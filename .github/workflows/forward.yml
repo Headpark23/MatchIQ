@@ -1,0 +1,30 @@
+name: MatchIQ forward tracking
+on:
+  schedule:
+    - cron: '10 6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: matchiq-forward-ledger
+  cancel-in-progress: false
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Record predictions and settle completed matches
+        run: python forward_test.py
+      - name: Commit immutable predictions and settlements
+        run: |
+          git config user.name 'matchiq-data-bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/forward_test.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record forward-test predictions and results'
+            git push
+          fi
