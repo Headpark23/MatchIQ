@@ -26,9 +26,17 @@ def main():
         try:
             day=dt.datetime.strptime(r["Date"],"%d/%m/%Y").date()
             hg,ag=int(r["FTHG"]),int(r["FTAG"])
+            if not (0 <= hg <= 30 and 0 <= ag <= 30): continue
+            outcome = "H" if hg > ag else "A" if ag > hg else "D"
+            if r.get("FTR") != outcome: continue
             history.append((day,r["HomeTeam"],r["AwayTeam"],hg,ag))
         except (ValueError,KeyError,TypeError):continue
     history.sort(key=lambda x:x[0])
+    counts = {}
+    for match in history:
+        key = match[:3]
+        counts[key] = counts.get(key, 0) + 1
+    history = [match for match in history if counts[match[:3]] == 1]
     changed=False
     for rec in records:
         if rec["status"]!="pending":continue
