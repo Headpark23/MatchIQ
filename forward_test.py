@@ -39,9 +39,18 @@ def main():
     for r in data.get("matches",[]):
         date=parse_date(r.get("Date",""))
         hc,ac=number(r.get("HC")),number(r.get("AC"))
-        if date and hc is not None and ac is not None:
+        if (date and hc is not None and ac is not None and
+                math.isfinite(hc) and math.isfinite(ac) and
+                hc.is_integer() and ac.is_integer() and
+                0 <= hc <= 40 and 0 <= ac <= 40):
             history.append((date,r,hc,ac))
     history.sort(key=lambda x:x[0])
+    # Quarantine all duplicate fixture keys, including conflicting source rows.
+    counts={}
+    for date,r,hc,ac in history:
+        key=(date,r.get("HomeTeam"),r.get("AwayTeam"))
+        counts[key]=counts.get(key,0)+1
+    history=[item for item in history if counts[(item[0],item[1].get("HomeTeam"),item[1].get("AwayTeam"))]==1]
     changed=False
     # Settle previously committed predictions only. Never change probabilities.
     for record in records:
