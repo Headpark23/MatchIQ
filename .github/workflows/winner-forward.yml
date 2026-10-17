@@ -1,0 +1,32 @@
+name: MatchIQ winner forward tracking
+on:
+  schedule:
+    - cron: '25 6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: matchiq-forward-ledger
+  cancel-in-progress: false
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned model family
+        run: python -m pip install 'penaltyblog>=1.0,<2'
+      - name: Record pre-match predictions and settle past results
+        run: python match_winner_forward.py
+      - name: Commit separate Match Winner ledger
+        run: |
+          git config user.name 'matchiq-data-bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/match_winner_forward.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record Match Winner forward predictions and results'
+            git push
+          fi
