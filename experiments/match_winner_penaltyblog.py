@@ -55,7 +55,7 @@ def simple_poisson(train, match):
 
 def dixon_coles(train, matches):
     import penaltyblog as pb
-    model = pb.models.DixonColesGoalsModel(
+    model = pb.models.DixonColesGoalModel(
         [r[3] for r in train], [r[4] for r in train],
         [r[1] for r in train], [r[2] for r in train])
     model.fit()
