@@ -75,26 +75,36 @@ function goalsBacktest(){
  const all=rows.filter(r=>r.done&&num(r.FTHG)!==null&&num(r.FTAG)!==null&&r.time<Date.now()).sort((a,b)=>a.time-b.time);
  if(all.length<100){out.textContent='Insufficient completed matches.';return}
  const cut=Math.floor(all.length*.7),train=all.slice(0,cut),test=all.slice(cut);
- const lines=[1.5,2.5,3.5],scores=lines.map(line=>({line,n:0,hits:0,model:0,baseline:0}));
+ const lines=[1.5,2.5,3.5],scores=lines.map(line=>({line,n:0,hits:0,old:0,newModel:0,baseline:0}));
  const base=lines.map(line=>train.filter(r=>num(r.FTHG)+num(r.FTAG)>line).length/train.length);
+ function poissonOver(mean,line){
+  let term=Math.exp(-mean),cdf=term;
+  for(let k=1;k<=Math.floor(line);k++){term*=mean/k;cdf+=term}
+  return Math.max(0,Math.min(1,1-cdf));
+ }
+ const avg=arr=>arr.reduce((a,b)=>a+b,0)/arr.length;
  for(let i=0;i<test.length;){
   let j=i+1;while(j<test.length&&test[j].time===test[i].time)j++;
   for(let k=i;k<j;k++){
-   const f=test[k];
-   const home=train.filter(r=>r.HomeTeam===f.HomeTeam&&r.time<f.time).slice(-10);
+   const f=test[k],home=train.filter(r=>r.HomeTeam===f.HomeTeam&&r.time<f.time).slice(-10);
    const away=train.filter(r=>r.AwayTeam===f.AwayTeam&&r.time<f.time).slice(-10);
    if(home.length<5||away.length<5)continue;
+   const sample=home.concat(away);
+   const homeExpected=(avg(home.map(r=>num(r.FTHG)))+avg(away.map(r=>num(r.FTHG))))/2;
+   const awayExpected=(avg(away.map(r=>num(r.FTAG)))+avg(home.map(r=>num(r.FTAG))))/2;
+   const totalExpected=homeExpected+awayExpected;
    for(let z=0;z<lines.length;z++){
-    const st=scores[z],line=lines[z],sample=home.concat(away);
-    const p=sample.filter(r=>num(r.FTHG)+num(r.FTAG)>line).length/sample.length;
+    const st=scores[z],line=lines[z];
+    const old=sample.filter(r=>num(r.FTHG)+num(r.FTAG)>line).length/sample.length;
+    const experimental=poissonOver(totalExpected,line);
     const y=num(f.FTHG)+num(f.FTAG)>line?1:0;
-    st.n++;st.hits+=y;st.model+=(p-y)**2;st.baseline+=(base[z]-y)**2;
+    st.n++;st.hits+=y;st.old+=(old-y)**2;st.newModel+=(experimental-y)**2;st.baseline+=(base[z]-y)**2;
    }
   }
   train.push(...test.slice(i,j));i=j;
  }
- out.innerHTML='<p class="muted">Training: '+cut+' · Holdout: '+test.length+' · Minimum five home and away matches · Same-day fixtures excluded from each other\'s history.</p><div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Model Brier</th><th>Baseline</th></tr></thead><tbody>'+
- scores.map(st=>'<tr><td>Over '+st.line+'</td><td>'+st.n+'</td><td>'+(st.n?(100*st.hits/st.n).toFixed(0)+'%':'—')+'</td><td>'+(st.n?(st.model/st.n).toFixed(3):'—')+'</td><td>'+(st.n?(st.baseline/st.n).toFixed(3):'—')+'</td></tr>').join('')+'</tbody></table></div><p class="muted">Lower Brier is better. No independent validation or odds-based profitability evidence.</p>';
+ out.innerHTML='<p class="muted">Training: '+cut+' · Holdout: '+test.length+' · Last 10 venue-specific matches, minimum 5 each · No same-day result leakage. Experimental model not fitted to holdout.</p><div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>New Brier</th><th>Baseline</th></tr></thead><tbody>'+
+ scores.map(st=>'<tr><td>Over '+st.line+'</td><td>'+st.n+'</td><td>'+(st.n?(100*st.hits/st.n).toFixed(0)+'%':'—')+'</td><td>'+(st.n?(st.old/st.n).toFixed(3):'—')+'</td><td>'+(st.n?(st.newModel/st.n).toFixed(3):'—')+'</td><td>'+(st.n?(st.baseline/st.n).toFixed(3):'—')+'</td></tr>').join('')+'</tbody></table></div><p class="muted">New = Poisson total-goals approximation from home/away attack and defence. Lower Brier is better. Repeated use of this holdout limits independence; no calibrated probabilities or betting-profit evidence.</p>';
 }
 function forwardTracker(){
  const target=el('forward');
