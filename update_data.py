@@ -47,6 +47,10 @@ def main():
         fixture_updated=datetime.datetime.now(datetime.timezone.utc).isoformat()
     except Exception as exc:
         errors.append({'source':'fixtures','error':str(exc)})
+        # Preserve the last verified snapshot and its original timestamp.
+        # Consumers already reject stale fixture snapshots after four days.
+        fixtures=previous.get('fixtures',[])
+        fixture_updated=previous.get('fixtures_last_checked')
     payload={'fixtures':fixtures,'fixtures_last_checked':fixture_updated,'source':'football-data.co.uk','last_successful_refresh':datetime.datetime.now(datetime.timezone.utc).isoformat(),'season_status':ok,'errors':errors,'matches':list(merged.values())}
     OUT.parent.mkdir(exist_ok=True)
     tmp=OUT.with_suffix('.tmp')
