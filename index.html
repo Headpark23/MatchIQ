@@ -4,11 +4,11 @@
 const markets=[['corners','🚩','Corners'],['cards','🟨','Cards'],['shots','🎯','Shots on target'],['wins','🏆','Match winner'],['btts','⚽','Both teams score'],['goals','🥅','Goals']];let selected='corners',rows=[],meta={};const el=id=>document.getElementById(id),num=v=>v===''||v==null?null:Number.isFinite(+v)?+v:null,avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null,esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function date(s){const p=(s||'').split('/');return p.length===3?new Date(+p[2]<100?2000+(+p[2]):+p[2],+p[1]-1,+p[0]).getTime():Date.parse(s)}
 function kickoff(f){
- if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(f.Date)||!/^\\d{2}:\\d{2}$/.test(f.Time||''))return NaN;
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(f.Date)||!/^\d{2}:\d{2}$/.test(f.Time||''))return NaN;
  const naive=Date.parse(f.Date+'T'+f.Time+':00Z');
  if(!Number.isFinite(naive))return NaN;
  const tz=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',timeZoneName:'shortOffset'}).formatToParts(new Date(naive)).find(x=>x.type==='timeZoneName')?.value||'GMT';
- const m=tz.match(/^GMT([+-])(\\d{1,2})(?::(\\d{2}))?$/);
+ const m=tz.match(/^GMT([+-])(\d{1,2})(?::(\d{2}))?$/);
  const offset=m?(m[1]==='+'?1:-1)*(+m[2]*60+(+(m[3]||0))):0;
  return naive-offset*60000;
 }
