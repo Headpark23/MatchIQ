@@ -1,0 +1,20 @@
+name: Match Winner offline experiment
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install experiment dependency
+        run: python -m pip install 'penaltyblog>=1.0,<2'
+      - name: Run isolated chronological comparison
+        run: python experiments/match_winner_penaltyblog.py
