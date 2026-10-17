@@ -55,13 +55,14 @@ def simple_poisson(train, match):
 
 def dixon_coles(train, matches):
     import penaltyblog as pb
-    model = pb.models.DixonColesGoalModel(
+    model = pb.models.DixonColesGoalsModel(
         [r[3] for r in train], [r[4] for r in train],
         [r[1] for r in train], [r[2] for r in train])
     model.fit()
     results = {}
+    known = set(r[1] for r in train) | set(r[2] for r in train)
     for m in matches:
-        if m[1] not in set(r[1] for r in train) | set(r[2] for r in train) or m[2] not in set(r[1] for r in train) | set(r[2] for r in train):
+        if m[1] not in known or m[2] not in known:
             continue
         ph, pd, pa = model.predict(m[1], m[2]).home_draw_away
         results[m] = {"H": float(ph), "D": float(pd), "A": float(pa)}
