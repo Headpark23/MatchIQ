@@ -1,7 +1,7 @@
 name: MatchIQ forward tracking
 on:
   schedule:
-    - cron: '10 6 * * *'
+    - cron: '10 6,18 * * *'
   workflow_dispatch:
 permissions:
   contents: write
