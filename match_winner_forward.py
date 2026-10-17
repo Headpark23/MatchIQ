@@ -44,8 +44,11 @@ def main():
         if len(matches)!=1 or matches[0][0]>=now.astimezone(UK).date():continue
         m=matches[0];rec["status"]="settled";rec["actual"]="H" if m[3]>m[4] else "A" if m[4]>m[3] else "D"
         rec["score"]=[m[3],m[4]];rec["settled_at"]=now.isoformat();changed=True
-    try:age=now-dt.datetime.fromisoformat(data["fixtures_last_checked"].replace("Z","+00:00"))
-    except (KeyError,TypeError,ValueError):age=dt.timedelta(days=999)
+    checked=data.get("fixtures_last_checked")
+    try:
+        if not isinstance(checked,str): raise ValueError("Missing fixture refresh timestamp")
+        age=now-dt.datetime.fromisoformat(checked.replace("Z","+00:00"))
+    except (TypeError,ValueError):age=dt.timedelta(days=999)
     if dt.timedelta(0)<=age<=dt.timedelta(days=4):
         for f in data.get("fixtures",[]):
             try:
