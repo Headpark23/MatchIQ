@@ -74,30 +74,39 @@ function backtest(){
  const all=rows.filter(r=>r.done&&num(r.HC)!==null&&num(r.AC)!==null&&r.time<Date.now()).sort((a,b)=>a.time-b.time);
  if(all.length<100){output.textContent='Insufficient completed matches for a chronological test.';return}
  const cut=Math.floor(all.length*.7),history=all.slice(0,cut),test=all.slice(cut),lines=[8.5,9.5,10.5];
- const stats=lines.map(line=>({line,total:0,hits:0,predicted:0,brier:0,baselineBrier:0}));
- // Pre-test baseline is calculated strictly from the training portion.
+ const stats=lines.map(line=>({line,total:0,hits:0,old:0,experimental:0,baseline:0}));
  const baselines=lines.map(line=>history.filter(r=>num(r.HC)+num(r.AC)>line).length/history.length);
- // Group equal-date fixtures so results from the same day never leak into predictions.
+ // Predeclared fixed model, no fitting or tuning on the holdout.
+ // Corners count is approximated by Poisson with venue-specific attack/defence means.
+ function poissonOver(mean,line){
+  let term=Math.exp(-mean),cdf=term;
+  for(let k=1;k<=Math.floor(line);k++){term*=mean/k;cdf+=term}
+  return Math.max(0,Math.min(1,1-cdf));
+ }
  for(let i=0;i<test.length;){
   let j=i+1;while(j<test.length&&test[j].time===test[i].time)j++;
   for(let k=i;k<j;k++){
-   const fixture=test[k];
-   const home=history.filter(r=>r.HomeTeam===fixture.HomeTeam&&r.time<fixture.time).slice(-n);
-   const away=history.filter(r=>r.AwayTeam===fixture.AwayTeam&&r.time<fixture.time).slice(-n);
+   const f=test[k],home=history.filter(r=>r.HomeTeam===f.HomeTeam&&r.time<f.time).slice(-n);
+   const away=history.filter(r=>r.AwayTeam===f.AwayTeam&&r.time<f.time).slice(-n);
    if(home.length<5||away.length<5)continue;
-   const combined=home.concat(away),total=num(fixture.HC)+num(fixture.AC);
+   const combined=home.concat(away),actual=num(f.HC)+num(f.AC);
+   const mean=z=>z.reduce((sum,v)=>sum+v,0)/z.length;
+   const expectedTotal=(mean(home.map(r=>num(r.HC)))+mean(away.map(r=>num(r.HC)))+
+                        mean(away.map(r=>num(r.AC)))+mean(home.map(r=>num(r.AC))))/2;
    stats.forEach((st,idx)=>{
-    const probability=combined.filter(r=>num(r.HC)!==null&&num(r.AC)!==null&&num(r.HC)+num(r.AC)>st.line).length/combined.length;
-    const outcome=total>st.line?1:0;
-    st.total++;st.hits+=outcome;st.predicted+=probability;st.brier+=(probability-outcome)**2;st.baselineBrier+=(baselines[idx]-outcome)**2;
+    const outcome=actual>st.line?1:0;
+    const old=combined.filter(r=>num(r.HC)+num(r.AC)>st.line).length/combined.length;
+    const experimental=poissonOver(expectedTotal,st.line);
+    st.total++;st.hits+=outcome;st.old+=(old-outcome)**2;
+    st.experimental+=(experimental-outcome)**2;st.baseline+=(baselines[idx]-outcome)**2;
    });
   }
   history.push(...test.slice(i,j));i=j;
  }
- output.innerHTML='<p class="muted">Training matches: '+cut+' · Holdout matches: '+test.length+' · Form: last '+n+' venue-specific games per team · Minimum 5 each.</p>'+
- '<div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Model Brier</th><th>Baseline Brier</th></tr></thead><tbody>'+
- stats.map(st=>'<tr><td>Over '+st.line+'</td><td>'+st.total+'</td><td>'+(st.total?(100*st.hits/st.total).toFixed(0)+'%':'—')+'</td><td>'+(st.total?(st.brier/st.total).toFixed(3):'—')+'</td><td>'+(st.total?(st.baselineBrier/st.total).toFixed(3):'—')+'</td></tr>').join('')+
- '</tbody></table></div><p class="muted">Brier score: lower is better (0 is perfect). Baseline uses only training-period league frequency. This is one retrospective test, not independent validation or evidence of betting profit.</p>';
+ output.innerHTML='<p class="muted">Training: '+cut+' · Holdout: '+test.length+' · Venue-specific last '+n+' matches · Minimum 5 each. Experimental model is fixed, not tuned on this test.</p>'+
+ '<div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>New Brier</th><th>Baseline</th></tr></thead><tbody>'+
+ stats.map(st=>'<tr><td>Over '+st.line+'</td><td>'+st.total+'</td><td>'+(st.total?(100*st.hits/st.total).toFixed(0)+'%':'—')+'</td><td>'+(st.total?(st.old/st.total).toFixed(3):'—')+'</td><td>'+(st.total?(st.experimental/st.total).toFixed(3):'—')+'</td><td>'+(st.total?(st.baseline/st.total).toFixed(3):'—')+'</td></tr>').join('')+
+ '</tbody></table></div><p class="muted">Lower Brier is better. New = Poisson approximation using corners won and conceded. This assumes a simplified distribution and is not calibrated. Repeated evaluation on this holdout limits independence. No betting-profit evidence.</p>';
 }
 
 el('markets').innerHTML=markets.map(([id,emoji,name])=>'<button class="market" data-id="'+id+'" aria-pressed="'+(id===selected)+'"><span class="emoji">'+emoji+'</span><b>'+name+'</b><small>Explore trends</small></button>').join('');document.querySelectorAll('.market').forEach(b=>b.onclick=()=>{selected=b.dataset.id;document.querySelectorAll('.market').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()});el('window').onchange=render;el('threshold').onchange=render;
