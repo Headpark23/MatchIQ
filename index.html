@@ -59,7 +59,8 @@ function render(){
    thresholdInfo={line,hits,count,rate:100*hits/count,sd,kind:selected==='corners'?'corners':'goals'};
   }
  }
- ranked.push({f,value,detail,unit,samples:[h.length,a.length],metrics,thresholdInfo});
+ const dc=selected==='wins'?(winnerPredictions.find(r=>r.home===f.HomeTeam&&r.away===f.AwayTeam&&r.date===f.Date&&r.model==='dixon-coles-v1-forward-frozen'&&r.probabilities&&['H','D','A'].every(k=>Number.isFinite(+r.probabilities[k]))&&Math.abs(['H','D','A'].reduce((t,k)=>t+(+r.probabilities[k]),0)-1)<0.01&&Date.parse(r.created_at)<Date.parse(r.kickoff_utc))||null):null;
+ ranked.push({f,value,detail,unit,samples:[h.length,a.length],metrics,thresholdInfo,dc});
  }
  ranked.sort((a,b)=>selected==='wins'?((b.dc?Math.max(...Object.values(b.dc.probabilities)):b.value/100)-(a.dc?Math.max(...Object.values(a.dc.probabilities)):a.value/100)):b.value-a.value);
  el('results').innerHTML=ranked.length?ranked.slice(0,8).map(({f,value,detail,unit,samples,metrics,thresholdInfo,dc})=>{
