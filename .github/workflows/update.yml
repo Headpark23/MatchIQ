@@ -38,9 +38,17 @@ jobs:
             exit 1
           fi
 
-          # 3. Deep publication integrity check & substantive change detection
-          python -c "
-          import json, sys, subprocess
+          # 3. Clean any stale marker file
+          MARKER_FILE=".git/substantive_change"
+          if [ ! -d ".git" ]; then
+            MARKER_FILE="substantive_change"
+          fi
+          rm -f "$MARKER_FILE"
+
+          # 4. Deep publication integrity check & substantive change detection
+          python - << 'EOF'
+          import json, sys, os, subprocess
+          from collections import Counter
 
           with open('data/matches.json', 'r', encoding='utf-8') as f:
               current = json.load(f)
@@ -53,16 +61,16 @@ jobs:
 
           # --- CHECK 1: PUBLICATION INTEGRITY SAFEGUARDS ---
           if cs.get('download_status') != 'success':
-              sys.exit(f\"PUBLICATION REJECTED: download_status is '{cs.get('download_status')}' (must be success)\")
+              sys.exit(f"PUBLICATION REJECTED: download_status is '{cs.get('download_status')}' (must be success)")
 
           if cs.get('status') != 'updated':
-              sys.exit(f\"PUBLICATION REJECTED: season status is '{cs.get('status')}' (must be updated)\")
+              sys.exit(f"PUBLICATION REJECTED: season status is '{cs.get('status')}' (must be updated)")
 
           if cs.get('result_freshness_status') != 'verified':
-              sys.exit(f\"PUBLICATION REJECTED: result_freshness_status is '{cs.get('result_freshness_status')}' (must be verified)\")
+              sys.exit(f"PUBLICATION REJECTED: result_freshness_status is '{cs.get('result_freshness_status')}' (must be verified)")
 
           if cs.get('statistics_freshness_status') != 'verified':
-              sys.exit(f\"PUBLICATION REJECTED: statistics_freshness_status is '{cs.get('statistics_freshness_status')}' (must be verified)\")
+              sys.exit(f"PUBLICATION REJECTED: statistics_freshness_status is '{cs.get('statistics_freshness_status')}' (must be verified)")
 
           ALLOWED_PIPELINE_STATES = {
               'verified_results_with_no_fixtures',
@@ -70,84 +78,110 @@ jobs:
               'verified_results_with_unverifiable_schedule',
           }
           if pipeline_state not in ALLOWED_PIPELINE_STATES:
-              sys.exit(f\"PUBLICATION REJECTED: pipeline_state '{pipeline_state}' is not an approved publication state\")
+              sys.exit(f"PUBLICATION REJECTED: pipeline_state '{pipeline_state}' is not an approved publication state")
 
           curr_matches = current.get('matches', [])
           head_matches = head.get('matches', [])
 
           if len(curr_matches) < len(head_matches):
-              sys.exit(f\"PUBLICATION REJECTED: Match count decreased ({len(curr_matches)} < {len(head_matches)})\")
+              sys.exit(f"PUBLICATION REJECTED: Match count decreased ({len(curr_matches)} < {len(head_matches)})")
+
+          curr_keys = [(m.get('season'), m.get('Date'), m.get('HomeTeam'), m.get('AwayTeam')) for m in curr_matches]
+          key_counts = Counter(curr_keys)
+          duplicates = [k for k, count in key_counts.items() if count > 1]
+          if duplicates:
+              sys.exit(f"PUBLICATION REJECTED: Duplicate match identities found: {duplicates[:3]}")
 
           head_map = {(m['season'], m['Date'], m['HomeTeam'], m['AwayTeam']): m for m in head_matches}
           curr_map = {(m['season'], m['Date'], m['HomeTeam'], m['AwayTeam']): m for m in curr_matches}
 
+          AUDIT_FIELDS = ('Date', 'HomeTeam', 'AwayTeam', 'FTHG', 'FTAG', 'FTR', 'HC', 'AC')
+
+          def values_differ(v1, v2):
+              if (v1 is None) != (v2 is None):
+                  return True
+              if v1 is None and v2 is None:
+                  return False
+              return str(v1).strip() != str(v2).strip()
+
           for k, hm in head_map.items():
               if k not in curr_map:
-                  sys.exit(f\"PUBLICATION REJECTED: Historical match missing: {k}\")
+                  sys.exit(f"PUBLICATION REJECTED: Historical match missing: {k}")
               cm = curr_map[k]
-              for fld in ('FTHG', 'FTAG', 'FTR', 'HC', 'AC'):
-                  if hm.get(fld) and hm.get(fld) != cm.get(fld):
-                      sys.exit(f\"PUBLICATION REJECTED: Historical match {k} field '{fld}' altered from '{hm.get(fld)}' to '{cm.get(fld)}'\")
+
+              for fld in AUDIT_FIELDS:
+                  if fld not in cm:
+                      sys.exit(f"PUBLICATION REJECTED: Historical match {k} required field '{fld}' missing")
+                  if fld in hm:
+                      if values_differ(hm[fld], cm[fld]):
+                          sys.exit(f"PUBLICATION REJECTED: Historical match {k} field '{fld}' altered from '{hm[fld]}' to '{cm[fld]}'")
 
           fixtures = current.get('fixtures')
           if not isinstance(fixtures, list):
-              sys.exit(\"PUBLICATION REJECTED: fixtures payload must be a list\")
+              sys.exit("PUBLICATION REJECTED: fixtures payload must be a list")
 
           if cs.get('schedule_status') in ('failed', 'incomplete') and len(fixtures) > 0:
-              sys.exit(f\"PUBLICATION REJECTED: Active fixtures present while schedule_status is '{cs.get('schedule_status')}'\")
+              sys.exit(f"PUBLICATION REJECTED: Active fixtures present while schedule_status is '{cs.get('schedule_status')}'")
 
           # --- CHECK 2: SUBSTANTIVE DATA CHANGE CLASSIFICATION ---
           substantive_changes = []
           if len(curr_matches) != len(head_matches):
-              substantive_changes.append(f\"Match count changed from {len(head_matches)} to {len(curr_matches)}\")
+              substantive_changes.append(f"Match count changed from {len(head_matches)} to {len(curr_matches)}")
           else:
               for k, cm in curr_map.items():
                   if k not in head_map:
-                      substantive_changes.append(f\"New match record: {k}\")
+                      substantive_changes.append(f"New match record: {k}")
                       break
                   hm = head_map[k]
                   for fld in set(cm.keys()) | set(hm.keys()):
-                      if cm.get(fld) != hm.get(fld):
-                          substantive_changes.append(f\"Match {k} field '{fld}' updated\")
+                      if values_differ(cm.get(fld), hm.get(fld)):
+                          substantive_changes.append(f"Match {k} field '{fld}' updated")
                           break
                   if substantive_changes:
                       break
 
           if fixtures != head.get('fixtures'):
-              substantive_changes.append(\"Upcoming fixtures list changed\")
+              substantive_changes.append("Upcoming fixtures list changed")
 
           if current.get('pending_expected_fixtures') != head.get('pending_expected_fixtures'):
-              substantive_changes.append(\"Pending expected fixtures changed\")
+              substantive_changes.append("Pending expected fixtures changed")
 
           if pipeline_state != head.get('pipeline_state'):
-              substantive_changes.append(f\"Pipeline state changed from '{head.get('pipeline_state')}' to '{pipeline_state}'\")
+              substantive_changes.append(f"Pipeline state changed from '{head.get('pipeline_state')}' to '{pipeline_state}'")
 
           head_cs = head.get('current_season_status', {})
           for sk in ('status', 'result_freshness_status', 'statistics_freshness_status', 'coverage_completeness_status', 'schedule_status', 'rows'):
               if cs.get(sk) != head_cs.get(sk):
-                  substantive_changes.append(f\"Current season status field '{sk}' changed\")
+                  substantive_changes.append(f"Current season status field '{sk}' changed")
 
           if current.get('freshness_warnings') != head.get('freshness_warnings'):
-              substantive_changes.append(\"Freshness warnings changed\")
+              substantive_changes.append("Freshness warnings changed")
 
           if current.get('errors') != head.get('errors'):
-              substantive_changes.append(\"Errors list changed\")
+              substantive_changes.append("Errors list changed")
+
+          marker_dir = '.git' if os.path.isdir('.git') else '.'
+          marker_path = os.path.join(marker_dir, 'substantive_change')
 
           if substantive_changes:
-              print(\"SUBSTANTIVE DATA CHANGES DETECTED:\")
+              print("SUBSTANTIVE DATA CHANGES DETECTED:")
               for sc in substantive_changes:
-                  print(f\"  - {sc}\")
-              with open('SUBSTANTIVE_CHANGE', 'w', encoding='utf-8') as out:
+                  print(f"  - {sc}")
+              with open(marker_path, 'w', encoding='utf-8') as out:
                   out.write('true')
           else:
-              print(\"NO SUBSTANTIVE DATA CHANGES DETECTED. Differences are routine refresh timestamps only.\")
-              with open('SUBSTANTIVE_CHANGE', 'w', encoding='utf-8') as out:
+              print("NO SUBSTANTIVE DATA CHANGES DETECTED. Differences are routine refresh timestamps only.")
+              with open(marker_path, 'w', encoding='utf-8') as out:
                   out.write('false')
-          "
+          EOF
       - name: Commit updated data
         run: |
-          HAS_CHANGE=$(cat SUBSTANTIVE_CHANGE 2>/dev/null || echo "false")
-          rm -f SUBSTANTIVE_CHANGE
+          MARKER_FILE=".git/substantive_change"
+          if [ ! -d ".git" ]; then
+            MARKER_FILE="substantive_change"
+          fi
+          HAS_CHANGE=$(cat "$MARKER_FILE" 2>/dev/null || echo "false")
+          rm -f "$MARKER_FILE"
           if [ "$HAS_CHANGE" = "true" ]; then
             git config user.name 'matchiq-data-bot'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -159,5 +193,3 @@ jobs:
             echo "Skipping commit: no substantive data changes detected."
             git checkout HEAD -- data/matches.json
           fi
-
-
