@@ -19,6 +19,45 @@ FIELDS = (
     "HY", "AY", "HST", "AST", "HS", "AS",
 )
 
+try:
+    from zoneinfo import ZoneInfo
+    UK_ZONE = ZoneInfo("Europe/London")
+except Exception:
+    class _LondonZone(dt.tzinfo):
+        """Fallback UK timezone (GMT / BST) when standard tzdata package is absent on Windows."""
+        def utcoffset(self, d):
+            return dt.timedelta(hours=1) if self._is_dst(d) else dt.timedelta(0)
+
+        def dst(self, d):
+            return dt.timedelta(hours=1) if self._is_dst(d) else dt.timedelta(0)
+
+        def tzname(self, d):
+            return "BST" if self._is_dst(d) else "GMT"
+
+        def _is_dst(self, d):
+            if d is None:
+                return False
+            year = d.year
+            march_last = dt.datetime(year, 3, 31, 1, 0, tzinfo=dt.timezone.utc)
+            march_sunday = march_last - dt.timedelta(days=(march_last.weekday() + 1) % 7)
+            oct_last = dt.datetime(year, 10, 31, 1, 0, tzinfo=dt.timezone.utc)
+            oct_sunday = oct_last - dt.timedelta(days=(oct_last.weekday() + 1) % 7)
+            if d.tzinfo is not None:
+                utc_d = dt.datetime(d.year, d.month, d.day, d.hour, d.minute, d.second, d.microsecond, tzinfo=dt.timezone.utc) - (dt.timedelta(hours=1) if (march_sunday.date() <= d.date() <= oct_sunday.date()) else dt.timedelta(0))
+                return march_sunday <= utc_d < oct_sunday
+            return False
+
+    UK_ZONE = _LondonZone()
+
+# Exactly 20 Premier League member clubs for the current 2627 season:
+CURRENT_SEASON_TEAMS = frozenset({
+    "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton",
+    "Chelsea", "Coventry", "Crystal Palace", "Everton", "Fulham",
+    "Hull", "Ipswich", "Leeds", "Liverpool", "Man City",
+    "Man United", "Newcastle", "Nott'm Forest", "Sunderland", "Tottenham",
+})
+DEFAULT_PREDICTION_HORIZON_DAYS = 14
+
 
 def parse_date(value):
     """Parse the date formats used in the result and fixture CSVs."""
@@ -30,6 +69,80 @@ def parse_date(value):
         except ValueError:
             continue
     return None
+
+
+def parse_kickoff(day, time_val):
+    """Parse local UK kickoff time string and return timezone-aware UTC datetime.
+
+    Rejects:
+    1. Malformed, non-string, or out-of-range hours (0-23) or minutes (0-59).
+    2. Nonexistent local times due to the spring clock change (e.g. 01:30 on 29 March 2026).
+    3. Ambiguous local times due to the autumn clock change (e.g. 01:30 on 25 October 2026).
+    """
+    if not isinstance(day, dt.date) or not isinstance(time_val, str):
+        return None
+    time_str = time_val.strip()
+    parts = time_str.split(":")
+    if len(parts) != 2:
+        return None
+    try:
+        hour, minute = int(parts[0]), int(parts[1])
+        if not (0 <= hour <= 23 and 0 <= minute <= 59):
+            return None
+    except (ValueError, TypeError):
+        return None
+
+    local_naive = dt.datetime.combine(day, dt.time(hour, minute))
+    year = day.year
+
+    # 1. Try standard zoneinfo if tzdata is available on host
+    try:
+        from zoneinfo import ZoneInfo
+        zone = ZoneInfo("Europe/London")
+        t0 = local_naive.replace(tzinfo=zone, fold=0)
+        t1 = local_naive.replace(tzinfo=zone, fold=1)
+        # Ambiguous time check: fold=0 and fold=1 produce different UTC moments
+        if t0.astimezone(UTC) != t1.astimezone(UTC):
+            return None
+        # Nonexistent time check: round-trip fails to recover the input local time
+        roundtrip = t0.astimezone(UTC).astimezone(zone).replace(tzinfo=None)
+        if roundtrip != local_naive:
+            return None
+        return t0.astimezone(UTC)
+    except Exception:
+        # 2. Standalone mathematical UK transition check (Summer Time Act 2002 / IANA rules)
+        # Transitions occur at 01:00 UTC on the last Sunday in March (GMT -> BST)
+        # and last Sunday in October (BST -> GMT).
+        march_last = dt.datetime(year, 3, 31, 1, 0, tzinfo=UTC)
+        march_sun_utc = march_last - dt.timedelta(days=(march_last.weekday() + 1) % 7)
+        oct_last = dt.datetime(year, 10, 31, 1, 0, tzinfo=UTC)
+        oct_sun_utc = oct_last - dt.timedelta(days=(oct_last.weekday() + 1) % 7)
+
+        def to_uk_local(u):
+            if march_sun_utc <= u < oct_sun_utc:
+                return u + dt.timedelta(hours=1)
+            return u
+
+        # Candidate 1: assuming GMT (UTC offset +0)
+        utc1 = local_naive.replace(tzinfo=UTC)
+        match1 = (to_uk_local(utc1).replace(tzinfo=None) == local_naive)
+
+        # Candidate 2: assuming BST (UTC offset +1)
+        utc2 = (local_naive - dt.timedelta(hours=1)).replace(tzinfo=UTC)
+        match2 = (to_uk_local(utc2).replace(tzinfo=None) == local_naive)
+
+        valid_utcs = []
+        if match1:
+            valid_utcs.append(utc1)
+        if match2 and utc2 not in valid_utcs:
+            valid_utcs.append(utc2)
+
+        # Exactly 1 valid UTC instant must map to this local time.
+        # If 0 matches: nonexistent local time (spring gap) -> None
+        # If >1 matches: ambiguous local time (autumn overlap) -> None
+        if len(valid_utcs) != 1:
+            return None
+        return valid_utcs[0]
 
 
 def parse_season_csv(body, season):
@@ -103,50 +216,140 @@ def _expected_record(row):
     }
 
 
-def parse_fixture_schedule_csv(body, today):
-    """Parse the fixture feed and report coverage evidence without treating emptiness as off-season proof."""
-    if not isinstance(today, dt.date):
-        raise ValueError("today must be a date")
+def parse_fixture_schedule_csv(
+    body, reference_time, horizon_days=DEFAULT_PREDICTION_HORIZON_DAYS, valid_teams=None
+):
+    """Parse candidate fixtures enforcing eligibility, team identity and horizon boundaries.
+
+    Prediction Horizon Justification:
+    Both production prediction models (forward_test.py line 77 and match_winner_forward.py line 60)
+    explicitly enforce: now < kickoff <= now + dt.timedelta(days=14).
+    This 14-day window aligns candidate fixtures in data["fixtures"] with model requirements:
+    1. Statistical stability: Pre-match Poisson corners and Dixon-Coles goal expectation models rely on rolling
+       10-match team form and sample statistics. Projecting beyond 14 days exposes predictions to intervening
+       match outcomes that would invalidate pre-match assumptions.
+    2. Schedule volatility: Premier League fixtures scheduled beyond 14 days are subject to broadcast selection
+       shifts, cup rearrangements, and postponements without timely notice.
+    3. Downstream compliance: Both frozen downstream prediction scripts reject any fixture where
+       kickoff > now + 14 days. Admitting them to data["fixtures"] adds no predictive value while increasing
+       exposure to schedule churn.
+    """
+    if isinstance(reference_time, dt.datetime):
+        if reference_time.tzinfo is None:
+            raise ValueError("reference_time must be timezone-aware if datetime")
+        now = reference_time.astimezone(UTC)
+        today = now.date()
+        horizon_limit = now + dt.timedelta(days=horizon_days)
+    elif isinstance(reference_time, dt.date):
+        today = reference_time
+        now = dt.datetime.combine(today, dt.time.min, UTC)
+        horizon_limit = dt.datetime.combine(today + dt.timedelta(days=horizon_days), dt.time.max, UTC)
+    else:
+        raise ValueError("reference_time must be a date or datetime")
+
+    teams_set = CURRENT_SEASON_TEAMS if valid_teams is None else frozenset(valid_teams)
     reader = csv.DictReader(io.StringIO(body))
     required = {"Div", "Date", "HomeTeam", "AwayTeam"}
     if not reader.fieldnames or not required.issubset(set(reader.fieldnames)):
         raise ValueError("Fixture feed missing required columns")
 
     records = list(reader)
-    fixtures = []
+    candidate_fixtures = []
     raw_e0_fixture_count = 0
     invalid_window_fixture_count = 0
+    past_kickoff_count = 0
+    beyond_horizon_count = 0
+    duplicate_fixture_count = 0
+    conflicting_fixture_count = 0
+    unknown_team_count = 0
+    malformed_fixture_count = 0
+
+    seen_matchups = set()
+    team_scheduled_dates = defaultdict(list)
+
     for row in records:
-        if (row.get("Div") or "").strip() != "E0":
+        div = (row.get("Div") or "").strip()
+        if div != "E0":
             continue
         raw_e0_fixture_count += 1
+
         day = parse_date((row.get("Date") or "").strip())
         if not day:
             invalid_window_fixture_count += 1
+            malformed_fixture_count += 1
             continue
-        if not today <= day <= today + dt.timedelta(days=35):
-            continue
+
         home = (row.get("HomeTeam") or "").strip()
         away = (row.get("AwayTeam") or "").strip()
         if not home or not away:
             invalid_window_fixture_count += 1
+            malformed_fixture_count += 1
             continue
-        fixtures.append({
+
+        if home == away:
+            invalid_window_fixture_count += 1
+            conflicting_fixture_count += 1
+            continue
+
+        if home not in teams_set or away not in teams_set:
+            invalid_window_fixture_count += 1
+            unknown_team_count += 1
+            continue
+
+        raw_time = (row.get("Time") or "").strip()
+        kickoff = parse_kickoff(day, raw_time)
+        if kickoff is None:
+            invalid_window_fixture_count += 1
+            malformed_fixture_count += 1
+            continue
+
+        matchup_key = (day.isoformat(), home, away)
+        if matchup_key in seen_matchups:
+            invalid_window_fixture_count += 1
+            duplicate_fixture_count += 1
+            continue
+        seen_matchups.add(matchup_key)
+
+        if day in team_scheduled_dates[home] or day in team_scheduled_dates[away]:
+            invalid_window_fixture_count += 1
+            conflicting_fixture_count += 1
+            continue
+        team_scheduled_dates[home].append(day)
+        team_scheduled_dates[away].append(day)
+
+        if kickoff <= now:
+            # Exclude past kickoffs (Requirement 4)
+            past_kickoff_count += 1
+            continue
+
+        if kickoff > horizon_limit:
+            # Outside approved prediction horizon (Requirement 3)
+            beyond_horizon_count += 1
+            continue
+
+        candidate_fixtures.append({
             "Date": day.isoformat(),
-            "Time": (row.get("Time") or "").strip(),
+            "Time": raw_time,
             "HomeTeam": home,
             "AwayTeam": away,
         })
 
-    feed_status = "available"
+    # FAIL CLOSED RULE (Requirement 7):
+    # When the provider returns corrupted or conflicting evidence, fail closed
+    # rather than silently accepting a partial clean subset.
     if invalid_window_fixture_count > 0:
+        fixtures = []
         schedule_status = "incomplete"
-    elif not fixtures:
+    elif not candidate_fixtures:
+        fixtures = []
         schedule_status = "no_fixtures_supplied"
     else:
+        fixtures = candidate_fixtures
         # Fixtures were found, but football-data.co.uk provides no independent
         # attestation of round completeness; coverage remains unverifiable.
         schedule_status = "unverifiable"
+
+    feed_status = "available"
     evidence = {
         "source": "football-data.co.uk/fixtures.csv",
         "feed_status": feed_status,
@@ -155,10 +358,18 @@ def parse_fixture_schedule_csv(body, today):
         "window_fixture_count": len(fixtures),
         "raw_e0_fixture_count": raw_e0_fixture_count,
         "invalid_window_fixture_count": invalid_window_fixture_count,
+        "past_kickoff_count": past_kickoff_count,
+        "beyond_horizon_count": beyond_horizon_count,
+        "duplicate_fixture_count": duplicate_fixture_count,
+        "conflicting_fixture_count": conflicting_fixture_count,
+        "unknown_team_count": unknown_team_count,
+        "malformed_fixture_count": malformed_fixture_count,
         "off_season_confirmed": False,
         "off_season_status": "not_indicated" if fixtures else "unconfirmed",
         "completeness_attested": False,
         "completeness_source": None,
+        "horizon_days": horizon_days,
+        "independently_confirmed": False,
     }
     return fixtures, evidence
 
@@ -707,11 +918,12 @@ def main():
         )
         with urllib.request.urlopen(request, timeout=20) as response:
             body = response.read().decode("utf-8-sig", errors="replace")
+        download_now = dt.datetime.now(UTC)
         fixtures, schedule_evidence = parse_fixture_schedule_csv(
-            body, dt.datetime.now(UTC).date()
+            body, download_now
         )
         if fixtures and schedule_evidence.get("invalid_window_fixture_count", 0) == 0:
-            fixture_updated = dt.datetime.now(UTC).isoformat()
+            fixture_updated = download_now.isoformat()
         else:
             # Empty feed or incomplete/corrupted feed:
             # Do NOT carry forward cached fixtures into active data["fixtures"].
@@ -779,6 +991,15 @@ def main():
             freshness["pipeline_state"] = "verified_results_with_unverifiable_schedule"
         freshness["warnings"].append(
             "Fixture schedule refresh failed; expected completed-fixture coverage cannot be confirmed."
+        )
+    elif schedule_evidence.get("invalid_window_fixture_count", 0) > 0:
+        freshness["coverage_completeness_status"] = "unverifiable"
+        freshness["verified_new"] = False
+        freshness["schedule_status"] = "incomplete"
+        if freshness["result_freshness_status"] == "verified":
+            freshness["pipeline_state"] = "verified_results_with_unverifiable_schedule"
+        freshness["warnings"].append(
+            "Fixture schedule contains corrupted, invalid, unknown-team, or conflicting entries; failing closed to seal prediction list."
         )
     downloaded_at = dt.datetime.now(UTC).isoformat()
     metadata = build_refresh_metadata(
