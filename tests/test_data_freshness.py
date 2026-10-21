@@ -8,7 +8,38 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 from unittest.mock import patch
-from zoneinfo import ZoneInfo
+try:
+    from zoneinfo import ZoneInfo
+    ZoneInfo("Europe/London")
+    def get_london_zone():
+        return ZoneInfo("Europe/London")
+except Exception:
+    class _LondonZone(dt.tzinfo):
+        """Fallback UK timezone (GMT / BST) when standard tzdata package is absent on Windows."""
+        def utcoffset(self, d):
+            return dt.timedelta(hours=1) if self._is_dst(d) else dt.timedelta(0)
+
+        def dst(self, d):
+            return dt.timedelta(hours=1) if self._is_dst(d) else dt.timedelta(0)
+
+        def tzname(self, d):
+            return "BST" if self._is_dst(d) else "GMT"
+
+        def _is_dst(self, d):
+            if d is None:
+                return False
+            year = d.year
+            march_last = dt.datetime(year, 3, 31, 1, 0, tzinfo=dt.timezone.utc)
+            march_sunday = march_last - dt.timedelta(days=(march_last.weekday() + 1) % 7)
+            oct_last = dt.datetime(year, 10, 31, 1, 0, tzinfo=dt.timezone.utc)
+            oct_sunday = oct_last - dt.timedelta(days=(oct_last.weekday() + 1) % 7)
+            if d.tzinfo is not None:
+                utc_d = dt.datetime(d.year, d.month, d.day, d.hour, d.minute, d.second, d.microsecond, tzinfo=dt.timezone.utc) - (dt.timedelta(hours=1) if (march_sunday.date() <= d.date() <= oct_sunday.date()) else dt.timedelta(0))
+                return march_sunday <= utc_d < oct_sunday
+            return False
+
+    def get_london_zone():
+        return _LondonZone()
 
 import update_data
 
@@ -249,12 +280,14 @@ class CurrentSeasonFreshnessTests(unittest.TestCase):
         self.assertEqual(freshness["known_fixture_status"], "verified")
         self.assertEqual(freshness["result_freshness_status"], "verified")
         self.assertEqual(freshness["coverage_completeness_status"], "unverifiable")
-        self.assertEqual(current["status"], "unavailable")
+        self.assertEqual(current["status"], "updated")
+        self.assertEqual(current["pipeline_state"], "verified_results_with_unverifiable_schedule")
         self.assertEqual(current["freshness_status"], "unverifiable")
         self.assertEqual(current["result_freshness_status"], "verified")
         self.assertTrue(current["result_verified_new"])
         self.assertEqual(current["last_result_verified_at"], self.NOW.isoformat())
-        self.assertEqual(current["last_successful_refresh"], self.OLD_VERIFIED)
+        self.assertEqual(current["last_successful_refresh"], self.NOW.isoformat())
+        self.assertEqual(current["last_freshness_verified_at"], self.OLD_VERIFIED)
         self.assertEqual(rows, original)
 
     def test_metadata_never_reports_updated_without_new_verification(self):
@@ -393,7 +426,7 @@ class CurrentSeasonFreshnessTests(unittest.TestCase):
 
     def test_utc_date_rollover_controls_when_fixture_becomes_expected(self):
         fixture = self.fixture(day="2026-10-20", time="")
-        london = ZoneInfo("Europe/London")
+        london = get_london_zone()
         before_utc_rollover = update_data.assess_current_season_freshness(
             [], [fixture], [], dt.datetime(2026, 10, 21, 0, 30, tzinfo=london)
         )
@@ -411,7 +444,7 @@ class CurrentSeasonFreshnessTests(unittest.TestCase):
 
     def test_spring_dst_transition_does_not_shorten_utc_grace(self):
         fixture = self.fixture(day="2026-03-28", time="")
-        london = ZoneInfo("Europe/London")
+        london = get_london_zone()
         before_deadline = update_data.assess_current_season_freshness(
             [], [fixture], [], dt.datetime(2026, 3, 31, 0, 59, tzinfo=london)
         )
@@ -425,7 +458,7 @@ class CurrentSeasonFreshnessTests(unittest.TestCase):
 
     def test_autumn_dst_transition_does_not_extend_utc_grace(self):
         fixture = self.fixture(day="2026-10-24", time="")
-        london = ZoneInfo("Europe/London")
+        london = get_london_zone()
         before_deadline = update_data.assess_current_season_freshness(
             [], [fixture], [], dt.datetime(2026, 10, 26, 23, 59, tzinfo=london)
         )
@@ -546,14 +579,18 @@ class CurrentSeasonFreshnessTests(unittest.TestCase):
             {}, {"2627": 1}, {}, self.NOW.isoformat(), freshness=freshness,
         )
         current = metadata["current_season_status"]
-        self.assertEqual(current["status"], "unavailable")
+        self.assertEqual(current["status"], "updated")
+        self.assertEqual(current["pipeline_state"], "verified_results_with_unverifiable_schedule")
         self.assertEqual(current["freshness_status"], "unverifiable")
+        self.assertEqual(current["coverage_completeness_status"], "unverifiable")
         self.assertEqual(current["known_fixture_status"], "verified")
         self.assertEqual(current["result_freshness_status"], "verified")
         self.assertFalse(current["verified_new"])
     def _run_main_with_synthetic_downloads(
         self, current_rows, previous_matches, previous_fixtures, pending_fixtures,
-        previous_current_status=None, run_at=None,
+        previous_current_status=None, run_at=None, custom_fixture_body=None,
+        fixture_error=False, season_error=None, raw_current_body=None,
+        previous_fixtures_last_checked=None,
     ):
         fields = ["Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR",
                   "HC", "AC", "HY", "AY", "HST", "AST", "HS", "AS"]
@@ -574,18 +611,22 @@ class CurrentSeasonFreshnessTests(unittest.TestCase):
         season_bodies = {
             "2425": csv_body([historic_2425]),
             "2526": csv_body([historic_2526]),
-            "2627": csv_body(current_rows),
+            "2627": raw_current_body if raw_current_body is not None else csv_body(current_rows),
         }
         run_at = run_at or self.NOW
         fixture_day = (run_at.date() + dt.timedelta(days=1)).strftime("%d/%m/%Y")
-        fixture_body = "\n".join([
-            "Div,Date,Time,HomeTeam,AwayTeam",
-            f"E0,{fixture_day},15:00,Upcoming,Future",
-        ]) + "\n"
+        if custom_fixture_body is not None:
+            fixture_body = custom_fixture_body
+        else:
+            fixture_body = "\n".join([
+                "Div,Date,Time,HomeTeam,AwayTeam",
+                f"E0,{fixture_day},15:00,Upcoming,Future",
+            ]) + "\n"
         old_timestamp = self.OLD_VERIFIED
         previous = {
             "matches": previous_matches,
             "fixtures": previous_fixtures,
+            "fixtures_last_checked": previous_fixtures_last_checked or old_timestamp,
             "pending_expected_fixtures": pending_fixtures,
             "current_season_status": previous_current_status or {
                 "freshness_status": "verified",
@@ -606,8 +647,12 @@ class CurrentSeasonFreshnessTests(unittest.TestCase):
         def fake_urlopen(request, timeout=20):
             url = request.full_url
             if url.endswith("/fixtures.csv"):
+                if fixture_error:
+                    raise update_data.urllib.error.URLError("503 Service Unavailable")
                 return io.BytesIO(fixture_body.encode("utf-8"))
             season = url.rsplit("/", 2)[-2]
+            if season == update_data.CURRENT_SEASON and season_error:
+                raise update_data.urllib.error.URLError(season_error)
             return io.BytesIO(season_bodies[season].encode("utf-8"))
 
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -789,6 +834,515 @@ class CurrentSeasonFreshnessTests(unittest.TestCase):
         self.assertEqual(second_matches[update_data.fixture_key(verified_fixture)]["prediction_record"],
                          cached_verified["prediction_record"])
         self.assertEqual(second_matches[update_data.fixture_key(still_pending_fixture)]["FTR"], "H")
+
+
+class MissionAG005DecouplingRequirementsTests(unittest.TestCase):
+    NOW = dt.datetime(2026, 10, 20, 12, 0, tzinfo=dt.timezone.utc)
+    OLD_VERIFIED = "2026-10-12T20:00:00+00:00"
+
+    @staticmethod
+    def fixture(day="2026-10-17", time="14:00", home="Brentford", away="Liverpool"):
+        return {"Date": day, "Time": time, "HomeTeam": home, "AwayTeam": away}
+
+    @staticmethod
+    def match(day="17/10/2026", home="Brentford", away="Liverpool", hg="1", ag="2",
+              ftr="A", hc="7", ac="5"):
+        return {
+            "Date": day, "HomeTeam": home, "AwayTeam": away,
+            "FTHG": hg, "FTAG": ag, "FTR": ftr, "HC": hc, "AC": ac,
+        }
+
+    def _run_main_helper(self, **kwargs):
+        test_instance = CurrentSeasonFreshnessTests()
+        return test_instance._run_main_with_synthetic_downloads(**kwargs)
+
+    def test_midweek_empty_premier_league_fixture_feed(self):
+        """1. Empty Premier League fixture feed mid-week verifies valid results and sets verified_results_with_no_fixtures."""
+        fixture = self.fixture(day="2026-10-17", home="Arsenal", away="Leeds")
+        cached = dict(self.match(day="17/10/2026", home="Arsenal", away="Leeds"),
+                      season=update_data.CURRENT_SEASON)
+        current_valid_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+
+        # Fixture feed has only Championship (E1), 0 Premier League (E0) rows
+        empty_e0_fixture_body = "Div,Date,Time,HomeTeam,AwayTeam\nE1,22/10/2026,19:45,Preston,Bristol City\n"
+
+        payload = self._run_main_helper(
+            current_rows=[current_valid_row],
+            previous_matches=[cached],
+            previous_fixtures=[fixture],
+            pending_fixtures=[],
+            custom_fixture_body=empty_e0_fixture_body,
+        )
+        current = payload["current_season_status"]
+        self.assertEqual(current["download_status"], "success")
+        self.assertEqual(current["status"], "updated")
+        self.assertEqual(current["result_freshness_status"], "verified")
+        self.assertTrue(current["result_verified_new"])
+        self.assertEqual(current["pipeline_state"], "verified_results_with_no_fixtures")
+        self.assertEqual(current["schedule_status"], "no_fixtures_supplied")
+        self.assertFalse(current["coverage_evidence"]["off_season_confirmed"])
+        self.assertEqual(current["coverage_evidence"]["off_season_status"], "unconfirmed")
+        self.assertEqual(current["last_result_verified_at"], self.NOW.isoformat())
+        self.assertEqual(current["last_successful_refresh"], self.NOW.isoformat())
+
+    def test_valid_results_with_incomplete_fixture_schedule(self):
+        """2. Valid match results with unattested/incomplete fixture schedule records verified_results_with_unverifiable_schedule."""
+        fixture = self.fixture(day="2026-10-17", home="Arsenal", away="Leeds")
+        upcoming = self.fixture(day="2026-10-24", home="Chelsea", away="Spurs")
+        valid_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+
+        # Incomplete schedule: feed contains an upcoming fixture, but no attestation
+        unattested_fixture_body = "Div,Date,Time,HomeTeam,AwayTeam\nE0,24/10/2026,15:00,Chelsea,Spurs\n"
+
+        payload = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[],
+            previous_fixtures=[fixture, upcoming],
+            pending_fixtures=[fixture],
+            custom_fixture_body=unattested_fixture_body,
+        )
+        current = payload["current_season_status"]
+        self.assertEqual(current["status"], "updated")
+        self.assertEqual(current["pipeline_state"], "verified_results_with_unverifiable_schedule")
+        self.assertEqual(current["result_freshness_status"], "verified")
+        self.assertEqual(current["coverage_completeness_status"], "unverifiable")
+        self.assertFalse(current["verified_new"])
+        self.assertTrue(current["result_verified_new"])
+
+    def test_valid_results_with_verified_future_fixtures(self):
+        """3. Valid results with independently attested complete schedule records verified_results_with_verified_fixtures."""
+        fixture = self.fixture(day="2026-10-17", home="Arsenal", away="Leeds")
+        upcoming = self.fixture(day="2026-10-24", home="Chelsea", away="Spurs")
+        valid_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+
+        schedule_evidence = {
+            "source": "official_attested_schedule_source",
+            "feed_status": "available",
+            "window_fixture_count": 10,
+            "raw_e0_fixture_count": 10,
+            "invalid_window_fixture_count": 0,
+            "off_season_confirmed": False,
+            "off_season_status": "not_indicated",
+            "completeness_attested": True,
+            "completeness_source": "Premier League Official Calendar API v1",
+        }
+        freshness = update_data.assess_current_season_freshness(
+            [valid_row], [fixture, upcoming], [fixture], self.NOW,
+            schedule_evidence=schedule_evidence,
+        )
+        self.assertEqual(freshness["pipeline_state"], "verified_results_with_verified_fixtures")
+        self.assertEqual(freshness["coverage_completeness_status"], "verified")
+        self.assertEqual(freshness["result_freshness_status"], "verified")
+        self.assertTrue(freshness["verified_new"])
+
+        metadata = update_data.build_refresh_metadata(
+            {}, {"2627": 1}, {}, self.NOW.isoformat(), freshness=freshness,
+        )
+        current = metadata["current_season_status"]
+        self.assertEqual(current["status"], "updated")
+        self.assertEqual(current["pipeline_state"], "verified_results_with_verified_fixtures")
+        self.assertEqual(current["coverage_completeness_status"], "verified")
+        self.assertTrue(current["verified_new"])
+        self.assertEqual(current["last_freshness_verified_at"], self.NOW.isoformat())
+
+    def test_invalid_results_csv_fails_closed(self):
+        """4. Invalid results CSV fails closed: status unavailable, pipeline_state results_download_failed, historical preserved."""
+        cached = dict(self.match(day="17/10/2026", home="Arsenal", away="Leeds"),
+                      season=update_data.CURRENT_SEASON)
+
+        # Corrupt CSV body missing required match columns
+        bad_csv = "InvalidCol1,InvalidCol2\nfoo,bar\n"
+
+        payload = self._run_main_helper(
+            current_rows=[],
+            previous_matches=[cached],
+            previous_fixtures=[],
+            pending_fixtures=[],
+            raw_current_body=bad_csv,
+        )
+        current = payload["current_season_status"]
+        self.assertEqual(current["download_status"], "failed")
+        self.assertEqual(current["status"], "unavailable")
+        self.assertEqual(current["pipeline_state"], "results_download_failed")
+        self.assertEqual(current["last_successful_refresh"], self.OLD_VERIFIED)
+
+        # Historical match was preserved
+        matches = [m for m in payload["matches"] if m.get("season") == update_data.CURRENT_SEASON]
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0]["HomeTeam"], "Arsenal")
+
+    def test_provider_outage_handling(self):
+        """5. Provider fixture outage does not invalidate verified results; results outage fails closed."""
+        fixture = self.fixture(day="2026-10-17", home="Arsenal", away="Leeds")
+        cached = dict(self.match(day="17/10/2026", home="Arsenal", away="Leeds"),
+                      season=update_data.CURRENT_SEASON)
+        valid_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+
+        # Scenario A: Fixture feed 503 outage, results succeed
+        payload = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[cached],
+            previous_fixtures=[fixture],
+            pending_fixtures=[fixture],
+            fixture_error=True,
+        )
+        current = payload["current_season_status"]
+        self.assertEqual(current["download_status"], "success")
+        self.assertEqual(current["status"], "updated")
+        self.assertEqual(current["result_freshness_status"], "verified")
+        self.assertEqual(current["schedule_status"], "failed")
+        self.assertEqual(current["pipeline_state"], "verified_results_with_unverifiable_schedule")
+        self.assertEqual(current["last_result_verified_at"], self.NOW.isoformat())
+
+        # Scenario B: Results 503 outage
+        payload_fail = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[cached],
+            previous_fixtures=[fixture],
+            pending_fixtures=[fixture],
+            season_error="503 Service Unavailable",
+        )
+        current_fail = payload_fail["current_season_status"]
+        self.assertEqual(current_fail["download_status"], "failed")
+        self.assertEqual(current_fail["status"], "unavailable")
+        self.assertEqual(current_fail["pipeline_state"], "results_download_failed")
+        self.assertEqual(current_fail["last_successful_refresh"], self.OLD_VERIFIED)
+
+    def test_postponed_or_rearranged_fixtures_warns_without_stable_id(self):
+        """6. Rescheduled fixtures emit warning that reconciliation is unavailable without stable fixture ID."""
+        fixture = self.fixture(day="2026-10-17", home="Arsenal", away="Leeds")
+        freshness = update_data.assess_current_season_freshness(
+            [], [fixture], [fixture], self.NOW
+        )
+        warning_text = " ".join(freshness["warnings"])
+        self.assertIn("reschedule reconciliation is unavailable without a stable provider fixture ID", warning_text)
+        evidence = freshness["coverage_evidence"]
+        self.assertEqual(evidence["reschedule_reconciliation"], "unavailable_without_stable_provider_fixture_id")
+
+    def test_stale_cached_fixtures_not_carried_forward_as_newly_verified(self):
+        """7. Fixtures whose kickoff date has passed are not carried forward as upcoming, and unexpired fixtures retain check timestamp."""
+        # Previous fixtures had:
+        # 1 expired fixture from yesterday (2026-10-19)
+        # 1 unexpired fixture for tomorrow (2026-10-21)
+        past_fixture = self.fixture(day="2026-10-19", home="PastHome", away="PastAway")
+        future_fixture = self.fixture(day="2026-10-21", home="FutureHome", away="FutureAway")
+        valid_row = self.match(day="19/10/2026", home="PastHome", away="PastAway")
+
+        # New fixture feed returns 0 fixtures
+        empty_fixture_feed = "Div,Date,Time,HomeTeam,AwayTeam\n"
+
+        payload = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[],
+            previous_fixtures=[past_fixture, future_fixture],
+            pending_fixtures=[past_fixture],
+            custom_fixture_body=empty_fixture_feed,
+            previous_current_status={
+                "freshness_status": "verified",
+                "last_successful_refresh": self.OLD_VERIFIED,
+                "last_freshness_verified_at": self.OLD_VERIFIED,
+                "last_result_verified_at": self.OLD_VERIFIED,
+                "last_statistics_verified_at": self.OLD_VERIFIED,
+            },
+        )
+        # Verify cached fixtures are NOT carried forward into active fixtures when provider returns 0 fixtures
+        upcoming_fixtures = payload["fixtures"]
+        self.assertEqual(len(upcoming_fixtures), 0)
+        self.assertEqual(upcoming_fixtures, [])
+
+        # Verify check timestamp on fixtures was NOT bumped to NOW
+        self.assertEqual(payload["fixtures_last_checked"], self.OLD_VERIFIED)
+        self.assertNotEqual(payload["fixtures_last_checked"], self.NOW.isoformat())
+
+    def test_repeat_execution_and_idempotency(self):
+        """8. Repeat execution with identical data is strictly idempotent."""
+        fixture = self.fixture(day="2026-10-17", home="Arsenal", away="Leeds")
+        valid_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+
+        run1 = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[],
+            previous_fixtures=[fixture],
+            pending_fixtures=[fixture],
+        )
+        run2 = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=run1["matches"],
+            previous_fixtures=run1["fixtures"],
+            pending_fixtures=run1["pending_expected_fixtures"],
+            previous_current_status=run1["current_season_status"],
+            run_at=self.NOW + dt.timedelta(hours=1),
+        )
+        self.assertEqual(len(run1["matches"]), len(run2["matches"]))
+        self.assertEqual(run1["current_season_status"]["status"], run2["current_season_status"]["status"])
+        self.assertEqual(run1["current_season_status"]["pipeline_state"], run2["current_season_status"]["pipeline_state"])
+        self.assertEqual(run1["current_season_status"]["rows"], run2["current_season_status"]["rows"])
+
+    def test_preservation_of_historical_records_and_frozen_ledgers(self):
+        """9. Historical records and prediction ledgers remain completely intact and uncorrupted."""
+        fixture = self.fixture(day="2026-10-17", home="Arsenal", away="Leeds")
+        cached_with_pred = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+        cached_with_pred["season"] = update_data.CURRENT_SEASON
+        cached_with_pred["prediction_record"] = {
+            "id": "pred-frozen-123",
+            "market": "Match Winner",
+            "probabilities": {"H": 0.55, "D": 0.25, "A": 0.20},
+        }
+
+        # New provider row arrives without prediction_record (provider never has prediction records)
+        provider_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+
+        payload = self._run_main_helper(
+            current_rows=[provider_row],
+            previous_matches=[cached_with_pred],
+            previous_fixtures=[fixture],
+            pending_fixtures=[],
+        )
+        stored = next(m for m in payload["matches"] if m.get("HomeTeam") == "Arsenal" and m.get("season") == update_data.CURRENT_SEASON)
+        self.assertIn("prediction_record", stored)
+        self.assertEqual(stored["prediction_record"]["id"], "pred-frozen-123")
+        self.assertEqual(stored["prediction_record"]["probabilities"]["H"], 0.55)
+
+        # Verify repository forward ledgers are untouched
+        forward_test = pathlib.Path(__file__).parent.parent / "data" / "forward_test.json"
+        winner_forward = pathlib.Path(__file__).parent.parent / "data" / "match_winner_forward.json"
+        if forward_test.exists():
+            data = json.loads(forward_test.read_text(encoding="utf-8"))
+            self.assertEqual(data.get("version"), 1)
+        if winner_forward.exists():
+            data = json.loads(winner_forward.read_text(encoding="utf-8"))
+            self.assertEqual(data.get("version"), 1)
+
+
+class MissionAG007LoopholeClosureTests(unittest.TestCase):
+    NOW = dt.datetime(2026, 10, 20, 12, 0, tzinfo=dt.timezone.utc)
+    OLD_VERIFIED = "2026-10-18T10:00:00+00:00"
+
+    @staticmethod
+    def fixture(day="2026-10-21", time="15:00", home="Brentford", away="Liverpool"):
+        return {"Date": day, "Time": time, "HomeTeam": home, "AwayTeam": away}
+
+    @staticmethod
+    def match(day="17/10/2026", home="Brentford", away="Liverpool", hg="1", ag="2",
+              ftr="A", hc="7", ac="5"):
+        return {
+            "Date": day, "HomeTeam": home, "AwayTeam": away,
+            "FTHG": hg, "FTAG": ag, "FTR": ftr, "HC": hc, "AC": ac,
+        }
+
+    def _run_main_helper(self, **kwargs):
+        test_instance = CurrentSeasonFreshnessTests()
+        return test_instance._run_main_with_synthetic_downloads(**kwargs)
+
+    def test_empty_premier_league_fixture_feed_seals_prediction_list(self):
+        """1. Empty Premier League fixture feed produces empty data['fixtures'] and does not advance fixtures_last_checked."""
+        past_fixture = self.fixture(day="2026-10-17", home="Arsenal", away="Leeds")
+        cached = dict(self.match(day="17/10/2026", home="Arsenal", away="Leeds"), season=update_data.CURRENT_SEASON)
+        valid_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+        cached_future = self.fixture(day="2026-10-24", home="Chelsea", away="Spurs")
+
+        # Provider returns 0 Premier League rows (only E1 Championship)
+        empty_e0_body = "Div,Date,Time,HomeTeam,AwayTeam\nE1,22/10/2026,19:45,Preston,Bristol City\n"
+
+        payload = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[cached],
+            previous_fixtures=[past_fixture, cached_future],
+            pending_fixtures=[],
+            custom_fixture_body=empty_e0_body,
+            previous_fixtures_last_checked=self.OLD_VERIFIED,
+        )
+        self.assertEqual(payload["fixtures"], [])
+        self.assertEqual(payload["fixtures_last_checked"], self.OLD_VERIFIED)
+        self.assertNotEqual(payload["fixtures_last_checked"], self.NOW.isoformat())
+        current = payload["current_season_status"]
+        self.assertEqual(current["schedule_status"], "no_fixtures_supplied")
+        self.assertEqual(current["pipeline_state"], "verified_results_with_no_fixtures")
+        self.assertEqual(current["result_freshness_status"], "verified")
+
+    def test_fixture_provider_failure_with_cached_fixtures_present(self):
+        """2. Fixture provider failure does not expose cached fixtures into data['fixtures'] or advance check timestamp."""
+        cached_future1 = self.fixture(day="2026-10-21", home="Man City", away="Brighton")
+        cached_future2 = self.fixture(day="2026-10-24", home="Chelsea", away="Spurs")
+        past_match = dict(self.match(day="17/10/2026", home="Arsenal", away="Leeds"), season=update_data.CURRENT_SEASON)
+        valid_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+
+        payload = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[past_match],
+            previous_fixtures=[cached_future1, cached_future2],
+            pending_fixtures=[],
+            fixture_error=True,
+            previous_fixtures_last_checked=self.OLD_VERIFIED,
+        )
+        self.assertEqual(payload["fixtures"], [])
+        self.assertEqual(payload["fixtures_last_checked"], self.OLD_VERIFIED)
+        self.assertNotEqual(payload["fixtures_last_checked"], self.NOW.isoformat())
+        current = payload["current_season_status"]
+        self.assertEqual(current["schedule_status"], "failed")
+        self.assertEqual(current["pipeline_state"], "verified_results_with_unverifiable_schedule")
+        # Completed historical matches remain preserved
+        current_matches = [m for m in payload["matches"] if m.get("season") == update_data.CURRENT_SEASON]
+        self.assertEqual(len(current_matches), 1)
+        self.assertEqual(current_matches[0]["HomeTeam"], "Arsenal")
+
+    def test_prevention_of_new_predictions_from_retained_stale_fixtures(self):
+        """3. Downstream prediction engine (forward_test / match_winner_forward) generates zero predictions when feed fails or is empty."""
+        unseen_future_fixture = self.fixture(day="2026-10-22", time="20:00", home="West Ham", away="Everton")
+        cached_match = dict(self.match(day="17/10/2026", home="Arsenal", away="Leeds"), season=update_data.CURRENT_SEASON)
+        valid_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+
+        # Provider returns 0 fixtures, but previous run had cached unseen upcoming fixture
+        payload = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[cached_match],
+            previous_fixtures=[unseen_future_fixture],
+            pending_fixtures=[],
+            custom_fixture_body="Div,Date,Time,HomeTeam,AwayTeam\n",
+            previous_fixtures_last_checked=self.OLD_VERIFIED,
+        )
+        self.assertEqual(payload["fixtures"], [])
+
+        # Exact simulation of forward_test.py and match_winner_forward.py downstream eligibility check
+        checked = payload.get("fixtures_last_checked")
+        age = self.NOW - dt.datetime.fromisoformat(checked)
+        generated_corner_predictions = []
+        generated_winner_predictions = []
+
+        if dt.timedelta(0) <= age <= dt.timedelta(days=4):
+            for f in payload.get("fixtures", []):
+                generated_corner_predictions.append(f)
+                generated_winner_predictions.append(f)
+
+        self.assertEqual(len(generated_corner_predictions), 0)
+        self.assertEqual(len(generated_winner_predictions), 0)
+
+    def test_postponed_completed_fixture_within_grace_and_beyond_grace(self):
+        """4. Previously scheduled completed fixtures that were postponed are detected and fail closed."""
+        postponed_fixture = self.fixture(day="2026-10-19", home="Liverpool", away="Everton")
+        # Match was postponed so current results CSV contains other valid season matches, but omits Liverpool vs Everton
+        valid_played_match = self.match(day="10/10/2026", home="Arsenal", away="Leeds")
+        current_results = [valid_played_match]
+
+        # Run 1: within 48h publication grace period (e.g. 2026-10-20 12:00)
+        payload_within_grace = self._run_main_helper(
+            current_rows=current_results,
+            previous_matches=[],
+            previous_fixtures=[postponed_fixture],
+            pending_fixtures=[postponed_fixture],
+            run_at=dt.datetime(2026, 10, 20, 12, 0, tzinfo=dt.timezone.utc),
+        )
+        current_within = payload_within_grace["current_season_status"]
+        self.assertEqual(current_within["result_freshness_status"], "awaiting_publication")
+        self.assertEqual(current_within["pipeline_state"], "results_awaiting_publication")
+        self.assertEqual(current_within["status"], "unavailable")
+
+        # Run 2: beyond 48h publication grace period (e.g. 2026-10-23 12:00)
+        payload_beyond_grace = self._run_main_helper(
+            current_rows=current_results,
+            previous_matches=[],
+            previous_fixtures=[postponed_fixture],
+            pending_fixtures=[postponed_fixture],
+            run_at=dt.datetime(2026, 10, 23, 12, 0, tzinfo=dt.timezone.utc),
+        )
+        current_beyond = payload_beyond_grace["current_season_status"]
+        self.assertEqual(current_beyond["result_freshness_status"], "stale")
+        self.assertEqual(current_beyond["pipeline_state"], "results_stale")
+        self.assertEqual(current_beyond["status"], "unavailable")
+        warnings_text = " ".join(current_beyond["freshness_warnings"])
+        self.assertIn("reschedule reconciliation is unavailable without a stable provider fixture ID", warnings_text)
+
+    def test_postponed_upcoming_fixture_not_in_active_prediction_targets(self):
+        """5. Upcoming fixtures that are postponed/cancelled are not retained as active prediction targets."""
+        postponed_future = self.fixture(day="2026-10-24", home="Chelsea", away="Spurs")
+        still_scheduled = self.fixture(day="2026-10-25", home="Arsenal", away="Man City")
+        valid_row = self.match(day="17/10/2026", home="Fulham", away="Brentford")
+
+        # New feed contains only the still_scheduled match; Chelsea vs Spurs was postponed
+        new_feed = "Div,Date,Time,HomeTeam,AwayTeam\nE0,25/10/2026,16:30,Arsenal,Man City\n"
+
+        payload = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[],
+            previous_fixtures=[postponed_future, still_scheduled],
+            pending_fixtures=[],
+            custom_fixture_body=new_feed,
+        )
+        active_homes = [f["HomeTeam"] for f in payload["fixtures"]]
+        self.assertIn("Arsenal", active_homes)
+        self.assertNotIn("Chelsea", active_homes)
+
+    def test_incomplete_corrupted_fixture_feed_fails_closed(self):
+        """6. Corrupted/incomplete fixture feeds do not expose prediction targets and fail closed."""
+        valid_row = self.match(day="17/10/2026", home="Fulham", away="Brentford")
+        past_fixture = self.fixture(day="2026-10-17", home="Fulham", away="Brentford")
+        cached_future = self.fixture(day="2026-10-24", home="Chelsea", away="Spurs")
+
+        # Feed has corrupted rows (invalid date and missing away team)
+        corrupted_feed = "Div,Date,Time,HomeTeam,AwayTeam\nE0,invalid_date,15:00,Arsenal,Leeds\nE0,24/10/2026,15:00,Chelsea,\n"
+
+        payload = self._run_main_helper(
+            current_rows=[valid_row],
+            previous_matches=[],
+            previous_fixtures=[past_fixture, cached_future],
+            pending_fixtures=[],
+            custom_fixture_body=corrupted_feed,
+            previous_fixtures_last_checked=self.OLD_VERIFIED,
+        )
+        self.assertEqual(payload["fixtures"], [])
+        self.assertEqual(payload["fixtures_last_checked"], self.OLD_VERIFIED)
+        self.assertNotEqual(payload["fixtures_last_checked"], self.NOW.isoformat())
+        current = payload["current_season_status"]
+        self.assertEqual(current["schedule_status"], "incomplete")
+        self.assertEqual(current["coverage_completeness_status"], "unverifiable")
+        self.assertEqual(current["pipeline_state"], "verified_results_with_unverifiable_schedule")
+
+    def test_nonempty_unattested_fixture_feed_is_not_independently_verified(self):
+        """7. Nonempty fixture feed without independent completeness attestation reports schedule_status unverifiable."""
+        fixtures, evidence = update_data.parse_fixture_schedule_csv(
+            "Div,Date,Time,HomeTeam,AwayTeam\nE0,24/10/2026,15:00,Chelsea,Spurs\n",
+            dt.date(2026, 10, 20),
+        )
+        self.assertEqual(len(fixtures), 1)
+        self.assertEqual(evidence["schedule_status"], "unverifiable")
+        self.assertFalse(evidence["completeness_attested"])
+        self.assertIsNone(evidence["completeness_source"])
+
+        freshness = update_data.assess_current_season_freshness(
+            [], fixtures, [], self.NOW, schedule_evidence=evidence,
+        )
+        self.assertEqual(freshness["schedule_status"], "unverifiable")
+        self.assertEqual(freshness["coverage_completeness_status"], "unverifiable")
+        self.assertFalse(freshness["verified_new"])
+
+    def test_preservation_of_historical_records_and_frozen_ledgers(self):
+        """8. Historical match records and production forward ledgers remain strictly untouched."""
+        # 1. Historical record preservation in update_data
+        fixture = self.fixture(day="2026-10-17", home="Arsenal", away="Leeds")
+        cached_record = dict(self.match(day="17/10/2026", home="Arsenal", away="Leeds"),
+                             season=update_data.CURRENT_SEASON,
+                             custom_feature="ag-007-verified",
+                             prediction_record={"id": "ledger-xyz-456", "market": "Corners", "probabilities": {"9.5": 0.62}})
+        provider_row = self.match(day="17/10/2026", home="Arsenal", away="Leeds")
+
+        payload = self._run_main_helper(
+            current_rows=[provider_row],
+            previous_matches=[cached_record],
+            previous_fixtures=[fixture],
+            pending_fixtures=[],
+        )
+        stored = next(m for m in payload["matches"] if m.get("HomeTeam") == "Arsenal" and m.get("season") == update_data.CURRENT_SEASON)
+        self.assertEqual(stored["custom_feature"], "ag-007-verified")
+        self.assertEqual(stored["prediction_record"]["id"], "ledger-xyz-456")
+
+        # 2. Frozen ledger file preservation
+        forward_test = pathlib.Path(__file__).parent.parent / "data" / "forward_test.json"
+        winner_forward = pathlib.Path(__file__).parent.parent / "data" / "match_winner_forward.json"
+        self.assertTrue(forward_test.exists())
+        self.assertTrue(winner_forward.exists())
+        self.assertEqual(json.loads(forward_test.read_text(encoding="utf-8"))["version"], 1)
+        self.assertEqual(json.loads(winner_forward.read_text(encoding="utf-8"))["version"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
