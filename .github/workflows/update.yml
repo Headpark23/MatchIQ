@@ -22,7 +22,7 @@ jobs:
           python-version: '3.12'
       - name: Download and validate
         run: python update_data.py
-      - name: Verify dataset and workspace integrity
+      - name: Verify publication integrity and classify data changes
         run: |
           # 1. Enforce working tree isolation: only data/matches.json may change
           MODIFIED_OTHER=$(git diff --name-only -- . ':(exclude)data/matches.json')
@@ -38,26 +38,126 @@ jobs:
             exit 1
           fi
 
-          # 3. Validate data integrity of data/matches.json
+          # 3. Deep publication integrity check & substantive change detection
           python -c "
-          import json
+          import json, sys, subprocess
+
           with open('data/matches.json', 'r', encoding='utf-8') as f:
-              data = json.load(f)
-          matches = data.get('matches', [])
-          assert len(matches) >= 830, f'Match count decreased or corrupted: {len(matches)}'
-          assert data.get('current_season_status', {}).get('download_status') == 'success', 'Current season download was not successful'
-          assert isinstance(data.get('fixtures'), list), 'Fixtures payload must be a list'
-          print(f'Dataset verification passed: {len(matches)} matches, pipeline_state={data.get(\"pipeline_state\")}')
+              current = json.load(f)
+
+          head_raw = subprocess.check_output(['git', 'show', 'HEAD:data/matches.json'], text=True, encoding='utf-8')
+          head = json.loads(head_raw)
+
+          cs = current.get('current_season_status', {})
+          pipeline_state = current.get('pipeline_state')
+
+          # --- CHECK 1: PUBLICATION INTEGRITY SAFEGUARDS ---
+          if cs.get('download_status') != 'success':
+              sys.exit(f\"PUBLICATION REJECTED: download_status is '{cs.get('download_status')}' (must be success)\")
+
+          if cs.get('status') != 'updated':
+              sys.exit(f\"PUBLICATION REJECTED: season status is '{cs.get('status')}' (must be updated)\")
+
+          if cs.get('result_freshness_status') != 'verified':
+              sys.exit(f\"PUBLICATION REJECTED: result_freshness_status is '{cs.get('result_freshness_status')}' (must be verified)\")
+
+          if cs.get('statistics_freshness_status') != 'verified':
+              sys.exit(f\"PUBLICATION REJECTED: statistics_freshness_status is '{cs.get('statistics_freshness_status')}' (must be verified)\")
+
+          ALLOWED_PIPELINE_STATES = {
+              'verified_results_with_no_fixtures',
+              'verified_results_with_verified_fixtures',
+              'verified_results_with_unverifiable_schedule',
+          }
+          if pipeline_state not in ALLOWED_PIPELINE_STATES:
+              sys.exit(f\"PUBLICATION REJECTED: pipeline_state '{pipeline_state}' is not an approved publication state\")
+
+          curr_matches = current.get('matches', [])
+          head_matches = head.get('matches', [])
+
+          if len(curr_matches) < len(head_matches):
+              sys.exit(f\"PUBLICATION REJECTED: Match count decreased ({len(curr_matches)} < {len(head_matches)})\")
+
+          head_map = {(m['season'], m['Date'], m['HomeTeam'], m['AwayTeam']): m for m in head_matches}
+          curr_map = {(m['season'], m['Date'], m['HomeTeam'], m['AwayTeam']): m for m in curr_matches}
+
+          for k, hm in head_map.items():
+              if k not in curr_map:
+                  sys.exit(f\"PUBLICATION REJECTED: Historical match missing: {k}\")
+              cm = curr_map[k]
+              for fld in ('FTHG', 'FTAG', 'FTR', 'HC', 'AC'):
+                  if hm.get(fld) and hm.get(fld) != cm.get(fld):
+                      sys.exit(f\"PUBLICATION REJECTED: Historical match {k} field '{fld}' altered from '{hm.get(fld)}' to '{cm.get(fld)}'\")
+
+          fixtures = current.get('fixtures')
+          if not isinstance(fixtures, list):
+              sys.exit(\"PUBLICATION REJECTED: fixtures payload must be a list\")
+
+          if cs.get('schedule_status') in ('failed', 'incomplete') and len(fixtures) > 0:
+              sys.exit(f\"PUBLICATION REJECTED: Active fixtures present while schedule_status is '{cs.get('schedule_status')}'\")
+
+          # --- CHECK 2: SUBSTANTIVE DATA CHANGE CLASSIFICATION ---
+          substantive_changes = []
+          if len(curr_matches) != len(head_matches):
+              substantive_changes.append(f\"Match count changed from {len(head_matches)} to {len(curr_matches)}\")
+          else:
+              for k, cm in curr_map.items():
+                  if k not in head_map:
+                      substantive_changes.append(f\"New match record: {k}\")
+                      break
+                  hm = head_map[k]
+                  for fld in set(cm.keys()) | set(hm.keys()):
+                      if cm.get(fld) != hm.get(fld):
+                          substantive_changes.append(f\"Match {k} field '{fld}' updated\")
+                          break
+                  if substantive_changes:
+                      break
+
+          if fixtures != head.get('fixtures'):
+              substantive_changes.append(\"Upcoming fixtures list changed\")
+
+          if current.get('pending_expected_fixtures') != head.get('pending_expected_fixtures'):
+              substantive_changes.append(\"Pending expected fixtures changed\")
+
+          if pipeline_state != head.get('pipeline_state'):
+              substantive_changes.append(f\"Pipeline state changed from '{head.get('pipeline_state')}' to '{pipeline_state}'\")
+
+          head_cs = head.get('current_season_status', {})
+          for sk in ('status', 'result_freshness_status', 'statistics_freshness_status', 'coverage_completeness_status', 'schedule_status', 'rows'):
+              if cs.get(sk) != head_cs.get(sk):
+                  substantive_changes.append(f\"Current season status field '{sk}' changed\")
+
+          if current.get('freshness_warnings') != head.get('freshness_warnings'):
+              substantive_changes.append(\"Freshness warnings changed\")
+
+          if current.get('errors') != head.get('errors'):
+              substantive_changes.append(\"Errors list changed\")
+
+          if substantive_changes:
+              print(\"SUBSTANTIVE DATA CHANGES DETECTED:\")
+              for sc in substantive_changes:
+                  print(f\"  - {sc}\")
+              with open('SUBSTANTIVE_CHANGE', 'w', encoding='utf-8') as out:
+                  out.write('true')
+          else:
+              print(\"NO SUBSTANTIVE DATA CHANGES DETECTED. Differences are routine refresh timestamps only.\")
+              with open('SUBSTANTIVE_CHANGE', 'w', encoding='utf-8') as out:
+                  out.write('false')
           "
       - name: Commit updated data
         run: |
-          git config user.name 'matchiq-data-bot'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/matches.json
-          if ! git diff --cached --quiet; then
+          HAS_CHANGE=$(cat SUBSTANTIVE_CHANGE 2>/dev/null || echo "false")
+          rm -f SUBSTANTIVE_CHANGE
+          if [ "$HAS_CHANGE" = "true" ]; then
+            git config user.name 'matchiq-data-bot'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add data/matches.json
             git commit -m 'Refresh Premier League statistics'
             git push
+            echo "Successfully published substantive dataset updates."
           else
-            echo "No data changes to commit."
+            echo "Skipping commit: no substantive data changes detected."
+            git checkout HEAD -- data/matches.json
           fi
+
 
