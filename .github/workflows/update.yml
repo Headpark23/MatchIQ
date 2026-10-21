@@ -1,8 +1,16 @@
 name: Refresh football data
 on:
+  schedule:
+    - cron: '15 5,17 * * *'
   workflow_dispatch:
+
 permissions:
   contents: write
+
+concurrency:
+  group: matchiq-data-refresh
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
@@ -14,6 +22,33 @@ jobs:
           python-version: '3.12'
       - name: Download and validate
         run: python update_data.py
+      - name: Verify dataset and workspace integrity
+        run: |
+          # 1. Enforce working tree isolation: only data/matches.json may change
+          MODIFIED_OTHER=$(git diff --name-only -- . ':(exclude)data/matches.json')
+          if [ -n "$MODIFIED_OTHER" ]; then
+            echo "SAFETY VIOLATION: Unexpected files modified by update_data.py: $MODIFIED_OTHER"
+            exit 1
+          fi
+
+          # 2. Reject untracked files outside cache
+          UNTRACKED_SRC=$(git status --porcelain | grep '^??' | grep -v '__pycache__' || true)
+          if [ -n "$UNTRACKED_SRC" ]; then
+            echo "SAFETY VIOLATION: Unexpected untracked files created: $UNTRACKED_SRC"
+            exit 1
+          fi
+
+          # 3. Validate data integrity of data/matches.json
+          python -c "
+          import json
+          with open('data/matches.json', 'r', encoding='utf-8') as f:
+              data = json.load(f)
+          matches = data.get('matches', [])
+          assert len(matches) >= 830, f'Match count decreased or corrupted: {len(matches)}'
+          assert data.get('current_season_status', {}).get('download_status') == 'success', 'Current season download was not successful'
+          assert isinstance(data.get('fixtures'), list), 'Fixtures payload must be a list'
+          print(f'Dataset verification passed: {len(matches)} matches, pipeline_state={data.get(\"pipeline_state\")}')
+          "
       - name: Commit updated data
         run: |
           git config user.name 'matchiq-data-bot'
@@ -22,4 +57,7 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m 'Refresh Premier League statistics'
             git push
+          else
+            echo "No data changes to commit."
           fi
+
