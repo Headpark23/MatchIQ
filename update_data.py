@@ -19,6 +19,45 @@ FIELDS = (
     "HY", "AY", "HST", "AST", "HS", "AS",
 )
 
+try:
+    from zoneinfo import ZoneInfo
+    UK_ZONE = ZoneInfo("Europe/London")
+except Exception:
+    class _LondonZone(dt.tzinfo):
+        """Fallback UK timezone (GMT / BST) when standard tzdata package is absent on Windows."""
+        def utcoffset(self, d):
+            return dt.timedelta(hours=1) if self._is_dst(d) else dt.timedelta(0)
+
+        def dst(self, d):
+            return dt.timedelta(hours=1) if self._is_dst(d) else dt.timedelta(0)
+
+        def tzname(self, d):
+            return "BST" if self._is_dst(d) else "GMT"
+
+        def _is_dst(self, d):
+            if d is None:
+                return False
+            year = d.year
+            march_last = dt.datetime(year, 3, 31, 1, 0, tzinfo=dt.timezone.utc)
+            march_sunday = march_last - dt.timedelta(days=(march_last.weekday() + 1) % 7)
+            oct_last = dt.datetime(year, 10, 31, 1, 0, tzinfo=dt.timezone.utc)
+            oct_sunday = oct_last - dt.timedelta(days=(oct_last.weekday() + 1) % 7)
+            if d.tzinfo is not None:
+                utc_d = dt.datetime(d.year, d.month, d.day, d.hour, d.minute, d.second, d.microsecond, tzinfo=dt.timezone.utc) - (dt.timedelta(hours=1) if (march_sunday.date() <= d.date() <= oct_sunday.date()) else dt.timedelta(0))
+                return march_sunday <= utc_d < oct_sunday
+            return False
+
+    UK_ZONE = _LondonZone()
+
+# Exactly 20 Premier League member clubs for the current 2627 season:
+CURRENT_SEASON_TEAMS = frozenset({
+    "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton",
+    "Chelsea", "Coventry", "Crystal Palace", "Everton", "Fulham",
+    "Hull", "Ipswich", "Leeds", "Liverpool", "Man City",
+    "Man United", "Newcastle", "Nott'm Forest", "Sunderland", "Tottenham",
+})
+DEFAULT_PREDICTION_HORIZON_DAYS = 14
+
 
 def parse_date(value):
     """Parse the date formats used in the result and fixture CSVs."""
@@ -30,6 +69,80 @@ def parse_date(value):
         except ValueError:
             continue
     return None
+
+
+def parse_kickoff(day, time_val):
+    """Parse local UK kickoff time string and return timezone-aware UTC datetime.
+
+    Rejects:
+    1. Malformed, non-string, or out-of-range hours (0-23) or minutes (0-59).
+    2. Nonexistent local times due to the spring clock change (e.g. 01:30 on 29 March 2026).
+    3. Ambiguous local times due to the autumn clock change (e.g. 01:30 on 25 October 2026).
+    """
+    if not isinstance(day, dt.date) or not isinstance(time_val, str):
+        return None
+    time_str = time_val.strip()
+    parts = time_str.split(":")
+    if len(parts) != 2:
+        return None
+    try:
+        hour, minute = int(parts[0]), int(parts[1])
+        if not (0 <= hour <= 23 and 0 <= minute <= 59):
+            return None
+    except (ValueError, TypeError):
+        return None
+
+    local_naive = dt.datetime.combine(day, dt.time(hour, minute))
+    year = day.year
+
+    # 1. Try standard zoneinfo if tzdata is available on host
+    try:
+        from zoneinfo import ZoneInfo
+        zone = ZoneInfo("Europe/London")
+        t0 = local_naive.replace(tzinfo=zone, fold=0)
+        t1 = local_naive.replace(tzinfo=zone, fold=1)
+        # Ambiguous time check: fold=0 and fold=1 produce different UTC moments
+        if t0.astimezone(UTC) != t1.astimezone(UTC):
+            return None
+        # Nonexistent time check: round-trip fails to recover the input local time
+        roundtrip = t0.astimezone(UTC).astimezone(zone).replace(tzinfo=None)
+        if roundtrip != local_naive:
+            return None
+        return t0.astimezone(UTC)
+    except Exception:
+        # 2. Standalone mathematical UK transition check (Summer Time Act 2002 / IANA rules)
+        # Transitions occur at 01:00 UTC on the last Sunday in March (GMT -> BST)
+        # and last Sunday in October (BST -> GMT).
+        march_last = dt.datetime(year, 3, 31, 1, 0, tzinfo=UTC)
+        march_sun_utc = march_last - dt.timedelta(days=(march_last.weekday() + 1) % 7)
+        oct_last = dt.datetime(year, 10, 31, 1, 0, tzinfo=UTC)
+        oct_sun_utc = oct_last - dt.timedelta(days=(oct_last.weekday() + 1) % 7)
+
+        def to_uk_local(u):
+            if march_sun_utc <= u < oct_sun_utc:
+                return u + dt.timedelta(hours=1)
+            return u
+
+        # Candidate 1: assuming GMT (UTC offset +0)
+        utc1 = local_naive.replace(tzinfo=UTC)
+        match1 = (to_uk_local(utc1).replace(tzinfo=None) == local_naive)
+
+        # Candidate 2: assuming BST (UTC offset +1)
+        utc2 = (local_naive - dt.timedelta(hours=1)).replace(tzinfo=UTC)
+        match2 = (to_uk_local(utc2).replace(tzinfo=None) == local_naive)
+
+        valid_utcs = []
+        if match1:
+            valid_utcs.append(utc1)
+        if match2 and utc2 not in valid_utcs:
+            valid_utcs.append(utc2)
+
+        # Exactly 1 valid UTC instant must map to this local time.
+        # If 0 matches: nonexistent local time (spring gap) -> None
+        # If >1 matches: ambiguous local time (autumn overlap) -> None
+        if len(valid_utcs) != 1:
+            return None
+        return valid_utcs[0]
 
 
 def parse_season_csv(body, season):
@@ -103,52 +216,160 @@ def _expected_record(row):
     }
 
 
-def parse_fixture_schedule_csv(body, today):
-    """Parse the fixture feed and report coverage evidence without treating emptiness as off-season proof."""
-    if not isinstance(today, dt.date):
-        raise ValueError("today must be a date")
+def parse_fixture_schedule_csv(
+    body, reference_time, horizon_days=DEFAULT_PREDICTION_HORIZON_DAYS, valid_teams=None
+):
+    """Parse candidate fixtures enforcing eligibility, team identity and horizon boundaries.
+
+    Prediction Horizon Justification:
+    Both production prediction models (forward_test.py line 77 and match_winner_forward.py line 60)
+    explicitly enforce: now < kickoff <= now + dt.timedelta(days=14).
+    This 14-day window aligns candidate fixtures in data["fixtures"] with model requirements:
+    1. Statistical stability: Pre-match Poisson corners and Dixon-Coles goal expectation models rely on rolling
+       10-match team form and sample statistics. Projecting beyond 14 days exposes predictions to intervening
+       match outcomes that would invalidate pre-match assumptions.
+    2. Schedule volatility: Premier League fixtures scheduled beyond 14 days are subject to broadcast selection
+       shifts, cup rearrangements, and postponements without timely notice.
+    3. Downstream compliance: Both frozen downstream prediction scripts reject any fixture where
+       kickoff > now + 14 days. Admitting them to data["fixtures"] adds no predictive value while increasing
+       exposure to schedule churn.
+    """
+    if isinstance(reference_time, dt.datetime):
+        if reference_time.tzinfo is None:
+            raise ValueError("reference_time must be timezone-aware if datetime")
+        now = reference_time.astimezone(UTC)
+        today = now.date()
+        horizon_limit = now + dt.timedelta(days=horizon_days)
+    elif isinstance(reference_time, dt.date):
+        today = reference_time
+        now = dt.datetime.combine(today, dt.time.min, UTC)
+        horizon_limit = dt.datetime.combine(today + dt.timedelta(days=horizon_days), dt.time.max, UTC)
+    else:
+        raise ValueError("reference_time must be a date or datetime")
+
+    teams_set = CURRENT_SEASON_TEAMS if valid_teams is None else frozenset(valid_teams)
     reader = csv.DictReader(io.StringIO(body))
     required = {"Div", "Date", "HomeTeam", "AwayTeam"}
     if not reader.fieldnames or not required.issubset(set(reader.fieldnames)):
         raise ValueError("Fixture feed missing required columns")
 
     records = list(reader)
-    fixtures = []
+    candidate_fixtures = []
     raw_e0_fixture_count = 0
     invalid_window_fixture_count = 0
+    past_kickoff_count = 0
+    beyond_horizon_count = 0
+    duplicate_fixture_count = 0
+    conflicting_fixture_count = 0
+    unknown_team_count = 0
+    malformed_fixture_count = 0
+
+    seen_matchups = set()
+    team_scheduled_dates = defaultdict(list)
+
     for row in records:
-        if (row.get("Div") or "").strip() != "E0":
+        div = (row.get("Div") or "").strip()
+        if div != "E0":
             continue
         raw_e0_fixture_count += 1
+
         day = parse_date((row.get("Date") or "").strip())
         if not day:
             invalid_window_fixture_count += 1
+            malformed_fixture_count += 1
             continue
-        if not today <= day <= today + dt.timedelta(days=35):
-            continue
+
         home = (row.get("HomeTeam") or "").strip()
         away = (row.get("AwayTeam") or "").strip()
         if not home or not away:
             invalid_window_fixture_count += 1
+            malformed_fixture_count += 1
             continue
-        fixtures.append({
+
+        if home == away:
+            invalid_window_fixture_count += 1
+            conflicting_fixture_count += 1
+            continue
+
+        if home not in teams_set or away not in teams_set:
+            invalid_window_fixture_count += 1
+            unknown_team_count += 1
+            continue
+
+        raw_time = (row.get("Time") or "").strip()
+        kickoff = parse_kickoff(day, raw_time)
+        if kickoff is None:
+            invalid_window_fixture_count += 1
+            malformed_fixture_count += 1
+            continue
+
+        matchup_key = (day.isoformat(), home, away)
+        if matchup_key in seen_matchups:
+            invalid_window_fixture_count += 1
+            duplicate_fixture_count += 1
+            continue
+        seen_matchups.add(matchup_key)
+
+        if day in team_scheduled_dates[home] or day in team_scheduled_dates[away]:
+            invalid_window_fixture_count += 1
+            conflicting_fixture_count += 1
+            continue
+        team_scheduled_dates[home].append(day)
+        team_scheduled_dates[away].append(day)
+
+        if kickoff <= now:
+            # Exclude past kickoffs (Requirement 4)
+            past_kickoff_count += 1
+            continue
+
+        if kickoff > horizon_limit:
+            # Outside approved prediction horizon (Requirement 3)
+            beyond_horizon_count += 1
+            continue
+
+        candidate_fixtures.append({
             "Date": day.isoformat(),
-            "Time": (row.get("Time") or "").strip(),
+            "Time": raw_time,
             "HomeTeam": home,
             "AwayTeam": away,
         })
 
+    # FAIL CLOSED RULE (Requirement 7):
+    # When the provider returns corrupted or conflicting evidence, fail closed
+    # rather than silently accepting a partial clean subset.
+    if invalid_window_fixture_count > 0:
+        fixtures = []
+        schedule_status = "incomplete"
+    elif not candidate_fixtures:
+        fixtures = []
+        schedule_status = "no_fixtures_supplied"
+    else:
+        fixtures = candidate_fixtures
+        # Fixtures were found, but football-data.co.uk provides no independent
+        # attestation of round completeness; coverage remains unverifiable.
+        schedule_status = "unverifiable"
+
+    feed_status = "available"
     evidence = {
         "source": "football-data.co.uk/fixtures.csv",
-        "feed_status": "available",
+        "feed_status": feed_status,
+        "schedule_status": schedule_status,
         "source_record_count": len(records),
         "window_fixture_count": len(fixtures),
         "raw_e0_fixture_count": raw_e0_fixture_count,
         "invalid_window_fixture_count": invalid_window_fixture_count,
+        "past_kickoff_count": past_kickoff_count,
+        "beyond_horizon_count": beyond_horizon_count,
+        "duplicate_fixture_count": duplicate_fixture_count,
+        "conflicting_fixture_count": conflicting_fixture_count,
+        "unknown_team_count": unknown_team_count,
+        "malformed_fixture_count": malformed_fixture_count,
         "off_season_confirmed": False,
         "off_season_status": "not_indicated" if fixtures else "unconfirmed",
         "completeness_attested": False,
         "completeness_source": None,
+        "horizon_days": horizon_days,
+        "independently_confirmed": False,
     }
     return fixtures, evidence
 
@@ -157,7 +378,7 @@ def assess_current_season_freshness(
     match_rows, fixtures, pending_fixtures, now, previous_freshness_status=None,
     duplicate_keys=None, grace_period=PUBLICATION_GRACE, schedule_evidence=None,
 ):
-    """Validate known completed fixtures; previous status is compatibility-only and never promotes verification."""
+    """Validate known completed fixtures independently of fixture schedule availability."""
     if now.tzinfo is None:
         raise ValueError("now must be timezone-aware")
     now = now.astimezone(UTC)
@@ -202,14 +423,28 @@ def assess_current_season_freshness(
             and isinstance(completeness_source, str)
             and bool(completeness_source.strip())
         )
-    schedule_credible = feed_status == "available" and current_window_count > 0
+
+    # Determine explicit schedule verification status:
+    if feed_status == "failed":
+        schedule_status = "failed"
+    elif invalid_window_count > 0:
+        schedule_status = "incomplete"
+    elif current_window_count == 0 or feed_status == "empty":
+        schedule_status = "no_fixtures_supplied"
+    elif completeness_attested:
+        schedule_status = "verified"
+    else:
+        schedule_status = "unverifiable"
+
+    schedule_credible = feed_status == "available" and current_window_count > 0 and invalid_window_count == 0
 
     expected = {}
-    unverifiable = []
+    result_unverifiable = []
+    schedule_unverifiable = []
     for row in pending_rows + fixture_rows:
         key = fixture_key(row)
         if not key:
-            unverifiable.append("Fixture schedule contains an incomplete date/team identity.")
+            schedule_unverifiable.append("Fixture schedule contains an incomplete date/team identity.")
             continue
         day = parse_date(row.get("Date", row.get("date", "")))
         already_pending = row in pending_rows
@@ -251,7 +486,7 @@ def assess_current_season_freshness(
 
         past_grace = _past_publication_grace(fixture, now, grace_period)
         if past_grace is None:
-            unverifiable.append(
+            result_unverifiable.append(
                 f"Cannot apply the publication grace period to {key[1]}–{key[2]} on {key[0]}."
             )
         elif score_issue:
@@ -267,28 +502,20 @@ def assess_current_season_freshness(
 
     if not schedule_credible:
         if feed_status == "failed":
-            unverifiable.append("Fixture schedule refresh failed; current schedule coverage is unavailable.")
+            schedule_unverifiable.append("Fixture schedule refresh failed; current schedule coverage is unavailable.")
+        elif current_window_count == 0:
+            schedule_unverifiable.append(
+                "Fixture feed returned 0 in-window fixtures; genuine off-season status is unconfirmed."
+            )
         else:
-            unverifiable.append(
+            schedule_unverifiable.append(
                 "No credible in-window fixture schedule is available; genuine off-season status is unconfirmed."
             )
     if not expected:
-        unverifiable.append("No completed fixture is available to verify current result coverage.")
+        result_unverifiable.append("No completed fixture is available to verify current result coverage.")
 
-    if unverifiable:
-        status = "unverifiable"
-    elif score_beyond_grace or statistics_beyond_grace:
-        status = "stale"
-    elif score_within_grace or statistics_within_grace:
-        status = "awaiting_publication"
-    elif expected and verified_score_count == len(expected) and verified_statistics_count == len(expected):
-        status = "verified"
-    else:
-        status = "unverifiable"
-        unverifiable.append("The available fixture evidence does not establish complete result coverage.")
-
-    def category_status(beyond_grace, within_grace, verified_count):
-        if unverifiable:
+    def result_category_status(beyond_grace, within_grace, verified_count):
+        if result_unverifiable:
             return "unverifiable"
         if beyond_grace:
             return "stale"
@@ -298,13 +525,25 @@ def assess_current_season_freshness(
             return "verified"
         return "unverifiable"
 
-    result_status = category_status(
+    result_status = result_category_status(
         score_beyond_grace, score_within_grace, verified_score_count
     )
-    statistics_status = category_status(
+    statistics_status = result_category_status(
         statistics_beyond_grace, statistics_within_grace, verified_statistics_count
     )
-    known_fixture_status = status
+
+    if result_unverifiable:
+        known_fixture_status = "unverifiable"
+    elif score_beyond_grace or statistics_beyond_grace:
+        known_fixture_status = "stale"
+    elif score_within_grace or statistics_within_grace:
+        known_fixture_status = "awaiting_publication"
+    elif expected and verified_score_count == len(expected) and verified_statistics_count == len(expected):
+        known_fixture_status = "verified"
+    else:
+        known_fixture_status = "unverifiable"
+        result_unverifiable.append("The available fixture evidence does not establish complete result coverage.")
+
     completeness_basis_verified = (
         completeness_attested
         and schedule_credible
@@ -314,8 +553,28 @@ def assess_current_season_freshness(
     coverage_completeness_status = (
         "verified" if completeness_basis_verified else "unverifiable"
     )
-    if not completeness_basis_verified:
-        status = "unverifiable"
+
+    overall_status = "verified" if (known_fixture_status == "verified" and completeness_basis_verified) else "unverifiable"
+
+    result_verified_new = bool(expected) and result_status == "verified"
+    statistics_verified_new = bool(expected) and statistics_status == "verified"
+    verified_new = overall_status == "verified" and bool(expected)
+
+    # Explicit pipeline states:
+    if result_status == "verified":
+        if schedule_status == "verified" and completeness_basis_verified:
+            pipeline_state = "verified_results_with_verified_fixtures"
+        elif schedule_status == "no_fixtures_supplied":
+            pipeline_state = "verified_results_with_no_fixtures"
+        else:
+            pipeline_state = "verified_results_with_unverifiable_schedule"
+    elif result_status == "stale":
+        pipeline_state = "results_stale"
+    elif result_status == "awaiting_publication":
+        pipeline_state = "results_awaiting_publication"
+    else:
+        pipeline_state = "results_unverifiable"
+
     warnings = []
     if missing_scores:
         warnings.append(f"{len(missing_scores)} expected completed fixture(s) lack a validated final score/result.")
@@ -335,10 +594,13 @@ def assess_current_season_freshness(
         warnings.append(
             "Comprehensive freshness is UNVERIFIABLE because no authoritative fixture-completeness basis is available; result/statistics statuses cover known expected fixtures only."
         )
-    warnings.extend(unverifiable)
+    warnings.extend(result_unverifiable)
+    warnings.extend(schedule_unverifiable)
     coverage_evidence = {
         "schedule_source": (schedule_evidence or {}).get("source", "fixture schedule input"),
         "schedule_feed_status": feed_status,
+        "schedule_status": schedule_status,
+        "pipeline_state": pipeline_state,
         "source_record_count": source_record_count,
         "current_window_fixture_count": current_window_count,
         "raw_e0_fixture_count": raw_e0_fixture_count,
@@ -358,14 +620,16 @@ def assess_current_season_freshness(
         "reschedule_reconciliation": "unavailable_without_stable_provider_fixture_id",
     }
     return {
-        "status": status,
+        "status": overall_status,
         "known_fixture_status": known_fixture_status,
         "coverage_completeness_status": coverage_completeness_status,
+        "schedule_status": schedule_status,
+        "pipeline_state": pipeline_state,
         "result_freshness_status": result_status,
         "statistics_freshness_status": statistics_status,
-        "result_verified_new": schedule_credible and bool(expected) and result_status == "verified",
-        "statistics_verified_new": schedule_credible and bool(expected) and statistics_status == "verified",
-        "verified_new": status == "verified" and bool(expected),
+        "result_verified_new": result_verified_new,
+        "statistics_verified_new": statistics_verified_new,
+        "verified_new": verified_new,
         "coverage_evidence": coverage_evidence,
         "pending_fixtures": pending,
         "missing_scores": missing_scores,
@@ -397,11 +661,15 @@ def build_refresh_metadata(previous, successful_rows, failures, refreshed_at, fr
     old_result_timestamp = (
         old_current.get("last_result_verified_at")
         or old_status_current.get("last_result_verified_at")
+        or old_current.get("last_successful_refresh")
+        or old_status_current.get("last_successful_refresh")
         or old_timestamp
     )
     old_statistics_timestamp = (
         old_current.get("last_statistics_verified_at")
         or old_status_current.get("last_statistics_verified_at")
+        or old_current.get("last_successful_refresh")
+        or old_status_current.get("last_successful_refresh")
         or old_timestamp
     )
     legacy_unverified_refresh_at = previous.get("legacy_unverified_refresh_at")
@@ -416,7 +684,7 @@ def build_refresh_metadata(previous, successful_rows, failures, refreshed_at, fr
         old = previous_status.get(season, {})
         season_timestamp = old.get("last_successful_refresh")
         if season == CURRENT_SEASON:
-            season_timestamp = old_timestamp
+            season_timestamp = old_result_timestamp
         if season in successful_rows:
             status = {
                 "season": season,
@@ -429,6 +697,8 @@ def build_refresh_metadata(previous, successful_rows, failures, refreshed_at, fr
                     "status": "unverifiable",
                     "known_fixture_status": "unverifiable",
                     "coverage_completeness_status": "unverifiable",
+                    "schedule_status": "unverifiable",
+                    "pipeline_state": "results_unverifiable",
                     "verified_new": False,
                     "result_verified_new": False,
                     "statistics_verified_new": False,
@@ -442,6 +712,8 @@ def build_refresh_metadata(previous, successful_rows, failures, refreshed_at, fr
                 coverage_completeness_status = freshness.get(
                     "coverage_completeness_status", "unverifiable"
                 )
+                schedule_status = freshness.get("schedule_status", "unverifiable")
+                pipeline_state = freshness.get("pipeline_state")
                 verified_new = (
                     freshness.get("verified_new") is True
                     and freshness_status == "verified"
@@ -460,12 +732,45 @@ def build_refresh_metadata(previous, successful_rows, failures, refreshed_at, fr
                 last_verified = refreshed_at if verified_new else old_timestamp
                 last_result_verified = refreshed_at if result_verified_new else old_result_timestamp
                 last_statistics_verified = refreshed_at if statistics_verified_new else old_statistics_timestamp
+
+                # Decoupled freshness:
+                # If completed-match results are verified and newly confirmed this run:
+                # season data is updated!
+                results_verified = (
+                    result_status == "verified"
+                    and result_verified_new
+                    and known_fixture_status == "verified"
+                )
+                if results_verified:
+                    current_status = "updated"
+                    current_refresh_timestamp = refreshed_at
+                else:
+                    current_status = "unavailable"
+                    current_refresh_timestamp = old_result_timestamp
+
+                if not pipeline_state:
+                    if result_status == "verified" and result_verified_new:
+                        if coverage_completeness_status == "verified" and schedule_status == "verified":
+                            pipeline_state = "verified_results_with_verified_fixtures"
+                        elif schedule_status == "no_fixtures_supplied":
+                            pipeline_state = "verified_results_with_no_fixtures"
+                        else:
+                            pipeline_state = "verified_results_with_unverifiable_schedule"
+                    elif result_status == "stale":
+                        pipeline_state = "results_stale"
+                    elif result_status == "awaiting_publication":
+                        pipeline_state = "results_awaiting_publication"
+                    else:
+                        pipeline_state = "results_unverifiable"
+
                 status.update({
-                    "status": "updated" if freshness_status == "verified" and verified_new else "unavailable",
+                    "status": current_status,
                     "download_status": "success",
+                    "pipeline_state": pipeline_state,
                     "freshness_status": freshness_status,
                     "known_fixture_status": known_fixture_status,
                     "coverage_completeness_status": coverage_completeness_status,
+                    "schedule_status": schedule_status,
                     "verified_new": verified_new,
                     "result_verified_new": result_verified_new,
                     "statistics_verified_new": statistics_verified_new,
@@ -477,7 +782,7 @@ def build_refresh_metadata(previous, successful_rows, failures, refreshed_at, fr
                     "last_download_at": last_download_at or refreshed_at,
                     "freshness_checked_at": refreshed_at,
                     "provider_published_at": None,
-                    "last_successful_refresh": last_verified,
+                    "last_successful_refresh": current_refresh_timestamp,
                     "last_freshness_verified_at": last_verified,
                     "freshness_warnings": freshness.get("warnings", []),
                 })
@@ -504,9 +809,11 @@ def build_refresh_metadata(previous, successful_rows, failures, refreshed_at, fr
                     failed_statistics_status = "unverifiable"
                 unavailable.update({
                     "download_status": "failed",
+                    "pipeline_state": "results_download_failed",
                     "freshness_status": failed_freshness_status,
                     "known_fixture_status": failed_known_fixture_status,
                     "coverage_completeness_status": failed_completeness_status,
+                    "schedule_status": "unavailable",
                     "verified_new": False,
                     "result_verified_new": False,
                     "statistics_verified_new": False,
@@ -528,8 +835,9 @@ def build_refresh_metadata(previous, successful_rows, failures, refreshed_at, fr
         "refresh_attempted_at": attempted_at or refreshed_at,
         "current_season": CURRENT_SEASON,
         "current_season_status": current,
-        # Compatibility field: last known coverage-verified current-season time, never download time.
-        "last_successful_refresh": current.get("last_freshness_verified_at"),
+        "pipeline_state": current.get("pipeline_state", "results_unverifiable"),
+        # Last known verified result time, never raw download time
+        "last_successful_refresh": current.get("last_successful_refresh"),
         "legacy_unverified_refresh_at": legacy_unverified_refresh_at,
         "historical_seasons_updated": historical_updated,
         "season_status": statuses,
@@ -610,17 +918,27 @@ def main():
         )
         with urllib.request.urlopen(request, timeout=20) as response:
             body = response.read().decode("utf-8-sig", errors="replace")
+        download_now = dt.datetime.now(UTC)
         fixtures, schedule_evidence = parse_fixture_schedule_csv(
-            body, dt.datetime.now(UTC).date()
+            body, download_now
         )
-        fixture_updated = dt.datetime.now(UTC).isoformat()
+        if fixtures and schedule_evidence.get("invalid_window_fixture_count", 0) == 0:
+            fixture_updated = download_now.isoformat()
+        else:
+            # Empty feed or incomplete/corrupted feed:
+            # Do NOT carry forward cached fixtures into active data["fixtures"].
+            # Do NOT advance fixtures_last_checked timestamp.
+            fixtures = []
+            fixture_updated = previous.get("fixtures_last_checked")
     except Exception as exc:
         fixture_error = str(exc)
         errors.append({"source": "fixtures", "error": fixture_error})
-        # Keep the last schedule evidence and its original timestamp for reconciliation.
-        fixtures = previous.get("fixtures", [])
+        # Fixture retrieval failed: do NOT expose cached fixtures as newly verified prediction targets.
+        # Do NOT advance fixtures_last_checked timestamp.
+        fixtures = []
         fixture_updated = previous.get("fixtures_last_checked")
         schedule_evidence["feed_status"] = "failed"
+        schedule_evidence["schedule_status"] = "failed"
         schedule_evidence["off_season_status"] = "unavailable"
 
     # Assess freshness only from this run's downloaded CSV; `merged` intentionally
@@ -666,10 +984,22 @@ def main():
         schedule_evidence=schedule_evidence,
     )
     if fixture_error:
-        freshness["status"] = "unverifiable"
+        freshness["coverage_completeness_status"] = "unverifiable"
         freshness["verified_new"] = False
+        freshness["schedule_status"] = "failed"
+        if freshness["result_freshness_status"] == "verified":
+            freshness["pipeline_state"] = "verified_results_with_unverifiable_schedule"
         freshness["warnings"].append(
             "Fixture schedule refresh failed; expected completed-fixture coverage cannot be confirmed."
+        )
+    elif schedule_evidence.get("invalid_window_fixture_count", 0) > 0:
+        freshness["coverage_completeness_status"] = "unverifiable"
+        freshness["verified_new"] = False
+        freshness["schedule_status"] = "incomplete"
+        if freshness["result_freshness_status"] == "verified":
+            freshness["pipeline_state"] = "verified_results_with_unverifiable_schedule"
+        freshness["warnings"].append(
+            "Fixture schedule contains corrupted, invalid, unknown-team, or conflicting entries; failing closed to seal prediction list."
         )
     downloaded_at = dt.datetime.now(UTC).isoformat()
     metadata = build_refresh_metadata(
