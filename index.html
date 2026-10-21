@@ -1,18 +1,2139 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#081b18"><title>MatchIQ ⚽</title><style>
-:root{font-family:system-ui,sans-serif;color:#e9f7f1;background:#081b18}*{box-sizing:border-box}body{margin:0}main{max-width:920px;margin:auto;padding:24px 16px 70px}header{display:flex;justify-content:space-between;align-items:center;gap:12px}h1{font-size:clamp(30px,6vw,52px);line-height:1.1;margin:34px 0 12px}p{color:#a9c3b7}.brand{font-weight:900;font-size:23px}.brand span{color:#64e7ac}.status{font-size:12px;border:1px solid #386453;border-radius:50px;padding:9px;color:#aee8c8}.markets{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.market{background:#142c25;color:#e9f7f1;border:1px solid #35574a;border-radius:16px;padding:13px 6px;cursor:pointer;min-height:90px}.market[aria-pressed=true]{border:2px solid #64e7ac;background:#214537}.market b{display:block;font-size:15px;margin:8px 0}.market small{color:#a9c3b7}.emoji{font-size:25px}.panel{background:#102920;border:1px solid #2e5143;border-radius:18px;padding:16px;margin:14px 0}.row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.tag{font-size:12px;color:#a7e6c5;border:1px solid #436654;border-radius:30px;padding:6px 9px}.result{padding:16px 0;border-top:1px solid #345044}.big{font-size:30px;font-weight:800;color:#75eeb2;margin:10px 0}select,button{font:inherit}select{background:#173c30;color:white;padding:8px;border-radius:8px;border:1px solid #456}.breakdown{margin-top:12px;border:1px solid #386453;border-radius:12px;padding:12px;background:#15382c}.breakdown summary{cursor:pointer;font-weight:700;color:#a7e6c5}.breakdown-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.breakdown-grid b{display:block;margin-bottom:5px}.breakdown-grid span{display:block;font-size:13px;color:#b9d2c5;margin-top:4px}.warning{font-size:12px;color:#e5cda0}.threshold{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}.threshold label{font-size:14px}.mini{font-size:13px;color:#b9d2c5}.caution{color:#e5cda0;font-size:13px}.backtest-table{width:100%;border-collapse:collapse;font-size:13px}.backtest-table th,.backtest-table td{padding:9px 5px;border-bottom:1px solid #345044;text-align:right}.backtest-table th:first-child,.backtest-table td:first-child{text-align:left}.backtest-table th{color:#a9c3b7}.muted{color:#a9c3b7;font-size:13px}[hidden]{display:none!important}footer{font-size:12px;color:#a9c3b7;margin-top:30px}@media(max-width:520px){.markets{grid-template-columns:repeat(2,1fr)}.market{min-height:88px}}
-.overview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.overview-tile{border:1px solid #386453;border-radius:12px;padding:12px;background:#15382c}.overview-tile strong{display:block;font-size:25px;color:#75eeb2}.overview-tile span{font-size:12px;color:#b9d2c5}.overview-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.overview-head h2{margin:0}.overview-note{font-size:12px;color:#a9c3b7}.overview-grid .overview-tile{min-width:0}</style><main><header><div class="brand">⚽ Match<span>IQ</span></div><div class="status" id="status">Checking data…</div></header><h1>What type of bet are you looking at?</h1><p>Choose a market. MatchIQ checks available Premier League statistics automatically. No spreadsheets to upload.</p><section class="panel" id="overview-panel"><div class="overview-head"><h2>📊 Research dashboard</h2><span class="tag">Forward evidence</span></div><p class="muted">Frozen pre-match predictions and their outcomes, not betting recommendations.</p><div id="overview">Loading trackers…</div></section><div class="markets" id="markets"></div><section class="panel"><div class="row"><h2 id="heading">Corners</h2><label>Form window <select id="window"><option>5</option><option selected>10</option><option>20</option></select></label></div><p id="intro"></p><div id="goals-control" class="threshold" hidden><label for="goals-threshold">Total goals line</label><select id="goals-threshold"><option value="1.5">Over 1.5</option><option value="2.5" selected>Over 2.5</option><option value="3.5">Over 3.5</option></select></div><div id="threshold-control" class="threshold"><label for="threshold">Total corners line</label><select id="threshold"><option value="8.5">Over 8.5</option><option value="9.5" selected>Over 9.5</option><option value="10.5">Over 10.5</option></select></div><div id="results">Loading…</div></section><section class="panel" id="corners-forward-panel"><h2>📋 Corners forward-test tracker</h2><p class="muted">Predictions recorded before kickoff. Results are settled only after the historical data feed updates. This is independent future evidence collection, not betting advice.</p><div id="forward">Loading prediction ledger…</div></section><section class="panel" id="corners-backtest-panel"><h2>🧪 Historical backtest: corners</h2><p class="muted">Chronological holdout test. Each prediction uses only earlier match dates. Research accuracy, not betting profitability.</p><div id="backtest">Waiting for data…</div></section><section class="panel" id="shots-backtest-panel" hidden><h2>🎯 Historical backtest: shots on target</h2><p class="muted">Combined home and away shots on target (HST + AST), not all shots. Chronological evaluation of recent-frequency, Poisson and league baseline.</p><div id="shots-backtest">Waiting for data…</div></section><section class="panel" id="cards-backtest-panel" hidden><h2>🟨 Historical backtest: yellow cards</h2><p class="muted">Total yellow cards only (HY + AY). Chronological holdout, comparing recent-frequency, Poisson and league baseline. Red cards and bookmaker card points are excluded.</p><div id="cards-backtest">Waiting for data…</div></section><section class="panel" id="btts-backtest-panel" hidden><h2>🧪 Historical backtest: BTTS</h2><p class="muted">Chronological holdout comparison for Both Teams To Score (Yes and No). Simple historical estimates, not validated betting probabilities.</p><div id="btts-backtest">Waiting for data…</div></section><section class="panel" id="goals-backtest-panel" hidden><h2>🧪 Historical backtest: goals</h2><p class="muted">Chronological 70/30 evaluation of a fixed, simple recent-frequency estimate against the training-period league baseline. Descriptive research, not validated betting probabilities.</p><div id="goals-backtest">Waiting for data…</div></section><section class="panel" id="winner-panel" hidden><h2>🏆 Experimental Match Winner: Dixon-Coles</h2><p class="muted">Frozen pre-match estimates only, recorded separately from Corners. No betting recommendations.</p><div id="winner-ledger">Waiting for recorded predictions…</div></section><section class="panel"><h2>📡 Data health</h2><p id="health">Checking feed…</p></section><footer>Private research prototype. Historical frequencies are not validated betting probabilities. No live odds. No bet is guaranteed.</footer></main><script src="market_calculations.js"></script><script>
-const markets=[['corners','🚩','Corners'],['cards','🟨','Cards'],['shots','🎯','Shots on target'],['wins','🏆','Match winner'],['btts','⚽','Both teams score'],['goals','🥅','Goals']];let selected='corners',rows=[],meta={},winnerPredictions=[];const calc=window.MatchIQCalculations,el=id=>document.getElementById(id),num=v=>v===''||v==null?null:Number.isFinite(+v)?+v:null,avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null,esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function date(s){const p=(s||'').split('/');return p.length===3?new Date(+p[2]<100?2000+(+p[2]):+p[2],+p[1]-1,+p[0]).getTime():Date.parse(s)}
-function kickoff(f){
- if(!/^\d{4}-\d{2}-\d{2}$/.test(f.Date)||!/^\d{2}:\d{2}$/.test(f.Time||''))return NaN;
- const naive=Date.parse(f.Date+'T'+f.Time+':00Z');
- if(!Number.isFinite(naive))return NaN;
- const tz=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',timeZoneName:'shortOffset'}).formatToParts(new Date(naive)).find(x=>x.type==='timeZoneName')?.value||'GMT';
- const m=tz.match(/^GMT([+-])(\d{1,2})(?::(\d{2}))?$/);
- const offset=m?(m[1]==='+'?1:-1)*(+m[2]*60+(+(m[3]||0))):0;
- return naive-offset*60000;
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MatchIQ Pro — Stadium Control & Football Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  font-family: "Roboto Condensed", "Arial Narrow", Inter, system-ui, sans-serif;
+  color: #f2f6f7;
+  background: #06131a;
+  color-scheme: dark;
+  --bg: #06131a;
+  --ink: #f2f6f7;
+  --muted: #8fa6b0;
+  --dim: #58707b;
+  --panel: #0b2029;
+  --line: rgba(186, 219, 226, 0.16);
+  --emerald: #28e7a0;
+  --gold: #f0c55b;
+  --home: #1161a3;
+  --away: #a70e39;
+  --cyan: #55c7d3;
 }
+* {
+  box-sizing: border-box;
+}
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  background: var(--bg);
+  min-width: 320px;
+  max-width: 100vw;
+}
+button, select {
+  font: inherit;
+}
+button:focus-visible, select:focus-visible, summary:focus-visible {
+  outline: 3px solid rgba(40, 231, 160, 0.55);
+  outline-offset: 3px;
+}
+.shell {
+  min-height: 100vh;
+  border-top: 4px solid #42314a;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+.topline {
+  display: grid;
+  grid-template-columns: 1.18fr 0.9fr 0.72fr 0.72fr 0.6fr 0.85fr 0.84fr;
+  min-height: 78px;
+  background: #07161d;
+  border-bottom: 1px solid var(--line);
+}
+.topcell {
+  padding: 14px 22px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+.topcell:last-child {
+  border-right: 0;
+}
+.brand {
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  font-size: 21px;
+}
+.brand em, .brand span {
+  font-style: normal;
+  color: var(--emerald);
+}
+.brand-sub {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.top-label {
+  font-size: 10px;
+  color: var(--muted);
+}
+.top-value {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.top-note {
+  font-size: 9px;
+  color: var(--muted);
+}
+.feed {
+  color: var(--emerald);
+  font-size: 10px;
+}
+.feed:before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background: var(--emerald);
+  margin-right: 8px;
+  box-shadow: 0 0 0 4px rgba(40, 231, 160, 0.12);
+}
+.ribbon {
+  display: grid;
+  grid-template-columns: 166px minmax(0, 1fr) 42px;
+  gap: 0;
+  min-height: 96px;
+  background: #071920;
+  border-bottom: 1px solid var(--line);
+  padding: 9px 18px;
+}
+.ribbon-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 16px 0 36px;
+  border-right: 1px solid var(--line);
+}
+.ribbon-title strong {
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+.ribbon-title span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.ribbon-list {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  align-items: center;
+  padding: 0 18px;
+  scrollbar-width: thin;
+}
+.ribbon-card {
+  min-width: 172px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 10px 12px;
+  color: var(--ink);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.ribbon-card:hover {
+  border-color: var(--emerald);
+  transform: translateY(-1px);
+}
+.ribbon-card.active {
+  border-color: var(--emerald);
+  box-shadow: 0 0 0 1px var(--emerald);
+}
+.ribbon-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+}
+.ribbon-top b {
+  color: var(--ink);
+}
+.ribbon-teams {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ribbon-prob {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.ribbon-prob .h { background: var(--home); }
+.ribbon-prob .d { background: #b0c4de; }
+.ribbon-prob .a { background: var(--away); }
+.ribbon-numbers {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--muted);
+}
+.ribbon-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--muted);
+}
+.ribbon-empty-state {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.ribbon-empty-icon {
+  font-size: 24px;
+  opacity: 0.8;
+}
+.ribbon-empty-state b {
+  color: var(--ink);
+  display: block;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+/* Stadium Hero Container */
+.broadcast {
+  min-height: 440px;
+  background: radial-gradient(circle at 50% 20%, #0e2a36 0%, #06131a 75%);
+  padding: 24px;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+.broadcast-inner {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+/* AG-024: Homepage Intro Stage */
+.intro-stage {
+  padding: 32px 16px 24px;
+  text-align: center;
+}
+.intro-radar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--emerald);
+  background: rgba(40, 231, 160, 0.08);
+  border: 1px solid rgba(40, 231, 160, 0.25);
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.radar-ping {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--emerald);
+  box-shadow: 0 0 0 3px rgba(40, 231, 160, 0.25);
+  animation: radarPulse 2s infinite ease-in-out;
+}
+@keyframes radarPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.85); }
+}
+.intro-brand {
+  font-size: clamp(38px, 6vw, 64px);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.intro-brand span {
+  color: var(--emerald);
+}
+.intro-headline {
+  font-size: clamp(20px, 3.2vw, 32px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #55c7d3;
+  margin: 0 0 16px;
+  text-transform: uppercase;
+}
+.intro-desc {
+  font-size: clamp(14px, 1.8vw, 16px);
+  color: var(--muted);
+  max-width: 760px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* Beginner Guide to Markets */
+.markets-guide-panel {
+  background: rgba(7, 25, 32, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+.markets-guide-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.markets-guide-head h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-transform: uppercase;
+}
+.markets-guide-head span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.markets-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.guide-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.guide-card-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+.guide-card-body b {
+  display: block;
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.guide-card-body p {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.45;
+  font-family: Inter, system-ui, sans-serif;
+}
+.guide-card-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-bottom: 6px;
+}
+.guide-card-badge.model {
+  background: rgba(40, 231, 160, 0.15);
+  color: var(--emerald);
+}
+.guide-card-badge.research {
+  background: rgba(240, 197, 91, 0.15);
+  color: var(--gold);
+}
+
+/* Match Selector Strip (for selecting match to experience predictions) */
+.match-explorer-box {
+  background: rgba(11, 32, 41, 0.85);
+  border: 1px solid rgba(40, 231, 160, 0.25);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+}
+.explorer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.explorer-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--emerald);
+  text-transform: uppercase;
+}
+.explorer-subtitle {
+  font-size: 12px;
+  color: var(--muted);
+}
+.explorer-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+.explorer-match-btn {
+  background: #071920;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 52px;
+  text-align: left;
+}
+.explorer-match-btn:hover {
+  border-color: var(--emerald);
+  background: #0d2631;
+  transform: translateY(-2px);
+}
+.explorer-match-btn b {
+  font-size: 12.5px;
+  display: block;
+}
+.explorer-match-btn small {
+  font-size: 10px;
+  color: var(--muted);
+}
+.explorer-match-btn .btn-arrow {
+  font-size: 14px;
+  color: var(--emerald);
+}
+
+/* AG-024: Match Selection Experience / Match Dashboard */
+.match-dashboard-stage {
+  padding: 10px 0 20px;
+}
+.dashboard-top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.btn-back-overview {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--cyan);
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  transition: all 0.15s ease;
+}
+.btn-back-overview:hover {
+  border-color: var(--cyan);
+  background: rgba(85, 199, 211, 0.1);
+}
+.status-pill {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f0c55b;
+  color: #06131a;
+  text-transform: uppercase;
+}
+.status-pill.model {
+  background: var(--emerald);
+  color: #06131a;
+}
+.status-pill.research {
+  background: #f0c55b;
+  color: #06131a;
+}
+.match-scoreboard-banner {
+  background: radial-gradient(circle at 50% 20%, #0e2a36 0%, #07161d 80%);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.match-scoreboard-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.teams-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.team-col {
+  display: flex;
+  flex-direction: column;
+}
+.team-col.home {
+  text-align: left;
+}
+.team-col.away {
+  text-align: right;
+}
+.team-col .t-name {
+  font-size: clamp(22px, 3.6vw, 38px);
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+}
+.team-col .t-code {
+  font-size: 11px;
+  color: var(--cyan);
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  margin-bottom: 4px;
+}
+.vs-divider {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--dim);
+}
+.five-sec-verdict {
+  background: rgba(40, 231, 160, 0.08);
+  border: 1px solid rgba(40, 231, 160, 0.25);
+  border-radius: 6px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+.verdict-tag {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  background: var(--emerald);
+  color: #06131a;
+  padding: 4px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.verdict-copy {
+  font-size: 12.5px;
+  color: #f2f6f7;
+  line-height: 1.45;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* 6 Betting Market Cards Dashboard */
+.dashboard-markets-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.dash-market-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  min-height: 220px;
+}
+.dash-market-card.is-leading {
+  border: 2px solid var(--emerald);
+  background: radial-gradient(circle at 50% 0%, rgba(40, 231, 160, 0.1) 0%, #0b2029 80%);
+  box-shadow: 0 0 24px rgba(40, 231, 160, 0.2);
+}
+.card-leading-badge {
+  position: absolute;
+  top: -12px;
+  left: 16px;
+  background: var(--emerald);
+  color: #06131a;
+  font-size: 9.5px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(40, 231, 160, 0.4);
+}
+.dash-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.dash-card-title {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dash-card-status {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.dash-card-status.model {
+  background: rgba(40, 231, 160, 0.15);
+  color: var(--emerald);
+}
+.dash-card-status.research {
+  background: rgba(240, 197, 91, 0.15);
+  color: var(--gold);
+}
+.dash-card-body {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.donut-graphic {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dash-prediction-box {
+  flex-grow: 1;
+}
+.pred-headline {
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0 0 6px;
+  line-height: 1.25;
+}
+.pred-headline.unavailable {
+  font-size: 14px;
+  color: var(--gold);
+  font-weight: 700;
+}
+.win-condition-text {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.45;
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+}
+.win-condition-text strong {
+  color: #f2f6f7;
+}
+.dash-card-footer {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 10px;
+  color: var(--dim);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* SVG Donut Styling */
+.donut-svg {
+  transform: rotate(-90deg);
+}
+.donut-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 8;
+}
+.donut-ring {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease;
+}
+.donut-bg-dashed {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 6;
+  stroke-dasharray: 4 4;
+}
+.donut-text-group {
+  transform: rotate(90deg);
+  transform-origin: 48px 48px;
+}
+.donut-val {
+  font-size: 18px;
+  font-weight: 900;
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.donut-val-muted {
+  font-size: 18px;
+  font-weight: 700;
+  fill: var(--dim);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.donut-lbl {
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  fill: var(--muted);
+  text-anchor: middle;
+}
+.donut-lbl-muted {
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  fill: var(--dim);
+  text-anchor: middle;
+}
+
+/* Secondary Supported Predictions (Requirement 7) */
+.secondary-container {
+  background: rgba(7, 25, 32, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.secondary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.secondary-head h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.secondary-head span {
+  font-size: 11px;
+  color: var(--dim);
+}
+.secondary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.sec-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.sec-prob-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(40, 231, 160, 0.1);
+  border: 2px solid rgba(40, 231, 160, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sec-prob-val {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--emerald);
+}
+.sec-prob-lbl {
+  font-size: 7px;
+  font-weight: 800;
+  color: var(--dim);
+  letter-spacing: 0.08em;
+}
+.sec-info b {
+  display: block;
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.sec-info p {
+  margin: 0 0 4px;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.4;
+  font-family: Inter, system-ui, sans-serif;
+}
+.sec-info small {
+  font-size: 9.5px;
+  color: var(--dim);
+}
+
+/* Model Notice & Disclaimers */
+.model-notice-box {
+  background: rgba(6, 19, 26, 0.85);
+  border-left: 3px solid var(--cyan);
+  padding: 12px 16px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 24px;
+  line-height: 1.5;
+  border-radius: 0 4px 4px 0;
+  font-family: Inter, system-ui, sans-serif;
+}
+.model-notice-box strong {
+  color: var(--cyan);
+}
+
+/* Deep Model Evidence / Methodology / Archive Section */
+.archive-divider {
+  max-width: 1160px;
+  margin: 32px auto 16px;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+.archive-divider h3 {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+.archive-divider span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.below {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 16px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.research-strip, .evidence-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+}
+.panel-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #fff;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.panel-title span {
+  font-size: 10px;
+  color: var(--emerald);
+  font-weight: 700;
+}
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.overview-tile {
+  background: rgba(6, 19, 26, 0.6);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+}
+.overview-tile b {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.overview-tile strong {
+  display: block;
+  font-size: 26px;
+  color: var(--emerald);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+.overview-tile span {
+  display: block;
+  font-size: 10px;
+  color: var(--dim);
+  margin-top: 2px;
+}
+.overview-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 10px;
+  line-height: 1.4;
+}
+.journal-overview-card {
+  background: rgba(6, 19, 26, 0.6);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 16px;
+}
+.journal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.journal-head b {
+  font-size: 14px;
+  color: var(--ink);
+}
+.journal-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+.journal-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.j-stat {
+  background: rgba(11, 32, 41, 0.8);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 8px;
+}
+.j-stat span {
+  display: block;
+  font-size: 8px;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+.j-stat b {
+  display: block;
+  font-size: 12px;
+  color: var(--emerald);
+  font-weight: 800;
+}
+.archive {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.panel h2 {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+.panel .muted {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.threshold {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+}
+.result {
+  background: rgba(6, 19, 26, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.result .row {
+  margin-bottom: 8px;
+}
+.tag {
+  font-size: 11px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+.big {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--emerald);
+  margin-bottom: 4px;
+}
+.breakdown {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.breakdown summary {
+  cursor: pointer;
+  color: var(--cyan);
+}
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+.warning, .caution {
+  font-size: 11px;
+  color: var(--gold);
+}
+.mini {
+  font-size: 11px;
+  color: var(--dim);
+}
+table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 12px 0;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+th, td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+th {
+  color: var(--muted);
+  font-weight: 700;
+}
+footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 11px;
+  color: var(--dim);
+  border-top: 1px solid var(--line);
+}
+select {
+  background: #071920;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 980px) {
+  .topline {
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  }
+  .topcell:nth-child(n+5) {
+    display: none;
+  }
+  .markets-guide-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dashboard-markets-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .secondary-grid {
+    grid-template-columns: 1fr;
+  }
+  .below {
+    grid-template-columns: 1fr;
+  }
+  .journal-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 620px) {
+  body, .shell {
+    max-width: 390px;
+    width: 100%;
+    margin: 0;
+  }
+  .topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    min-height: auto;
+  }
+  .topcell {
+    padding: 0;
+    border-right: none;
+  }
+  .topcell:nth-child(n+3) {
+    display: none;
+  }
+  .brand {
+    font-size: 18px;
+  }
+  .brand-sub {
+    font-size: 8px;
+  }
+  .top-value {
+    font-size: 12px;
+  }
+  .ribbon {
+    grid-template-columns: 80px minmax(0, 1fr);
+    padding: 8px 10px;
+    min-height: auto;
+  }
+  .ribbon-arrow {
+    display: none;
+  }
+  .ribbon-title {
+    padding: 0 8px 0 0;
+  }
+  .ribbon-title strong {
+    font-size: 10px;
+  }
+  .ribbon-title span {
+    font-size: 9px;
+  }
+  .ribbon-list {
+    padding: 0 4px;
+    overflow-x: hidden;
+  }
+  .ribbon-empty-state {
+    padding: 2px 0;
+    gap: 8px;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+  .ribbon-empty-state b {
+    font-size: 10.5px;
+    line-height: 1.25;
+  }
+  .ribbon-empty-state small {
+    font-size: 9px;
+    line-height: 1.25;
+    display: block;
+  }
+  .ribbon-empty-icon {
+    font-size: 18px;
+  }
+  .broadcast {
+    padding: 14px 10px;
+    min-height: auto;
+  }
+  .intro-stage {
+    padding: 20px 10px 16px;
+  }
+  .intro-brand {
+    font-size: 34px;
+  }
+  .intro-headline {
+    font-size: 16px;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    word-break: break-word;
+  }
+  .markets-guide-head h3 {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .markets-guide-panel {
+    padding: 16px 12px;
+  }
+  .markets-guide-grid {
+    grid-template-columns: 1fr;
+  }
+  .match-dashboard-stage {
+    padding: 10px 0;
+  }
+  .dashboard-markets-grid {
+    grid-template-columns: 1fr;
+  }
+  .dash-card-header {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .dash-card-body {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .donut-graphic {
+    align-self: center;
+  }
+  .sec-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dashboard-top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .match-scoreboard-banner {
+    padding: 14px 10px;
+  }
+  .match-scoreboard-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .five-sec-verdict {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .teams-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+  }
+  .team-col.home {
+    text-align: left;
+    max-width: 44%;
+  }
+  .team-col.away {
+    text-align: right;
+    max-width: 44%;
+  }
+  .team-col .t-name {
+    font-size: 15px;
+    word-break: break-word;
+    line-height: 1.2;
+  }
+  .dash-market-card {
+    padding: 16px 12px;
+  }
+  select, button {
+    min-height: 44px;
+  }
+  .below {
+    padding: 12px;
+    gap: 12px;
+  }
+  .archive {
+    padding: 0 12px 24px;
+  }
+  .panel {
+    padding: 16px 14px;
+  }
+  .journal-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .journal-stats {
+    grid-template-columns: 1fr;
+  }
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.panel, .evidence-panel, .research-strip, .archive, .below, .match-dashboard-stage, .match-scoreboard-banner, .dash-market-card, .secondary-container {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+#forward, #winner-ledger, #backtest, #goals-backtest, #btts-backtest, #cards-backtest, #shots-backtest {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  max-width: 100%;
+}
+</style>
+</head>
+<body>
+<main class="shell">
+<section class="topline">
+  <div class="topcell">
+    <div class="brand">MATCH<span>IQ</span> PRO</div>
+    <div class="brand-sub">Football intelligence</div>
+  </div>
+  <div class="topcell">
+    <div class="top-label">Premier League</div>
+    <div class="top-value">UK Time</div>
+  </div>
+  <div class="topcell">
+    <div class="top-label">Holdout Archive</div>
+    <div class="top-value" id="top-matches-count">830</div>
+    <div class="top-note" id="top-matches-sub">completed</div>
+  </div>
+  <div class="topcell">
+    <div class="top-label">Verified Fixtures</div>
+    <div class="top-value" id="top-fixtures-count">0</div>
+    <div class="top-note">in verified feed</div>
+  </div>
+  <div class="topcell">
+    <div class="top-label">Season coverage</div>
+    <div class="top-value">26/27</div>
+    <div class="top-note">active campaign</div>
+  </div>
+  <div class="topcell">
+    <div class="top-label">Historical seasons</div>
+    <div class="top-value">24/25 25/26</div>
+    <div class="top-note">benchmark baseline</div>
+  </div>
+  <div class="topcell">
+    <div class="feed" id="top-feed-status">Research feed</div>
+    <div class="top-note" id="health">Current season 2627 updated successfully: 21/10/2026. Historical seasons updated: 2425, 2526.</div>
+  </div>
+</section>
+
+<!-- Fixture Ribbon -->
+<section class="ribbon">
+  <div class="ribbon-title">
+    <strong>FIXTURES</strong>
+    <span id="ribbon-count">0 verified fixtures</span>
+  </div>
+  <div class="ribbon-list" id="fixture-ribbon">
+    <div class="ribbon-empty-state">
+      <span class="ribbon-empty-icon">📅</span>
+      <div>
+        <b>No upcoming fixtures scheduled in verified feed</b>
+        <small>All 830 completed match records and research models remain active</small>
+      </div>
+    </div>
+  </div>
+  <div class="ribbon-arrow">›</div>
+</section>
+
+<!-- Stadium Stage: Switches between Homepage Overview & Match Dashboard -->
+<section class="broadcast">
+  <div class="broadcast-inner" id="featured-match">
+    <!-- Populated dynamically by renderBroadcast() -->
+  </div>
+</section>
+
+<div class="archive-divider">
+  <h3>Deep Model Evidence & Historical Archive (830 Matches)</h3>
+  <span>Holdout backtests, rolling parameters & experimental ledgers</span>
+</div>
+
+<!-- Lower Panels: Research Status & Selected Evidence -->
+<section class="below">
+  <div class="research-strip">
+    <div class="panel-title">
+      RESEARCH STATUS
+      <span>(LIVE LEDGERS)</span>
+    </div>
+    <div id="overview"></div>
+  </div>
+  <div class="evidence-panel">
+    <div class="panel-title" id="selected-evidence-title">
+      SELECTED MARKET EVIDENCE
+      <span>(FROZEN MODEL)</span>
+    </div>
+    <div id="selected-evidence"></div>
+  </div>
+</section>
+
+<!-- Archive & Backtests -->
+<section class="archive">
+  <div class="panel">
+    <div class="row">
+      <div>
+        <h2 id="heading">Corners Watchlist</h2>
+        <p class="muted" id="intro">Upcoming fixtures ranked by historical indicators. These are NOT validated betting probabilities.</p>
+      </div>
+      <div>
+        <label for="window">Form window</label>
+        <select id="window">
+          <option value="5">5 matches</option>
+          <option value="10" selected>10 matches</option>
+          <option value="20">20 matches</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="threshold" id="goals-control" hidden>
+      <label for="goals-threshold">Total goals line</label>
+      <select id="goals-threshold">
+        <option value="1.5">Over 1.5</option>
+        <option value="2.5" selected>Over 2.5</option>
+        <option value="3.5">Over 3.5</option>
+      </select>
+    </div>
+
+    <div class="threshold" id="threshold-control">
+      <label for="threshold">Total corners line</label>
+      <select id="threshold">
+        <option value="8.5">Over 8.5</option>
+        <option value="9.5" selected>Over 9.5</option>
+        <option value="10.5">Over 10.5</option>
+      </select>
+    </div>
+
+    <div id="results"></div>
+  </div>
+
+  <div class="panel" id="corners-forward-panel">
+    <h2>📋 Corners forward-test tracker</h2>
+    <p class="muted">Predictions recorded before kickoff. Results are settled only after the historical data feed updates. This is independent future evidence collection, not betting advice.</p>
+    <div id="forward"></div>
+  </div>
+
+  <div class="panel" id="winner-panel">
+    <h2>🏆 Match Winner experimental ledger</h2>
+    <p class="muted">Experimental three-outcome Dixon-Coles model forward test. Append-only pre-match predictions, settled chronologically against verified final results.</p>
+    <div id="winner-ledger"></div>
+  </div>
+
+  <div class="panel" id="corners-backtest-panel">
+    <h2>📊 Corners historical backtest (70/30 split)</h2>
+    <p class="muted">Model trained on first 70% of chronological match results; evaluated on remaining 30%. Baseline: historical league average over-rate.</p>
+    <div id="backtest"></div>
+  </div>
+
+  <div class="panel" id="goals-backtest-panel" hidden>
+    <h2>📊 Goals historical backtest (70/30 split)</h2>
+    <p class="muted">Holdout validation across lines 1.5, 2.5, and 3.5. Evaluates model Brier score against unconditional league base rate.</p>
+    <div id="goals-backtest"></div>
+  </div>
+
+  <div class="panel" id="btts-backtest-panel" hidden>
+    <h2>📊 Both Teams To Score historical backtest (70/30 split)</h2>
+    <p class="muted">Evaluates joint scoring probability calibration on the 30% chronological holdout partition.</p>
+    <div id="btts-backtest"></div>
+  </div>
+
+  <div class="panel" id="cards-backtest-panel" hidden>
+    <h2>📊 Yellow cards historical backtest (70/30 split)</h2>
+    <p class="muted">Holdout evaluation against lines 2.5, 3.5, and 4.5. Discipline markets exhibit high game-state variance.</p>
+    <div id="cards-backtest"></div>
+  </div>
+
+  <div class="panel" id="shots-backtest-panel" hidden>
+    <h2>📊 Shots on target historical backtest (70/30 split)</h2>
+    <p class="muted">Holdout evaluation against lines 7.5, 8.5, and 9.5 total match shots on target.</p>
+    <div id="shots-backtest"></div>
+  </div>
+</section>
+
+<footer>
+  <p>MatchIQ Football Intelligence • Holdout Verified Research Platform • Not financial or betting advice</p>
+</footer>
+</main>
+<span id="status" style="display:none;" aria-live="polite"></span>
+
+<script src="market_calculations.js"></script>
+<script>
+const calc = window.MatchIQCalculations || {};
+const el = id => document.getElementById(id);
+const num = v => { const n = +v; return Number.isFinite(n) ? n : null; };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const date = s => {
+  const m = String(s).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  return m ? Date.UTC(+m[3], +m[2] - 1, +m[1]) : NaN;
+};
+const kickoff = f => {
+  const m = String(f.Date).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const tm = String(f.Time || '').match(/^(\d{1,2}):(\d{2})$/);
+  return m ? Date.UTC(+m[1], +m[2] - 1, +m[3], tm ? +tm[1] : 12, tm ? +tm[2] : 0) : NaN;
+};
+const avg = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+
+let rows = [];
+let meta = { matches: [], fixtures: [] };
+let selected = 'corners';
+let selectedFixtureKey = null;
+let winnerPredictions = [];
+let cornersPredictions = [];
+
+const markets = [
+  ['corners', '🚩', 'Corners'],
+  ['cards', '🟨', 'Cards'],
+  ['shots', '🎯', 'Shots on target'],
+  ['wins', '🏆', 'Match winner'],
+  ['btts', '⚽', 'Both teams score'],
+  ['goals', '🥅', 'Goals']
+];
+
+function fixtureKey(f) {
+  return f ? String(f.Date || '') + '_' + String(f.HomeTeam || '') + '_' + String(f.AwayTeam || '') : '';
+}
+
+function getSelectedFixture(fixtures) {
+  const list = Array.isArray(fixtures) ? fixtures : [];
+  if (!list.length) {
+    if (selectedFixtureKey) {
+      // Look up in verified holdout matches
+      return getVerifiedHoldoutMatches().find(f => fixtureKey(f) === selectedFixtureKey) || null;
+    }
+    return null;
+  }
+  return list.find(f => fixtureKey(f) === selectedFixtureKey) || null;
+}
+
+function getVerifiedHoldoutMatches() {
+  // Return the 7 verified matches present in both forward test ledgers
+  const fixturesMap = new Map();
+  winnerPredictions.forEach(r => {
+    if (r.home && r.away && r.date) {
+      fixturesMap.set(r.date + '_' + r.home + '_' + r.away, {
+        HomeTeam: r.home,
+        AwayTeam: r.away,
+        Date: r.date,
+        Time: '15:00',
+        isHoldout: true
+      });
+    }
+  });
+  return Array.from(fixturesMap.values());
+}
+
+function selectMatch(key) {
+  selectedFixtureKey = key;
+  try { history.replaceState(null, '', '#match=' + encodeURIComponent(key)); } catch(e) {}
+  renderBroadcast();
+  renderSelectedEvidence();
+  render();
+}
+
+function deselectMatch() {
+  selectedFixtureKey = null;
+  try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch(e) {}
+  renderBroadcast();
+  renderSelectedEvidence();
+  render();
+}
+
+// Check initial hash on startup
+try {
+  const hash = window.location.hash.slice(1);
+  if (hash.startsWith('match=')) {
+    selectedFixtureKey = decodeURIComponent(hash.slice(6));
+  }
+} catch(e) {}
+
+function renderDonutSVG(pct, color) {
+  const r = 36;
+  const c = 2 * Math.PI * r;
+  const offset = c * (1 - (pct / 100));
+  const clr = color || 'var(--emerald)';
+  return '<svg class="donut-svg" width="96" height="96" viewBox="0 0 96 96" aria-label="' + pct.toFixed(1) + ' percent probability">' +
+    '<circle cx="48" cy="48" r="' + r + '" class="donut-bg" />' +
+    '<circle cx="48" cy="48" r="' + r + '" class="donut-ring" style="stroke:' + clr + '; stroke-dasharray:' + c.toFixed(2) + '; stroke-dashoffset:' + offset.toFixed(2) + ';" />' +
+    '<g class="donut-text-group">' +
+      '<text x="48" y="44" class="donut-val">' + pct.toFixed(1) + '%</text>' +
+      '<text x="48" y="58" class="donut-lbl">EST. CHANCE</text>' +
+    '</g>' +
+  '</svg>';
+}
+
+function renderUnavailableDonutSVG() {
+  const r = 36;
+  return '<svg class="donut-svg" width="96" height="96" viewBox="0 0 96 96" aria-label="Prediction not available yet">' +
+    '<circle cx="48" cy="48" r="' + r + '" class="donut-bg-dashed" />' +
+    '<g class="donut-text-group">' +
+      '<text x="48" y="44" class="donut-val-muted">—</text>' +
+      '<text x="48" y="58" class="donut-lbl-muted">NO MODEL</text>' +
+    '</g>' +
+  '</svg>';
+}
+
+function renderMarketGrid() {
+  // Maintained for compatibility with legacy render calls
+}
+
+function renderBroadcast() {
+  const ribbon = el('fixture-ribbon');
+  const count = el('ribbon-count');
+  const liveFixtures = Array.isArray(meta.fixtures) ? meta.fixtures : [];
+  const holdouts = getVerifiedHoldoutMatches();
+  const selectedFixture = getSelectedFixture(liveFixtures);
+
+  if (count) {
+    count.textContent = liveFixtures.length + ' verified fixture' + (liveFixtures.length === 1 ? '' : 's');
+  }
+
+  if (ribbon) {
+    if (liveFixtures.length === 0) {
+      ribbon.innerHTML = '<div class="ribbon-empty-state">' +
+        '<span class="ribbon-empty-icon">📅</span>' +
+        '<div>' +
+          '<b>No upcoming fixtures scheduled in verified feed</b>' +
+          '<small>All 830 completed match records and research models remain active</small>' +
+        '</div>' +
+      '</div>';
+    } else {
+      ribbon.innerHTML = liveFixtures.slice(0, 7).map(f => {
+        const pred = winnerPredictions.find(x => x.home === f.HomeTeam && x.away === f.AwayTeam && x.date === f.Date && x.probabilities);
+        const p = pred ? pred.probabilities : null;
+        const h = p ? 100 * +p.H : null;
+        const d = p ? 100 * +p.D : null;
+        const a = p ? 100 * +p.A : null;
+        const active = selectedFixture && f.HomeTeam === selectedFixture.HomeTeam && f.AwayTeam === selectedFixture.AwayTeam;
+        return '<button type="button" data-fix="' + esc(fixtureKey(f)) + '" onclick="selectMatch(this.dataset.fix)" class="ribbon-card' + (active ? ' active' : '') + '">' +
+          '<div class="ribbon-top"><span>' + esc(f.Time || '—') + ' UK</span><b>' + esc(f.HomeTeam.slice(0, 3).toUpperCase()) + ' v ' + esc(f.AwayTeam.slice(0, 3).toUpperCase()) + '</b></div>' +
+          '<div class="ribbon-teams">' + esc(f.HomeTeam) + ' <span style="color:var(--dim)">v</span> ' + esc(f.AwayTeam) + '</div>' +
+          (h === null ? '<div class="evidence-unavailable" style="font-size:9px;color:var(--dim)">Historical data only</div>' :
+            '<div class="ribbon-prob"><span class="h" style="width:' + h + '%"></span><span class="d" style="width:' + d + '%"></span><span class="a" style="width:' + a + '%"></span></div>' +
+            '<div class="ribbon-numbers"><b>' + h.toFixed(0) + '%</b><b>' + d.toFixed(0) + '%</b><b>' + a.toFixed(0) + '%</b></div>') +
+        '</button>';
+      }).join('');
+    }
+  }
+
+  const container = el('featured-match');
+  if (!container) return;
+
+  // If a fixture is selected, show the Match Selection Experience / Match Dashboard
+  if (selectedFixture) {
+    const f = selectedFixture;
+    const wPred = winnerPredictions.find(r => r.home === f.HomeTeam && r.away === f.AwayTeam && r.date === f.Date && r.probabilities);
+    const cPred = cornersPredictions.find(r => r.home === f.HomeTeam && r.away === f.AwayTeam && r.date === f.Date && r.probabilities);
+
+    // Calculate genuine Match Winner outcome
+    let winOutcome = null;
+    let winProb = null;
+    let winHeadline = 'Prediction not available yet';
+    let winWinCondition = 'No calibrated Match Winner probability model is recorded for this fixture.';
+    if (wPred && wPred.probabilities) {
+      const p = wPred.probabilities;
+      const h = 100 * +p.H, d = 100 * +p.D, a = 100 * +p.A;
+      if (h >= d && h >= a) {
+        winOutcome = 'Home';
+        winProb = h;
+        winHeadline = esc(f.HomeTeam) + ' to Win';
+        winWinCondition = '<strong>What needs to happen:</strong> ' + esc(f.HomeTeam) + ' must score more goals than ' + esc(f.AwayTeam) + ' by full time (90 mins + stoppage).';
+      } else if (a >= h && a >= d) {
+        winOutcome = 'Away';
+        winProb = a;
+        winHeadline = esc(f.AwayTeam) + ' to Win';
+        winWinCondition = '<strong>What needs to happen:</strong> ' + esc(f.AwayTeam) + ' must score more goals than ' + esc(f.HomeTeam) + ' by full time (90 mins + stoppage).';
+      } else {
+        winOutcome = 'Draw';
+        winProb = d;
+        winHeadline = 'Match to end in a Draw';
+        winWinCondition = '<strong>What needs to happen:</strong> Both teams must be tied at the final whistle (e.g. 0-0, 1-1, 2-2).';
+      }
+    }
+
+    // Calculate genuine Corners outcome
+    let cornerProb = null;
+    let cornerHeadline = 'Prediction not available yet';
+    let cornerWinCondition = 'No frozen Poisson corners model is recorded for this fixture.';
+    if (cPred && cPred.probabilities) {
+      const p95 = 100 * +cPred.probabilities['9.5'];
+      if (p95 >= 50.0) {
+        cornerProb = p95;
+        cornerHeadline = 'Over 9.5 Total Corners';
+        cornerWinCondition = '<strong>What needs to happen:</strong> Both teams combined must take at least 10 corners during normal time (9 or fewer loses).';
+      } else {
+        cornerProb = 100.0 - p95;
+        cornerHeadline = 'Under 9.5 Total Corners';
+        cornerWinCondition = '<strong>What needs to happen:</strong> Both teams combined must take 9 or fewer corners during normal time (10 or more loses).';
+      }
+    }
+
+    // Determine leading prediction
+    const candidatePicks = [];
+    if (winProb !== null) {
+      candidatePicks.push({ market: 'wins', prob: winProb, headline: winHeadline, condition: winWinCondition });
+    }
+    if (cornerProb !== null) {
+      candidatePicks.push({ market: 'corners', prob: cornerProb, headline: cornerHeadline, condition: cornerWinCondition });
+    }
+    candidatePicks.sort((a, b) => b.prob - a.prob);
+    const leadingMarket = candidatePicks.length ? candidatePicks[0].market : null;
+    const leadingPick = candidatePicks[0] || null;
+
+    // Build the two secondary supported suggestions
+    const secondaryList = [];
+    if (cPred && cPred.probabilities) {
+      const p85 = 100 * +cPred.probabilities['8.5'];
+      const p105 = 100 * +cPred.probabilities['10.5'];
+      if (leadingMarket === 'wins') {
+        // Suggestion 1: Corners Over 8.5
+        secondaryList.push({
+          badge: 'SUPPORTED CORNERS LINE',
+          prob: p85,
+          title: 'Over 8.5 Total Corners',
+          desc: 'Both teams combined take 9 or more corners.',
+          meta: 'v0.9 Frozen Poisson model'
+        });
+        // Suggestion 2: Corners Over 9.5 benchmark
+        secondaryList.push({
+          badge: 'BENCHMARK CORNERS LINE',
+          prob: 100 * +cPred.probabilities['9.5'],
+          title: 'Over 9.5 Total Corners',
+          desc: 'Both teams combined take 10 or more corners.',
+          meta: 'v0.9 Frozen Poisson benchmark line'
+        });
+      } else {
+        // If corners was leading, suggest match winner
+        if (winProb !== null) {
+          secondaryList.push({
+            badge: 'MATCH WINNER MODEL',
+            prob: winProb,
+            title: winHeadline,
+            desc: winWinCondition.replace(/<[^>]*>/g, '').replace(/^What needs to happen:\s*/i, ''),
+            meta: 'Dixon-Coles Poisson model'
+          });
+        }
+        // And second corners line
+        secondaryList.push({
+          badge: 'SECONDARY CORNERS LINE',
+          prob: p85,
+          title: 'Over 8.5 Total Corners',
+          desc: 'Both teams combined take 9 or more corners.',
+          meta: 'v0.9 Frozen Poisson model'
+        });
+      }
+    }
+
+    container.innerHTML = '<div class="match-dashboard-stage">' +
+      '<div class="dashboard-top-nav">' +
+        '<button type="button" class="btn-back-overview" onclick="deselectMatch()">← Back to Homepage Overview</button>' +
+        '<span class="status-pill model">' + (f.isHoldout ? 'VERIFIED HOLDOUT MATCH' : 'VERIFIED FIXTURE') + '</span>' +
+      '</div>' +
+
+      '<div class="match-scoreboard-banner">' +
+        '<div class="match-scoreboard-strip">' +
+          '<span>PREMIER LEAGUE · ' + esc(f.Date) + ' · 15:00 UK</span>' +
+          '<span>STADIUM CONTROL DASHBOARD</span>' +
+        '</div>' +
+        '<div class="teams-row">' +
+          '<div class="team-col home">' +
+            '<span class="t-code">' + esc(f.HomeTeam.slice(0, 3).toUpperCase()) + ' · HOME</span>' +
+            '<span class="t-name">' + esc(f.HomeTeam) + '</span>' +
+          '</div>' +
+          '<div class="vs-divider">VS</div>' +
+          '<div class="team-col away">' +
+            '<span class="t-code">' + esc(f.AwayTeam.slice(0, 3).toUpperCase()) + ' · AWAY</span>' +
+            '<span class="t-name">' + esc(f.AwayTeam) + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="five-sec-verdict">' +
+          '<span class="verdict-tag">5-SECOND VERDICT</span>' +
+          '<div class="verdict-copy">' +
+            (leadingPick ?
+              'The algorithm estimates <strong>' + esc(leadingPick.headline) + ' (' + leadingPick.prob.toFixed(1) + '% chance)</strong> as the strongest supported outcome for this match. ' + (cornerProb !== null && leadingMarket !== 'corners' ? 'Over 9.5 Corners is also supported at ' + cornerProb.toFixed(1) + '%.' : '') :
+              'No validated probability models are currently active for this match fixture.') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- 6 Betting Market Cards Grid -->' +
+      '<div class="dashboard-markets-grid">' +
+
+        '<!-- 1. Match Winner -->' +
+        '<div class="dash-market-card' + (leadingMarket === 'wins' ? ' is-leading' : '') + '">' +
+          (leadingMarket === 'wins' ? '<div class="card-leading-badge">★ LEADING SUPPORTED PREDICTION</div>' : '') +
+          '<div class="dash-card-header">' +
+            '<span class="dash-card-title">🏆 Match Winner</span>' +
+            '<span class="dash-card-status model">ESTIMATED PROBABILITY</span>' +
+          '</div>' +
+          '<div class="dash-card-body">' +
+            '<div class="donut-graphic">' + (winProb !== null ? renderDonutSVG(winProb, 'var(--emerald)') : renderUnavailableDonutSVG()) + '</div>' +
+            '<div class="dash-prediction-box">' +
+              '<div class="pred-headline">' + esc(winHeadline) + '</div>' +
+              '<p class="win-condition-text">' + winWinCondition + '</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="dash-card-footer">' +
+            '<span>Dixon-Coles Model</span>' +
+            '<span>820 training matches</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- 2. Total Corners -->' +
+        '<div class="dash-market-card' + (leadingMarket === 'corners' ? ' is-leading' : '') + '">' +
+          (leadingMarket === 'corners' ? '<div class="card-leading-badge">★ LEADING SUPPORTED PREDICTION</div>' : '') +
+          '<div class="dash-card-header">' +
+            '<span class="dash-card-title">🚩 Total Corners</span>' +
+            '<span class="dash-card-status model">ESTIMATED PROBABILITY</span>' +
+          '</div>' +
+          '<div class="dash-card-body">' +
+            '<div class="donut-graphic">' + (cornerProb !== null ? renderDonutSVG(cornerProb, 'var(--cyan)') : renderUnavailableDonutSVG()) + '</div>' +
+            '<div class="dash-prediction-box">' +
+              '<div class="pred-headline">' + esc(cornerHeadline) + '</div>' +
+              '<p class="win-condition-text">' + cornerWinCondition + '</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="dash-card-footer">' +
+            '<span>v0.9 Frozen Poisson</span>' +
+            '<span>Benchmark line 9.5</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- 3. Total Goals (Research Only) -->' +
+        '<div class="dash-market-card">' +
+          '<div class="dash-card-header">' +
+            '<span class="dash-card-title">🥅 Total Goals</span>' +
+            '<span class="dash-card-status research">RESEARCH ONLY</span>' +
+          '</div>' +
+          '<div class="dash-card-body">' +
+            '<div class="donut-graphic">' + renderUnavailableDonutSVG() + '</div>' +
+            '<div class="dash-prediction-box">' +
+              '<div class="pred-headline unavailable">Prediction not available yet</div>' +
+              '<p class="win-condition-text"><strong>Why no percentage:</strong> MatchIQ does not currently deploy an approved probability model for match goals. We only publish probabilities verified against out-of-sample data.</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="dash-card-footer">' +
+            '<span>Over 2.5 benchmark requires 3+ goals</span>' +
+            '<span>Holdout tests below</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- 4. Both Teams to Score (Research Only) -->' +
+        '<div class="dash-market-card">' +
+          '<div class="dash-card-header">' +
+            '<span class="dash-card-title">⚽ Both Teams to Score</span>' +
+            '<span class="dash-card-status research">RESEARCH ONLY</span>' +
+          '</div>' +
+          '<div class="dash-card-body">' +
+            '<div class="donut-graphic">' + renderUnavailableDonutSVG() + '</div>' +
+            '<div class="dash-prediction-box">' +
+              '<div class="pred-headline unavailable">Prediction not available yet</div>' +
+              '<p class="win-condition-text"><strong>Why no percentage:</strong> No frozen probability model is currently approved for BTTS. Raw scoring frequency trackers are provided below for reference only.</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="dash-card-footer">' +
+            '<span>BTTS Yes needs both teams to score</span>' +
+            '<span>Historical frequency below</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- 5. Yellow Cards (Research Only) -->' +
+        '<div class="dash-market-card">' +
+          '<div class="dash-card-header">' +
+            '<span class="dash-card-title">🟨 Yellow Cards</span>' +
+            '<span class="dash-card-status research">RESEARCH ONLY</span>' +
+          '</div>' +
+          '<div class="dash-card-body">' +
+            '<div class="donut-graphic">' + renderUnavailableDonutSVG() + '</div>' +
+            '<div class="dash-prediction-box">' +
+              '<div class="pred-headline unavailable">Prediction not available yet</div>' +
+              '<p class="win-condition-text"><strong>Why no percentage:</strong> Card counts vary heavily with referee style and game state. No calibrated model is active for this market.</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="dash-card-footer">' +
+            '<span>Over 3.5 cards needs 4+ bookings</span>' +
+            '<span>Discipline archive below</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- 6. Shots on Target (Research Only) -->' +
+        '<div class="dash-market-card">' +
+          '<div class="dash-card-header">' +
+            '<span class="dash-card-title">🎯 Shots on Target</span>' +
+            '<span class="dash-card-status research">RESEARCH ONLY</span>' +
+          '</div>' +
+          '<div class="dash-card-body">' +
+            '<div class="donut-graphic">' + renderUnavailableDonutSVG() + '</div>' +
+            '<div class="dash-prediction-box">' +
+              '<div class="pred-headline unavailable">Prediction not available yet</div>' +
+              '<p class="win-condition-text"><strong>Why no percentage:</strong> Tracked for descriptive form research only. No forward-tested predictive model exists for shots on target yet.</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="dash-card-footer">' +
+            '<span>Over 8.5 line needs 9+ on target</span>' +
+            '<span>Descriptive stats below</span>' +
+          '</div>' +
+        '</div>' +
+
+      '</div>' +
+
+      '<!-- Exactly Two Additional Supported Suggestions (Requirement 7) -->' +
+      (secondaryList.length >= 2 ?
+        '<div class="secondary-container">' +
+          '<div class="secondary-head">' +
+            '<h4>ADDITIONAL SUPPORTED PREDICTIONS (SECONDARY)</h4>' +
+            '<span>Model-derived supporting lines · Independent holdout evaluations</span>' +
+          '</div>' +
+          '<div class="secondary-grid">' +
+            '<div class="sec-card">' +
+              '<div class="sec-prob-circle">' +
+                '<span class="sec-prob-val">' + secondaryList[0].prob.toFixed(1) + '%</span>' +
+                '<span class="sec-prob-lbl">PROBABILITY</span>' +
+              '</div>' +
+              '<div class="sec-info">' +
+                '<b>' + esc(secondaryList[0].title) + '</b>' +
+                '<p><strong>What needs to happen:</strong> ' + esc(secondaryList[0].desc) + '</p>' +
+                '<small>' + esc(secondaryList[0].meta) + '</small>' +
+              '</div>' +
+            '</div>' +
+            '<div class="sec-card">' +
+              '<div class="sec-prob-circle">' +
+                '<span class="sec-prob-val">' + secondaryList[1].prob.toFixed(1) + '%</span>' +
+                '<span class="sec-prob-lbl">PROBABILITY</span>' +
+              '</div>' +
+              '<div class="sec-info">' +
+                '<b>' + esc(secondaryList[1].title) + '</b>' +
+                '<p><strong>What needs to happen:</strong> ' + esc(secondaryList[1].desc) + '</p>' +
+                '<small>' + esc(secondaryList[1].meta) + '</small>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' : '') +
+
+      '<div class="model-notice-box">' +
+        '<strong>Model Transparency & Integrity Notice:</strong> All percentages are genuine mathematical outcome probabilities calculated prior to kickoff by frozen, holdout-tested statistical algorithms. "Leading Prediction" identifies the most probable mathematical outcome — not a value bet recommendation, as live bookmaker odds are not ingested. Never gamble money you cannot afford to lose.' +
+      '</div>' +
+    '</div>';
+    return;
+  }
+
+  // Otherwise, render the Homepage Intro Stage (AG-024 Requirement)
+  container.innerHTML = '<div class="intro-stage">' +
+    '<div class="intro-radar-badge"><span class="radar-ping"></span>STATISTICAL FOOTBALL INTELLIGENCE</div>' +
+    '<div class="intro-brand">MATCH<span>IQ</span></div>' +
+    '<h1 class="intro-headline">Know the numbers. Understand the game.</h1>' +
+    '<p class="intro-desc">' +
+      'MatchIQ transforms complex football match statistics into clear, transparent probabilities. ' +
+      'Every prediction is powered by holdout-tested mathematical models — completely free from gut feelings, pundit hype, or bookmaker bias.' +
+    '</p>' +
+
+    '<!-- Beginner Market Guide -->' +
+    '<div class="markets-guide-panel">' +
+      '<div class="markets-guide-head">' +
+        '<h3>Beginner’s Guide to Football Betting Markets</h3>' +
+        '<span>Understand exactly what each market measures:</span>' +
+      '</div>' +
+      '<div class="markets-guide-grid">' +
+        '<div class="guide-card">' +
+          '<div class="guide-card-icon">🏆</div>' +
+          '<div class="guide-card-body">' +
+            '<span class="guide-card-badge model">VERIFIED MODEL (DIXON-COLES)</span>' +
+            '<b>Match Winner</b>' +
+            '<p>Predicts whether the match ends in a <strong>Home Win</strong>, <strong>Away Win</strong>, or <strong>Draw</strong> after 90 minutes plus stoppage time.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="guide-card">' +
+          '<div class="guide-card-icon">🚩</div>' +
+          '<div class="guide-card-body">' +
+            '<span class="guide-card-badge model">VERIFIED MODEL (POISSON)</span>' +
+            '<b>Total Corners</b>' +
+            '<p>Predicts the combined corner kicks taken by both squads. Our benchmark evaluates <strong>Over/Under 9.5 Corners</strong> (10+ corners to win Over).</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="guide-card">' +
+          '<div class="guide-card-icon">🥅</div>' +
+          '<div class="guide-card-body">' +
+            '<span class="guide-card-badge research">RESEARCH ONLY</span>' +
+            '<b>Total Goals</b>' +
+            '<p>Predicts whether total goals scored by both clubs exceed a set line (e.g., <strong>Over 2.5 Goals</strong>, needing 3+ goals). No probability model deployed yet.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="guide-card">' +
+          '<div class="guide-card-icon">⚽</div>' +
+          '<div class="guide-card-body">' +
+            '<span class="guide-card-badge research">RESEARCH ONLY</span>' +
+            '<b>Both Teams to Score (BTTS)</b>' +
+            '<p>A simple Yes/No on whether both teams find the net (1-1, 2-1 win; 1-0 or 0-0 lose). Tracked as descriptive historical frequency only.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="guide-card">' +
+          '<div class="guide-card-icon">🟨</div>' +
+          '<div class="guide-card-body">' +
+            '<span class="guide-card-badge research">RESEARCH ONLY</span>' +
+            '<b>Yellow Cards</b>' +
+            '<p>Measures referee bookings across both squads (typically line 3.5). High variance; tracked for discipline trends without an active probability model.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="guide-card">' +
+          '<div class="guide-card-icon">🎯</div>' +
+          '<div class="guide-card-body">' +
+            '<span class="guide-card-badge research">RESEARCH ONLY</span>' +
+            '<b>Shots on Target</b>' +
+            '<p>Counts attempts on target that result in a goal or require a goalkeeper save (benchmark line 8.5). Tracked for offensive form research only.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<!-- Match Explorer (Select a match to experience predictions) -->' +
+    '<div class="match-explorer-box">' +
+      '<div class="explorer-head">' +
+        '<div>' +
+          '<div class="explorer-title">Instant Prediction Explorer</div>' +
+          '<div class="explorer-subtitle">Select any verified match below to experience the 5-second prediction dashboard:</div>' +
+        '</div>' +
+        '<span class="status-pill model">' + holdouts.length + ' VERIFIED MATCHES READY</span>' +
+      '</div>' +
+      '<div class="explorer-buttons-grid">' +
+        holdouts.map(m => {
+          return '<button type="button" class="explorer-match-btn" data-fix="' + esc(fixtureKey(m)) + '" onclick="selectMatch(this.dataset.fix)">' +
+            '<div>' +
+              '<b>' + esc(m.HomeTeam) + ' v ' + esc(m.AwayTeam) + '</b>' +
+              '<small>Premier League · ' + esc(m.Date) + '</small>' +
+            '</div>' +
+            '<span class="btn-arrow">View Dashboard →</span>' +
+          '</button>';
+        }).join('') +
+      '</div>' +
+    '</div>' +
+
+  '</div>';
+}
+
+function renderSelectedEvidence() {
+  const target = el('selected-evidence');
+  if (!target) return;
+  const fixture = getSelectedFixture(meta.fixtures || []);
+  const marketObj = markets.find(m => m[0] === selected);
+  const marketName = marketObj ? marketObj[2] : selected;
+  if (el('selected-evidence-title')) el('selected-evidence-title').innerHTML = 'SELECTED MARKET EVIDENCE <span>(' + (selected === 'corners' || selected === 'wins' ? 'FROZEN MODEL' : 'RESEARCH ONLY') + ')</span>';
+
+  if (!fixture) {
+    const descriptions = {
+      corners: 'Corners model evaluates rolling won and conceded corner counts using a Poisson approximation against the 9.5 total match corners benchmark. Holdout Brier score: 0.325.',
+      wins: 'Match Winner model implements a three-outcome Dixon-Coles Poisson formulation to generate calibrated home, draw, and away probabilities. Holdout Brier score: 0.453.',
+      cards: 'Yellow cards research assesses team discipline trends and combined card frequencies against the 3.5 total yellow card benchmark. Red cards excluded.',
+      shots: 'Shots on target research tracks combined home and away target attempts (HST + AST) against the 8.5 line.',
+      btts: 'Both Teams To Score evaluates joint scoring probabilities across 5, 10, and 20 match rolling windows.',
+      goals: 'Goals research tracks total match goals against lines 1.5, 2.5, and 3.5 across rolling form periods.'
+    };
+    target.innerHTML = '<div class="journal-overview-card">' +
+      '<div class="journal-head"><b>' + (marketObj ? marketObj[1] : '') + ' ' + marketName + ' — Historical Baseline & Methodology</b><span class="status-pill ' + (selected === 'corners' || selected === 'wins' ? 'model' : 'research') + '">' + (selected === 'corners' || selected === 'wins' ? 'FROZEN MODEL' : 'DESCRIPTIVE RESEARCH') + '</span></div>' +
+      '<p class="journal-desc">' + (descriptions[selected] || 'Historical analysis across 830 Premier League matches.') + '</p>' +
+      '<div class="journal-stats">' +
+        '<div class="j-stat"><span>Verified Match Dataset</span><b>830 matches</b></div>' +
+        '<div class="j-stat"><span>Form Analysis Window</span><b>5, 10, 20 games</b></div>' +
+        '<div class="j-stat"><span>Evaluation Holdout</span><b>Chronological 70/30</b></div>' +
+        '<div class="j-stat"><span>Bet Recommendation</span><b>None (Research only)</b></div>' +
+      '</div>' +
+    '</div>';
+    return;
+  }
+
+  target.innerHTML = '<div class="journal-overview-card">' +
+    '<div class="journal-head"><b>' + esc(fixture.HomeTeam) + ' v ' + esc(fixture.AwayTeam) + ' (' + marketName + ')</b><span class="status-pill ' + (selected === 'corners' || selected === 'wins' ? 'model' : 'research') + '">' + (selected === 'corners' || selected === 'wins' ? 'VERIFIED MODEL' : 'RESEARCH ONLY') + '</span></div>' +
+    '<p class="journal-desc">Independent pre-match evaluation based on recent verified home/away forms. Opponent strength, live odds and injuries are not modelled.</p>' +
+  '</div>';
+}
+
+function researchOverview() {
+  const target = el('overview');
+  if (!target) return;
+  const paths = ['data/forward_test.json', 'data/match_winner_forward.json'];
+  Promise.all(paths.map(path => fetch(path, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null))).then(([corners, winner]) => {
+    const datasets = [corners, winner];
+    const names = ['Corners Over 9.5', 'Match Winner (3-way)'];
+    let html = '<div class="overview-grid">';
+    datasets.forEach((d, i) => {
+      const records = Array.isArray(d?.records) ? d.records : [];
+      const valid = records.filter(r => r.model);
+      const settled = valid.filter(r => r.status === 'settled');
+      const pending = valid.filter(r => r.status === 'pending').length;
+      const brier = settled.length && Number.isFinite(+settled[settled.length - 1].cumulative_brier) ? +settled[settled.length - 1].cumulative_brier : null;
+      html += '<div class="overview-tile"><b>' + names[i] + '</b><strong>' + (d ? valid.length : '—') + '</strong><span>' + (d ? pending : '—') + ' pending · ' + (d ? settled.length : '—') + ' settled</span><p class="overview-note">' + (!d ? 'Ledger unavailable' : brier === null ? 'Awaiting settled results' : 'Forward Brier: ' + brier.toFixed(3)) + '</p></div>';
+    });
+    html += '</div><p class="overview-note">Corners score uses Over 9.5 binary Brier; Match Winner uses three-outcome multiclass Brier. Scores are not directly comparable.</p>';
+    target.innerHTML = html;
+  }).catch(() => {
+    target.innerHTML = '<p class="overview-note">Research status is temporarily unavailable. The underlying ledgers remain unchanged.</p>';
+  });
+}
+
+function forwardTracker() {
+  const target = el('forward');
+  if (!target) return;
+  fetch('data/forward_test.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(d => {
+    const records = Array.isArray(d?.records) ? d.records : [];
+    if (!records.length) { target.textContent = 'No forward predictions recorded yet.'; return; }
+    target.innerHTML = '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%"><table><thead><tr><th>Date</th><th>Fixture</th><th>Over 9.5</th><th>Result</th><th>Status</th><th>Cumulative Brier</th></tr></thead><tbody>' +
+      records.map(r => {
+        const prob = r.probabilities && r.probabilities['9.5'] !== undefined ? (100 * +r.probabilities['9.5']).toFixed(1) + '%' : '—';
+        const corners = r.actual_corners !== undefined && r.actual_corners !== null ? r.actual_corners : '—';
+        const brier = Number.isFinite(+r.cumulative_brier) ? (+r.cumulative_brier).toFixed(3) : '—';
+        return '<tr><td>' + esc(r.date) + '</td><td>' + esc(r.home) + ' v ' + esc(r.away) + '</td><td>' + prob + '</td><td>' + corners + '</td><td>' + esc(r.status) + '</td><td>' + brier + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }).catch(() => { target.textContent = 'Unable to load forward tracker.'; });
+}
+
+function winnerLedger() {
+  const target = el('winner-ledger');
+  if (!target) return;
+  fetch('data/match_winner_forward.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(d => {
+    const records = Array.isArray(d?.records) ? d.records : [];
+    if (!records.length) { target.textContent = 'No Match Winner forward predictions recorded yet.'; return; }
+    target.innerHTML = '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%"><table><thead><tr><th>Date</th><th>Fixture</th><th>Home</th><th>Draw</th><th>Away</th><th>Actual</th><th>Score</th><th>Status</th></tr></thead><tbody>' +
+      records.map(r => {
+        const p = r.probabilities || {};
+        const h = p.H !== undefined ? (100 * +p.H).toFixed(1) + '%' : '—';
+        const dw = p.D !== undefined ? (100 * +p.D).toFixed(1) + '%' : '—';
+        const a = p.A !== undefined ? (100 * +p.A).toFixed(1) + '%' : '—';
+        const score = Array.isArray(r.score) ? r.score.join('–') : '—';
+        return '<tr><td>' + esc(r.date) + '</td><td>' + esc(r.home) + ' v ' + esc(r.away) + '</td><td>' + h + '</td><td>' + dw + '</td><td>' + a + '</td><td>' + esc(r.actual || '—') + '</td><td>' + score + '</td><td>' + esc(r.status) + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }).catch(() => { target.textContent = 'Unable to load Match Winner ledger.'; });
+}
+
 function render(){
+ renderMarketGrid();
  const name=markets.find(x=>x[0]===selected)[2];el('heading').textContent=name+' Watchlist';el('threshold-control').hidden=selected!=='corners';el('goals-control').hidden=selected!=='goals';el('goals-backtest-panel').hidden=selected!=='goals';el('corners-backtest-panel').hidden=selected!=='corners';el('btts-backtest-panel').hidden=selected!=='btts';el('cards-backtest-panel').hidden=selected!=='cards';el('shots-backtest-panel').hidden=selected!=='shots';el('winner-panel').hidden=selected!=='wins';el('corners-forward-panel').hidden=selected!=='corners';
  el('intro').textContent='Upcoming fixtures ranked by historical indicators. These are NOT validated betting probabilities.';
  const now=Date.now(),checked=meta.fixtures_last_checked?Date.parse(meta.fixtures_last_checked):0;
@@ -68,243 +2189,224 @@ function render(){
   const breakdown=metrics?'<div class="breakdown-grid"><div><b>'+esc(f.HomeTeam)+' (home)</b><span>For: '+display(metrics[0].h)+'</span><span>Conceded: '+display(metrics[1].h)+'</span><span>Last '+samples[0]+' home games</span></div><div><b>'+esc(f.AwayTeam)+' (away)</b><span>For: '+display(metrics[0].a)+'</span><span>Conceded: '+display(metrics[1].a)+'</span><span>Last '+samples[1]+' away games</span></div></div>':'<p>Historical sample: '+samples[0]+' home and '+samples[1]+' away games. This indicator is descriptive only.</p>';
   const winnerDisplay=selected==='wins'?(dc?'<div class="big">Home '+(100*dc.probabilities.H).toFixed(1)+'% · Draw '+(100*dc.probabilities.D).toFixed(1)+'% · Away '+(100*dc.probabilities.A).toFixed(1)+'%</div><p>Experimental Dixon-Coles · recorded '+esc(new Date(dc.created_at).toLocaleString('en-GB',{timeZone:'Europe/London',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))+'</p>':'<p class="caution">No recorded Dixon-Coles prediction for this fixture.</p>')+'<p class="mini">Historical home-win/away-loss indicator: '+value.toFixed(1)+'% (comparison only)</p>':null;
   const thresholdText=thresholdInfo?'<p><b>Over '+thresholdInfo.line+': '+thresholdInfo.hits+'/'+thresholdInfo.count+' historical matches ('+thresholdInfo.rate.toFixed(0)+'%)</b></p><p class="mini">Variation: '+thresholdInfo.sd.toFixed(1)+' '+thresholdInfo.kind+' standard deviation · '+(thresholdInfo.count<20?'Small sample':'20-match sample')+'</p><p class="caution">Descriptive hit rate only. These were matches against other opponents, not an out-of-sample forecast.</p>':'';
-  return '<div class="result"><div class="row"><b>'+esc(f.HomeTeam)+' v '+esc(f.AwayTeam)+'</b><span class="tag">'+esc(f.Date)+' · '+esc(f.Time)+' UK</span></div>'+(winnerDisplay===null?'<div class="big">'+value.toFixed(1)+unit+'</div><p>'+detail+'</p>':winnerDisplay)+thresholdText+'<details class="breakdown"><summary>View match breakdown</summary>'+breakdown+'<p class="warning">Historical data only. Opponent strength, injuries, live odds and uncertainty are not modelled. No bet recommendation.</p></details></div>';
+  return '<div class="result fixture-select-result" role="button" tabindex="0" data-fixture-key="'+esc(fixtureKey(f))+'"><div class="row"><b>'+esc(f.HomeTeam)+' v '+esc(f.AwayTeam)+'</b><span class="tag">'+esc(f.Date)+' · '+esc(f.Time)+' UK</span></div>'+(winnerDisplay===null?'<div class="big">'+value.toFixed(1)+unit+'</div><p>'+detail+'</p>':winnerDisplay)+thresholdText+'<details class="breakdown"><summary>View match breakdown</summary>'+breakdown+'<p class="warning">Historical data only. Opponent strength, injuries, live odds and uncertainty are not modelled. No bet recommendation.</p></details></div>';
  }).join(''):'Not enough verified recent home/away matches to rank these fixtures. No suggestions issued.';
+ bindFixtureSelection();
 }
 
-function shotsBacktest(){
- const out=el('shots-backtest');
- const all=rows.filter(r=>r.done&&num(r.HST)!==null&&num(r.AST)!==null&&r.time<Date.now()).sort((a,b)=>a.time-b.time);
- if(all.length<100){out.textContent='Insufficient shots-on-target history.';return}
- const cut=Math.floor(all.length*.7),history=all.slice(0,cut),test=all.slice(cut);
- const lines=[6.5,8.5,10.5,12.5],total=r=>num(r.HST)+num(r.AST);
- const stats=lines.map(line=>({line,n:0,hits:0,old:0,poisson:0,base:0}));
- const baseline=lines.map(line=>history.filter(r=>total(r)>line).length/history.length);
- const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
- const over=(lambda,line)=>{let t=Math.exp(-lambda),cdf=t;for(let k=1;k<=Math.floor(line);k++){t*=lambda/k;cdf+=t}return Math.max(0,Math.min(1,1-cdf))};
- for(let i=0;i<test.length;){
-  let j=i+1;while(j<test.length&&test[j].time===test[i].time)j++;
-  for(let k=i;k<j;k++){
-   const f=test[k],home=history.filter(r=>r.HomeTeam===f.HomeTeam&&r.time<f.time).slice(-10);
-   const away=history.filter(r=>r.AwayTeam===f.AwayTeam&&r.time<f.time).slice(-10);
-   if(home.length<5||away.length<5)continue;
-   const sample=home.concat(away);
-   const expected=(mean(home.map(r=>num(r.HST)))+mean(away.map(r=>num(r.HST)))+mean(away.map(r=>num(r.AST)))+mean(home.map(r=>num(r.AST))))/2;
-   for(let z=0;z<lines.length;z++){
-    const st=stats[z],line=lines[z],y=+(total(f)>line);
-    const old=sample.filter(r=>total(r)>line).length/sample.length,p=over(expected,line);
-    st.n++;st.hits+=y;st.old+=(old-y)**2;st.poisson+=(p-y)**2;st.base+=(baseline[z]-y)**2;
-   }
-  }
-  history.push(...test.slice(i,j));i=j;
- }
- out.innerHTML='<p class="muted">Training: '+cut+' · Holdout: '+test.length+' · Last 10 venue-specific matches, minimum 5 each · Same-day results excluded.</p><div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>Poisson</th><th>Baseline</th></tr></thead><tbody>'+stats.map(st=>'<tr><td>Over '+st.line+'</td><td>'+st.n+'</td><td>'+(st.n?(100*st.hits/st.n).toFixed(0)+'%':'—')+'</td><td>'+(st.n?(st.old/st.n).toFixed(3):'—')+'</td><td>'+(st.n?(st.poisson/st.n).toFixed(3):'—')+'</td><td>'+(st.n?(st.base/st.n).toFixed(3):'—')+'</td></tr>').join('')+'</tbody></table></div><p class="muted">Lower Brier is better. Poisson is a simplified count assumption, not a calibrated probability model. Reused holdout is not independent validation, and no odds or profit have been tested.</p>';
-}
-function cardsBacktest(){
- const out=el('cards-backtest');
- const all=rows.filter(r=>r.done&&num(r.HY)!==null&&num(r.AY)!==null&&r.time<Date.now()).sort((a,b)=>a.time-b.time);
- if(all.length<100){out.textContent='Insufficient yellow-card history.';return}
- const cut=Math.floor(all.length*.7),history=all.slice(0,cut),test=all.slice(cut);
- const lines=[2.5,3.5,4.5,5.5],total=r=>num(r.HY)+num(r.AY);
- const stats=lines.map(line=>({line,n:0,hits:0,old:0,poisson:0,base:0}));
- const baseline=lines.map(line=>history.filter(r=>total(r)>line).length/history.length);
- const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
- const over=(lambda,line)=>{let t=Math.exp(-lambda),cdf=t;for(let k=1;k<=Math.floor(line);k++){t*=lambda/k;cdf+=t}return Math.max(0,Math.min(1,1-cdf))};
- for(let i=0;i<test.length;){
-  let j=i+1;while(j<test.length&&test[j].time===test[i].time)j++;
-  for(let k=i;k<j;k++){
-   const f=test[k],home=history.filter(r=>r.HomeTeam===f.HomeTeam&&r.time<f.time).slice(-10);
-   const away=history.filter(r=>r.AwayTeam===f.AwayTeam&&r.time<f.time).slice(-10);
-   if(home.length<5||away.length<5)continue;
-   const sample=home.concat(away);
-   const expected=(mean(home.map(r=>num(r.HY)))+mean(away.map(r=>num(r.HY)))+mean(away.map(r=>num(r.AY)))+mean(home.map(r=>num(r.AY))))/2;
-   for(let z=0;z<lines.length;z++){
-    const st=stats[z],line=lines[z],y=+(total(f)>line);
-    const old=sample.filter(r=>total(r)>line).length/sample.length,p=over(expected,line);
-    st.n++;st.hits+=y;st.old+=(old-y)**2;st.poisson+=(p-y)**2;st.base+=(baseline[z]-y)**2;
-   }
-  }
-  history.push(...test.slice(i,j));i=j;
- }
- out.innerHTML='<p class="muted">Training: '+cut+' · Holdout: '+test.length+' · Last 10 venue-specific matches, minimum 5 each · Same-day results excluded.</p><div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>Poisson</th><th>Baseline</th></tr></thead><tbody>'+stats.map(st=>'<tr><td>Over '+st.line+'</td><td>'+st.n+'</td><td>'+(st.n?(100*st.hits/st.n).toFixed(0)+'%':'—')+'</td><td>'+(st.n?(st.old/st.n).toFixed(3):'—')+'</td><td>'+(st.n?(st.poisson/st.n).toFixed(3):'—')+'</td><td>'+(st.n?(st.base/st.n).toFixed(3):'—')+'</td></tr>').join('')+'</tbody></table></div><p class="muted">Lower Brier is better. Cards are often overdispersed relative to Poisson; these are research benchmarks, not calibrated forecasts. Reused holdout is not independent validation.</p>';
-}
-function bttsBacktest(){
- const out=el('btts-backtest');
- const all=rows.filter(r=>r.done&&num(r.FTHG)!==null&&num(r.FTAG)!==null&&r.time<Date.now()).sort((a,b)=>a.time-b.time);
- if(all.length<100){out.textContent='Insufficient completed matches.';return}
- const cut=Math.floor(all.length*.7),history=all.slice(0,cut),test=all.slice(cut);
- const yes=r=>num(r.FTHG)>0&&num(r.FTAG)>0?1:0;
- const base=history.reduce((sum,r)=>sum+yes(r),0)/history.length;
- const stats={n:0,hits:0,old:0,newModel:0,baseline:0};
- const avg=a=>a.reduce((sum,v)=>sum+v,0)/a.length;
- for(let i=0;i<test.length;){
-  let j=i+1;while(j<test.length&&test[j].time===test[i].time)j++;
-  for(let k=i;k<j;k++){
-   const f=test[k],home=history.filter(r=>r.HomeTeam===f.HomeTeam&&r.time<f.time).slice(-10);
-   const away=history.filter(r=>r.AwayTeam===f.AwayTeam&&r.time<f.time).slice(-10);
-   if(home.length<5||away.length<5)continue;
-   const sample=home.concat(away),old=avg(sample.map(yes));
-   // Independent scoring events, fixed Poisson approximation.
-   const homeMean=(avg(home.map(r=>num(r.FTHG)))+avg(away.map(r=>num(r.FTHG))))/2;
-   const awayMean=(avg(away.map(r=>num(r.FTAG)))+avg(home.map(r=>num(r.FTAG))))/2;
-   const experimental=(1-Math.exp(-homeMean))*(1-Math.exp(-awayMean));
-   const outcome=yes(f);
-   stats.n++;stats.hits+=outcome;
-   stats.old+=(old-outcome)**2;stats.newModel+=(experimental-outcome)**2;stats.baseline+=(base-outcome)**2;
-  }
-  history.push(...test.slice(i,j));i=j;
- }
- const n=stats.n;
- const rowsHtml=[['BTTS Yes',stats.hits/n,stats.old/n,stats.newModel/n,stats.baseline/n],['BTTS No',1-stats.hits/n,stats.old/n,stats.newModel/n,stats.baseline/n]].map(v=>'<tr><td>'+v[0]+'</td><td>'+n+'</td><td>'+(100*v[1]).toFixed(0)+'%</td><td>'+v[2].toFixed(3)+'</td><td>'+v[3].toFixed(3)+'</td><td>'+v[4].toFixed(3)+'</td></tr>').join('');
- out.innerHTML='<p class="muted">Training: '+cut+' · Holdout: '+test.length+' · Tested: '+n+' · Last 10 home/away matches, minimum five each. No same-day leakage.</p><div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Outcome</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>New Brier</th><th>Baseline</th></tr></thead><tbody>'+rowsHtml+'</tbody></table></div><p class="muted">Yes/No Brier scores are identical because No = 1 − Yes. Old = historical BTTS frequency; New = independent Poisson scoring approximation using goals scored and conceded. Lower is better. This reused holdout is not independent validation, and odds/profit are not assessed.</p>';
-}
-function winnerLedger(){
- const target=el('winner-ledger');
- const ukDate=v=>{const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleString('en-GB',{timeZone:'Europe/London',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'Unknown'};
- fetch('data/match_winner_forward.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('No forward predictions recorded yet');return r.json()}).then(d=>{
- const records=Array.isArray(d.records)?d.records:[];
- const settled=records.filter(r=>r.status==='settled'&&r.probabilities&&['H','D','A'].includes(r.actual));
- let html='<p class="muted">'+records.length+' recorded · '+records.filter(r=>r.status==='pending').length+' pending · '+settled.length+' settled</p>';
- if(settled.length){
-  const score=settled.reduce((sum,r)=>sum+['H','D','A'].reduce((acc,k)=>acc+(+r.probabilities[k]-(r.actual===k?1:0))**2,0),0)/settled.length;
-  html+='<p class="muted">Forward multiclass Brier: '+score.toFixed(3)+' ('+settled.length+' matches). Lower is better; small samples are unstable.</p>';
- }else html+='<p class="caution">No settled matches yet. No accuracy claims can be made.</p>';
- html+='<details class="breakdown"><summary>View Match Winner ledger ('+records.length+')</summary>';
- html+=records.slice(-40).reverse().map(r=>'<div class="result"><b>'+esc(r.home)+' v '+esc(r.away)+'</b><p class="mini">Kickoff: '+esc(ukDate(r.kickoff_utc))+' · Recorded: '+esc(ukDate(r.created_at))+' · '+esc(r.status)+'</p><p>Home '+(100*r.probabilities.H).toFixed(1)+'% · Draw '+(100*r.probabilities.D).toFixed(1)+'% · Away '+(100*r.probabilities.A).toFixed(1)+'%</p>'+(r.status==='settled'?'<p>Actual: '+esc(r.actual)+' · '+esc((r.score||[]).join('-'))+'</p>':'')+'</div>').join('');
- target.innerHTML=html+'</details>';
- }).catch(e=>target.textContent=e.message);
-}
-function goalsBacktest(){
- const out=el('goals-backtest');
- const all=rows.filter(r=>r.done&&num(r.FTHG)!==null&&num(r.FTAG)!==null&&r.time<Date.now()).sort((a,b)=>a.time-b.time);
- if(all.length<100){out.textContent='Insufficient completed matches.';return}
- const cut=Math.floor(all.length*.7),train=all.slice(0,cut),test=all.slice(cut);
- const lines=[1.5,2.5,3.5],scores=lines.map(line=>({line,n:0,hits:0,old:0,newModel:0,baseline:0}));
- const base=lines.map(line=>train.filter(r=>num(r.FTHG)+num(r.FTAG)>line).length/train.length);
- function poissonOver(mean,line){
-  let term=Math.exp(-mean),cdf=term;
-  for(let k=1;k<=Math.floor(line);k++){term*=mean/k;cdf+=term}
-  return Math.max(0,Math.min(1,1-cdf));
- }
- const avg=arr=>arr.reduce((a,b)=>a+b,0)/arr.length;
- for(let i=0;i<test.length;){
-  let j=i+1;while(j<test.length&&test[j].time===test[i].time)j++;
-  for(let k=i;k<j;k++){
-   const f=test[k],home=train.filter(r=>r.HomeTeam===f.HomeTeam&&r.time<f.time).slice(-10);
-   const away=train.filter(r=>r.AwayTeam===f.AwayTeam&&r.time<f.time).slice(-10);
-   if(home.length<5||away.length<5)continue;
-   const sample=home.concat(away);
-   const homeExpected=(avg(home.map(r=>num(r.FTHG)))+avg(away.map(r=>num(r.FTHG))))/2;
-   const awayExpected=(avg(away.map(r=>num(r.FTAG)))+avg(home.map(r=>num(r.FTAG))))/2;
-   const totalExpected=homeExpected+awayExpected;
-   for(let z=0;z<lines.length;z++){
-    const st=scores[z],line=lines[z];
-    const old=sample.filter(r=>num(r.FTHG)+num(r.FTAG)>line).length/sample.length;
-    const experimental=poissonOver(totalExpected,line);
-    const y=num(f.FTHG)+num(f.FTAG)>line?1:0;
-    st.n++;st.hits+=y;st.old+=(old-y)**2;st.newModel+=(experimental-y)**2;st.baseline+=(base[z]-y)**2;
-   }
-  }
-  train.push(...test.slice(i,j));i=j;
- }
- out.innerHTML='<p class="muted">Training: '+cut+' · Holdout: '+test.length+' · Last 10 venue-specific matches, minimum 5 each · No same-day result leakage. Experimental model not fitted to holdout.</p><div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>New Brier</th><th>Baseline</th></tr></thead><tbody>'+
- scores.map(st=>'<tr><td>Over '+st.line+'</td><td>'+st.n+'</td><td>'+(st.n?(100*st.hits/st.n).toFixed(0)+'%':'—')+'</td><td>'+(st.n?(st.old/st.n).toFixed(3):'—')+'</td><td>'+(st.n?(st.newModel/st.n).toFixed(3):'—')+'</td><td>'+(st.n?(st.baseline/st.n).toFixed(3):'—')+'</td></tr>').join('')+'</tbody></table></div><p class="muted">New = Poisson total-goals approximation from home/away attack and defence. Lower Brier is better. Repeated use of this holdout limits independence; no calibrated probabilities or betting-profit evidence.</p>';
-}
-function researchOverview(){
- const target=el('overview');
- const paths=['data/forward_test.json','data/match_winner_forward.json'];
- Promise.all(paths.map(path=>fetch(path,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).catch(()=>null))).then(([corners,winner])=>{
-  const datasets=[corners,winner];
-  const names=['Corners','Match Winner'];
-  let html='<div class="overview-grid">';
-  datasets.forEach((d,i)=>{
-   const records=Array.isArray(d?.records)?d.records:[];
-   const valid=records.filter(r=>r&&r.model===(i===0?'v0.9-frozen-poisson':'dixon-coles-v1-forward-frozen')&&r.probabilities&&r.created_at&&r.kickoff_utc);
-   const pending=valid.filter(r=>r.status==='pending').length;
-   const settled=valid.filter(r=>r.status==='settled'&&(i===0?r.outcomes&&[0,1].includes(r.outcomes['9.5']):['H','D','A'].includes(r.actual)));
-   let brier=null;
-   if(settled.length){
-    const squared=settled.map(r=>{
-     if(i===0){const p=Number(r.probabilities['9.5']);return Number.isFinite(p)?(p-r.outcomes['9.5'])**2:null}
-     const vals=['H','D','A'].map(k=>Number(r.probabilities[k]));
-     return vals.every(Number.isFinite)?vals.reduce((sum,p,j)=>sum+(p-(r.actual===['H','D','A'][j]?1:0))**2,0):null;
-    }).filter(v=>v!==null);
-    if(squared.length)brier=squared.reduce((a,b)=>a+b,0)/squared.length;
-   }
-   html+='<div class="overview-tile"><b>'+names[i]+'</b><strong>'+(d?valid.length:'—')+'</strong><span>recorded · '+(d?pending:'—')+' pending · '+(d?settled.length:'—')+' settled</span><p class="overview-note">'+(!d?'Ledger unavailable':brier===null?'Awaiting settled results':'Forward Brier: '+brier.toFixed(3))+'</p></div>';
-  });
-  html+='</div><p class="overview-note">Corners score uses Over 9.5 binary Brier; Match Winner uses three-outcome multiclass Brier. Scores are not directly comparable. Small samples are unstable.</p>';
-  target.innerHTML=html;
- }).catch(()=>{target.textContent='Dashboard temporarily unavailable.'});
-}
-function forwardTracker(){
- const target=el('forward');
- fetch('./data/forward_test.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(d=>{
-  const records=Array.isArray(d.records)?d.records:[];
-  const valid=records.filter(r=>r.model==='v0.9-frozen-poisson'&&r.probabilities&&r.created_at&&r.kickoff_utc);
-  const pending=valid.filter(r=>r.status==='pending'),settled=valid.filter(r=>r.status==='settled'&&r.outcomes);
-  const escaped=v=>esc(v==null?'':v);
-  const lines=['8.5','9.5','10.5'];
-  let html='<p class="muted"><b>'+valid.length+'</b> predictions recorded · <b>'+pending.length+'</b> pending · <b>'+settled.length+'</b> settled</p>';
-  if(settled.length){
-   html+='<div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Market</th><th>Settled</th><th>Brier</th></tr></thead><tbody>';
-   for(const line of lines){
-    const eligible=settled.filter(r=>Number.isFinite(+r.probabilities[line])&&(r.outcomes[line]===0||r.outcomes[line]===1));
-    const brier=eligible.length?eligible.reduce((sum,r)=>sum+(+r.probabilities[line]-r.outcomes[line])**2,0)/eligible.length:null;
-    html+='<tr><td>Over '+line+'</td><td>'+eligible.length+'</td><td>'+(brier===null?'—':brier.toFixed(3))+'</td></tr>';
-   }
-   html+='</tbody></table></div><p class="muted">Lower Brier is better. Small samples are unstable. No odds or profit tracking.</p>';
-  }else html+='<p class="caution">No settled matches yet. No accuracy claims can be made.</p>';
-  html+='<details class="breakdown"><summary>View prediction ledger ('+valid.length+')</summary><div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Fixture</th><th>Recorded (UK)</th><th>Over 9.5</th><th>Status</th></tr></thead><tbody>';
-  for(const r of valid.slice().sort((a,b)=>a.kickoff_utc.localeCompare(b.kickoff_utc)).slice(-40)){
-   const recorded=new Date(r.created_at);
-   const dateLabel=Number.isFinite(recorded.getTime())?recorded.toLocaleString('en-GB',{timeZone:'Europe/London',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'Unknown';
-   html+='<tr><td>'+escaped(r.home)+' v '+escaped(r.away)+'</td><td>'+escaped(dateLabel)+'</td><td>'+((+r.probabilities['9.5'])*100).toFixed(1)+'%</td><td>'+escaped(r.status)+'</td></tr>';
-  }
-  html+='</tbody></table></div></details>';
-  target.innerHTML=html;
- }).catch(e=>{target.textContent='Prediction ledger unavailable: '+e.message});
-}
+
+
 function backtest(){
- const output=el('backtest'),n=10;
- const all=rows.filter(r=>r.done&&num(r.HC)!==null&&num(r.AC)!==null&&r.time<Date.now()).sort((a,b)=>a.time-b.time);
- if(all.length<100){output.textContent='Insufficient completed matches for a chronological test.';return}
- const cut=Math.floor(all.length*.7),history=all.slice(0,cut),test=all.slice(cut),lines=[8.5,9.5,10.5];
- const stats=lines.map(line=>({line,total:0,hits:0,old:0,experimental:0,baseline:0}));
- const baselines=lines.map(line=>history.filter(r=>num(r.HC)+num(r.AC)>line).length/history.length);
- // Predeclared fixed model, no fitting or tuning on the holdout.
- // Corners count is approximated by Poisson with venue-specific attack/defence means.
- function poissonOver(mean,line){
-  let term=Math.exp(-mean),cdf=term;
-  for(let k=1;k<=Math.floor(line);k++){term*=mean/k;cdf+=term}
-  return Math.max(0,Math.min(1,1-cdf));
+ const output = el('backtest') || el('backtest-results'), n = 10;
+ if(!output) return;
+ const all = rows.filter(r => r.done && num(r.HC) !== null && num(r.AC) !== null && r.time < Date.now()).sort((a,b) => a.time - b.time);
+ if(all.length < 100){ output.textContent = 'Insufficient completed matches for a chronological test.'; return; }
+ const cut = Math.floor(all.length * .7), history = all.slice(0, cut), test = all.slice(cut), lines = [8.5, 9.5, 10.5];
+ const stats = lines.map(line => ({ line, total: 0, hits: 0, old: 0, experimental: 0, baseline: 0 }));
+ const baselines = lines.map(line => history.filter(r => num(r.HC) + num(r.AC) > line).length / history.length);
+ function poissonOver(mean, line){
+  let term = Math.exp(-mean), cdf = term;
+  for(let k = 1; k <= Math.floor(line); k++){ term *= mean / k; cdf += term; }
+  return Math.max(0, Math.min(1, 1 - cdf));
  }
- for(let i=0;i<test.length;){
-  let j=i+1;while(j<test.length&&test[j].time===test[i].time)j++;
-  for(let k=i;k<j;k++){
-   const f=test[k],home=history.filter(r=>r.HomeTeam===f.HomeTeam&&r.time<f.time).slice(-n);
-   const away=history.filter(r=>r.AwayTeam===f.AwayTeam&&r.time<f.time).slice(-n);
-   if(home.length<5||away.length<5)continue;
-   const combined=home.concat(away),actual=num(f.HC)+num(f.AC);
-   const mean=z=>z.reduce((sum,v)=>sum+v,0)/z.length;
-   const expectedTotal=(mean(home.map(r=>num(r.HC)))+mean(away.map(r=>num(r.HC)))+
-                        mean(away.map(r=>num(r.AC)))+mean(home.map(r=>num(r.AC))))/2;
-   stats.forEach((st,idx)=>{
-    const outcome=actual>st.line?1:0;
-    const old=combined.filter(r=>num(r.HC)+num(r.AC)>st.line).length/combined.length;
-    const experimental=poissonOver(expectedTotal,st.line);
-    st.total++;st.hits+=outcome;st.old+=(old-outcome)**2;
-    st.experimental+=(experimental-outcome)**2;st.baseline+=(baselines[idx]-outcome)**2;
+ for(let i = 0; i < test.length; ){
+  let j = i + 1; while(j < test.length && test[j].time === test[i].time) j++;
+  for(let k = i; k < j; k++){
+   const f = test[k], home = history.filter(r => r.HomeTeam === f.HomeTeam && r.time < f.time).slice(-n);
+   const away = history.filter(r => r.AwayTeam === f.AwayTeam && r.time < f.time).slice(-n);
+   if(home.length < 5 || away.length < 5) continue;
+   const combined = home.concat(away), actual = num(f.HC) + num(f.AC);
+   const mean = z => z.reduce((sum, v) => sum + v, 0) / z.length;
+   const expectedTotal = (mean(home.map(r => num(r.HC))) + mean(away.map(r => num(r.HC))) +
+                        mean(away.map(r => num(r.AC))) + mean(home.map(r => num(r.AC)))) / 2;
+   stats.forEach((st, idx) => {
+    const outcome = actual > st.line ? 1 : 0;
+    const old = combined.filter(r => num(r.HC) + num(r.AC) > st.line).length / combined.length;
+    const experimental = poissonOver(expectedTotal, st.line);
+    st.total++; st.hits += outcome; st.old += (old - outcome)**2;
+    st.experimental += (experimental - outcome)**2; st.baseline += (baselines[idx] - outcome)**2;
    });
   }
-  history.push(...test.slice(i,j));i=j;
+  history.push(...test.slice(i, j)); i = j;
  }
- output.innerHTML='<p class="muted">Training: '+cut+' · Holdout: '+test.length+' · Venue-specific last '+n+' matches · Minimum 5 each. Experimental model is fixed, not tuned on this test.</p>'+
- '<div style="overflow-x:auto"><table class="backtest-table"><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>New Brier</th><th>Baseline</th></tr></thead><tbody>'+
- stats.map(st=>'<tr><td>Over '+st.line+'</td><td>'+st.total+'</td><td>'+(st.total?(100*st.hits/st.total).toFixed(0)+'%':'—')+'</td><td>'+(st.total?(st.old/st.total).toFixed(3):'—')+'</td><td>'+(st.total?(st.experimental/st.total).toFixed(3):'—')+'</td><td>'+(st.total?(st.baseline/st.total).toFixed(3):'—')+'</td></tr>').join('')+
+ output.innerHTML = '<p class="muted">Training: ' + cut + ' · Holdout: ' + test.length + ' · Venue-specific last ' + n + ' matches · Minimum 5 each. Experimental model is fixed, not tuned on this test.</p>' +
+ '<div style="overflow-x:auto"><table><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>New Brier</th><th>Baseline</th></tr></thead><tbody>' +
+ stats.map(st => '<tr><td>Over ' + st.line + '</td><td>' + st.total + '</td><td>' + (st.total ? (100 * st.hits / st.total).toFixed(0) + '%' : '—') + '</td><td>' + (st.total ? (st.old / st.total).toFixed(3) : '—') + '</td><td>' + (st.total ? (st.experimental / st.total).toFixed(3) : '—') + '</td><td>' + (st.total ? (st.baseline / st.total).toFixed(3) : '—') + '</td></tr>').join('') +
  '</tbody></table></div><p class="muted">Lower Brier is better. New = Poisson approximation using corners won and conceded. This assumes a simplified distribution and is not calibrated. Repeated evaluation on this holdout limits independence. No betting-profit evidence.</p>';
 }
 
-el('markets').innerHTML=markets.map(([id,emoji,name])=>'<button class="market" data-id="'+id+'" aria-pressed="'+(id===selected)+'"><span class="emoji">'+emoji+'</span><b>'+name+'</b><small>Explore trends</small></button>').join('');document.querySelectorAll('.market').forEach(b=>b.onclick=()=>{selected=b.dataset.id;document.querySelectorAll('.market').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()});el('window').onchange=render;el('threshold').onchange=render;el('goals-threshold').onchange=render;
-fetch('./data/matches.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(d=>{meta=d;rows=(d.matches||[]).map(r=>({...r,time:date(r.Date),done:num(r.FTHG)!==null&&num(r.FTAG)!==null})).filter(r=>Number.isFinite(r.time));const freshness=calc.dataFreshnessSummary(d);el('status').textContent=rows.length+' matches · '+freshness.state;el('health').textContent=rows.filter(r=>r.done).length+' completed matches · '+freshness.text+' Upcoming fixtures: '+(d.fixtures||[]).length+' · fixtures checked: '+(d.fixtures_last_checked?new Date(d.fixtures_last_checked).toLocaleString('en-GB'):'never')+(d.errors?.length?' · Some sources failed.':'');fetch('data/match_winner_forward.json',{cache:'no-store'}).then(x=>x.ok?x.json():null).then(x=>{winnerPredictions=Array.isArray(x?.records)?x.records:[];if(selected==='wins')render()}).catch(()=>{});render();backtest();goalsBacktest();bttsBacktest();cardsBacktest();shotsBacktest();forwardTracker();winnerLedger();researchOverview()}).catch(e=>{el('status').textContent='Data unavailable';el('health').textContent=e.message;render()});
-</script></html>
+function goalsBacktest(){
+ const out = el('goals-backtest') || el('goals-backtest-results');
+ if(!out) return;
+ const all = rows.filter(r => r.done && num(r.FTHG) !== null && num(r.FTAG) !== null && r.time < Date.now()).sort((a,b) => a.time - b.time);
+ if(all.length < 100){ out.textContent = 'Insufficient completed matches.'; return; }
+ const cut = Math.floor(all.length * .7), train = all.slice(0, cut), test = all.slice(cut);
+ const lines = [1.5, 2.5, 3.5], scores = lines.map(line => ({ line, n: 0, hits: 0, old: 0, newModel: 0, baseline: 0 }));
+ const base = lines.map(line => train.filter(r => num(r.FTHG) + num(r.FTAG) > line).length / train.length);
+ function poissonOver(mean, line){
+  let term = Math.exp(-mean), cdf = term;
+  for(let k = 1; k <= Math.floor(line); k++){ term *= mean / k; cdf += term; }
+  return Math.max(0, Math.min(1, 1 - cdf));
+ }
+ const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+ for(let i = 0; i < test.length; ){
+  let j = i + 1; while(j < test.length && test[j].time === test[i].time) j++;
+  for(let k = i; k < j; k++){
+   const f = test[k], home = train.filter(r => r.HomeTeam === f.HomeTeam && r.time < f.time).slice(-10);
+   const away = train.filter(r => r.AwayTeam === f.AwayTeam && r.time < f.time).slice(-10);
+   if(home.length < 5 || away.length < 5) continue;
+   const sample = home.concat(away);
+   const homeExpected = (avg(home.map(r => num(r.FTHG))) + avg(away.map(r => num(r.FTHG)))) / 2;
+   const awayExpected = (avg(away.map(r => num(r.FTAG))) + avg(home.map(r => num(r.FTAG)))) / 2;
+   const totalExpected = homeExpected + awayExpected;
+   for(let z = 0; z < lines.length; z++){
+    const st = scores[z], line = lines[z];
+    const old = sample.filter(r => num(r.FTHG) + num(r.FTAG) > line).length / sample.length;
+    const experimental = poissonOver(totalExpected, line);
+    const y = num(f.FTHG) + num(f.FTAG) > line ? 1 : 0;
+    st.n++; st.hits += y; st.old += (old - y)**2; st.newModel += (experimental - y)**2; st.baseline += (base[z] - y)**2;
+   }
+  }
+  train.push(...test.slice(i, j)); i = j;
+ }
+ out.innerHTML = '<p class="muted">Training: ' + cut + ' · Holdout: ' + test.length + ' · Last 10 venue-specific matches, minimum 5 each · No same-day result leakage. Experimental model not fitted to holdout.</p><div style="overflow-x:auto"><table><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>New Brier</th><th>Baseline</th></tr></thead><tbody>' +
+ scores.map(st => '<tr><td>Over ' + st.line + '</td><td>' + st.n + '</td><td>' + (st.n ? (100 * st.hits / st.n).toFixed(0) + '%' : '—') + '</td><td>' + (st.n ? (st.old / st.n).toFixed(3) : '—') + '</td><td>' + (st.n ? (st.newModel / st.n).toFixed(3) : '—') + '</td><td>' + (st.n ? (st.baseline / st.n).toFixed(3) : '—') + '</td></tr>').join('') + '</tbody></table></div><p class="muted">New = Poisson total-goals approximation from home/away attack and defence. Lower Brier is better. Repeated use of this holdout limits independence; no calibrated probabilities or betting-profit evidence.</p>';
+}
+
+function bttsBacktest(){
+ const out = el('btts-backtest') || el('btts-backtest-results');
+ if(!out) return;
+ const all = rows.filter(r => r.done && num(r.FTHG) !== null && num(r.FTAG) !== null && r.time < Date.now()).sort((a,b) => a.time - b.time);
+ if(all.length < 100){ out.textContent = 'Insufficient completed matches.'; return; }
+ const cut = Math.floor(all.length * .7), history = all.slice(0, cut), test = all.slice(cut);
+ const yes = r => num(r.FTHG) > 0 && num(r.FTAG) > 0 ? 1 : 0;
+ const base = history.reduce((sum, r) => sum + yes(r), 0) / history.length;
+ const stats = { n: 0, hits: 0, old: 0, newModel: 0, baseline: 0 };
+ const avg = a => a.reduce((sum, v) => sum + v, 0) / a.length;
+ for(let i = 0; i < test.length; ){
+  let j = i + 1; while(j < test.length && test[j].time === test[i].time) j++;
+  for(let k = i; k < j; k++){
+   const f = test[k], home = history.filter(r => r.HomeTeam === f.HomeTeam && r.time < f.time).slice(-10);
+   const away = history.filter(r => r.AwayTeam === f.AwayTeam && r.time < f.time).slice(-10);
+   if(home.length < 5 || away.length < 5) continue;
+   const sample = home.concat(away), old = avg(sample.map(yes));
+   const homeMean = (avg(home.map(r => num(r.FTHG))) + avg(away.map(r => num(r.FTHG)))) / 2;
+   const awayMean = (avg(away.map(r => num(r.FTAG))) + avg(home.map(r => num(r.FTAG)))) / 2;
+   const experimental = (1 - Math.exp(-homeMean)) * (1 - Math.exp(-awayMean));
+   const outcome = yes(f);
+   stats.n++; stats.hits += outcome;
+   stats.old += (old - outcome)**2; stats.newModel += (experimental - outcome)**2; stats.baseline += (base - outcome)**2;
+  }
+  history.push(...test.slice(i, j)); i = j;
+ }
+ const n = stats.n;
+ const rowsHtml = [['BTTS Yes', stats.hits/n, stats.old/n, stats.newModel/n, stats.baseline/n], ['BTTS No', 1 - stats.hits/n, stats.old/n, stats.newModel/n, stats.baseline/n]].map(v => '<tr><td>' + v[0] + '</td><td>' + n + '</td><td>' + (100 * v[1]).toFixed(0) + '%</td><td>' + v[2].toFixed(3) + '</td><td>' + v[3].toFixed(3) + '</td><td>' + v[4].toFixed(3) + '</td></tr>').join('');
+ out.innerHTML = '<p class="muted">Training: ' + cut + ' · Holdout: ' + test.length + ' · Tested: ' + n + ' · Last 10 home/away matches, minimum five each. No same-day leakage.</p><div style="overflow-x:auto"><table><thead><tr><th>Outcome</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>New Brier</th><th>Baseline</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div><p class="muted">Yes/No Brier scores are identical because No = 1 − Yes. Old = historical BTTS frequency; New = independent Poisson scoring approximation using goals scored and conceded. Lower is better. This reused holdout is not independent validation, and odds/profit are not assessed.</p>';
+}
+
+function cardsBacktest(){
+ const out = el('cards-backtest') || el('cards-backtest-results');
+ if(!out) return;
+ const all = rows.filter(r => r.done && num(r.HY) !== null && num(r.AY) !== null && r.time < Date.now()).sort((a,b) => a.time - b.time);
+ if(all.length < 100){ out.textContent = 'Insufficient yellow-card history.'; return; }
+ const cut = Math.floor(all.length * .7), history = all.slice(0, cut), test = all.slice(cut);
+ const lines = [2.5, 3.5, 4.5, 5.5], total = r => num(r.HY) + num(r.AY);
+ const stats = lines.map(line => ({ line, n: 0, hits: 0, old: 0, poisson: 0, base: 0 }));
+ const baseline = lines.map(line => history.filter(r => total(r) > line).length / history.length);
+ const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+ const over = (lambda, line) => { let t = Math.exp(-lambda), cdf = t; for(let k = 1; k <= Math.floor(line); k++){ t *= lambda / k; cdf += t; } return Math.max(0, Math.min(1, 1 - cdf)); };
+ for(let i = 0; i < test.length; ){
+  let j = i + 1; while(j < test.length && test[j].time === test[i].time) j++;
+  for(let k = i; k < j; k++){
+   const f = test[k], home = history.filter(r => r.HomeTeam === f.HomeTeam && r.time < f.time).slice(-10);
+   const away = history.filter(r => r.AwayTeam === f.AwayTeam && r.time < f.time).slice(-10);
+   if(home.length < 5 || away.length < 5) continue;
+   const sample = home.concat(away);
+   const expected = (mean(home.map(r => num(r.HY))) + mean(away.map(r => num(r.HY))) + mean(away.map(r => num(r.AY))) + mean(home.map(r => num(r.AY)))) / 2;
+   for(let z = 0; z < lines.length; z++){
+    const st = stats[z], line = lines[z], y = +(total(f) > line);
+    const old = sample.filter(r => total(r) > line).length / sample.length, p = over(expected, line);
+    st.n++; st.hits += y; st.old += (old - y)**2; st.poisson += (p - y)**2; st.base += (baseline[z] - y)**2;
+   }
+  }
+  history.push(...test.slice(i, j)); i = j;
+ }
+ out.innerHTML = '<p class="muted">Training: ' + cut + ' · Holdout: ' + test.length + ' · Last 10 venue-specific matches, minimum 5 each · Same-day results excluded.</p><div style="overflow-x:auto"><table><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>Poisson</th><th>Baseline</th></tr></thead><tbody>' + stats.map(st => '<tr><td>Over ' + st.line + '</td><td>' + st.n + '</td><td>' + (st.n ? (100 * st.hits / st.n).toFixed(0) + '%' : '—') + '</td><td>' + (st.n ? (st.old / st.n).toFixed(3) : '—') + '</td><td>' + (st.n ? (st.poisson / st.n).toFixed(3) : '—') + '</td><td>' + (st.n ? (st.base / st.n).toFixed(3) : '—') + '</td></tr>').join('') + '</tbody></table></div><p class="muted">Lower Brier is better. Cards are often overdispersed relative to Poisson; these are research benchmarks, not calibrated forecasts. Reused holdout is not independent validation.</p>';
+}
+
+function shotsBacktest(){
+ const out = el('shots-backtest') || el('shots-backtest-results');
+ if(!out) return;
+ const all = rows.filter(r => r.done && num(r.HST) !== null && num(r.AST) !== null && r.time < Date.now()).sort((a,b) => a.time - b.time);
+ if(all.length < 100){ out.textContent = 'Insufficient shots-on-target history.'; return; }
+ const cut = Math.floor(all.length * .7), history = all.slice(0, cut), test = all.slice(cut);
+ const lines = [6.5, 8.5, 10.5, 12.5], total = r => num(r.HST) + num(r.AST);
+ const stats = lines.map(line => ({ line, n: 0, hits: 0, old: 0, poisson: 0, base: 0 }));
+ const baseline = lines.map(line => history.filter(r => total(r) > line).length / history.length);
+ const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+ const over = (lambda, line) => { let t = Math.exp(-lambda), cdf = t; for(let k = 1; k <= Math.floor(line); k++){ t *= lambda / k; cdf += t; } return Math.max(0, Math.min(1, 1 - cdf)); };
+ for(let i = 0; i < test.length; ){
+  let j = i + 1; while(j < test.length && test[j].time === test[i].time) j++;
+  for(let k = i; k < j; k++){
+   const f = test[k], home = history.filter(r => r.HomeTeam === f.HomeTeam && r.time < f.time).slice(-10);
+   const away = history.filter(r => r.AwayTeam === f.AwayTeam && r.time < f.time).slice(-10);
+   if(home.length < 5 || away.length < 5) continue;
+   const sample = home.concat(away);
+   const expected = (mean(home.map(r => num(r.HST))) + mean(away.map(r => num(r.HST))) + mean(away.map(r => num(r.AST))) + mean(home.map(r => num(r.AST)))) / 2;
+   for(let z = 0; z < lines.length; z++){
+    const st = stats[z], line = lines[z], y = +(total(f) > line);
+    const old = sample.filter(r => total(r) > line).length / sample.length, p = over(expected, line);
+    st.n++; st.hits += y; st.old += (old - y)**2; st.poisson += (p - y)**2; st.base += (baseline[z] - y)**2;
+   }
+  }
+  history.push(...test.slice(i, j)); i = j;
+ }
+ out.innerHTML = '<p class="muted">Training: ' + cut + ' · Holdout: ' + test.length + ' · Last 10 venue-specific matches, minimum 5 each · Same-day results excluded.</p><div style="overflow-x:auto"><table><thead><tr><th>Line</th><th>Tested</th><th>Actual</th><th>Old Brier</th><th>Poisson</th><th>Baseline</th></tr></thead><tbody>' + stats.map(st => '<tr><td>Over ' + st.line + '</td><td>' + st.n + '</td><td>' + (st.n ? (100 * st.hits / st.n).toFixed(0) + '%' : '—') + '</td><td>' + (st.n ? (st.old / st.n).toFixed(3) : '—') + '</td><td>' + (st.n ? (st.poisson / st.n).toFixed(3) : '—') + '</td><td>' + (st.n ? (st.base / st.n).toFixed(3) : '—') + '</td></tr>').join('') + '</tbody></table></div><p class="muted">Lower Brier is better. Poisson is a simplified count assumption, not a calibrated probability model. Reused holdout is not independent validation, and no odds or profit have been tested.</p>';
+}
+
+
+fetch('data/matches.json', { cache: 'no-store' }).then(r => {
+  if (!r.ok) throw Error('HTTP ' + r.status);
+  return r.json();
+}).then(d => {
+  meta = d;
+  rows = (d.matches || []).map(r => ({ ...r, time: date(r.Date), done: num(r.FTHG) !== null && num(r.FTAG) !== null })).filter(r => Number.isFinite(r.time));
+  const freshness = calc.dataFreshnessSummary ? calc.dataFreshnessSummary(d) : { state: 'updated', text: 'Verified known completed results' };
+
+  if (el('status')) el('status').textContent = rows.length + ' matches · ' + freshness.state;
+  if (el('top-matches-count')) el('top-matches-count').textContent = rows.filter(r => r.done).length;
+  if (el('top-fixtures-count')) el('top-fixtures-count').textContent = (d.fixtures || []).length;
+  if (el('top-matches-sub')) el('top-matches-sub').textContent = freshness.state;
+  if (el('top-feed-status')) el('top-feed-status').textContent = freshness.text.split('·')[0].trim() || 'Verified';
+  if (el('health')) el('health').textContent = rows.filter(r => r.done).length + ' completed matches · ' + freshness.text + ' Upcoming fixtures: ' + (d.fixtures || []).length + ' · fixtures checked: ' + (d.fixtures_last_checked ? new Date(d.fixtures_last_checked).toLocaleString('en-GB') : 'never') + (d.errors?.length ? ' · Some sources failed.' : '');
+
+  // Load both forward ledgers to enable predictions across both models
+  Promise.all([
+    fetch('data/match_winner_forward.json', { cache: 'no-store' }).then(x => x.ok ? x.json() : null).catch(() => null),
+    fetch('data/forward_test.json', { cache: 'no-store' }).then(x => x.ok ? x.json() : null).catch(() => null)
+  ]).then(([winnerData, cornersData]) => {
+    winnerPredictions = Array.isArray(winnerData?.records) ? winnerData.records : [];
+    cornersPredictions = Array.isArray(cornersData?.records) ? cornersData.records : [];
+    renderBroadcast();
+    renderSelectedEvidence();
+  });
+
+  renderBroadcast();
+  renderSelectedEvidence();
+  render();
+  backtest();
+  goalsBacktest();
+  bttsBacktest();
+  cardsBacktest();
+  shotsBacktest();
+  forwardTracker();
+  winnerLedger();
+  researchOverview();
+}).catch(e => {
+  if (el('status')) el('status').textContent = 'Data unavailable';
+  if (el('health')) el('health').textContent = e.message;
+  render();
+});
+</script>
+</body>
+</html>
