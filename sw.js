@@ -1,7 +1,7 @@
 // MatchIQ Progressive Web App Service Worker (v1)
 // Caches application shell and enables offline home screen capability
 
-const CACHE_NAME = 'matchiq-pwa-v1';
+const CACHE_NAME = 'matchiq-pwa-v2';
 
 const PRECACHE_ASSETS = [
   './',
@@ -38,9 +38,23 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch: Network-first for dynamic data, Cache-first for static shell
+// Fetch: Network-first for HTML and data, Cache-first for static assets
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
+
+  // For HTML navigation requests, use Network-first with cache fallback so updates are instant
+  if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' }).then(response => {
+        if (response && response.status === 200) {
+          const respClone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, respClone));
+        }
+        return response;
+      }).catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
 
   // For data requests, use Network-first with cache: 'no-store' to ensure freshness
   if (url.pathname.includes('/data/')) {
@@ -56,7 +70,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // For HTML, scripts, stylesheets, and images: Cache-first with network fallback
+  // For static assets (images, icons): Cache-first with network fallback
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;

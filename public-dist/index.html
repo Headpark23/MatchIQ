@@ -671,42 +671,76 @@ button:focus-visible, select:focus-visible {
   font-weight: 800;
 }
 
-/* PREDICTION ROWS (CRISP LIGHT CARD) */
+/* PREDICTION ROWS & CARDS (CRISP LIGHT CARD) */
 .prediction-ledger-card {
   background: #ffffff;
-  padding: 16px 36px 8px;
+  padding: 24px 28px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
+.prediction-card,
 .prediction-row {
-  display: grid;
-  grid-template-columns: 48px 300px 120px 1fr;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 14px !important;
+  padding: 18px 20px !important;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.18s ease !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+.prediction-card:hover,
+.prediction-row:hover {
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08) !important;
+}
+
+.pred-card-top {
+  display: flex;
   align-items: center;
-  gap: 24px;
-  padding: 20px 0;
-  border-bottom: 1px solid #F1F5F9;
-  transition: background 0.15s ease;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
 }
 
-.prediction-row:last-child {
-  border-bottom: none;
+.pred-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
-.market-icon-col {
+.pred-card-icon {
+  font-size: 24px;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  color: #0F172A;
+  width: 40px;
+  height: 40px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  flex-shrink: 0;
 }
 
-.market-info-col {
+.pred-card-kicker-group {
   display: flex;
   flex-direction: column;
   gap: 3px;
+  min-width: 0;
 }
 
-.market-kicker {
+.pred-card-kicker {
   font-family: 'Outfit', sans-serif;
   font-size: 11px;
   font-weight: 800;
@@ -715,32 +749,110 @@ button:focus-visible, select:focus-visible {
   color: #64748B;
 }
 
-.market-headline {
-  font-family: 'Outfit', sans-serif;
-  font-size: 22px;
-  font-weight: 800;
-  color: #0F172A;
-  letter-spacing: -0.01em;
-}
-
-.market-prob-col {
+.pred-card-prob {
   font-family: 'Oswald', sans-serif;
-  font-size: 48px;
+  font-size: 38px;
   font-weight: 800;
   color: #0052FF;
   line-height: 0.95;
   letter-spacing: -0.02em;
-  text-align: right;
+  flex-shrink: 0;
 }
 
-.market-rule-col {
+.pred-card-headline {
+  font-family: 'Outfit', sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  word-break: break-word;
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.pred-card-body {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pred-card-rule {
   font-family: 'Inter', sans-serif;
-  font-size: 14.5px;
+  font-size: 13.5px;
   font-weight: 500;
-  color: #334155;
+  color: #1E293B;
   line-height: 1.45;
-  padding-left: 14px;
-  border-left: 2px solid #E2E8F0;
+}
+
+.pred-card-rule strong {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+.pred-card-model {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  color: #64748B;
+}
+
+.pred-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pred-card-consensus {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #475569;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  flex: 1;
+  min-width: 180px;
+  box-sizing: border-box;
+}
+
+.pred-card-consensus strong {
+  color: #0F172A;
+}
+
+.pred-card-btn {
+  background: #0052FF;
+  color: #FFFFFF !important;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0, 82, 255, 0.25);
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  min-height: 38px;
+}
+
+.pred-card-btn:hover {
+  background: #0040CC;
+  box-shadow: 0 4px 12px rgba(0, 82, 255, 0.38);
+  transform: translateY(-1px);
 }
 
 /* BOTTOM ACTION BAR */
@@ -941,29 +1053,38 @@ button:focus-visible, select:focus-visible {
     font-size: 18px;
   }
   .prediction-ledger-card {
-    padding: 12px 14px;
+    padding: 12px 10px;
+    gap: 12px;
   }
+  .prediction-card,
   .prediction-row {
-    grid-template-columns: 32px minmax(0, 1fr) auto;
-    gap: 10px;
+    padding: 14px 12px !important;
+    gap: 10px !important;
   }
-  .market-info-col {
-    min-width: 0;
-  }
-  .market-headline {
+  .pred-card-headline {
     font-size: 16px;
-    word-break: break-word;
   }
-  .market-prob-col {
-    font-size: 32px;
+  .pred-card-prob {
+    font-size: 30px;
   }
-  .market-rule-col {
-    grid-column: 1 / -1;
-    font-size: 13px;
-    border-left: none;
-    padding-left: 0;
-    padding-top: 6px;
-    border-top: 1px dashed #E2E8F0;
+  .pred-card-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+  }
+  .pred-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .pred-card-consensus {
+    min-width: 0;
+    width: 100%;
+  }
+  .pred-card-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 14px;
   }
   .stadium-bottom-bar {
     padding: 16px 14px;
@@ -2916,7 +3037,7 @@ const calc = window.MatchIQCalculations;
 const el = id => document.getElementById(id);
 const num = v => (v === '' || v == null) ? null : Number.isFinite(+v) ? +v : null;
 const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
-const esc = s => String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const esc = s => String(s || '').replace(/&amp;#39;/g, "'").replace(/&#39;/g, "'").replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 function date(s) {
   const p = (s || '').split('/');
@@ -4181,9 +4302,9 @@ function renderBroadcast() {
     }
 
     // High level Matchday banner variables
-    const teamHomeName = esc(f.HomeTeam.toUpperCase()) + (f.HomeTeam.endsWith('FC') || f.HomeTeam.endsWith('United') || f.HomeTeam.endsWith('City') ? '' : ' FC');
-    const teamAwayName = esc(f.AwayTeam.toUpperCase());
-    const prematchDate = esc(f.Date) + ' · ' + esc(f.Time || '15:00') + ' UK (Matchday 8)';
+    const teamHomeName = f.HomeTeam.toUpperCase() + (f.HomeTeam.endsWith('FC') || f.HomeTeam.endsWith('United') || f.HomeTeam.endsWith('City') ? '' : ' FC');
+    const teamAwayName = f.AwayTeam.toUpperCase();
+    const prematchDate = (f.Date || '') + ' · ' + (f.Time || '15:00') + ' UK (Matchday 8)';
     const matchSlogan = 'PREMIER LEAGUE 2026/27 · LIVE PILOT ROUND';
 
     let leadPickHeadline = 'MODEL PREDICTION READY';
@@ -4318,40 +4439,34 @@ function renderBroadcast() {
     const cardsHtml = marketCards.map(c => {
       let badge = '';
       if (c.status === 'model') {
-        badge = '<span class="model-badge verified">VERIFIED PRODUCTION MODEL</span>';
+        badge = '<span class="model-badge" style="background:#DCFCE7;color:#15803D;border:1px solid #86EFAC;font-weight:700;font-size:10px;padding:3px 8px;border-radius:4px;white-space:nowrap;">VERIFIED PRODUCTION MODEL</span>';
       } else if (c.status === 'withheld') {
-        badge = '<span class="model-badge warning" style="color:var(--amber);background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.35);">INSUFFICIENT SAMPLE (<5)</span>';
+        badge = '<span class="model-badge" style="background:#FEE2E2;color:#B91C1C;border:1px solid #FCA5A5;font-weight:700;font-size:10px;padding:3px 8px;border-radius:4px;white-space:nowrap;">SAMPLE &lt;5 (WITHHELD)</span>';
       } else if (c.status === 'rejected') {
-        badge = '<span class="model-badge" style="color:var(--rose);background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.35);">RESEARCH ONLY (OFFLINE)</span>';
+        badge = '<span class="model-badge" style="background:#F1F5F9;color:#64748B;border:1px solid #CBD5E1;font-weight:700;font-size:10px;padding:3px 8px;border-radius:4px;white-space:nowrap;">RESEARCH ONLY (OFFLINE)</span>';
       } else {
-        badge = '<span class="model-badge experimental">RESEARCH BENCHMARK</span>';
+        badge = '<span class="model-badge" style="background:#FEF3C7;color:#B45309;border:1px solid #FCD34D;font-weight:700;font-size:10px;padding:3px 8px;border-radius:4px;white-space:nowrap;">RESEARCH BENCHMARK</span>';
       }
 
-      return '<div class="prediction-row" style="flex-direction:column;align-items:stretch;gap:10px;">' +
-        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">' +
-          '<div style="display:flex;align-items:center;gap:10px;">' +
-            '<span style="font-size:22px;">' + c.icon + '</span>' +
-            '<div>' +
-              '<div class="market-kicker">' + esc(c.name) + '</div>' +
-              '<div class="market-headline">' + esc(c.title) + '</div>' +
+      return '<div class="prediction-card">' +
+        '<div class="pred-card-top">' +
+          '<div class="pred-card-meta">' +
+            '<span class="pred-card-icon">' + c.icon + '</span>' +
+            '<div class="pred-card-kicker-group">' +
+              '<div class="pred-card-kicker">' + esc(c.name) + '</div>' +
+              '<div style="margin-top:2px;">' + badge + '</div>' +
             '</div>' +
           '</div>' +
-          badge +
+          '<div class="pred-card-prob">' + (c.prob !== null ? c.prob.toFixed(1) + '%' : '—') + '</div>' +
         '</div>' +
-
-        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:rgba(255,255,255,0.02);padding:10px 14px;border-radius:var(--radius-md);">' +
-          '<div style="font-size:12px;color:var(--muted);">' +
-            '<div><strong>Settlement Rule:</strong> ' + esc(c.rule) + '</div>' +
-            '<div style="font-size:11px;color:var(--dim);margin-top:2px;">' + esc(c.modelName) + '</div>' +
-          '</div>' +
-          '<div class="market-prob-col" style="font-size:24px;">' +
-            (c.prob !== null ? c.prob.toFixed(1) + '%' : '—') +
-          '</div>' +
+        '<div class="pred-card-headline">' + esc(c.title) + '</div>' +
+        '<div class="pred-card-body">' +
+          '<div class="pred-card-rule"><strong>Settlement Rule:</strong> ' + esc(c.rule) + '</div>' +
+          '<div class="pred-card-model">' + esc(c.modelName) + '</div>' +
         '</div>' +
-
-        '<div class="market-consensus-badge">' +
-          '<span><strong>Market Context:</strong> ' + esc(c.consensus) + '</span>' +
-          '<button type="button" class="btn-card-diary" style="width:auto;margin:0;padding:6px 14px;font-size:11.5px;" onclick="openBetDiaryModal(\'' + esc(fixtureKey(f)) + '\', \'' + c.id + '\')">' +
+        '<div class="pred-card-footer">' +
+          '<div class="pred-card-consensus"><strong>Market Context:</strong> ' + esc(c.consensus) + '</div>' +
+          '<button type="button" class="pred-card-btn" onclick="openBetDiaryModal(\'' + esc(fixtureKey(f)) + '\', \'' + c.id + '\')">' +
             '📓 Log to Bet Diary' +
           '</button>' +
         '</div>' +
@@ -4653,6 +4768,7 @@ fetch('data/matches.json', { cache: 'no-store' }).then(r => {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(reg => {
+      reg.update();
       console.log('MatchIQ PWA Service Worker active, scope:', reg.scope);
     }).catch(err => {
       console.log('MatchIQ PWA Service Worker registration notice:', err);
