@@ -73,4 +73,12 @@ summary = calc.dataFreshnessSummary({
 assert.equal(summary.state, 'updated');
 assert.match(summary.text, /Current season 2627 updated successfully/);
 
+// Unit tests for Poisson calculations and BTTS probability model
+close(calc.poissonOver(10.45, 9.5), 0.5969605533394432, 'Corners Poisson Over 9.5');
+close(calc.poissonOver(3.45, 2.5), 0.6698056996226208, 'Goals Poisson Over 2.5');
+const bttsResult = calc.bttsProbability(2.30, 1.15);
+assert.ok(bttsResult !== null);
+close(bttsResult.yes, 0.6148500232762109, 'BTTS Yes Poisson');
+close(bttsResult.no, 0.38514997672378914, 'BTTS No Poisson');
+
 console.log('All six market calculations, labels, and freshness states PASS');

@@ -86,6 +86,27 @@
     };
   }
 
+  function poissonOver(mean, line) {
+    if (!Number.isFinite(mean) || mean <= 0) return 0;
+    let term = Math.exp(-mean), cdf = term;
+    for (let k = 1; k <= Math.floor(line); k++) {
+      term *= mean / k;
+      cdf += term;
+    }
+    return Math.max(0, Math.min(1, 1 - cdf));
+  }
+
+  function bttsProbability(homeExpectedGoals, awayExpectedGoals) {
+    if (!Number.isFinite(homeExpectedGoals) || !Number.isFinite(awayExpectedGoals)) return null;
+    const pHome = 1 - Math.exp(-homeExpectedGoals);
+    const pAway = 1 - Math.exp(-awayExpectedGoals);
+    const yes = pHome * pAway;
+    return {
+      yes: Math.max(0, Math.min(1, yes)),
+      no: Math.max(0, Math.min(1, 1 - yes))
+    };
+  }
+
   return {
     MARKET_LABELS,
     number,
@@ -94,6 +115,8 @@
     overLine,
     bothTeamsScored,
     matchWinnerIndicator,
-    dataFreshnessSummary
+    dataFreshnessSummary,
+    poissonOver,
+    bttsProbability
   };
 });
