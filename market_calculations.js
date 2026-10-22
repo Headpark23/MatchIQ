@@ -107,6 +107,102 @@
     };
   }
 
+  function calculateBetProfit(stake, decimalOdds, outcome) {
+    const s = number(stake);
+    const odds = number(decimalOdds);
+    if (s === null || s < 0) return null;
+    const status = (outcome || '').toLowerCase().trim();
+    if (status === 'won') {
+      if (odds === null || odds < 1.0) return null;
+      return Math.round(s * (odds - 1) * 100) / 100;
+    }
+    if (status === 'lost') {
+      return -Math.round(s * 100) / 100;
+    }
+    if (status === 'void') {
+      return 0.0;
+    }
+    return null; // 'pending' or unspecified
+  }
+
+  function summarizeBetDiary(entries) {
+    const list = Array.isArray(entries) ? entries : [];
+    let pendingCount = 0;
+    let wonCount = 0;
+    let lostCount = 0;
+    let voidCount = 0;
+    let totalStaked = 0;
+    let settledStaked = 0;
+    let netProfit = 0;
+
+    const originBreakdown = {
+      matchiq: { count: 0, staked: 0, profit: 0 },
+      independent: { count: 0, staked: 0, profit: 0 }
+    };
+
+    for (const entry of list) {
+      const stake = number(entry.stake) || 0;
+      const odds = number(entry.odds) || 1.0;
+      const outcome = (entry.outcome || 'pending').toLowerCase().trim();
+      const origin = (entry.origin || 'matchiq').toLowerCase().trim() === 'independent' ? 'independent' : 'matchiq';
+
+      totalStaked += stake;
+      originBreakdown[origin].count++;
+      originBreakdown[origin].staked += stake;
+
+      if (outcome === 'pending') {
+        pendingCount++;
+      } else {
+        settledStaked += stake;
+        const profit = calculateBetProfit(stake, odds, outcome) || 0;
+        netProfit += profit;
+        originBreakdown[origin].profit += profit;
+
+        if (outcome === 'won') wonCount++;
+        else if (outcome === 'lost') lostCount++;
+        else if (outcome === 'void') voidCount++;
+      }
+    }
+
+    const settledCount = wonCount + lostCount + voidCount;
+    const winRatePct = settledCount > 0 ? (wonCount / settledCount) * 100 : 0;
+    const roiPct = settledStaked > 0 ? (netProfit / settledStaked) * 100 : 0;
+
+    return {
+      totalEntries: list.length,
+      pendingCount,
+      settledCount,
+      wonCount,
+      lostCount,
+      voidCount,
+      totalStaked: Math.round(totalStaked * 100) / 100,
+      settledStaked: Math.round(settledStaked * 100) / 100,
+      netProfit: Math.round(netProfit * 100) / 100,
+      winRatePct,
+      roiPct,
+      originBreakdown
+    };
+  }
+
+  function calculateBrierScore(probabilities, actualOutcome, marketType = 'binary') {
+    if (marketType === '1x2') {
+      if (!probabilities || typeof probabilities !== 'object') return null;
+      const pH = number(probabilities.H) ?? 0;
+      const pD = number(probabilities.D) ?? 0;
+      const pA = number(probabilities.A) ?? 0;
+      const actual = String(actualOutcome).toUpperCase();
+      const yH = actual === 'H' ? 1 : 0;
+      const yD = actual === 'D' ? 1 : 0;
+      const yA = actual === 'A' ? 1 : 0;
+      return (pH - yH) ** 2 + (pD - yD) ** 2 + (pA - yA) ** 2;
+    }
+    // Binary market (e.g. Over/Under, BTTS)
+    const p = number(probabilities);
+    if (p === null) return null;
+    const y = number(actualOutcome) === 1 ? 1 : 0;
+    return (p - y) ** 2;
+  }
+
   return {
     MARKET_LABELS,
     number,
@@ -117,6 +213,9 @@
     matchWinnerIndicator,
     dataFreshnessSummary,
     poissonOver,
-    bttsProbability
+    bttsProbability,
+    calculateBetProfit,
+    summarizeBetDiary,
+    calculateBrierScore
   };
 });
