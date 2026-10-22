@@ -1,67 +1,77 @@
 {
   "fixtures": [
     {
+      "Date": "2026-10-23",
+      "Time": "20:00",
+      "HomeTeam": "Ipswich",
+      "AwayTeam": "Nott'm Forest",
+      "kickoff_utc": "2026-10-23T19:00:00+00:00"
+    },
+    {
       "Date": "2026-10-24",
       "Time": "12:30",
-      "HomeTeam": "Everton",
-      "AwayTeam": "Fulham"
+      "HomeTeam": "Aston Villa",
+      "AwayTeam": "Man City",
+      "kickoff_utc": "2026-10-24T11:30:00+00:00"
     },
     {
       "Date": "2026-10-24",
       "Time": "15:00",
       "HomeTeam": "Arsenal",
-      "AwayTeam": "Chelsea"
+      "AwayTeam": "Everton",
+      "kickoff_utc": "2026-10-24T14:00:00+00:00"
     },
     {
       "Date": "2026-10-24",
       "Time": "15:00",
-      "HomeTeam": "Liverpool",
-      "AwayTeam": "Leeds"
-    },
-    {
-      "Date": "2026-10-24",
-      "Time": "15:00",
-      "HomeTeam": "Man City",
-      "AwayTeam": "Brighton"
-    },
-    {
-      "Date": "2026-10-24",
-      "Time": "15:00",
-      "HomeTeam": "Aston Villa",
-      "AwayTeam": "Brentford"
-    },
-    {
-      "Date": "2026-10-24",
-      "Time": "15:00",
-      "HomeTeam": "Crystal Palace",
-      "AwayTeam": "Coventry"
+      "HomeTeam": "Coventry",
+      "AwayTeam": "Fulham",
+      "kickoff_utc": "2026-10-24T14:00:00+00:00"
     },
     {
       "Date": "2026-10-24",
       "Time": "17:30",
-      "HomeTeam": "Newcastle",
-      "AwayTeam": "Ipswich"
+      "HomeTeam": "Chelsea",
+      "AwayTeam": "Tottenham",
+      "kickoff_utc": "2026-10-24T16:30:00+00:00"
     },
     {
       "Date": "2026-10-25",
       "Time": "14:00",
-      "HomeTeam": "Nott'm Forest",
-      "AwayTeam": "Bournemouth"
+      "HomeTeam": "Crystal Palace",
+      "AwayTeam": "Newcastle",
+      "kickoff_utc": "2026-10-25T14:00:00+00:00"
+    },
+    {
+      "Date": "2026-10-25",
+      "Time": "14:00",
+      "HomeTeam": "Hull",
+      "AwayTeam": "Brentford",
+      "kickoff_utc": "2026-10-25T14:00:00+00:00"
+    },
+    {
+      "Date": "2026-10-25",
+      "Time": "14:00",
+      "HomeTeam": "Liverpool",
+      "AwayTeam": "Brighton",
+      "kickoff_utc": "2026-10-25T14:00:00+00:00"
     },
     {
       "Date": "2026-10-25",
       "Time": "14:00",
       "HomeTeam": "Man United",
-      "AwayTeam": "Hull"
+      "AwayTeam": "Bournemouth",
+      "kickoff_utc": "2026-10-25T14:00:00+00:00"
     },
     {
       "Date": "2026-10-25",
       "Time": "16:30",
-      "HomeTeam": "Tottenham",
-      "AwayTeam": "Sunderland"
+      "HomeTeam": "Sunderland",
+      "AwayTeam": "Leeds",
+      "kickoff_utc": "2026-10-25T16:30:00+00:00"
     }
   ],
-  "fixtures_last_checked": "2026-10-22T10:45:00+00:00",
+  "fixtures_last_checked": "2026-10-22T11:11:07.903525+00:00",
   "source": "football-data.co.uk",
   "refresh_attempted_at": "2026-10-21T17:31:29.864675+00:00",
   "current_season": "2627",

@@ -3026,87 +3026,27 @@ function exploreSelectedMatch() {
 }
 
 // ============================================================
-// MARKET CONSENSUS BENCHMARKS FOR MATCHWEEK 8 (24–25 OCT 2026)
-// Derived from free authentic consensus datasets (AG-033 to AG-036)
-// Provides clear contrast between MatchIQ models and bookmaker prices
+// MARKET ODDS AVAILABILITY (AG-037A INTEGRITY REPAIR)
+// In strict accordance with AG-037A governance rules:
+// "No fabricated bookmaker odds. Verify that any market odds are authentic,
+// correctly matched and available at the relevant time. Otherwise mark them unavailable."
+// Pre-match closing odds for Matchweek 8 are not yet available in verified research datasets.
+// Market consensus odds are therefore designated as UNAVAILABLE until live feed integration.
 // ============================================================
-const MARKET_CONSENSUS_WEEKEND = {
-  'Everton v Fulham': {
-    homeOdds: 2.50, drawOdds: 3.40, awayOdds: 2.90,
-    impliedHome: 38.0, impliedDraw: 28.0, impliedAway: 34.0,
-    cornersLine: 9.5, cornersOverOdds: 1.90, cornersUnderOdds: 1.90,
-    favoured: 'Everton', bookmakers: 26
-  },
-  'Arsenal v Chelsea': {
-    homeOdds: 1.85, drawOdds: 3.80, awayOdds: 4.20,
-    impliedHome: 52.0, impliedDraw: 25.0, impliedAway: 23.0,
-    cornersLine: 9.5, cornersOverOdds: 1.85, cornersUnderOdds: 1.95,
-    favoured: 'Arsenal', bookmakers: 27
-  },
-  'Liverpool v Leeds': {
-    homeOdds: 1.45, drawOdds: 4.80, awayOdds: 6.80,
-    impliedHome: 66.0, impliedDraw: 20.0, impliedAway: 14.0,
-    cornersLine: 9.5, cornersOverOdds: 1.80, cornersUnderOdds: 2.00,
-    favoured: 'Liverpool', bookmakers: 27
-  },
-  'Man City v Brighton': {
-    homeOdds: 1.40, drawOdds: 5.10, awayOdds: 7.50,
-    impliedHome: 68.0, impliedDraw: 19.0, impliedAway: 13.0,
-    cornersLine: 9.5, cornersOverOdds: 1.82, cornersUnderOdds: 1.98,
-    favoured: 'Man City', bookmakers: 27
-  },
-  'Aston Villa v Brentford': {
-    homeOdds: 2.20, drawOdds: 3.50, awayOdds: 3.20,
-    impliedHome: 43.0, impliedDraw: 27.0, impliedAway: 30.0,
-    cornersLine: 9.5, cornersOverOdds: 1.92, cornersUnderOdds: 1.88,
-    favoured: 'Aston Villa', bookmakers: 26
-  },
-  'Crystal Palace v Coventry': {
-    homeOdds: 1.65, drawOdds: 4.00, awayOdds: 5.20,
-    impliedHome: 57.0, impliedDraw: 24.0, impliedAway: 19.0,
-    cornersLine: 9.5, cornersOverOdds: 1.90, cornersUnderOdds: 1.90,
-    favoured: 'Crystal Palace', bookmakers: 25,
-    notice: 'Promoted club Coventry has <5 top-flight venue matches. Model predictions withheld.'
-  },
-  'Newcastle v Ipswich': {
-    homeOdds: 1.35, drawOdds: 5.40, awayOdds: 8.50,
-    impliedHome: 71.0, impliedDraw: 18.0, impliedAway: 11.0,
-    cornersLine: 9.5, cornersOverOdds: 1.88, cornersUnderOdds: 1.92,
-    favoured: 'Newcastle', bookmakers: 27
-  },
-  "Nott'm Forest v Bournemouth": {
-    homeOdds: 2.60, drawOdds: 3.30, awayOdds: 2.75,
-    impliedHome: 36.0, impliedDraw: 29.0, impliedAway: 35.0,
-    cornersLine: 9.5, cornersOverOdds: 1.91, cornersUnderOdds: 1.89,
-    favoured: 'Nott\'m Forest', bookmakers: 26
-  },
-  'Man United v Hull': {
-    homeOdds: 1.30, drawOdds: 5.80, awayOdds: 9.50,
-    impliedHome: 73.0, impliedDraw: 17.0, impliedAway: 10.0,
-    cornersLine: 9.5, cornersOverOdds: 1.85, cornersUnderOdds: 1.95,
-    favoured: 'Man United', bookmakers: 25,
-    notice: 'Promoted club Hull has <5 top-flight venue matches. Model predictions withheld.'
-  },
-  'Tottenham v Sunderland': {
-    homeOdds: 1.75, drawOdds: 3.90, awayOdds: 4.60,
-    impliedHome: 54.0, impliedDraw: 24.0, impliedAway: 22.0,
-    cornersLine: 9.5, cornersOverOdds: 1.84, cornersUnderOdds: 1.96,
-    favoured: 'Tottenham', bookmakers: 26
-  }
-};
+const MARKET_CONSENSUS_WEEKEND = {};
 
 function getVerifiedHoldoutMatches() {
   return [
-    { Date: '2026-10-24', Time: '12:30', HomeTeam: 'Everton', AwayTeam: 'Fulham' },
-    { Date: '2026-10-24', Time: '15:00', HomeTeam: 'Arsenal', AwayTeam: 'Chelsea' },
-    { Date: '2026-10-24', Time: '15:00', HomeTeam: 'Liverpool', AwayTeam: 'Leeds' },
-    { Date: '2026-10-24', Time: '15:00', HomeTeam: 'Man City', AwayTeam: 'Brighton' },
-    { Date: '2026-10-24', Time: '15:00', HomeTeam: 'Aston Villa', AwayTeam: 'Brentford' },
-    { Date: '2026-10-24', Time: '15:00', HomeTeam: 'Crystal Palace', AwayTeam: 'Coventry' },
-    { Date: '2026-10-24', Time: '17:30', HomeTeam: 'Newcastle', AwayTeam: 'Ipswich' },
-    { Date: '2026-10-25', Time: '14:00', HomeTeam: "Nott'm Forest", AwayTeam: 'Bournemouth' },
-    { Date: '2026-10-25', Time: '14:00', HomeTeam: 'Man United', AwayTeam: 'Hull' },
-    { Date: '2026-10-25', Time: '16:30', HomeTeam: 'Tottenham', AwayTeam: 'Sunderland' }
+    { Date: '2026-10-23', Time: '20:00', HomeTeam: 'Ipswich', AwayTeam: "Nott'm Forest" },
+    { Date: '2026-10-24', Time: '12:30', HomeTeam: 'Aston Villa', AwayTeam: 'Man City' },
+    { Date: '2026-10-24', Time: '15:00', HomeTeam: 'Arsenal', AwayTeam: 'Everton' },
+    { Date: '2026-10-24', Time: '15:00', HomeTeam: 'Coventry', AwayTeam: 'Fulham' },
+    { Date: '2026-10-24', Time: '17:30', HomeTeam: 'Chelsea', AwayTeam: 'Tottenham' },
+    { Date: '2026-10-25', Time: '14:00', HomeTeam: 'Crystal Palace', AwayTeam: 'Newcastle' },
+    { Date: '2026-10-25', Time: '14:00', HomeTeam: 'Hull', AwayTeam: 'Brentford' },
+    { Date: '2026-10-25', Time: '14:00', HomeTeam: 'Liverpool', AwayTeam: 'Brighton' },
+    { Date: '2026-10-25', Time: '14:00', HomeTeam: 'Man United', AwayTeam: 'Bournemouth' },
+    { Date: '2026-10-25', Time: '16:30', HomeTeam: 'Sunderland', AwayTeam: 'Leeds' }
   ];
 }
 
@@ -3631,7 +3571,7 @@ function renderPredictionJournalView() {
 function exportJournalJSON() {
   const journalData = {
     generated_at: new Date().toISOString(),
-    matchweek: 'Matchday 8 (24-25 October 2026)',
+    matchweek: 'Matchday 8 (23-25 October 2026)',
     winner_predictions: winnerPredictions.filter(p => p.status === 'pending'),
     corners_predictions: cornersPredictions.filter(p => p.status === 'pending')
   };
@@ -3913,35 +3853,34 @@ function syncModalFixtureDetails() {
     if (pw && pw.probabilities) {
       const p = pw.probabilities;
       let pick = f.HomeTeam + ' Win';
-      let implied = consensus ? consensus.homeOdds : 2.10;
       if (+p.A >= +p.H && +p.A >= +p.D) {
         pick = f.AwayTeam + ' Win';
-        implied = consensus ? consensus.awayOdds : 3.20;
       } else if (+p.D >= +p.H && +p.D >= +p.A) {
         pick = 'Draw';
-        implied = consensus ? consensus.drawOdds : 3.40;
       }
       if (selInput && !selInput.dataset.manual) selInput.value = pick;
-      if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = implied;
+      if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = '';
     } else {
       if (selInput && !selInput.dataset.manual) selInput.value = f.HomeTeam + ' Win';
-      if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = (consensus ? consensus.homeOdds : 2.10);
+      if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = '';
     }
   } else if (market === 'corners') {
-    if (selInput && !selInput.dataset.manual) selInput.value = 'Over 9.5 Corners';
-    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = (consensus ? consensus.cornersOverOdds : 1.90);
+    const pc = cornersPredictions.find(x => x.home === f.HomeTeam && x.away === f.AwayTeam && x.date === f.Date);
+    const pick = (pc && pc.probabilities && +pc.probabilities['9.5'] < 0.5) ? 'Under 9.5 Corners' : 'Over 9.5 Corners';
+    if (selInput && !selInput.dataset.manual) selInput.value = pick;
+    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = '';
   } else if (market === 'goals') {
     if (selInput && !selInput.dataset.manual) selInput.value = 'Over 2.5 Goals';
-    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = 1.85;
+    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = '';
   } else if (market === 'btts') {
     if (selInput && !selInput.dataset.manual) selInput.value = 'BTTS — Yes';
-    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = 1.80;
+    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = '';
   } else if (market === 'cards') {
     if (selInput && !selInput.dataset.manual) selInput.value = 'Over 3.5 Cards';
-    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = 1.95;
+    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = '';
   } else {
     if (selInput && !selInput.dataset.manual) selInput.value = 'Over 8.5 Shots on Target';
-    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = 1.90;
+    if (oddsInput && !oddsInput.dataset.manual) oddsInput.value = '';
   }
 
   if (stakeInput && !stakeInput.value) stakeInput.value = '10.00';
@@ -4114,9 +4053,9 @@ function renderBroadcast() {
     const winnerIndicator = hasSample ? calc.matchWinnerIndicator(hv,av) : null;
 
     // 1. MATCH WINNER (Dixon-Coles)
-    let winProb = null, winHeadline = 'Sample Size Withheld (<5)', winWinCondition = 'Coventry and Hull have <5 top-flight matches in current dataset. Model predictions responsibly withheld under MatchIQ frozen data governance rules.', winStatus = 'withheld';
+    let winProb = null, winHeadline = 'Sample Size Withheld (<5)', winWinCondition = 'Coventry and Hull have <5 top-flight home matches in current dataset. Model predictions responsibly withheld under MatchIQ frozen data governance rules.', winStatus = 'withheld';
     let winPredType = 'Retrospective Historical Estimate', winPredDetail = 'Historical home-win/away-loss indicator';
-    let winConsensusText = consensus ? 'Bookmaker consensus fair: ' + consensus.favoured + ' @ ' + (consensus.favoured === f.HomeTeam ? consensus.homeOdds : consensus.awayOdds) + ' (Median 26 brands)' : 'Market lines active';
+    let winConsensusText = 'Market Consensus Odds: Unavailable (Awaiting pre-match live feed)';
 
     const predW = winnerPredictions.find(x => x.home === f.HomeTeam && x.away === f.AwayTeam && x.date === f.Date && x.probabilities);
     if (predW && predW.probabilities) {
@@ -4135,7 +4074,7 @@ function renderBroadcast() {
       }
       winPredType = 'Pre-kickoff Forward Prediction';
       winPredDetail = 'Frozen Dixon-Coles Model v1 · Out-of-sample forward ledger';
-      if (consensus) {
+      if (consensus && consensus.homeOdds) {
         const fairOdds = (100 / winProb).toFixed(2);
         const mktProb = (winHeadline.includes(f.HomeTeam) ? consensus.impliedHome : winHeadline.includes(f.AwayTeam) ? consensus.impliedAway : consensus.impliedDraw);
         const mktOdds = (winHeadline.includes(f.HomeTeam) ? consensus.homeOdds : winHeadline.includes(f.AwayTeam) ? consensus.awayOdds : consensus.drawOdds);
@@ -4154,7 +4093,7 @@ function renderBroadcast() {
     // 2. TOTAL CORNERS (Poisson line 9.5)
     let cornerProb = null, cornerHeadline = 'Sample Size Withheld (<5)', cornerWinCondition = 'Minimum 5 recent matches required.', cornerStatus = 'withheld';
     let cornerPredType = 'Retrospective Historical Estimate', cornerPredDetail = 'v0.9 Frozen Poisson · Venue form prior to match';
-    let cornerConsensusText = 'Market Over 9.5 line: 1.90 (52.6% implied)';
+    let cornerConsensusText = 'Market Consensus Odds: Unavailable (Awaiting pre-match live feed)';
     const predC = cornersPredictions.find(x => x.home === f.HomeTeam && x.away === f.AwayTeam && x.date === f.Date);
     if (predC) {
       cornerStatus = 'model';
@@ -4168,7 +4107,7 @@ function renderBroadcast() {
         cornerProb = 100.0 - p95; cornerHeadline = 'Under 9.5 Total Corners';
         cornerWinCondition = 'Both teams combined must take 9 or fewer corners in normal time (10 or more loses).';
       }
-      cornerConsensusText = 'Model Expected: ' + predC.expected_corners + ' · Over 9.5: ' + p95.toFixed(1) + '% (Market: 1.90)';
+      cornerConsensusText = 'Model Expected: ' + predC.expected_corners + ' · Over 9.5: ' + p95.toFixed(1) + '% (Market Odds: Unavailable)';
     } else if (hasSample) {
       const expCorners = (avg(h.map(r => num(r.HC))) + avg(a.map(r => num(r.HC))) + avg(a.map(r => num(r.AC))) + avg(h.map(r => num(r.AC)))) / 2;
       const pOver95 = 100 * calc.poissonOver(expCorners, 9.5);
@@ -4326,7 +4265,7 @@ function renderBroadcast() {
         prob: goalsProb,
         rule: goalsWinCondition,
         status: 'experimental',
-        consensus: 'Bookmaker consensus over 2.5: ~1.85 (54.1% implied)',
+        consensus: 'Market Odds: Unavailable (Offline research benchmark)',
         modelName: goalsModel
       },
       {
@@ -4337,7 +4276,7 @@ function renderBroadcast() {
         prob: bttsProb,
         rule: bttsWinCondition,
         status: 'experimental',
-        consensus: 'Bookmaker consensus BTTS Yes: ~1.80 (55.6% implied)',
+        consensus: 'Market Odds: Unavailable (Offline research benchmark)',
         modelName: bttsModel
       },
       {
@@ -4348,7 +4287,7 @@ function renderBroadcast() {
         prob: cardsProb,
         rule: cardsWinCondition,
         status: 'experimental',
-        consensus: 'Bookmaker consensus over 3.5: ~1.95 (51.3% implied)',
+        consensus: 'Market Odds: Unavailable (Offline research benchmark)',
         modelName: cardsModel
       },
       {
@@ -4521,44 +4460,74 @@ function renderForwardPanel(m) {
   const target = el('forward-tracker-panel');
   if (!target) return;
   if (m.id === 'wins') {
+    const list = Array.isArray(winnerPredictions) ? winnerPredictions : [];
+    const settled = list.filter(r => r.status === 'settled');
+    const wonCount = settled.filter(r => {
+      const p = r.probabilities || {};
+      const pick = (+p.H >= +p.A && +p.H >= +p.D) ? 'H' : (+p.A >= +p.H && +p.A >= +p.D) ? 'A' : 'D';
+      return pick === r.actual;
+    }).length;
+    const hitRate = settled.length > 0 ? (100 * wonCount / settled.length).toFixed(1) + '% SETTLED HIT RATE' : '0.0%';
+
     target.innerHTML = '<div class="hub-card-header">' +
       '<h3>🏆 Match Winner Forward Verification Ledger</h3>' +
-      '<span class="badge-tag verified">66.7% SETTLED HIT RATE</span>' +
+      '<span class="badge-tag verified">' + hitRate + '</span>' +
     '</div>' +
     '<p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;">Out-of-sample forward verification ledger recorded in <code>data/match_winner_forward.json</code> prior to match kickoffs:</p>' +
     '<div style="overflow-x:auto;">' +
       '<table class="data-table">' +
         '<thead><tr><th>Date</th><th>Fixture</th><th>Model Prediction</th><th>Probability</th><th>Actual Result</th><th>Status</th></tr></thead>' +
         '<tbody>' +
-          '<tr><td>17/10/2026</td><td>Man City v Ipswich</td><td>Man City Win</td><td>85.1%</td><td>3 - 2</td><td><span class="tag-win">WON</span></td></tr>' +
-          '<tr><td>17/10/2026</td><td>Brentford v Liverpool</td><td>Liverpool Win</td><td>42.0%</td><td>1 - 2</td><td><span class="tag-win">WON</span></td></tr>' +
-          '<tr><td>17/10/2026</td><td>Newcastle v Aston Villa</td><td>Newcastle Win</td><td>42.6%</td><td>0 - 1</td><td><span class="tag-loss">LOST</span></td></tr>' +
-          '<tr><td>18/10/2026</td><td>Bournemouth v Sunderland</td><td>Bournemouth Win</td><td>47.1%</td><td>2 - 0</td><td><span class="tag-win">WON</span></td></tr>' +
-          '<tr><td>18/10/2026</td><td>Brighton v Crystal Palace</td><td>Brighton Win</td><td>51.6%</td><td>5 - 0</td><td><span class="tag-win">WON</span></td></tr>' +
-          '<tr><td>18/10/2026</td><td>Leeds v Man United</td><td>Leeds Win</td><td>38.3%</td><td>1 - 1</td><td><span class="tag-loss">LOST (Draw)</span></td></tr>' +
-          '<tr><td>18/10/2026</td><td>Nott\'m Forest v Arsenal</td><td>Arsenal Win</td><td>51.9%</td><td>0 - 1</td><td><span class="tag-win">WON</span></td></tr>' +
-          '<tr><td>24/10/2026</td><td>Everton v Fulham</td><td>Everton Win</td><td>39.0%</td><td>Pending</td><td><span class="badge-pending">PENDING</span></td></tr>' +
-          '<tr><td>24/10/2026</td><td>Arsenal v Chelsea</td><td>Arsenal Win</td><td>57.0%</td><td>Pending</td><td><span class="badge-pending">PENDING</span></td></tr>' +
+          list.map(r => {
+            const p = r.probabilities || {};
+            let pick = r.home + ' Win', prob = 100 * (+p.H || 0);
+            if (+p.A >= +p.H && +p.A >= +p.D) { pick = r.away + ' Win'; prob = 100 * +p.A; }
+            else if (+p.D >= +p.H && +p.D >= +p.A) { pick = 'Draw'; prob = 100 * +p.D; }
+            const statusBadge = r.status === 'settled'
+              ? (r.actual === ((+p.H >= +p.A && +p.H >= +p.D) ? 'H' : (+p.A >= +p.H && +p.A >= +p.D) ? 'A' : 'D')
+                 ? '<span class="tag-win">WON</span>' : '<span class="tag-loss">LOST</span>')
+              : '<span class="badge-pending">PENDING</span>';
+            const scoreText = r.score ? r.score[0] + ' - ' + r.score[1] : 'Pending';
+            return '<tr>' +
+              '<td>' + esc(r.date) + '</td>' +
+              '<td><strong>' + esc(r.home) + ' v ' + esc(r.away) + '</strong></td>' +
+              '<td>' + esc(pick) + '</td>' +
+              '<td>' + prob.toFixed(1) + '%</td>' +
+              '<td>' + scoreText + '</td>' +
+              '<td>' + statusBadge + '</td>' +
+            '</tr>';
+          }).join('') +
         '</tbody>' +
       '</table>' +
     '</div>';
   } else if (m.id === 'corners') {
+    const list = Array.isArray(cornersPredictions) ? cornersPredictions : [];
     target.innerHTML = '<div class="hub-card-header">' +
       '<h3>🚩 Total Corners Forward Verification Ledger</h3>' +
-      '<span class="badge-tag verified">66.7% SETTLED HIT RATE</span>' +
+      '<span class="badge-tag verified">SETTLED & FORWARD LEDGER</span>' +
     '</div>' +
     '<p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;">Pre-kickoff corner predictions evaluated across line 9.5 from <code>data/forward_test.json</code>:</p>' +
     '<div style="overflow-x:auto;">' +
       '<table class="data-table">' +
         '<thead><tr><th>Date</th><th>Fixture</th><th>Line</th><th>Prediction</th><th>Actual Corners</th><th>Status</th></tr></thead>' +
         '<tbody>' +
-          '<tr><td>17/10/2026</td><td>Brentford v Liverpool</td><td>Over 9.5</td><td>48.5%</td><td>12 Corners</td><td><span class="tag-win">WON</span></td></tr>' +
-          '<tr><td>17/10/2026</td><td>Man City v Ipswich</td><td>Over 9.5</td><td>59.7%</td><td>5 Corners</td><td><span class="tag-loss">LOST</span></td></tr>' +
-          '<tr><td>17/10/2026</td><td>Newcastle v Aston Villa</td><td>Over 9.5</td><td>53.8%</td><td>10 Corners</td><td><span class="tag-win">WON</span></td></tr>' +
-          '<tr><td>18/10/2026</td><td>Bournemouth v Sunderland</td><td>Over 9.5</td><td>48.5%</td><td>10 Corners</td><td><span class="tag-win">WON</span></td></tr>' +
-          '<tr><td>18/10/2026</td><td>Brighton v Crystal Palace</td><td>Under 9.5</td><td>52.7%</td><td>8 Corners</td><td><span class="tag-win">WON</span></td></tr>' +
-          '<tr><td>24/10/2026</td><td>Arsenal v Chelsea</td><td>Over 9.5</td><td>57.9%</td><td>Pending</td><td><span class="badge-pending">PENDING</span></td></tr>' +
-          '<tr><td>24/10/2026</td><td>Liverpool v Leeds</td><td>Over 9.5</td><td>64.3%</td><td>Pending</td><td><span class="badge-pending">PENDING</span></td></tr>' +
+          list.map(r => {
+            const p = r.probabilities || {};
+            const p95 = 100 * (+p['9.5'] || 0);
+            const pick = p95 >= 50.0 ? 'Over 9.5' : 'Under 9.5';
+            const statusBadge = r.status === 'settled'
+              ? ((r.actual_corners > 9.5 ? 'Over 9.5' : 'Under 9.5') === pick ? '<span class="tag-win">WON</span>' : '<span class="tag-loss">LOST</span>')
+              : '<span class="badge-pending">PENDING</span>';
+            const actualText = r.actual_corners != null ? r.actual_corners + ' Corners' : 'Pending';
+            return '<tr>' +
+              '<td>' + esc(r.date) + '</td>' +
+              '<td><strong>' + esc(r.home) + ' v ' + esc(r.away) + '</strong></td>' +
+              '<td>Line 9.5</td>' +
+              '<td>' + esc(pick) + ' (' + (p95 >= 50 ? p95 : 100 - p95).toFixed(1) + '%)</td>' +
+              '<td>' + actualText + '</td>' +
+              '<td>' + statusBadge + '</td>' +
+            '</tr>';
+          }).join('') +
         '</tbody>' +
       '</table>' +
     '</div>';
@@ -4594,7 +4563,7 @@ function renderWatchlistPanel(m) {
   if (!target) return;
   const fixtures = Array.isArray(meta.fixtures) && meta.fixtures.length > 0 ? meta.fixtures : getVerifiedHoldoutMatches();
   target.innerHTML = '<div class="hub-card-header">' +
-    '<h3>📋 Matchweek 8 Schedule & Coverage (24–25 Oct 2026)</h3>' +
+    '<h3>📋 Matchweek 8 Schedule & Coverage (23–25 Oct 2026)</h3>' +
     '<span class="badge-tag verified">10 MATCHES VERIFIED</span>' +
   '</div>' +
   '<p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;">All 10 Premier League fixtures scheduled for this weekend with model status:</p>' +
