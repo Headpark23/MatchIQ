@@ -1,0 +1,310 @@
+{
+  "version": 1,
+  "model": "v0.9-frozen-poisson",
+  "records": [
+    {
+      "date": "2026-10-17",
+      "kickoff_utc": "2026-10-17T14:00:00+00:00",
+      "home": "Brentford",
+      "away": "Liverpool",
+      "created_at": "2026-10-17T12:43:22.862539+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "settled",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 9.55,
+      "probabilities": {
+        "8.5": 0.61431,
+        "9.5": 0.484665,
+        "10.5": 0.360855
+      },
+      "actual_corners": 12.0,
+      "outcomes": {
+        "8.5": 1,
+        "9.5": 1,
+        "10.5": 1
+      },
+      "settled_at": "2026-10-20T11:24:08.394203+00:00"
+    },
+    {
+      "date": "2026-10-17",
+      "kickoff_utc": "2026-10-17T14:00:00+00:00",
+      "home": "Man City",
+      "away": "Ipswich",
+      "created_at": "2026-10-17T12:43:22.862539+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "settled",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 10.45,
+      "probabilities": {
+        "8.5": 0.715512,
+        "9.5": 0.596961,
+        "10.5": 0.473074
+      },
+      "actual_corners": 5.0,
+      "outcomes": {
+        "8.5": 0,
+        "9.5": 0,
+        "10.5": 0
+      },
+      "settled_at": "2026-10-20T11:24:08.394203+00:00"
+    },
+    {
+      "date": "2026-10-17",
+      "kickoff_utc": "2026-10-17T16:30:00+00:00",
+      "home": "Newcastle",
+      "away": "Aston Villa",
+      "created_at": "2026-10-17T12:43:22.862539+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "settled",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 9.6,
+      "probabilities": {
+        "8.5": 0.620394,
+        "9.5": 0.491138,
+        "10.5": 0.367052
+      },
+      "actual_corners": 9.0,
+      "outcomes": {
+        "8.5": 1,
+        "9.5": 0,
+        "10.5": 0
+      },
+      "settled_at": "2026-10-20T11:24:08.394203+00:00"
+    },
+    {
+      "date": "2026-10-18",
+      "kickoff_utc": "2026-10-18T13:00:00+00:00",
+      "home": "Bournemouth",
+      "away": "Sunderland",
+      "created_at": "2026-10-17T12:43:22.862539+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "settled",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 9.85,
+      "probabilities": {
+        "8.5": 0.65004,
+        "9.5": 0.523169,
+        "10.5": 0.398201
+      },
+      "actual_corners": 8.0,
+      "outcomes": {
+        "8.5": 0,
+        "9.5": 0,
+        "10.5": 0
+      },
+      "settled_at": "2026-10-20T11:24:08.394203+00:00"
+    },
+    {
+      "date": "2026-10-18",
+      "kickoff_utc": "2026-10-18T13:00:00+00:00",
+      "home": "Brighton",
+      "away": "Crystal Palace",
+      "created_at": "2026-10-17T12:43:22.862539+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "settled",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 8.85,
+      "probabilities": {
+        "8.5": 0.524426,
+        "9.5": 0.392837,
+        "10.5": 0.27638
+      },
+      "actual_corners": 13.0,
+      "outcomes": {
+        "8.5": 1,
+        "9.5": 1,
+        "10.5": 1
+      },
+      "settled_at": "2026-10-20T11:24:08.394203+00:00"
+    },
+    {
+      "date": "2026-10-18",
+      "kickoff_utc": "2026-10-18T13:00:00+00:00",
+      "home": "Leeds",
+      "away": "Man United",
+      "created_at": "2026-10-17T12:43:22.862539+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "settled",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 9.8,
+      "probabilities": {
+        "8.5": 0.644217,
+        "9.5": 0.516812,
+        "10.5": 0.391955
+      },
+      "actual_corners": 5.0,
+      "outcomes": {
+        "8.5": 0,
+        "9.5": 0,
+        "10.5": 0
+      },
+      "settled_at": "2026-10-20T11:24:08.394203+00:00"
+    },
+    {
+      "date": "2026-10-18",
+      "kickoff_utc": "2026-10-18T15:30:00+00:00",
+      "home": "Nott'm Forest",
+      "away": "Arsenal",
+      "created_at": "2026-10-17T12:43:22.862539+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "settled",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 8.05,
+      "probabilities": {
+        "8.5": 0.414432,
+        "9.5": 0.289599,
+        "10.5": 0.189108
+      },
+      "actual_corners": 14.0,
+      "outcomes": {
+        "8.5": 1,
+        "9.5": 1,
+        "10.5": 1
+      },
+      "settled_at": "2026-10-20T11:24:08.394203+00:00"
+    },
+    {
+      "date": "2026-10-23",
+      "kickoff_utc": "2026-10-23T19:00:00+00:00",
+      "home": "Ipswich",
+      "away": "Nott'm Forest",
+      "created_at": "2026-10-22T11:11:15.688501+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "pending",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 9.4,
+      "probabilities": {
+        "8.5": 0.595765,
+        "9.5": 0.465142,
+        "10.5": 0.342356
+      }
+    },
+    {
+      "date": "2026-10-24",
+      "kickoff_utc": "2026-10-24T11:30:00+00:00",
+      "home": "Aston Villa",
+      "away": "Man City",
+      "created_at": "2026-10-22T11:11:15.688501+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "pending",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 10.75,
+      "probabilities": {
+        "8.5": 0.745058,
+        "9.5": 0.631754,
+        "10.5": 0.509951
+      }
+    },
+    {
+      "date": "2026-10-24",
+      "kickoff_utc": "2026-10-24T14:00:00+00:00",
+      "home": "Arsenal",
+      "away": "Everton",
+      "created_at": "2026-10-22T11:11:15.688501+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "pending",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 9.9,
+      "probabilities": {
+        "8.5": 0.655809,
+        "9.5": 0.529498,
+        "10.5": 0.404451
+      }
+    },
+    {
+      "date": "2026-10-24",
+      "kickoff_utc": "2026-10-24T16:30:00+00:00",
+      "home": "Chelsea",
+      "away": "Tottenham",
+      "created_at": "2026-10-22T11:11:15.688501+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "pending",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 9.75,
+      "probabilities": {
+        "8.5": 0.63834,
+        "9.5": 0.510429,
+        "10.5": 0.385716
+      }
+    },
+    {
+      "date": "2026-10-25",
+      "kickoff_utc": "2026-10-25T14:00:00+00:00",
+      "home": "Crystal Palace",
+      "away": "Newcastle",
+      "created_at": "2026-10-22T11:11:15.688501+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "pending",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 9.8,
+      "probabilities": {
+        "8.5": 0.644217,
+        "9.5": 0.516812,
+        "10.5": 0.391955
+      }
+    },
+    {
+      "date": "2026-10-25",
+      "kickoff_utc": "2026-10-25T14:00:00+00:00",
+      "home": "Liverpool",
+      "away": "Brighton",
+      "created_at": "2026-10-22T11:11:15.688501+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "pending",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 11.3,
+      "probabilities": {
+        "8.5": 0.793568,
+        "9.5": 0.691141,
+        "10.5": 0.575398
+      }
+    },
+    {
+      "date": "2026-10-25",
+      "kickoff_utc": "2026-10-25T14:00:00+00:00",
+      "home": "Man United",
+      "away": "Bournemouth",
+      "created_at": "2026-10-22T11:11:15.688501+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "pending",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 10.4,
+      "probabilities": {
+        "8.5": 0.710377,
+        "9.5": 0.591013,
+        "10.5": 0.466874
+      }
+    },
+    {
+      "date": "2026-10-25",
+      "kickoff_utc": "2026-10-25T16:30:00+00:00",
+      "home": "Sunderland",
+      "away": "Leeds",
+      "created_at": "2026-10-22T11:11:15.688501+00:00",
+      "model": "v0.9-frozen-poisson",
+      "status": "pending",
+      "sample_home": 10,
+      "sample_away": 10,
+      "expected_corners": 10.4,
+      "probabilities": {
+        "8.5": 0.710377,
+        "9.5": 0.591013,
+        "10.5": 0.466874
+      }
+    }
+  ]
+}

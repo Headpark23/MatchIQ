@@ -42,10 +42,10 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // For data requests, use Network-first with cache fallback
+  // For data requests, use Network-first with cache: 'no-store' to ensure freshness
   if (url.pathname.includes('/data/')) {
     event.respondWith(
-      fetch(event.request).then(response => {
+      fetch(event.request, { cache: 'no-store' }).then(response => {
         if (response && response.status === 200) {
           const respClone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, respClone));
