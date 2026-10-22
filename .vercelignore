@@ -1,0 +1,36 @@
+# ============================================================
+# VERCEL DEPLOYMENT SECURITY POLICY (.vercelignore)
+# Strictly prevents public exposure of research artifacts,
+# candidate models, raw market datasets, Python virtual environments,
+# unit tests, and internal audit evidence.
+# ============================================================
+
+# Internal Python Architecture & Frozen Models
+*.py
+*.pyc
+__pycache__/
+.venv/
+requirements.txt
+
+# Experimental Research, Signal Exploration, & Audit Evidence
+experiments/
+planning/
+
+# Automated Test Suites
+tests/
+
+# Repository & Environment Metadata
+.git/
+.github/
+.gitignore
+.worktrees/
+.edge_diag/
+.edge_profile/
+
+# Logs & Temporary Files
+*.log
+*.tmp
+*.bak
+*.png
+!assets/*.png
+*.md
