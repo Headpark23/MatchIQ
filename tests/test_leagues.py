@@ -151,3 +151,17 @@ class LeagueLifecycle(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CoUkDownloadGateTests(unittest.TestCase):
+    def test_real_network_download_is_off_unless_opted_in(self):
+        import os
+        old = os.environ.pop("MATCHIQ_ALLOW_COUK_DOWNLOAD", None)
+        try:
+            with self.assertRaises(PermissionError):
+                leagues.fetch_csv("BL1", "2627")
+            rows, status = leagues.refresh_current([], "2627")
+            self.assertTrue(all(not st["ok"] for st in status.values()))
+        finally:
+            if old is not None:
+                os.environ["MATCHIQ_ALLOW_COUK_DOWNLOAD"] = old

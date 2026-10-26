@@ -131,3 +131,12 @@ Preview: **https://matchiq-igrroq2wf-martin-whites-projects.vercel.app** (dev pr
 **Automation**: a clean-worktree rehearsal of the workflow steps (tests, refresh, bundle) passed and was idempotent. GitHub itself has not run it; nothing pushed. The workflow now also commits `data/odds.json` and `data/league_results.json`.
 
 **Local-only ledger note**: `dea1cd2` briefly contained league predictions with unpolished names (e.g. "Paris Sg"); `7d8588a` replaced them before anything was pushed. If you want a clean history squash those two commits before pushing.
+
+## Release-candidate pass, part 1 (this session)
+
+- **State verified:** branch `dev/mission065-best-bet` at `004f739`, unpushed; 121 Python tests + 5 JS suites pass. `.gitignore`, `.claude/` and `public-dist/.gitignore` untouched.
+- **Secrets wiring verified by reading `matchiq-refresh.yml`:** it uses the exact names `FOOTBALL_DATA_ORG_TOKEN` and `ODDS_API_KEY`. Neither is present in the local environment, `gh` is not installed locally, and nothing is pushed, so **no live call has been made**. Live verification needs one Actions run, which needs the branch pushed (owner approval).
+- **Licensing finding (football-data.co.uk):** the site's data page limits use to "private individuals only, NOT commercial or data training products using automated bots/scrapers/AI", states no licence and says the data is for league match prediction. The pipeline downloaded it automatically on every run. **Fixed:** automated download is now off unless `MATCHIQ_ALLOW_COUK_DOWNLOAD=1` (`pipeline/leagues.py`, test in `tests/test_leagues.py`); runs keep the stored copy. `update.yml` is manual-only and still fetches it when the owner presses the button.
+- **Unresolved (owner decision):** the stored co.uk-derived rows in `data/league_results.json` / `data/matches.json` still feed the public models and the corners/cards/shots markets, which have no other permitted source. Options: ask the site's owner for permission, or drop those markets from the public app. Not changed yet.
+- **football-data.org:** the free tier lists PL, ELC, BL1, PD, SA, FL1 (coverage page); rate limits and redistribution terms were not on that page, so confirm with the first live run and their terms/contact.
+- **The Odds API:** credit cost is 1 per market per region (docs). Docs say totals are mainly US and BTTS is not listed; only `soccer_epl` is confirmed by the docs page I read, so the other league keys must be checked against the free `/sports` call.

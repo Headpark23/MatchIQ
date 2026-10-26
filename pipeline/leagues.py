@@ -11,6 +11,7 @@ import csv
 import datetime as dt
 import io
 import json
+import os
 import sys
 import urllib.request
 from pathlib import Path
@@ -56,7 +57,16 @@ def parse_csv(text, competition, season):
     return [r for r in rows if seen[(r["date"], r["home"], r["away"])] == 1]
 
 
+def co_uk_download_allowed():
+    """football-data.co.uk limits its data to private individuals and excludes automated
+    bots/scrapers. Scheduled and public runs therefore never download it; a research run by
+    the owner must opt in explicitly with MATCHIQ_ALLOW_COUK_DOWNLOAD=1."""
+    return os.environ.get("MATCHIQ_ALLOW_COUK_DOWNLOAD") == "1"
+
+
 def fetch_csv(competition, season, opener=None):
+    if opener is None and not co_uk_download_allowed():
+        raise PermissionError("automated football-data.co.uk download disabled (site terms); set MATCHIQ_ALLOW_COUK_DOWNLOAD=1 for a manual research run")
     url = f"https://www.football-data.co.uk/mmz4281/{season}/{LEAGUES[competition]['co_uk']}.csv"
     opener = opener or urllib.request.urlopen
     request = urllib.request.Request(url, headers={"User-Agent": "MatchIQ/1.0 (research)"})
