@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-10-26T17:21:20.441600+00:00",
+ "attempted_at": "2026-10-26T17:32:31.484448+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -154,9 +154,9 @@
     "PL": "skipped: no Premier League match in the next 36 h",
     "ELC": "skipped: no Championship match in the next 36 h",
     "BL1": "skipped: no Bundesliga match in the next 36 h",
-    "PD": "skipped: polled 0.3 h ago (minimum 3 h)",
-    "SA": "skipped: polled 0.3 h ago (minimum 8 h)",
-    "FL1": "skipped: polled 0.3 h ago (minimum 3 h)"
+    "PD": "skipped: polled 0.5 h ago (minimum 3 h)",
+    "SA": "skipped: polled 0.5 h ago (minimum 8 h)",
+    "FL1": "skipped: polled 0.5 h ago (minimum 3 h)"
    },
    "credits_used_this_month": 6,
    "credits_remaining_reported": 470
@@ -165,10 +165,10 @@
  "warnings": [],
  "errors": [],
  "ok": true,
- "last_success": "2026-10-26T17:21:20.441600+00:00",
+ "last_success": "2026-10-26T17:32:31.484448+00:00",
  "fixtures": 2304,
  "upcoming_predicted": 144,
- "published_revisions": 20,
+ "published_revisions": 0,
  "imported_frozen_records": 0,
  "settlement_updates": 4,
  "training_results": 1913,
@@ -180,5 +180,11 @@
   "blend": "blend30-league-v1",
   "corners_frozen": "v0.9-frozen-poisson"
  },
- "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk."
+ "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk.",
+ "public": {
+  "model_version": "dc-public-v1",
+  "predictions": 144,
+  "records": 144,
+  "validated": true
+ }
 }

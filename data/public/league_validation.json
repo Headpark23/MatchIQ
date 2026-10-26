@@ -1,0 +1,193 @@
+{
+ "generated_at": "2026-10-26T17:32:13.492402+00:00",
+ "model_version": "dc-public-v1",
+ "method": "weekly refit walk-forward on football-data.org scores, Brier vs league average",
+ "leagues": {
+  "PL": {
+   "competition": "PL",
+   "name": "Premier League",
+   "test_season": "2526",
+   "test_season_label": "2025-26",
+   "test_matches": 380,
+   "result_tiers": {
+    "L1": 351,
+    "T3": 29
+   },
+   "markets": {
+    "result": {
+     "n": 351,
+     "model_brier": 0.6196,
+     "league_brier": 0.6582,
+     "blend_brier": 0.6196,
+     "gain": 0.0386,
+     "strength": "moderate"
+    },
+    "goals": {
+     "n": 380,
+     "blend_brier": 0.2492,
+     "league_brier": 0.2499
+    },
+    "btts": {
+     "n": 380,
+     "blend_brier": 0.2461,
+     "league_brier": 0.2474
+    }
+   }
+  },
+  "ELC": {
+   "competition": "ELC",
+   "name": "Championship",
+   "test_season": "2526",
+   "test_season_label": "2025-26",
+   "test_matches": 557,
+   "result_tiers": {
+    "T3": 54,
+    "L1": 503
+   },
+   "markets": {
+    "goals": {
+     "n": 557,
+     "blend_brier": 0.2501,
+     "league_brier": 0.2505
+    },
+    "btts": {
+     "n": 557,
+     "blend_brier": 0.2475,
+     "league_brier": 0.2479
+    },
+    "result": {
+     "n": 503,
+     "model_brier": 0.6389,
+     "league_brier": 0.6549,
+     "blend_brier": 0.6389,
+     "gain": 0.016,
+     "strength": "moderate"
+    }
+   }
+  },
+  "BL1": {
+   "competition": "BL1",
+   "name": "Bundesliga",
+   "test_season": "2526",
+   "test_season_label": "2025-26",
+   "test_matches": 306,
+   "result_tiers": {
+    "L1": 287,
+    "T3": 19
+   },
+   "markets": {
+    "result": {
+     "n": 287,
+     "model_brier": 0.5714,
+     "league_brier": 0.6493,
+     "blend_brier": 0.5714,
+     "gain": 0.0779,
+     "strength": "moderate"
+    },
+    "goals": {
+     "n": 306,
+     "blend_brier": 0.2295,
+     "league_brier": 0.2321
+    },
+    "btts": {
+     "n": 306,
+     "blend_brier": 0.2387,
+     "league_brier": 0.237
+    }
+   }
+  },
+  "PD": {
+   "competition": "PD",
+   "name": "La Liga",
+   "test_season": "2526",
+   "test_season_label": "2025-26",
+   "test_matches": 380,
+   "result_tiers": {
+    "L1": 353,
+    "T3": 27
+   },
+   "markets": {
+    "result": {
+     "n": 353,
+     "model_brier": 0.5803,
+     "league_brier": 0.6285,
+     "blend_brier": 0.5803,
+     "gain": 0.0482,
+     "strength": "moderate"
+    },
+    "goals": {
+     "n": 380,
+     "blend_brier": 0.2469,
+     "league_brier": 0.2507
+    },
+    "btts": {
+     "n": 380,
+     "blend_brier": 0.2459,
+     "league_brier": 0.2474
+    }
+   }
+  },
+  "SA": {
+   "competition": "SA",
+   "name": "Serie A",
+   "test_season": "2526",
+   "test_season_label": "2025-26",
+   "test_matches": 380,
+   "result_tiers": {
+    "L1": 350,
+    "T3": 30
+   },
+   "markets": {
+    "result": {
+     "n": 350,
+     "model_brier": 0.5889,
+     "league_brier": 0.6578,
+     "blend_brier": 0.5889,
+     "gain": 0.0689,
+     "strength": "moderate"
+    },
+    "goals": {
+     "n": 380,
+     "blend_brier": 0.2502,
+     "league_brier": 0.249
+    },
+    "btts": {
+     "n": 380,
+     "blend_brier": 0.2496,
+     "league_brier": 0.251
+    }
+   }
+  },
+  "FL1": {
+   "competition": "FL1",
+   "name": "Ligue 1",
+   "test_season": "2526",
+   "test_season_label": "2025-26",
+   "test_matches": 306,
+   "result_tiers": {
+    "L1": 275,
+    "T3": 31
+   },
+   "markets": {
+    "result": {
+     "n": 275,
+     "model_brier": 0.5992,
+     "league_brier": 0.6454,
+     "blend_brier": 0.5992,
+     "gain": 0.0462,
+     "strength": "moderate"
+    },
+    "goals": {
+     "n": 306,
+     "blend_brier": 0.248,
+     "league_brier": 0.2498
+    },
+    "btts": {
+     "n": 306,
+     "blend_brier": 0.2512,
+     "league_brier": 0.2518
+    }
+   }
+  }
+ }
+}
