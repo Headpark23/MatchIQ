@@ -335,3 +335,31 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   .rec-row-main, .rec-row-side { grid-column: 2; }
   .rec-row .fx-chev { grid-column: 3; grid-row: 1; }
 }
+
+/* ---------- Top six (Mission 065) ---------- */
+.top-card { display: grid; gap: 10px; align-content: start; }
+.top-card.unsupported { border-style: dashed; }
+.top-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.top-rank { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--surface-raised); font-weight: 700; font-size: 13px; color: #fff; }
+.badge.unsupported { color: #fecaca; background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.35); }
+.badge.awaiting { color: var(--muted); background: rgba(148, 163, 184, 0.08); border: 1px dashed var(--line-strong); }
+.rec-card.awaiting { border-color: var(--line-strong); border-style: dashed; background: var(--surface); }
+.rec-card.awaiting .rec-kicker { color: var(--muted); }
+.top-card .field .lbl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- Results scorecards: cards, not wide tables (Mission 065) ---------- */
+.stat-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.stat-card { display: grid; gap: 10px; align-content: start; padding: 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-raised); }
+.stat-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.stat-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: #fff; }
+.stat-bar { position: relative; height: 10px; border-radius: 6px; background: rgba(148, 163, 184, 0.14); overflow: hidden; }
+.stat-bar .pred, .stat-bar .obs { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; }
+.stat-bar .pred { background: rgba(148, 163, 184, 0.45); }
+.stat-bar .obs { background: var(--pick); height: 50%; top: 25%; }
+.stat-legend { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--dim); margin-top: -4px; }
+.stat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; margin: 0; }
+.stat-grid dt { font-size: 12px; color: var(--dim); font-weight: 600; }
+.stat-grid dd { margin: 2px 0 0; font-family: var(--mono); font-size: 16px; color: #fff; }
+.stat-grid dd.pos { color: var(--pick); }
+.stat-grid dd.neg { color: #fca5a5; }
+@media (max-width: 760px) { .stat-cards { grid-template-columns: 1fr; } }

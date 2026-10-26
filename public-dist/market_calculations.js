@@ -304,6 +304,133 @@
     return (p - y) ** 2;
   }
 
+  // ---------------------------------------------------------------- selections, Top Six, value
+  const MARKET_NAMES = Object.freeze({ result: 'Match result', goals: 'Total goals', btts: 'Both teams to score', corners: 'Total corners', cards: 'Total cards', shots: 'Shots on target' });
+  const FEATURE_LINES = Object.freeze({ goals: 2.5, corners: 9.5, cards: 3.5, shots: 8.5 }); // the only lines the 409-match backtest scored
+  const SHRINK_WEIGHT = 20, Z90 = 1.645, BACKTEST_N = 409, T2_BACKTEST_N = 41, VALUE_MIN_EV = 0.05;
+
+  const marketStatus = (m) => (m.evidence.status === 'provisional' && m.evidence.strength === 'none') ? 'league' : m.evidence.status;
+  const lowerBound = (p, n) => (n ? Math.max(0, p - Z90 * Math.sqrt(p * (1 - p) / n)) : 0);
+  const bandFor = (bands, p) => (bands || []).find((b) => p >= b.lo && p < b.hi) || null;
+
+  /* Every selection of a published prediction. `group` holds the outcomes that make up one
+     book, so a full set of prices can remove the bookmaker's margin. */
+  function allSelections(pred) {
+    const out = [], mk = pred.markets;
+    if (mk.result) {
+      mk.result.selections.forEach((s) => out.push({ id: 'result:' + s.key, group: 'result', market: 'result', key: s.key, label: s.label, p: s.p, fair: s.fair_odds,
+        status: marketStatus(mk.result), strength: mk.result.evidence.strength, tier: mk.result.tier, isPick: s.key === mk.result.pick.key }));
+    }
+    for (const key of ['goals', 'corners', 'cards', 'shots']) {
+      const m = mk[key];
+      if (!m || m.unavailable) continue;
+      for (const l of m.lines) {
+        for (const side of ['over', 'under']) {
+          out.push({ id: key + ':' + side + ':' + l.line, group: key + ':' + l.line, market: key, key: side, line: l.line, label: MARKET_NAMES[key] + ': ' + l[side].label,
+            p: l[side].p, fair: l[side].fair_odds, status: marketStatus(m), strength: m.evidence.strength, backtested: l.line === FEATURE_LINES[key],
+            reference: side === 'over' ? l.league_p : (l.league_p == null ? null : 1 - l.league_p) });
+        }
+      }
+    }
+    if (mk.btts) {
+      mk.btts.selections.forEach((s) => out.push({ id: 'btts:' + s.key, group: 'btts', market: 'btts', key: s.key, label: 'Both teams to score: ' + s.label, p: s.p, fair: s.fair_odds,
+        status: marketStatus(mk.btts), strength: mk.btts.evidence.strength, backtested: true,
+        reference: mk.btts.league_p == null ? null : (s.key === 'yes' ? mk.btts.league_p : 1 - mk.btts.league_p) }));
+    }
+    return out;
+  }
+
+  /* How much weight the evidence gives a selection. Returns null when the selection says
+     nothing about this match (league-average fallback) and so is never promoted. */
+  function evidenceFor(sel, pred, bands) {
+    if (sel.strength === 'none') return null;
+    if (sel.market === 'result') {
+      if (!sel.isPick) return null; // backtest calibration describes the model's top pick only
+      if (sel.tier === 'T1') {
+        const band = bandFor(bands, sel.p);
+        if (!band) return null;
+        return { credible: (band.n * band.observed_rate + SHRINK_WEIGHT * sel.p) / (band.n + SHRINK_WEIGHT), n: band.n, support: 'validated', basis: 'frozen model, ' + band.n + ' backtest picks at ' + band.band };
+      }
+      if (sel.tier === 'T2') {
+        const ref = (pred.markets.result.league_p || [])[{ H: 0, D: 1, A: 2 }[sel.key]];
+        const league = ref == null ? 1 / 3 : ref;
+        return { credible: (T2_BACKTEST_N * sel.p + SHRINK_WEIGHT * league) / (T2_BACKTEST_N + SHRINK_WEIGHT), n: T2_BACKTEST_N, support: 'provisional', basis: 'promoted-club model, ' + T2_BACKTEST_N + ' backtest matches' };
+      }
+      return null;
+    }
+    const ref = sel.reference;
+    if (sel.backtested) {
+      return { credible: ref == null ? sel.p : (BACKTEST_N * sel.p + SHRINK_WEIGHT * ref) / (BACKTEST_N + SHRINK_WEIGHT), n: BACKTEST_N, support: 'provisional', basis: 'league-anchored blend, ' + BACKTEST_N + ' backtest matches' };
+    }
+    // A line the backtest never scored: only the weight of the prior, pulled halfway to the league rate.
+    return { credible: ref == null ? sel.p : (SHRINK_WEIGHT * sel.p + SHRINK_WEIGHT * ref) / (2 * SHRINK_WEIGHT), n: SHRINK_WEIGHT, support: 'unsupported', basis: 'line never backtested; league rate nudged by the model' };
+  }
+
+  /* Ranked selections, strongest first, on the lower 90% bound of the credible chance:
+     a big number with thin evidence behind it ranks below a well-tested one. Selections on
+     lines the backtest never scored (`unsupported`) rank after every backtested selection, so
+     a league-rate 80% on an untested line never outranks a tested estimate. The first entry
+     is the same selection the pipeline seals as Most Likely. */
+  function rankSelections(pred, reliability) {
+    const bands = (((reliability || {}).markets || {}).wins || {}).bands || [];
+    const out = [];
+    for (const sel of allSelections(pred)) {
+      const ev = evidenceFor(sel, pred, bands);
+      if (!ev) continue;
+      out.push({ ...sel, ...ev, lower_bound: lowerBound(ev.credible, ev.n) });
+    }
+    const supported = (x) => (x.support === 'unsupported' ? 1 : 0);
+    return out.sort((a, b) => supported(a) - supported(b) || b.lower_bound - a.lower_bound || b.credible - a.credible);
+  }
+
+  /* The six strongest: one selection per line (never Over and Under of the same line).
+     Unsupported-line selections appear only when fewer than six backtested ones exist. */
+  function topSix(pred, reliability) {
+    const picked = [], groups = new Set();
+    for (const s of rankSelections(pred, reliability)) {
+      if (groups.has(s.group)) continue;
+      picked.push(s); groups.add(s.group);
+      if (picked.length === 6) break;
+    }
+    return picked;
+  }
+
+  /* Value test for one selection at a price the user saw elsewhere. MatchIQ's probability
+     comes from results-based models, never from these prices, so the comparison is
+     independent. Verdicts: awaiting_odds (no usable price), no_bet (not eligible to call
+     value), no_value (price too short), value (Potential Value). `bands` are the backtest
+     calibration bands of the frozen match-result model. */
+  function valueVerdict(sel, priceText, siblings, prices, bands) {
+    const text = priceText == null ? '' : String(priceText).trim();
+    if (!text) return { verdict: 'awaiting_odds', why: 'No bookmaker price yet. Type a fractional price you have seen to test it.' };
+    const dec = parseFractionalOdds(text);
+    if (!Number.isFinite(dec) || dec <= 1) return { verdict: 'awaiting_odds', why: 'That price was not understood. Use a fractional price such as 6/4 or Evens.' };
+    const implied = 1 / dec, ev = sel.p * dec - 1;
+    const sibDec = siblings.map((x) => parseFractionalOdds((prices || {})[x.id]));
+    const complete = siblings.length > 0 && sibDec.every((d) => Number.isFinite(d) && d > 1);
+    const book = complete ? implied + sibDec.reduce((t, d) => t + 1 / d, 0) : null;
+    const out = { dec, implied, ev, margin: complete ? book - 1 : null, fairImplied: complete ? implied / book : null, priceText: formatFractionalOdds(dec) };
+    const pctText = (x) => Math.round(100 * x) + '%';
+    if (sel.status !== 'validated') return { ...out, verdict: 'no_bet', why: 'MatchIQ’s estimate for this market has no proven edge over league averages, so no price can be called value here.' };
+    if (sel.market === 'result' && sel.isPick === false) return { ...out, verdict: 'no_bet', why: 'Only the model’s top match-result pick is backtested, so no other outcome can be called value.' };
+    const band = bandFor(bands, sel.p);
+    if (!(band && band.established)) return { ...out, verdict: 'no_bet', why: 'Too few backtested picks at this probability to trust a value call.' };
+    const compared = out.fairImplied != null ? out.fairImplied : implied;
+    if (ev >= VALUE_MIN_EV) return { ...out, verdict: 'value', why: 'At ' + out.priceText + ' the price implies ' + pctText(compared) + (out.fairImplied != null ? ' once the margin is removed' : '') + ', below MatchIQ’s ' + pctText(sel.p) + '. An estimate, not a guarantee.' };
+    return { ...out, verdict: 'no_value', why: 'At ' + out.priceText + ' the estimated expected value is ' + (ev >= 0 ? '+' : '') + Math.round(100 * ev) + '%, under the +' + Math.round(100 * VALUE_MIN_EV) + '% needed to call it value.' };
+  }
+
+  /* Best Value across EVERY selection that has a price, not only the Top Six. Returns the
+     highest-EV Potential Value, else the highest-EV priced selection, else null. */
+  function bestValue(pred, prices, bands) {
+    const sels = allSelections(pred);
+    const priced = sels.filter((s) => (prices || {})[s.id])
+      .map((s) => ({ sel: s, v: valueVerdict(s, prices[s.id], sels.filter((x) => x.group === s.group && x.id !== s.id), prices, bands) }))
+      .filter((x) => x.v.verdict !== 'awaiting_odds');
+    const byEv = (a, b) => b.v.ev - a.v.ev;
+    return priced.filter((x) => x.v.verdict === 'value').sort(byEv)[0] || priced.sort(byEv)[0] || null;
+  }
+
   return {
     MARKET_LABELS,
     number,
@@ -325,6 +452,14 @@
     settleAccumulator,
     loadBetDiary,
     saveBetDiary,
-    calculateBrierScore
+    calculateBrierScore,
+    MARKET_NAMES,
+    FEATURE_LINES,
+    VALUE_MIN_EV,
+    allSelections,
+    rankSelections,
+    topSix,
+    valueVerdict,
+    bestValue
   };
 });

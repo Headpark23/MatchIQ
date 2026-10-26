@@ -82,6 +82,12 @@ cd public-dist && npx vercel link --yes --project matchiq --scope martin-whites-
   - All steps were reproduced in a clean worktree; GitHub itself has not run them.
 - **C3 `c29d095`.** The ledger is strictly append-only (no re-sorting) and byte-stable across runs.
   - Preview: **https://matchiq-l2hl02dbd-martin-whites-projects.vercel.app**. Tested on mobile and desktop: Most Likely, Best Value with manual odds and margin removal, promoted-club No Bet, Diary from both cards, scorecard.
+- **C4 (dynamic Top Six, value tests, historical comparison, mobile scorecards).**
+  - Match screen leads with a **Top Six**: the six strongest individual selections across every market and Over/Under line, computed in the browser by `topSix()` in `market_calculations.js` from the published predictions (the sealed ledger and frozen models are untouched). Ranked on the lower 90% bound of the credible chance, one selection per line. Selections on lines the backtest never scored (everything except goals 2.5, corners 9.5, cards 3.5, shots 8.5 and BTTS) are labelled **Unsupported** and rank after every backtested one, so they appear only when fewer than six backtested selections exist (promoted clubs). League-average fallback markets and non-top result outcomes are never promoted. #1 is always the sealed Most Likely pick. Every other prediction is under "Every market and line".
+  - Each Top Six card has its own price box. **Best Value** (`bestValue()`) scans every priced selection in every market, not only the Top Six: states are Awaiting Odds, No Bet, Potential Value.
+  - `valueVerdict`, `allSelections`, `rankSelections`, `topSix`, `bestValue` moved to `market_calculations.js` with `tests/test_best_value.js`. Behaviour change: only the model's top match-result pick can be called value (the 40%-band calibration describes top picks only).
+  - `experiments/m065_most_likely_backtest/` (REPORT.md, results.json, decisions.csv): Most Likely hits 56.7% vs the favourite's 47.2% (+9.5 pts, CI [+2.7, +16.2]) but only because it picks likelier events; its edge over base rate is -0.8 pts against +8.6 for the favourite. No prices exist for these comparisons, so no profit/loss is claimed.
+  - Results scorecards are now cards (`statCard`) instead of wide tables. Service-worker cache bumped to v5.
 
 ## Next steps for the next session
 
@@ -89,6 +95,5 @@ cd public-dist && npx vercel link --yes --project matchiq --scope martin-whites-
    - Authorise pushing `dev/mission065-best-bet`.
    - Add the secrets `FOOTBALL_DATA_ORG_TOKEN`, `VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID`.
    - Run the workflow once by hand on the branch and confirm that the preview deploy and the data commit both happen.
-2. Chronological comparison of strategies (Most Likely across markets vs match-result favourite) on the 409-match backtest, using `experiments/m063_prediction_challenge/predictions.csv`. Not started.
-3. JS unit tests for `valueVerdict`. It lives in `app.js` and so far has only been verified in the browser; consider moving it to `market_calculations.js`.
-4. On mobile, the Results scorecard table is cramped; consider using cards instead.
+2. The Most Likely scorecard still has 0 settled picks; the populated mobile cards were only checked with mock numbers in the browser.
+3. Possible follow-ups: show the backtest comparison in the app (it lives only in the experiment report); a browser-level test for the Top Six cards.

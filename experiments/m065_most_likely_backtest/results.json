@@ -1,0 +1,169 @@
+{
+  "source": "experiments/m063_prediction_challenge/predictions.csv",
+  "n": 409,
+  "first_match": "2025-08-15",
+  "last_match": "2026-10-18",
+  "strategies": [
+    {
+      "strategy": "Match-result favourite (frozen Dixon-Coles)",
+      "n": 409,
+      "hits": 193,
+      "hit_rate": 0.4718826405867971,
+      "ci95": [
+        0.423987994904144,
+        0.520300565163446
+      ],
+      "mean_claimed_p": 0.48687649633251834,
+      "brier_of_claim": 0.2368506076253276,
+      "mean_base_rate": 0.38558703131219213,
+      "edge_over_base": 0.08629560927460495
+    },
+    {
+      "strategy": "Most Likely (lower-90%-bound rule)",
+      "n": 409,
+      "hits": 232,
+      "hit_rate": 0.5672371638141809,
+      "ci95": [
+        0.5188135981511579,
+        0.6144094103828657
+      ],
+      "mean_claimed_p": 0.5813994799629469,
+      "brier_of_claim": 0.2448801897169337,
+      "mean_base_rate": 0.57486819421881,
+      "edge_over_base": -0.007631030404629091
+    },
+    {
+      "strategy": "Highest raw probability, no evidence adjustment",
+      "n": 409,
+      "hits": 238,
+      "hit_rate": 0.5819070904645477,
+      "ci95": [
+        0.5335584761184078,
+        0.6287313706412212
+      ],
+      "mean_claimed_p": 0.5841870420495278,
+      "brier_of_claim": 0.24323986525890726,
+      "mean_base_rate": 0.5599208385596652,
+      "edge_over_base": 0.02198625190488246
+    },
+    {
+      "strategy": "Naive: most common selection in the league so far",
+      "n": 409,
+      "hits": 227,
+      "hit_rate": 0.5550122249388753,
+      "ci95": [
+        0.5065585125707157,
+        0.6024421307753036
+      ],
+      "mean_claimed_p": 0.5828463757378975,
+      "brier_of_claim": 0.24770372798552745,
+      "mean_base_rate": 0.5828463757378975,
+      "edge_over_base": -0.027834150799022295
+    },
+    {
+      "strategy": "Always back the home win",
+      "n": 409,
+      "hits": 168,
+      "hit_rate": 0.41075794621026895,
+      "ci95": [
+        0.3641236739859568,
+        0.4590530601416116
+      ],
+      "mean_claimed_p": 0.4203626252734642,
+      "brier_of_claim": 0.24248053967950042,
+      "mean_base_rate": 0.4203626252734642,
+      "edge_over_base": -0.009604679063195232
+    },
+    {
+      "strategy": "Bookmaker closing favourite (benchmark, not available live)",
+      "n": 409,
+      "hits": 202,
+      "hit_rate": 0.4938875305623472,
+      "ci95": [
+        0.4457160817375897,
+        0.5421727356684081
+      ],
+      "mean_claimed_p": 0.5132029339853301,
+      "brier_of_claim": 0.23893583217603911,
+      "mean_base_rate": null,
+      "edge_over_base": null
+    }
+  ],
+  "paired_hit_rate_differences": {
+    "most_likely_minus_favourite": {
+      "diff": 0.0953545232273838,
+      "ci95": [
+        0.026587175646168647,
+        0.16177122114668646
+      ]
+    },
+    "most_likely_minus_raw": {
+      "diff": -0.014669926650366816,
+      "ci95": [
+        -0.04000250626566419,
+        0.009711117456691397
+      ]
+    },
+    "most_likely_minus_naive": {
+      "diff": 0.012224938875305624,
+      "ci95": [
+        -0.04276241017468959,
+        0.06618446291560097
+      ]
+    }
+  },
+  "chronological_thirds": [
+    {
+      "period": "2025-08-15 to 2025-12-20",
+      "n": 137,
+      "favourite_hit": 0.5328467153284672,
+      "favourite_claimed": 0.49201241605839413,
+      "most_likely_hit": 0.6131386861313869,
+      "most_likely_claimed": 0.58470570775707
+    },
+    {
+      "period": "2025-12-20 to 2026-03-16",
+      "n": 136,
+      "favourite_hit": 0.4264705882352941,
+      "favourite_claimed": 0.493124375,
+      "most_likely_hit": 0.5147058823529411,
+      "most_likely_claimed": 0.5790378154477471
+    },
+    {
+      "period": "2026-03-20 to 2026-10-18",
+      "n": 136,
+      "favourite_hit": 0.45588235294117646,
+      "favourite_claimed": 0.47545493382352944,
+      "most_likely_hit": 0.5735294117647058,
+      "most_likely_claimed": 0.5804306061855374
+    }
+  ],
+  "most_likely_by_selection": {
+    "btts_yes": {
+      "n": 89,
+      "hit_rate": 0.5617977528089888,
+      "mean_claimed": 0.571703836295119
+    },
+    "cards_over": {
+      "n": 107,
+      "hit_rate": 0.5887850467289719,
+      "mean_claimed": 0.5822276407142295
+    },
+    "corners_over": {
+      "n": 188,
+      "hit_rate": 0.5638297872340425,
+      "mean_claimed": 0.5850374066309111
+    },
+    "goals_over": {
+      "n": 20,
+      "hit_rate": 0.45,
+      "mean_claimed": 0.5903096885175783
+    },
+    "shots_under": {
+      "n": 5,
+      "hit_rate": 0.8,
+      "mean_claimed": 0.5638324202388573
+    }
+  },
+  "most_likely_chose_result_share": 0.0
+}

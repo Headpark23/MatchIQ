@@ -104,47 +104,14 @@ function wayBar(sels, pickKey, names, compact, cls = '') {
 
 // ------------------------------------------------------------ Most Likely / Best Value / No Bet
 const PRICE_STORAGE_KEY = 'matchiq_seen_prices_v1';
-const VALUE_MIN_EV = 0.05;
 const REC_LABEL = { most_likely: 'Most Likely pick', best_value: 'Best Value pick' };
 
 function readPrices() { try { const v = JSON.parse(localStorage.getItem(PRICE_STORAGE_KEY) || '{}'); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } }
 function writePrices(v) { try { localStorage.setItem(PRICE_STORAGE_KEY, JSON.stringify(v)); } catch (e) { /* prices are a convenience only */ } }
 
-const marketStatus = m => (m.evidence.status === 'provisional' && m.evidence.strength === 'none') ? 'league' : m.evidence.status;
-
-/* Every selection of a published prediction. `group` holds the outcomes that make up one
-   book, so a full set of prices can remove the bookmaker's margin. */
-function allSelections(pred) {
-  const out = [], mk = pred.markets;
-  if (mk.result) mk.result.selections.forEach(s => out.push({ id: 'result:' + s.key, group: 'result', market: 'result', label: s.label, p: s.p, fair: s.fair_odds, status: marketStatus(mk.result), strength: mk.result.evidence.strength, tier: mk.result.tier }));
-  for (const key of ['goals', 'corners', 'cards', 'shots']) {
-    const m = mk[key];
-    if (!m || m.unavailable) continue;
-    for (const l of m.lines) for (const side of ['over', 'under'])
-      out.push({ id: key + ':' + side + ':' + l.line, group: key + ':' + l.line, market: key, label: MARKETS[key].name + ': ' + l[side].label, p: l[side].p, fair: l[side].fair_odds, status: marketStatus(m), strength: m.evidence.strength });
-  }
-  if (mk.btts) mk.btts.selections.forEach(s => out.push({ id: 'btts:' + s.key, group: 'btts', market: 'btts', label: 'Both teams to score: ' + s.label, p: s.p, fair: s.fair_odds, status: marketStatus(mk.btts), strength: mk.btts.evidence.strength }));
-  return out;
-}
-
-/* Value test for one selection at a price the user saw elsewhere. MatchIQ's probability
-   comes from results-based models, never from these prices, so the comparison is
-   independent. Only the validated model, at a well-backtested probability, can call value. */
-function valueVerdict(sel, priceText, siblings, prices) {
-  const dec = calc.parseFractionalOdds(priceText);
-  if (!Number.isFinite(dec) || dec <= 1) return null;
-  const implied = 1 / dec, ev = sel.p * dec - 1;
-  const sibDec = siblings.map(x => calc.parseFractionalOdds(prices[x.id]));
-  const complete = siblings.length > 0 && sibDec.every(d => Number.isFinite(d) && d > 1);
-  const book = complete ? implied + sibDec.reduce((t, d) => t + 1 / d, 0) : null;
-  const out = { dec, implied, ev, margin: complete ? book - 1 : null, fairImplied: complete ? implied / book : null, priceText: calc.formatFractionalOdds(dec) };
-  if (sel.status !== 'validated') return { ...out, verdict: 'no_bet', why: 'MatchIQ’s estimate for this market has no proven edge over league averages, so no price can be called value here.' };
-  const band = reliabilityBand(sel.p);
-  if (!(band && band.established)) return { ...out, verdict: 'no_bet', why: 'Too few backtested picks at this probability to trust a value call.' };
-  const compared = out.fairImplied != null ? out.fairImplied : implied;
-  if (ev >= VALUE_MIN_EV) return { ...out, verdict: 'value', why: 'At ' + out.priceText + ' the price implies ' + pct(compared) + (out.fairImplied != null ? ' once the margin is removed' : '') + ', below MatchIQ’s ' + pct(sel.p) + '. An estimate, not a guarantee.' };
-  return { ...out, verdict: 'no_value', why: 'At ' + out.priceText + ' the estimated expected value is ' + (ev >= 0 ? '+' : '') + Math.round(100 * ev) + '%, under the +' + Math.round(100 * VALUE_MIN_EV) + '% needed to call it value.' };
-}
+const allSelections = calc.allSelections;
+const matchIQBands = () => ((((DATA.reliability || {}).markets || {}).wins) || {}).bands || [];
+const valueVerdict = (sel, priceText, siblings, prices) => calc.valueVerdict(sel, priceText, siblings, prices, matchIQBands());
 
 function selectionFor(pred, m) {
   const id = m.market === 'result' ? 'result:' + m.key : m.market === 'btts' ? 'btts:' + m.key : m.market + ':' + m.key + ':' + m.line;
@@ -166,39 +133,84 @@ function mostLikelyBlock(pred, big) {
     '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button></div>';
 }
 
+const VALUE_HEAD = { value: ['value', 'Potential Value'], no_value: ['nobet', 'No Bet'], no_bet: ['nobet', 'No Bet'], awaiting_odds: ['awaiting', 'Awaiting Odds'] };
+
 function bestValueBlock(pred) {
   const sels = allSelections(pred), prices = readPrices()[pred.match_id] || {};
-  const sel = sels.find(s => s.id === prices._selected) || sels.find(s => s.id === 'result:' + pred.markets.result.pick.key) || sels[0];
+  const best = calc.bestValue(pred, prices, matchIQBands());
+  const sel = sels.find(s => s.id === prices._selected) || (best && best.sel) || sels.find(s => s.id === 'result:' + pred.markets.result.pick.key) || sels[0];
   const siblings = sels.filter(s => s.group === sel.group && s.id !== sel.id);
   const verdict = valueVerdict(sel, prices[sel.id], siblings, prices);
-  const v = verdict ? verdict.verdict : 'no_bet';
-  const head = { value: ['value', 'Possible value'], no_value: ['nobet', 'No value at this price'], no_bet: ['nobet', 'No bet'] }[v];
-  let detail;
-  if (!verdict) {
-    detail = '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded: there is no lawful free odds feed. Type a fractional price you have seen to test it against MatchIQ’s independent estimate.</p>';
+  const v = best ? best.v.verdict : 'awaiting_odds';
+  const head = VALUE_HEAD[v];
+  const pricedCount = sels.filter(s => prices[s.id]).length;
+  let detail = '';
+  if (best) {
+    detail += '<p class="muted" style="font-size:13.5px"><b>' + (v === 'value' ? 'Best value found: ' : 'Closest to value: ') + esc(best.sel.label) + '</b> at ' + esc(best.v.priceText) + ' (' + (best.v.ev >= 0 ? '+' : '') + Math.round(100 * best.v.ev) + '% estimated expected value). Checked ' + pricedCount + ' priced selection' + (pricedCount === 1 ? '' : 's') + ' across every market, not only the top six.</p>';
   } else {
-    detail = '<div class="value-grid"><div><span>Price</span><b>' + esc(verdict.priceText) + '</b></div><div><span>Price implies</span><b>' + pct(verdict.implied) + '</b></div>' +
+    detail += '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded: there is no lawful free odds feed. Type a fractional price you have seen on any selection, here or in the top six, and MatchIQ will check every priced selection for value.</p>';
+  }
+  if (verdict.verdict !== 'awaiting_odds') {
+    detail += '<div class="value-grid"><div><span>Price</span><b>' + esc(verdict.priceText) + '</b></div><div><span>Price implies</span><b>' + pct(verdict.implied) + '</b></div>' +
       (verdict.fairImplied != null ? '<div><span>Margin removed</span><b>' + pct(verdict.fairImplied) + '</b></div>' : '') +
       '<div><span>MatchIQ</span><b>' + pct(sel.p) + '</b></div><div><span>Expected value</span><b class="' + (verdict.ev >= 0 ? 'pos' : 'neg') + '">' + (verdict.ev >= 0 ? '+' : '') + Math.round(100 * verdict.ev) + '%</b></div>' +
       (verdict.margin != null ? '<div><span>Bookmaker margin</span><b>' + (100 * verdict.margin).toFixed(1) + '%</b></div>' : '') + '</div>' +
-      '<p class="muted" style="font-size:13.5px">' + esc(verdict.why) + (verdict.margin == null && siblings.length && verdict.verdict !== 'no_bet' ? ' Add the other outcomes’ prices below to remove the bookmaker’s margin.' : '') + '</p>';
+      '<p class="muted" style="font-size:13.5px"><b>' + esc(sel.label) + ':</b> ' + esc(verdict.why) + (verdict.margin == null && siblings.length && verdict.verdict !== 'no_bet' ? ' Add the other outcomes’ prices below to remove the bookmaker’s margin.' : '') + '</p>';
+  } else if (prices[sel.id]) {
+    detail += '<p class="muted" style="font-size:13.5px">' + esc(verdict.why) + '</p>';
   }
   const opts = sels.map(s => '<option value="' + esc(s.id) + '"' + (s.id === sel.id ? ' selected' : '') + '>' + esc(s.label) + ' · ' + pct(s.p) + '</option>').join('');
   const priceInput = (s, main) => '<label class="field"><span class="lbl">' + esc(main ? 'Bookmaker price you were offered' : s.label) + '</span><input class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or Evens" data-price="' + esc(s.id) + '" data-match="' + esc(pred.match_id) + '" value="' + esc(prices[s.id] || '') + '"></label>';
-  const diary = verdict ? { id: pred.match_id, market: MARKETS[sel.market].diary, selection: sel.label, p: sel.p, fair: sel.fair, odds: verdict.priceText, rec: 'best_value' } : null;
-  return '<div class="rec-card ' + head[0] + '"><div class="rec-kicker">Best value</div><div class="rec-pick">' + esc(head[1]) + '</div>' +
-    '<label class="field"><span class="lbl">Selection to test</span><select class="ctl" data-value-select="' + esc(pred.match_id) + '">' + opts + '</select></label>' +
-    priceInput(sel, true) + detail +
+  const diary = verdict.verdict !== 'awaiting_odds' ? { id: pred.match_id, market: MARKETS[sel.market].diary, selection: sel.label, p: sel.p, fair: sel.fair, odds: verdict.priceText, rec: 'best_value' } : null;
+  return '<div class="rec-card ' + head[0] + '"><div class="rec-kicker">Best value</div><div class="rec-pick">' + esc(head[1]) + '</div>' + detail +
+    '<label class="field"><span class="lbl">Selection to test (any market or line)</span><select class="ctl" data-value-select="' + esc(pred.match_id) + '">' + opts + '</select></label>' +
+    priceInput(sel, true) +
     (siblings.length ? '<details class="compare"' + (siblings.some(s => prices[s.id]) ? ' open' : '') + '><summary>Other outcomes’ prices (removes the margin)</summary><div class="grid" style="margin-top:8px">' + siblings.map(s => priceInput(s, false)).join('') + '</div></details>' : '') +
     (diary ? '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary at ' + esc(verdict.priceText) + '</button>' : '') + '</div>';
 }
 
+/* The six strongest selections across every market and line, with a price box on each. */
+const SUPPORT = { validated: ['validated', 'Validated model'], provisional: ['provisional', 'Provisional estimate'], unsupported: ['unsupported', 'Unsupported estimate'] };
+function topSixCard(s, pred, rank, isMostLikely, prices) {
+  const [cls, label] = SUPPORT[s.support];
+  const sels = allSelections(pred);
+  const v = valueVerdict(s, prices[s.id], sels.filter(x => x.group === s.group && x.id !== s.id), prices);
+  const chip = { value: '<span class="badge validated">Potential Value</span>', no_value: '<span class="badge unavailable">No Bet</span>', no_bet: '<span class="badge unavailable">No Bet</span>', awaiting_odds: '<span class="badge awaiting">Awaiting Odds</span>' }[v.verdict];
+  const note = s.support === 'unsupported' ? 'This line was never backtested. It is the league rate lightly nudged by the model, not a read on this match, and no price can be called value.'
+    : s.support === 'provisional' ? (s.market === 'result' ? 'Promoted-club model, thin evidence. No price can be called value.' : 'No proven edge over the league average. Treat it as a base rate.') : 'About ' + Math.round(s.credible * 10) + ' times in 10 once calibrated against the backtest.';
+  const diary = { id: pred.match_id, market: MARKETS[s.market].diary, selection: s.label, p: s.p, fair: s.fair, rec: isMostLikely ? 'most_likely' : '' };
+  return '<article class="card top-card ' + cls + '"><div class="top-head"><span class="top-rank">' + rank + '</span><span class="market-name"><svg viewBox="0 0 24 24">' + ICONS[s.market] + '</svg>' + esc(MARKETS[s.market].name) + '</span>' +
+    (isMostLikely ? '<span class="badge validated">Most Likely</span>' : '') + '</div>' +
+    '<div class="market-main">' + ring(s.p, 64, s.support === 'validated' ? '' : s.support === 'unsupported' ? 'limited' : 'provisional') +
+    '<div><div class="market-pick">' + esc(s.label.replace(/^[^:]+: /, '')) + '</div><div class="market-odds">Model fair odds <b>' + esc(s.fair) + '</b> · not a bookmaker price</div></div></div>' +
+    '<div class="evidence-row"><span class="badge ' + cls + '">' + label + '</span>' + (s.support === 'unsupported' ? '' : meter(s.strength)) + '</div>' +
+    '<p class="muted" style="font-size:13px">' + esc(note) + '</p>' +
+    '<label class="field"><span class="lbl">Price you saw ' + chip + '</span><input class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or Evens" aria-label="Bookmaker price for ' + esc(s.label) + '" data-price="' + esc(s.id) + '" data-match="' + esc(pred.match_id) + '" value="' + esc(prices[s.id] || '') + '"></label>' +
+    (prices[s.id] && v.verdict !== 'awaiting_odds' ? '<p class="muted" style="font-size:12.5px">' + esc(v.why) + '</p>' : '') +
+    '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button></article>';
+}
+
+function topSixBlock(pred) {
+  const six = calc.topSix(pred, DATA.reliability), prices = readPrices()[pred.match_id] || {};
+  const ml = (pred.recommendations || {}).most_likely || {};
+  const isML = s => ml.decision === 'most_likely' && s.market === ml.market && s.key === ml.key && (ml.line == null || s.line === ml.line);
+  if (!six.length) return '<div class="empty">No selection has enough evidence to rank for this match. Every prediction is still listed below.</div>';
+  return '<div class="grid grid-2 top-six">' + six.map((s, i) => topSixCard(s, pred, i + 1, isML(s), prices)).join('') + '</div>' +
+    (six.length < 6 ? '<p class="dim" style="font-size:12.5px;margin-top:8px">Fewer than six selections have enough evidence. Every other prediction stays available below.</p>' : '');
+}
+
 function refreshValue(matchId) {
-  const pred = DATA.predictions && DATA.predictions.predictions[matchId], box = $('value-' + matchId);
-  if (!pred || !box) return;
-  const focused = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.price : null;
-  box.innerHTML = bestValueBlock(pred);
-  if (focused) { const input = box.querySelector('[data-price="' + CSS.escape(focused) + '"]'); if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); } }
+  const pred = DATA.predictions && DATA.predictions.predictions[matchId];
+  if (!pred) return;
+  const active = document.activeElement, focused = active && active.dataset ? active.dataset.price : null;
+  const boxes = { ['value-' + matchId]: bestValueBlock, ['top-' + matchId]: topSixBlock };
+  for (const [boxId, build] of Object.entries(boxes)) {
+    const box = $(boxId);
+    if (!box) continue;
+    const holdsFocus = focused && box.contains(active);
+    box.innerHTML = build(pred);
+    if (holdsFocus) { const input = box.querySelector('[data-price="' + CSS.escape(focused) + '"]'); if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); } }
+  }
 }
 
 function recommendationPair(pred) {
@@ -408,10 +420,10 @@ function lowerBoundOf(pred) {
 function valueStatus(pred) {
   const prices = readPrices()[pred.match_id] || {};
   const sels = allSelections(pred);
-  const verdicts = sels.filter(s => prices[s.id]).map(s => valueVerdict(s, prices[s.id], sels.filter(x => x.group === s.group && x.id !== s.id), prices)).filter(Boolean);
-  if (verdicts.some(v => v.verdict === 'value')) return '<span class="badge validated">Possible value at your price</span>';
-  if (verdicts.length) return '<span class="badge unavailable">No value at your prices</span>';
-  return '<span class="badge unavailable">Value: no bet, no price</span>';
+  const best = calc.bestValue(pred, prices, matchIQBands());
+  if (best && best.v.verdict === 'value') return '<span class="badge validated">Potential Value at your price</span>';
+  if (best) return '<span class="badge unavailable">No Bet at your prices</span>';
+  return '<span class="badge awaiting">Awaiting Odds</span>';
 }
 
 function matchRecRow(pred) {
@@ -516,8 +528,11 @@ function viewMatch(id) {
       '<div class="section">' + heroCard(pred, 'Match result') + '</div>' +
       '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Why this match-result prediction</summary><ul class="explain" style="margin-top:6px">' + resultExplanation(pred) + '</ul>' +
       '<p class="dim" style="font-size:13px;margin-top:10px">' + esc(r.evidence.summary) + ' The models use results and match statistics only. They know nothing about injuries, team news, line-ups or motivation.</p></details>';
-    html += '<div class="section"><div class="section-head"><h2 class="section-title">Every market</h2><span class="section-note">Published ' + esc(ago(pred.published_at)) + ' · record ' + esc(pred.record_id) + '. Probability and evidence strength are shown separately: a 60% estimate with weak evidence is still weak.</span></div>' +
-      '<div class="grid grid-2">' + MARKET_ORDER.map(k => marketCard(k, normaliseMarket(k, pred.markets[k]), { id, canLog: true })).join('') + '</div></div>';
+    html += '<div class="section"><div class="section-head"><h2 class="section-title">Top six selections</h2><span class="section-note">The six strongest individual selections from every market and Over/Under line, ranked on the cautious end of their chance so thin evidence cannot win on a big number. Lines MatchIQ never backtested rank last and are labelled unsupported.</span></div>' +
+      '<div id="top-' + esc(id) + '">' + topSixBlock(pred) + '</div></div>' +
+      '<details class="card section all-markets"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Every market and line (' + allSelections(pred).length + ' selections)</summary>' +
+      '<p class="dim" style="font-size:13px;margin:6px 0 12px">Published ' + esc(ago(pred.published_at)) + ' · record ' + esc(pred.record_id) + '. Probability and evidence strength are shown separately: a 60% estimate with weak evidence is still weak.</p>' +
+      '<div class="grid grid-2">' + MARKET_ORDER.map(k => marketCard(k, normaliseMarket(k, pred.markets[k]), { id, canLog: true })).join('') + '</div></details>';
   } else if (rec) {
     const ml = (rec.recommendations || {}).most_likely, mls = (rec.settlement || {}).most_likely;
     if (ml) html += '<div class="section card"><h2 class="section-title">Sealed recommendations</h2><p style="margin-top:8px">' +
@@ -549,9 +564,11 @@ function viewResults() {
     '<div class="tile"><div class="k">Published records</div><div class="v">' + (perf.published_records || 0) + '</div><div class="s">including earlier revisions</div></div></div>';
   if (!res || !res.sufficient_sample) html += '<div class="notice section">Early days: ' + (res ? res.n : 0) + ' settled match-result predictions. Live figures need at least ' + (perf.min_report_n || 20) + ' before they mean much, so lean on the backtest below until then.</div>';
 
-  const marketRows = MARKET_ORDER.filter(k => (perf.markets || {})[k]).map(k => { const m = perf.markets[k]; return '<tr><td>' + esc(MARKETS[k].name) + (m.sufficient_sample ? '' : ' <span class="badge pending">small sample</span>') + '</td><td class="num">' + m.n + '</td><td class="num">' + pct(m.pick_hit_rate) + '</td><td class="num">' + pct(m.mean_pick_p) + '</td><td class="num">' + m.brier.toFixed(3) + '</td></tr>'; }).join('');
-  html += '<div class="section card"><div class="section-head"><h2 class="section-title">Live record by market</h2><span class="section-note">Hit rate should sit close to the average pick probability if the estimates are honest.</span></div>' +
-    (marketRows ? '<div style="overflow-x:auto"><table class="table"><thead><tr><th>Market</th><th style="text-align:right">Settled</th><th style="text-align:right">Picks right</th><th style="text-align:right">Avg pick</th><th style="text-align:right">Brier</th></tr></thead><tbody>' + marketRows + '</tbody></table></div>' : '<p class="muted">No settled predictions yet.</p>') + '</div>';
+  const marketCards = MARKET_ORDER.filter(k => (perf.markets || {})[k]).map(k => { const m = perf.markets[k];
+    return statCard(esc(MARKETS[k].name), m.sufficient_sample ? '' : '<span class="badge pending">small sample</span>',
+      [['Settled', m.n], ['Picks right', pct(m.pick_hit_rate)], ['Brier', m.brier.toFixed(3)]], { claimed: m.mean_pick_p, actual: m.pick_hit_rate }); }).join('');
+  html += '<div class="section card"><div class="section-head"><h2 class="section-title">Live record by market</h2><span class="section-note">The two bars should sit close together if the estimates are honest.</span></div>' +
+    (marketCards ? '<div class="stat-cards">' + marketCards + '</div>' : '<p class="muted">No settled predictions yet.</p>') + '</div>';
 
   const bands = (perf.bands || {}).result || {};
   const bandRows = Object.entries(bands).sort().map(([band, b]) => '<div class="calib-row"><span class="mono">' + esc(band) + '</span><div class="calib-bars" aria-label="Predicted ' + pct(b.mean_pick_p) + ', happened ' + pct(b.pick_hit_rate) + '"><span class="pred" style="width:' + (100 * b.mean_pick_p).toFixed(0) + '%"></span><span class="obs" style="width:' + (100 * b.pick_hit_rate).toFixed(0) + '%"></span></div><span class="mono dim">' + pct(b.pick_hit_rate) + ' · n=' + b.n + '</span></div>').join('');
@@ -577,6 +594,15 @@ function viewResults() {
   return html + '</section>';
 }
 
+/* One readable card per row of a scorecard: a title, optional badge, an estimate-versus-landed bar
+   and a grid of labelled figures. Replaces wide tables that scrolled sideways on phones. */
+function statCard(title, badge, stats, bar) {
+  return '<article class="stat-card"><div class="stat-head"><h3>' + title + '</h3>' + (badge || '') + '</div>' +
+    (bar ? '<div class="stat-bar" role="img" aria-label="Estimated ' + pct(bar.claimed) + ', landed ' + pct(bar.actual) + '"><span class="pred" style="width:' + (100 * bar.claimed).toFixed(0) + '%"></span><span class="obs" style="width:' + (100 * bar.actual).toFixed(0) + '%"></span></div>' +
+      '<div class="stat-legend"><span>Estimated ' + pct(bar.claimed) + '</span><span>Landed ' + pct(bar.actual) + '</span></div>' : '') +
+    '<dl class="stat-grid">' + stats.map(([k, v, cls]) => '<div><dt>' + k + '</dt><dd' + (cls ? ' class="' + cls + '"' : '') + '>' + v + '</dd></div>').join('') + '</dl></article>';
+}
+
 function diaryByRecommendation() {
   const groups = { most_likely: [], best_value: [], other: [] };
   for (const e of getStoredDiary()) (groups[e.recommendation] || groups.other).push(e);
@@ -592,15 +618,17 @@ function scorecard(perf) {
   const byMarket = Object.entries(perf.most_likely_by_market || {});
   const dec = perf.decisions || {};
   const labels = { most_likely: 'Most Likely picks', best_value: 'Best Value picks', other: 'Other bets' };
-  const rows = diaryByRecommendation().map(g => '<tr><td>' + labels[g.key] + '</td><td class="num">' + g.n + '</td><td class="num">' + g.won + '–' + g.lost + '–' + g.void + '</td><td class="num">£' + g.staked.toFixed(2) + '</td><td class="num ' + (g.profit > 0 ? 'pos' : g.profit < 0 ? 'neg' : '') + '">' + (g.profit >= 0 ? '+' : '−') + '£' + Math.abs(g.profit).toFixed(2) + '</td><td class="num">' + (g.settled ? g.roi.toFixed(0) + '%' : '—') + '</td></tr>').join('');
-  return '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Most Likely scorecard (sealed)</h2>' +
-    '<p class="section-note" style="margin:4px 0 10px">Every Most Likely pick is sealed before kick-off and scored when the result is confirmed.</p>' +
-    (ml.n ? '<div class="tiles"><div class="tile"><div class="k">Settled</div><div class="v">' + ml.n + '</div></div><div class="tile"><div class="k">Landed</div><div class="v">' + pct(ml.pick_hit_rate) + '</div><div class="s">average estimate ' + pct(ml.mean_pick_p) + '</div></div><div class="tile"><div class="k">Brier</div><div class="v">' + ml.brier.toFixed(3) + '</div></div></div>' +
-      (byMarket.length ? '<table class="table" style="margin-top:10px"><tbody>' + byMarket.map(([k, v]) => '<tr><td>' + esc(MARKETS[k].name) + '</td><td class="num">' + v.n + '</td><td class="num">' + pct(v.pick_hit_rate) + '</td></tr>').join('') + '</tbody></table>' : '')
+  const signed = v => (v >= 0 ? '+' : '−') + '£' + Math.abs(v).toFixed(2);
+  const bets = diaryByRecommendation().map(g => statCard(labels[g.key], g.n ? '' : '<span class="badge pending">none yet</span>',
+    [['Bets', g.n], ['Won–lost–void', g.won + '–' + g.lost + '–' + g.void], ['Settled stake', '£' + g.staked.toFixed(2)], ['Profit', signed(g.profit), g.profit > 0 ? 'pos' : g.profit < 0 ? 'neg' : ''], ['ROI', g.settled ? g.roi.toFixed(0) + '%' : '—']])).join('');
+  const mlMarkets = byMarket.map(([k, v]) => statCard(esc(MARKETS[k].name), '', [['Settled', v.n], ['Landed', pct(v.pick_hit_rate)]], { claimed: v.mean_pick_p == null ? v.pick_hit_rate : v.mean_pick_p, actual: v.pick_hit_rate })).join('');
+  return '<div class="section card"><h2 class="section-title">Most Likely scorecard (sealed)</h2>' +
+    '<p class="section-note" style="margin:4px 0 12px">Every Most Likely pick is sealed before kick-off and scored when the result is confirmed.</p>' +
+    (ml.n ? '<div class="stat-cards">' + statCard('All Most Likely picks', ml.sufficient_sample ? '' : '<span class="badge pending">small sample</span>', [['Settled', ml.n], ['Landed', pct(ml.pick_hit_rate)], ['Average estimate', pct(ml.mean_pick_p)], ['Brier', ml.brier.toFixed(3)]], { claimed: ml.mean_pick_p, actual: ml.pick_hit_rate }) + mlMarkets + '</div>'
       : '<p class="muted">No Most Likely pick has settled yet. The first ones settle once the 31 October fixtures have confirmed results.</p>') +
-    '<p class="section-note" style="margin-top:10px">Value decisions so far: ' + (dec['best_value:no_bet'] || 0) + ' No Bet (no bookmaker price available), ' + (dec['best_value:value'] || 0) + ' value calls.' + (ml.n && !ml.sufficient_sample ? ' Small sample: treat these figures as anecdotes.' : '') + '</p></div>' +
-    '<div class="card"><h2 class="section-title">Your recorded bets</h2><p class="section-note" style="margin:4px 0 10px">From your Bet Diary in this browser, at the prices you actually took. A high hit rate is not the same as profit.</p>' +
-    '<div style="overflow-x:auto"><table class="table"><thead><tr><th>Type</th><th style="text-align:right">Bets</th><th style="text-align:right">W–L–V</th><th style="text-align:right">Settled stake</th><th style="text-align:right">Profit</th><th style="text-align:right">ROI</th></tr></thead><tbody>' + rows + '</tbody></table></div></div></div>';
+    '<p class="section-note" style="margin-top:12px">Value decisions so far: ' + (dec['best_value:no_bet'] || 0) + ' No Bet (no bookmaker price available), ' + (dec['best_value:value'] || 0) + ' value calls.' + (ml.n && !ml.sufficient_sample ? ' Small sample: treat these figures as anecdotes.' : '') + '</p></div>' +
+    '<div class="section card"><h2 class="section-title">Your recorded bets</h2><p class="section-note" style="margin:4px 0 12px">From your Bet Diary in this browser, at the prices you actually took. A high hit rate is not the same as profit.</p>' +
+    '<div class="stat-cards">' + bets + '</div></div>';
 }
 
 function backtestCard(rel) {
