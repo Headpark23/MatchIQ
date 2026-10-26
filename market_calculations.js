@@ -218,6 +218,30 @@
     return bestError > 1e-10 ? `≈${fraction}` : fraction;
   }
 
+  // Standard UK bookmaker price ladder, used only to express model-derived fair odds.
+  const UK_PRICE_LADDER = Object.freeze([
+    '1/20', '1/16', '1/14', '1/12', '1/10', '1/9', '1/8', '1/7', '1/6', '1/5', '2/9', '1/4', '2/7',
+    '3/10', '1/3', '4/11', '2/5', '4/9', '1/2', '8/15', '4/7', '8/13', '4/6', '8/11', '4/5', '5/6',
+    '10/11', 'Evens', '11/10', '6/5', '5/4', '11/8', '6/4', '13/8', '7/4', '15/8', '2/1', '9/4',
+    '5/2', '11/4', '3/1', '100/30', '7/2', '4/1', '9/2', '5/1', '11/2', '6/1', '13/2', '7/1',
+    '15/2', '8/1', '9/1', '10/1', '11/1', '12/1', '14/1', '16/1', '18/1', '20/1', '25/1', '33/1',
+    '40/1', '50/1', '66/1', '100/1'
+  ]);
+
+  // Model fair odds are 1 / probability with no bookmaker margin. They are always an
+  // approximation, so they are snapped to the nearest familiar UK price and marked "≈".
+  function formatFairOdds(probability) {
+    const p = number(probability);
+    if (p === null || p <= 0 || p >= 1) return '—';
+    let best = UK_PRICE_LADDER[0], bestGap = Infinity;
+    for (const price of UK_PRICE_LADDER) {
+      const implied = 1 / parseFractionalOdds(price);
+      const gap = Math.abs(implied - p);
+      if (gap < bestGap) { best = price; bestGap = gap; }
+    }
+    return '≈' + best;
+  }
+
   function parseFractionalOdds(value) {
     const text = String(value ?? '').trim().toLowerCase();
     if (/^(?:evens?|even money)(?:\s*\(1\/1\))?$/.test(text)) return 2;
@@ -236,11 +260,15 @@
 
   function settleAccumulator(accumulator, legOutcomes) {
     const legs = accumulator.legs.map((leg, index) => ({ ...leg, outcome: legOutcomes[index] || leg.outcome || 'pending' }));
-    if (legs.some(leg => leg.outcome === 'lost')) return { ...accumulator, legs, outcome: 'lost' };
+    // Void legs drop out of the combined price; the price is always rebuilt from the legs
+    // so a partially settled accumulator never loses its odds.
     const active = legs.filter(leg => leg.outcome !== 'void');
-    if (legs.some(leg => !['won', 'lost', 'void'].includes(leg.outcome))) return { ...accumulator, legs, outcome: 'pending' };
-    const decimalOdds = active.reduce((product, leg) => product * leg.odds, 1);
-    return { ...accumulator, legs, decimalOdds, potentialReturn: accumulator.stake * decimalOdds, outcome: 'won' };
+    const decimalOdds = active.reduce((product, leg) => product * number(leg.odds), 1);
+    const priced = { ...accumulator, legs, decimalOdds, potentialReturn: number(accumulator.stake) * decimalOdds };
+    if (legs.some(leg => leg.outcome === 'lost')) return { ...priced, outcome: 'lost' };
+    if (legs.some(leg => !['won', 'lost', 'void'].includes(leg.outcome))) return { ...priced, outcome: 'pending' };
+    if (!active.length) return { ...priced, outcome: 'void' };
+    return { ...priced, outcome: 'won' };
   }
 
   function loadBetDiary(storage, key) {
@@ -290,6 +318,8 @@
     calculateBetProfit,
     summarizeBetDiary,
     formatFractionalOdds,
+    formatFairOdds,
+    UK_PRICE_LADDER,
     parseFractionalOdds,
     createAccumulator,
     settleAccumulator,

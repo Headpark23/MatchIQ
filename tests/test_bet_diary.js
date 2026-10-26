@@ -131,6 +131,15 @@ assert.equal(accA.legs.length, 2);
 assert.equal(accA.profile, 'Tester A');
 assert.equal(calc.settleAccumulator(accA, ['won', 'lost']).outcome, 'lost');
 assert.equal(calc.settleAccumulator(accA, ['won', 'void']).decimalOdds, 2.2);
+// A stored diary entry has `odds` but no `decimalOdds`; partial settlement must keep its price.
+const storedEntry = { type: 'accumulator', odds: 3.85, stake: 10, legs: accA.legs.map(leg => ({ ...leg })) };
+const partial = calc.settleAccumulator(storedEntry, ['won', 'pending']);
+assert.equal(partial.outcome, 'pending');
+close(partial.decimalOdds, 3.85, 'Partially settled accumulator keeps combined odds');
+close(partial.potentialReturn, 38.5, 'Partially settled accumulator keeps potential return');
+const allVoid = calc.settleAccumulator(storedEntry, ['void', 'void']);
+assert.equal(allVoid.outcome, 'void', 'All-void accumulator is void, not won');
+close(calc.calculateBetProfit(10, allVoid.decimalOdds, allVoid.outcome), 0, 'All-void accumulator returns the stake');
 
 assert.equal(calc.loadBetDiary({ getItem: () => null }, 'diary').length, 0);
 const memoryStorage = { value: null, setItem(key, value) { this.value = value; }, getItem() { return this.value; } };
