@@ -70,3 +70,25 @@ cd public-dist && npx vercel link --yes --project matchiq --scope martin-whites-
 ## Checkpoint log
 
 - **C0 (Mission 065 start).** All Mission 063/064 work committed at `ea73acb`; preview `https://matchiq-8fv9258g4-martin-whites-projects.vercel.app`.
+- **C1 `79d1d65`.** Pipeline seals a Most Likely decision for every match, ranked on the lower 90% bound of a reference-shrunk probability. Best Value is No Bet when no price exists. Results are settled and summarised in `performance.json`.
+- **C2 `0da99d6`.** App screens:
+  - "This round" home: Most Likely hero and a match-by-match list.
+  - Match screen: Most Likely card plus a Best Value checker with manual fractional prices. The margin is removed when every outcome is priced. Only the validated model can call value, and only at +5% EV or more.
+  - League-average fallback badges; diary entries carry the recommendation type; Results has the scorecard.
+- **CI `.github/workflows/matchiq-refresh.yml`.** Adds a Vercel deploy step for `public-dist/` only:
+  - Preview from branches.
+  - Production only from `main` with the variable `MATCHIQ_DEPLOY_PRODUCTION=true`.
+  - Skipped unless `VERCEL_TOKEN` is set.
+  - All steps were reproduced in a clean worktree; GitHub itself has not run them.
+- **C3 `c29d095`.** The ledger is strictly append-only (no re-sorting) and byte-stable across runs.
+  - Preview: **https://matchiq-l2hl02dbd-martin-whites-projects.vercel.app**. Tested on mobile and desktop: Most Likely, Best Value with manual odds and margin removal, promoted-club No Bet, Diary from both cards, scorecard.
+
+## Next steps for the next session
+
+1. Owner actions:
+   - Authorise pushing `dev/mission065-best-bet`.
+   - Add the secrets `FOOTBALL_DATA_ORG_TOKEN`, `VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID`.
+   - Run the workflow once by hand on the branch and confirm that the preview deploy and the data commit both happen.
+2. Chronological comparison of strategies (Most Likely across markets vs match-result favourite) on the 409-match backtest, using `experiments/m063_prediction_challenge/predictions.csv`. Not started.
+3. JS unit tests for `valueVerdict`. It lives in `app.js` and so far has only been verified in the browser; consider moving it to `market_calculations.js`.
+4. On mobile, the Results scorecard table is cramped; consider using cards instead.
