@@ -84,7 +84,8 @@ def import_frozen_ledgers(ledger, data_dir, now):
         record["sha256"] = hist.seal(record)
         ledger["records"].append(record)
         added += 1
-    ledger["records"].sort(key=lambda r: (r["fixture"]["kickoff_utc"], r["match_id"], r["revision"]))
+    if added:  # only on first import; afterwards the ledger is strictly append-only
+        ledger["records"].sort(key=lambda r: (r["fixture"]["kickoff_utc"], r["match_id"], r["revision"]))
     return added
 
 
