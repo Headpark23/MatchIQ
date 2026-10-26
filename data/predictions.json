@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-26T17:03:38.162299+00:00",
+ "generated_at": "2026-10-26T17:21:20.441600+00:00",
  "horizon_days": 21,
  "predictions": {
   "FL1-2627-paris-sg-v-lyon": {
@@ -9026,8 +9026,8 @@
   },
   "PL-2627-chelsea-v-man-united": {
    "match_id": "PL-2627-chelsea-v-man-united",
-   "record_id": "PL-2627-chelsea-v-man-united#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-chelsea-v-man-united#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -9052,31 +9052,31 @@
      "pick": {
       "key": "H",
       "label": "Chelsea win",
-      "p": 0.4803,
+      "p": 0.4736,
       "fair_odds": "≈11/10"
      },
      "selections": [
       {
        "key": "H",
        "label": "Chelsea win",
-       "p": 0.4803,
+       "p": 0.4736,
        "fair_odds": "≈11/10"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.255,
+       "p": 0.2554,
        "fair_odds": "≈3/1"
       },
       {
        "key": "A",
        "label": "Man United win",
-       "p": 0.2647,
+       "p": 0.271,
        "fair_odds": "≈11/4"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -9158,13 +9158,13 @@
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 41,
-      "away": 41
+      "away": 40
      }
     },
     "goals": {
@@ -9179,7 +9179,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5608,
+      "p": 0.5617,
       "fair_odds": "≈4/5",
       "line": 2.5
      },
@@ -9189,16 +9189,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.8024,
+        "p": 0.8019,
         "fair_odds": "≈1/4"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.1976,
+        "p": 0.1981,
         "fair_odds": "≈4/1"
        },
-       "model_p": 0.8136,
+       "model_p": 0.8118,
        "league_p": 0.7976
       },
       {
@@ -9206,45 +9206,45 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5608,
+        "p": 0.5617,
         "fair_odds": "≈4/5"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4392,
+        "p": 0.4383,
         "fair_odds": "≈5/4"
        },
-       "model_p": 0.5805,
-       "league_p": 0.5524
+       "model_p": 0.5784,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3261,
+        "p": 0.3268,
         "fair_odds": "≈2/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6739,
+        "p": 0.6732,
         "fair_odds": "≈1/2"
        },
-       "model_p": 0.3564,
-       "league_p": 0.3131
+       "model_p": 0.3544,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.76,
-       1.26
+       1.74,
+       1.27
       ]
      },
      "explanation": [
-      "The score model expects about 1.8 goals for Chelsea and 1.3 for Man United.",
+      "The score model expects about 1.7 goals for Chelsea and 1.3 for Man United.",
       "Premier League matches average 2.84 goals; 55% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Premier League rate for each line"
@@ -9261,25 +9261,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5734,
+      "p": 0.5748,
       "fair_odds": "≈8/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5734,
+       "p": 0.5748,
        "fair_odds": "≈8/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4266,
+       "p": 0.4252,
        "fair_odds": "≈11/8"
       }
      ],
-     "model_p": 0.603,
-     "league_p": 0.5607,
+     "model_p": 0.6026,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -15355,8 +15355,8 @@
   },
   "PL-2627-bournemouth-v-leeds": {
    "match_id": "PL-2627-bournemouth-v-leeds",
-   "record_id": "PL-2627-bournemouth-v-leeds#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-bournemouth-v-leeds#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -15381,31 +15381,31 @@
      "pick": {
       "key": "H",
       "label": "Bournemouth win",
-      "p": 0.448,
+      "p": 0.4423,
       "fair_odds": "≈5/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Bournemouth win",
-       "p": 0.448,
+       "p": 0.4423,
        "fair_odds": "≈5/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2774,
-       "fair_odds": "≈5/2"
+       "p": 0.2747,
+       "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Leeds win",
-       "p": 0.2746,
-       "fair_odds": "≈11/4"
+       "p": 0.283,
+       "fair_odds": "≈5/2"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -15446,6 +15446,13 @@
       ],
       "away": [
        {
+        "date": "2026-05-11",
+        "opponent": "Tottenham",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
         "date": "2026-05-24",
         "opponent": "West Ham",
         "gf": 0,
@@ -15472,28 +15479,21 @@
         "gf": 1,
         "ga": 2,
         "res": "L"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Sunderland",
-        "gf": 0,
-        "ga": 0,
-        "res": "D"
        }
       ]
      },
      "venue_games": {
       "home": 42,
-      "away": 23
+      "away": 22
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 42,
-      "away": 41
+      "home": 41,
+      "away": 40
      }
     },
     "goals": {
@@ -15508,7 +15508,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5366,
+      "p": 0.541,
       "fair_odds": "≈5/6",
       "line": 2.5
      },
@@ -15518,16 +15518,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7857,
+        "p": 0.7877,
         "fair_odds": "≈2/7"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2143,
+        "p": 0.2123,
         "fair_odds": "≈7/2"
        },
-       "model_p": 0.7578,
+       "model_p": 0.7646,
        "league_p": 0.7976
       },
       {
@@ -15535,45 +15535,45 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5366,
+        "p": 0.541,
         "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4634,
+        "p": 0.459,
         "fair_odds": "≈6/5"
        },
-       "model_p": 0.4997,
-       "league_p": 0.5524
+       "model_p": 0.5096,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3031,
+        "p": 0.3071,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6969,
+        "p": 0.6929,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.2799,
-       "league_p": 0.3131
+       "model_p": 0.2888,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.52,
-       1.15
+       1.53,
+       1.18
       ]
      },
      "explanation": [
-      "The score model expects about 1.5 goals for Bournemouth and 1.1 for Leeds.",
+      "The score model expects about 1.5 goals for Bournemouth and 1.2 for Leeds.",
       "Premier League matches average 2.84 goals; 55% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Premier League rate for each line"
@@ -15590,25 +15590,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5562,
+      "p": 0.5603,
       "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5562,
+       "p": 0.5603,
        "fair_odds": "≈4/5"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4438,
+       "p": 0.4397,
        "fair_odds": "≈5/4"
       }
      ],
-     "model_p": 0.5456,
-     "league_p": 0.5607,
+     "model_p": 0.5543,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -15887,8 +15887,8 @@
   },
   "PL-2627-brentford-v-nottm-forest": {
    "match_id": "PL-2627-brentford-v-nottm-forest",
-   "record_id": "PL-2627-brentford-v-nottm-forest#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-brentford-v-nottm-forest#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -15913,31 +15913,31 @@
      "pick": {
       "key": "H",
       "label": "Brentford win",
-      "p": 0.4387,
+      "p": 0.44,
       "fair_odds": "≈5/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Brentford win",
-       "p": 0.4387,
+       "p": 0.44,
        "fair_odds": "≈5/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2727,
+       "p": 0.2713,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Nott'm Forest win",
-       "p": 0.2885,
+       "p": 0.2887,
        "fair_odds": "≈5/2"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -16019,12 +16019,12 @@
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 41,
+      "home": 40,
       "away": 41
      }
     },
@@ -16040,7 +16040,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.544,
+      "p": 0.5458,
       "fair_odds": "≈5/6",
       "line": 2.5
      },
@@ -16059,7 +16059,7 @@
         "p": 0.2089,
         "fair_odds": "≈4/1"
        },
-       "model_p": 0.7757,
+       "model_p": 0.7761,
        "league_p": 0.7976
       },
       {
@@ -16067,40 +16067,40 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.544,
+        "p": 0.5458,
         "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.456,
+        "p": 0.4542,
         "fair_odds": "≈6/5"
        },
-       "model_p": 0.5243,
-       "league_p": 0.5524
+       "model_p": 0.5256,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3099,
+        "p": 0.3115,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6901,
+        "p": 0.6885,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.3023,
-       "league_p": 0.3131
+       "model_p": 0.3035,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.55,
+       1.56,
        1.22
       ]
      },
@@ -16122,25 +16122,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5627,
+      "p": 0.5643,
       "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5627,
+       "p": 0.5643,
        "fair_odds": "≈4/5"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4373,
+       "p": 0.4357,
        "fair_odds": "≈5/4"
       }
      ],
-     "model_p": 0.5672,
-     "league_p": 0.5607,
+     "model_p": 0.5675,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -16953,8 +16953,8 @@
   },
   "PL-2627-coventry-v-sunderland": {
    "match_id": "PL-2627-coventry-v-sunderland",
-   "record_id": "PL-2627-coventry-v-sunderland#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-coventry-v-sunderland#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -16981,31 +16981,31 @@
      "pick": {
       "key": "H",
       "label": "Coventry win",
-      "p": 0.4116,
+      "p": 0.4137,
       "fair_odds": "≈11/8"
      },
      "selections": [
       {
        "key": "H",
        "label": "Coventry win",
-       "p": 0.4116,
+       "p": 0.4137,
        "fair_odds": "≈11/8"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2674,
+       "p": 0.265,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Sunderland win",
-       "p": 0.321,
+       "p": 0.3213,
        "fair_odds": "≈2/1"
       }
      ],
      "method": "Premier League + Championship Dixon-Coles, shrunk 50% toward league averages",
-     "training_matches": 1918,
+     "training_matches": 1913,
      "form": {
       "home": [
        {
@@ -17080,18 +17080,18 @@
       "away": 23
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 45,
-      "away": 42
+      "away": 41
      },
      "pooled_raw": [
-      0.4089,
-      0.2728,
-      0.3183
+      0.4119,
+      0.2689,
+      0.3192
      ]
     },
     "goals": {
@@ -17106,7 +17106,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5211,
+      "p": 0.526,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -17116,16 +17116,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7705,
+        "p": 0.7731,
         "fair_odds": "≈3/10"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2295,
+        "p": 0.2269,
         "fair_odds": "≈100/30"
        },
-       "model_p": 0.7073,
+       "model_p": 0.716,
        "league_p": 0.7976
       },
       {
@@ -17133,45 +17133,45 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5211,
+        "p": 0.526,
         "fair_odds": "≈10/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4789,
+        "p": 0.474,
         "fair_odds": "≈11/10"
        },
-       "model_p": 0.4481,
-       "league_p": 0.5524
+       "model_p": 0.4596,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2899,
+        "p": 0.2941,
         "fair_odds": "≈5/2"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7101,
+        "p": 0.7059,
         "fair_odds": "≈2/5"
        },
-       "model_p": 0.2357,
-       "league_p": 0.3131
+       "model_p": 0.2452,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.33,
-       1.14
+       1.35,
+       1.16
       ]
      },
      "explanation": [
-      "The score model expects about 1.3 goals for Coventry and 1.1 for Sunderland.",
+      "The score model expects about 1.4 goals for Coventry and 1.2 for Sunderland.",
       "Premier League matches average 2.84 goals; 55% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Premier League rate for each line"
@@ -17188,25 +17188,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5428,
+      "p": 0.5469,
       "fair_odds": "≈5/6"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5428,
+       "p": 0.5469,
        "fair_odds": "≈5/6"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4572,
+       "p": 0.4531,
        "fair_odds": "≈6/5"
       }
      ],
-     "model_p": 0.5011,
-     "league_p": 0.5607,
+     "model_p": 0.5097,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -17462,13 +17462,13 @@
      "market": "btts",
      "key": "yes",
      "label": "Yes",
-     "p": 0.5428,
-     "credible_p": 0.5436,
+     "p": 0.5469,
+     "credible_p": 0.5476,
      "n": 409,
      "status": "provisional",
      "strength": "weak",
      "basis": "league-anchored blend, 409 backtest matches",
-     "lower_bound": 0.5031
+     "lower_bound": 0.5071
     },
     "best_value": {
      "decision": "no_bet",
@@ -17479,8 +17479,8 @@
   },
   "PL-2627-hull-v-ipswich": {
    "match_id": "PL-2627-hull-v-ipswich",
-   "record_id": "PL-2627-hull-v-ipswich#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-hull-v-ipswich#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -17508,31 +17508,31 @@
      "pick": {
       "key": "H",
       "label": "Hull win",
-      "p": 0.3858,
+      "p": 0.3842,
       "fair_odds": "≈13/8"
      },
      "selections": [
       {
        "key": "H",
        "label": "Hull win",
-       "p": 0.3858,
+       "p": 0.3842,
        "fair_odds": "≈13/8"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2564,
+       "p": 0.255,
        "fair_odds": "≈3/1"
       },
       {
        "key": "A",
        "label": "Ipswich win",
-       "p": 0.3577,
+       "p": 0.3608,
        "fair_odds": "≈7/4"
       }
      ],
      "method": "Premier League + Championship Dixon-Coles, shrunk 50% toward league averages",
-     "training_matches": 1918,
+     "training_matches": 1913,
      "form": {
       "home": [
        {
@@ -17554,13 +17554,6 @@
         "opponent": "Everton",
         "gf": 2,
         "ga": 2,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Brentford",
-        "gf": 1,
-        "ga": 1,
         "res": "D"
        }
       ],
@@ -17603,22 +17596,22 @@
       ]
      },
      "venue_games": {
-      "home": 4,
+      "home": 3,
       "away": 23
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 48,
+      "home": 47,
       "away": 46
      },
      "pooled_raw": [
-      0.3574,
-      0.251,
-      0.3916
+      0.3528,
+      0.2489,
+      0.3983
      ]
     },
     "goals": {
@@ -17633,7 +17626,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5509,
+      "p": 0.5538,
       "fair_odds": "≈4/5",
       "line": 2.5
      },
@@ -17643,16 +17636,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7929,
+        "p": 0.7937,
         "fair_odds": "≈1/4"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2071,
+        "p": 0.2063,
         "fair_odds": "≈4/1"
        },
-       "model_p": 0.7819,
+       "model_p": 0.7847,
        "league_p": 0.7976
       },
       {
@@ -17660,41 +17653,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5509,
+        "p": 0.5538,
         "fair_odds": "≈4/5"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4491,
+        "p": 0.4462,
         "fair_odds": "≈5/4"
        },
-       "model_p": 0.5475,
-       "league_p": 0.5524
+       "model_p": 0.5522,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3164,
+        "p": 0.3191,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6836,
+        "p": 0.6809,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.3241,
-       "league_p": 0.3131
+       "model_p": 0.3286,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
        1.4,
-       1.47
+       1.5
       ]
      },
      "explanation": [
@@ -17715,25 +17708,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.567,
-      "fair_odds": "≈4/5"
+      "p": 0.5693,
+      "fair_odds": "≈8/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.567,
-       "fair_odds": "≈4/5"
+       "p": 0.5693,
+       "fair_odds": "≈8/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.433,
-       "fair_odds": "≈5/4"
+       "p": 0.4307,
+       "fair_odds": "≈11/8"
       }
      ],
-     "model_p": 0.5815,
-     "league_p": 0.5607,
+     "model_p": 0.5844,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -17989,13 +17982,13 @@
      "market": "btts",
      "key": "yes",
      "label": "Yes",
-     "p": 0.567,
-     "credible_p": 0.5667,
+     "p": 0.5693,
+     "credible_p": 0.569,
      "n": 409,
      "status": "provisional",
      "strength": "weak",
      "basis": "league-anchored blend, 409 backtest matches",
-     "lower_bound": 0.5264
+     "lower_bound": 0.5287
     },
     "best_value": {
      "decision": "no_bet",
@@ -18006,8 +17999,8 @@
   },
   "PL-2627-man-city-v-brighton": {
    "match_id": "PL-2627-man-city-v-brighton",
-   "record_id": "PL-2627-man-city-v-brighton#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-man-city-v-brighton#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -18032,31 +18025,31 @@
      "pick": {
       "key": "H",
       "label": "Man City win",
-      "p": 0.5552,
+      "p": 0.5542,
       "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "H",
        "label": "Man City win",
-       "p": 0.5552,
+       "p": 0.5542,
        "fair_odds": "≈4/5"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2332,
+       "p": 0.2327,
        "fair_odds": "≈100/30"
       },
       {
        "key": "A",
        "label": "Brighton win",
-       "p": 0.2116,
+       "p": 0.2131,
        "fair_odds": "≈7/2"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -18097,6 +18090,13 @@
       ],
       "away": [
        {
+        "date": "2026-05-02",
+        "opponent": "Newcastle",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       },
+       {
         "date": "2026-05-17",
         "opponent": "Leeds",
         "gf": 0,
@@ -18123,28 +18123,21 @@
         "gf": 2,
         "ga": 0,
         "res": "W"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Liverpool",
-        "gf": 0,
-        "ga": 2,
-        "res": "L"
        }
       ]
      },
      "venue_games": {
       "home": 42,
-      "away": 42
+      "away": 41
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 42,
-      "away": 41
+      "away": 40
      }
     },
     "goals": {
@@ -18159,7 +18152,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5724,
+      "p": 0.5737,
       "fair_odds": "≈8/11",
       "line": 2.5
      },
@@ -18169,16 +18162,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.8096,
+        "p": 0.8093,
         "fair_odds": "≈2/9"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.1904,
+        "p": 0.1907,
         "fair_odds": "≈9/2"
        },
-       "model_p": 0.8375,
+       "model_p": 0.8367,
        "league_p": 0.7976
       },
       {
@@ -18186,34 +18179,34 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5724,
+        "p": 0.5737,
         "fair_odds": "≈8/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4276,
+        "p": 0.4263,
         "fair_odds": "≈11/8"
        },
-       "model_p": 0.6191,
-       "league_p": 0.5524
+       "model_p": 0.6185,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3381,
+        "p": 0.3392,
         "fair_odds": "≈2/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6619,
+        "p": 0.6608,
         "fair_odds": "≈1/2"
        },
-       "model_p": 0.3964,
-       "league_p": 0.3131
+       "model_p": 0.3958,
+       "league_p": 0.315
       }
      ],
      "inputs": {
@@ -18241,25 +18234,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5757,
+      "p": 0.5771,
       "fair_odds": "≈8/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5757,
+       "p": 0.5771,
        "fair_odds": "≈8/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4243,
+       "p": 0.4229,
        "fair_odds": "≈11/8"
       }
      ],
-     "model_p": 0.6106,
-     "league_p": 0.5607,
+     "model_p": 0.6102,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -24399,8 +24392,8 @@
   },
   "PL-2627-tottenham-v-crystal-palace": {
    "match_id": "PL-2627-tottenham-v-crystal-palace",
-   "record_id": "PL-2627-tottenham-v-crystal-palace#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-tottenham-v-crystal-palace#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -24425,31 +24418,31 @@
      "pick": {
       "key": "H",
       "label": "Tottenham win",
-      "p": 0.4339,
-      "fair_odds": "≈5/4"
+      "p": 0.4314,
+      "fair_odds": "≈11/8"
      },
      "selections": [
       {
        "key": "H",
        "label": "Tottenham win",
-       "p": 0.4339,
-       "fair_odds": "≈5/4"
+       "p": 0.4314,
+       "fair_odds": "≈11/8"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2722,
+       "p": 0.2712,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Crystal Palace win",
-       "p": 0.2939,
-       "fair_odds": "≈5/2"
+       "p": 0.2974,
+       "fair_odds": "≈9/4"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -24531,13 +24524,13 @@
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 41,
-      "away": 41
+      "away": 40
      }
     },
     "goals": {
@@ -24552,7 +24545,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5453,
+      "p": 0.5471,
       "fair_odds": "≈5/6",
       "line": 2.5
      },
@@ -24562,16 +24555,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.792,
+        "p": 0.7921,
         "fair_odds": "≈1/4"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.208,
+        "p": 0.2079,
         "fair_odds": "≈4/1"
        },
-       "model_p": 0.7789,
+       "model_p": 0.7792,
        "league_p": 0.7976
       },
       {
@@ -24579,41 +24572,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5453,
+        "p": 0.5471,
         "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4547,
+        "p": 0.4529,
         "fair_odds": "≈6/5"
        },
-       "model_p": 0.5288,
-       "league_p": 0.5524
+       "model_p": 0.53,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3111,
+        "p": 0.3127,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6889,
+        "p": 0.6873,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.3065,
-       "league_p": 0.3131
+       "model_p": 0.3076,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
        1.55,
-       1.24
+       1.25
       ]
      },
      "explanation": [
@@ -24634,25 +24627,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.564,
+      "p": 0.5657,
       "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.564,
+       "p": 0.5657,
        "fair_odds": "≈4/5"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.436,
+       "p": 0.4343,
        "fair_odds": "≈5/4"
       }
      ],
-     "model_p": 0.5716,
-     "league_p": 0.5607,
+     "model_p": 0.5725,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -27027,8 +27020,8 @@
   },
   "PL-2627-aston-villa-v-fulham": {
    "match_id": "PL-2627-aston-villa-v-fulham",
-   "record_id": "PL-2627-aston-villa-v-fulham#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-aston-villa-v-fulham#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -27053,31 +27046,31 @@
      "pick": {
       "key": "H",
       "label": "Aston Villa win",
-      "p": 0.456,
+      "p": 0.4583,
       "fair_odds": "≈6/5"
      },
      "selections": [
       {
        "key": "H",
        "label": "Aston Villa win",
-       "p": 0.456,
+       "p": 0.4583,
        "fair_odds": "≈6/5"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.278,
+       "p": 0.2769,
        "fair_odds": "≈5/2"
       },
       {
        "key": "A",
        "label": "Fulham win",
-       "p": 0.266,
+       "p": 0.2648,
        "fair_odds": "≈11/4"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -27159,9 +27152,9 @@
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 42,
@@ -27180,8 +27173,8 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5344,
-      "fair_odds": "≈10/11",
+      "p": 0.5356,
+      "fair_odds": "≈5/6",
       "line": 2.5
      },
      "lines": [
@@ -27190,16 +27183,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7841,
+        "p": 0.7837,
         "fair_odds": "≈2/7"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2159,
+        "p": 0.2163,
         "fair_odds": "≈7/2"
        },
-       "model_p": 0.7526,
+       "model_p": 0.7511,
        "league_p": 0.7976
       },
       {
@@ -27207,41 +27200,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5344,
-        "fair_odds": "≈10/11"
+        "p": 0.5356,
+        "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4656,
-        "fair_odds": "≈11/10"
+        "p": 0.4644,
+        "fair_odds": "≈6/5"
        },
-       "model_p": 0.4926,
-       "league_p": 0.5524
+       "model_p": 0.4914,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3013,
+        "p": 0.3023,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6987,
+        "p": 0.6977,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.2736,
-       "league_p": 0.3131
+       "model_p": 0.2726,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
        1.53,
-       1.12
+       1.11
       ]
      },
      "explanation": [
@@ -27262,25 +27255,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5539,
+      "p": 0.5549,
       "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5539,
+       "p": 0.5549,
        "fair_odds": "≈4/5"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4461,
+       "p": 0.4451,
        "fair_odds": "≈5/4"
       }
      ],
-     "model_p": 0.5381,
-     "league_p": 0.5607,
+     "model_p": 0.5362,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -27541,13 +27534,13 @@
      "market": "btts",
      "key": "yes",
      "label": "Yes",
-     "p": 0.5539,
-     "credible_p": 0.5542,
+     "p": 0.5549,
+     "credible_p": 0.5553,
      "n": 409,
      "status": "provisional",
      "strength": "weak",
      "basis": "league-anchored blend, 409 backtest matches",
-     "lower_bound": 0.5138
+     "lower_bound": 0.5149
     },
     "best_value": {
      "decision": "no_bet",
@@ -32887,8 +32880,8 @@
   },
   "PL-2627-liverpool-v-arsenal": {
    "match_id": "PL-2627-liverpool-v-arsenal",
-   "record_id": "PL-2627-liverpool-v-arsenal#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-liverpool-v-arsenal#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -32913,33 +32906,40 @@
      "pick": {
       "key": "A",
       "label": "Arsenal win",
-      "p": 0.4256,
+      "p": 0.43,
       "fair_odds": "≈11/8"
      },
      "selections": [
       {
        "key": "H",
        "label": "Liverpool win",
-       "p": 0.2889,
+       "p": 0.2866,
        "fair_odds": "≈5/2"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2855,
+       "p": 0.2834,
        "fair_odds": "≈5/2"
       },
       {
        "key": "A",
        "label": "Arsenal win",
-       "p": 0.4256,
+       "p": 0.43,
        "fair_odds": "≈11/8"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
+       {
+        "date": "2026-05-09",
+        "opponent": "Chelsea",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
        {
         "date": "2026-05-24",
         "opponent": "Brentford",
@@ -32967,13 +32967,6 @@
         "gf": 0,
         "ga": 3,
         "res": "L"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Brighton",
-        "gf": 2,
-        "ga": 0,
-        "res": "W"
        }
       ],
       "away": [
@@ -33015,16 +33008,16 @@
       ]
      },
      "venue_games": {
-      "home": 42,
+      "home": 41,
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 41,
+      "home": 40,
       "away": 42
      }
     },
@@ -33040,7 +33033,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5295,
+      "p": 0.5317,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -33050,16 +33043,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7804,
+        "p": 0.7808,
         "fair_odds": "≈2/7"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2196,
+        "p": 0.2192,
         "fair_odds": "≈7/2"
        },
-       "model_p": 0.7403,
+       "model_p": 0.7416,
        "league_p": 0.7976
       },
       {
@@ -33067,41 +33060,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5295,
+        "p": 0.5317,
         "fair_odds": "≈10/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4705,
+        "p": 0.4683,
         "fair_odds": "≈11/10"
        },
-       "model_p": 0.4762,
-       "league_p": 0.5524
+       "model_p": 0.4787,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.297,
+        "p": 0.2989,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.703,
+        "p": 0.7011,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.2594,
-       "league_p": 0.3131
+       "model_p": 0.2615,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
        1.14,
-       1.44
+       1.45
       ]
      },
      "explanation": [
@@ -33122,25 +33115,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5518,
+      "p": 0.5535,
       "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5518,
+       "p": 0.5535,
        "fair_odds": "≈4/5"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4482,
+       "p": 0.4465,
        "fair_odds": "≈5/4"
       }
      ],
-     "model_p": 0.531,
-     "league_p": 0.5607,
+     "model_p": 0.5317,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -37694,8 +37687,8 @@
   },
   "PL-2627-newcastle-v-everton": {
    "match_id": "PL-2627-newcastle-v-everton",
-   "record_id": "PL-2627-newcastle-v-everton#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-newcastle-v-everton#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -37720,31 +37713,31 @@
      "pick": {
       "key": "H",
       "label": "Newcastle win",
-      "p": 0.4526,
-      "fair_odds": "≈6/5"
+      "p": 0.4488,
+      "fair_odds": "≈5/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Newcastle win",
-       "p": 0.4526,
-       "fair_odds": "≈6/5"
+       "p": 0.4488,
+       "fair_odds": "≈5/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2872,
+       "p": 0.2865,
        "fair_odds": "≈5/2"
       },
       {
        "key": "A",
        "label": "Everton win",
-       "p": 0.2601,
+       "p": 0.2646,
        "fair_odds": "≈11/4"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -37826,12 +37819,12 @@
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 42,
+      "home": 41,
       "away": 41
      }
     },
@@ -37847,7 +37840,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5233,
+      "p": 0.525,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -37857,13 +37850,13 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7756,
+        "p": 0.7755,
         "fair_odds": "≈2/7"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2244,
+        "p": 0.2245,
         "fair_odds": "≈7/2"
        },
        "model_p": 0.7241,
@@ -37874,41 +37867,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5233,
+        "p": 0.525,
         "fair_odds": "≈10/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4767,
+        "p": 0.475,
         "fair_odds": "≈11/10"
        },
-       "model_p": 0.4556,
-       "league_p": 0.5524
+       "model_p": 0.4562,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2917,
+        "p": 0.2932,
         "fair_odds": "≈5/2"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7083,
+        "p": 0.7068,
         "fair_odds": "≈2/5"
        },
-       "model_p": 0.2419,
-       "league_p": 0.3131
+       "model_p": 0.2424,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.45,
-       1.05
+       1.44,
+       1.06
       ]
      },
      "explanation": [
@@ -37929,25 +37922,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5451,
+      "p": 0.5469,
       "fair_odds": "≈5/6"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5451,
+       "p": 0.5469,
        "fair_odds": "≈5/6"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4549,
+       "p": 0.4531,
        "fair_odds": "≈6/5"
       }
      ],
-     "model_p": 0.5086,
-     "league_p": 0.5607,
+     "model_p": 0.5096,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -46752,8 +46745,8 @@
   },
   "PL-2627-everton-v-coventry": {
    "match_id": "PL-2627-everton-v-coventry",
-   "record_id": "PL-2627-everton-v-coventry#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-everton-v-coventry#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -46780,31 +46773,31 @@
      "pick": {
       "key": "H",
       "label": "Everton win",
-      "p": 0.4813,
+      "p": 0.4827,
       "fair_odds": "≈11/10"
      },
      "selections": [
       {
        "key": "H",
        "label": "Everton win",
-       "p": 0.4813,
+       "p": 0.4827,
        "fair_odds": "≈11/10"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2515,
+       "p": 0.2506,
        "fair_odds": "≈3/1"
       },
       {
        "key": "A",
        "label": "Coventry win",
-       "p": 0.2672,
+       "p": 0.2667,
        "fair_odds": "≈11/4"
       }
      ],
      "method": "Premier League + Championship Dixon-Coles, shrunk 50% toward league averages",
-     "training_matches": 1918,
+     "training_matches": 1913,
      "form": {
       "home": [
        {
@@ -46879,18 +46872,18 @@
       "away": 4
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 41,
       "away": 45
      },
      "pooled_raw": [
-      0.5483,
-      0.2411,
-      0.2106
+      0.5498,
+      0.2402,
+      0.21
      ]
     },
     "goals": {
@@ -46905,7 +46898,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5365,
+      "p": 0.5377,
       "fair_odds": "≈5/6",
       "line": 2.5
      },
@@ -46915,16 +46908,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7825,
+        "p": 0.7821,
         "fair_odds": "≈2/7"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2175,
+        "p": 0.2179,
         "fair_odds": "≈7/2"
        },
-       "model_p": 0.7472,
+       "model_p": 0.7459,
        "league_p": 0.7976
       },
       {
@@ -46932,34 +46925,34 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5365,
+        "p": 0.5377,
         "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4635,
+        "p": 0.4623,
         "fair_odds": "≈6/5"
        },
-       "model_p": 0.4995,
-       "league_p": 0.5524
+       "model_p": 0.4984,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3031,
+        "p": 0.3041,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6969,
+        "p": 0.6959,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.2797,
-       "league_p": 0.3131
+       "model_p": 0.2788,
+       "league_p": 0.315
       }
      ],
      "inputs": {
@@ -46987,25 +46980,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5447,
+      "p": 0.5456,
       "fair_odds": "≈5/6"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5447,
+       "p": 0.5456,
        "fair_odds": "≈5/6"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4553,
+       "p": 0.4544,
        "fair_odds": "≈6/5"
       }
      ],
-     "model_p": 0.5072,
-     "league_p": 0.5607,
+     "model_p": 0.5054,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -47261,13 +47254,13 @@
      "market": "btts",
      "key": "yes",
      "label": "Yes",
-     "p": 0.5447,
-     "credible_p": 0.5454,
+     "p": 0.5456,
+     "credible_p": 0.5464,
      "n": 409,
      "status": "provisional",
      "strength": "weak",
      "basis": "league-anchored blend, 409 backtest matches",
-     "lower_bound": 0.5049
+     "lower_bound": 0.5059
     },
     "best_value": {
      "decision": "no_bet",
@@ -48348,8 +48341,8 @@
   },
   "PL-2627-leeds-v-tottenham": {
    "match_id": "PL-2627-leeds-v-tottenham",
-   "record_id": "PL-2627-leeds-v-tottenham#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-leeds-v-tottenham#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -48374,31 +48367,31 @@
      "pick": {
       "key": "H",
       "label": "Leeds win",
-      "p": 0.4354,
+      "p": 0.4417,
       "fair_odds": "≈5/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Leeds win",
-       "p": 0.4354,
+       "p": 0.4417,
        "fair_odds": "≈5/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2716,
+       "p": 0.2673,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Tottenham win",
-       "p": 0.2929,
+       "p": 0.291,
        "fair_odds": "≈5/2"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -48480,12 +48473,12 @@
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 41,
+      "home": 40,
       "away": 41
      }
     },
@@ -48501,8 +48494,8 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5459,
-      "fair_odds": "≈5/6",
+      "p": 0.5508,
+      "fair_odds": "≈4/5",
       "line": 2.5
      },
      "lines": [
@@ -48511,16 +48504,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7924,
+        "p": 0.7946,
         "fair_odds": "≈1/4"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2076,
+        "p": 0.2054,
         "fair_odds": "≈4/1"
        },
-       "model_p": 0.7802,
+       "model_p": 0.7877,
        "league_p": 0.7976
       },
       {
@@ -48528,45 +48521,45 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5459,
-        "fair_odds": "≈5/6"
+        "p": 0.5508,
+        "fair_odds": "≈4/5"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4541,
-        "fair_odds": "≈6/5"
+        "p": 0.4492,
+        "fair_odds": "≈5/4"
        },
-       "model_p": 0.5307,
-       "league_p": 0.5524
+       "model_p": 0.5423,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3116,
+        "p": 0.3162,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6884,
+        "p": 0.6838,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.3082,
-       "league_p": 0.3131
+       "model_p": 0.3191,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.56,
-       1.24
+       1.59,
+       1.26
       ]
      },
      "explanation": [
-      "The score model expects about 1.6 goals for Leeds and 1.2 for Tottenham.",
+      "The score model expects about 1.6 goals for Leeds and 1.3 for Tottenham.",
       "Premier League matches average 2.84 goals; 55% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Premier League rate for each line"
@@ -48583,25 +48576,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5643,
-      "fair_odds": "≈4/5"
+      "p": 0.5681,
+      "fair_odds": "≈8/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5643,
-       "fair_odds": "≈4/5"
+       "p": 0.5681,
+       "fair_odds": "≈8/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4357,
-       "fair_odds": "≈5/4"
+       "p": 0.4319,
+       "fair_odds": "≈11/8"
       }
      ],
-     "model_p": 0.5728,
-     "league_p": 0.5607,
+     "model_p": 0.5804,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -53628,8 +53621,8 @@
   },
   "PL-2627-arsenal-v-hull": {
    "match_id": "PL-2627-arsenal-v-hull",
-   "record_id": "PL-2627-arsenal-v-hull#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-arsenal-v-hull#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -53656,31 +53649,31 @@
      "pick": {
       "key": "H",
       "label": "Arsenal win",
-      "p": 0.6316,
+      "p": 0.635,
       "fair_odds": "≈4/7"
      },
      "selections": [
       {
        "key": "H",
        "label": "Arsenal win",
-       "p": 0.6316,
+       "p": 0.635,
        "fair_odds": "≈4/7"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.1869,
+       "p": 0.1845,
        "fair_odds": "≈9/2"
       },
       {
        "key": "A",
        "label": "Hull win",
-       "p": 0.1815,
+       "p": 0.1805,
        "fair_odds": "≈9/2"
       }
      ],
      "method": "Premier League + Championship Dixon-Coles, shrunk 50% toward league averages",
-     "training_matches": 1918,
+     "training_matches": 1913,
      "form": {
       "home": [
        {
@@ -53755,18 +53748,18 @@
       "away": 4
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 42,
-      "away": 48
+      "away": 47
      },
      "pooled_raw": [
-      0.8489,
-      0.112,
-      0.0391
+      0.8544,
+      0.1079,
+      0.0376
      ]
     },
     "goals": {
@@ -53781,7 +53774,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.57,
+      "p": 0.5741,
       "fair_odds": "≈8/11",
       "line": 2.5
      },
@@ -53791,16 +53784,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.8054,
+        "p": 0.807,
         "fair_odds": "≈1/4"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.1946,
+        "p": 0.193,
         "fair_odds": "≈4/1"
        },
-       "model_p": 0.8235,
+       "model_p": 0.8289,
        "league_p": 0.7976
       },
       {
@@ -53808,45 +53801,45 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.57,
+        "p": 0.5741,
         "fair_odds": "≈8/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.43,
+        "p": 0.4259,
         "fair_odds": "≈11/8"
        },
-       "model_p": 0.611,
-       "league_p": 0.5524
+       "model_p": 0.6198,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3355,
+        "p": 0.3396,
         "fair_odds": "≈2/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6645,
+        "p": 0.6604,
         "fair_odds": "≈1/2"
        },
-       "model_p": 0.3878,
-       "league_p": 0.3131
+       "model_p": 0.3972,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       2.72,
+       2.76,
        0.44
       ]
      },
      "explanation": [
-      "The score model expects about 2.7 goals for Arsenal and 0.4 for Hull.",
+      "The score model expects about 2.8 goals for Arsenal and 0.4 for Hull.",
       "Premier League matches average 2.84 goals; 55% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Premier League rate for each line"
@@ -53863,25 +53856,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5074,
+      "p": 0.506,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4926,
+       "p": 0.494,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5074,
+       "p": 0.506,
        "fair_odds": "≈Evens"
       }
      ],
-     "model_p": 0.3338,
-     "league_p": 0.5607,
+     "model_p": 0.3332,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -54138,13 +54131,13 @@
      "key": "over",
      "line": 2.5,
      "label": "Over 2.5",
-     "p": 0.57,
-     "credible_p": 0.5692,
+     "p": 0.5741,
+     "credible_p": 0.5732,
      "n": 409,
      "status": "provisional",
      "strength": "weak",
      "basis": "league-anchored blend, 409 backtest matches",
-     "lower_bound": 0.5289
+     "lower_bound": 0.533
     },
     "best_value": {
      "decision": "no_bet",
@@ -56286,8 +56279,8 @@
   },
   "PL-2627-fulham-v-newcastle": {
    "match_id": "PL-2627-fulham-v-newcastle",
-   "record_id": "PL-2627-fulham-v-newcastle#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-fulham-v-newcastle#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -56312,31 +56305,31 @@
      "pick": {
       "key": "A",
       "label": "Newcastle win",
-      "p": 0.3771,
-      "fair_odds": "≈13/8"
+      "p": 0.3708,
+      "fair_odds": "≈7/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Fulham win",
-       "p": 0.3466,
+       "p": 0.354,
        "fair_odds": "≈15/8"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2764,
-       "fair_odds": "≈5/2"
+       "p": 0.2752,
+       "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Newcastle win",
-       "p": 0.3771,
-       "fair_odds": "≈13/8"
+       "p": 0.3708,
+       "fair_odds": "≈7/4"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -56377,6 +56370,13 @@
       ],
       "away": [
        {
+        "date": "2026-05-10",
+        "opponent": "Nott'm Forest",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
         "date": "2026-05-24",
         "opponent": "Fulham",
         "gf": 0,
@@ -56403,28 +56403,21 @@
         "gf": 1,
         "ga": 4,
         "res": "L"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Crystal Palace",
-        "gf": 2,
-        "ga": 0,
-        "res": "W"
        }
       ]
      },
      "venue_games": {
       "home": 42,
-      "away": 42
+      "away": 41
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 41,
-      "away": 42
+      "away": 41
      }
     },
     "goals": {
@@ -56439,7 +56432,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5446,
+      "p": 0.5462,
       "fair_odds": "≈5/6",
       "line": 2.5
      },
@@ -56458,7 +56451,7 @@
         "p": 0.2085,
         "fair_odds": "≈4/1"
        },
-       "model_p": 0.7773,
+       "model_p": 0.7772,
        "league_p": 0.7976
       },
       {
@@ -56466,41 +56459,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5446,
+        "p": 0.5462,
         "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4554,
+        "p": 0.4538,
         "fair_odds": "≈6/5"
        },
-       "model_p": 0.5263,
-       "league_p": 0.5524
+       "model_p": 0.5269,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3104,
+        "p": 0.3119,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6896,
+        "p": 0.6881,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.3042,
-       "league_p": 0.3131
+       "model_p": 0.3047,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.36,
-       1.42
+       1.37,
+       1.41
       ]
      },
      "explanation": [
@@ -56521,25 +56514,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5651,
+      "p": 0.5667,
       "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5651,
+       "p": 0.5667,
        "fair_odds": "≈4/5"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4349,
+       "p": 0.4333,
        "fair_odds": "≈5/4"
       }
      ],
-     "model_p": 0.5755,
-     "league_p": 0.5607,
+     "model_p": 0.5756,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -60546,8 +60539,8 @@
   },
   "PL-2627-nottm-forest-v-man-city": {
    "match_id": "PL-2627-nottm-forest-v-man-city",
-   "record_id": "PL-2627-nottm-forest-v-man-city#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-nottm-forest-v-man-city#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -60572,31 +60565,31 @@
      "pick": {
       "key": "A",
       "label": "Man City win",
-      "p": 0.4967,
+      "p": 0.4955,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "H",
        "label": "Nott'm Forest win",
-       "p": 0.2361,
+       "p": 0.2376,
        "fair_odds": "≈100/30"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2673,
+       "p": 0.2669,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Man City win",
-       "p": 0.4967,
+       "p": 0.4955,
        "fair_odds": "≈Evens"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -60678,9 +60671,9 @@
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 41,
@@ -60699,7 +60692,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5399,
+      "p": 0.5408,
       "fair_odds": "≈5/6",
       "line": 2.5
      },
@@ -60709,16 +60702,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.788,
+        "p": 0.7875,
         "fair_odds": "≈2/7"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.212,
+        "p": 0.2125,
         "fair_odds": "≈7/2"
        },
-       "model_p": 0.7657,
+       "model_p": 0.7638,
        "league_p": 0.7976
       },
       {
@@ -60726,41 +60719,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5399,
+        "p": 0.5408,
         "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4601,
+        "p": 0.4592,
         "fair_odds": "≈6/5"
        },
-       "model_p": 0.5108,
-       "league_p": 0.5524
+       "model_p": 0.5089,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3061,
+        "p": 0.3069,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6939,
+        "p": 0.6931,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.2899,
-       "league_p": 0.3131
+       "model_p": 0.2882,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
        1.07,
-       1.65
+       1.64
       ]
      },
      "explanation": [
@@ -60781,25 +60774,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5551,
+      "p": 0.5561,
       "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5551,
+       "p": 0.5561,
        "fair_odds": "≈4/5"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4449,
+       "p": 0.4439,
        "fair_odds": "≈5/4"
       }
      ],
-     "model_p": 0.5419,
-     "league_p": 0.5607,
+     "model_p": 0.5403,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -64795,8 +64788,8 @@
   },
   "PL-2627-brighton-v-brentford": {
    "match_id": "PL-2627-brighton-v-brentford",
-   "record_id": "PL-2627-brighton-v-brentford#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-brighton-v-brentford#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -64821,31 +64814,31 @@
      "pick": {
       "key": "H",
       "label": "Brighton win",
-      "p": 0.4538,
+      "p": 0.46,
       "fair_odds": "≈6/5"
      },
      "selections": [
       {
        "key": "H",
        "label": "Brighton win",
-       "p": 0.4538,
+       "p": 0.46,
        "fair_odds": "≈6/5"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2488,
+       "p": 0.2466,
        "fair_odds": "≈3/1"
       },
       {
        "key": "A",
        "label": "Brentford win",
-       "p": 0.2974,
-       "fair_odds": "≈9/4"
+       "p": 0.2935,
+       "fair_odds": "≈5/2"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -64886,6 +64879,13 @@
       ],
       "away": [
        {
+        "date": "2026-05-09",
+        "opponent": "Man City",
+        "gf": 0,
+        "ga": 3,
+        "res": "L"
+       },
+       {
         "date": "2026-05-24",
         "opponent": "Liverpool",
         "gf": 1,
@@ -64912,28 +64912,21 @@
         "gf": 2,
         "ga": 2,
         "res": "D"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Hull",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
        }
       ]
      },
      "venue_games": {
       "home": 42,
-      "away": 42
+      "away": 41
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 41,
-      "away": 41
+      "home": 40,
+      "away": 40
      }
     },
     "goals": {
@@ -64948,7 +64941,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5741,
+      "p": 0.5765,
       "fair_odds": "≈8/11",
       "line": 2.5
      },
@@ -64958,16 +64951,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.8107,
+        "p": 0.8111,
         "fair_odds": "≈2/9"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.1893,
+        "p": 0.1889,
         "fair_odds": "≈9/2"
        },
-       "model_p": 0.8413,
+       "model_p": 0.8427,
        "league_p": 0.7976
       },
       {
@@ -64975,41 +64968,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5741,
+        "p": 0.5765,
         "fair_odds": "≈8/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4259,
+        "p": 0.4235,
         "fair_odds": "≈11/8"
        },
-       "model_p": 0.6246,
-       "league_p": 0.5524
+       "model_p": 0.6277,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3399,
-        "fair_odds": "≈2/1"
+        "p": 0.3422,
+        "fair_odds": "≈15/8"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6601,
-        "fair_odds": "≈1/2"
+        "p": 0.6578,
+        "fair_odds": "≈8/15"
        },
-       "model_p": 0.4023,
-       "league_p": 0.3131
+       "model_p": 0.4057,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.8,
-       1.43
+       1.82,
+       1.42
       ]
      },
      "explanation": [
@@ -65030,25 +65023,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5855,
+      "p": 0.5873,
       "fair_odds": "≈8/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5855,
+       "p": 0.5873,
        "fair_odds": "≈8/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4145,
+       "p": 0.4127,
        "fair_odds": "≈11/8"
       }
      ],
-     "model_p": 0.6434,
-     "league_p": 0.5607,
+     "model_p": 0.6443,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -65327,8 +65320,8 @@
   },
   "PL-2627-crystal-palace-v-liverpool": {
    "match_id": "PL-2627-crystal-palace-v-liverpool",
-   "record_id": "PL-2627-crystal-palace-v-liverpool#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-crystal-palace-v-liverpool#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -65353,33 +65346,40 @@
      "pick": {
       "key": "A",
       "label": "Liverpool win",
-      "p": 0.517,
-      "fair_odds": "≈10/11"
+      "p": 0.5081,
+      "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "H",
        "label": "Crystal Palace win",
-       "p": 0.2281,
+       "p": 0.2369,
        "fair_odds": "≈100/30"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2549,
+       "p": 0.255,
        "fair_odds": "≈3/1"
       },
       {
        "key": "A",
        "label": "Liverpool win",
-       "p": 0.517,
-       "fair_odds": "≈10/11"
+       "p": 0.5081,
+       "fair_odds": "≈Evens"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
+       {
+        "date": "2026-05-10",
+        "opponent": "Everton",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
        {
         "date": "2026-05-24",
         "opponent": "Arsenal",
@@ -65407,13 +65407,6 @@
         "gf": 3,
         "ga": 1,
         "res": "W"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Newcastle",
-        "gf": 0,
-        "ga": 2,
-        "res": "L"
        }
       ],
       "away": [
@@ -65455,17 +65448,17 @@
       ]
      },
      "venue_games": {
-      "home": 42,
+      "home": 41,
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 41,
-      "away": 41
+      "home": 40,
+      "away": 40
      }
     },
     "goals": {
@@ -65480,7 +65473,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5519,
+      "p": 0.5543,
       "fair_odds": "≈4/5",
       "line": 2.5
      },
@@ -65490,16 +65483,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7964,
+        "p": 0.7969,
         "fair_odds": "≈1/4"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2036,
+        "p": 0.2031,
         "fair_odds": "≈4/1"
        },
-       "model_p": 0.7936,
+       "model_p": 0.7952,
        "league_p": 0.7976
       },
       {
@@ -65507,41 +65500,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5519,
+        "p": 0.5543,
         "fair_odds": "≈4/5"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4481,
+        "p": 0.4457,
         "fair_odds": "≈5/4"
        },
-       "model_p": 0.5506,
-       "league_p": 0.5524
+       "model_p": 0.5538,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3173,
+        "p": 0.3195,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6827,
+        "p": 0.6805,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.3271,
-       "league_p": 0.3131
+       "model_p": 0.3301,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.11,
-       1.77
+       1.14,
+       1.76
       ]
      },
      "explanation": [
@@ -65562,25 +65555,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5629,
+      "p": 0.566,
       "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5629,
+       "p": 0.566,
        "fair_odds": "≈4/5"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4371,
+       "p": 0.434,
        "fair_odds": "≈5/4"
       }
      ],
-     "model_p": 0.568,
-     "league_p": 0.5607,
+     "model_p": 0.5732,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -66391,8 +66384,8 @@
   },
   "PL-2627-ipswich-v-bournemouth": {
    "match_id": "PL-2627-ipswich-v-bournemouth",
-   "record_id": "PL-2627-ipswich-v-bournemouth#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-ipswich-v-bournemouth#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -66419,31 +66412,31 @@
      "pick": {
       "key": "A",
       "label": "Bournemouth win",
-      "p": 0.6105,
-      "fair_odds": "≈8/13"
+      "p": 0.601,
+      "fair_odds": "≈4/6"
      },
      "selections": [
       {
        "key": "H",
        "label": "Ipswich win",
-       "p": 0.1705,
-       "fair_odds": "≈5/1"
+       "p": 0.1775,
+       "fair_odds": "≈9/2"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.219,
+       "p": 0.2215,
        "fair_odds": "≈7/2"
       },
       {
        "key": "A",
        "label": "Bournemouth win",
-       "p": 0.6105,
-       "fair_odds": "≈8/13"
+       "p": 0.601,
+       "fair_odds": "≈4/6"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
        {
@@ -66484,6 +66477,13 @@
       ],
       "away": [
        {
+        "date": "2026-05-09",
+        "opponent": "Fulham",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
         "date": "2026-05-24",
         "opponent": "Nott'm Forest",
         "gf": 1,
@@ -66510,28 +66510,21 @@
         "gf": 1,
         "ga": 5,
         "res": "L"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Man United",
-        "gf": 3,
-        "ga": 0,
-        "res": "W"
        }
       ]
      },
      "venue_games": {
       "home": 23,
-      "away": 42
+      "away": 41
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
       "home": 46,
-      "away": 42
+      "away": 41
      }
     },
     "goals": {
@@ -66546,7 +66539,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5724,
+      "p": 0.5729,
       "fair_odds": "≈8/11",
       "line": 2.5
      },
@@ -66556,16 +66549,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.8095,
-        "fair_odds": "≈2/9"
+        "p": 0.8088,
+        "fair_odds": "≈1/4"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.1905,
-        "fair_odds": "≈9/2"
+        "p": 0.1912,
+        "fair_odds": "≈4/1"
        },
-       "model_p": 0.8371,
+       "model_p": 0.8348,
        "league_p": 0.7976
       },
       {
@@ -66573,41 +66566,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5724,
+        "p": 0.5729,
         "fair_odds": "≈8/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4276,
+        "p": 0.4271,
         "fair_odds": "≈11/8"
        },
-       "model_p": 0.6193,
-       "league_p": 0.5524
+       "model_p": 0.616,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3381,
+        "p": 0.3384,
         "fair_odds": "≈2/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6619,
+        "p": 0.6616,
         "fair_odds": "≈1/2"
        },
-       "model_p": 0.3966,
-       "league_p": 0.3131
+       "model_p": 0.3931,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.06,
-       2.14
+       1.08,
+       2.1
       ]
      },
      "explanation": [
@@ -66628,25 +66621,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5681,
+      "p": 0.5702,
       "fair_odds": "≈8/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5681,
+       "p": 0.5702,
        "fair_odds": "≈8/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4319,
+       "p": 0.4298,
        "fair_odds": "≈11/8"
       }
      ],
-     "model_p": 0.5854,
-     "league_p": 0.5607,
+     "model_p": 0.5872,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -66908,13 +66901,13 @@
      "key": "over",
      "line": 2.5,
      "label": "Over 2.5",
-     "p": 0.5724,
-     "credible_p": 0.5715,
+     "p": 0.5729,
+     "credible_p": 0.572,
      "n": 409,
      "status": "provisional",
      "strength": "weak",
      "basis": "league-anchored blend, 409 backtest matches",
-     "lower_bound": 0.5312
+     "lower_bound": 0.5318
     },
     "best_value": {
      "decision": "no_bet",
@@ -67987,8 +67980,8 @@
   },
   "PL-2627-sunderland-v-chelsea": {
    "match_id": "PL-2627-sunderland-v-chelsea",
-   "record_id": "PL-2627-sunderland-v-chelsea#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-sunderland-v-chelsea#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -68013,33 +68006,40 @@
      "pick": {
       "key": "A",
       "label": "Chelsea win",
-      "p": 0.4359,
+      "p": 0.4352,
       "fair_odds": "≈5/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Sunderland win",
-       "p": 0.2741,
-       "fair_odds": "≈11/4"
+       "p": 0.2789,
+       "fair_odds": "≈5/2"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2899,
+       "p": 0.2859,
        "fair_odds": "≈5/2"
       },
       {
        "key": "A",
        "label": "Chelsea win",
-       "p": 0.4359,
+       "p": 0.4352,
        "fair_odds": "≈5/4"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
+       {
+        "date": "2026-05-09",
+        "opponent": "Man United",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
        {
         "date": "2026-05-24",
         "opponent": "Chelsea",
@@ -68067,13 +68067,6 @@
         "gf": 0,
         "ga": 2,
         "res": "L"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Leeds",
-        "gf": 0,
-        "ga": 0,
-        "res": "D"
        }
       ],
       "away": [
@@ -68115,16 +68108,16 @@
       ]
      },
      "venue_games": {
-      "home": 23,
+      "home": 22,
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 42,
+      "home": 41,
       "away": 41
      }
     },
@@ -68140,7 +68133,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5227,
+      "p": 0.528,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -68150,16 +68143,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7751,
+        "p": 0.7779,
         "fair_odds": "≈2/7"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2249,
+        "p": 0.2221,
         "fair_odds": "≈7/2"
        },
-       "model_p": 0.7226,
+       "model_p": 0.7319,
        "league_p": 0.7976
       },
       {
@@ -68167,41 +68160,41 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5227,
+        "p": 0.528,
         "fair_odds": "≈10/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4773,
+        "p": 0.472,
         "fair_odds": "≈11/10"
        },
-       "model_p": 0.4535,
-       "league_p": 0.5524
+       "model_p": 0.466,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2912,
+        "p": 0.2957,
         "fair_odds": "≈5/2"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7088,
+        "p": 0.7043,
         "fair_odds": "≈2/5"
        },
-       "model_p": 0.2402,
-       "league_p": 0.3131
+       "model_p": 0.2507,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.07,
-       1.42
+       1.1,
+       1.44
       ]
      },
      "explanation": [
@@ -68222,25 +68215,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5457,
+      "p": 0.5502,
       "fair_odds": "≈5/6"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5457,
+       "p": 0.5502,
        "fair_odds": "≈5/6"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4543,
+       "p": 0.4498,
        "fair_odds": "≈6/5"
       }
      ],
-     "model_p": 0.5106,
-     "league_p": 0.5607,
+     "model_p": 0.5205,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
@@ -72224,8 +72217,8 @@
   },
   "PL-2627-man-united-v-aston-villa": {
    "match_id": "PL-2627-man-united-v-aston-villa",
-   "record_id": "PL-2627-man-united-v-aston-villa#r3",
-   "published_at": "2026-10-26T17:03:38.162299+00:00",
+   "record_id": "PL-2627-man-united-v-aston-villa#r4",
+   "published_at": "2026-10-26T17:21:20.441600+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -72250,33 +72243,40 @@
      "pick": {
       "key": "H",
       "label": "Man United win",
-      "p": 0.3871,
-      "fair_odds": "≈13/8"
+      "p": 0.3957,
+      "fair_odds": "≈6/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Man United win",
-       "p": 0.3871,
-       "fair_odds": "≈13/8"
+       "p": 0.3957,
+       "fair_odds": "≈6/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2744,
+       "p": 0.2733,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Aston Villa win",
-       "p": 0.3385,
+       "p": 0.331,
        "fair_odds": "≈2/1"
       }
      ],
      "method": "Frozen Dixon-Coles v1",
-     "training_matches": 840,
+     "training_matches": 835,
      "form": {
       "home": [
+       {
+        "date": "2026-05-03",
+        "opponent": "Liverpool",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
        {
         "date": "2026-05-17",
         "opponent": "Nott'm Forest",
@@ -72304,13 +72304,6 @@
         "gf": 1,
         "ga": 1,
         "res": "D"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Bournemouth",
-        "gf": 0,
-        "ga": 3,
-        "res": "L"
        }
       ],
       "away": [
@@ -72352,16 +72345,16 @@
       ]
      },
      "venue_games": {
-      "home": 42,
+      "home": 41,
       "away": 42
      },
      "league_p": [
-      0.4143,
-      0.2619,
-      0.3238
+      0.4156,
+      0.2611,
+      0.3234
      ],
      "pooled_matches": {
-      "home": 41,
+      "home": 40,
       "away": 42
      }
     },
@@ -72377,7 +72370,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5466,
+      "p": 0.5477,
       "fair_odds": "≈5/6",
       "line": 2.5
      },
@@ -72387,16 +72380,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7929,
+        "p": 0.7925,
         "fair_odds": "≈1/4"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2071,
+        "p": 0.2075,
         "fair_odds": "≈4/1"
        },
-       "model_p": 0.782,
+       "model_p": 0.7807,
        "league_p": 0.7976
       },
       {
@@ -72404,45 +72397,45 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5466,
+        "p": 0.5477,
         "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4534,
+        "p": 0.4523,
         "fair_odds": "≈6/5"
        },
-       "model_p": 0.5331,
-       "league_p": 0.5524
+       "model_p": 0.532,
+       "league_p": 0.5545
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3123,
+        "p": 0.3133,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6877,
+        "p": 0.6867,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.3104,
-       "league_p": 0.3131
+       "model_p": 0.3094,
+       "league_p": 0.315
       }
      ],
      "inputs": {
       "league_mean_goals": 2.84,
       "expected_goals": [
-       1.46,
-       1.35
+       1.47,
+       1.33
       ]
      },
      "explanation": [
-      "The score model expects about 1.5 goals for Man United and 1.4 for Aston Villa.",
+      "The score model expects about 1.5 goals for Man United and 1.3 for Aston Villa.",
       "Premier League matches average 2.84 goals; 55% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Premier League rate for each line"
@@ -72459,25 +72452,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5666,
-      "fair_odds": "≈4/5"
+      "p": 0.5675,
+      "fair_odds": "≈8/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5666,
-       "fair_odds": "≈4/5"
+       "p": 0.5675,
+       "fair_odds": "≈8/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4334,
-       "fair_odds": "≈5/4"
+       "p": 0.4325,
+       "fair_odds": "≈11/8"
       }
      ],
-     "model_p": 0.5802,
-     "league_p": 0.5607,
+     "model_p": 0.5783,
+     "league_p": 0.5629,
      "explanation": [
       "Both teams scored in 56% of Premier League matches in the training data."
      ],
