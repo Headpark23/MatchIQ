@@ -32,7 +32,8 @@ ALLOWLIST_ASSETS = [
 ALLOWLIST_DATA = [
     "matches.json",
     "match_winner_forward.json",
-    "forward_test.json"
+    "forward_test.json",
+    "model_reliability.json"
 ]
 
 def build():

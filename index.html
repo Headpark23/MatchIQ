@@ -2649,6 +2649,171 @@ footer {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ============================================================
+   STRONGEST SIGNALS HOME (Mission 063)
+   One bold element: the floodlit confidence ring on the hero.
+   Everything around it stays quiet.
+   ============================================================ */
+:root {
+  --floodlight: #eaf6ff;
+  --turf: #0c2a1f;
+  --pick: #34d399;
+  --pick-deep: #059669;
+  --other: rgba(148, 163, 184, 0.32);
+  --draw: rgba(203, 213, 225, 0.55);
+}
+.home-view { display: flex; flex-direction: column; gap: 28px; padding-top: 8px; }
+.home-view[hidden], #featured-match[hidden], .research-hub[hidden] { display: none !important; }
+.sig-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 20px; }
+.sig-title { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: clamp(26px, 4vw, 38px); line-height: 1.05; letter-spacing: 0.01em; color: var(--floodlight); }
+.sig-sub { color: var(--muted); font-size: 14px; max-width: 62ch; margin-top: 6px; }
+.sig-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.sig-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line-light); color: var(--muted); background: rgba(255,255,255,0.03); }
+.sig-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dim); }
+.sig-chip.ok .dot { background: var(--pick); }
+.sig-chip.warn { color: #fcd34d; border-color: rgba(245, 158, 11, 0.35); }
+.sig-chip.warn .dot { background: var(--amber); }
+.sig-notice { border: 1px solid rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.07); color: #fde68a; border-radius: 12px; padding: 12px 16px; font-size: 13.5px; }
+
+.sig-hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center; padding: 30px 32px; border-radius: 22px; border: 1px solid rgba(255,255,255,0.12); overflow: hidden; isolation: isolate;
+  background: linear-gradient(100deg, rgba(5, 12, 22, 0.97) 0%, rgba(5, 12, 22, 0.88) 48%, rgba(5, 18, 14, 0.62) 100%), url('assets/stadium_hero.jpg') center 30% / cover no-repeat; }
+.sig-hero::after { content: ''; position: absolute; inset: auto 0 0 0; height: 3px; background: linear-gradient(90deg, var(--pick-deep), var(--pick), transparent); z-index: -1; }
+.sig-rank-note { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.sig-rank-note strong { color: var(--floodlight); font-weight: 600; }
+.sig-teams { display: flex; align-items: center; gap: 12px; margin: 14px 0 6px; flex-wrap: wrap; }
+.sig-team { display: inline-flex; align-items: center; gap: 10px; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: clamp(22px, 3.2vw, 34px); line-height: 1.1; color: #fff; text-transform: uppercase; letter-spacing: 0.01em; }
+.sig-v { color: var(--dim); font-family: 'Oswald', sans-serif; font-size: 18px; }
+.sig-pick { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: clamp(20px, 2.6vw, 28px); color: var(--pick); margin-top: 8px; }
+.sig-plain { font-size: 15px; color: #dbe4ef; max-width: 58ch; margin-top: 4px; }
+.sig-ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.sig-ring { width: 184px; height: 184px; filter: drop-shadow(0 0 22px rgba(52, 211, 153, 0.28)); }
+.sig-ring .track { fill: none; stroke: rgba(255,255,255,0.09); }
+.sig-ring .arc { fill: none; stroke: url(#ringGrad); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; animation: ringFill 1.1s cubic-bezier(.2,.8,.2,1) both; }
+.sig-ring .val { font-family: 'Oswald', sans-serif; font-weight: 600; fill: #fff; }
+.sig-ring .lbl { font-size: 10.5px; fill: var(--muted); font-family: 'Inter', sans-serif; }
+@keyframes ringFill { from { stroke-dashoffset: var(--circ); } }
+.sig-odds { display: grid; gap: 2px; text-align: center; font-size: 12.5px; color: var(--muted); }
+.sig-odds strong { color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 14px; }
+
+.way-bar { margin-top: 16px; max-width: 520px; }
+.way-track { display: flex; height: 12px; border-radius: 999px; overflow: hidden; gap: 2px; background: rgba(255,255,255,0.05); }
+.way-seg { height: 100%; background: var(--other); transition: width .6s ease; }
+.way-seg.draw { background: var(--draw); opacity: 0.55; }
+.way-seg.picked { background: linear-gradient(90deg, var(--pick-deep), var(--pick)); opacity: 1; }
+.way-labels { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); margin-top: 6px; }
+.way-labels b { color: #fff; font-weight: 700; }
+
+.evidence { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 16px; font-size: 12.5px; color: var(--muted); }
+.evidence-item { display: inline-flex; align-items: center; gap: 7px; }
+.pip { width: 18px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.12); }
+.pip.on { background: var(--pick); }
+.pip.half { background: linear-gradient(90deg, var(--amber) 50%, rgba(255,255,255,0.12) 50%); }
+.evidence-item.limited { color: #fcd34d; }
+
+.sig-why { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 12px; }
+.sig-why > summary, .sig-more > summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; color: var(--floodlight); min-height: 44px; }
+.sig-why > summary::-webkit-details-marker, .sig-more > summary::-webkit-details-marker { display: none; }
+.sig-why > summary::before, .sig-more > summary::before { content: '+'; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line-light); font-size: 14px; transition: transform .2s ease; }
+.sig-why[open] > summary::before, .sig-more[open] > summary::before { content: '–'; }
+.why-list { display: grid; gap: 8px; margin: 6px 0 12px; padding-left: 18px; font-size: 13.5px; color: #cbd5e1; max-width: 70ch; }
+.why-caveat { font-size: 12.5px; color: var(--dim); max-width: 70ch; }
+.form-strip { display: inline-flex; gap: 3px; vertical-align: middle; margin-left: 4px; }
+.form-strip i { width: 16px; height: 16px; border-radius: 4px; display: inline-grid; place-items: center; font-style: normal; font-size: 9.5px; font-weight: 800; color: #04110b; }
+.form-strip i.W { background: var(--pick); } .form-strip i.D { background: #cbd5e1; } .form-strip i.L { background: #f87171; }
+.research-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+.research-table td { padding: 8px 6px; border-top: 1px solid var(--line); color: #cbd5e1; vertical-align: top; }
+.research-table td:last-child { text-align: right; white-space: nowrap; font-family: 'JetBrains Mono', monospace; color: var(--muted); }
+.research-tag { font-size: 11px; color: var(--dim); display: block; }
+.sig-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.sig-btn { min-height: 44px; padding: 10px 16px; border-radius: 12px; font-weight: 600; font-size: 14px; border: 1px solid var(--line-light); background: rgba(255,255,255,0.05); color: #fff; }
+.sig-btn.primary { background: var(--pick); color: #03140d; border-color: transparent; }
+.sig-btn:hover { border-color: var(--pick); }
+
+.lane { display: grid; gap: 12px; }
+.lane-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.lane-title { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 21px; color: var(--floodlight); }
+.lane-note { font-size: 12.5px; color: var(--dim); max-width: 60ch; }
+.lane-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.sig-card { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: center; text-align: left; padding: 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface-card); color: inherit; min-height: 44px; width: 100%; }
+.sig-card:hover, .sig-card:focus-visible { border-color: rgba(52, 211, 153, 0.5); }
+.mini-ring { width: 64px; height: 64px; }
+.mini-ring .track { fill: none; stroke: rgba(255,255,255,0.09); }
+.mini-ring .arc { fill: none; stroke: var(--pick); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; }
+.mini-ring.lean .arc { stroke: #67e8f9; }
+.mini-ring text { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 17px; fill: #fff; }
+.sig-card-fixture { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.sig-card-pick { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16.5px; color: #fff; margin: 3px 0 2px; }
+.sig-card-plain { font-size: 12.5px; color: var(--muted); }
+.sig-card-evidence { font-size: 11.5px; color: var(--dim); margin-top: 4px; }
+.sig-card-evidence.limited { color: #fcd34d; }
+
+.method { border: 1px solid var(--line); border-radius: 14px; padding: 4px 16px 10px; background: rgba(255,255,255,0.02); }
+.method p, .method li { font-size: 13px; color: var(--muted); max-width: 75ch; }
+.method ol { padding-left: 18px; display: grid; gap: 6px; margin: 4px 0 8px; }
+
+.fx-list { display: grid; gap: 8px; }
+.fx-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) minmax(120px, 210px) 24px; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: rgba(14, 22, 38, 0.7); text-align: left; color: inherit; width: 100%; min-height: 56px; }
+.fx-row:hover, .fx-row:focus-visible { border-color: var(--line-light); background: rgba(20, 31, 54, 0.9); }
+.fx-time { font-size: 12px; color: var(--muted); line-height: 1.3; }
+.fx-time b { display: block; color: #fff; font-size: 14px; font-family: 'JetBrains Mono', monospace; }
+.fx-teams { display: grid; gap: 4px; font-weight: 600; font-size: 14.5px; min-width: 0; }
+.fx-team { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.fx-team span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fx-lean { display: grid; gap: 5px; font-size: 12px; color: var(--muted); }
+.fx-lean b { color: #fff; font-weight: 600; }
+.fx-lean .way-track { height: 6px; }
+.fx-chev { color: var(--dim); font-size: 18px; }
+.fx-status { font-size: 11px; color: #fcd34d; }
+.detail-back { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; margin: 6px 0 14px; border-radius: 12px; border: 1px solid var(--line-light); color: #fff; font-weight: 600; font-size: 14px; background: rgba(255,255,255,0.04); }
+.empty-state { padding: 28px; border-radius: 18px; border: 1px dashed var(--line-light); color: var(--muted); text-align: center; }
+
+@media (max-width: 760px) {
+  .sig-hero { grid-template-columns: 1fr; padding: 22px 18px; gap: 18px; border-radius: 18px;
+    background: linear-gradient(180deg, rgba(5, 12, 22, 0.8) 0%, rgba(5, 12, 22, 0.97) 55%), url('assets/stadium_hero.jpg') center top / cover no-repeat; }
+  .sig-ring-wrap { order: -1; flex-direction: row; justify-content: flex-start; gap: 16px; }
+  .sig-ring { width: 124px; height: 124px; }
+  .sig-odds { text-align: left; }
+  .sig-team { font-size: 22px; }
+  .fx-row { grid-template-columns: 52px minmax(0, 1fr) 18px; }
+  .fx-lean { grid-column: 2 / 3; }
+  .fx-chev { grid-row: 1; grid-column: 3; }
+  .lane-grid { grid-template-columns: 1fr; }
+}
+
+/* Mobile Bet Diary: two-up metrics and each bet as a labelled card. */
+@media (max-width: 640px) {
+  .diary-metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
+  .diary-metric-card { padding: 12px !important; min-width: 0; }
+  .diary-metric-card:last-child { grid-column: 1 / -1; }
+  .diary-metric-val { font-size: 22px !important; }
+  .diary-metric-sub { font-size: 11px !important; }
+  .diary-table-wrap { overflow: visible !important; border: none !important; background: none !important; }
+  .diary-table, .diary-table tbody, .diary-table tr, .diary-table td { display: block; width: 100%; }
+  .diary-table { min-width: 0 !important; }
+  .diary-table thead { display: none; }
+  .diary-table tr { border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; background: var(--surface-card); }
+  .diary-table tr { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; }
+  .diary-table td { border: none !important; padding: 6px 0 !important; max-width: none !important; min-width: 0; overflow-wrap: anywhere; }
+  .diary-table td:nth-child(1), .diary-table td:nth-child(2), .diary-table td:nth-child(8), .diary-table td:nth-child(9) { grid-column: 1 / -1; }
+  .diary-table td::before { content: attr(data-label); display: block; font-size: 11px; color: var(--dim); font-weight: 600; margin-bottom: 2px; }
+  .diary-table td[colspan] { display: block; grid-column: 1 / -1; }
+  .diary-table td[colspan]::before { content: none; }
+  .diary-table select { min-height: 40px; max-width: 100%; }
+}
+
+/* Mobile: the view switcher becomes a thumb-reachable bottom tab bar. */
+@media (max-width: 640px) {
+  body { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+  .app-nav-bar { position: fixed; top: auto; bottom: 0; left: 0; right: 0; padding: 0 4px env(safe-area-inset-bottom); border-top: 1px solid var(--line-light); border-bottom: none; z-index: 950; }
+  .nav-bar-container { gap: 0; overflow: visible; }
+  .app-nav-btn { flex: 1 1 0; flex-direction: column; gap: 2px; padding: 8px 2px; min-height: 60px; border-bottom: none; border-top: 3px solid transparent; font-size: 11px; white-space: normal; text-align: center; }
+  .app-nav-btn.active { border-top-color: var(--pick); border-bottom-color: transparent; }
+  .app-nav-btn .nav-btn-sub, .app-nav-btn .nav-btn-badge { display: none; }
+  .nav-btn-title { font-size: 11px; letter-spacing: 0; line-height: 1.15; }
+  .toast-container { bottom: calc(80px + env(safe-area-inset-bottom)); right: 12px; left: 12px; }
+  #ribbon-bar-container { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -2666,20 +2831,20 @@ footer {
 
   <div class="topline-metrics">
     <div class="top-stat-pill">
-      <span class="top-stat-lbl">Active Matchday</span>
-      <span class="top-stat-val" id="top-matchday">Matchday 8</span>
+      <span class="top-stat-lbl">Round</span>
+      <span class="top-stat-val" id="top-matchday">—</span>
     </div>
     <div class="top-stat-pill">
       <span class="top-stat-lbl">Verified Ledgers</span>
       <span class="top-stat-val accent" id="top-verified-models">2 Active</span>
     </div>
     <div class="top-stat-pill">
-      <span class="top-stat-lbl">Model Hit Rate</span>
-      <span class="top-stat-val accent">66.7%</span>
+      <span class="top-stat-lbl">Live 1X2 record</span>
+      <span class="top-stat-val accent" id="top-hit-rate">—</span>
     </div>
     <div class="top-stat-pill">
       <span class="top-stat-lbl">Next Kickoff</span>
-      <span class="top-stat-val" id="top-next-kickoff">Sat 12:30 UK</span>
+      <span class="top-stat-val" id="top-next-kickoff">—</span>
     </div>
     <div class="feed-status" id="feed-status-badge">
       <span class="feed-pulse" aria-hidden="true"></span>
@@ -2729,13 +2894,27 @@ footer {
 <main class="container" id="main-content">
   <!-- VIEW 1: STADIUM CONTROL -->
   <div id="view-stadium" class="app-view active">
-    <!-- Dynamic Hero / Match Dashboard -->
-    <div id="featured-match">
+    <!-- Home: strongest signals first, then every fixture -->
+    <div id="home-view" class="home-view">
+      <section id="signals-home" aria-labelledby="signals-title">
+        <div class="empty-state">Loading predictions…</div>
+      </section>
+      <section class="lane" aria-labelledby="fixtures-title">
+        <div class="lane-head">
+          <h2 class="lane-title" id="fixtures-title">All matches</h2>
+          <span class="lane-note" id="fixtures-note"></span>
+        </div>
+        <div class="fx-list" id="fixture-list"></div>
+      </section>
+    </div>
+
+    <!-- Match detail (Stadium Control card) -->
+    <div id="featured-match" hidden>
       <!-- Populated dynamically by renderBroadcast() -->
     </div>
 
     <!-- Lower Research Hub -->
-    <section class="research-hub" id="research-section" aria-label="Research & Data Lineage Hub">
+    <section class="research-hub" id="research-section" aria-label="Research & Data Lineage Hub" hidden>
       <div class="market-tabs-wrapper">
         <div class="market-tabs-label">Filter Lower Evidence by Betting Market</div>
         <div class="market-tabs-nav" id="market-nav-tabs">
@@ -3224,7 +3403,9 @@ function selectMatch(key) {
     if (selected) sp.set('market', selected);
     history.replaceState(null, '', '#' + sp.toString());
   } catch(e) {}
+  if (currentAppView !== 'stadium') switchAppView('stadium');
   render();
+  window.scrollTo({ top: 0 });
 }
 
 function deselectMatch() {
@@ -3233,6 +3414,7 @@ function deselectMatch() {
     history.replaceState(null, '', window.location.pathname);
   } catch(e) {}
   render();
+  window.scrollTo({ top: 0 });
 }
 
 function selectMarket(marketId) {
@@ -3318,8 +3500,9 @@ function switchAppView(viewName) {
 
   const ribbonEl = el('ribbon-bar-container');
   if (ribbonEl) {
-    ribbonEl.style.display = (viewName === 'stadium' ? 'block' : 'none');
+    ribbonEl.style.display = (viewName === 'stadium' && selectedMatchKey ? 'block' : 'none');
   }
+  if (viewName === 'stadium') render();
 
   if (viewName === 'diary') renderBetDiaryView();
   else if (viewName === 'journal') renderPredictionJournalView();
@@ -3513,6 +3696,9 @@ function renderBetDiaryView() {
       '</tbody>' +
     '</table>' +
   '</div>';
+  // Label each cell with its column so mobile card rows stay readable.
+  const labels = Array.from(container.querySelectorAll('.diary-table thead th')).map(th => th.textContent);
+  container.querySelectorAll('.diary-table tbody tr').forEach(tr => Array.from(tr.children).forEach((td, i) => { if (labels[i]) td.dataset.label = labels[i]; }));
 }
 
 function updateAccumulatorLegOutcome(id, index, outcome) {
@@ -3564,23 +3750,25 @@ function exportDiaryCSV() {
   }
   const headers = ['id', 'date', 'fixture', 'market', 'selection', 'origin', 'bookmaker', 'odds_fractional', 'accumulator_legs_fractional', 'stake_gbp', 'outcome', 'net_profit_gbp', 'timestamp', 'notes'];
   const csvRows = [headers.join(',')];
+  // RFC 4180 quoting: wrap every text cell and double embedded quotes.
+  const cell = value => '"' + String(value ?? '').replace(/"/g, '""') + '"';
   for (const e of diary) {
     const profit = calc.calculateBetProfit(e.stake, e.odds, e.outcome);
     const row = [
-      JSON.stringify(e.id || ''),
-      JSON.stringify(e.date || ''),
-      JSON.stringify(e.fixture || ''),
-      JSON.stringify(e.market || ''),
-      JSON.stringify(e.selection || ''),
-      JSON.stringify(e.origin || 'matchiq'),
-      JSON.stringify(e.bookmaker || ''),
-      JSON.stringify(calc.formatFractionalOdds(e.odds)),
-      JSON.stringify((e.legs || []).map(leg => ({ selection: leg.selection, odds_fractional: calc.formatFractionalOdds(leg.odds) }))),
+      cell(e.id),
+      cell(e.date),
+      cell(e.fixture),
+      cell(e.market),
+      cell(e.selection),
+      cell(e.origin || 'matchiq'),
+      cell(e.bookmaker),
+      cell(calc.formatFractionalOdds(e.odds)),
+      cell((e.legs || []).map(leg => leg.selection + ' @ ' + calc.formatFractionalOdds(leg.odds) + ' (' + (leg.outcome || 'pending') + ')').join('; ')),
       e.stake,
-      JSON.stringify(e.outcome || 'pending'),
+      cell(e.outcome || 'pending'),
       profit !== null ? profit : '',
-      JSON.stringify(e.timestamp || ''),
-      JSON.stringify(e.notes || '')
+      cell(e.timestamp),
+      cell(e.notes)
     ];
     csvRows.push(row.join(','));
   }
@@ -4251,8 +4439,9 @@ function renderBroadcast() {
       }
       winPredType = 'Pre-kickoff Forward Prediction';
       winPredDetail = 'Frozen Dixon-Coles Model v1 · Out-of-sample forward ledger';
+      winConsensusText = 'Model fair odds ' + calc.formatFairOdds(winProb / 100) + ' (' + winProb.toFixed(1) + '%) · Bookmaker odds: not loaded';
       if (consensus && consensus.homeOdds) {
-        const fairOdds = calc.formatFractionalOdds(100 / winProb);
+        const fairOdds = calc.formatFairOdds(winProb / 100);
         const mktProb = (winHeadline.includes(f.HomeTeam) ? consensus.impliedHome : winHeadline.includes(f.AwayTeam) ? consensus.impliedAway : consensus.impliedDraw);
         const mktOdds = (winHeadline.includes(f.HomeTeam) ? consensus.homeOdds : winHeadline.includes(f.AwayTeam) ? consensus.awayOdds : consensus.drawOdds);
         winConsensusText = 'Model Fair Odds: ' + fairOdds + ' (' + winProb.toFixed(1) + '%) · Market Consensus: ' + calc.formatFractionalOdds(mktOdds) + ' (' + mktProb.toFixed(0) + '%)';
@@ -4284,7 +4473,7 @@ function renderBroadcast() {
         cornerProb = 100.0 - p95; cornerHeadline = 'Under 9.5 Total Corners';
         cornerWinCondition = 'Both teams combined must take 9 or fewer corners in normal time (10 or more loses).';
       }
-      cornerConsensusText = 'Model Expected: ' + predC.expected_corners + ' · Over 9.5: ' + p95.toFixed(1) + '% (Market Odds: Unavailable)';
+      cornerConsensusText = 'Model expected: ' + predC.expected_corners + ' corners · Model fair odds ' + calc.formatFairOdds(cornerProb / 100) + ' · Bookmaker odds: not loaded';
     } else if (hasSample) {
       const expCorners = (avg(h.map(r => num(r.HC))) + avg(a.map(r => num(r.HC))) + avg(a.map(r => num(r.AC))) + avg(h.map(r => num(r.AC)))) / 2;
       const pOver95 = 100 * calc.poissonOver(expCorners, 9.5);
@@ -4293,7 +4482,9 @@ function renderBroadcast() {
       cornerWinCondition = pOver95 >= 50 ? 'Both teams take 10+ corners combined.' : 'Both teams take 9 or fewer corners.';
       cornerStatus = 'model';
     }
-    const cornerModel = cornerPredType + ' · ' + cornerPredDetail;
+    const cornersEvidence = modelReliability && modelReliability.markets.corners;
+    const cornerModel = cornerPredType + ' · ' + cornerPredDetail + (cornersEvidence && !cornersEvidence.beats_league_average
+      ? ' · Backtest (' + cornersEvidence.n + ' matches): no better than the league average, so treat as limited evidence' : '');
 
     // 3. TOTAL GOALS (Poisson line 2.5 - RESEARCH BENCHMARK)
     let goalsProb = null, goalsHeadline = 'Research Benchmark Only', goalsWinCondition = 'Minimum 5 recent matches required.', goalsStatus = 'experimental';
@@ -4348,8 +4539,9 @@ function renderBroadcast() {
     // High level Matchday banner variables
     const teamHomeName = f.HomeTeam.toUpperCase() + (f.HomeTeam.endsWith('FC') || f.HomeTeam.endsWith('United') || f.HomeTeam.endsWith('City') ? '' : ' FC');
     const teamAwayName = f.AwayTeam.toUpperCase();
-    const prematchDate = (f.Date || '') + ' · ' + (f.Time || '15:00') + ' UK (Matchday 8)';
-    const matchSlogan = 'PREMIER LEAGUE 2026/27 · LIVE PILOT ROUND';
+    const kickoffParts = formatKickoff(f);
+    const prematchDate = kickoffParts.day + ' · ' + kickoffParts.time + ' UK';
+    const matchSlogan = 'PREMIER LEAGUE 2026/27';
 
     let leadPickHeadline = 'MODEL PREDICTION READY';
     let leadPickHuge = '50%';
@@ -4540,7 +4732,8 @@ function renderBroadcast() {
       '</div>' +
     '</div>';
 
-    container.innerHTML = '<div class="stadium-control-card">' +
+    container.innerHTML = '<button type="button" class="detail-back" onclick="deselectMatch()"><span aria-hidden="true">‹</span> All predictions</button>' +
+      '<div class="stadium-control-card">' +
       '<div class="stadium-stage">' +
         '<div class="stadium-top-nav">' +
           '<div class="stadium-brand-lockup">' +
@@ -4548,7 +4741,7 @@ function renderBroadcast() {
             '<span class="stadium-brand-divider">/</span>' +
             '<span class="stadium-control-sub">STADIUM CONTROL</span>' +
           '</div>' +
-          '<span class="stadium-context-tag">Matchday 8 • 24–25 October 2026 • Live Pilot</span>' +
+          '<span class="stadium-context-tag">Premier League • ' + esc(el('top-matchday') ? el('top-matchday').textContent : '') + '</span>' +
         '</div>' +
         '<div class="stadium-hero-grid">' +
           '<div class="hero-matchup-col">' +
@@ -4583,6 +4776,295 @@ function renderBroadcast() {
     '</div>';
     return;
   }
+}
+
+// ============================================================
+// STRONGEST SIGNALS (Mission 063)
+// Ranks only frozen production predictions. Research markets are shown for
+// context and never ranked. Reliability comes from data/model_reliability.json,
+// a walk-forward backtest of the frozen models (experiments/m063_prediction_challenge).
+// ============================================================
+let modelReliability = null;
+const SIGNAL_RULES = Object.freeze({
+  trivialAbove: 0.85,   // near-certain favourites are not "signals"
+  shrinkWeight: 20,     // pseudo-matches pulling a model probability toward its backtest band
+  fullSample: 10        // venue matches needed for full data completeness
+});
+
+function fixtureKickoffMs(f) {
+  if (f.kickoff_utc) return Date.parse(f.kickoff_utc);
+  return Date.parse((f.Date || '') + 'T' + (f.Time || '15:00') + ':00Z');
+}
+
+function formatKickoff(f) {
+  const t = fixtureKickoffMs(f);
+  if (!Number.isFinite(t)) return { day: f.Date || '', time: f.Time || '' };
+  const d = new Date(t);
+  return {
+    day: d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/London' }),
+    time: d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })
+  };
+}
+
+function venueForm(team, venue, beforeMs, n = 5) {
+  return rows.filter(r => r.done && r.time < beforeMs && (venue === 'H' ? r.HomeTeam === team : r.AwayTeam === team))
+    .sort((a, b) => b.time - a.time).slice(0, n)
+    .map(r => {
+      const gf = venue === 'H' ? +r.FTHG : +r.FTAG, ga = venue === 'H' ? +r.FTAG : +r.FTHG;
+      const cf = num(venue === 'H' ? r.HC : r.AC), ca = num(venue === 'H' ? r.AC : r.HC);
+      return { res: gf > ga ? 'W' : gf < ga ? 'L' : 'D', gf, ga, cf, ca };
+    });
+}
+
+function formSummary(games) {
+  if (!games.length) return null;
+  const count = k => games.filter(g => g.res === k).length;
+  const mean = k => { const v = games.map(g => g[k]).filter(x => x !== null && Number.isFinite(x)); return v.length ? avg(v) : null; };
+  return { n: games.length, w: count('W'), d: count('D'), l: count('L'), gf: mean('gf'), ga: mean('ga'), cf: mean('cf'), ca: mean('ca'), strip: games.map(g => g.res).reverse() };
+}
+
+function formStripHtml(summary) {
+  if (!summary) return '';
+  return '<span class="form-strip" aria-label="Last ' + summary.n + ' results, oldest first">' + summary.strip.map(r => '<i class="' + r + '">' + r + '</i>').join('') + '</span>';
+}
+
+function reliabilityBand(market, p) {
+  const m = modelReliability && modelReliability.markets && modelReliability.markets[market];
+  if (!m) return null;
+  return (m.bands || []).find(b => p >= b.lo && p < b.hi) || null;
+}
+
+function plainInterpretation(market, p, pickLabel) {
+  const inTen = Math.round(p * 10);
+  if (market === 'wins') {
+    if (p >= 0.7) return 'Strong favourite. In matches rated like this, the model expects this result about ' + inTen + ' times in 10.';
+    if (p >= 0.55) return 'Clear favourite. The model expects this result about ' + inTen + ' times in 10.';
+    if (p >= 0.45) return 'Narrow favourite. Roughly a coin flip between this and the other two results.';
+    return 'The most likely of three results, but it is still less likely to happen than not.';
+  }
+  if (p >= 0.65) return 'The model leans clearly towards ' + pickLabel.toLowerCase() + ', about ' + inTen + ' times in 10.';
+  if (p >= 0.55) return 'A modest lean towards ' + pickLabel.toLowerCase() + '.';
+  return 'Close to a coin flip.';
+}
+
+function buildWinnerSignal(f) {
+  const pred = winnerPredictions.find(x => x.home === f.HomeTeam && x.away === f.AwayTeam && x.date === f.Date && x.probabilities);
+  if (!pred) return null;
+  const p = { H: +pred.probabilities.H, D: +pred.probabilities.D, A: +pred.probabilities.A };
+  const outcome = p.H >= p.A && p.H >= p.D ? 'H' : p.A >= p.H && p.A >= p.D ? 'A' : 'D';
+  const prob = p[outcome];
+  const kickoff = fixtureKickoffMs(f);
+  const homeForm = formSummary(venueForm(f.HomeTeam, 'H', kickoff));
+  const awayForm = formSummary(venueForm(f.AwayTeam, 'A', kickoff));
+  const band = reliabilityBand('wins', prob);
+  const calibrated = band ? (band.n * band.observed_rate + SIGNAL_RULES.shrinkWeight * prob) / (band.n + SIGNAL_RULES.shrinkWeight) : prob;
+  const sample = Math.min(rows.filter(r => r.done && r.time < kickoff && r.HomeTeam === f.HomeTeam).length, rows.filter(r => r.done && r.time < kickoff && r.AwayTeam === f.AwayTeam).length);
+  const completeness = Math.min(1, sample / SIGNAL_RULES.fullSample);
+  const label = outcome === 'H' ? f.HomeTeam + ' to win' : outcome === 'A' ? f.AwayTeam + ' to win' : 'Draw';
+  return {
+    key: fixtureKey(f), market: 'wins', marketName: 'Match result', fixture: f, outcome, label, prob, probs: p,
+    calibrated, band, completeness, sample, kickoff, kicked: kickoff <= Date.now(),
+    trivial: prob > SIGNAL_RULES.trivialAbove,
+    rankScore: calibrated * (0.85 + 0.15 * completeness),
+    pred, homeForm, awayForm
+  };
+}
+
+function buildCornersSignal(f) {
+  const pred = cornersPredictions.find(x => x.home === f.HomeTeam && x.away === f.AwayTeam && x.date === f.Date && x.probabilities);
+  if (!pred) return null;
+  const over = +pred.probabilities['9.5'];
+  const prob = over >= 0.5 ? over : 1 - over;
+  return { key: fixtureKey(f), market: 'corners', label: (over >= 0.5 ? 'Over' : 'Under') + ' 9.5 corners', prob, over, expected: +pred.expected_corners, band: reliabilityBand('corners', prob), pred };
+}
+
+function researchEstimates(f) {
+  const kickoff = fixtureKickoffMs(f);
+  const h = rows.filter(r => r.done && r.HomeTeam === f.HomeTeam && r.time < kickoff).sort((a, b) => b.time - a.time).slice(0, 10);
+  const a = rows.filter(r => r.done && r.AwayTeam === f.AwayTeam && r.time < kickoff).sort((a, b) => b.time - a.time).slice(0, 10);
+  if (h.length < 5 || a.length < 5) return [];
+  const mean = (list, k) => avg(list.map(r => num(r[k])).filter(v => v !== null));
+  const pair = (hk, ak) => [(mean(h, hk) + mean(a, hk)) / 2, (mean(a, ak) + mean(h, ak)) / 2];
+  const [hg, ag] = pair('FTHG', 'FTAG');
+  const btts = calc.bttsProbability(hg, ag);
+  const over = (rates, line) => calc.poissonOver(rates[0] + rates[1], line);
+  return [
+    { id: 'goals', name: 'Total goals', line: 'Over 2.5', p: over([hg, ag], 2.5) },
+    { id: 'btts', name: 'Both teams to score', line: 'Yes', p: btts ? btts.yes : null },
+    { id: 'cards', name: 'Yellow cards', line: 'Over 3.5', p: over(pair('HY', 'AY'), 3.5) },
+    { id: 'shots', name: 'Shots on target', line: 'Over 8.5', p: over(pair('HST', 'AST'), 8.5) }
+  ].filter(x => x.p !== null && Number.isFinite(x.p));
+}
+
+function liveLedgerRecord() {
+  const settled = winnerPredictions.filter(r => r.status === 'settled' && r.probabilities);
+  const hits = settled.filter(r => { const p = r.probabilities; const pick = (+p.H >= +p.A && +p.H >= +p.D) ? 'H' : (+p.A >= +p.H && +p.A >= +p.D) ? 'A' : 'D'; return pick === r.actual; }).length;
+  return { settled: settled.length, hits };
+}
+
+function ringSvg(p, size, cls) {
+  const r = 42, c = 2 * Math.PI * r, pct = Math.round(p * 100);
+  return '<svg class="' + cls + '" viewBox="0 0 100 100" width="' + size + '" height="' + size + '" role="img" aria-label="Estimated chance ' + pct + ' percent">' +
+    (cls === 'sig-ring' ? '<defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#a7f3d0"/></linearGradient></defs>' : '') +
+    '<circle class="track" cx="50" cy="50" r="' + r + '" stroke-width="' + (cls === 'sig-ring' ? 7 : 8) + '"/>' +
+    '<circle class="arc" cx="50" cy="50" r="' + r + '" stroke-width="' + (cls === 'sig-ring' ? 7 : 8) + '" style="--circ:' + c.toFixed(2) + ';stroke-dasharray:' + c.toFixed(2) + ';stroke-dashoffset:' + (c * (1 - p)).toFixed(2) + '"/>' +
+    (cls === 'sig-ring'
+      ? '<text class="val" x="50" y="53" text-anchor="middle" font-size="26">' + pct + '%</text><text class="lbl" x="50" y="68" text-anchor="middle">model estimate</text>'
+      : '<text x="50" y="57" text-anchor="middle">' + pct + '%</text>') +
+  '</svg>';
+}
+
+function wayBarHtml(s, compact) {
+  const f = s.fixture, p = s.probs;
+  const seg = (k, cls) => '<div class="way-seg ' + cls + (s.outcome === k ? ' picked' : '') + '" style="width:' + (100 * p[k]).toFixed(1) + '%"></div>';
+  return '<div class="way-bar"><div class="way-track" aria-hidden="true">' + seg('H', 'home') + seg('D', 'draw') + seg('A', 'away') + '</div>' +
+    (compact ? '' : '<div class="way-labels"><span>' + esc(f.HomeTeam) + ' <b>' + Math.round(100 * p.H) + '%</b></span><span>Draw <b>' + Math.round(100 * p.D) + '%</b></span><span>' + esc(f.AwayTeam) + ' <b>' + Math.round(100 * p.A) + '%</b></span></div>') +
+  '</div>';
+}
+
+function evidenceText(s) {
+  const b = s.band;
+  if (b && b.established) return { level: 'established', text: 'Backtest: picks rated ' + b.band + ' landed ' + Math.round(100 * b.observed_rate) + '% of the time (' + b.n + ' matches).' };
+  return { level: 'limited', text: 'Limited evidence: ' + (b ? 'only ' + b.n + ' backtested picks' : 'no backtested picks') + ' at this probability.' };
+}
+
+function evidenceRow(s) {
+  const ev = evidenceText(s);
+  const complete = s.completeness >= 1 ? 'on' : 'half';
+  return '<div class="evidence" aria-label="Evidence behind this prediction">' +
+    '<span class="evidence-item"><span class="pip on"></span>Frozen production model</span>' +
+    '<span class="evidence-item' + (ev.level === 'limited' ? ' limited' : '') + '"><span class="pip ' + (ev.level === 'established' ? 'on' : '') + '"></span>' + (ev.level === 'established' ? 'Calibration checked' : 'Limited evidence') + '</span>' +
+    '<span class="evidence-item"><span class="pip ' + complete + '"></span>' + (s.completeness >= 1 ? 'Full venue history' : 'Short venue history (' + s.sample + ')') + '</span>' +
+  '</div>';
+}
+
+function whyDetailsHtml(s) {
+  const f = s.fixture, ev = evidenceText(s), created = s.pred.created_at ? new Date(s.pred.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : 'before kick-off';
+  const formLine = (team, where, fm) => fm ? '<li>' + esc(team) + ' ' + where + ', last ' + fm.n + ': ' + fm.w + ' won, ' + fm.d + ' drawn, ' + fm.l + ' lost ' + formStripHtml(fm) + ' · scoring ' + fm.gf.toFixed(1) + ', conceding ' + fm.ga.toFixed(1) + ' a game.</li>' : '';
+  const corners = buildCornersSignal(f);
+  const research = researchEstimates(f);
+  const verdict = id => modelReliability && modelReliability.markets[id] && modelReliability.markets[id].beats_league_average === false ? 'Backtest: no better than the league average' : 'Research only';
+  return '<details class="sig-why"><summary>Why this prediction</summary>' +
+    '<ul class="why-list">' +
+      '<li>The frozen Dixon-Coles model rated this from ' + (s.pred.training_matches || 'all prior') + ' completed Premier League results, recorded ' + esc(created) + ' before kick-off.</li>' +
+      formLine(f.HomeTeam, 'at home', s.homeForm) + formLine(f.AwayTeam, 'away', s.awayForm) +
+      '<li>' + esc(ev.text) + (modelReliability ? ' Overall backtest Brier ' + modelReliability.markets.wins.brier.toFixed(3) + ' vs ' + modelReliability.markets.wins.league_average_brier.toFixed(3) + ' for league averages and ' + modelReliability.markets.wins.market_close_brier.toFixed(3) + ' for bookmaker closing prices.' : '') + '</li>' +
+    '</ul>' +
+    '<p class="why-caveat">The model uses final scores only. It knows nothing about injuries, team news, line-ups or motivation. A high probability is not the same as good betting value.</p>' +
+    '<details class="sig-more"><summary>More markets for this match</summary>' +
+      '<table class="research-table"><tbody>' +
+        (corners ? '<tr><td>Corners: ' + esc(corners.label) + '<span class="research-tag">Frozen v0.9 model · expected ' + corners.expected.toFixed(1) + ' corners · ' + esc(verdict('corners')) + '</span></td><td>' + Math.round(100 * corners.prob) + '% · fair ' + calc.formatFairOdds(corners.prob) + '</td></tr>' : '') +
+        research.map(r => '<tr><td>' + esc(r.name) + ': ' + esc(r.line) + '<span class="research-tag">' + esc(verdict(r.id)) + '</span></td><td>' + Math.round(100 * r.p) + '%</td></tr>').join('') +
+      '</tbody></table>' +
+    '</details>' +
+  '</details>';
+}
+
+function heroSignalHtml(s, rankNote) {
+  const f = s.fixture, k = formatKickoff(f);
+  return '<article class="sig-hero" aria-label="Strongest signal">' +
+    '<div class="sig-hero-main">' +
+      '<div class="sig-rank-note"><strong>' + esc(rankNote) + '</strong><span>Premier League</span><span>' + esc(k.day) + ', ' + esc(k.time) + ' UK</span>' + (s.kicked ? '<span class="fx-status">Kicked off</span>' : '') + '</div>' +
+      '<div class="sig-teams"><span class="sig-team">' + renderTeamCrest(f.HomeTeam, 40) + esc(f.HomeTeam) + '</span><span class="sig-v">v</span><span class="sig-team">' + renderTeamCrest(f.AwayTeam, 40) + esc(f.AwayTeam) + '</span></div>' +
+      '<h3 class="sig-pick">' + esc(s.label) + '</h3>' +
+      '<p class="sig-plain">' + esc(plainInterpretation('wins', s.prob, s.label)) + '</p>' +
+      wayBarHtml(s, false) +
+      evidenceRow(s) +
+      whyDetailsHtml(s) +
+      '<div class="sig-actions">' +
+        '<button type="button" class="sig-btn primary" data-fix="' + esc(s.key) + '" onclick="selectMatch(this.dataset.fix)">Open match</button>' +
+        '<button type="button" class="sig-btn" onclick="openBetDiaryModal(\'' + escJsArg(s.key) + '\', \'wins\')">Log to Bet Diary</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="sig-ring-wrap">' + ringSvg(s.prob, 184, 'sig-ring') +
+      '<div class="sig-odds"><span>Model fair odds <strong>' + calc.formatFairOdds(s.prob) + '</strong></span><span>Bookmaker odds: not loaded</span></div>' +
+    '</div>' +
+  '</article>';
+}
+
+function signalCardHtml(s) {
+  const f = s.fixture, k = formatKickoff(f), ev = evidenceText(s);
+  return '<button type="button" class="sig-card" data-fix="' + esc(s.key) + '" onclick="selectMatch(this.dataset.fix)">' +
+    ringSvg(s.prob, 64, 'mini-ring') +
+    '<span>' +
+      '<span class="sig-card-fixture">' + renderTeamCrest(f.HomeTeam, 18) + renderTeamCrest(f.AwayTeam, 18) + '<span>' + esc(f.HomeTeam) + ' v ' + esc(f.AwayTeam) + '</span></span>' +
+      '<span class="sig-card-pick" style="display:block">' + esc(s.label) + '</span>' +
+      '<span class="sig-card-plain" style="display:block">' + esc(k.day) + ' ' + esc(k.time) + ' · fair odds ' + calc.formatFairOdds(s.prob) + '</span>' +
+      '<span class="sig-card-evidence' + (ev.level === 'limited' ? ' limited' : '') + '" style="display:block">' + esc(ev.level === 'limited' ? 'Limited evidence' : 'Backtest: picks at ' + s.band.band + ' landed ' + Math.round(100 * s.band.observed_rate) + '%') + '</span>' +
+    '</span>' +
+  '</button>';
+}
+
+function renderSignalsHome() {
+  const target = el('signals-home');
+  if (!target) return;
+  const fixtures = Array.isArray(meta.fixtures) && meta.fixtures.length > 0 ? meta.fixtures : getVerifiedHoldoutMatches();
+  const signals = fixtures.map(buildWinnerSignal).filter(Boolean);
+  const ranked = signals.filter(s => !s.trivial).sort((a, b) => b.rankScore - a.rankScore);
+  const trivial = signals.filter(s => s.trivial);
+  const allKicked = fixtures.length > 0 && fixtures.every(f => fixtureKickoffMs(f) <= Date.now());
+  const freshness = calc.dataFreshnessSummary ? calc.dataFreshnessSummary(meta) : { state: 'unknown' };
+  const corners = modelReliability && modelReliability.markets.corners;
+
+  let html = '<div class="sig-head"><div>' +
+      '<h2 class="sig-title" id="signals-title">Strongest signals</h2>' +
+      '<p class="sig-sub">Match-result predictions from the frozen model, ranked by backtest-calibrated probability and data completeness. One leading outcome per match.</p>' +
+    '</div><div class="sig-chips">' +
+      '<span class="sig-chip ' + (freshness.state === 'updated' ? 'ok' : 'warn') + '"><span class="dot"></span>Results data ' + (freshness.state === 'updated' ? 'up to date' : freshness.state) + '</span>' +
+      '<span class="sig-chip ' + (modelReliability ? 'ok' : 'warn') + '"><span class="dot"></span>' + (modelReliability ? 'Backtest: ' + modelReliability.markets.wins.n + ' matches' : 'Backtest evidence unavailable') + '</span>' +
+    '</div></div>';
+  if (allKicked) html += '<div class="sig-notice" style="margin-top:14px">Every match in this round has kicked off. These are the pre-match predictions; new ones appear after the next fixture and results refresh.</div>';
+
+  if (!ranked.length) {
+    html += '<div class="empty-state" style="margin-top:16px">No qualifying predictions yet. Predictions are recorded before kick-off once both teams have at least five venue matches.</div>';
+  } else {
+    html += '<div style="margin-top:16px">' + heroSignalHtml(ranked[0], allKicked ? 'Strongest signal, latest round' : 'Strongest signal') + '</div>';
+    if (ranked.length > 1) {
+      html += '<div class="lane" style="margin-top:22px"><div class="lane-head"><h3 class="lane-title">Next strongest</h3><span class="lane-note">Same market, same model, so these are directly comparable.</span></div>' +
+        '<div class="lane-grid">' + ranked.slice(1, 5).map(signalCardHtml).join('') + '</div></div>';
+    }
+  }
+  if (trivial.length) html += '<p class="lane-note" style="margin-top:10px">' + trivial.length + ' heavy favourite' + (trivial.length > 1 ? 's' : '') + ' above ' + Math.round(100 * SIGNAL_RULES.trivialAbove) + '% left out of the ranking: likely, but not informative.</p>';
+
+  html += '<details class="method" style="margin-top:18px"><summary class="lane-title" style="font-size:16px;min-height:44px;display:flex;align-items:center;cursor:pointer">How the ranking works</summary>' +
+    '<ol>' +
+      '<li>Only the frozen Match Result model is ranked. Corners, goals, BTTS, cards and shots stay out because their backtests did not beat a simple league average' + (corners ? ' (corners Brier ' + corners.brier.toFixed(3) + ' vs ' + corners.league_average_brier.toFixed(3) + ')' : '') + '.</li>' +
+      '<li>Each probability is pulled towards how often picks in the same range actually landed in the backtest (' + SIGNAL_RULES.shrinkWeight + '-match weight), so an over-confident band is marked down.</li>' +
+      '<li>Matches where a side has fewer than ' + SIGNAL_RULES.fullSample + ' venue games are marked down for completeness.</li>' +
+      '<li>Favourites above ' + Math.round(100 * SIGNAL_RULES.trivialAbove) + '% are excluded as trivial. Probability ranges with fewer than ' + (modelReliability ? modelReliability.min_band_n : 30) + ' backtested picks show "Limited evidence".</li>' +
+      '<li>Model fair odds are 1 ÷ probability, with no bookmaker margin, rounded to the nearest familiar UK price. They are not bookmaker prices and are not a value judgement.</li>' +
+    '</ol></details>';
+  target.innerHTML = html;
+}
+
+function renderFixtureList() {
+  const target = el('fixture-list');
+  if (!target) return;
+  const fixtures = (Array.isArray(meta.fixtures) && meta.fixtures.length > 0 ? meta.fixtures : getVerifiedHoldoutMatches()).slice().sort((a, b) => fixtureKickoffMs(a) - fixtureKickoffMs(b));
+  if (el('fixtures-note')) el('fixtures-note').textContent = fixtures.length + ' Premier League fixtures, in kick-off order.';
+  target.innerHTML = fixtures.map(f => {
+    const s = buildWinnerSignal(f), k = formatKickoff(f), kicked = fixtureKickoffMs(f) <= Date.now();
+    const lean = s
+      ? '<span>Leans <b>' + esc(s.label) + '</b> ' + Math.round(100 * s.prob) + '%</span>' + wayBarHtml(s, true)
+      : '<span>Prediction withheld: fewer than 5 venue matches</span>';
+    return '<button type="button" class="fx-row" data-fix="' + esc(fixtureKey(f)) + '" onclick="selectMatch(this.dataset.fix)">' +
+      '<span class="fx-time"><b>' + esc(k.time) + '</b>' + esc(k.day) + (kicked ? '<span class="fx-status" style="display:block">Kicked off</span>' : '') + '</span>' +
+      '<span class="fx-teams"><span class="fx-team">' + renderTeamCrest(f.HomeTeam, 22) + '<span>' + esc(f.HomeTeam) + '</span></span><span class="fx-team">' + renderTeamCrest(f.AwayTeam, 22) + '<span>' + esc(f.AwayTeam) + '</span></span></span>' +
+      '<span class="fx-lean">' + lean + '</span>' +
+      '<span class="fx-chev" aria-hidden="true">›</span>' +
+    '</button>';
+  }).join('');
+}
+
+function renderTopline() {
+  const fixtures = Array.isArray(meta.fixtures) && meta.fixtures.length > 0 ? meta.fixtures : getVerifiedHoldoutMatches();
+  const times = fixtures.map(fixtureKickoffMs).filter(Number.isFinite).sort((a, b) => a - b);
+  const fmt = t => new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/London' });
+  if (el('top-matchday') && times.length) el('top-matchday').textContent = fmt(times[0]) + (fmt(times[0]) !== fmt(times[times.length - 1]) ? '–' + fmt(times[times.length - 1]) : '');
+  const next = times.find(t => t > Date.now());
+  if (el('top-next-kickoff')) el('top-next-kickoff').textContent = next ? new Date(next).toLocaleString('en-GB', { weekday: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' }) + ' UK' : 'None scheduled';
+  const rec = liveLedgerRecord();
+  if (el('top-hit-rate')) el('top-hit-rate').textContent = rec.settled ? rec.hits + ' of ' + rec.settled + ' top picks' : 'No settled picks';
 }
 
 function renderLowerResearchSection() {
@@ -4769,9 +5251,21 @@ function renderWatchlistPanel(m) {
 function render() {
   updateNavBadges();
   renderMarketNavTabs();
+  renderTopline();
   if (currentAppView === 'stadium') {
-    renderBroadcast();
-    renderLowerResearchSection();
+    const detail = !!selectedMatchKey;
+    el('home-view').hidden = detail;
+    el('featured-match').hidden = !detail;
+    el('research-section').hidden = !detail;
+    const ribbonEl = el('ribbon-bar-container');
+    if (ribbonEl) ribbonEl.style.display = detail ? 'block' : 'none';
+    if (detail) {
+      renderBroadcast();
+      renderLowerResearchSection();
+    } else {
+      renderSignalsHome();
+      renderFixtureList();
+    }
   } else if (currentAppView === 'diary') {
     renderBetDiaryView();
   } else if (currentAppView === 'journal') {
@@ -4796,10 +5290,12 @@ fetch('data/matches.json', { cache: 'no-store' }).then(r => {
 
   Promise.all([
     fetch('data/match_winner_forward.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch('data/forward_test.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null)
-  ]).then(([wData, cData]) => {
+    fetch('data/forward_test.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('data/model_reliability.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([wData, cData, relData]) => {
     winnerPredictions = Array.isArray(wData?.records) ? wData.records : [];
     cornersPredictions = Array.isArray(cData?.records) ? cData.records : [];
+    modelReliability = relData && relData.markets && relData.markets.wins ? relData : null;
     render();
   });
 

@@ -1,7 +1,7 @@
 // MatchIQ Progressive Web App Service Worker (v1)
 // Caches application shell and enables offline home screen capability
 
-const CACHE_NAME = 'matchiq-pwa-v2';
+const CACHE_NAME = 'matchiq-pwa-v3';
 
 const PRECACHE_ASSETS = [
   './',
@@ -15,7 +15,8 @@ const PRECACHE_ASSETS = [
   './assets/stadium_hero.jpg',
   './data/matches.json',
   './data/match_winner_forward.json',
-  './data/forward_test.json'
+  './data/forward_test.json',
+  './data/model_reliability.json'
 ];
 
 // Install: pre-cache core shell
