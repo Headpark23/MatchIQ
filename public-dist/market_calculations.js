@@ -220,7 +220,7 @@
 
   function parseFractionalOdds(value) {
     const text = String(value ?? '').trim().toLowerCase();
-    if (/^(evens?|even money)$/.test(text)) return 2;
+    if (/^(?:evens?|even money)(?:\s*\(1\/1\))?$/.test(text)) return 2;
     const match = text.match(/^(\d+)\s*\/\s*(\d+)$/);
     if (!match) return null;
     const numerator = Number(match[1]), denominator = Number(match[2]);

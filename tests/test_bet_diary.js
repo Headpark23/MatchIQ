@@ -119,6 +119,7 @@ assert.equal(calc.formatFractionalOdds(3.1897), '≈35/16');
 assert.equal(calc.parseFractionalOdds('1/2'), 1.5);
 assert.equal(calc.parseFractionalOdds('6/4'), 2.5);
 assert.equal(calc.parseFractionalOdds('Evens'), 2);
+assert.equal(calc.parseFractionalOdds('Evens (1/1)'), 2);
 assert.equal(calc.parseFractionalOdds('2/1'), 3);
 assert.equal(calc.parseFractionalOdds('1.91'), null, 'Decimal-formatted prices are rejected by the UK odds input');
 const accA = calc.createAccumulator([{ selection: 'A', odds: 2.2 }, { selection: 'B', odds: 1.75 }], 10, 'Tester A');

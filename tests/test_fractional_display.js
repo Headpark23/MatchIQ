@@ -12,8 +12,9 @@ assert.doesNotMatch(html, /mktOdds\.toFixed/);
 
 // New user entry and export paths must not ask for or emit decimal odds.
 assert.ok(/type="text"[^>]*id="modal-odds-input"/.test(html), 'single-bet odds field accepts UK fractional text');
-assert.match(html, /Fractional Odds Actually Offered/);
+assert.ok(/Fractional Odds Actually Offered/.test(html));
 assert.match(html, /selection \| fractional odds/i);
+assert.ok(/id="modal-legs-input"[^>]*oninput="updateModalPnlPreview\(\)"/.test(html), 'editing accumulator legs refreshes the combined-price preview');
 assert.doesNotMatch(html, /Decimal Odds Actually Offered/i);
 assert.doesNotMatch(html, /using [“"]selection \| decimal odds/i);
 assert.match(html, /calc\.formatFractionalOdds\(e\.odds\)/, 'CSV exports fractional prices');

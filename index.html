@@ -2841,7 +2841,7 @@ footer {
         </div>
         <div class="form-row" id="accumulator-legs-row" style="display:none;">
           <label class="form-lbl" for="modal-legs-input">Accumulator legs (one per line: selection | fractional odds)</label>
-          <textarea id="modal-legs-input" class="form-ctrl" rows="4" placeholder="Arsenal win | 6/4&#10;Over 2.5 goals | 10/11"></textarea>
+          <textarea id="modal-legs-input" class="form-ctrl" rows="4" oninput="updateModalPnlPreview()" placeholder="Arsenal win | 6/4&#10;Over 2.5 goals | 10/11"></textarea>
         </div>
         <div class="form-row">
           <label class="form-lbl" for="modal-selection-input">Actual Bet Selection</label>
