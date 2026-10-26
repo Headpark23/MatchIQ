@@ -5,11 +5,13 @@ const fs = require('node:fs');
 const path = require('node:path');
 const calc = require('../market_calculations.js');
 
-const page = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-assert.match(page, /calc\.matchWinnerIndicator\(hv,av\)/, 'Dashboard uses the tested winner calculation');
-assert.doesNotMatch(page, /avg\(av\.map\(r=>r\.FTR==='A'\?1:0\)\)/,
-  'Dashboard no longer treats away wins as away losses');
-assert.match(page, /calc\.dataFreshnessSummary\(d\)/, 'Dashboard uses per-season freshness reporting');
+// Mission 064: the app renders published predictions only (pipeline/run.py), so the
+// page must never recompute probabilities in the browser.
+const page = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8') + fs.readFileSync(path.join(__dirname, '..', 'app.js'), 'utf8');
+assert.doesNotMatch(page, /calc\.(poissonOver|bttsProbability|matchWinnerIndicator)\(/, 'Browser does not compute predictions');
+assert.doesNotMatch(page, /avg\(av\.map\(r=>r\.FTR==='A'\?1:0\)\)/, 'Old away-loss bug cannot return');
+assert.match(page, /data\/predictions\.json/, 'App reads published predictions');
+assert.match(page, /data\/pipeline_status\.json/, 'App surfaces refresh status');
 
 function close(actual, expected, message) {
   assert.ok(Math.abs(actual - expected) < 1e-9, `${message}: expected ${expected}, got ${actual}`);
@@ -32,8 +34,6 @@ assert.equal(calc.MARKET_LABELS.wins,
   'Home-win frequency blended with away-loss frequency, not a calibrated win chance');
 assert.deepEqual(Object.keys(calc.MARKET_LABELS).sort(),
   ['btts', 'cards', 'corners', 'goals', 'shots', 'wins']);
-assert.match(page, /Historical home-win\/away-loss indicator/,
-  'Displayed Match Winner label describes the corrected blend');
 
 const recent = '2026-10-17T12:00:00+00:00';
 const now = Date.parse('2026-10-18T12:00:00+00:00');

@@ -1,18 +1,33 @@
+// UI regression checks for the Mission 064 single-design-system app.
 const fs = require('fs');
-const content = fs.readFileSync('index.html', 'utf8');
+const path = require('path');
+const root = path.join(__dirname, '..');
+const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const app = fs.readFileSync(path.join(root, 'app.js'), 'utf8');
+const css = fs.readFileSync(path.join(root, 'styles.css'), 'utf8');
+const predictions = JSON.parse(fs.readFileSync(path.join(root, 'data', 'predictions.json'), 'utf8')).predictions;
 
 const checks = [
-  { name: 'calc.matchWinnerIndicator(hv,av)', pass: content.includes('calc.matchWinnerIndicator(hv,av)') },
-  { name: 'calc.dataFreshnessSummary(d)', pass: content.includes('calc.dataFreshnessSummary(d)') },
-  { name: 'Historical home-win/away-loss indicator', pass: content.includes('Historical home-win/away-loss indicator') },
-  { name: 'NOT avg(av.map(r=>r.FTR===\'A\'?1:0))', pass: !content.includes("avg(av.map(r=>r.FTR==='A'?1:0))") }
+  ['one stylesheet, no legacy inline style block', html.includes('href="styles.css"') && !/<style>/.test(html)],
+  ['no legacy Stadium Control dashboard markup', !/stadium-control-card|research-hub|ribbon-bar/.test(html + app)],
+  ['every view is routed through one renderer', ['viewHome', 'viewFixtures', 'viewMatch', 'viewResults', 'viewDiary', 'viewMore'].every(v => app.includes('function ' + v + '('))],
+  ['every match analysis lists all six markets', /MARKET_ORDER = \['result', 'goals', 'btts', 'corners', 'cards', 'shots'\]/.test(app)],
+  ['evidence strength shown separately from probability', app.includes('function meter(') && app.includes('Probability and evidence strength are shown separately')],
+  ['diary storage key preserved', app.includes("'matchiq_bet_diary_v1'")],
+  ['feedback storage key preserved', app.includes("'matchiq_ux_feedback_v1'")],
+  ['hidden attribute always wins over component display rules', /\[hidden\] \{ display: none !important; \}/.test(css)],
+  ['fixed tab bar is not trapped by header backdrop-filter', /\.app-header \{ backdrop-filter: none;/.test(css)],
+  ['ring classes do not collide with the hero card', !/ring\([^)]*'hero/.test(app)],
+  ['every upcoming prediction has a match result distribution', Object.values(predictions).every(p => p.markets.result && Math.abs(p.markets.result.selections.reduce((s, x) => s + x.p, 0) - 1) < 0.01)],
+  ['promoted clubs are predicted, not dropped', Object.values(predictions).some(p => p.promoted.length > 0)],
+  ['every prediction covers all six markets', Object.values(predictions).every(p => ['result', 'goals', 'btts', 'corners', 'cards', 'shots'].every(k => p.markets[k]))],
+  ['non-validated estimates are labelled provisional', Object.values(predictions).every(p => p.markets.result.tier === 'T1' ? p.markets.result.evidence.status === 'validated' : p.markets.result.evidence.status === 'provisional')],
 ];
 
 console.log('Regression Checks:');
 let allPass = true;
-checks.forEach(c => {
-  console.log(' ', c.name, '->', c.pass ? 'PASS' : 'FAIL');
-  if (!c.pass) allPass = false;
-});
-
+for (const [name, pass] of checks) {
+  console.log(' ', name, '->', pass ? 'PASS' : 'FAIL');
+  if (!pass) allPass = false;
+}
 process.exit(allPass ? 0 : 1);

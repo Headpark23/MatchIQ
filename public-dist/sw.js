@@ -1,11 +1,13 @@
 // MatchIQ Progressive Web App Service Worker (v1)
 // Caches application shell and enables offline home screen capability
 
-const CACHE_NAME = 'matchiq-pwa-v3';
+const CACHE_NAME = 'matchiq-pwa-v4';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
+  './styles.css',
+  './app.js',
   './manifest.json',
   './market_calculations.js',
   './assets/icon-192.png',
@@ -13,9 +15,11 @@ const PRECACHE_ASSETS = [
   './assets/apple-touch-icon.png',
   './assets/favicon-32.png',
   './assets/stadium_hero.jpg',
-  './data/matches.json',
-  './data/match_winner_forward.json',
-  './data/forward_test.json',
+  './data/predictions.json',
+  './data/fixtures.json',
+  './data/prediction_history.json',
+  './data/performance.json',
+  './data/pipeline_status.json',
   './data/model_reliability.json'
 ];
 
@@ -58,7 +62,8 @@ self.addEventListener('fetch', event => {
   }
 
   // For data requests, use Network-first with cache: 'no-store' to ensure freshness
-  if (url.pathname.includes('/data/')) {
+  // Data and app code are network-first so a deploy or data refresh shows at once.
+  if (url.pathname.includes('/data/') || /\.(js|css)$/.test(url.pathname)) {
     event.respondWith(
       fetch(event.request, { cache: 'no-store' }).then(response => {
         if (response && response.status === 200) {

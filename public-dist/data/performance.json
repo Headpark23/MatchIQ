@@ -1,0 +1,276 @@
+{
+ "generated_at": "2026-10-26T13:11:24.741152+00:00",
+ "min_report_n": 20,
+ "markets": {
+  "result": {
+   "n": 7,
+   "brier": 0.4527,
+   "logloss": 0.791,
+   "pick_hit_rate": 0.7143,
+   "mean_pick_p": 0.5123,
+   "sufficient_sample": false
+  },
+  "corners": {
+   "n": 7,
+   "brier": 0.3253,
+   "logloss": 0.85,
+   "pick_hit_rate": 0.1429,
+   "mean_pick_p": 0.5684,
+   "sufficient_sample": false
+  }
+ },
+ "bands": {
+  "result": {
+   "40-50%": {
+    "n": 3,
+    "brier": 0.5515,
+    "logloss": 0.9299,
+    "pick_hit_rate": 0.6667,
+    "mean_pick_p": 0.439,
+    "sufficient_sample": false
+   },
+   "80-100%": {
+    "n": 1,
+    "brier": 0.0352,
+    "logloss": 0.1615,
+    "pick_hit_rate": 1.0,
+    "mean_pick_p": 0.8509,
+    "sufficient_sample": false
+   },
+   "50-60%": {
+    "n": 2,
+    "brier": 0.3518,
+    "logloss": 0.659,
+    "pick_hit_rate": 1.0,
+    "mean_pick_p": 0.5173,
+    "sufficient_sample": false
+   },
+   "0-40%": {
+    "n": 1,
+    "brier": 0.7756,
+    "logloss": 1.2677,
+    "pick_hit_rate": 0.0,
+    "mean_pick_p": 0.3835,
+    "sufficient_sample": false
+   }
+  },
+  "corners": {
+   "50-60%": {
+    "n": 5,
+    "brier": 0.2808,
+    "logloss": 0.7553,
+    "pick_hit_rate": 0.2,
+    "mean_pick_p": 0.5322,
+    "sufficient_sample": false
+   },
+   "60-70%": {
+    "n": 1,
+    "brier": 0.3687,
+    "logloss": 0.9345,
+    "pick_hit_rate": 0.0,
+    "mean_pick_p": 0.6072,
+    "sufficient_sample": false
+   },
+   "70-80%": {
+    "n": 1,
+    "brier": 0.5047,
+    "logloss": 1.2392,
+    "pick_hit_rate": 0.0,
+    "mean_pick_p": 0.7104,
+    "sufficient_sample": false
+   }
+  }
+ },
+ "versions": {
+  "result": {
+   "dixon-coles-v1-forward-frozen": {
+    "n": 7,
+    "brier": 0.4527,
+    "logloss": 0.791,
+    "pick_hit_rate": 0.7143,
+    "mean_pick_p": 0.5123,
+    "sufficient_sample": false
+   }
+  },
+  "corners": {
+   "v0.9-frozen-poisson": {
+    "n": 7,
+    "brier": 0.3253,
+    "logloss": 0.85,
+    "pick_hit_rate": 0.1429,
+    "mean_pick_p": 0.5684,
+    "sufficient_sample": false
+   }
+  }
+ },
+ "tiers": {
+  "T1": {
+   "n": 7,
+   "brier": 0.4527,
+   "logloss": 0.791,
+   "pick_hit_rate": 0.7143,
+   "mean_pick_p": 0.5123,
+   "sufficient_sample": false
+  }
+ },
+ "teams": {
+  "Brentford": {
+   "n": 1,
+   "brier": 0.5072,
+   "logloss": 0.8668,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.4203,
+   "sufficient_sample": false
+  },
+  "Liverpool": {
+   "n": 1,
+   "brier": 0.5072,
+   "logloss": 0.8668,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.4203,
+   "sufficient_sample": false
+  },
+  "Man City": {
+   "n": 1,
+   "brier": 0.0352,
+   "logloss": 0.1615,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.8509,
+   "sufficient_sample": false
+  },
+  "Ipswich": {
+   "n": 1,
+   "brier": 0.0352,
+   "logloss": 0.1615,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.8509,
+   "sufficient_sample": false
+  },
+  "Newcastle": {
+   "n": 1,
+   "brier": 0.7263,
+   "logloss": 1.1696,
+   "pick_hit_rate": 0.0,
+   "mean_pick_p": 0.4259,
+   "sufficient_sample": false
+  },
+  "Aston Villa": {
+   "n": 1,
+   "brier": 0.7263,
+   "logloss": 1.1696,
+   "pick_hit_rate": 0.0,
+   "mean_pick_p": 0.4259,
+   "sufficient_sample": false
+  },
+  "Bournemouth": {
+   "n": 1,
+   "brier": 0.4208,
+   "logloss": 0.7532,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.4709,
+   "sufficient_sample": false
+  },
+  "Sunderland": {
+   "n": 1,
+   "brier": 0.4208,
+   "logloss": 0.7532,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.4709,
+   "sufficient_sample": false
+  },
+  "Brighton": {
+   "n": 1,
+   "brier": 0.3524,
+   "logloss": 0.6622,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.5157,
+   "sufficient_sample": false
+  },
+  "Crystal Palace": {
+   "n": 1,
+   "brier": 0.3524,
+   "logloss": 0.6622,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.5157,
+   "sufficient_sample": false
+  },
+  "Leeds": {
+   "n": 1,
+   "brier": 0.7756,
+   "logloss": 1.2677,
+   "pick_hit_rate": 0.0,
+   "mean_pick_p": 0.3835,
+   "sufficient_sample": false
+  },
+  "Man United": {
+   "n": 1,
+   "brier": 0.7756,
+   "logloss": 1.2677,
+   "pick_hit_rate": 0.0,
+   "mean_pick_p": 0.3835,
+   "sufficient_sample": false
+  },
+  "Nott'm Forest": {
+   "n": 1,
+   "brier": 0.3512,
+   "logloss": 0.6559,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.519,
+   "sufficient_sample": false
+  },
+  "Arsenal": {
+   "n": 1,
+   "brier": 0.3512,
+   "logloss": 0.6559,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.519,
+   "sufficient_sample": false
+  }
+ },
+ "result_timeline": [
+  {
+   "kickoff_utc": "2026-10-17T14:00:00Z",
+   "won": true,
+   "brier": 0.50725
+  },
+  {
+   "kickoff_utc": "2026-10-17T14:00:00Z",
+   "won": true,
+   "brier": 0.03524
+  },
+  {
+   "kickoff_utc": "2026-10-17T16:30:00Z",
+   "won": false,
+   "brier": 0.72629
+  },
+  {
+   "kickoff_utc": "2026-10-18T13:00:00Z",
+   "won": true,
+   "brier": 0.42084
+  },
+  {
+   "kickoff_utc": "2026-10-18T13:00:00Z",
+   "won": true,
+   "brier": 0.35238
+  },
+  {
+   "kickoff_utc": "2026-10-18T13:00:00Z",
+   "won": false,
+   "brier": 0.7756
+  },
+  {
+   "kickoff_utc": "2026-10-18T15:30:00Z",
+   "won": true,
+   "brier": 0.35122
+  }
+ ],
+ "evaluated_matches": 7,
+ "published_records": 35,
+ "challenger": {
+  "challenger": "dc-decay-epl-v1-shadow",
+  "production": "dixon-coles-v1-forward-frozen",
+  "n": 0,
+  "min_n_for_promotion": 150,
+  "recommendation": "Collecting evidence: no settled matches yet."
+ }
+}

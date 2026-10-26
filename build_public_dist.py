@@ -15,6 +15,8 @@ DIST = ROOT / "public-dist"
 # Explicit Allowlist: ONLY these files are permitted in public distribution
 ALLOWLIST_FILES = [
     "index.html",
+    "app.js",
+    "styles.css",
     "market_calculations.js",
     "manifest.json",
     "sw.js",
@@ -30,10 +32,14 @@ ALLOWLIST_ASSETS = [
 ]
 
 ALLOWLIST_DATA = [
-    "matches.json",
     "match_winner_forward.json",
     "forward_test.json",
-    "model_reliability.json"
+    "model_reliability.json",
+    "fixtures.json",
+    "predictions.json",
+    "prediction_history.json",
+    "performance.json",
+    "pipeline_status.json"
 ]
 
 def build():
