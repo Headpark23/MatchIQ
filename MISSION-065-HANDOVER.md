@@ -88,6 +88,7 @@ cd public-dist && npx vercel link --yes --project matchiq --scope martin-whites-
   - `valueVerdict`, `allSelections`, `rankSelections`, `topSix`, `bestValue` moved to `market_calculations.js` with `tests/test_best_value.js`. Behaviour change: only the model's top match-result pick can be called value (the 40%-band calibration describes top picks only).
   - `experiments/m065_most_likely_backtest/` (REPORT.md, results.json, decisions.csv): Most Likely hits 56.7% vs the favourite's 47.2% (+9.5 pts, CI [+2.7, +16.2]) but only because it picks likelier events; its edge over base rate is -0.8 pts against +8.6 for the favourite. No prices exist for these comparisons, so no profit/loss is claimed.
   - Results scorecards are now cards (`statCard`) instead of wide tables. Service-worker cache bumped to v5.
+  - Preview: **https://matchiq-c8objec2o-martin-whites-projects.vercel.app** (commit `92cc0e8`). Production untouched.
 
 ## Next steps for the next session
 
