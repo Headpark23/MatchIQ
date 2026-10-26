@@ -213,6 +213,7 @@ def predict(fixture, ctx, evidence=None):
         "pick": pick, "selections": selections, "method": res["note"], "training_matches": res.get("training_matches"),
         "form": {"home": ctx.form(home, "H"), "away": ctx.form(away, "A")},
         "venue_games": {"home": ctx.home_counts[home], "away": ctx.away_counts[away]},
+        "league_p": [round(x, 4) for x in ctx.base["result"]],
         "pooled_matches": {"home": ctx.pooled_counts[home], "away": ctx.pooled_counts[away]},
     }
     if "pooled_raw" in res:

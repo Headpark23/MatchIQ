@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-10-26T13:11:24.741152+00:00",
+ "generated_at": "2026-10-26T13:40:32.738035+00:00",
  "horizon_days": 21,
  "predictions": {
   "PL-2627-chelsea-v-man-united": {
    "match_id": "PL-2627-chelsea-v-man-united",
-   "record_id": "PL-2627-chelsea-v-man-united#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-chelsea-v-man-united#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -135,6 +135,11 @@
       "home": 41,
       "away": 42
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 40
@@ -506,12 +511,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5893,
+     "credible_p": 0.5885,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5485
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-bournemouth-v-leeds": {
    "match_id": "PL-2627-bournemouth-v-leeds",
-   "record_id": "PL-2627-bournemouth-v-leeds#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-bournemouth-v-leeds#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -641,6 +667,11 @@
       "home": 42,
       "away": 22
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 41,
       "away": 40
@@ -1012,12 +1043,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5919,
+     "credible_p": 0.5909,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5509
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-brentford-v-nottm-forest": {
    "match_id": "PL-2627-brentford-v-nottm-forest",
-   "record_id": "PL-2627-brentford-v-nottm-forest#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-brentford-v-nottm-forest#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -1147,6 +1199,11 @@
       "home": 42,
       "away": 41
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 40
@@ -1518,12 +1575,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5718,
+     "credible_p": 0.5717,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5315
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-coventry-v-sunderland": {
    "match_id": "PL-2627-coventry-v-sunderland",
-   "record_id": "PL-2627-coventry-v-sunderland#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-coventry-v-sunderland#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -1641,6 +1719,11 @@
       "home": 3,
       "away": 23
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 44,
       "away": 41
@@ -2012,12 +2095,32 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5493,
+     "credible_p": 0.55,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5095
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-hull-v-ipswich": {
    "match_id": "PL-2627-hull-v-ipswich",
-   "record_id": "PL-2627-hull-v-ipswich#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-hull-v-ipswich#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -2136,6 +2239,11 @@
       "home": 3,
       "away": 23
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 47,
       "away": 45
@@ -2507,12 +2615,32 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5708,
+     "credible_p": 0.5705,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5302
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-man-city-v-brighton": {
    "match_id": "PL-2627-man-city-v-brighton",
-   "record_id": "PL-2627-man-city-v-brighton#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-man-city-v-brighton#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -2642,6 +2770,11 @@
       "home": 42,
       "away": 41
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 41,
       "away": 40
@@ -3013,12 +3146,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5893,
+     "credible_p": 0.5883,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5483
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-tottenham-v-crystal-palace": {
    "match_id": "PL-2627-tottenham-v-crystal-palace",
-   "record_id": "PL-2627-tottenham-v-crystal-palace#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-tottenham-v-crystal-palace#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -3148,6 +3302,11 @@
       "home": 42,
       "away": 42
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 40
@@ -3519,12 +3678,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5807,
+     "credible_p": 0.5801,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.54
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-aston-villa-v-fulham": {
    "match_id": "PL-2627-aston-villa-v-fulham",
-   "record_id": "PL-2627-aston-villa-v-fulham#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-aston-villa-v-fulham#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -3654,6 +3834,11 @@
       "home": 41,
       "away": 41
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 41,
       "away": 40
@@ -4025,12 +4210,32 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5567,
+     "credible_p": 0.557,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5166
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-liverpool-v-arsenal": {
    "match_id": "PL-2627-liverpool-v-arsenal",
-   "record_id": "PL-2627-liverpool-v-arsenal#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-liverpool-v-arsenal#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -4160,6 +4365,11 @@
       "home": 41,
       "away": 42
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 41
@@ -4531,12 +4741,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5697,
+     "credible_p": 0.5698,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5295
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-newcastle-v-everton": {
    "match_id": "PL-2627-newcastle-v-everton",
-   "record_id": "PL-2627-newcastle-v-everton#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-newcastle-v-everton#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -4666,6 +4897,11 @@
       "home": 42,
       "away": 41
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 41,
       "away": 40
@@ -5037,12 +5273,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.616,
+     "credible_p": 0.6139,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5743
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-everton-v-coventry": {
    "match_id": "PL-2627-everton-v-coventry",
-   "record_id": "PL-2627-everton-v-coventry#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-everton-v-coventry#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -5167,6 +5424,11 @@
       "home": 42,
       "away": 4
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 44
@@ -5538,12 +5800,32 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5483,
+     "credible_p": 0.549,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5085
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-leeds-v-tottenham": {
    "match_id": "PL-2627-leeds-v-tottenham",
-   "record_id": "PL-2627-leeds-v-tottenham#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-leeds-v-tottenham#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -5673,6 +5955,11 @@
       "home": 23,
       "away": 41
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 40
@@ -6044,12 +6331,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5839,
+     "credible_p": 0.5833,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5432
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-arsenal-v-hull": {
    "match_id": "PL-2627-arsenal-v-hull",
-   "record_id": "PL-2627-arsenal-v-hull#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-arsenal-v-hull#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -6174,6 +6482,11 @@
       "home": 41,
       "away": 4
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 41,
       "away": 47
@@ -6545,12 +6858,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5746,
+     "credible_p": 0.5738,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5336
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-fulham-v-newcastle": {
    "match_id": "PL-2627-fulham-v-newcastle",
-   "record_id": "PL-2627-fulham-v-newcastle#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-fulham-v-newcastle#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -6680,6 +7014,11 @@
       "home": 42,
       "away": 41
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 41
@@ -7051,12 +7390,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5824,
+     "credible_p": 0.5818,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5417
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-nottm-forest-v-man-city": {
    "match_id": "PL-2627-nottm-forest-v-man-city",
-   "record_id": "PL-2627-nottm-forest-v-man-city#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-nottm-forest-v-man-city#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -7186,6 +7546,11 @@
       "home": 42,
       "away": 41
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 41
@@ -7557,12 +7922,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5772,
+     "credible_p": 0.5768,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5366
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-brighton-v-brentford": {
    "match_id": "PL-2627-brighton-v-brentford",
-   "record_id": "PL-2627-brighton-v-brentford#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-brighton-v-brentford#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -7692,6 +8078,11 @@
       "home": 42,
       "away": 41
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 40
@@ -8063,12 +8454,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5996,
+     "credible_p": 0.5983,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5584
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-crystal-palace-v-liverpool": {
    "match_id": "PL-2627-crystal-palace-v-liverpool",
-   "record_id": "PL-2627-crystal-palace-v-liverpool#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-crystal-palace-v-liverpool#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -8198,6 +8610,11 @@
       "home": 41,
       "away": 42
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 40
@@ -8569,12 +8986,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5668,
+     "credible_p": 0.567,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5267
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-ipswich-v-bournemouth": {
    "match_id": "PL-2627-ipswich-v-bournemouth",
-   "record_id": "PL-2627-ipswich-v-bournemouth#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-ipswich-v-bournemouth#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -8706,6 +9144,11 @@
       "home": 22,
       "away": 41
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 45,
       "away": 41
@@ -9077,12 +9520,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5747,
+     "credible_p": 0.5739,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5337
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-sunderland-v-chelsea": {
    "match_id": "PL-2627-sunderland-v-chelsea",
-   "record_id": "PL-2627-sunderland-v-chelsea#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-sunderland-v-chelsea#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -9212,6 +9676,11 @@
       "home": 22,
       "away": 42
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 41,
       "away": 40
@@ -9583,12 +10052,33 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5975,
+     "credible_p": 0.5962,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5563
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
   "PL-2627-man-united-v-aston-villa": {
    "match_id": "PL-2627-man-united-v-aston-villa",
-   "record_id": "PL-2627-man-united-v-aston-villa#r1",
-   "published_at": "2026-10-26T13:11:24.741152+00:00",
+   "record_id": "PL-2627-man-united-v-aston-villa#r2",
+   "published_at": "2026-10-26T13:40:32.738035+00:00",
    "fixture": {
     "competition": "PL",
     "season": "2627",
@@ -9718,6 +10208,11 @@
       "home": 41,
       "away": 42
      },
+     "league_p": [
+      0.4157,
+      0.2614,
+      0.3229
+     ],
      "pooled_matches": {
       "home": 40,
       "away": 41
@@ -10089,6 +10584,27 @@
      ],
      "method": "30% venue-average Poisson + 70% Premier League rate"
     }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5811,
+     "credible_p": 0.5806,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5405
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   }
  }

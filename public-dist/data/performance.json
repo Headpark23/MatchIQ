@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-26T13:11:24.741152+00:00",
+ "generated_at": "2026-10-26T13:40:32.738035+00:00",
  "min_report_n": 20,
  "markets": {
   "result": {
@@ -264,8 +264,14 @@
    "brier": 0.35122
   }
  ],
+ "most_likely": {
+  "n": 0,
+  "sufficient_sample": false
+ },
+ "most_likely_by_market": {},
+ "decisions": {},
  "evaluated_matches": 7,
- "published_records": 35,
+ "published_records": 55,
  "challenger": {
   "challenger": "dc-decay-epl-v1-shadow",
   "production": "dixon-coles-v1-forward-frozen",

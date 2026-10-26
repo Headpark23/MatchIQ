@@ -17,6 +17,8 @@ import math
 from collections import defaultdict
 
 SEALED = ("record_id", "match_id", "revision", "fixture", "published_at", "inputs_fingerprint", "markets", "sources", "origin")
+# Added in Mission 065. Sealed when present, so earlier records keep their original hash.
+SEALED_OPTIONAL = ("recommendations",)
 BAND_EDGES = (0.0, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0001)
 MIN_REPORT_N = 20
 
@@ -30,7 +32,9 @@ def canonical_json(value):
 
 
 def seal(record):
-    return hashlib.sha256(canonical_json({k: record.get(k) for k in SEALED}).encode("utf-8")).hexdigest()
+    payload = {k: record.get(k) for k in SEALED}
+    payload.update({k: record[k] for k in SEALED_OPTIONAL if k in record})
+    return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
 
 
 def verify(ledger):
@@ -68,7 +72,7 @@ def compact_markets(markets):
     return out
 
 
-def publish(ledger, fixture, markets, inputs_fingerprint, sources, now, origin="pipeline"):
+def publish(ledger, fixture, markets, inputs_fingerprint, sources, now, origin="pipeline", recommendations=None):
     """Append a revision if the fixture has not kicked off and inputs changed."""
     if _parse(fixture["kickoff_utc"]) <= now:
         return None
@@ -80,6 +84,8 @@ def publish(ledger, fixture, markets, inputs_fingerprint, sources, now, origin="
               "fixture": {k: fixture[k] for k in ("competition", "season", "home", "away", "kickoff_utc")},
               "published_at": now.isoformat(), "inputs_fingerprint": inputs_fingerprint,
               "markets": compact_markets(markets), "sources": sources, "origin": origin}
+    if recommendations is not None:
+        record["recommendations"] = recommendations
     record["sha256"] = seal(record)
     if latest:
         latest["superseded_by"] = record["record_id"]
@@ -131,11 +137,32 @@ def settle_record(record, score, stats):
         yes = int(hg > 0 and ag > 0)
         p_yes = next(s["p"] for s in m["selections"] if s["key"] == "yes")
         out["btts"] = {"outcome": "yes" if yes else "no", "pick_won": (m["pick"]["key"] == "yes") == bool(yes), **_binary(p_yes, yes)}
+    most = (record.get("recommendations") or {}).get("most_likely") or {}
+    if most.get("decision") == "most_likely":
+        won = selection_won(most["market"], most["key"], most.get("line"), score, totals)
+        if won is None:
+            out["most_likely"] = {"pending": "match statistics not yet available"}
+        else:
+            y = int(won)
+            out["most_likely"] = {"market": most["market"], "label": most["label"], "p": most["p"], "won": won, **_binary(most["p"], y)}
     for v in out.values():
         for k in ("brier", "logloss", "rps"):
             if k in v:
                 v[k] = round(v[k], 5)
     return out
+
+
+def selection_won(market, key, line, score, totals):
+    """Did one selection win? None when the statistic is not yet known."""
+    hg, ag = score
+    if market == "result":
+        return key == ("H" if hg > ag else "A" if ag > hg else "D")
+    if market == "btts":
+        return (key == "yes") == (hg > 0 and ag > 0)
+    total = totals.get(market)
+    if total is None:
+        return None
+    return (key == "over") == (total > line)
 
 
 def settle(ledger, fixtures, stats_by_match, now):
@@ -192,7 +219,7 @@ def performance(ledger):
         if not r.get("evaluated"):
             continue
         for market, s in (r.get("settlement") or {}).items():
-            if "brier" not in s:
+            if "brier" not in s or market not in r["markets"]:
                 continue
             m = r["markets"][market]
             row = {"brier": s["brier"], "logloss": s["logloss"], "won": s["pick_won"], "p": m["pick"]["p"]}
@@ -226,6 +253,22 @@ def performance(ledger):
             out["teams"][key[1]] = summary(rows)
     timeline.sort(key=lambda x: x["kickoff_utc"])
     out["result_timeline"] = timeline
+    most_rows, most_by_market, decisions = [], defaultdict(list), defaultdict(int)
+    for r in ledger["records"]:
+        if not r.get("evaluated"):
+            continue
+        rec = r.get("recommendations") or {}
+        for kind in ("most_likely", "best_value"):
+            if rec.get(kind):
+                decisions[kind + ":" + rec[kind]["decision"]] += 1
+        s = (r.get("settlement") or {}).get("most_likely")
+        if s and "won" in s:
+            row = {"brier": s["brier"], "logloss": s["logloss"], "won": s["won"], "p": s["p"]}
+            most_rows.append(row)
+            most_by_market[s["market"]].append(row)
+    out["most_likely"] = summary(most_rows) if most_rows else {"n": 0, "sufficient_sample": False}
+    out["most_likely_by_market"] = {k: summary(v) for k, v in most_by_market.items()}
+    out["decisions"] = dict(decisions)
     out["evaluated_matches"] = len({r["match_id"] for r in ledger["records"] if r.get("evaluated")})
     out["published_records"] = len(ledger["records"])
     return json.loads(json.dumps(out))

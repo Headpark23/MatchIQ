@@ -20,6 +20,7 @@ from .data import (ROOT, championship_history, co_uk_as_matches, load_co_uk, mer
                    promoted_by_season, uk_date)
 from .fairodds import fair_odds
 from .models import SHADOW_VERSION, VERSIONS, Context, predict, shadow_result
+from .recommend import RULE_VERSION, recommend
 from .sources import SOURCE_LABELS, fetch_football_data_org, fetch_openfootball, fetch_openligadb
 from .teams import canonical, match_id
 
@@ -91,7 +92,7 @@ def fingerprint(results):
     digest = hashlib.sha256()
     for r in sorted(results, key=lambda r: (r["date"], r["home"])):
         digest.update(f"{r['date']}|{r['home']}|{r['away']}|{r['hg']}|{r['ag']}\n".encode())
-    digest.update(json.dumps(VERSIONS, sort_keys=True).encode())
+    digest.update(json.dumps({**VERSIONS, "recommend": RULE_VERSION}, sort_keys=True).encode())
     return digest.hexdigest()[:16]
 
 
@@ -149,7 +150,8 @@ def run(out_dir, now, offline=False, fetchers=None):
     frozen = {(r["date"], canonical(r["home"]), canonical(r["away"])): r for r in read_json(data_dir / "match_winner_forward.json", {"records": []})["records"]}
     as_of = uk_date(now)
     ctx = Context(results, as_of, promoted, frozen)
-    evidence = evidence_from(read_json(data_dir / "model_reliability.json", {}),
+    reliability = read_json(data_dir / "model_reliability.json", {})
+    evidence = evidence_from(reliability,
                              read_json(ROOT / "experiments" / "m064_promoted_hierarchy" / "results.json", {}))
     imported = import_frozen_ledgers(ledger, data_dir, now)
     fp = fingerprint(results)
@@ -162,7 +164,8 @@ def run(out_dir, now, offline=False, fetchers=None):
             continue
         fixture = {**f, "date": uk_date(kickoff)}
         markets = predict(fixture, ctx, evidence)
-        if hist.publish(ledger, f, markets, fp, [s for s in f["sources"]], now):
+        recommendations = recommend(markets, reliability)
+        if hist.publish(ledger, f, markets, fp, [s for s in f["sources"]], now, recommendations=recommendations):
             published += 1
         challenger = shadow_result(fixture, ctx)
         if challenger:
@@ -171,7 +174,7 @@ def run(out_dir, now, offline=False, fetchers=None):
         predictions[f["id"]] = {"match_id": f["id"], "record_id": latest["record_id"], "published_at": latest["published_at"],
                                 "fixture": {k: f[k] for k in ("competition", "season", "home", "away", "kickoff_utc", "status", "kickoff_history")},
                                 "promoted": [t for t in (f["home"], f["away"]) if t in promoted.get(f["season"], set())],
-                                "markets": markets}
+                                "markets": markets, "recommendations": latest.get("recommendations") or recommendations}
 
     stats_by_match = {match_id("PL", r["season"], r["home"], r["away"]): r["stats"] for r in co_uk}
     settled = hist.settle(ledger, fixtures, stats_by_match, now)

@@ -260,6 +260,61 @@ class ChallengerGate(unittest.TestCase):
         self.assertIn("Keep production", worse["recommendation"])
 
 
+class Recommendations(unittest.TestCase):
+    RELIABILITY = {"markets": {"wins": {"bands": [{"band": "60-70%", "lo": 0.6, "hi": 0.7, "n": 104, "observed_rate": 0.66}]}}}
+
+    def markets(self, tier, p_home, goals_over=0.55, goals_strength="weak"):
+        mk = sample_markets(p_home)
+        mk["result"]["tier"] = tier
+        mk["result"]["league_p"] = [0.44, 0.24, 0.32]
+        mk["result"]["evidence"] = {"status": "validated" if tier == "T1" else "provisional", "strength": "moderate" if tier == "T1" else "weak"}
+        line = {"line": 2.5, "over": {"key": "over", "label": "Over 2.5", "p": goals_over, "fair_odds": fair_odds(goals_over)},
+                "under": {"key": "under", "label": "Under 2.5", "p": 1 - goals_over, "fair_odds": fair_odds(1 - goals_over)}}
+        mk["goals"] = {**mk["goals"], "lines": [line], "evidence": {"status": "provisional", "strength": goals_strength}}
+        mk.pop("corners")
+        return mk
+
+    def test_validated_70_outranks_provisional_80_with_little_evidence(self):
+        from pipeline.recommend import recommend
+        validated = recommend(self.markets("T1", 0.66, goals_over=0.5), self.RELIABILITY)["most_likely"]
+        self.assertEqual((validated["market"], validated["key"]), ("result", "H"))
+        mk = self.markets("T2", 0.72, goals_over=0.5)
+        mk["result"]["pick"]["p"] = 0.80  # hypothetical: larger number, far less evidence
+        provisional = recommend(mk, self.RELIABILITY)["most_likely"]
+        self.assertLess(provisional["lower_bound"], validated["lower_bound"])
+
+    def test_league_average_lines_are_never_featured_and_no_bet_is_possible(self):
+        from pipeline.recommend import recommend
+        mk = self.markets("T3", 0.45, goals_over=0.9, goals_strength="none")
+        mk["btts"]["evidence"]["strength"] = "none"
+        rec = recommend(mk, self.RELIABILITY)
+        self.assertEqual(rec["most_likely"]["decision"], "no_bet")
+        self.assertEqual(rec["best_value"]["decision"], "no_bet")
+
+    def test_most_likely_is_sealed_and_settled(self):
+        from pipeline.recommend import recommend
+        ledger = hist.empty_ledger()
+        mk = self.markets("T1", 0.66)
+        hist.publish(ledger, FIXTURE, mk, "fp1", ["openligadb"], NOW, recommendations=recommend(mk, self.RELIABILITY))
+        ledger["records"][0]["recommendations"]["most_likely"]["p"] = 0.99
+        with self.assertRaises(hist.IntegrityError):
+            hist.verify(ledger)
+        ledger = hist.empty_ledger()
+        hist.publish(ledger, FIXTURE, mk, "fp1", ["openligadb"], NOW, recommendations=recommend(mk, self.RELIABILITY))
+        hist.settle(ledger, [{**FIXTURE, "status": "FINISHED", "score": [2, 0], "result_source": "openligadb"}], {}, NOW + dt.timedelta(days=4))
+        s = ledger["records"][0]["settlement"]["most_likely"]
+        self.assertTrue(s["won"])
+        perf = hist.performance(ledger)
+        self.assertEqual(perf["most_likely"]["n"], 1)
+        self.assertEqual(perf["decisions"]["best_value:no_bet"], 1)
+
+    def test_records_sealed_before_mission_065_still_verify(self):
+        ledger = hist.empty_ledger()
+        hist.publish(ledger, FIXTURE, sample_markets(), "fp1", ["openligadb"], NOW)
+        self.assertNotIn("recommendations", ledger["records"][0])
+        self.assertTrue(hist.verify(ledger))
+
+
 class FairOddsParity(unittest.TestCase):
     def test_python_matches_javascript_formatter(self):
         node = shutil.which("node")
