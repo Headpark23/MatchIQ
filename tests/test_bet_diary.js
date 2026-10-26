@@ -104,4 +104,26 @@ close(calc.calculateBrierScore(p1X2, 'D', '1x2'), 0.945, 'Multi-class draw surpr
 // Outcome 'A' -> 0.60^2 + 0.25^2 + (0.15-1)^2 = 0.36 + 0.0625 + 0.7225 = 1.145
 close(calc.calculateBrierScore(p1X2, 'A', '1x2'), 1.145, 'Multi-class away upset');
 
+// UK fractional rendering and independent accumulator calculations
+assert.equal(calc.formatFractionalOdds(2.5), '3/2');
+assert.equal(calc.formatFractionalOdds(1.833333333333), '5/6');
+assert.equal(calc.formatFractionalOdds(1), 'Evens');
+const accA = calc.createAccumulator([{ selection: 'A', odds: 2.2 }, { selection: 'B', odds: 1.75 }], 10, 'Tester A');
+const accB = calc.createAccumulator([{ selection: 'C', odds: 3.1 }, { selection: 'D', odds: 1.4 }], 5, 'Tester B');
+close(accA.decimalOdds, 3.85, 'Accumulator A precise combined odds');
+close(accA.potentialReturn, 38.5, 'Accumulator A potential return');
+close(accB.decimalOdds, 4.34, 'Accumulator B remains independent');
+assert.equal(accA.legs.length, 2);
+assert.equal(accA.profile, 'Tester A');
+assert.equal(calc.settleAccumulator(accA, ['won', 'lost']).outcome, 'lost');
+assert.equal(calc.settleAccumulator(accA, ['won', 'void']).decimalOdds, 2.2);
+
+assert.equal(calc.loadBetDiary({ getItem: () => null }, 'diary').length, 0);
+const memoryStorage = { value: null, setItem(key, value) { this.value = value; }, getItem() { return this.value; } };
+const storedAcc = [accA, accB];
+calc.saveBetDiary(memoryStorage, 'diary', storedAcc);
+assert.equal(calc.loadBetDiary(memoryStorage, 'diary').length, 2, 'Two separate bets survive storage reload');
+assert.throws(() => calc.saveBetDiary({ setItem() { throw new Error('quota'); } }, 'diary', []), /quota/);
+assert.throws(() => calc.loadBetDiary({ getItem() { throw new Error('blocked'); } }, 'diary'), /blocked/);
+
 console.log('PASS: All Bet Diary and Brier score unit tests successfully verified.');

@@ -2817,6 +2817,20 @@ footer {
           </div>
         </div>
 
+        <div class="form-row-2">
+          <div class="form-row">
+            <label class="form-lbl" for="modal-bet-type">Bet type</label>
+            <select id="modal-bet-type" class="form-ctrl" onchange="toggleAccumulatorFields()"><option value="single">Single bet</option><option value="accumulator">Accumulator</option></select>
+          </div>
+          <div class="form-row">
+            <label class="form-lbl" for="modal-profile">Bettor profile</label>
+            <input id="modal-profile" class="form-ctrl" value="Tester A" maxlength="40" placeholder="e.g. Tester A or Tester B" />
+          </div>
+        </div>
+        <div class="form-row" id="accumulator-legs-row" style="display:none;">
+          <label class="form-lbl" for="modal-legs-input">Accumulator legs (one per line: selection | decimal odds)</label>
+          <textarea id="modal-legs-input" class="form-ctrl" rows="4" placeholder="Arsenal win | 1.85&#10;Over 2.5 goals | 1.90"></textarea>
+        </div>
         <div class="form-row">
           <label class="form-lbl" for="modal-selection-input">Actual Bet Selection</label>
           <input type="text" id="modal-selection-input" class="form-ctrl" placeholder="e.g. Arsenal Win, Over 9.5 Corners" required />
@@ -2838,7 +2852,7 @@ footer {
         <div class="form-row-2">
           <div class="form-row">
             <label class="form-lbl" for="modal-odds-input">Decimal Odds Actually Offered</label>
-            <input type="number" id="modal-odds-input" class="form-ctrl" step="0.01" min="1.01" max="250.0" placeholder="e.g. 1.85" oninput="updateModalPnlPreview()" required />
+            <input type="number" id="modal-odds-input" class="form-ctrl" step="any" min="1.00000001" max="250.0" placeholder="e.g. 1.85" oninput="updateModalPnlPreview()" required />
           </div>
           <div class="form-row">
             <label class="form-lbl" for="modal-stake-input">Stake in GBP (£)</label>
@@ -3038,6 +3052,7 @@ const el = id => document.getElementById(id);
 const num = v => (v === '' || v == null) ? null : Number.isFinite(+v) ? +v : null;
 const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
 const esc = s => String(s || '').replace(/&amp;#39;/g, "'").replace(/&#39;/g, "'").replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const escJsArg = s => esc(String(s || '').split(String.fromCharCode(92)).join(String.fromCharCode(92) + String.fromCharCode(92)).split("'").join(String.fromCharCode(92) + "'"));
 
 function date(s) {
   const p = (s || '').split('/');
@@ -3304,69 +3319,24 @@ function switchAppView(viewName) {
 // Private, zero-leakage client-side tracking with CSV/JSON exports
 // ============================================================
 const DIARY_STORAGE_KEY = 'matchiq_bet_diary_v1';
+let diaryStorageReadFailed = false;
 
 function getStoredDiary() {
   try {
-    const data = localStorage.getItem(DIARY_STORAGE_KEY);
-    if (data) return JSON.parse(data);
-  } catch(e) {}
-  // Provide sample settled bets from Matchweek 7 so user sees immediate functionality
-  return [
-    {
-      id: 'demo-mw7-1',
-      date: '2026-10-17',
-      fixture: 'Man City v Ipswich',
-      market: 'wins',
-      marketName: 'Match Winner',
-      prediction: 'Man City Win (85.1%)',
-      selection: 'Man City Win',
-      origin: 'matchiq',
-      bookmaker: 'Bet365',
-      odds: 1.30,
-      stake: 20.00,
-      outcome: 'won',
-      timestamp: '2026-10-17T13:45:00Z',
-      notes: 'Followed Dixon-Coles prediction on home banker'
-    },
-    {
-      id: 'demo-mw7-2',
-      date: '2026-10-17',
-      fixture: 'Brentford v Liverpool',
-      market: 'corners',
-      marketName: 'Total Corners',
-      prediction: 'Over 9.5 Corners (52.1%)',
-      selection: 'Over 9.5 Corners',
-      origin: 'matchiq',
-      bookmaker: 'SkyBet',
-      odds: 1.85,
-      stake: 10.00,
-      outcome: 'won',
-      timestamp: '2026-10-17T13:48:00Z',
-      notes: 'Poisson model indicated value against 9.5 line'
-    },
-    {
-      id: 'demo-mw7-3',
-      date: '2026-10-17',
-      fixture: 'Newcastle v Aston Villa',
-      market: 'wins',
-      marketName: 'Match Winner',
-      prediction: 'Newcastle Win (48.6%)',
-      selection: 'Aston Villa Win',
-      origin: 'independent',
-      bookmaker: 'Betfair',
-      odds: 3.25,
-      stake: 10.00,
-      outcome: 'won',
-      timestamp: '2026-10-17T16:15:00Z',
-      notes: 'Independent choice against model; Villa won 1-0'
-    }
-  ];
+    const entries = calc.loadBetDiary(localStorage, DIARY_STORAGE_KEY);
+    diaryStorageReadFailed = false;
+    return entries;
+  } catch (error) {
+    diaryStorageReadFailed = true;
+    console.error('Bet Diary could not be read:', error);
+    showToast('Could not read saved diary data. Existing data was left untouched.', 'error');
+    return [];
+  }
 }
 
 function saveStoredDiary(entries) {
-  try {
-    localStorage.setItem(DIARY_STORAGE_KEY, JSON.stringify(entries));
-  } catch(e) {}
+  if (diaryStorageReadFailed) throw new Error('Bet Diary read failed; refusing to overwrite existing data.');
+  calc.saveBetDiary(localStorage, DIARY_STORAGE_KEY, entries);
   updateNavBadges();
 }
 
@@ -3378,10 +3348,12 @@ function updateNavBadges() {
   }
 }
 
+let diaryProfileFilter = 'all';
 function renderBetDiaryView() {
   const container = el('diary-stage-content');
   if (!container) return;
-  const diary = getStoredDiary();
+  const allDiary = getStoredDiary();
+  const diary = diaryProfileFilter === 'all' ? allDiary : allDiary.filter(entry => (entry.profile || 'Default') === diaryProfileFilter);
   const summary = calc.summarizeBetDiary ? calc.summarizeBetDiary(diary) : {
     totalEntries: diary.length, totalStaked: 0, settledStaked: 0, netProfit: 0,
     winRatePct: 0, roiPct: 0, pendingCount: 0, settledCount: 0, wonCount: 0, lostCount: 0, voidCount: 0,
@@ -3440,6 +3412,13 @@ function renderBetDiaryView() {
       '</button>' +
     '</div>' +
     '<div class="action-group">' +
+      '<label class="form-lbl" for="diary-profile-filter">History:</label>' +
+      '<select id="diary-profile-filter" class="form-ctrl" onchange="diaryProfileFilter=this.value;renderBetDiaryView()">' +
+        '<option value="all"' + (diaryProfileFilter === 'all' ? ' selected' : '') + '>All profiles</option>' +
+        Array.from(new Set(allDiary.map(entry => entry.profile || 'Default'))).sort().map(profile => '<option value="' + esc(profile) + '"' + (diaryProfileFilter === profile ? ' selected' : '') + '>' + esc(profile) + '</option>').join('') +
+      '</select>' +
+    '</div>' +
+    '<div class="action-group">' +
       '<button type="button" class="btn-danger-outline" onclick="clearDiary()">' +
         '🗑️ Clear Diary' +
       '</button>' +
@@ -3489,10 +3468,11 @@ function renderBetDiaryView() {
               '<td>' +
                 '<strong style="color:#fff;">' + esc(entry.selection) + '</strong>' +
                 '<div style="font-size:11px;color:var(--muted);">' + esc(entry.marketName || entry.market) + '</div>' +
+                (entry.type === 'accumulator' ? (entry.legs || []).map((leg, index) => '<div class="small-muted">' + esc(leg.selection) + ' · ' + calc.formatFractionalOdds(+leg.odds) + ' · <select aria-label="Settle ' + esc(leg.selection) + '" onchange="updateAccumulatorLegOutcome(\'' + entry.id + '\',' + index + ',this.value)"><option value="pending"' + (leg.outcome === 'pending' ? ' selected' : '') + '>Pending</option><option value="won"' + (leg.outcome === 'won' ? ' selected' : '') + '>Won</option><option value="lost"' + (leg.outcome === 'lost' ? ' selected' : '') + '>Lost</option><option value="void"' + (leg.outcome === 'void' ? ' selected' : '') + '>Void</option></select></div>').join('') : '') +
               '</td>' +
               '<td>' + originBadge + '</td>' +
               '<td>' + esc(entry.bookmaker || 'Standard') + '</td>' +
-              '<td><strong class="mono">' + (+entry.odds).toFixed(2) + '</strong></td>' +
+              '<td><strong class="mono">' + calc.formatFractionalOdds(+entry.odds) + '</strong><div class="small-muted">' + esc(entry.profile || 'Default') + (entry.type === 'accumulator' ? ' · Accumulator (' + ((entry.legs || []).length) + ' legs)' : ' · Single') + '</div></td>' +
               '<td><strong class="mono">£' + (+entry.stake).toFixed(2) + '</strong></td>' +
               '<td>' +
                 '<div>' + pnlDisplay + '</div>' +
@@ -3516,6 +3496,20 @@ function renderBetDiaryView() {
       '</tbody>' +
     '</table>' +
   '</div>';
+}
+
+function updateAccumulatorLegOutcome(id, index, outcome) {
+  const diary = getStoredDiary();
+  const entry = diary.find(item => item.id === id && item.type === 'accumulator');
+  if (!entry || !entry.legs || !entry.legs[index]) return;
+  entry.legs[index].outcome = outcome;
+  const settled = calc.settleAccumulator(entry, entry.legs.map(leg => leg.outcome));
+  entry.outcome = settled.outcome;
+  entry.odds = settled.decimalOdds;
+  entry.potentialReturn = settled.potentialReturn;
+  try { saveStoredDiary(diary); }
+  catch (error) { showToast('Could not save settlement. Please check browser storage.', 'error'); return; }
+  renderBetDiaryView();
 }
 
 function updateDiaryEntryOutcome(id, outcome) {
@@ -4046,56 +4040,77 @@ function setBookmakerChip(name) {
   }
 }
 
+function toggleAccumulatorFields() {
+  const isAcc = el('modal-bet-type')?.value === 'accumulator';
+  const row = el('accumulator-legs-row');
+  if (row) row.style.display = isAcc ? '' : 'none';
+  const odds = el('modal-odds-input');
+  if (odds) odds.required = !isAcc;
+  updateModalPnlPreview();
+}
+
+function parseAccumulatorLegs() {
+  return (el('modal-legs-input')?.value || '').split('\n').map(line => line.trim()).filter(Boolean).map(line => {
+    const [selection, oddsText] = line.split('|').map(part => part.trim());
+    return { selection, odds: Number(oddsText), outcome: 'pending' };
+  });
+}
+
 function updateModalPnlPreview() {
-  const odds = Number(el('modal-odds-input')?.value) || 0;
+  const betType = el('modal-bet-type')?.value || 'single';
+  const legs = betType === 'accumulator' ? parseAccumulatorLegs() : [];
+  const odds = betType === 'accumulator' ? legs.reduce((total, leg) => total * (leg.odds || 0), 1) : Number(el('modal-odds-input')?.value) || 0;
   const stake = Number(el('modal-stake-input')?.value) || 0;
   const preview = el('modal-pnl-preview');
   if (!preview) return;
-
   if (odds > 1.0 && stake > 0) {
     const profit = calc.calculateBetProfit(stake, odds, 'won');
-    const potReturn = (stake * odds).toFixed(2);
-    preview.innerHTML = '<span>💰 Potential return: <strong>£' + potReturn + '</strong> (Net profit if won: <strong style="color:var(--emerald)">+£' + profit.toFixed(2) + '</strong>)</span>';
-  } else {
-    preview.innerHTML = '<span>💡 Enter odds & stake to preview potential returns.</span>';
-  }
+    preview.innerHTML = '<span>💰 Potential return: <strong>£' + (stake * odds).toFixed(2) + '</strong> (Net profit: <strong>+£' + profit.toFixed(2) + '</strong>; odds ' + calc.formatFractionalOdds(odds) + ')</span>';
+  } else preview.innerHTML = '<span>💡 Enter valid odds and stake to preview potential returns.</span>';
 }
 
 function handleDiaryFormSubmit(e) {
   e.preventDefault();
+  const betType = el('modal-bet-type')?.value || 'single';
+  const legs = betType === 'accumulator' ? parseAccumulatorLegs() : [];
+  const profile = el('modal-profile')?.value.trim() || 'Default';
+  const stake = Number(el('modal-stake-input')?.value);
+  const singleOdds = Number(el('modal-odds-input')?.value);
+  if (!Number.isFinite(stake) || stake <= 0) { showToast('Enter a valid stake greater than £0.', 'error'); return; }
+  if (betType === 'accumulator' && (legs.length < 2 || legs.some(leg => !leg.selection || !Number.isFinite(leg.odds) || leg.odds <= 1))) {
+    showToast('Add at least two legs using “selection | decimal odds”, with odds above 1.00.', 'error'); return;
+  }
+  if (betType === 'single' && (!Number.isFinite(singleOdds) || singleOdds <= 1)) { showToast('Enter valid decimal odds above 1.00.', 'error'); return; }
+  const odds = betType === 'accumulator' ? legs.reduce((total, leg) => total * leg.odds, 1) : singleOdds;
   const fixKey = el('modal-fixture-select')?.value || '';
   const liveFixtures = Array.isArray(meta.fixtures) && meta.fixtures.length > 0 ? meta.fixtures : getVerifiedHoldoutMatches();
   const f = liveFixtures.find(x => fixtureKey(x) === fixKey) || liveFixtures[0];
-
   const market = el('modal-market-select')?.value || 'wins';
-  const origin = el('modal-origin-select')?.value || 'matchiq';
-  const selection = el('modal-selection-input')?.value.trim() || 'Selection';
-  const bookmaker = el('modal-bookmaker-input')?.value.trim() || 'Bookmaker';
-  const odds = Number(el('modal-odds-input')?.value) || 2.00;
-  const stake = Number(el('modal-stake-input')?.value) || 10.00;
-  const notes = el('modal-notes-input')?.value.trim() || '';
-
   const entry = {
-    id: 'bet-' + Date.now(),
-    date: f ? f.Date : '2026-10-24',
-    fixture: f ? (f.HomeTeam + ' v ' + f.AwayTeam) : 'Premier League Match',
-    market: market,
-    marketName: MARKET_CONFIG[market]?.name || market,
-    selection: selection,
-    origin: origin,
-    bookmaker: bookmaker,
-    odds: odds,
-    stake: stake,
-    outcome: 'pending',
-    timestamp: new Date().toISOString(),
-    notes: notes
+    id: 'bet-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+    type: betType, profile,
+    date: f ? f.Date : new Date().toISOString().slice(0, 10),
+    fixture: f ? (f.HomeTeam + ' v ' + f.AwayTeam) : (el('modal-selection-input')?.value.trim() || 'Independent selection'),
+    market, marketName: MARKET_CONFIG[market]?.name || market,
+    selection: betType === 'accumulator' ? legs.map(leg => leg.selection).join(' + ') : (el('modal-selection-input')?.value.trim() || 'Selection'),
+    legs: betType === 'accumulator' ? legs : undefined,
+    origin: el('modal-origin-select')?.value || 'matchiq',
+    bookmaker: el('modal-bookmaker-input')?.value.trim() || 'Bookmaker',
+    odds, stake, potentialReturn: stake * odds,
+    outcome: 'pending', timestamp: new Date().toISOString(),
+    notes: el('modal-notes-input')?.value.trim() || ''
   };
-
-  const diary = getStoredDiary();
-  diary.unshift(entry);
-  saveStoredDiary(diary);
+  try {
+    const diary = getStoredDiary();
+    diary.unshift(entry);
+    saveStoredDiary(diary);
+  } catch (error) {
+    console.error('Bet Diary save failed:', error);
+    showToast('Could not save to this browser. Check storage space or privacy settings; your entry was not reported as saved.', 'error');
+    return;
+  }
   closeBetDiaryModal();
-  showToast('Selection recorded in Bet Diary!', 'success');
+  showToast('Bet saved to this browser.', 'success');
   if (currentAppView === 'diary') renderBetDiaryView();
 }
 
@@ -4104,7 +4119,7 @@ function showToast(msg, type = 'info') {
   if (!container) return;
   const toast = document.createElement('div');
   toast.className = 'toast-msg';
-  toast.innerHTML = (type === 'success' ? '✅ ' : 'ℹ️ ') + esc(msg);
+  toast.textContent = (type === 'success' ? '✅ ' : type === 'error' ? '⚠️ ' : 'ℹ️ ') + msg;
   container.appendChild(toast);
   setTimeout(() => {
     toast.style.opacity = '0';
@@ -4466,7 +4481,7 @@ function renderBroadcast() {
         '</div>' +
         '<div class="pred-card-footer">' +
           '<div class="pred-card-consensus"><strong>Market Context:</strong> ' + esc(c.consensus) + '</div>' +
-          '<button type="button" class="pred-card-btn" onclick="openBetDiaryModal(\'' + esc(fixtureKey(f)) + '\', \'' + c.id + '\')">' +
+          '<button type="button" class="pred-card-btn" onclick="openBetDiaryModal(\'' + escJsArg(fixtureKey(f)) + '\', \'' + c.id + '\')">' +
             '📓 Log to Bet Diary' +
           '</button>' +
         '</div>' +
@@ -4475,7 +4490,7 @@ function renderBroadcast() {
 
     const bottomBarHtml = '<div class="stadium-bottom-bar">' +
       '<div class="cta-actions">' +
-        '<button type="button" class="btn-explore-orange" onclick="openBetDiaryModal(\'' + esc(fixtureKey(f)) + '\', \'wins\')">' +
+        '<button type="button" class="btn-explore-orange" onclick="openBetDiaryModal(\'' + escJsArg(fixtureKey(f)) + '\', \'wins\')">' +
           '📓 Log match selection to Diary <span aria-hidden="true">&rarr;</span>' +
         '</button>' +
         '<span style="color:#CBD5E1;font-size:18px;">|</span>' +

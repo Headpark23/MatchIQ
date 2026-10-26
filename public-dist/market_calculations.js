@@ -184,6 +184,56 @@
     };
   }
 
+  function formatFractionalOdds(decimalOdds) {
+    const odds = number(decimalOdds);
+    if (odds === null || odds < 1) return '—';
+    const value = odds - 1;
+    if (value === 0) return 'Evens';
+    // Continued-fraction approximation; keeps display concise without altering stored decimal odds.
+    let x = value, h0 = 0, h1 = 1, k0 = 1, k1 = 0;
+    for (let i = 0; i < 32; i++) {
+      const a = Math.floor(x), h2 = a * h1 + h0, k2 = a * k1 + k0;
+      if (k2 > 10000) break;
+      h0 = h1; h1 = h2; k0 = k1; k1 = k2;
+      if (Math.abs(h1 / k1 - value) < 1e-10) break;
+      const fraction = x - a;
+      if (fraction === 0) break;
+      x = 1 / fraction;
+    }
+    function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+    const divisor = gcd(Math.abs(h1), k1);
+    return `${h1 / divisor}/${k1 / divisor}`;
+  }
+
+  function createAccumulator(legs, stake, profile = 'Default') {
+    if (!Array.isArray(legs) || legs.length < 2 || legs.some(leg => !Number.isFinite(number(leg.odds)) || number(leg.odds) <= 1)) return null;
+    const decimalOdds = legs.reduce((combined, leg) => combined * number(leg.odds), 1);
+    return { type: 'accumulator', legs: legs.map(leg => ({ ...leg, odds: number(leg.odds), outcome: leg.outcome || 'pending' })), stake: number(stake), decimalOdds, potentialReturn: number(stake) * decimalOdds, profile, outcome: 'pending' };
+  }
+
+  function settleAccumulator(accumulator, legOutcomes) {
+    const legs = accumulator.legs.map((leg, index) => ({ ...leg, outcome: legOutcomes[index] || leg.outcome || 'pending' }));
+    if (legs.some(leg => leg.outcome === 'lost')) return { ...accumulator, legs, outcome: 'lost' };
+    const active = legs.filter(leg => leg.outcome !== 'void');
+    if (legs.some(leg => !['won', 'lost', 'void'].includes(leg.outcome))) return { ...accumulator, legs, outcome: 'pending' };
+    const decimalOdds = active.reduce((product, leg) => product * leg.odds, 1);
+    return { ...accumulator, legs, decimalOdds, potentialReturn: accumulator.stake * decimalOdds, outcome: 'won' };
+  }
+
+  function loadBetDiary(storage, key) {
+    const raw = storage.getItem(key);
+    if (raw == null) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) throw new Error('Bet Diary data is invalid; existing data was not changed.');
+    return parsed;
+  }
+
+  function saveBetDiary(storage, key, entries) {
+    if (!Array.isArray(entries)) throw new TypeError('Bet Diary entries must be an array.');
+    storage.setItem(key, JSON.stringify(entries));
+    return true;
+  }
+
   function calculateBrierScore(probabilities, actualOutcome, marketType = 'binary') {
     if (marketType === '1x2') {
       if (!probabilities || typeof probabilities !== 'object') return null;
@@ -216,6 +266,11 @@
     bttsProbability,
     calculateBetProfit,
     summarizeBetDiary,
+    formatFractionalOdds,
+    createAccumulator,
+    settleAccumulator,
+    loadBetDiary,
+    saveBetDiary,
     calculateBrierScore
   };
 });
