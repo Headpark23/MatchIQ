@@ -10726,8 +10726,8 @@
     "away": "Lazio",
     "kickoff_utc": "2026-10-27T17:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -10952,7 +10952,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "dfcb36e2029c5fc8a3ef6e277203443fa00059465e6c291ef7a42ff249889082"
+   "sha256": "075d3c243b9d340977a4d5bca9623a1527880cbb52f4b63758bec6a7a41eaaa6"
   },
   {
    "record_id": "SA-2627-roma-v-cagliari#r1",
@@ -10965,8 +10965,8 @@
     "away": "Cagliari",
     "kickoff_utc": "2026-10-27T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -11190,7 +11190,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "781da6199a1fb40a8f97dec971ef6e90a4208950af55c79aa082250d3d1aed80"
+   "sha256": "c1c124d24e57efc8aab46197b5faed24475d397302e7b0045899c92b92d827ef"
   },
   {
    "record_id": "SA-2627-torino-v-como#r1",
@@ -11203,8 +11203,8 @@
     "away": "Como",
     "kickoff_utc": "2026-10-27T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -11429,21 +11429,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "0b170154ac8c4634d65d44d1b4f2bf866407de0ff0783e55650727cfcd7d719a"
+   "sha256": "9c421d3e6f795608ba748dbf053722b5cfe59909c6976617a442926d89e51d4c"
   },
   {
-   "record_id": "SA-2627-milan-v-bologna#r1",
-   "match_id": "SA-2627-milan-v-bologna",
+   "record_id": "SA-2627-ac-milan-v-bologna#r1",
+   "match_id": "SA-2627-ac-milan-v-bologna",
    "revision": 1,
    "fixture": {
     "competition": "SA",
     "season": "2627",
-    "home": "Milan",
+    "home": "AC Milan",
     "away": "Bologna",
     "kickoff_utc": "2026-10-28T17:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -11453,7 +11453,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Milan win",
+      "label": "AC Milan win",
       "p": 0.4934,
       "fair_odds": "≈Evens"
      },
@@ -11461,7 +11461,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Milan win",
+       "label": "AC Milan win",
        "p": 0.4934,
        "fair_odds": "≈Evens"
       },
@@ -11668,7 +11668,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "7298913248ea0a3f91be7cea1c35b34013a1a663f98717d1d75869f811f2807d"
+   "sha256": "39e4ac018cf72938f636f111503d0eab1c641443ab334457a0b5b887e9c9a98f"
   },
   {
    "record_id": "SA-2627-parma-v-udinese#r1",
@@ -11681,8 +11681,8 @@
     "away": "Udinese",
     "kickoff_utc": "2026-10-28T17:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -11907,7 +11907,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "f6d7c3810838011473e03ff3d765e0943b4bc7de9710bca5061694bc614aefdd"
+   "sha256": "53a45314b2c6d7836ced57d692dd792ae15e7c3c0c32a0fefe39f8150ebb0195"
   },
   {
    "record_id": "SA-2627-venezia-v-inter#r1",
@@ -11920,8 +11920,8 @@
     "away": "Inter",
     "kickoff_utc": "2026-10-28T17:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -12146,7 +12146,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "141bff9e89f422d7ed982dd2dc21f710cef4bba8fb8a7524bfe14e6971f8e3b9"
+   "sha256": "f0a2d8c7079978fa584f3f3bf3ec07b5eb0ca8b2716216fe76c23707cc45b3b1"
   },
   {
    "record_id": "SA-2627-genoa-v-juventus#r1",
@@ -12159,8 +12159,8 @@
     "away": "Juventus",
     "kickoff_utc": "2026-10-28T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -12385,7 +12385,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "00299e32ee38c3e506cc6d7d51f35951cb82832d0491ed858ca62add3cbae965"
+   "sha256": "c5d17d723df35426a73fac6a47c527f9b8bf402be8ffb31cb7dcf5a67c3f96bf"
   },
   {
    "record_id": "SA-2627-monza-v-napoli#r1",
@@ -12398,8 +12398,8 @@
     "away": "Napoli",
     "kickoff_utc": "2026-10-28T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -12624,7 +12624,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "22a2b5c0ef7072c73dee35cea9dbb016343846ab721ff910544fa96909bbaed1"
+   "sha256": "17770f3ba5121bd654de977466e536cdc9a341f77d4e1716ddfde2fbab3840c7"
   },
   {
    "record_id": "SA-2627-frosinone-v-lecce#r1",
@@ -12637,8 +12637,8 @@
     "away": "Lecce",
     "kickoff_utc": "2026-10-29T17:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -12863,7 +12863,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "3ffcc1322a92d439b13fe414cd2c1882d11d5cf948cfedb00f4738bc8a2c84e3"
+   "sha256": "f6a969d66674ac474a57a5905064130b2834b6c639847171e87668af1655cd27"
   },
   {
    "record_id": "SA-2627-fiorentina-v-atalanta#r1",
@@ -12876,8 +12876,8 @@
     "away": "Atalanta",
     "kickoff_utc": "2026-10-29T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -13102,7 +13102,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2edcbd246bce61473a03da4a7577c64c52a25cccefbbcf5cf9f23528a12545ae"
+   "sha256": "0051ee3dc1f30d0b59584d3de7368caa73d1371a95bb439fb8d33b3808c5a4d7"
   },
   {
    "record_id": "FL1-2627-le-havre-v-paris-sg#r1",
@@ -13112,11 +13112,11 @@
     "competition": "FL1",
     "season": "2627",
     "home": "Le Havre",
-    "away": "Paris Sg",
+    "away": "Paris SG",
     "kickoff_utc": "2026-10-30T18:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -13126,7 +13126,7 @@
      },
      "pick": {
       "key": "A",
-      "label": "Paris Sg win",
+      "label": "Paris SG win",
       "p": 0.6958,
       "fair_odds": "≈4/9"
      },
@@ -13146,7 +13146,7 @@
       },
       {
        "key": "A",
-       "label": "Paris Sg win",
+       "label": "Paris SG win",
        "p": 0.6958,
        "fair_odds": "≈4/9"
       }
@@ -13325,7 +13325,7 @@
      "decision": "most_likely",
      "market": "result",
      "key": "A",
-     "label": "Paris Sg win",
+     "label": "Paris SG win",
      "p": 0.6958,
      "credible_p": 0.6705,
      "n": 275,
@@ -13340,7 +13340,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "b43558a49e64a8a5e8828c0670a11a68d17acd1e98e585d8bcdef39f5362ae88"
+   "sha256": "c3c2924490a03d47a4aada2e6b226da136667d97a2e4b198b57535c751e657e7"
   },
   {
    "record_id": "BL1-2627-elversberg-v-mainz#r1",
@@ -13353,8 +13353,8 @@
     "away": "Mainz",
     "kickoff_utc": "2026-10-30T19:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -13570,7 +13570,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "81a7f20c1de413a37a163359ef38649fe4e636b1edbbadb264d89726f480d51a"
+   "sha256": "89cdf62b288d44b163e474ff3f5380e3e0bb7fecd0e97410338d3c9df0111172"
   },
   {
    "record_id": "ELC-2627-sheffield-united-v-wrexham#r1",
@@ -13583,8 +13583,8 @@
     "away": "Wrexham",
     "kickoff_utc": "2026-10-30T20:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -13809,7 +13809,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "8429ba64d65080bbe87eb946c57c819d063fd5bd0e06991d2c71c829ffd53aa9"
+   "sha256": "c6030816a3a75d11b473c416f23d5657d39016aefd928ce3164479466f1e7f03"
   },
   {
    "record_id": "FL1-2627-lille-v-lens#r1",
@@ -13822,8 +13822,8 @@
     "away": "Lens",
     "kickoff_utc": "2026-10-30T20:05:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -14048,7 +14048,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "19776c27b63ec1797533a78554b2b3ef506e8b4d976fc040c4726b4d046851b2"
+   "sha256": "e0ba87f4551b2b2fed3a02f6d17c2374aba295c9112ae6a1fdb6f5d6a2d555cb"
   },
   {
    "record_id": "ELC-2627-lincoln-v-birmingham#r1",
@@ -14061,8 +14061,8 @@
     "away": "Birmingham",
     "kickoff_utc": "2026-10-31T12:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -14287,7 +14287,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "a6c409afc81c36a63328581b5f00c7d386a4d132e30c66fb7a8741eeabb6959d"
+   "sha256": "68e0b5410a6e3efb47f03c4812cdb4923f4dffc2ba10ad1ea0abcd20215dc534"
   },
   {
    "record_id": "ELC-2627-norwich-v-watford#r1",
@@ -14300,8 +14300,8 @@
     "away": "Watford",
     "kickoff_utc": "2026-10-31T12:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -14525,7 +14525,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "20f23b2f94c2ba013ef6ce163d79210924de4832a9149a51eb5ccc324d6c9a58"
+   "sha256": "6f8fd4b9e8f726eb37d47a2e6a06cbca73519ab3f9ce97c9ed1ea0392d0be85a"
   },
   {
    "record_id": "ELC-2627-stoke-v-preston#r1",
@@ -14538,8 +14538,8 @@
     "away": "Preston",
     "kickoff_utc": "2026-10-31T12:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -14764,7 +14764,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "074a3d229fc258253de0db2345dc8e5a1ea6820e4f68f43df573985fc77e0155"
+   "sha256": "60a02f82f3a6d83452b0155a367504d18c29445a9267c666f7bc79cd5e75d565"
   },
   {
    "record_id": "SA-2627-bologna-v-monza#r1",
@@ -14777,8 +14777,8 @@
     "away": "Monza",
     "kickoff_utc": "2026-10-31T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -15003,7 +15003,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "0222c496cd137b18e84414a6a35775ab00b02e8914df40e5c046cd94c1b09cde"
+   "sha256": "3880deb146fed5f4f09b0fd7bc2b7a32baf6c479c30ca011893dc4c9d0681c02"
   },
   {
    "record_id": "BL1-2627-augsburg-v-freiburg#r1",
@@ -15016,8 +15016,8 @@
     "away": "Freiburg",
     "kickoff_utc": "2026-10-31T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -15243,7 +15243,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "d73bfe4dc6b01ef5321977dc6f5f353b423b983beb9e3e8f758d01f6a145367c"
+   "sha256": "036a6b86041d27343bf95f3d988942cb3b81eef2ae6aa9545d4f5b72fe582061"
   },
   {
    "record_id": "BL1-2627-leverkusen-v-stuttgart#r1",
@@ -15256,8 +15256,8 @@
     "away": "Stuttgart",
     "kickoff_utc": "2026-10-31T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -15483,7 +15483,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "428d5194e593c7394d8f5a3fa9ee798bbe89a5fb1b4469fcf7f4fe024ddd398e"
+   "sha256": "17bdddee55bbff3325cfecbf60c8443584aa744087d24e0599421d1ccc995252"
   },
   {
    "record_id": "BL1-2627-mgladbach-v-paderborn#r1",
@@ -15492,12 +15492,12 @@
    "fixture": {
     "competition": "BL1",
     "season": "2627",
-    "home": "Mgladbach",
+    "home": "M'gladbach",
     "away": "Paderborn",
     "kickoff_utc": "2026-10-31T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -15507,7 +15507,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Mgladbach win",
+      "label": "M'gladbach win",
       "p": 0.4261,
       "fair_odds": "≈11/8"
      },
@@ -15515,7 +15515,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Mgladbach win",
+       "label": "M'gladbach win",
        "p": 0.4261,
        "fair_odds": "≈11/8"
       },
@@ -15713,7 +15713,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "f1e0abe7b725a228bd22dd0edf004c9b6900938daf5c16404e0449cb2823222e"
+   "sha256": "d1e7210acf8058fa7cb7b95e7a4956c01caf8aa886254ad4d0433b1c705334c0"
   },
   {
    "record_id": "BL1-2627-schalke-04-v-rb-leipzig#r1",
@@ -15723,11 +15723,11 @@
     "competition": "BL1",
     "season": "2627",
     "home": "Schalke 04",
-    "away": "Rb Leipzig",
+    "away": "RB Leipzig",
     "kickoff_utc": "2026-10-31T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -15757,7 +15757,7 @@
       },
       {
        "key": "A",
-       "label": "Rb Leipzig win",
+       "label": "RB Leipzig win",
        "p": 0.3231,
        "fair_odds": "≈2/1"
       }
@@ -15943,7 +15943,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "992f1692ad9c33aa75376d5f8531acf3e708529157c2fef96adf91e36d9087d0"
+   "sha256": "63499595585f78050e527ff816ff9bd7de706bb95a314688a02cd9c8821119b5"
   },
   {
    "record_id": "BL1-2627-werder-bremen-v-hoffenheim#r1",
@@ -15956,8 +15956,8 @@
     "away": "Hoffenheim",
     "kickoff_utc": "2026-10-31T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -16183,7 +16183,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "4d411d218bf11581cbeec912959ca77ebf43f49fb4baa38b9775b05031f66cf2"
+   "sha256": "66f020f68b40c07cbb2fe11d8279645ffb045ba6679100c42fe66d87a5d65d0c"
   },
   {
    "record_id": "ELC-2627-bolton-v-bristol-city#r1",
@@ -16196,8 +16196,8 @@
     "away": "Bristol City",
     "kickoff_utc": "2026-10-31T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -16422,7 +16422,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "8254581b667c59f9a0830f526ffc5150f1d93ed38837b5a42a0802ddf46ce987"
+   "sha256": "bfc693ab886ac18dae69e6f96ca824e4eb01ca544dfd409d88c58d1a79af19ae"
   },
   {
    "record_id": "ELC-2627-burnley-v-portsmouth#r1",
@@ -16435,8 +16435,8 @@
     "away": "Portsmouth",
     "kickoff_utc": "2026-10-31T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -16661,7 +16661,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "c2db9f85056818e9ad77302029de6cffde3ae4af5f89892d886d6caf525d889a"
+   "sha256": "9d1612c9424500e7decbbf4f666a0d8a2691be6b86b029c9c5455b20f5076c7e"
   },
   {
    "record_id": "ELC-2627-middlesbrough-v-charlton#r1",
@@ -16674,8 +16674,8 @@
     "away": "Charlton",
     "kickoff_utc": "2026-10-31T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -16900,7 +16900,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "a7c2a1903be254f4a6ef081525102c0af57c9c6a494f92dbc4fe2df1e3917971"
+   "sha256": "c7041789241edd4e215fe7ffa4cc0593383408ead4ae686545d635bf3a010e86"
   },
   {
    "record_id": "ELC-2627-millwall-v-derby#r1",
@@ -16913,8 +16913,8 @@
     "away": "Derby",
     "kickoff_utc": "2026-10-31T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -17139,7 +17139,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "999dfa5faf970a9e9598a5d5d0086fd72841df2d151ec5e5ee9fb577067d678b"
+   "sha256": "613ddb528f396fe418e2f25cc5f0d05c08d63cdc11012bf371366ad49791580a"
   },
   {
    "record_id": "ELC-2627-southampton-v-qpr#r1",
@@ -17149,11 +17149,11 @@
     "competition": "ELC",
     "season": "2627",
     "home": "Southampton",
-    "away": "Qpr",
+    "away": "QPR",
     "kickoff_utc": "2026-10-31T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -17183,7 +17183,7 @@
       },
       {
        "key": "A",
-       "label": "Qpr win",
+       "label": "QPR win",
        "p": 0.1644,
        "fair_odds": "≈5/1"
       }
@@ -17377,7 +17377,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2d252890be65ae8a6eaeff37ac1ce4b808320b6a2fa4f8c014a58789a02ecadc"
+   "sha256": "b5ac23f9c1578c082eeaf2c0a8f3569773c1cbf031c639178b1860eca9808481"
   },
   {
    "record_id": "ELC-2627-swansea-v-blackburn#r1",
@@ -17390,8 +17390,8 @@
     "away": "Blackburn",
     "kickoff_utc": "2026-10-31T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -17616,7 +17616,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "0b4e22c26ec5b61ff3e96d8b9e2e2189d1d16ff388933855d4fd2b248283966c"
+   "sha256": "6cbec391488b1232b5d0bd4c1891ebafbe85159c353e0db12963664a33e10a0b"
   },
   {
    "record_id": "ELC-2627-west-ham-v-west-brom#r1",
@@ -17629,8 +17629,8 @@
     "away": "West Brom",
     "kickoff_utc": "2026-10-31T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -17854,7 +17854,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "afdb4d98f9325cc2d98905ffb39ee3b4b9fd1190b31cd6ec5a67688128b5204e"
+   "sha256": "52952f9f916d3d58b0c8729002469aed187a9fa689fbde4112b3b445dc064d0a"
   },
   {
    "record_id": "ELC-2627-wolves-v-cardiff#r1",
@@ -17867,8 +17867,8 @@
     "away": "Cardiff",
     "kickoff_utc": "2026-10-31T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -18092,7 +18092,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "cbb73249cb177d41faa957d4249bb74fb7898b2f4edb95f7f5f0201d18bf35b2"
+   "sha256": "0a9e39003cfa6f82f74c4718a4ff29cd787204675164a55a0f129bbd89359949"
   },
   {
    "record_id": "FL1-2627-nice-v-rennes#r1",
@@ -18105,8 +18105,8 @@
     "away": "Rennes",
     "kickoff_utc": "2026-10-31T16:15:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -18331,7 +18331,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "5492f58260b81898a986f5ab4bc7a65f4ac2bce4e75093f8ea725464ffb9b3a7"
+   "sha256": "629aedb538ded1ff2215bd585323cd2b479ae46861bc8ad13a7b548bfef886d1"
   },
   {
    "record_id": "SA-2627-udinese-v-roma#r1",
@@ -18344,8 +18344,8 @@
     "away": "Roma",
     "kickoff_utc": "2026-10-31T17:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -18569,7 +18569,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "71800554fe9e497446226901c5f7e62b37a148e3fc2d998bf115883752fb5ad6"
+   "sha256": "376f675efe891c4ab4389665ddf4976c55fdf1895ae8e6ac36c663761b887333"
   },
   {
    "record_id": "BL1-2627-bayern-munich-v-dortmund#r1",
@@ -18582,8 +18582,8 @@
     "away": "Dortmund",
     "kickoff_utc": "2026-10-31T17:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -18809,7 +18809,246 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "108be525f5016a9fef1fcd5b3e146fb85dfae6e809b54e40d20f5cae888cc95a"
+   "sha256": "e422e5e21bcbab6a3c378cb7d8bddeb7343e57d67dc4a6bce13ff7d83958781a"
+  },
+  {
+   "record_id": "SA-2627-ac-milan-v-inter#r1",
+   "match_id": "SA-2627-ac-milan-v-inter",
+   "revision": 1,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "AC Milan",
+    "away": "Inter",
+    "kickoff_utc": "2026-10-31T19:45:00Z"
+   },
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Inter win",
+      "p": 0.5076,
+      "fair_odds": "≈Evens"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "AC Milan win",
+       "p": 0.2609,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2315,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Inter win",
+       "p": 0.5076,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5209,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7611,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5209,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2908,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5345,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5345,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4655,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.6306,
+      "fair_odds": "≈4/7",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.4749,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3694,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      },
+      {
+       "line": 10.5,
+       "over": 0.2701,
+       "over_fair_odds": "≈11/4",
+       "under_fair_odds": "≈4/11"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5731,
+      "fair_odds": "≈8/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7677,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5731,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3729,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5206,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6182,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4794,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3496,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.6306,
+     "credible_p": 0.6264,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5856
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "81d8cf282ce3144f6052f49ebcc04e9b652a0013e863996c589959df0b27d722"
   },
   {
    "record_id": "FL1-2627-lorient-v-brest#r1",
@@ -18822,8 +19061,8 @@
     "away": "Brest",
     "kickoff_utc": "2026-10-31T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -19047,7 +19286,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "806e0cdeecb06508dbb1d7af4b29074f8ea7da9b1c2bf0a515d7e80c10e793c8"
+   "sha256": "28bce21433a71abea82052a0db2dfd92b4c3ddd6f1cbc493b795e7ca4f8c56da"
   },
   {
    "record_id": "FL1-2627-lyon-v-angers#r1",
@@ -19060,8 +19299,8 @@
     "away": "Angers",
     "kickoff_utc": "2026-10-31T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -19285,246 +19524,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "dea50d0b2f278a52a44435cb59e484e312f75d3c4bf1fef722332a368763c3ae"
-  },
-  {
-   "record_id": "SA-2627-milan-v-inter#r1",
-   "match_id": "SA-2627-milan-v-inter",
-   "revision": 1,
-   "fixture": {
-    "competition": "SA",
-    "season": "2627",
-    "home": "Milan",
-    "away": "Inter",
-    "kickoff_utc": "2026-10-31T19:45:00Z"
-   },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
-   "markets": {
-    "result": {
-     "model_version": "dc-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate"
-     },
-     "pick": {
-      "key": "A",
-      "label": "Inter win",
-      "p": 0.5076,
-      "fair_odds": "≈Evens"
-     },
-     "tier": "L1",
-     "selections": [
-      {
-       "key": "H",
-       "label": "Milan win",
-       "p": 0.2609,
-       "fair_odds": "≈11/4"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2315,
-       "fair_odds": "≈100/30"
-      },
-      {
-       "key": "A",
-       "label": "Inter win",
-       "p": 0.5076,
-       "fair_odds": "≈Evens"
-      }
-     ]
-    },
-    "goals": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "none"
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 2.5",
-      "p": 0.5209,
-      "fair_odds": "≈10/11",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": 0.7611,
-       "over_fair_odds": "≈3/10",
-       "under_fair_odds": "≈100/30"
-      },
-      {
-       "line": 2.5,
-       "over": 0.5209,
-       "over_fair_odds": "≈10/11",
-       "under_fair_odds": "≈11/10"
-      },
-      {
-       "line": 3.5,
-       "over": 0.2908,
-       "over_fair_odds": "≈5/2",
-       "under_fair_odds": "≈2/5"
-      }
-     ]
-    },
-    "btts": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5345,
-      "fair_odds": "≈10/11"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5345,
-       "fair_odds": "≈10/11"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4655,
-       "fair_odds": "≈11/10"
-      }
-     ]
-    },
-    "corners": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 9.5",
-      "p": 0.6306,
-      "fair_odds": "≈4/7",
-      "line": 9.5
-     },
-     "lines": [
-      {
-       "line": 8.5,
-       "over": 0.4749,
-       "over_fair_odds": "≈11/10",
-       "under_fair_odds": "≈10/11"
-      },
-      {
-       "line": 9.5,
-       "over": 0.3694,
-       "over_fair_odds": "≈7/4",
-       "under_fair_odds": "≈4/7"
-      },
-      {
-       "line": 10.5,
-       "over": 0.2701,
-       "over_fair_odds": "≈11/4",
-       "under_fair_odds": "≈4/11"
-      }
-     ]
-    },
-    "cards": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 3.5",
-      "p": 0.5731,
-      "fair_odds": "≈8/11",
-      "line": 3.5
-     },
-     "lines": [
-      {
-       "line": 2.5,
-       "over": 0.7677,
-       "over_fair_odds": "≈3/10",
-       "under_fair_odds": "≈100/30"
-      },
-      {
-       "line": 3.5,
-       "over": 0.5731,
-       "over_fair_odds": "≈8/11",
-       "under_fair_odds": "≈11/8"
-      },
-      {
-       "line": 4.5,
-       "over": 0.3729,
-       "over_fair_odds": "≈13/8",
-       "under_fair_odds": "≈8/13"
-      }
-     ]
-    },
-    "shots": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 8.5",
-      "p": 0.5206,
-      "fair_odds": "≈10/11",
-      "line": 8.5
-     },
-     "lines": [
-      {
-       "line": 7.5,
-       "over": 0.6182,
-       "over_fair_odds": "≈8/13",
-       "under_fair_odds": "≈13/8"
-      },
-      {
-       "line": 8.5,
-       "over": 0.4794,
-       "over_fair_odds": "≈11/10",
-       "under_fair_odds": "≈10/11"
-      },
-      {
-       "line": 9.5,
-       "over": 0.3496,
-       "over_fair_odds": "≈15/8",
-       "under_fair_odds": "≈8/15"
-      }
-     ]
-    }
-   },
-   "sources": [
-    "openfootball"
-   ],
-   "origin": "pipeline",
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "corners",
-     "key": "under",
-     "line": 9.5,
-     "label": "Under 9.5",
-     "p": 0.6306,
-     "credible_p": 0.6264,
-     "n": 380,
-     "status": "provisional",
-     "strength": "weak",
-     "basis": "league-anchored blend, 380 Serie A backtest matches",
-     "lower_bound": 0.5856
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   },
-   "sha256": "d01e716904c22937f2ff2ca2334fa2b92ede2fa070fbb048a6c517bac8f5af2b"
+   "sha256": "37fc82a31ae7aa5b88611a8e053bd33f1b46ff273c19324f358f7986343bc020"
   },
   {
    "record_id": "FL1-2627-troyes-v-le-mans#r1",
@@ -19537,8 +19537,8 @@
     "away": "Le Mans",
     "kickoff_utc": "2026-10-31T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -19753,7 +19753,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "09a9cf29286f3336ae82c2467f49b05d3daa52bde77b75f84b6ee2a12f84b935"
+   "sha256": "9d6188c4a48b54787619366a3c5fb2756b34fe2947aabb66d66193a7b6a4d6fc"
   },
   {
    "record_id": "SA-2627-como-v-venezia#r1",
@@ -19766,8 +19766,8 @@
     "away": "Venezia",
     "kickoff_utc": "2026-11-01T11:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -19992,21 +19992,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "3cbd2f38dd5929ed22cb0ac19d345506edd7142c29f1664587534f29603c1926"
+   "sha256": "799639d38069db37407f25b5e1e1ab07193cd384bca180f03f8feca3fec85966"
   },
   {
-   "record_id": "PD-2627-ath-bilbao-v-sociedad#r1",
-   "match_id": "PD-2627-ath-bilbao-v-sociedad",
+   "record_id": "PD-2627-athletic-club-v-real-sociedad#r1",
+   "match_id": "PD-2627-athletic-club-v-real-sociedad",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
-    "home": "Ath Bilbao",
-    "away": "Sociedad",
+    "home": "Athletic Club",
+    "away": "Real Sociedad",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -20016,7 +20016,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Ath Bilbao win",
+      "label": "Athletic Club win",
       "p": 0.4802,
       "fair_odds": "≈11/10"
      },
@@ -20024,7 +20024,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Ath Bilbao win",
+       "label": "Athletic Club win",
        "p": 0.4802,
        "fair_odds": "≈11/10"
       },
@@ -20036,7 +20036,7 @@
       },
       {
        "key": "A",
-       "label": "Sociedad win",
+       "label": "Real Sociedad win",
        "p": 0.2604,
        "fair_odds": "≈11/4"
       }
@@ -20231,7 +20231,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "7e78398a8001bc6119dc82a8f3f7ee16163a49322f060aecf29f8a69a979d1e4"
+   "sha256": "f0d4a014b8caca16124733ee86cd2da8b89320ada0f75dd45201980d8085e561"
   },
   {
    "record_id": "PD-2627-barcelona-v-alaves#r1",
@@ -20244,8 +20244,8 @@
     "away": "Alaves",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -20469,21 +20469,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "ed366d65556b6c74ac657b4b64c7d7211b2d7e060e48aa91de9ab222f5e0bbb9"
+   "sha256": "e4aec2fa127333fb6b8dfef70b9dbcaf48f85839664d5aaeed939fa8c68a89ce"
   },
   {
-   "record_id": "PD-2627-betis-v-malaga#r1",
-   "match_id": "PD-2627-betis-v-malaga",
+   "record_id": "PD-2627-deportivo-la-coruna-v-osasuna#r1",
+   "match_id": "PD-2627-deportivo-la-coruna-v-osasuna",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
-    "home": "Betis",
-    "away": "Malaga",
+    "home": "Deportivo La Coruna",
+    "away": "Osasuna",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -20493,7 +20493,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Betis win",
+      "label": "Deportivo La Coruna win",
       "p": 0.4565,
       "fair_odds": "≈6/5"
      },
@@ -20501,7 +20501,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Betis win",
+       "label": "Deportivo La Coruna win",
        "p": 0.4565,
        "fair_odds": "≈6/5"
       },
@@ -20513,7 +20513,7 @@
       },
       {
        "key": "A",
-       "label": "Malaga win",
+       "label": "Osasuna win",
        "p": 0.2815,
        "fair_odds": "≈5/2"
       }
@@ -20584,31 +20584,31 @@
      "model_version": "blend30-league-v1",
      "evidence": {
       "status": "provisional",
-      "strength": "none"
+      "strength": "weak"
      },
      "pick": {
       "key": "under",
       "label": "Under 9.5",
-      "p": 0.5281,
+      "p": 0.5282,
       "fair_odds": "≈10/11",
       "line": 9.5
      },
      "lines": [
       {
        "line": 8.5,
-       "over": 0.594,
+       "over": 0.5964,
        "over_fair_odds": "≈4/6",
        "under_fair_odds": "≈6/4"
       },
       {
        "line": 9.5,
-       "over": 0.4719,
+       "over": 0.4718,
        "over_fair_odds": "≈11/10",
        "under_fair_odds": "≈10/11"
       },
       {
        "line": 10.5,
-       "over": 0.3645,
+       "over": 0.3597,
        "over_fair_odds": "≈7/4",
        "under_fair_odds": "≈4/7"
       }
@@ -20618,33 +20618,33 @@
      "model_version": "blend30-league-v1",
      "evidence": {
       "status": "provisional",
-      "strength": "none"
+      "strength": "weak"
      },
      "pick": {
       "key": "over",
       "label": "Over 3.5",
-      "p": 0.642,
-      "fair_odds": "≈4/7",
+      "p": 0.6073,
+      "fair_odds": "≈4/6",
       "line": 3.5
      },
      "lines": [
       {
        "line": 2.5,
-       "over": 0.8055,
-       "over_fair_odds": "≈1/4",
-       "under_fair_odds": "≈4/1"
+       "over": 0.7832,
+       "over_fair_odds": "≈2/7",
+       "under_fair_odds": "≈7/2"
       },
       {
        "line": 3.5,
-       "over": 0.642,
-       "over_fair_odds": "≈4/7",
-       "under_fair_odds": "≈7/4"
+       "over": 0.6073,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
       },
       {
        "line": 4.5,
-       "over": 0.4719,
-       "over_fair_odds": "≈11/10",
-       "under_fair_odds": "≈10/11"
+       "over": 0.43,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
       }
      ]
     },
@@ -20652,33 +20652,33 @@
      "model_version": "blend30-league-v1",
      "evidence": {
       "status": "provisional",
-      "strength": "none"
+      "strength": "weak"
      },
      "pick": {
-      "key": "under",
-      "label": "Under 8.5",
-      "p": 0.5167,
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5133,
       "fair_odds": "≈10/11",
       "line": 8.5
      },
      "lines": [
       {
        "line": 7.5,
-       "over": 0.6208,
-       "over_fair_odds": "≈8/13",
-       "under_fair_odds": "≈13/8"
+       "over": 0.6476,
+       "over_fair_odds": "≈8/15",
+       "under_fair_odds": "≈15/8"
       },
       {
        "line": 8.5,
-       "over": 0.4833,
-       "over_fair_odds": "≈11/10",
-       "under_fair_odds": "≈10/11"
+       "over": 0.5133,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
       },
       {
        "line": 9.5,
-       "over": 0.3629,
-       "over_fair_odds": "≈7/4",
-       "under_fair_odds": "≈4/7"
+       "over": 0.3896,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
       }
      ]
     }
@@ -20689,8 +20689,18 @@
    "origin": "pipeline",
    "recommendations": {
     "most_likely": {
-     "decision": "no_bet",
-     "reason": "No market has enough evidence about this match to feature a selection."
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.6073,
+     "credible_p": 0.609,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 La Liga backtest matches",
+     "lower_bound": 0.5678
     },
     "best_value": {
      "decision": "no_bet",
@@ -20698,7 +20708,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "92ed22e6d2baafb1f182cf6374d56e40de32751a25a7d58bbc583c78bf5e2251"
+   "sha256": "59a4e7c78f9f9d5fab8bdb17b4242e7e6466fc05b079115a3bd282701471a877"
   },
   {
    "record_id": "PD-2627-elche-v-valencia#r1",
@@ -20711,8 +20721,8 @@
     "away": "Valencia",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -20937,7 +20947,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "3164e5e54f34f5a034cf086ac5def1617c91c64bac605887606acd0a0f6a990c"
+   "sha256": "39fd11b24510e9f30df4e0ae5594c55b0103e0cf353b42733ebc5cb75f6c42a1"
   },
   {
    "record_id": "SA-2627-frosinone-v-torino#r1",
@@ -20950,8 +20960,8 @@
     "away": "Torino",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -21176,7 +21186,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "8ff87a2916a4d26b5cb709ab47be747c1b355b17e01225739b885ad7eed8df36"
+   "sha256": "c6e73be13932efcc75e5257b204ccc613c82fcbff9f967053da8ee5744828b89"
   },
   {
    "record_id": "PD-2627-getafe-v-sevilla#r1",
@@ -21189,8 +21199,8 @@
     "away": "Sevilla",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -21415,246 +21425,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "379945f2ec0ee66175d3dbfcc5e763d14fa3cb3cc024df164289002e83ed6e37"
-  },
-  {
-   "record_id": "PD-2627-la-coruna-v-osasuna#r1",
-   "match_id": "PD-2627-la-coruna-v-osasuna",
-   "revision": 1,
-   "fixture": {
-    "competition": "PD",
-    "season": "2627",
-    "home": "La Coruna",
-    "away": "Osasuna",
-    "kickoff_utc": "2026-11-01T14:00:00Z"
-   },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
-   "markets": {
-    "result": {
-     "model_version": "league-average-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "none"
-     },
-     "pick": {
-      "key": "H",
-      "label": "La Coruna win",
-      "p": 0.4565,
-      "fair_odds": "≈6/5"
-     },
-     "tier": "T3",
-     "selections": [
-      {
-       "key": "H",
-       "label": "La Coruna win",
-       "p": 0.4565,
-       "fair_odds": "≈6/5"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.262,
-       "fair_odds": "≈11/4"
-      },
-      {
-       "key": "A",
-       "label": "Osasuna win",
-       "p": 0.2815,
-       "fair_odds": "≈5/2"
-      }
-     ]
-    },
-    "goals": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "none"
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 2.5",
-      "p": 0.5118,
-      "fair_odds": "≈Evens",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": 0.7421,
-       "over_fair_odds": "≈1/3",
-       "under_fair_odds": "≈3/1"
-      },
-      {
-       "line": 2.5,
-       "over": 0.4882,
-       "over_fair_odds": "≈Evens",
-       "under_fair_odds": "≈Evens"
-      },
-      {
-       "line": 3.5,
-       "over": 0.2653,
-       "over_fair_odds": "≈11/4",
-       "under_fair_odds": "≈4/11"
-      }
-     ]
-    },
-    "btts": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "none"
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5386,
-      "fair_odds": "≈5/6"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5386,
-       "fair_odds": "≈5/6"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4614,
-       "fair_odds": "≈6/5"
-      }
-     ]
-    },
-    "corners": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 9.5",
-      "p": 0.5282,
-      "fair_odds": "≈10/11",
-      "line": 9.5
-     },
-     "lines": [
-      {
-       "line": 8.5,
-       "over": 0.5964,
-       "over_fair_odds": "≈4/6",
-       "under_fair_odds": "≈6/4"
-      },
-      {
-       "line": 9.5,
-       "over": 0.4718,
-       "over_fair_odds": "≈11/10",
-       "under_fair_odds": "≈10/11"
-      },
-      {
-       "line": 10.5,
-       "over": 0.3597,
-       "over_fair_odds": "≈7/4",
-       "under_fair_odds": "≈4/7"
-      }
-     ]
-    },
-    "cards": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 3.5",
-      "p": 0.6073,
-      "fair_odds": "≈4/6",
-      "line": 3.5
-     },
-     "lines": [
-      {
-       "line": 2.5,
-       "over": 0.7832,
-       "over_fair_odds": "≈2/7",
-       "under_fair_odds": "≈7/2"
-      },
-      {
-       "line": 3.5,
-       "over": 0.6073,
-       "over_fair_odds": "≈4/6",
-       "under_fair_odds": "≈6/4"
-      },
-      {
-       "line": 4.5,
-       "over": 0.43,
-       "over_fair_odds": "≈11/8",
-       "under_fair_odds": "≈8/11"
-      }
-     ]
-    },
-    "shots": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 8.5",
-      "p": 0.5133,
-      "fair_odds": "≈10/11",
-      "line": 8.5
-     },
-     "lines": [
-      {
-       "line": 7.5,
-       "over": 0.6476,
-       "over_fair_odds": "≈8/15",
-       "under_fair_odds": "≈15/8"
-      },
-      {
-       "line": 8.5,
-       "over": 0.5133,
-       "over_fair_odds": "≈10/11",
-       "under_fair_odds": "≈11/10"
-      },
-      {
-       "line": 9.5,
-       "over": 0.3896,
-       "over_fair_odds": "≈13/8",
-       "under_fair_odds": "≈8/13"
-      }
-     ]
-    }
-   },
-   "sources": [
-    "openfootball"
-   ],
-   "origin": "pipeline",
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "cards",
-     "key": "over",
-     "line": 3.5,
-     "label": "Over 3.5",
-     "p": 0.6073,
-     "credible_p": 0.609,
-     "n": 380,
-     "status": "provisional",
-     "strength": "weak",
-     "basis": "league-anchored blend, 380 La Liga backtest matches",
-     "lower_bound": 0.5678
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   },
-   "sha256": "bf888c23017f32dd1e8d0e1ece4b31ddd54eacce4269659a803d1e894b885003"
+   "sha256": "3681dcfabe2e9647659e87880d9718ad27d6d990382092e71688404b1e2c530f"
   },
   {
    "record_id": "SA-2627-lazio-v-cagliari#r1",
@@ -21667,8 +21438,8 @@
     "away": "Cagliari",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -21893,21 +21664,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "0451413f72c3ad0f7d06a844162454408287198c06bf1265e940753ffdb589b0"
+   "sha256": "c8de23f7840f3390c7c402112b31a448f0fdd14f50d91bfe0215799a32adc049"
   },
   {
-   "record_id": "PD-2627-levante-v-ath-madrid#r1",
-   "match_id": "PD-2627-levante-v-ath-madrid",
+   "record_id": "PD-2627-levante-v-atletico-madrid#r1",
+   "match_id": "PD-2627-levante-v-atletico-madrid",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
     "home": "Levante",
-    "away": "Ath Madrid",
+    "away": "Atletico Madrid",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -21917,7 +21688,7 @@
      },
      "pick": {
       "key": "A",
-      "label": "Ath Madrid win",
+      "label": "Atletico Madrid win",
       "p": 0.5034,
       "fair_odds": "≈Evens"
      },
@@ -21937,7 +21708,7 @@
       },
       {
        "key": "A",
-       "label": "Ath Madrid win",
+       "label": "Atletico Madrid win",
        "p": 0.5034,
        "fair_odds": "≈Evens"
       }
@@ -22132,21 +21903,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "c25eafb4e3fa0cfab4e30419a8665c844f9dc6624c188bcdf737536bb2051e55"
+   "sha256": "7c1eff8ad270f5b7eba6b7d6238a18fb5adacb896a9fee35e9971d538075eb79"
   },
   {
-   "record_id": "PD-2627-santander-v-real-madrid#r1",
-   "match_id": "PD-2627-santander-v-real-madrid",
+   "record_id": "PD-2627-racing-santander-v-real-madrid#r1",
+   "match_id": "PD-2627-racing-santander-v-real-madrid",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
-    "home": "Santander",
+    "home": "Racing Santander",
     "away": "Real Madrid",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -22156,7 +21927,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Santander win",
+      "label": "Racing Santander win",
       "p": 0.4565,
       "fair_odds": "≈6/5"
      },
@@ -22164,7 +21935,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Santander win",
+       "label": "Racing Santander win",
        "p": 0.4565,
        "fair_odds": "≈6/5"
       },
@@ -22361,7 +22132,475 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2799cdb9be35da6d3913fa5384b80e8412ea289566dc516242240b3b1f8d5b42"
+   "sha256": "a8c789da8097ad9adf1ee43793f9c29129f2b413d8101c94978c42e4251b6fdf"
+  },
+  {
+   "record_id": "PD-2627-rayo-vallecano-v-celta-vigo#r1",
+   "match_id": "PD-2627-rayo-vallecano-v-celta-vigo",
+   "revision": 1,
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Rayo Vallecano",
+    "away": "Celta Vigo",
+    "kickoff_utc": "2026-11-01T14:00:00Z"
+   },
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Rayo Vallecano win",
+      "p": 0.3824,
+      "fair_odds": "≈13/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Rayo Vallecano win",
+       "p": 0.3824,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2936,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Celta Vigo win",
+       "p": 0.3241,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5374,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7214,
+       "over_fair_odds": "≈2/5",
+       "under_fair_odds": "≈5/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4626,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2456,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5181,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5181,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4819,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5033,
+      "fair_odds": "≈Evens",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.6193,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4967,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 10.5,
+       "over": 0.384,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.6611,
+      "fair_odds": "≈1/2",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.8211,
+       "over_fair_odds": "≈2/9",
+       "under_fair_odds": "≈9/2"
+      },
+      {
+       "line": 3.5,
+       "over": 0.6611,
+       "over_fair_odds": "≈1/2",
+       "under_fair_odds": "≈2/1"
+      },
+      {
+       "line": 4.5,
+       "over": 0.4875,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5269,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.611,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4731,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3504,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.6611,
+     "credible_p": 0.6601,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 La Liga backtest matches",
+     "lower_bound": 0.6201
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "d3ac558944dbe8fbc9cf20f7a87098181c38d6d232069ecb91ba7ccc44f4a61d"
+  },
+  {
+   "record_id": "PD-2627-real-betis-v-malaga#r1",
+   "match_id": "PD-2627-real-betis-v-malaga",
+   "revision": 1,
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Real Betis",
+    "away": "Malaga",
+    "kickoff_utc": "2026-11-01T14:00:00Z"
+   },
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
+   "markets": {
+    "result": {
+     "model_version": "league-average-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Real Betis win",
+      "p": 0.4565,
+      "fair_odds": "≈6/5"
+     },
+     "tier": "T3",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Real Betis win",
+       "p": 0.4565,
+       "fair_odds": "≈6/5"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.262,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Malaga win",
+       "p": 0.2815,
+       "fair_odds": "≈5/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5118,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7421,
+       "over_fair_odds": "≈1/3",
+       "under_fair_odds": "≈3/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4882,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2653,
+       "over_fair_odds": "≈11/4",
+       "under_fair_odds": "≈4/11"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5386,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5386,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4614,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5281,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.594,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4719,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3645,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.642,
+      "fair_odds": "≈4/7",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.8055,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 3.5,
+       "over": 0.642,
+       "over_fair_odds": "≈4/7",
+       "under_fair_odds": "≈7/4"
+      },
+      {
+       "line": 4.5,
+       "over": 0.4719,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5167,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6208,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4833,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3629,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "no_bet",
+     "reason": "No market has enough evidence about this match to feature a selection."
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "6f90606225669133428bb46313ccb425b9f73f9a0f398fccb2d2f605b4866a78"
   },
   {
    "record_id": "FL1-2627-strasbourg-v-auxerre#r1",
@@ -22374,8 +22613,8 @@
     "away": "Auxerre",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -22600,260 +22839,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "bef8b12c1fdfd5f7a7fa06e4ae177b3709ad30b5e2985d9e429db3adc63dceb3"
+   "sha256": "df7ebd290317dd8b7d73eff4e55476db2d759d2103514d661ce0601c7502fe8e"
   },
   {
-   "record_id": "PD-2627-vallecano-v-celta#r1",
-   "match_id": "PD-2627-vallecano-v-celta",
-   "revision": 1,
-   "fixture": {
-    "competition": "PD",
-    "season": "2627",
-    "home": "Vallecano",
-    "away": "Celta",
-    "kickoff_utc": "2026-11-01T14:00:00Z"
-   },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
-   "markets": {
-    "result": {
-     "model_version": "dc-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate"
-     },
-     "pick": {
-      "key": "H",
-      "label": "Vallecano win",
-      "p": 0.3824,
-      "fair_odds": "≈13/8"
-     },
-     "tier": "L1",
-     "selections": [
-      {
-       "key": "H",
-       "label": "Vallecano win",
-       "p": 0.3824,
-       "fair_odds": "≈13/8"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2936,
-       "fair_odds": "≈5/2"
-      },
-      {
-       "key": "A",
-       "label": "Celta win",
-       "p": 0.3241,
-       "fair_odds": "≈2/1"
-      }
-     ]
-    },
-    "goals": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 2.5",
-      "p": 0.5374,
-      "fair_odds": "≈5/6",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": 0.7214,
-       "over_fair_odds": "≈2/5",
-       "under_fair_odds": "≈5/2"
-      },
-      {
-       "line": 2.5,
-       "over": 0.4626,
-       "over_fair_odds": "≈6/5",
-       "under_fair_odds": "≈5/6"
-      },
-      {
-       "line": 3.5,
-       "over": 0.2456,
-       "over_fair_odds": "≈3/1",
-       "under_fair_odds": "≈1/3"
-      }
-     ]
-    },
-    "btts": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5181,
-      "fair_odds": "≈10/11"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5181,
-       "fair_odds": "≈10/11"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4819,
-       "fair_odds": "≈11/10"
-      }
-     ]
-    },
-    "corners": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 9.5",
-      "p": 0.5033,
-      "fair_odds": "≈Evens",
-      "line": 9.5
-     },
-     "lines": [
-      {
-       "line": 8.5,
-       "over": 0.6193,
-       "over_fair_odds": "≈8/13",
-       "under_fair_odds": "≈13/8"
-      },
-      {
-       "line": 9.5,
-       "over": 0.4967,
-       "over_fair_odds": "≈Evens",
-       "under_fair_odds": "≈Evens"
-      },
-      {
-       "line": 10.5,
-       "over": 0.384,
-       "over_fair_odds": "≈13/8",
-       "under_fair_odds": "≈8/13"
-      }
-     ]
-    },
-    "cards": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 3.5",
-      "p": 0.6611,
-      "fair_odds": "≈1/2",
-      "line": 3.5
-     },
-     "lines": [
-      {
-       "line": 2.5,
-       "over": 0.8211,
-       "over_fair_odds": "≈2/9",
-       "under_fair_odds": "≈9/2"
-      },
-      {
-       "line": 3.5,
-       "over": 0.6611,
-       "over_fair_odds": "≈1/2",
-       "under_fair_odds": "≈2/1"
-      },
-      {
-       "line": 4.5,
-       "over": 0.4875,
-       "over_fair_odds": "≈11/10",
-       "under_fair_odds": "≈10/11"
-      }
-     ]
-    },
-    "shots": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 8.5",
-      "p": 0.5269,
-      "fair_odds": "≈10/11",
-      "line": 8.5
-     },
-     "lines": [
-      {
-       "line": 7.5,
-       "over": 0.611,
-       "over_fair_odds": "≈8/13",
-       "under_fair_odds": "≈13/8"
-      },
-      {
-       "line": 8.5,
-       "over": 0.4731,
-       "over_fair_odds": "≈11/10",
-       "under_fair_odds": "≈10/11"
-      },
-      {
-       "line": 9.5,
-       "over": 0.3504,
-       "over_fair_odds": "≈15/8",
-       "under_fair_odds": "≈8/15"
-      }
-     ]
-    }
-   },
-   "sources": [
-    "openfootball"
-   ],
-   "origin": "pipeline",
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "cards",
-     "key": "over",
-     "line": 3.5,
-     "label": "Over 3.5",
-     "p": 0.6611,
-     "credible_p": 0.6601,
-     "n": 380,
-     "status": "provisional",
-     "strength": "weak",
-     "basis": "league-anchored blend, 380 La Liga backtest matches",
-     "lower_bound": 0.6201
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   },
-   "sha256": "95644539a913ce70adae94f337d169b34fb59ae2a79e622de7b6c4ebcad6c7d9"
-  },
-  {
-   "record_id": "PD-2627-villarreal-v-espanol#r1",
-   "match_id": "PD-2627-villarreal-v-espanol",
+   "record_id": "PD-2627-villarreal-v-espanyol#r1",
+   "match_id": "PD-2627-villarreal-v-espanyol",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
     "home": "Villarreal",
-    "away": "Espanol",
+    "away": "Espanyol",
     "kickoff_utc": "2026-11-01T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -22883,7 +22883,7 @@
       },
       {
        "key": "A",
-       "label": "Espanol win",
+       "label": "Espanyol win",
        "p": 0.1603,
        "fair_odds": "≈5/1"
       }
@@ -23078,7 +23078,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e291e19b0d1ad369d76884fcdbdb4d2d016c79a14428a24e4e88974b8248f159"
+   "sha256": "b1948c17813ddf38563610573ae7029a996021291bbb052a914a340c2c608c43"
   },
   {
    "record_id": "BL1-2627-union-berlin-v-koln#r1",
@@ -23088,11 +23088,11 @@
     "competition": "BL1",
     "season": "2627",
     "home": "Union Berlin",
-    "away": "Koln",
+    "away": "FC Koln",
     "kickoff_utc": "2026-11-01T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -23122,7 +23122,7 @@
       },
       {
        "key": "A",
-       "label": "Koln win",
+       "label": "FC Koln win",
        "p": 0.3103,
        "fair_odds": "≈9/4"
       }
@@ -23318,7 +23318,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e45b09167ff634a228ed4f8d9f78039e300eb8d4309a5aabfc42f55e99c1eac1"
+   "sha256": "3f36a25b3b91332d4b8c16c8f319839b830748316aa663de84d78a0ff9d4bb8c"
   },
   {
    "record_id": "FL1-2627-paris-v-monaco#r1",
@@ -23327,12 +23327,12 @@
    "fixture": {
     "competition": "FL1",
     "season": "2627",
-    "home": "Paris",
+    "home": "Paris FC",
     "away": "Monaco",
     "kickoff_utc": "2026-11-01T16:15:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -23342,7 +23342,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Paris win",
+      "label": "Paris FC win",
       "p": 0.3787,
       "fair_odds": "≈13/8"
      },
@@ -23350,7 +23350,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Paris win",
+       "label": "Paris FC win",
        "p": 0.3787,
        "fair_odds": "≈13/8"
       },
@@ -23557,21 +23557,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "95b6044128d3c40be7b5642362509caf32439feca7cd81e273ccae209d354174"
+   "sha256": "87d019e7502a715b83a8f9ac59196f5e98d5415a3509b53f6af021f0b5d824ab"
   },
   {
-   "record_id": "BL1-2627-ein-frankfurt-v-hamburg#r1",
-   "match_id": "BL1-2627-ein-frankfurt-v-hamburg",
+   "record_id": "BL1-2627-eintracht-frankfurt-v-hamburg#r1",
+   "match_id": "BL1-2627-eintracht-frankfurt-v-hamburg",
    "revision": 1,
    "fixture": {
     "competition": "BL1",
     "season": "2627",
-    "home": "Ein Frankfurt",
+    "home": "Eintracht Frankfurt",
     "away": "Hamburg",
     "kickoff_utc": "2026-11-01T16:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -23581,7 +23581,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Ein Frankfurt win",
+      "label": "Eintracht Frankfurt win",
       "p": 0.5766,
       "fair_odds": "≈8/11"
      },
@@ -23589,7 +23589,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Ein Frankfurt win",
+       "label": "Eintracht Frankfurt win",
        "p": 0.5766,
        "fair_odds": "≈8/11"
       },
@@ -23797,7 +23797,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "b60862c5daac64077b0dac95be21f35e891dd07fb933edbf1d53e8cbbd4b5287"
+   "sha256": "3b8cdb5f6217b425eb3e7bc2094de38d1c6dd1b506fd4b3e30fd8e72868c0f33"
   },
   {
    "record_id": "SA-2627-lecce-v-genoa#r1",
@@ -23810,8 +23810,8 @@
     "away": "Genoa",
     "kickoff_utc": "2026-11-01T17:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -24036,7 +24036,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "88746894e8e5118aa792278095375a806da943c746ca374e2eb71030f24a0475"
+   "sha256": "dee8e594e28ab0ff8128708d4b3432ec7ea2fd8585a32339f5f059f878bbf279"
   },
   {
    "record_id": "SA-2627-juventus-v-napoli#r1",
@@ -24049,8 +24049,8 @@
     "away": "Napoli",
     "kickoff_utc": "2026-11-01T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -24275,7 +24275,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "5202eb315509fad9a65fc3fead31e21b770f70d0e2e2b05d13d36d51f158ab33"
+   "sha256": "e513ccd143d45c48c7868c9386d19091236e33d74f57b18db4158fc59e0b6573"
   },
   {
    "record_id": "FL1-2627-marseille-v-toulouse#r1",
@@ -24288,8 +24288,8 @@
     "away": "Toulouse",
     "kickoff_utc": "2026-11-01T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -24514,7 +24514,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "862a9043240b53462f09d9353b8a9af48e3e5722dfb9a8913c1f98766b63b968"
+   "sha256": "16e20f550462d5d62e08b02aed3b4fde4bb670218d95645dba2db912e8e9388f"
   },
   {
    "record_id": "SA-2627-sassuolo-v-fiorentina#r1",
@@ -24527,8 +24527,8 @@
     "away": "Fiorentina",
     "kickoff_utc": "2026-11-02T17:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -24753,7 +24753,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "f055c218ea8d43ae7d82a8dab032ecb35d3e43f584a88f16bf1799abf8602809"
+   "sha256": "d06897a647eaf6475dd03a95d73f7a65a1eb2358aa180167b4e22b30c47da4ce"
   },
   {
    "record_id": "SA-2627-atalanta-v-parma#r1",
@@ -24766,8 +24766,8 @@
     "away": "Parma",
     "kickoff_utc": "2026-11-02T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -24991,7 +24991,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "d0de47126f5d7f878d3e96db2f09a958a188f4d36e04b5174e5dfbd05e433d61"
+   "sha256": "b14d78361174e29b5b48365a0b61bd7931a5938e88ed85dfc412beaa81cf8f38"
   },
   {
    "record_id": "ELC-2627-birmingham-v-millwall#r1",
@@ -25004,8 +25004,8 @@
     "away": "Millwall",
     "kickoff_utc": "2026-11-03T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -25230,7 +25230,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "d6499b78224004aabd259a9d26e0a106ddc57859ead711827c2859067dda748f"
+   "sha256": "a1415e83900c2f9256aa3253944f956c6b9604b8547efe5e6f249a077d512d0e"
   },
   {
    "record_id": "ELC-2627-blackburn-v-stoke#r1",
@@ -25243,8 +25243,8 @@
     "away": "Stoke",
     "kickoff_utc": "2026-11-03T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -25469,7 +25469,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "71082b85316d20d9afdfb29e06e92b703ef882547ade1c58b505b7d166fc18ad"
+   "sha256": "148c19e80314850c27173282ee172580fe6cdf3b48c57fa4fa92ec39ce3ef48a"
   },
   {
    "record_id": "ELC-2627-charlton-v-bolton#r1",
@@ -25482,8 +25482,8 @@
     "away": "Bolton",
     "kickoff_utc": "2026-11-03T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -25708,7 +25708,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "083cac02bf839a79043461102c0099a1c6234925d3a5065311d637fba32c1148"
+   "sha256": "27cc8f925e64d64c9994e175033012fbb78001bf45ccb2cdc814d9f4032bde1d"
   },
   {
    "record_id": "ELC-2627-derby-v-norwich#r1",
@@ -25721,8 +25721,8 @@
     "away": "Norwich",
     "kickoff_utc": "2026-11-03T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -25947,7 +25947,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "562d342c8d473ed38ec3907b07afe0f131d7d22f484a44c6f22f7be03e39af9c"
+   "sha256": "63c04fb8829ecfde5f10dc636778a5e08a870edb2a2c967771388cfa115d05e2"
   },
   {
    "record_id": "ELC-2627-portsmouth-v-swansea#r1",
@@ -25960,8 +25960,8 @@
     "away": "Swansea",
     "kickoff_utc": "2026-11-03T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -26186,7 +26186,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "431f496927259c1821238bbd6c27b8dc6ae63809c8b3cd0190a7f82ce709767a"
+   "sha256": "1bf366636d8d6eb2c02c5c0ce1182f0fd3494304b9096d014a9f21b2401f65f6"
   },
   {
    "record_id": "ELC-2627-preston-v-sheffield-united#r1",
@@ -26199,8 +26199,8 @@
     "away": "Sheffield United",
     "kickoff_utc": "2026-11-03T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -26425,7 +26425,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "a26772ab50d17a7afa1df90760d72e0409fb7ed5f3156961a8187d9703b29c77"
+   "sha256": "b30ed75e7c10ecb3b2b0c6476378af5a66ddce41083228f1dfe995de918f890f"
   },
   {
    "record_id": "ELC-2627-qpr-v-burnley#r1",
@@ -26434,12 +26434,12 @@
    "fixture": {
     "competition": "ELC",
     "season": "2627",
-    "home": "Qpr",
+    "home": "QPR",
     "away": "Burnley",
     "kickoff_utc": "2026-11-03T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -26457,7 +26457,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Qpr win",
+       "label": "QPR win",
        "p": 0.2702,
        "fair_odds": "≈11/4"
       },
@@ -26663,7 +26663,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "ccc623fbac9d9dc793a5e1573e43095705524c403e1bda810b10cb68249d6e0a"
+   "sha256": "c138688b8bfca0239dbef43e50ce1e8770dcb0e5db15afd53c636039868c4589"
   },
   {
    "record_id": "ELC-2627-watford-v-lincoln#r1",
@@ -26676,8 +26676,8 @@
     "away": "Lincoln",
     "kickoff_utc": "2026-11-03T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -26902,7 +26902,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "979c92dfdce35930ac211662407e0f6cbb7f7ddbf7ee0c0e5e178546a1b42005"
+   "sha256": "2e3bdf8fabed84ba840bfa1090dedc5b7dcd8a1a7560dc7ea6210de3706bdf02"
   },
   {
    "record_id": "ELC-2627-west-brom-v-southampton#r1",
@@ -26915,8 +26915,8 @@
     "away": "Southampton",
     "kickoff_utc": "2026-11-03T20:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -27141,7 +27141,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "000b52b19175b083fe8257eaabbf853d99c56fd1df2c560707432370dc6cc142"
+   "sha256": "5381d6f456a694950915108a82afdef1343a4cca1e56ac6ae5e562f9704bdb2d"
   },
   {
    "record_id": "ELC-2627-cardiff-v-west-ham#r1",
@@ -27154,8 +27154,8 @@
     "away": "West Ham",
     "kickoff_utc": "2026-11-04T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -27379,7 +27379,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "ac00419054a038e99bab953e393941b60039be36810cc1bc434f306d4f5bab72"
+   "sha256": "a9c7b33d2279b2eda34e5cf7565cc4e49e5f57a9daba206d26d4f976814f1d49"
   },
   {
    "record_id": "ELC-2627-wrexham-v-middlesbrough#r1",
@@ -27392,8 +27392,8 @@
     "away": "Middlesbrough",
     "kickoff_utc": "2026-11-04T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -27617,7 +27617,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "867b625a383d79ee7ea55aae426c0bf13d96bfbd8dab8e0ad745ee1b8f5c0ebd"
+   "sha256": "58552c2c7571b0bb564b3909d60db8e8082cfdf8ed2c117172d4abaa1fca2e3d"
   },
   {
    "record_id": "ELC-2627-bristol-city-v-wolves#r1",
@@ -27630,8 +27630,8 @@
     "away": "Wolves",
     "kickoff_utc": "2026-11-04T20:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -27856,7 +27856,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "d5662e4759ac4dd99429ecdfac17a7b5d1843f88cbf0b0851a51eb766b19485b"
+   "sha256": "c81a4fe686fc8d1f08699aa91e2edce8f03ff3328b20469d0044788d08ca5077"
   },
   {
    "record_id": "BL1-2627-hamburg-v-mgladbach#r1",
@@ -27866,11 +27866,11 @@
     "competition": "BL1",
     "season": "2627",
     "home": "Hamburg",
-    "away": "Mgladbach",
+    "away": "M'gladbach",
     "kickoff_utc": "2026-11-06T19:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -27900,7 +27900,7 @@
       },
       {
        "key": "A",
-       "label": "Mgladbach win",
+       "label": "M'gladbach win",
        "p": 0.3454,
        "fair_odds": "≈15/8"
       }
@@ -28096,7 +28096,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "17e713d20d4a8d5d35b53c30fb9d37c9fb507adb910fbcb45761afa089904f03"
+   "sha256": "e3e6e742cfaac4b83a5fd5084e65f7801252337b2108b561733d2684252b139e"
   },
   {
    "record_id": "FL1-2627-toulouse-v-strasbourg#r1",
@@ -28109,8 +28109,8 @@
     "away": "Strasbourg",
     "kickoff_utc": "2026-11-06T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -28335,7 +28335,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "798e81fe7d31906f69c64f87a1990f750368cbeec6781bacdb0795edc11472bb"
+   "sha256": "93a31b82d30990f7ef722f5233fd92ab3341ce06b0de3738e8cedd2382384ac9"
   },
   {
    "record_id": "SA-2627-venezia-v-udinese#r1",
@@ -28348,8 +28348,8 @@
     "away": "Udinese",
     "kickoff_utc": "2026-11-06T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -28574,7 +28574,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "25063840f154124b70c955eeeee35d03f032de70f071a8440fa817724ba072bf"
+   "sha256": "0af21a0e318cac2a10f2d1e0c68ab8f2f9374b49c52c8857b67f1b9d4ca26ee6"
   },
   {
    "record_id": "ELC-2627-derby-v-bolton#r1",
@@ -28587,8 +28587,8 @@
     "away": "Bolton",
     "kickoff_utc": "2026-11-06T20:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -28813,7 +28813,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "24b02d86eb6de8ebca6a223f65fb4bd765e696d6569b652f326ea770e14d751d"
+   "sha256": "46e8c98240e93607c98b2ddfad513a1207361b012e4f8aa27916e650ccec7665"
   },
   {
    "record_id": "ELC-2627-bristol-city-v-norwich#r1",
@@ -28826,8 +28826,8 @@
     "away": "Norwich",
     "kickoff_utc": "2026-11-07T12:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -29052,7 +29052,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "cfcac95f0afbd61ef58850ad1a7aeb0f14304753d4f5546b43b26ac0efa1b5a3"
+   "sha256": "d9fd552fd998601af985e26f92a8f50ce9b26cbb2addac250b2d8afc553159aa"
   },
   {
    "record_id": "ELC-2627-portsmouth-v-stoke#r1",
@@ -29065,8 +29065,8 @@
     "away": "Stoke",
     "kickoff_utc": "2026-11-07T12:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -29291,7 +29291,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2650c9f0dcd6f4c1f4f64d38db8c0a9f88d6f83a553726960f0a3e3b8045c6b5"
+   "sha256": "1a23767df8c6155921429f56d56e37780177477a970a0b7ddb6b21dfd0328451"
   },
   {
    "record_id": "ELC-2627-wrexham-v-wolves#r1",
@@ -29304,8 +29304,8 @@
     "away": "Wolves",
     "kickoff_utc": "2026-11-07T12:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -29529,7 +29529,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e8d94466adbe0af6cfdecf8fd613f5d7b91d88ba7130dd217921f4bf30c97ae5"
+   "sha256": "900d4303aa60dfa3217b3cf68020be1acf12e0b281d2ff78699938bc4339c0ee"
   },
   {
    "record_id": "SA-2627-cagliari-v-frosinone#r1",
@@ -29542,8 +29542,8 @@
     "away": "Frosinone",
     "kickoff_utc": "2026-11-07T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -29768,7 +29768,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e36b28d96f8aaf351424992ec518c8af01bd19a75dd6fb758208d74fd52cd06f"
+   "sha256": "bba42f2e177ba9fbe093c8d335887e516c9689b278d970018a72c58528a51fb8"
   },
   {
    "record_id": "SA-2627-torino-v-lecce#r1",
@@ -29781,8 +29781,8 @@
     "away": "Lecce",
     "kickoff_utc": "2026-11-07T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -30007,7 +30007,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "b454d039d61542de32dc9dfcb2bf88bfbf0daeab94f304725c630340d8d85fcd"
+   "sha256": "6c2d130391167290f23af27f512cba504812b2fe5bb89ddb5eca862b0bd9dcfe"
   },
   {
    "record_id": "BL1-2627-dortmund-v-elversberg#r1",
@@ -30020,8 +30020,8 @@
     "away": "Elversberg",
     "kickoff_utc": "2026-11-07T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -30237,7 +30237,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "13a20e1997d7b87825d2e760e76a41bea6ea00ed8d7ae2b4fc2a81a0c8a90b3a"
+   "sha256": "7ea75495edbc235eb70850d3a1ca345d73ff54e23ed54f601f47dcad07f6792c"
   },
   {
    "record_id": "BL1-2627-mainz-v-bayern-munich#r1",
@@ -30250,8 +30250,8 @@
     "away": "Bayern Munich",
     "kickoff_utc": "2026-11-07T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -30476,21 +30476,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "0333d1cfb70b4e43601762b856e7c92fa3941775e34e8b24c882bc5fb2c81c89"
+   "sha256": "44eba28e95e40e41554bb948b08d02448349ee2a24d3e248ed31bee93c78080e"
   },
   {
-   "record_id": "BL1-2627-paderborn-v-ein-frankfurt#r1",
-   "match_id": "BL1-2627-paderborn-v-ein-frankfurt",
+   "record_id": "BL1-2627-paderborn-v-eintracht-frankfurt#r1",
+   "match_id": "BL1-2627-paderborn-v-eintracht-frankfurt",
    "revision": 1,
    "fixture": {
     "competition": "BL1",
     "season": "2627",
     "home": "Paderborn",
-    "away": "Ein Frankfurt",
+    "away": "Eintracht Frankfurt",
     "kickoff_utc": "2026-11-07T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -30520,7 +30520,7 @@
       },
       {
        "key": "A",
-       "label": "Ein Frankfurt win",
+       "label": "Eintracht Frankfurt win",
        "p": 0.3231,
        "fair_odds": "≈2/1"
       }
@@ -30706,7 +30706,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "f3de21f4cf6d2734f18791e40aa8820acf1a0ca96002ee1a7fd9b38e7ba9dc77"
+   "sha256": "00319c4bf476d69d32cbbf7e474f60a0715fe6d6665a51e59241729b6a544df1"
   },
   {
    "record_id": "BL1-2627-rb-leipzig-v-augsburg#r1",
@@ -30715,12 +30715,12 @@
    "fixture": {
     "competition": "BL1",
     "season": "2627",
-    "home": "Rb Leipzig",
+    "home": "RB Leipzig",
     "away": "Augsburg",
     "kickoff_utc": "2026-11-07T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -30730,7 +30730,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Rb Leipzig win",
+      "label": "RB Leipzig win",
       "p": 0.6365,
       "fair_odds": "≈4/7"
      },
@@ -30738,7 +30738,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Rb Leipzig win",
+       "label": "RB Leipzig win",
        "p": 0.6365,
        "fair_odds": "≈4/7"
       },
@@ -30946,7 +30946,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "7ee0a687117591ffbf234228092100b1747efc0470f571d89c3e9a0fcd9a8424"
+   "sha256": "8fa96ac7cee8fa73e3286272f8253c2328ba3b71c745cf814a260a7cabc1a9da"
   },
   {
    "record_id": "ELC-2627-birmingham-v-swansea#r1",
@@ -30959,8 +30959,8 @@
     "away": "Swansea",
     "kickoff_utc": "2026-11-07T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -31185,7 +31185,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "f0115c54476833ac7cbffb0ad28f59810135bc40a8a3695f4db4afe796101711"
+   "sha256": "24332fce0d37e86a4e2a04c4bbb0b4b668be6381c9bbdf66edfbcb724d449172"
   },
   {
    "record_id": "ELC-2627-blackburn-v-west-ham#r1",
@@ -31198,8 +31198,8 @@
     "away": "West Ham",
     "kickoff_utc": "2026-11-07T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -31423,7 +31423,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "11767cbec3b5c46f5f7ad71af1a0eb2953a67aec3188a1c6147b62f49b9d4ae6"
+   "sha256": "ede8a43b8c8cc939c4012ea3462e51f9f3351007c94d2a9f240a63fea5b988fb"
   },
   {
    "record_id": "ELC-2627-cardiff-v-burnley#r1",
@@ -31436,8 +31436,8 @@
     "away": "Burnley",
     "kickoff_utc": "2026-11-07T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -31661,7 +31661,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "63a2c613f646965136f69b5d31b8a4514dbfdbdaf203f4e24b5b85342d718562"
+   "sha256": "221a0ca9586cae1a30b967a8ad85cf0b1bafc42e444ec2090b6e45554b244478"
   },
   {
    "record_id": "ELC-2627-charlton-v-sheffield-united#r1",
@@ -31674,8 +31674,8 @@
     "away": "Sheffield United",
     "kickoff_utc": "2026-11-07T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -31900,7 +31900,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "25938b0ab6e944b89705627d375162b51cd578c0396168cf5c97f0c08f406bb6"
+   "sha256": "d09b463f8d104a778186482fbea0276d5e3ff5911c713b96d221cb0e3ee17616"
   },
   {
    "record_id": "ELC-2627-preston-v-southampton#r1",
@@ -31913,8 +31913,8 @@
     "away": "Southampton",
     "kickoff_utc": "2026-11-07T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -32139,7 +32139,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "80b06a44d0d20598576a377e62e2ace3e64bc1ff5124ab9e08dfa284c0c814af"
+   "sha256": "2ca8e06bafa8301bd1b5d5e133ef687383a25466835d04b11b0818994fba9c01"
   },
   {
    "record_id": "ELC-2627-qpr-v-lincoln#r1",
@@ -32148,12 +32148,12 @@
    "fixture": {
     "competition": "ELC",
     "season": "2627",
-    "home": "Qpr",
+    "home": "QPR",
     "away": "Lincoln",
     "kickoff_utc": "2026-11-07T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -32163,7 +32163,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Qpr win",
+      "label": "QPR win",
       "p": 0.5724,
       "fair_odds": "≈8/11"
      },
@@ -32171,7 +32171,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Qpr win",
+       "label": "QPR win",
        "p": 0.5724,
        "fair_odds": "≈8/11"
       },
@@ -32378,7 +32378,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "f52d302b18ae500a31ed27f7346b4b3b7442af5f539203fe38882fe845b15012"
+   "sha256": "b391506bff64f641d1489f0ad3fa84704a9aa574ca8a833916ef4f393f68f495"
   },
   {
    "record_id": "ELC-2627-watford-v-middlesbrough#r1",
@@ -32391,8 +32391,8 @@
     "away": "Middlesbrough",
     "kickoff_utc": "2026-11-07T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -32617,7 +32617,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "ad64bd8616674e76973b15821ae719a0adb42aad547f0142f23f440d8f67dd77"
+   "sha256": "0912d4ea68eb991fd441eeaba57b3b53f26b13bdb430a3202dfc31f02d0a7d8e"
   },
   {
    "record_id": "ELC-2627-west-brom-v-millwall#r1",
@@ -32630,8 +32630,8 @@
     "away": "Millwall",
     "kickoff_utc": "2026-11-07T15:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "4a72c49924dfb7fa",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "3e29bc5c35d8b2af",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -32856,7 +32856,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "342cf16c9650b0fad6df99273deac619e3f686e930fd0dec3e66e26cc9016c8e"
+   "sha256": "639ae661ad7c5be8d7b7b81efc3131aa9296aa66a15896eea194612b610a2bbb"
   },
   {
    "record_id": "FL1-2627-auxerre-v-paris#r1",
@@ -32866,11 +32866,11 @@
     "competition": "FL1",
     "season": "2627",
     "home": "Auxerre",
-    "away": "Paris",
+    "away": "Paris FC",
     "kickoff_utc": "2026-11-07T16:15:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -32880,7 +32880,7 @@
      },
      "pick": {
       "key": "A",
-      "label": "Paris win",
+      "label": "Paris FC win",
       "p": 0.398,
       "fair_odds": "≈6/4"
      },
@@ -32900,7 +32900,7 @@
       },
       {
        "key": "A",
-       "label": "Paris win",
+       "label": "Paris FC win",
        "p": 0.398,
        "fair_odds": "≈6/4"
       }
@@ -33094,7 +33094,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "f35af74af032394607d60b02cd26fd4d0e5bdadbf8eea35744eda3191bbbe814"
+   "sha256": "64cc4a14afb3c3e7d5b22578275cf918074ac977eb254d77b0d25989ae8b020f"
   },
   {
    "record_id": "SA-2627-parma-v-bologna#r1",
@@ -33107,8 +33107,8 @@
     "away": "Bologna",
     "kickoff_utc": "2026-11-07T17:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -33333,7 +33333,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "97266394a36435bd80de394a4eccfdf536c7ca2bf961e35c1f7aa0a7a07c9ddd"
+   "sha256": "4ae42a0eb2d74a051d94f552141ce3f1379bc2c3e919394090ae110d4cbcb1f9"
   },
   {
    "record_id": "BL1-2627-stuttgart-v-werder-bremen#r1",
@@ -33346,8 +33346,8 @@
     "away": "Werder Bremen",
     "kickoff_utc": "2026-11-07T17:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -33573,7 +33573,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "0eb07dd5e411c6e20740e3304e96054a6df8de704b9fe98f9c6e3b7e5381debc"
+   "sha256": "600b4a7adbdf428de8d77c878948f2db4ecb5b33118c8dcbca9eee6c6f027bd2"
   },
   {
    "record_id": "FL1-2627-paris-sg-v-troyes#r1",
@@ -33582,12 +33582,12 @@
    "fixture": {
     "competition": "FL1",
     "season": "2627",
-    "home": "Paris Sg",
+    "home": "Paris SG",
     "away": "Troyes",
     "kickoff_utc": "2026-11-07T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -33597,7 +33597,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Paris Sg win",
+      "label": "Paris SG win",
       "p": 0.4404,
       "fair_odds": "≈5/4"
      },
@@ -33605,7 +33605,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Paris Sg win",
+       "label": "Paris SG win",
        "p": 0.4404,
        "fair_odds": "≈5/4"
       },
@@ -33802,7 +33802,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "4640c2c73ac1386ecc9702e1586214f78db9dc5780682f851df31519d763babd"
+   "sha256": "4cf3b4812fd3824ecf1407e88825c09b1fedfcf951192752093b3577b111affa"
   },
   {
    "record_id": "SA-2627-roma-v-sassuolo#r1",
@@ -33815,8 +33815,8 @@
     "away": "Sassuolo",
     "kickoff_utc": "2026-11-07T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -34040,7 +34040,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e3eac52f8cb34e0f7ff9db31874d61658a95b49cd2ada320f089958659c32137"
+   "sha256": "a9760fd0cff40e940babfaf7c50f8b0167bd9245aff6ebd559cce5d2970f74f9"
   },
   {
    "record_id": "SA-2627-napoli-v-lazio#r1",
@@ -34053,8 +34053,8 @@
     "away": "Lazio",
     "kickoff_utc": "2026-11-08T11:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -34279,21 +34279,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "281e41af195e2b47e64b292a525581bc3c4ed6aa74b626769a91f661d03ccbdb"
+   "sha256": "0f45341968e6ff1a06bea8eb23d24507f4dced4cd9c336154047069173db755b"
   },
   {
-   "record_id": "PD-2627-ath-madrid-v-barcelona#r1",
-   "match_id": "PD-2627-ath-madrid-v-barcelona",
+   "record_id": "PD-2627-atletico-madrid-v-barcelona#r1",
+   "match_id": "PD-2627-atletico-madrid-v-barcelona",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
-    "home": "Ath Madrid",
+    "home": "Atletico Madrid",
     "away": "Barcelona",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -34311,7 +34311,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Ath Madrid win",
+       "label": "Atletico Madrid win",
        "p": 0.3276,
        "fair_odds": "≈2/1"
       },
@@ -34518,21 +34518,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2aedda9c73765d14a00222e19aba46ff0c157861e4586089e5904791c5d5b29d"
+   "sha256": "d0a156885f479c2dd2986b3c403f47e1154977d67dc95e56fbd07c7724bc73a1"
   },
   {
-   "record_id": "PD-2627-celta-v-levante#r1",
-   "match_id": "PD-2627-celta-v-levante",
+   "record_id": "PD-2627-celta-vigo-v-levante#r1",
+   "match_id": "PD-2627-celta-vigo-v-levante",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
-    "home": "Celta",
+    "home": "Celta Vigo",
     "away": "Levante",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -34542,7 +34542,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Celta win",
+      "label": "Celta Vigo win",
       "p": 0.5346,
       "fair_odds": "≈10/11"
      },
@@ -34550,7 +34550,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Celta win",
+       "label": "Celta Vigo win",
        "p": 0.5346,
        "fair_odds": "≈10/11"
       },
@@ -34757,21 +34757,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "21c0c87fd2704b5f0fa5d6115475e36761e8b3a0bf4eb438d17fb3d80e48b7ae"
+   "sha256": "82bc3b65f3111c4d2030d36175ef5e265f649f819670d1ffeacf67340369475f"
   },
   {
-   "record_id": "PD-2627-elche-v-betis#r1",
-   "match_id": "PD-2627-elche-v-betis",
+   "record_id": "PD-2627-elche-v-real-betis#r1",
+   "match_id": "PD-2627-elche-v-real-betis",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
     "home": "Elche",
-    "away": "Betis",
+    "away": "Real Betis",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -34781,7 +34781,7 @@
      },
      "pick": {
       "key": "A",
-      "label": "Betis win",
+      "label": "Real Betis win",
       "p": 0.3902,
       "fair_odds": "≈13/8"
      },
@@ -34801,7 +34801,7 @@
       },
       {
        "key": "A",
-       "label": "Betis win",
+       "label": "Real Betis win",
        "p": 0.3902,
        "fair_odds": "≈13/8"
       }
@@ -34996,21 +34996,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "ebe31efd460633b6070a430bd3325ab41ba6feb9571370697ce28d6c8ac0d412"
+   "sha256": "4c9cde10a7f941b3b9afc6831ad0f97f0925a3f7c280e3bcf50947ccdb920f49"
   },
   {
-   "record_id": "PD-2627-espanol-v-la-coruna#r1",
-   "match_id": "PD-2627-espanol-v-la-coruna",
+   "record_id": "PD-2627-espanyol-v-deportivo-la-coruna#r1",
+   "match_id": "PD-2627-espanyol-v-deportivo-la-coruna",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
-    "home": "Espanol",
-    "away": "La Coruna",
+    "home": "Espanyol",
+    "away": "Deportivo La Coruna",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -35020,7 +35020,7 @@
      },
      "pick": {
       "key": "H",
-      "label": "Espanol win",
+      "label": "Espanyol win",
       "p": 0.4565,
       "fair_odds": "≈6/5"
      },
@@ -35028,7 +35028,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Espanol win",
+       "label": "Espanyol win",
        "p": 0.4565,
        "fair_odds": "≈6/5"
       },
@@ -35040,7 +35040,7 @@
       },
       {
        "key": "A",
-       "label": "La Coruna win",
+       "label": "Deportivo La Coruna win",
        "p": 0.2815,
        "fair_odds": "≈5/2"
       }
@@ -35225,21 +35225,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "f09fe3f274154cf76f1d5266fc3026cc4bb61fb9e40343a4d4cee3458706c74c"
+   "sha256": "1d815833ff753a57de203b462033c487fac91755e7a66f9320c6baa47e9c46ad"
   },
   {
-   "record_id": "SA-2627-genoa-v-milan#r1",
-   "match_id": "SA-2627-genoa-v-milan",
+   "record_id": "SA-2627-genoa-v-ac-milan#r1",
+   "match_id": "SA-2627-genoa-v-ac-milan",
    "revision": 1,
    "fixture": {
     "competition": "SA",
     "season": "2627",
     "home": "Genoa",
-    "away": "Milan",
+    "away": "AC Milan",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -35249,7 +35249,7 @@
      },
      "pick": {
       "key": "A",
-      "label": "Milan win",
+      "label": "AC Milan win",
       "p": 0.5215,
       "fair_odds": "≈10/11"
      },
@@ -35269,7 +35269,7 @@
       },
       {
        "key": "A",
-       "label": "Milan win",
+       "label": "AC Milan win",
        "p": 0.5215,
        "fair_odds": "≈10/11"
       }
@@ -35464,21 +35464,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "b2fe7583ad0a8c2e942e854c47ecaa02e2a119df349a55e2c77745f616f06e5a"
+   "sha256": "79ed4b713ea30f137af57a9e84a4a75696da61521c05602efcfa9483488ce102"
   },
   {
-   "record_id": "PD-2627-malaga-v-santander#r1",
-   "match_id": "PD-2627-malaga-v-santander",
+   "record_id": "PD-2627-malaga-v-racing-santander#r1",
+   "match_id": "PD-2627-malaga-v-racing-santander",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
     "home": "Malaga",
-    "away": "Santander",
+    "away": "Racing Santander",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -35508,7 +35508,7 @@
       },
       {
        "key": "A",
-       "label": "Santander win",
+       "label": "Racing Santander win",
        "p": 0.2815,
        "fair_odds": "≈5/2"
       }
@@ -35703,7 +35703,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "eb9b26a730cbf911353139fabee956c6999b1912066351f1b6c4ee9f3968f13c"
+   "sha256": "931528c9c13b868f353cc3272aef3ef56e81613908885727ef2ba9a5da58352c"
   },
   {
    "record_id": "SA-2627-monza-v-atalanta#r1",
@@ -35716,8 +35716,8 @@
     "away": "Atalanta",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -35942,21 +35942,21 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2aaa340401e174c7b1eaa88e7c70368bd79fca81fe3b1a8ba41832de8d43d69b"
+   "sha256": "6994f3acd2fe8ffcecdc2e1c930abd1c472fefd3471bc43ebc44d1611da02477"
   },
   {
-   "record_id": "PD-2627-osasuna-v-ath-bilbao#r1",
-   "match_id": "PD-2627-osasuna-v-ath-bilbao",
+   "record_id": "PD-2627-osasuna-v-athletic-club#r1",
+   "match_id": "PD-2627-osasuna-v-athletic-club",
    "revision": 1,
    "fixture": {
     "competition": "PD",
     "season": "2627",
     "home": "Osasuna",
-    "away": "Ath Bilbao",
+    "away": "Athletic Club",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -35986,7 +35986,7 @@
       },
       {
        "key": "A",
-       "label": "Ath Bilbao win",
+       "label": "Athletic Club win",
        "p": 0.3487,
        "fair_odds": "≈15/8"
       }
@@ -36181,7 +36181,246 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "70c2a8df555df9f9c6a8bdc7f99c4a927481074b35c24e728b15b8b1e72983da"
+   "sha256": "6898195469cb0ebe0ddd60752ef3f286ecf8eea998b035544cdb54d9bbbf5cb7"
+  },
+  {
+   "record_id": "PD-2627-real-sociedad-v-rayo-vallecano#r1",
+   "match_id": "PD-2627-real-sociedad-v-rayo-vallecano",
+   "revision": 1,
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Real Sociedad",
+    "away": "Rayo Vallecano",
+    "kickoff_utc": "2026-11-08T14:00:00Z"
+   },
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Real Sociedad win",
+      "p": 0.4919,
+      "fair_odds": "≈Evens"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Real Sociedad win",
+       "p": 0.4919,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2597,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Rayo Vallecano win",
+       "p": 0.2484,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5102,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7434,
+       "over_fair_odds": "≈1/3",
+       "under_fair_odds": "≈3/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4898,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.268,
+       "over_fair_odds": "≈11/4",
+       "under_fair_odds": "≈4/11"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5344,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5344,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4656,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.533,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.6501,
+       "over_fair_odds": "≈8/15",
+       "under_fair_odds": "≈15/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.533,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 10.5,
+       "over": 0.4225,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.674,
+      "fair_odds": "≈1/2",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.8289,
+       "over_fair_odds": "≈1/5",
+       "under_fair_odds": "≈5/1"
+      },
+      {
+       "line": 3.5,
+       "over": 0.674,
+       "over_fair_odds": "≈1/2",
+       "under_fair_odds": "≈2/1"
+      },
+      {
+       "line": 4.5,
+       "over": 0.5034,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5226,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6555,
+       "over_fair_odds": "≈8/15",
+       "under_fair_odds": "≈15/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.5226,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3994,
+       "over_fair_odds": "≈6/4",
+       "under_fair_odds": "≈4/6"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.674,
+     "credible_p": 0.6724,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 La Liga backtest matches",
+     "lower_bound": 0.6328
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "60f8dc741adbfd3dfca4e457617d0f64fed36de4980d92a657d0161327f47313"
   },
   {
    "record_id": "FL1-2627-rennes-v-lille#r1",
@@ -36194,8 +36433,8 @@
     "away": "Lille",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -36420,7 +36659,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "11bfa67ceae8cfb3da1a0d10c01dd895a8a3e133ac561e7f4d9899b28a031dcb"
+   "sha256": "1ee6facb0972e95441faa98d834d7d616af95b9da6e59116b42b304c4e564d58"
   },
   {
    "record_id": "PD-2627-sevilla-v-alaves#r1",
@@ -36433,8 +36672,8 @@
     "away": "Alaves",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -36659,246 +36898,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "bd5de751d758c735102c293c12686765d50dae16881fd8358ded8572d19b05f7"
-  },
-  {
-   "record_id": "PD-2627-sociedad-v-vallecano#r1",
-   "match_id": "PD-2627-sociedad-v-vallecano",
-   "revision": 1,
-   "fixture": {
-    "competition": "PD",
-    "season": "2627",
-    "home": "Sociedad",
-    "away": "Vallecano",
-    "kickoff_utc": "2026-11-08T14:00:00Z"
-   },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
-   "markets": {
-    "result": {
-     "model_version": "dc-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate"
-     },
-     "pick": {
-      "key": "H",
-      "label": "Sociedad win",
-      "p": 0.4919,
-      "fair_odds": "≈Evens"
-     },
-     "tier": "L1",
-     "selections": [
-      {
-       "key": "H",
-       "label": "Sociedad win",
-       "p": 0.4919,
-       "fair_odds": "≈Evens"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2597,
-       "fair_odds": "≈11/4"
-      },
-      {
-       "key": "A",
-       "label": "Vallecano win",
-       "p": 0.2484,
-       "fair_odds": "≈3/1"
-      }
-     ]
-    },
-    "goals": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 2.5",
-      "p": 0.5102,
-      "fair_odds": "≈Evens",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": 0.7434,
-       "over_fair_odds": "≈1/3",
-       "under_fair_odds": "≈3/1"
-      },
-      {
-       "line": 2.5,
-       "over": 0.4898,
-       "over_fair_odds": "≈Evens",
-       "under_fair_odds": "≈Evens"
-      },
-      {
-       "line": 3.5,
-       "over": 0.268,
-       "over_fair_odds": "≈11/4",
-       "under_fair_odds": "≈4/11"
-      }
-     ]
-    },
-    "btts": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5344,
-      "fair_odds": "≈10/11"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5344,
-       "fair_odds": "≈10/11"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4656,
-       "fair_odds": "≈11/10"
-      }
-     ]
-    },
-    "corners": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 9.5",
-      "p": 0.533,
-      "fair_odds": "≈10/11",
-      "line": 9.5
-     },
-     "lines": [
-      {
-       "line": 8.5,
-       "over": 0.6501,
-       "over_fair_odds": "≈8/15",
-       "under_fair_odds": "≈15/8"
-      },
-      {
-       "line": 9.5,
-       "over": 0.533,
-       "over_fair_odds": "≈10/11",
-       "under_fair_odds": "≈11/10"
-      },
-      {
-       "line": 10.5,
-       "over": 0.4225,
-       "over_fair_odds": "≈11/8",
-       "under_fair_odds": "≈8/11"
-      }
-     ]
-    },
-    "cards": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 3.5",
-      "p": 0.674,
-      "fair_odds": "≈1/2",
-      "line": 3.5
-     },
-     "lines": [
-      {
-       "line": 2.5,
-       "over": 0.8289,
-       "over_fair_odds": "≈1/5",
-       "under_fair_odds": "≈5/1"
-      },
-      {
-       "line": 3.5,
-       "over": 0.674,
-       "over_fair_odds": "≈1/2",
-       "under_fair_odds": "≈2/1"
-      },
-      {
-       "line": 4.5,
-       "over": 0.5034,
-       "over_fair_odds": "≈Evens",
-       "under_fair_odds": "≈Evens"
-      }
-     ]
-    },
-    "shots": {
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak"
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 8.5",
-      "p": 0.5226,
-      "fair_odds": "≈10/11",
-      "line": 8.5
-     },
-     "lines": [
-      {
-       "line": 7.5,
-       "over": 0.6555,
-       "over_fair_odds": "≈8/15",
-       "under_fair_odds": "≈15/8"
-      },
-      {
-       "line": 8.5,
-       "over": 0.5226,
-       "over_fair_odds": "≈10/11",
-       "under_fair_odds": "≈11/10"
-      },
-      {
-       "line": 9.5,
-       "over": 0.3994,
-       "over_fair_odds": "≈6/4",
-       "under_fair_odds": "≈4/6"
-      }
-     ]
-    }
-   },
-   "sources": [
-    "openfootball"
-   ],
-   "origin": "pipeline",
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "cards",
-     "key": "over",
-     "line": 3.5,
-     "label": "Over 3.5",
-     "p": 0.674,
-     "credible_p": 0.6724,
-     "n": 380,
-     "status": "provisional",
-     "strength": "weak",
-     "basis": "league-anchored blend, 380 La Liga backtest matches",
-     "lower_bound": 0.6328
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   },
-   "sha256": "63d6a768b9211a11deaf50070c20fd9662113675ad195b8a89279ace026eeccb"
+   "sha256": "a4543189356efb80354fb8b237b5b563ef64705637fc59b0639790f5fa3826c3"
   },
   {
    "record_id": "PD-2627-valencia-v-real-madrid#r1",
@@ -36911,8 +36911,8 @@
     "away": "Real Madrid",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -37137,7 +37137,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e128657ea65f1cb431a80985b42e19041be728a8a1670e46a50a63c4b89d8539"
+   "sha256": "d99335d515535330c0420f9a6518d101aad226c1a3203bd250596de9cac8184f"
   },
   {
    "record_id": "PD-2627-villarreal-v-getafe#r1",
@@ -37150,8 +37150,8 @@
     "away": "Getafe",
     "kickoff_utc": "2026-11-08T14:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "09423a2ecfe88d60",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "a2d124b0e2ba6193",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -37376,7 +37376,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "46711aa28758cde887c370a0df7f9d6fff90e450ac088d5f46234e770cfdb4b1"
+   "sha256": "df58eb812e28de7d51473d31e5b55100b778baa6f890355c75bf6fd0d46b37da"
   },
   {
    "record_id": "BL1-2627-koln-v-leverkusen#r1",
@@ -37385,12 +37385,12 @@
    "fixture": {
     "competition": "BL1",
     "season": "2627",
-    "home": "Koln",
+    "home": "FC Koln",
     "away": "Leverkusen",
     "kickoff_utc": "2026-11-08T14:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -37408,7 +37408,7 @@
      "selections": [
       {
        "key": "H",
-       "label": "Koln win",
+       "label": "FC Koln win",
        "p": 0.1983,
        "fair_odds": "≈4/1"
       },
@@ -37616,7 +37616,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "7fad2f66202982ebd09e248b692197cfc7c8075fd00c8427197a6e74d39d4adc"
+   "sha256": "ff041bdfab44be2ba20d2003c3e64da7595665febac3c24f352a92961869b2f1"
   },
   {
    "record_id": "FL1-2627-angers-v-nice#r1",
@@ -37629,8 +37629,8 @@
     "away": "Nice",
     "kickoff_utc": "2026-11-08T16:15:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -37855,7 +37855,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "72fd376e59eaefc1212a240bf4a17b5747adf2f2eca0bfad1fe11d4e108d3103"
+   "sha256": "7f1092c688bd2f129be4dbd7fced49d7a4b0508a1cc1e98aa7b0cdd9dbd144fe"
   },
   {
    "record_id": "FL1-2627-brest-v-lyon#r1",
@@ -37868,8 +37868,8 @@
     "away": "Lyon",
     "kickoff_utc": "2026-11-08T16:15:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -38093,7 +38093,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "25c8b914a6bf0f5521f220097765f81c395a040196a9d06a01a5d0bd17bd22ba"
+   "sha256": "a90764c0c38f9179f36086b6ab90b376068299f51203d51c8489838c377d1ed6"
   },
   {
    "record_id": "FL1-2627-le-havre-v-lorient#r1",
@@ -38106,8 +38106,8 @@
     "away": "Lorient",
     "kickoff_utc": "2026-11-08T16:15:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -38332,7 +38332,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "68d88675823c7fe4ccfbc0a1a700f02328488dd7930344e0e13700a4cced6d2f"
+   "sha256": "0ff284be8ce042db2acc9c9bb745b5db7776edf128047a54bdf8957aad27d3c0"
   },
   {
    "record_id": "FL1-2627-le-mans-v-monaco#r1",
@@ -38345,8 +38345,8 @@
     "away": "Monaco",
     "kickoff_utc": "2026-11-08T16:15:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -38561,7 +38561,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e7932007bbf41ec5fa8d268a109e67e4ec2bf437d7486bb00eb4534cc601c84b"
+   "sha256": "2c4ed2533d405c93d3ca7e5c50c1147627ba5d10255bed76ae4488df9f6b5fbf"
   },
   {
    "record_id": "BL1-2627-freiburg-v-union-berlin#r1",
@@ -38574,8 +38574,8 @@
     "away": "Union Berlin",
     "kickoff_utc": "2026-11-08T16:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -38801,7 +38801,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "7feda60ccea6007de5252251426d20fa25165d023284b5ddebb2d77eb3313a30"
+   "sha256": "0a53dea3a00b659fc7df687f9a9c3f8c75bf558693678506f7e78729c6e3eaa2"
   },
   {
    "record_id": "SA-2627-inter-v-como#r1",
@@ -38814,8 +38814,8 @@
     "away": "Como",
     "kickoff_utc": "2026-11-08T17:00:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -39039,7 +39039,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e98de2870c2cd3d3d430d70555e277d0721741121af9bc75e6a092f15c16d250"
+   "sha256": "4a9050ff6a148d20f25526cfec1452cf0b9c28a397000d5ab3ee00edc8f30f85"
   },
   {
    "record_id": "BL1-2627-hoffenheim-v-schalke-04#r1",
@@ -39052,8 +39052,8 @@
     "away": "Schalke 04",
     "kickoff_utc": "2026-11-08T18:30:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "faf79d272bb13200",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "5872bb1561981c2d",
    "markets": {
     "result": {
      "model_version": "league-average-v1",
@@ -39269,7 +39269,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "3a76241628f5512b929c36eb5e083a94c3da331c7389ee31d91eb5fedfd6bc87"
+   "sha256": "92e1ebe549571fc712a9a694a22b24c268086c3d19893a18afb04f43ea3b2496"
   },
   {
    "record_id": "SA-2627-fiorentina-v-juventus#r1",
@@ -39282,8 +39282,8 @@
     "away": "Juventus",
     "kickoff_utc": "2026-11-08T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "8a906e775a7fe984",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "8b7449251a88088d",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -39508,7 +39508,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "c6447e6b98bde3a6e935bde18bfe27a581e94f875782e06182b2e235aa5d0ead"
+   "sha256": "e133b172134c3662482184fba42436741904f97e8a6c66826c52e670d74d02bd"
   },
   {
    "record_id": "FL1-2627-lens-v-marseille#r1",
@@ -39521,8 +39521,8 @@
     "away": "Marseille",
     "kickoff_utc": "2026-11-08T19:45:00Z"
    },
-   "published_at": "2026-10-26T16:41:41.654981+00:00",
-   "inputs_fingerprint": "84a51a4b40b90ec0",
+   "published_at": "2026-10-26T16:44:38.256231+00:00",
+   "inputs_fingerprint": "fad9851d9f33f6f7",
    "markets": {
     "result": {
      "model_version": "dc-league-v1",
@@ -39747,7 +39747,7 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "a515c4cb7878509e5ec0b3e8af33d9659b87cf48e255ac95c794eaf14101c6d2"
+   "sha256": "f5f533c078d35ee259531b3f4d292c2400a4312975c7a664b7f15ae0dc886823"
   }
  ]
 }

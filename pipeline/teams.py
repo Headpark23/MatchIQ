@@ -146,6 +146,18 @@ def _league_match(table, key):
     return found.pop() if len(found) == 1 else None
 
 
+# Readable names for clubs whose football-data.co.uk short name is cryptic. Applied to the
+# canonical form itself, so every source and every stored result resolves to the same string.
+DISPLAY_NAMES = {"Paris SG": "Paris SG", "Paris FC": "Paris FC", "RB Leipzig": "RB Leipzig", "M'gladbach": "M'gladbach", "QPR": "QPR", "Ein Frankfurt": "Eintracht Frankfurt", "FC Koln": "FC Koln",
+                 "Ath Bilbao": "Athletic Club", "Ath Madrid": "Atletico Madrid", "Espanol": "Espanyol", "Sociedad": "Real Sociedad",
+                 "Vallecano": "Rayo Vallecano", "Betis": "Real Betis", "Celta": "Celta Vigo", "Sheffield Weds": "Sheffield Wednesday",
+                 "Milan": "AC Milan", "Verona": "Hellas Verona", "La Coruna": "Deportivo La Coruna", "Santander": "Racing Santander"}
+
+
+def _display(name):
+    return DISPLAY_NAMES.get(name) or canonical(name)
+
+
 def canonical_for(competition, raw):
     """Canonical club name for any competition. PL keeps the established `canonical()`."""
     if competition == "PL" or competition not in _LEAGUE_LOOKUP:
@@ -153,7 +165,7 @@ def canonical_for(competition, raw):
     key = _normalise(raw)
     hit = _league_match(_LEAGUE_LOOKUP[competition], key)
     if hit:
-        return canonical(hit)
+        return _display(hit)
     if competition == "ELC" and key in _LOOKUP:  # relegated/promoted clubs shared with the PL table
         return _LOOKUP[key]
     return canonical(raw)
