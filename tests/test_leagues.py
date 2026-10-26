@@ -94,5 +94,60 @@ class LeagueModels(unittest.TestCase):
         self.assertEqual(out["by_competition"]["SA"]["markets"]["result"]["n"], 1)
 
 
+class LeagueLifecycle(unittest.TestCase):
+    """Fixture -> sealed prediction -> reschedule -> result -> settlement -> scorecard, for a non-PL league."""
+
+    def test_bundesliga_end_to_end(self):
+        import copy
+        import tempfile
+        from pipeline import run as runner
+        from pipeline.teams import canonical
+
+        def pl(home, away, kick, status="SCHEDULED", score=None):
+            return {"competition": "PL", "season": "2627", "home": canonical(home), "away": canonical(away), "kickoff_utc": kick,
+                    "status": status, "score": score, "source": "openligadb", "source_updated": None}
+
+        def bl(home, away, kick, status="SCHEDULED", score=None):
+            return {"competition": "BL1", "season": "2627", "home": canonical_for("BL1", home), "away": canonical_for("BL1", away),
+                    "kickoff_utc": kick, "status": status, "score": score, "source": "openfootball", "source_updated": None}
+        utc = dt.timezone.utc
+        t0 = dt.datetime(2026, 10, 28, 9, tzinfo=utc)
+        pl_fx = {"openligadb": lambda: ([pl("Chelsea", "Man United", "2026-10-31T12:30:00Z")], None)}
+        stored = leagues.load_results()
+        with tempfile.TemporaryDirectory() as out:
+            def go(now, fixture):
+                extra = {"BL1": {"openfootball": lambda: ([copy.deepcopy(fixture)], None)}}
+                return runner.run(out, now, fetchers=pl_fx, extra_fetchers=extra, league_rows=stored)
+            go(t0, bl("FC Bayern München", "Borussia Dortmund", "2026-10-31T17:30:00Z"))
+            preds = json.loads((Path(out) / "predictions.json").read_text(encoding="utf-8"))["predictions"]
+            bay = next(v for v in preds.values() if v["fixture"]["competition"] == "BL1")
+            self.assertEqual(bay["markets"]["result"]["tier"], "L1")
+            self.assertEqual(bay["markets"]["result"]["evidence"]["status"], "provisional")
+            self.assertEqual(bay["recommendations"]["best_value"]["decision"], "no_bet")
+            # Reschedule: a new revision is NOT needed for a kick-off change alone, but the move is recorded.
+            go(t0 + dt.timedelta(hours=6), bl("Bayern Munich", "Dortmund", "2026-10-31T19:30:00Z"))
+            fixtures = json.loads((Path(out) / "fixtures.json").read_text(encoding="utf-8"))["fixtures"]
+            fx = next(f for f in fixtures if f["id"] == "BL1-2627-bayern-munich-v-dortmund")
+            self.assertEqual(len(fx["kickoff_history"]), 1)
+            ledger = json.loads((Path(out) / "prediction_history.json").read_text(encoding="utf-8"))
+            sealed = [r for r in ledger["records"] if r["fixture"]["competition"] == "BL1"]
+            self.assertTrue(sealed)
+            first_hash = sealed[0]["sha256"]
+            # Result arrives after kick-off.
+            after = dt.datetime(2026, 11, 1, 9, tzinfo=utc)
+            go(after, bl("Bayern Munich", "Dortmund", "2026-10-31T19:30:00Z", "FINISHED", [3, 1]))
+            ledger = json.loads((Path(out) / "prediction_history.json").read_text(encoding="utf-8"))
+            sealed = [r for r in ledger["records"] if r["fixture"]["competition"] == "BL1" and r.get("evaluated")]
+            self.assertEqual(len(sealed), 1)
+            self.assertEqual(sealed[0]["result"]["score"], [3, 1])
+            self.assertEqual([r for r in ledger["records"] if r["fixture"]["competition"] == "BL1"][0]["sha256"], first_hash)
+            perf = json.loads((Path(out) / "performance.json").read_text(encoding="utf-8"))
+            self.assertEqual(perf["by_competition"]["BL1"]["evaluated_matches"], 1)
+            pl_done = {r["match_id"] for r in ledger["records"] if r["fixture"]["competition"] == "PL" and r.get("evaluated")}
+            self.assertEqual(perf["evaluated_matches"], len(pl_done))  # the Premier League scorecard excludes other leagues
+            preds = json.loads((Path(out) / "predictions.json").read_text(encoding="utf-8"))["predictions"]
+            self.assertFalse([v for v in preds.values() if v["fixture"]["competition"] == "BL1"], "finished match leaves Upcoming")
+
+
 if __name__ == "__main__":
     unittest.main()
