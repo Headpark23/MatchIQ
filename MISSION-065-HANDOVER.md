@@ -156,3 +156,29 @@ Preview: **https://matchiq-igrroq2wf-martin-whites-projects.vercel.app** (dev pr
 **Rights audit (football-data.co.uk)**: automated download stays off (`MATCHIQ_ALLOW_COUK_DOWNLOAD=1` only for a manual research run). Research data is preserved untouched. The public bundle contains no raw co.uk rows (`matches.json`, `league_results.json` are not in the allowlist), but the models behind corners, cards and shots, and the sealed history for them, were trained on it; with downloads off those markets cannot settle for new matches (no statistics) and the pipeline status warns "download failed" (wording should say "disabled"). **No preview was deployed**, so nothing with unresolved rights was newly published. Owner decision needed: get written permission from football-data.co.uk, or have the public bundle withhold corners/cards/shots.
 
 **Vercel**: not attempted. Needed only for automated deploys (`VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`); manual preview deploys still work from this machine's linked CLI.
+
+## Public-rights pass (2026-10-26/27)
+
+**Rule:** matching scores is not legal clearance. Everything trained on football-data.co.uk data (frozen PL models, pooled/promoted models, the sealed private ledgers, corners/cards/shots) is a **private research artefact**: kept, never deleted or replaced, never shipped.
+
+**Public path (`pipeline/public.py`, model `dc-public-v1`)**
+- Training data: football-data.org final scores only (`data/public_results.json`: 6 leagues x seasons 2023-25, built by `python -m pipeline.public --history`, 18 free requests, refreshed monthly by the workflows) plus current-season results whose `result_source` is football-data.org/OpenLigaDB/openfootball. Rows with a co.uk source are excluded (tested).
+- Model: per-league time-weighted Dixon-Coles for all six leagues, Premier League included (not the frozen model). Markets: Match Result, Goals, BTTS. Corners, cards, shots: not modelled publicly (no permitted statistics source).
+- Chronological validation: weekly-refit walk-forward on 2025-26, `data/public/league_validation.json`. Result Brier gain over league average: PL +0.039 (n 351), ELC +0.016, BL1 +0.078, PD +0.048, SA +0.069, FL1 +0.046; goals/BTTS within +-0.004 of league average (no proven edge). All provisional; no forward record.
+- Identity: public records live in `data/public/prediction_history.json` with ids `PUB-<match id>#rN`, `origin: public-derived`, `model_version: dc-public-v1`, `derivation: public-derived`. They are **not** the originally sealed predictions, which are not shown or re-derived. Public history/scorecards start empty on the day the public model went live (first run 2026-10-26: 144 predictions).
+- Public bundle (`build_public_dist.py`): predictions, history, performance and validation come only from `data/public/`; fixtures drop co.uk labels; `model_reliability.json` is an empty placeholder (`public: true`); `match_winner_forward.json` and `forward_test.json` are not shipped; the build aborts if any public data file contains corners/cards/shots or "football-data.co.uk" (except `rights.json`). With no public data it ships empty predictions, never private ones. The build now preserves `public-dist/.gitignore` and `.vercel` (it used to delete them; I relinked Vercel and the `.gitignore` is regenerated, untracked).
+- `data/provenance_audit.json`: dependency table plus score parity against football-data.org: 6517/6532 equal (99.77%); 5 ELC mismatches per season.
+
+**Verified:** 128 Python tests + 5 JS suites pass. Browser (own static server, port 8070; the built-in preview server proxy failed): real Odds API prices and bookmaker names (Smarkets, William Hill), fractional 4/1, margin removal, Best Value No Bet ("no proven edge"), Awaiting Odds without prices, Most Likely, Top Six (fewer than six selections when only 3 markets exist), stale/started prices rejected, Results page with per-league backtest, More page attribution and method text, footer credits football-data.org, OpenLigaDB, openfootball and The Odds API. No restricted words in the shipped data.
+
+**Dev preview (production untouched):** https://matchiq-dnzqrfoy5-martin-whites-projects.vercel.app
+
+**Automation and environments**
+- `.github/workflows/live-integration-check.yml`: dev-branch-only, push-triggered by editing `.github/live-check-request.txt`; runs the API check, provenance audit, public history/validation, tests, full refresh, bundle build, commits data to the branch. No deploy. Delete before merging to main.
+- `.github/workflows/matchiq-refresh.yml`: the production-intended workflow (6-hourly cron; inactive until on main). Now also refreshes public history/validation monthly. Deploy step: preview from any branch, production only from `main` AND repository variable `MATCHIQ_DEPLOY_PRODUCTION=true`; skipped unless `VERCEL_TOKEN` exists. Needs secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (project id `prj_wXS9PKDxWoNMIo6VOLf5FFrYMZt1`, org `martin-whites-projects`).
+
+**Open items (owner)**
+1. football-data.org free-tier terms for storing history in the repo and showing derived predictions publicly are unchecked (private repo for now; email the address on their coverage page, or check the terms).
+2. The Odds API display/redistribution terms are unchecked.
+3. Bookmaker prices appear only for Match Result and Total Goals; BTTS is rejected by the provider.
+4. Merge to main and the Vercel secrets are still needed for fully automatic operation. The co.uk research data stays private; ask the site owner for permission before any public use.

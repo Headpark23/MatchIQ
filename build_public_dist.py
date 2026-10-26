@@ -51,6 +51,8 @@ def build():
     # Clean previous contents of public-dist if present without removing the directory itself
     DIST.mkdir(parents=True, exist_ok=True)
     for item in DIST.iterdir():
+        if item.name in {".gitignore", ".vercel", ".env.local"}:
+            continue  # local Vercel link artefacts, owned by the developer
         if item.is_file():
             item.unlink()
         elif item.is_dir():
