@@ -575,9 +575,11 @@ function viewMatch(id) {
 let resultsFilter = 'settled';
 function viewResults() {
   const allPerf = DATA.performance || {};
-  const other = compFilter !== 'ALL' && (compFilter !== 'PL' || !!(DATA.reliability || {}).public);
-  const perf = other ? ((allPerf.by_competition || {})[compFilter] || {}) : allPerf;  // leagues are never pooled
-  const lv = other ? (((DATA.leagueValidation || {}).leagues || {})[compFilter] || null) : null;
+  const publicModel = !!(DATA.reliability || {}).public;  // public-derived model: every league, the Premier League included, uses its own backtest card
+  const separate = compFilter !== 'ALL' && compFilter !== 'PL';
+  const other = separate || publicModel;
+  const perf = separate ? ((allPerf.by_competition || {})[compFilter] || {}) : allPerf;  // leagues are never pooled
+  const lv = other ? (((DATA.leagueValidation || {}).leagues || {})[compFilter === 'ALL' ? 'PL' : compFilter] || null) : null;
   const rel = other ? null : DATA.reliability;
   const res = (perf.markets || {}).result;
   const latest = {};

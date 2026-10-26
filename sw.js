@@ -1,7 +1,7 @@
 // MatchIQ Progressive Web App Service Worker (v1)
 // Caches application shell and enables offline home screen capability
 
-const CACHE_NAME = 'matchiq-pwa-v8';
+const CACHE_NAME = 'matchiq-pwa-v9';
 
 const PRECACHE_ASSETS = [
   './',
