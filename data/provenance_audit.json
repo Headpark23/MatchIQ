@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-26T17:15:35.610055+00:00",
+ "generated_at": "2026-10-26T17:17:42.192500+00:00",
  "dependencies": {
   "result": {
    "inputs": "final scores and dates of past matches",
@@ -32,5 +32,173 @@
    "public": "NO: research-only, no permitted source of shot counts"
   }
  },
- "score_parity": "skipped: token not set"
+ "score_parity": {
+  "PL:2324": {
+   "permitted_source_finished": 380,
+   "stored_research_rows": 0,
+   "compared": 0,
+   "scores_equal": 0,
+   "only_in_permitted": 380,
+   "only_in_research": 0,
+   "error": null
+  },
+  "PL:2425": {
+   "permitted_source_finished": 380,
+   "stored_research_rows": 380,
+   "compared": 380,
+   "scores_equal": 380,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "PL:2526": {
+   "permitted_source_finished": 380,
+   "stored_research_rows": 380,
+   "compared": 380,
+   "scores_equal": 380,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "ELC:2324": {
+   "permitted_source_finished": 552,
+   "stored_research_rows": 552,
+   "compared": 552,
+   "scores_equal": 547,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "ELC:2425": {
+   "permitted_source_finished": 552,
+   "stored_research_rows": 552,
+   "compared": 552,
+   "scores_equal": 547,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "ELC:2526": {
+   "permitted_source_finished": 552,
+   "stored_research_rows": 552,
+   "compared": 552,
+   "scores_equal": 547,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "BL1:2324": {
+   "permitted_source_finished": 306,
+   "stored_research_rows": 306,
+   "compared": 306,
+   "scores_equal": 306,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "BL1:2425": {
+   "permitted_source_finished": 306,
+   "stored_research_rows": 306,
+   "compared": 306,
+   "scores_equal": 306,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "BL1:2526": {
+   "permitted_source_finished": 306,
+   "stored_research_rows": 306,
+   "compared": 306,
+   "scores_equal": 306,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "PD:2324": {
+   "permitted_source_finished": 380,
+   "stored_research_rows": 380,
+   "compared": 380,
+   "scores_equal": 380,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "PD:2425": {
+   "permitted_source_finished": 380,
+   "stored_research_rows": 380,
+   "compared": 380,
+   "scores_equal": 380,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "PD:2526": {
+   "permitted_source_finished": 380,
+   "stored_research_rows": 380,
+   "compared": 380,
+   "scores_equal": 380,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "SA:2324": {
+   "permitted_source_finished": 380,
+   "stored_research_rows": 380,
+   "compared": 380,
+   "scores_equal": 380,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "SA:2425": {
+   "permitted_source_finished": 380,
+   "stored_research_rows": 380,
+   "compared": 380,
+   "scores_equal": 380,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "SA:2526": {
+   "permitted_source_finished": 380,
+   "stored_research_rows": 380,
+   "compared": 380,
+   "scores_equal": 380,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "FL1:2324": {
+   "permitted_source_finished": 306,
+   "stored_research_rows": 306,
+   "compared": 306,
+   "scores_equal": 306,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "FL1:2425": {
+   "permitted_source_finished": 306,
+   "stored_research_rows": 306,
+   "compared": 306,
+   "scores_equal": 306,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  },
+  "FL1:2526": {
+   "permitted_source_finished": 306,
+   "stored_research_rows": 306,
+   "compared": 306,
+   "scores_equal": 306,
+   "only_in_permitted": 0,
+   "only_in_research": 0,
+   "error": null
+  }
+ },
+ "score_parity_summary": {
+  "compared": 6532,
+  "equal": 6517,
+  "agreement": 0.9977
+ }
 }
