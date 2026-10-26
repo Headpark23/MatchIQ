@@ -103,6 +103,10 @@ def refresh_current(stored, season, opener=None):
                 raise ValueError("download has fewer matches than the stored copy")
             out += fresh
             status[code] = {"ok": True, "results": len(fresh), "latest_result": max((r["date"] for r in fresh), default=None)}
+        except PermissionError as error:  # disabled on purpose (site terms): not a failure
+            out += old
+            status[code] = {"ok": False, "disabled": True, "results": len(old), "note": "automated download disabled by design (site terms); stored research copy kept",
+                            "latest_result": max((r["date"] for r in old), default=None)}
         except Exception as error:  # network or format problem: keep what we have
             out += old
             status[code] = {"ok": False, "results": len(old), "note": f"kept stored copy ({type(error).__name__}: {error})",

@@ -15,7 +15,7 @@ jobs:
   check:
     if: github.ref == 'refs/heads/dev/mission065-best-bet'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -27,11 +27,15 @@ jobs:
           FOOTBALL_DATA_ORG_TOKEN: ${{ secrets.FOOTBALL_DATA_ORG_TOKEN }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python -m pipeline.live_check > /dev/null
+      - name: Provenance audit (18 free football-data.org requests)
+        env:
+          FOOTBALL_DATA_ORG_TOKEN: ${{ secrets.FOOTBALL_DATA_ORG_TOKEN }}
+        run: python -m pipeline.provenance_audit
       - name: Commit the sanitised report to this branch
         run: |
           git config user.name 'matchiq-data-bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/live_check/report.json
+          git add data/live_check/report.json data/provenance_audit.json
           git commit -m 'Live API check report' || exit 0
           git pull --rebase
           git push

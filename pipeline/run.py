@@ -183,7 +183,7 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
         lists.extend(got)
     for code, st in league_status.items():
         status["sources"][f"football-data.co.uk:{code}"] = {"label": SOURCE_LABELS["football-data.co.uk"], **st}
-        if not st["ok"]:
+        if not st["ok"] and not st.get("disabled"):
             status["warnings"].append(f"{LEAGUES[code]['name']}: results and statistics download failed, using the stored copy ({st['note']}).")
     lists.append(co_uk_as_matches(co_uk, SEASON))
     lists.append(co_uk_as_matches(league_all, SEASON))
@@ -281,7 +281,7 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
                    "fixtures": len(fixtures), "upcoming_predicted": len(predictions), "published_revisions": published,
                    "imported_frozen_records": imported, "settlement_updates": settled, "training_results": len(results),
                    "results_latest": max(r["date"] for r in epl).isoformat(), "model_versions": VERSIONS,
-                   "attribution": "Fixtures and results: OpenLigaDB contributors (ODbL 1.0), openfootball (CC0), football-data.org where configured. Match statistics: football-data.co.uk."})
+                   "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk."})
     if ok:
         write_json(out_dir / "fixtures.json", {"generated_at": now.isoformat(), "season": SEASON, "fixtures": fixtures})
         write_json(out_dir / "predictions.json", {"generated_at": now.isoformat(), "horizon_days": HORIZON_DAYS, "predictions": predictions})

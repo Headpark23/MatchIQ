@@ -1,0 +1,36 @@
+{
+ "generated_at": "2026-10-26T17:15:35.610055+00:00",
+ "dependencies": {
+  "result": {
+   "inputs": "final scores and dates of past matches",
+   "restricted_source_rows": true,
+   "public": "yes, provisional: scores are facts also supplied by football-data.org; parity measured below"
+  },
+  "goals": {
+   "inputs": "final scores (goals for and against) plus league goal rate",
+   "restricted_source_rows": true,
+   "public": "yes, provisional: same score-only inputs as result"
+  },
+  "btts": {
+   "inputs": "final scores plus league both-teams-scored rate",
+   "restricted_source_rows": true,
+   "public": "yes, provisional: same score-only inputs as result"
+  },
+  "corners": {
+   "inputs": "corner counts per match (football-data.co.uk statistics only)",
+   "restricted_source_rows": true,
+   "public": "NO: research-only, no permitted source of corner counts"
+  },
+  "cards": {
+   "inputs": "yellow-card counts per match (football-data.co.uk statistics only)",
+   "restricted_source_rows": true,
+   "public": "NO: research-only, no permitted source of card counts"
+  },
+  "shots": {
+   "inputs": "shots-on-target counts per match (football-data.co.uk statistics only)",
+   "restricted_source_rows": true,
+   "public": "NO: research-only, no permitted source of shot counts"
+  }
+ },
+ "score_parity": "skipped: token not set"
+}
