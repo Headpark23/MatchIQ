@@ -106,12 +106,21 @@ close(calc.calculateBrierScore(p1X2, 'D', '1x2'), 0.945, 'Multi-class draw surpr
 // Outcome 'A' -> 0.60^2 + 0.25^2 + (0.15-1)^2 = 0.36 + 0.0625 + 0.7225 = 1.145
 close(calc.calculateBrierScore(p1X2, 'A', '1x2'), 1.145, 'Multi-class away upset');
 
-// UK fractional rendering and independent accumulator calculations
-assert.equal(calc.formatFractionalOdds(2.5), '3/2');
+// UK bookmaker-style fractional rendering and parsers; decimal inputs never appear in the UI.
+assert.equal(calc.formatFractionalOdds(1.5), '1/2');
+assert.equal(calc.formatFractionalOdds(1.8), '4/5');
+assert.equal(calc.formatFractionalOdds(2), 'Evens (1/1)');
+assert.equal(calc.formatFractionalOdds(2.5), '6/4');
+assert.equal(calc.formatFractionalOdds(3), '2/1');
+assert.equal(calc.formatFractionalOdds(4.5), '7/2');
 assert.equal(calc.formatFractionalOdds(1.833333333333), '5/6');
-assert.equal(calc.formatFractionalOdds(1), 'Evens');
-assert.equal(calc.formatFractionalOdds(1.91), '10/11');
-assert.equal(calc.formatFractionalOdds(3.1897), '35/16');
+assert.equal(calc.formatFractionalOdds(1.91), '≈10/11');
+assert.equal(calc.formatFractionalOdds(3.1897), '≈35/16');
+assert.equal(calc.parseFractionalOdds('1/2'), 1.5);
+assert.equal(calc.parseFractionalOdds('6/4'), 2.5);
+assert.equal(calc.parseFractionalOdds('Evens'), 2);
+assert.equal(calc.parseFractionalOdds('2/1'), 3);
+assert.equal(calc.parseFractionalOdds('1.91'), null, 'Decimal-formatted prices are rejected by the UK odds input');
 const accA = calc.createAccumulator([{ selection: 'A', odds: 2.2 }, { selection: 'B', odds: 1.75 }], 10, 'Tester A');
 const accB = calc.createAccumulator([{ selection: 'C', odds: 3.1 }, { selection: 'D', odds: 1.4 }], 5, 'Tester B');
 close(accA.decimalOdds, 3.85, 'Accumulator A precise combined odds');

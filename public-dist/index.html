@@ -2840,8 +2840,8 @@ footer {
           </div>
         </div>
         <div class="form-row" id="accumulator-legs-row" style="display:none;">
-          <label class="form-lbl" for="modal-legs-input">Accumulator legs (one per line: selection | decimal odds)</label>
-          <textarea id="modal-legs-input" class="form-ctrl" rows="4" placeholder="Arsenal win | 1.85&#10;Over 2.5 goals | 1.90"></textarea>
+          <label class="form-lbl" for="modal-legs-input">Accumulator legs (one per line: selection | fractional odds)</label>
+          <textarea id="modal-legs-input" class="form-ctrl" rows="4" placeholder="Arsenal win | 6/4&#10;Over 2.5 goals | 10/11"></textarea>
         </div>
         <div class="form-row">
           <label class="form-lbl" for="modal-selection-input">Actual Bet Selection</label>
@@ -2863,8 +2863,8 @@ footer {
 
         <div class="form-row-2">
           <div class="form-row">
-            <label class="form-lbl" for="modal-odds-input">Decimal Odds Actually Offered</label>
-            <input type="number" id="modal-odds-input" class="form-ctrl" step="any" min="1.00000001" max="250.0" placeholder="e.g. 1.85" oninput="updateModalPnlPreview()" required />
+            <label class="form-lbl" for="modal-odds-input">Fractional Odds Actually Offered</label>
+            <input type="text" id="modal-odds-input" class="form-ctrl" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or Evens" oninput="updateModalPnlPreview()" required />
           </div>
           <div class="form-row">
             <label class="form-lbl" for="modal-stake-input">Stake in GBP (£)</label>
@@ -2873,7 +2873,7 @@ footer {
         </div>
 
         <div class="pnl-preview-box" id="modal-pnl-preview">
-          <span>💡 Enter odds & stake to preview potential returns.</span>
+          <span>💡 Enter fractional odds and stake to preview potential returns.</span>
         </div>
 
         <div class="form-row">
@@ -3562,7 +3562,7 @@ function exportDiaryCSV() {
     alert('Bet Diary is empty. Nothing to export.');
     return;
   }
-  const headers = ['id', 'date', 'fixture', 'market', 'selection', 'origin', 'bookmaker', 'odds', 'stake_gbp', 'outcome', 'net_profit_gbp', 'timestamp', 'notes'];
+  const headers = ['id', 'date', 'fixture', 'market', 'selection', 'origin', 'bookmaker', 'odds_fractional', 'accumulator_legs_fractional', 'stake_gbp', 'outcome', 'net_profit_gbp', 'timestamp', 'notes'];
   const csvRows = [headers.join(',')];
   for (const e of diary) {
     const profit = calc.calculateBetProfit(e.stake, e.odds, e.outcome);
@@ -3574,7 +3574,8 @@ function exportDiaryCSV() {
       JSON.stringify(e.selection || ''),
       JSON.stringify(e.origin || 'matchiq'),
       JSON.stringify(e.bookmaker || ''),
-      e.odds,
+      JSON.stringify(calc.formatFractionalOdds(e.odds)),
+      JSON.stringify((e.legs || []).map(leg => ({ selection: leg.selection, odds_fractional: calc.formatFractionalOdds(leg.odds) }))),
       e.stake,
       JSON.stringify(e.outcome || 'pending'),
       profit !== null ? profit : '',
@@ -3588,7 +3589,18 @@ function exportDiaryCSV() {
 
 function exportDiaryJSON() {
   const diary = getStoredDiary();
-  downloadFile(JSON.stringify(diary, null, 2), 'matchiq_bet_diary_' + new Date().toISOString().slice(0, 10) + '.json', 'application/json');
+  const exportEntries = diary.map(entry => {
+    const { odds, legs, ...rest } = entry;
+    return {
+      ...rest,
+      odds_fractional: calc.formatFractionalOdds(odds),
+      ...(Array.isArray(legs) ? { legs: legs.map(leg => {
+        const { odds: legOdds, ...legRest } = leg;
+        return { ...legRest, odds_fractional: calc.formatFractionalOdds(legOdds) };
+      }) } : {})
+    };
+  });
+  downloadFile(JSON.stringify(exportEntries, null, 2), 'matchiq_bet_diary_' + new Date().toISOString().slice(0, 10) + '.json', 'application/json');
 }
 
 // ============================================================
@@ -4069,21 +4081,21 @@ function toggleAccumulatorFields() {
 function parseAccumulatorLegs() {
   return (el('modal-legs-input')?.value || '').split('\n').map(line => line.trim()).filter(Boolean).map(line => {
     const [selection, oddsText] = line.split('|').map(part => part.trim());
-    return { selection, odds: Number(oddsText), outcome: 'pending' };
+    return { selection, odds: calc.parseFractionalOdds(oddsText), outcome: 'pending' };
   });
 }
 
 function updateModalPnlPreview() {
   const betType = el('modal-bet-type')?.value || 'single';
   const legs = betType === 'accumulator' ? parseAccumulatorLegs() : [];
-  const odds = betType === 'accumulator' ? legs.reduce((total, leg) => total * (leg.odds || 0), 1) : Number(el('modal-odds-input')?.value) || 0;
+  const odds = betType === 'accumulator' ? (legs.length && legs.every(leg => Number.isFinite(leg.odds) && leg.odds > 1) ? legs.reduce((total, leg) => total * leg.odds, 1) : 0) : (calc.parseFractionalOdds(el('modal-odds-input')?.value) || 0);
   const stake = Number(el('modal-stake-input')?.value) || 0;
   const preview = el('modal-pnl-preview');
   if (!preview) return;
   if (odds > 1.0 && stake > 0) {
     const profit = calc.calculateBetProfit(stake, odds, 'won');
-    preview.innerHTML = '<span>💰 Potential return: <strong>£' + (stake * odds).toFixed(2) + '</strong> (Net profit: <strong>+£' + profit.toFixed(2) + '</strong>; odds ' + calc.formatFractionalOdds(odds) + ')</span>';
-  } else preview.innerHTML = '<span>💡 Enter valid odds and stake to preview potential returns.</span>';
+    preview.innerHTML = '<span>💰 Potential return: <strong>£' + (stake * odds).toFixed(2) + '</strong> (Net profit: <strong>+£' + profit.toFixed(2) + '</strong>; fractional odds ' + calc.formatFractionalOdds(odds) + ')</span>';
+  } else preview.innerHTML = '<span>💡 Enter valid UK fractional odds and a stake to preview potential returns.</span>';
 }
 
 function handleDiaryFormSubmit(e) {
@@ -4092,12 +4104,12 @@ function handleDiaryFormSubmit(e) {
   const legs = betType === 'accumulator' ? parseAccumulatorLegs() : [];
   const profile = el('modal-profile')?.value.trim() || 'Default';
   const stake = Number(el('modal-stake-input')?.value);
-  const singleOdds = Number(el('modal-odds-input')?.value);
+  const singleOdds = calc.parseFractionalOdds(el('modal-odds-input')?.value);
   if (!Number.isFinite(stake) || stake <= 0) { showToast('Enter a valid stake greater than £0.', 'error'); return; }
   if (betType === 'accumulator' && (legs.length < 2 || legs.some(leg => !leg.selection || !Number.isFinite(leg.odds) || leg.odds <= 1))) {
-    showToast('Add at least two legs using “selection | decimal odds”, with odds above 1.00.', 'error'); return;
+    showToast('Add at least two legs using “selection | fractional odds”, such as 6/4 or Evens.', 'error'); return;
   }
-  if (betType === 'single' && (!Number.isFinite(singleOdds) || singleOdds <= 1)) { showToast('Enter valid decimal odds above 1.00.', 'error'); return; }
+  if (betType === 'single' && (!Number.isFinite(singleOdds) || singleOdds <= 1)) { showToast('Enter valid UK fractional odds, such as 6/4, 1/2 or Evens.', 'error'); return; }
   const odds = betType === 'accumulator' ? legs.reduce((total, leg) => total * leg.odds, 1) : singleOdds;
   const fixKey = el('modal-fixture-select')?.value || '';
   const liveFixtures = Array.isArray(meta.fixtures) && meta.fixtures.length > 0 ? meta.fixtures : getVerifiedHoldoutMatches();
@@ -4240,10 +4252,10 @@ function renderBroadcast() {
       winPredType = 'Pre-kickoff Forward Prediction';
       winPredDetail = 'Frozen Dixon-Coles Model v1 · Out-of-sample forward ledger';
       if (consensus && consensus.homeOdds) {
-        const fairOdds = (100 / winProb).toFixed(2);
+        const fairOdds = calc.formatFractionalOdds(100 / winProb);
         const mktProb = (winHeadline.includes(f.HomeTeam) ? consensus.impliedHome : winHeadline.includes(f.AwayTeam) ? consensus.impliedAway : consensus.impliedDraw);
         const mktOdds = (winHeadline.includes(f.HomeTeam) ? consensus.homeOdds : winHeadline.includes(f.AwayTeam) ? consensus.awayOdds : consensus.drawOdds);
-        winConsensusText = 'Model Fair Odds: ' + fairOdds + ' (' + winProb.toFixed(1) + '%) · Market Consensus: ' + mktOdds.toFixed(2) + ' (' + mktProb.toFixed(0) + '%)';
+        winConsensusText = 'Model Fair Odds: ' + fairOdds + ' (' + winProb.toFixed(1) + '%) · Market Consensus: ' + calc.formatFractionalOdds(mktOdds) + ' (' + mktProb.toFixed(0) + '%)';
       }
     } else if (hasSample) {
       winProb = winnerIndicator;

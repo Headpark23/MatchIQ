@@ -191,14 +191,21 @@
 
   function formatFractionalOdds(decimalOdds) {
     const odds = number(decimalOdds);
-    if (odds === null || odds < 1) return '—';
-    const value = odds - 1;
-    if (value === 0) return 'Evens';
-    // Approximate display odds with common UK-style fractions; stored decimal odds remain untouched.
-    let bestNumerator = 1, bestDenominator = 100, bestError = Infinity;
+    if (odds === null || odds <= 1) return '—';
+
+    // Preserve familiar UK display conventions, including the commonly quoted 6/4.
+    const canonical = [
+      [1.5, '1/2'], [1.8, '4/5'], [2, 'Evens (1/1)'],
+      [2.5, '6/4'], [3, '2/1'], [4.5, '7/2']
+    ];
+    const known = canonical.find(([price]) => Math.abs(odds - price) < 1e-10);
+    if (known) return known[1];
+
+    const profit = odds - 1;
+    let bestNumerator = 1, bestDenominator = 1, bestError = Infinity;
     for (let denominator = 1; denominator <= 20; denominator++) {
-      const numerator = Math.max(1, Math.round(value * denominator));
-      const error = Math.abs(numerator / denominator - value);
+      const numerator = Math.max(1, Math.round(profit * denominator));
+      const error = Math.abs(numerator / denominator - profit);
       if (error < bestError || (error === bestError && denominator < bestDenominator)) {
         bestNumerator = numerator;
         bestDenominator = denominator;
@@ -207,7 +214,18 @@
     }
     function gcd(a, b) { return b ? gcd(b, a % b) : a; }
     const divisor = gcd(bestNumerator, bestDenominator);
-    return `${bestNumerator / divisor}/${bestDenominator / divisor}`;
+    const fraction = `${bestNumerator / divisor}/${bestDenominator / divisor}`;
+    return bestError > 1e-10 ? `≈${fraction}` : fraction;
+  }
+
+  function parseFractionalOdds(value) {
+    const text = String(value ?? '').trim().toLowerCase();
+    if (/^(evens?|even money)$/.test(text)) return 2;
+    const match = text.match(/^(\d+)\s*\/\s*(\d+)$/);
+    if (!match) return null;
+    const numerator = Number(match[1]), denominator = Number(match[2]);
+    if (!Number.isSafeInteger(numerator) || !Number.isSafeInteger(denominator) || denominator <= 0) return null;
+    return 1 + numerator / denominator;
   }
 
   function createAccumulator(legs, stake, profile = 'Default') {
@@ -272,6 +290,7 @@
     calculateBetProfit,
     summarizeBetDiary,
     formatFractionalOdds,
+    parseFractionalOdds,
     createAccumulator,
     settleAccumulator,
     loadBetDiary,
