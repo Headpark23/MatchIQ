@@ -14,6 +14,8 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      HAS_VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -44,3 +46,23 @@ jobs:
             git pull --rebase
             git push
           fi
+      - name: Deploy the public bundle to Vercel
+        # Needs repository secrets VERCEL_TOKEN, VERCEL_ORG_ID and VERCEL_PROJECT_ID.
+        # Only public-dist/ is uploaded, never the repository root. Runs from any
+        # branch other than main deploy a preview; production needs main AND the
+        # repository variable MATCHIQ_DEPLOY_PRODUCTION set to 'true' by the owner.
+        if: success() && env.HAS_VERCEL_TOKEN == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          PRODUCTION: ${{ github.ref == 'refs/heads/main' && vars.MATCHIQ_DEPLOY_PRODUCTION == 'true' }}
+        working-directory: public-dist
+        run: |
+          npm install --global vercel@65.2.0
+          if [ "$PRODUCTION" = "true" ]; then
+            url=$(vercel deploy --prod --yes --token "$VERCEL_TOKEN")
+          else
+            url=$(vercel deploy --yes --token "$VERCEL_TOKEN")
+          fi
+          echo "Deployed: $url" >> "$GITHUB_STEP_SUMMARY"
