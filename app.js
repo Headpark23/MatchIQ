@@ -493,7 +493,7 @@ function viewHome() {
     '<div class="grid grid-2">' + validated.slice(0, 4).map(signalCard).join('') + '</div></div>';
   html += '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">How Most Likely, Best Value and No Bet work</summary><ol class="explain" style="margin-top:8px">' +
     '<li><b>Most likely</b> looks at every backtested selection in every market, including heavy favourites. Each chance is pulled toward how often similar picks landed in the backtest, then ranked by the cautious end of a 90% range. Thin evidence therefore counts for less than a well-tested estimate, even with a bigger number.</li>' +
-    '<li><b>Best value</b> needs a real bookmaker price. MatchIQ has no lawful free odds feed, so enter a price you have seen. Add every outcome’s price to remove the bookmaker’s margin. Only the validated match-result model, at a well-backtested probability, can call value, and only at +5% estimated expected value or more.</li>' +
+    '<li><b>Best value</b> needs a real bookmaker price. Prices come from The Odds API for Match Result and Total Goals; for anything else enter a price you have seen. Add every outcome’s price to remove the bookmaker’s margin. Only the validated match-result model, at a well-backtested probability, can call value, and only at +5% estimated expected value or more.</li>' +
     '<li><b>No bet</b> is a real answer: when evidence is thin, the price is short or no price exists. The predictions stay visible underneath.</li>' +
     '<li>Model fair odds are 1 ÷ probability with no margin, rounded to a familiar UK price. They are never bookmaker prices.</li></ol></details>';
   return html + homeFixtures() + '</section>';
@@ -575,7 +575,7 @@ function viewMatch(id) {
 let resultsFilter = 'settled';
 function viewResults() {
   const allPerf = DATA.performance || {};
-  const other = compFilter !== 'ALL' && compFilter !== 'PL';
+  const other = compFilter !== 'ALL' && (compFilter !== 'PL' || !!(DATA.reliability || {}).public);
   const perf = other ? ((allPerf.by_competition || {})[compFilter] || {}) : allPerf;  // leagues are never pooled
   const lv = other ? (((DATA.leagueValidation || {}).leagues || {})[compFilter] || null) : null;
   const rel = other ? null : DATA.reliability;
@@ -678,7 +678,7 @@ function leagueBacktestCard(lv) {
 }
 
 function backtestCard(rel) {
-  if (!rel) return '<div class="card"><h2 class="section-title">Backtest reference</h2><p class="muted">Backtest evidence unavailable.</p></div>';
+  if (!rel || !rel.markets || !rel.markets.wins) return '<div class="card"><h2 class="section-title">Backtest reference</h2><p class="muted">Backtest evidence unavailable.</p></div>';
   const rows = [['wins', 'Match result'], ['goals', 'Over 2.5 goals'], ['btts', 'Both teams to score'], ['corners', 'Corners 9.5'], ['cards', 'Cards 3.5'], ['shots', 'Shots 8.5']]
     .filter(([k]) => rel.markets[k]).map(([k, l]) => { const m = rel.markets[k]; return '<tr><td>' + l + '</td><td class="num">' + m.brier.toFixed(3) + '</td><td class="num">' + m.league_average_brier.toFixed(3) + '</td><td>' + (m.beats_league_average ? '<span class="badge validated">Beats average</span>' : '<span class="badge provisional">No edge</span>') + '</td></tr>'; }).join('');
   return '<div class="card"><h2 class="section-title">Backtest reference</h2><p class="section-note" style="margin:4px 0 8px">' + rel.markets.wins.n + ' matches, ' + esc(rel.window[0]) + ' to ' + esc(rel.window[1]) + ', each predicted from earlier data only. This is research evidence, not the live record.</p>' +
@@ -920,12 +920,12 @@ function viewMore() {
     '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Update status</h2><div class="chips" style="margin:10px 0">' + freshnessChips() + '</div>' +
       '<p class="muted" style="font-size:13.5px">Last attempt ' + esc(s.attempted_at ? ago(s.attempted_at) : 'unknown') + '. Last success ' + esc(s.last_success ? ago(s.last_success) : 'never') + '. ' + (s.errors && s.errors.length ? 'Errors: ' + esc(s.errors.join(' ')) : 'No errors.') + '</p>' +
       '<div style="overflow-x:auto"><table class="table" style="margin-top:8px"><thead><tr><th>Source</th><th>Status</th><th style="text-align:right">Fixtures</th><th style="text-align:right">Results</th></tr></thead><tbody>' + sourceRows + '</tbody></table></div>' +
-      '<p class="section-note" style="margin-top:10px">' + esc(s.attribution || '') + ' No bookmaker feed is connected: no free source with clear reuse rights was found, so bookmaker odds are never shown as available.</p></div>' +
+      '<p class="section-note" style="margin-top:10px">' + esc(s.attribution || '') + ' Bookmaker prices come from The Odds API (UK bookmakers; Match Result and Total Goals only) and are ignored once older than 12 hours; for any other market, enter a price you have seen. Corners, cards and shots are not shown: their statistics come from a source whose terms exclude public use.</p></div>' +
     '<div class="card"><h2 class="section-title">Where each number comes from</h2><table class="table" style="margin-top:8px"><tbody>' +
-      '<tr><td><b>Match result</b></td><td>Validated frozen Dixon-Coles model. For promoted clubs without enough Premier League games: Premier League + Championship model, pulled halfway to league averages (provisional). With no usable history: league averages (limited evidence).</td></tr>' +
+      '<tr><td><b>Match result</b></td><td>Dixon-Coles model with time decay, fitted for each league on football-data.org final scores only (model dc-public-v1) and backtested chronologically on 2025-26. A club with too little recent history, such as a newly promoted side, gets the league average (limited evidence). All estimates are provisional until a forward record builds up.</td></tr>' +
       '<tr><td><b>Goals, both teams to score</b></td><td>Provisional: 30% score model, 70% league rate. Backtests show no proven edge.</td></tr>' +
-      '<tr><td><b>Corners, cards, shots</b></td><td>Provisional: 30% recent venue averages, 70% league rate. The frozen corners model is shown for reference only, because it backtested worse than the league average.</td></tr>' +
-      '<tr><td><b>Other competitions</b></td><td>Championship, Bundesliga, La Liga, Serie A and Ligue 1 each use their own time-weighted Dixon-Coles model fitted on that league only, backtested on 2025-26 against that league’s average. They stay provisional (no value calls) until a forward record exists. A club with too little recent history, such as a newly promoted side, gets the league average instead.</td></tr>' +
+      '<tr><td><b>Corners, cards, shots</b></td><td>Not shown. The only available match statistics come from a source that does not permit public use. Earlier research predictions for these markets are private.</td></tr>' +
+      '<tr><td><b>Records</b></td><td>Public records (ids starting PUB-) are produced by the public model and sealed before kick-off from the day it went live. They are not the earlier research predictions, which are kept privately and are not shown or recreated here.</td></tr>' +
       '<tr><td><b>Fair odds</b></td><td>1 ÷ probability, rounded to a familiar UK price. Not a bookmaker price.</td></tr></tbody></table></div></div>' +
     '<div class="section card"><h2 class="section-title">Tell us what you think</h2><form id="fb-form" class="grid" style="margin-top:12px">' +
       stars('understand', 'How clear were the predictions? (1 confusing, 5 crystal clear)') + stars('convincing', 'How convincing was the evidence?') +

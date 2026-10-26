@@ -72,7 +72,7 @@ def compact_markets(markets):
     return out
 
 
-def publish(ledger, fixture, markets, inputs_fingerprint, sources, now, origin="pipeline", recommendations=None):
+def publish(ledger, fixture, markets, inputs_fingerprint, sources, now, origin="pipeline", recommendations=None, record_prefix=""):
     """Append a revision if the fixture has not kicked off and inputs changed."""
     if _parse(fixture["kickoff_utc"]) <= now:
         return None
@@ -80,7 +80,7 @@ def publish(ledger, fixture, markets, inputs_fingerprint, sources, now, origin="
     latest = existing[-1] if existing else None
     if latest and latest["inputs_fingerprint"] == inputs_fingerprint and latest["fixture"]["kickoff_utc"] == fixture["kickoff_utc"]:
         return None
-    record = {"record_id": f"{fixture['id']}#r{len(existing) + 1}", "match_id": fixture["id"], "revision": len(existing) + 1,
+    record = {"record_id": f"{record_prefix}{fixture['id']}#r{len(existing) + 1}", "match_id": fixture["id"], "revision": len(existing) + 1,
               "fixture": {k: fixture[k] for k in ("competition", "season", "home", "away", "kickoff_utc")},
               "published_at": now.isoformat(), "inputs_fingerprint": inputs_fingerprint,
               "markets": compact_markets(markets), "sources": sources, "origin": origin}

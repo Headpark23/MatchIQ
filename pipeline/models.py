@@ -59,8 +59,9 @@ class Context:
     """Everything fitted from results strictly before `as_of`. Built once per run (or
     once per backtest day) so every fixture on that day sees identical inputs."""
 
-    def __init__(self, results, as_of, promoted_by_season=None, frozen_ledger=None, competition="PL", league_name="Premier League", validation=None):
+    def __init__(self, results, as_of, promoted_by_season=None, frozen_ledger=None, competition="PL", league_name="Premier League", validation=None, public=False):
         self.as_of = as_of
+        self.public = public  # rights-compliant public path: the league model for every competition, Premier League included
         self.competition, self.league_name, self.validation = competition, league_name, validation or {}
         self.prior = sorted([r for r in results if r["date"] < as_of], key=lambda r: r["date"])
         self.epl = [r for r in self.prior if r["competition"] == competition]  # the league being predicted
@@ -68,7 +69,7 @@ class Context:
         self.promoted_by_season = promoted_by_season or {}
         self.home_counts = Counter(r["home"] for r in self.epl)
         self.away_counts = Counter(r["away"] for r in self.epl)
-        other = competition != "PL"  # frozen/pooled/shadow models exist for the Premier League only
+        other = competition != "PL" or public  # frozen/pooled/shadow models exist for the Premier League only
         self.frozen = self._fit(self.epl, weighted=False) if len(self.epl) > 100 and not other else None
         window = as_of - dt.timedelta(days=POOLED_WINDOW_DAYS)
         self.pooled_counts = Counter()
@@ -131,7 +132,7 @@ class Context:
 
     def result(self, fixture):
         home, away = fixture["home"], fixture["away"]
-        if self.competition != "PL":
+        if self.competition != "PL" or self.public:
             return self.league_result(fixture)
         ledger = self.frozen_ledger.get((fixture["date"].isoformat(), home, away))
         if ledger:
@@ -201,7 +202,7 @@ def _sel(key, label, p):
 def league_evidence(ctx, market, has_inputs, label="the model"):
     """Evidence block for the blended markets. Premier League keeps its Mission 063/064
     wording; other leagues use their own walk-forward backtest (data/league_validation.json)."""
-    if ctx is None or ctx.competition == "PL":
+    if ctx is None or (ctx.competition == "PL" and not ctx.public):
         return {"status": "provisional", "strength": "none" if not has_inputs else "weak",
                 "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by " + label + "."
                 if has_inputs else "No team-level data for this market; this is the Premier League average."}
@@ -279,7 +280,7 @@ def predict(fixture, ctx, evidence=None):
     btts = {"market": "btts", "name": MARKET_NAMES["btts"], "model_version": VERSIONS["blend"],
             "evidence": ({"status": "provisional", "strength": "weak" if btts_model is not None else "none",
                           "summary": "Backtests show no proven edge over the league average (409 matches)."}
-                         if ctx.competition == "PL" else league_evidence(ctx, "btts", btts_model is not None, "the Dixon-Coles score model")),
+                         if ctx.competition == "PL" and not ctx.public else league_evidence(ctx, "btts", btts_model is not None, "the Dixon-Coles score model")),
             "pick": yes if yes["p"] >= 0.5 else no, "selections": [yes, no],
             "model_p": None if btts_model is None else round(btts_model, 4), "league_p": round(ctx.base["btts"], 4),
             "explanation": [f"Both teams scored in {round(100 * ctx.base['btts'])}% of {ctx.league_name} matches in the training data."],

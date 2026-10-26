@@ -14,8 +14,6 @@ builds a filtered copy for the public bundle.
 import copy
 import json
 
-from .history import performance
-from .recommend import recommend
 
 RESTRICTED_MARKETS = ("corners", "cards", "shots")
 PUBLIC_MARKETS = ("result", "goals", "btts")
@@ -44,62 +42,6 @@ def public_fixtures(payload):
     return _drop_source_label(payload)
 
 
-def public_prediction(pred, reliability, validation=None):
-    out = copy.deepcopy(pred)
-    out["markets"] = _strip(out["markets"])
-    out["recommendations"] = recommend(out["markets"], reliability, validation)
-    return out
-
-
-def public_predictions(payload, reliability, league_validation):
-    out = copy.deepcopy(payload)
-    lv = (league_validation or {}).get("leagues", {})
-    out["predictions"] = {k: public_prediction(p, reliability, lv.get(p["fixture"]["competition"]))
-                          for k, p in payload["predictions"].items()}
-    return out
-
-
-def public_ledger(ledger, reliability, league_validation):
-    lv = (league_validation or {}).get("leagues", {})
-    out = copy.deepcopy(ledger)
-    out["description"] = (ledger.get("description", "") + " PUBLIC VIEW: research-only markets removed; record hashes belong to the private, unfiltered ledger.").strip()
-    for r in out["records"]:
-        r["markets"] = _strip(r["markets"])
-        s = r.get("settlement")
-        if s:
-            for k in RESTRICTED_MARKETS:
-                s.pop(k, None)
-            if s.get("most_likely", {}).get("market") in RESTRICTED_MARKETS:
-                s.pop("most_likely")
-        rec = r.get("recommendations")
-        if rec and (rec.get("most_likely") or {}).get("market") in RESTRICTED_MARKETS:
-            try:  # the sealed pick was a research-only market: show the best public one instead
-                r["recommendations"] = recommend(r["markets"], reliability, lv.get(r["fixture"]["competition"]))
-            except (TypeError, KeyError, StopIteration):  # older record shapes
-                r["recommendations"] = {**rec, "most_likely": {"decision": "no_bet", "reason": "Research-only market withheld."}}
-    return _drop_source_label(out)
-
-
-def public_performance(public_ledger_, original):
-    out = {"generated_at": original.get("generated_at"), **performance(public_ledger_)}
-    if "challenger" in original:
-        out["challenger"] = original["challenger"]
-    return json.loads(json.dumps(out))
-
-
-def public_reliability(rel):
-    out = copy.deepcopy(rel)
-    out["markets"] = {k: v for k, v in out.get("markets", {}).items() if k not in RESTRICTED_MARKETS}
-    return out
-
-
-def public_league_validation(lv):
-    out = copy.deepcopy(lv)
-    for league in out.get("leagues", {}).values():
-        league["markets"] = _strip(league.get("markets", {}))
-    return out
-
-
 def public_status(status):
     out = copy.deepcopy(status)
     out["sources"] = {k: v for k, v in out.get("sources", {}).items() if "co.uk" not in k}
@@ -112,4 +54,5 @@ def public_status(status):
 def rights_manifest():
     return {"withheld_markets": list(RESTRICTED_MARKETS), "public_markets": list(PUBLIC_MARKETS),
             "reason": "Corners, cards and shots depend on football-data.co.uk statistics, whose terms exclude public and automated use. They remain research-only.",
+            "public_model": "dc-public-v1: Dixon-Coles per league trained on football-data.org scores only, validated chronologically on 2025-26. The original sealed research predictions and frozen models are private and are not shown or re-derived.",
             "attribution": PUBLIC_ATTRIBUTION}

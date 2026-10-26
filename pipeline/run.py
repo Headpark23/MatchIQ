@@ -292,8 +292,32 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
         write_json(out_dir / "odds.json", odds_cache or {"fetched_at": None, "source": None, "matches": {}})
         write_json(out_dir / "performance.json", {"generated_at": now.isoformat(), **hist.performance(ledger),
                                                   "challenger": hist.compare_challenger(ledger, shadow)})
+        run_public_path(out_dir, now, fixtures, status)
     write_json(out_dir / "pipeline_status.json", status)
     return status
+
+
+def run_public_path(out_dir, now, fixtures, status):
+    """Rights-compliant public-derived predictions (pipeline/public.py), written to out_dir/public.
+    Independent of the private ledgers: a failure here is a warning, never a failed refresh."""
+    from . import public
+    pub_dir = Path(out_dir) / "public"
+    if not public.load_history():
+        status["warnings"].append("Public model: no football-data.org score history yet (run pipeline.public --history); public predictions not produced.")
+        return
+    try:
+        pub_dir.mkdir(exist_ok=True)
+        ledger = read_json(pub_dir / "prediction_history.json", None)
+        payload, ledger, perf = public.run_public(now, fixtures, SEASON, HORIZON_DAYS, ledger=ledger)
+        write_json(pub_dir / "predictions.json", payload)
+        write_json(pub_dir / "prediction_history.json", ledger)
+        write_json(pub_dir / "performance.json", perf)
+        status["public"] = {"model_version": public.PUBLIC_MODEL_VERSION, "predictions": len(payload["predictions"]),
+                            "records": len(ledger["records"]), "validated": (pub_dir / "league_validation.json").exists()}
+    except hist.IntegrityError:
+        raise
+    except Exception as error:  # public path must never stop the private refresh
+        status["warnings"].append(f"Public model failed: {type(error).__name__}: {error}")
 
 
 def main(argv=None):

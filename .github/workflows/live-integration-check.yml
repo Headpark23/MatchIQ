@@ -45,7 +45,7 @@ jobs:
     needs: check
     if: github.ref == 'refs/heads/dev/mission065-best-bet'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
         with:
@@ -58,6 +58,10 @@ jobs:
         run: |
           python -m unittest discover -s tests -p "test_*.py"
           for t in tests/*.js; do node "$t"; done
+      - name: Public model inputs (football-data.org history, then chronological validation)
+        env:
+          FOOTBALL_DATA_ORG_TOKEN: ${{ secrets.FOOTBALL_DATA_ORG_TOKEN }}
+        run: python -m pipeline.public --history --validate --if-stale
       - name: Refresh (football-data.co.uk downloads stay disabled)
         env:
           FOOTBALL_DATA_ORG_TOKEN: ${{ secrets.FOOTBALL_DATA_ORG_TOKEN }}
@@ -69,7 +73,7 @@ jobs:
         run: |
           git config user.name 'matchiq-data-bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/fixtures.json data/predictions.json data/prediction_history.json data/shadow_history.json data/performance.json data/pipeline_status.json data/odds.json public-dist
+          git add data/fixtures.json data/predictions.json data/prediction_history.json data/shadow_history.json data/performance.json data/pipeline_status.json data/odds.json data/public data/public_results.json public-dist
           git commit -m 'Dev-branch live refresh' || exit 0
           git pull --rebase
           git push

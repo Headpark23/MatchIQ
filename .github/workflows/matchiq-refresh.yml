@@ -13,7 +13,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 90
     env:
       HAS_VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN != '' }}
     steps:
@@ -27,6 +27,10 @@ jobs:
         run: |
           python -m unittest discover -s tests -p "test_*.py"
           for t in tests/*.js; do node "$t"; done
+      - name: Public model inputs (football-data.org history and chronological validation, refreshed monthly)
+        env:
+          FOOTBALL_DATA_ORG_TOKEN: ${{ secrets.FOOTBALL_DATA_ORG_TOKEN }}
+        run: python -m pipeline.public --history --validate --if-stale
       - name: Refresh fixtures, publish predictions, settle results
         env:
           # Optional free token from football-data.org. Without it the run uses
@@ -42,7 +46,7 @@ jobs:
         run: |
           git config user.name 'matchiq-data-bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/fixtures.json data/predictions.json data/prediction_history.json data/shadow_history.json data/performance.json data/pipeline_status.json data/odds.json data/league_results.json public-dist
+          git add data/fixtures.json data/predictions.json data/prediction_history.json data/shadow_history.json data/performance.json data/pipeline_status.json data/odds.json data/league_results.json data/public data/public_results.json public-dist
           if ! git diff --cached --quiet; then
             git commit -m 'Refresh fixtures, predictions and prediction history'
             git pull --rebase

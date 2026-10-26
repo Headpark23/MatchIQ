@@ -36,7 +36,6 @@ ALLOWLIST_ASSETS = [
 ]
 
 ALLOWLIST_DATA = [
-    "match_winner_forward.json",
     "model_reliability.json",
     "fixtures.json",
     "predictions.json",
@@ -80,15 +79,23 @@ def build():
     # 3. Data files. Research-only markets (rights.py) are filtered out of every file that
     # carries them; the private files in data/ are never modified.
     read = lambda n: json.loads((ROOT / "data" / n).read_text(encoding="utf-8"))
-    reliability, league_validation = read("model_reliability.json"), read("league_validation.json")
-    ledger = rights.public_ledger(read("prediction_history.json"), reliability, league_validation)
+
+    def read_public(name, fallback):
+        path = ROOT / "data" / "public" / name
+        return json.loads(path.read_text(encoding="utf-8")) if path.exists() else fallback
+
+    # Public predictions come ONLY from the public-derived pipeline (pipeline/public.py), which is
+    # trained on permitted data. The private frozen-model predictions, sealed ledger and
+    # reliability files are research artefacts and are never shipped, filtered or re-derived.
+    from pipeline import history as hist
+    public_ledger = read_public("prediction_history.json", None) or hist.empty_ledger()
     filtered = {
-        "predictions.json": rights.public_predictions(read("predictions.json"), reliability, league_validation),
+        "predictions.json": read_public("predictions.json", {"generated_at": None, "predictions": {}}),
+        "prediction_history.json": public_ledger,
+        "performance.json": read_public("performance.json", {"generated_at": None, **hist.performance(public_ledger)}),
+        "model_reliability.json": {"public": True, "markets": {}, "note": "Frozen-model reliability is a private research artefact."},
+        "league_validation.json": read_public("league_validation.json", {"leagues": {}}),
         "fixtures.json": rights.public_fixtures(read("fixtures.json")),
-        "prediction_history.json": ledger,
-        "performance.json": rights.public_performance(ledger, read("performance.json")),
-        "model_reliability.json": rights.public_reliability(reliability),
-        "league_validation.json": rights.public_league_validation(league_validation),
         "pipeline_status.json": rights.public_status(read("pipeline_status.json")),
         "rights.json": rights.rights_manifest(),
     }

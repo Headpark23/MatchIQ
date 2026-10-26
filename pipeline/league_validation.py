@@ -37,7 +37,7 @@ def outcome(market, row):
     return None if h is None or a is None else h + a > LINE[market]
 
 
-def validate_league(code, results, progress=None):
+def validate_league(code, results, progress=None, public=False):
     rows = [r for r in results if r["competition"] == code]
     test = [r for r in rows if r["season"] == TEST_SEASON]
     by_week = defaultdict(list)
@@ -46,7 +46,7 @@ def validate_league(code, results, progress=None):
     scores = defaultdict(lambda: [0, 0.0, 0.0])  # n, model brier sum, league brier sum
     tiers = defaultdict(int)
     for week in sorted(by_week):
-        ctx = Context(rows, week, competition=code, league_name=LEAGUES[code]["name"])
+        ctx = Context(rows, week, competition=code, league_name=LEAGUES[code]["name"], public=public)
         if not ctx.epl or ctx.base["btts"] is None:
             continue
         for r in by_week[week]:
