@@ -7,6 +7,10 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 // Forecast/detail odds must pass through the same formatter as saved-bet odds.
 assert.ok(/calc\.formatFractionalOdds\(100\s*\/\s*winProb\)/.test(html), 'model fair odds use fractional display');
 assert.ok(/calc\.formatFractionalOdds\(mktOdds\)/.test(html), 'market-consensus odds use fractional display');
+assert.ok(/calc\.formatFractionalOdds\(\+entry\.odds\)/.test(html), 'saved bets use fractional display');
+assert.ok(/calc\.formatFractionalOdds\(\+leg\.odds\)/.test(html), 'accumulator legs use fractional display');
+assert.ok(/calc\.formatFractionalOdds\(odds\)/.test(html), 'single and combined previews use fractional display');
+assert.ok(!/(?:[A-Za-z_$][\w$]*\.)?[A-Za-z_$]*[Oo]dds?\.toFixed\(/.test(html), 'no odds value is formatted as a decimal');
 assert.doesNotMatch(html, /fairOdds\s*=\s*\(100\s*\/\s*winProb\)\.toFixed/);
 assert.doesNotMatch(html, /mktOdds\.toFixed/);
 
