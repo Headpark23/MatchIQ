@@ -205,3 +205,11 @@ Preview: **https://matchiq-igrroq2wf-martin-whites-projects.vercel.app** (dev pr
 **6. Regression (browser, own static server):** competition filters (each league shows only its own matches), Top Six, Most Likely, Best Value with live bookmaker prices (Betfair, William Hill, fractional 11/10 etc.; no decimal odds shown), stale rejection, Results, More, Diary; no horizontal overflow at 375px on all six screens; no corners/cards/shots text.
 
 **Remaining before a public stable release:** the three provider-terms confirmations above; the three Vercel secrets; merge to `main` (delete `live-integration-check.yml` first); decide the single stable URL; first genuine forward settlement; permission from football-data.co.uk if the research markets are ever to go public.
+
+## Forward settlement test (prepared 2026-10-26, run scheduled 2026-10-27 08:30 UTC)
+
+Football-data.org had not yet reported tonight's matches when requested (it was 17:5x UTC), so the live run was deferred. Prepared:
+- `data/forward_check/baseline.json`: sealed hashes and published times of the 144 genuine forward PUB- records (all published 2026-10-26T17:03Z; baseline committed 17:53Z, before the evening kick-offs). Only these count; replays do not.
+- `pipeline/forward_check.py`: seven checks (sealed before kick-off, result matched to fixture from a permitted unconflicted source, independent win/loss recomputation, immutability versus the baseline, scorecards recomputed per league, finished fixtures out of Upcoming but kept in history, idempotent re-settlement). Self-tested on a replay in a temp directory (not counted as forward): 7 of 7 PASS.
+- `.github/workflows/forward-settlement-check.yml`: dev-branch only, triggered by pushing `.github/forward-check-request.txt`; football-data.org token only, the Odds API key is not passed (zero bookmaker credits); no deploy.
+- A one-off scheduled task (`matchiq-forward-settlement-check`) runs it on 27 Oct 08:30 UTC and appends the PASS/FAIL result here. It needs the desktop app open (otherwise it runs at next launch). Manual alternative: create the request file, commit, push to the dev branch, then read `data/forward_check/report.json`.
