@@ -1,0 +1,106 @@
+{
+  "n": 41,
+  "tiers_used": {
+    "T2": 41
+  },
+  "date_range": [
+    "2025-08-16",
+    "2026-10-19"
+  ],
+  "models": {
+    "hierarchy": {
+      "n": 41,
+      "brier": 0.6294,
+      "logloss": 1.044,
+      "rps": 0.2284,
+      "top_pick_hit_rate": 0.5122,
+      "delta_brier_vs_league": -0.001,
+      "delta_brier_vs_league_ci95": [
+        -0.0495,
+        0.048
+      ]
+    },
+    "pooled_unshrunk": {
+      "n": 41,
+      "brier": 0.6672,
+      "logloss": 1.1028,
+      "rps": 0.2463,
+      "top_pick_hit_rate": 0.4634,
+      "delta_brier_vs_league": 0.0368,
+      "delta_brier_vs_league_ci95": [
+        -0.0582,
+        0.1379
+      ]
+    },
+    "prior": {
+      "n": 38,
+      "brier": 0.7464,
+      "logloss": 1.2547,
+      "rps": 0.2795,
+      "top_pick_hit_rate": 0.4474,
+      "delta_brier_vs_league": 0.112,
+      "delta_brier_vs_league_ci95": [
+        -0.0367,
+        0.2588
+      ]
+    },
+    "league": {
+      "n": 41,
+      "brier": 0.6304,
+      "logloss": 1.0457,
+      "rps": 0.2289,
+      "top_pick_hit_rate": 0.5366
+    },
+    "market_close": {
+      "n": 40,
+      "brier": 0.5923,
+      "logloss": 0.9981,
+      "rps": 0.2124,
+      "top_pick_hit_rate": 0.525,
+      "delta_brier_vs_league": -0.0409,
+      "delta_brier_vs_league_ci95": [
+        -0.1258,
+        0.0556
+      ]
+    }
+  },
+  "hierarchy_brier_by_promoted_team": {
+    "Burnley": {
+      "n": 10,
+      "brier": 0.5455
+    },
+    "Coventry": {
+      "n": 7,
+      "brier": 0.544
+    },
+    "Hull": {
+      "n": 7,
+      "brier": 0.7312
+    },
+    "Leeds": {
+      "n": 10,
+      "brier": 0.5766
+    },
+    "Sunderland": {
+      "n": 10,
+      "brier": 0.7477
+    }
+  },
+  "promoted_clubs": {
+    "2425": [
+      "Ipswich",
+      "Leicester",
+      "Southampton"
+    ],
+    "2526": [
+      "Burnley",
+      "Leeds",
+      "Sunderland"
+    ],
+    "2627": [
+      "Coventry",
+      "Hull",
+      "Ipswich"
+    ]
+  }
+}
