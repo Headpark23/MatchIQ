@@ -3356,7 +3356,7 @@ function renderBetDiaryView() {
   const diary = diaryProfileFilter === 'all' ? allDiary : allDiary.filter(entry => (entry.profile || 'Default') === diaryProfileFilter);
   const summary = calc.summarizeBetDiary ? calc.summarizeBetDiary(diary) : {
     totalEntries: diary.length, totalStaked: 0, settledStaked: 0, netProfit: 0,
-    winRatePct: 0, roiPct: 0, pendingCount: 0, settledCount: 0, wonCount: 0, lostCount: 0, voidCount: 0,
+    winRatePct: 0, roiPct: 0, totalReturned: 0, pendingCount: 0, settledCount: 0, wonCount: 0, lostCount: 0, voidCount: 0,
     originBreakdown: { matchiq: { count: 0, profit: 0 }, independent: { count: 0, profit: 0 } }
   };
 
@@ -3367,7 +3367,8 @@ function renderBetDiaryView() {
     '<h2 class="stage-title">📓 Personal Bet Diary</h2>' +
     '<p class="stage-sub">' +
       'Private matchday ledger for entertainment selections. Track selections, bookmaker odds, and settlement outcomes. ' +
-      'Strictly client-side and stored in your browser — zero external accounts, zero tracking, £0 external cost.' +
+      'Stored only in this browser; it does not sync across devices and browser privacy settings or cleared site data can remove it. ' +
+      'No external accounts or paid services are used.' +
     '</p>' +
   '</div>' +
 
@@ -3376,12 +3377,17 @@ function renderBetDiaryView() {
     '<div class="diary-metric-card accent-green">' +
       '<div class="diary-metric-lbl"><span>Net Profit / Loss</span><span>GBP</span></div>' +
       '<div class="diary-metric-val ' + pnlClass + '">' + pnlSign + '£' + Math.abs(summary.netProfit).toFixed(2) + '</div>' +
-      '<div class="diary-metric-sub">Across ' + summary.settledCount + ' settled selections (ROI: ' + summary.roiPct.toFixed(1) + '%)</div>' +
+      '<div class="diary-metric-sub">' + summary.totalEntries + ' bets placed · ' + summary.settledCount + ' settled (ROI: ' + summary.roiPct.toFixed(1) + '%)</div>' +
     '</div>' +
     '<div class="diary-metric-card accent-cyan">' +
       '<div class="diary-metric-lbl"><span>Total Staked</span><span>GBP</span></div>' +
       '<div class="diary-metric-val">£' + summary.totalStaked.toFixed(2) + '</div>' +
       '<div class="diary-metric-sub">£' + summary.settledStaked.toFixed(2) + ' settled · ' + summary.pendingCount + ' pending</div>' +
+    '</div>' +
+    '<div class="diary-metric-card">' +
+      '<div class="diary-metric-lbl"><span>Actual Returns (Settled)</span><span>GBP</span></div>' +
+      '<div class="diary-metric-val">£' + summary.totalReturned.toFixed(2) + '</div>' +
+      '<div class="diary-metric-sub">Winning payouts plus stakes returned on void bets</div>' +
     '</div>' +
     '<div class="diary-metric-card accent-amber">' +
       '<div class="diary-metric-lbl"><span>Settled Win Rate</span><span>RATE</span></div>' +
@@ -3455,7 +3461,6 @@ function renderBetDiaryView() {
               const clr = profit > 0 ? 'pnl-pos' : profit < 0 ? 'pnl-neg' : 'pnl-zero';
               pnlDisplay = '<span class="' + clr + '" style="font-weight:700;">' + sign + '£' + Math.abs(profit).toFixed(2) + '</span>';
             }
-            const potReturn = (entry.stake * entry.odds).toFixed(2);
             const originBadge = entry.origin === 'independent' ?
               '<span class="badge-origin-indep">INDEPENDENT</span>' :
               '<span class="badge-origin-matchiq">MATCHIQ PICK</span>';
@@ -3476,7 +3481,7 @@ function renderBetDiaryView() {
               '<td><strong class="mono">£' + (+entry.stake).toFixed(2) + '</strong></td>' +
               '<td>' +
                 '<div>' + pnlDisplay + '</div>' +
-                '<div style="font-size:10.5px;color:var(--dim)">Pot. £' + potReturn + '</div>' +
+                '<div style="font-size:10.5px;color:var(--dim)">' + (profit !== null ? 'Return £' + (entry.stake + profit).toFixed(2) : 'Potential £' + (entry.stake * entry.odds).toFixed(2)) + '</div>' +
               '</td>' +
               '<td>' +
                 '<select class="status-select-inline" onchange="updateDiaryEntryOutcome(\'' + entry.id + '\', this.value)">' +

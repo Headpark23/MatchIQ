@@ -72,6 +72,8 @@ close(summary.settledStaked, 80.00, 'Settled staked');
 // b5: 0.00
 // Net = 14 + 17 - 15 - 5 + 0 = +11.00
 close(summary.netProfit, 11.00, 'Net profit calculation');
+close(summary.totalReturned, 91.00, 'Settled returns include winning payouts and returned void stakes');
+assert.equal(summary.totalEntries, 6, 'Total bets placed');
 
 // Win rate on settled: 2 won out of 5 settled = 40.0%
 close(summary.winRatePct, 40.0, 'Win rate %');
@@ -108,6 +110,8 @@ close(calc.calculateBrierScore(p1X2, 'A', '1x2'), 1.145, 'Multi-class away upset
 assert.equal(calc.formatFractionalOdds(2.5), '3/2');
 assert.equal(calc.formatFractionalOdds(1.833333333333), '5/6');
 assert.equal(calc.formatFractionalOdds(1), 'Evens');
+assert.equal(calc.formatFractionalOdds(1.91), '10/11');
+assert.equal(calc.formatFractionalOdds(3.1897), '35/16');
 const accA = calc.createAccumulator([{ selection: 'A', odds: 2.2 }, { selection: 'B', odds: 1.75 }], 10, 'Tester A');
 const accB = calc.createAccumulator([{ selection: 'C', odds: 3.1 }, { selection: 'D', odds: 1.4 }], 5, 'Tester B');
 close(accA.decimalOdds, 3.85, 'Accumulator A precise combined odds');

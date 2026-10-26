@@ -134,6 +134,7 @@
     let totalStaked = 0;
     let settledStaked = 0;
     let netProfit = 0;
+    let totalReturned = 0;
 
     const originBreakdown = {
       matchiq: { count: 0, staked: 0, profit: 0 },
@@ -154,9 +155,12 @@
         pendingCount++;
       } else {
         settledStaked += stake;
-        const profit = calculateBetProfit(stake, odds, outcome) || 0;
-        netProfit += profit;
-        originBreakdown[origin].profit += profit;
+        const profit = calculateBetProfit(stake, odds, outcome);
+        if (profit !== null) {
+          netProfit += profit;
+          totalReturned += stake + profit;
+          originBreakdown[origin].profit += profit;
+        }
 
         if (outcome === 'won') wonCount++;
         else if (outcome === 'lost') lostCount++;
@@ -178,6 +182,7 @@
       totalStaked: Math.round(totalStaked * 100) / 100,
       settledStaked: Math.round(settledStaked * 100) / 100,
       netProfit: Math.round(netProfit * 100) / 100,
+      totalReturned: Math.round(totalReturned * 100) / 100,
       winRatePct,
       roiPct,
       originBreakdown
@@ -189,20 +194,20 @@
     if (odds === null || odds < 1) return '—';
     const value = odds - 1;
     if (value === 0) return 'Evens';
-    // Continued-fraction approximation; keeps display concise without altering stored decimal odds.
-    let x = value, h0 = 0, h1 = 1, k0 = 1, k1 = 0;
-    for (let i = 0; i < 32; i++) {
-      const a = Math.floor(x), h2 = a * h1 + h0, k2 = a * k1 + k0;
-      if (k2 > 10000) break;
-      h0 = h1; h1 = h2; k0 = k1; k1 = k2;
-      if (Math.abs(h1 / k1 - value) < 1e-10) break;
-      const fraction = x - a;
-      if (fraction === 0) break;
-      x = 1 / fraction;
+    // Approximate display odds with common UK-style fractions; stored decimal odds remain untouched.
+    let bestNumerator = 1, bestDenominator = 100, bestError = Infinity;
+    for (let denominator = 1; denominator <= 20; denominator++) {
+      const numerator = Math.max(1, Math.round(value * denominator));
+      const error = Math.abs(numerator / denominator - value);
+      if (error < bestError || (error === bestError && denominator < bestDenominator)) {
+        bestNumerator = numerator;
+        bestDenominator = denominator;
+        bestError = error;
+      }
     }
     function gcd(a, b) { return b ? gcd(b, a % b) : a; }
-    const divisor = gcd(Math.abs(h1), k1);
-    return `${h1 / divisor}/${k1 / divisor}`;
+    const divisor = gcd(bestNumerator, bestDenominator);
+    return `${bestNumerator / divisor}/${bestDenominator / divisor}`;
   }
 
   function createAccumulator(legs, stake, profile = 'Default') {
