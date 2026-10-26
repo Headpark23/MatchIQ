@@ -21,6 +21,10 @@ const checks = [
   ['every upcoming prediction has a match result distribution', Object.values(predictions).every(p => p.markets.result && Math.abs(p.markets.result.selections.reduce((s, x) => s + x.p, 0) - 1) < 0.01)],
   ['promoted clubs are predicted, not dropped', Object.values(predictions).some(p => p.promoted.length > 0)],
   ['every prediction covers all six markets', Object.values(predictions).every(p => ['result', 'goals', 'btts', 'corners', 'cards', 'shots'].every(k => p.markets[k]))],
+  ['every upcoming match has a sealed Most Likely or No Bet decision', Object.values(predictions).every(p => p.recommendations && ['most_likely', 'no_bet'].includes(p.recommendations.most_likely.decision) && p.recommendations.best_value.decision === 'no_bet')],
+  ['value calls need a real price and the validated model', /sel\.status !== 'validated'/.test(app) && /VALUE_MIN_EV = 0\.05/.test(app) && /calc\.parseFractionalOdds\(priceText\)/.test(app)],
+  ['bookmaker margin is removed when every outcome is priced', /fairImplied: complete \? implied \/ book : null/.test(app)],
+  ['Most Likely and Best Value both feed the Bet Diary', /rec: 'most_likely'/.test(app) && /rec: 'best_value'/.test(app)],
   ['non-validated estimates are labelled provisional', Object.values(predictions).every(p => p.markets.result.tier === 'T1' ? p.markets.result.evidence.status === 'validated' : p.markets.result.evidence.status === 'provisional')],
 ];
 

@@ -73,7 +73,8 @@ const MARKETS = {
 const MARKET_ORDER = ['result', 'goals', 'btts', 'corners', 'cards', 'shots'];
 const STATUS = {
   validated: ['validated', 'Validated model'], provisional: ['provisional', 'Provisional estimate'], market: ['market', 'Bookmaker-derived'],
-  unavailable: ['unavailable', 'Not available'], frozen: ['frozen', 'Frozen model'], shadow: ['shadow', 'Shadow challenger']
+  unavailable: ['unavailable', 'Not available'], frozen: ['frozen', 'Frozen model'], shadow: ['shadow', 'Shadow challenger'],
+  league: ['unavailable', 'League-average fallback']
 };
 const STRENGTH = { strong: [3, 'Strong evidence'], moderate: [2, 'Moderate evidence'], weak: [1, 'Weak evidence'], none: [0, 'No proven edge'] };
 
@@ -101,11 +102,116 @@ function wayBar(sels, pickKey, names, compact, cls = '') {
     (compact ? '' : '<div class="way-labels"><span>' + esc(names[0]) + ' <b>' + pct(p.H) + '</b></span><span>Draw <b>' + pct(p.D) + '</b></span><span>' + esc(names[1]) + ' <b>' + pct(p.A) + '</b></span></div>') + '</div>';
 }
 
+// ------------------------------------------------------------ Most Likely / Best Value / No Bet
+const PRICE_STORAGE_KEY = 'matchiq_seen_prices_v1';
+const VALUE_MIN_EV = 0.05;
+const REC_LABEL = { most_likely: 'Most Likely pick', best_value: 'Best Value pick' };
+
+function readPrices() { try { const v = JSON.parse(localStorage.getItem(PRICE_STORAGE_KEY) || '{}'); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } }
+function writePrices(v) { try { localStorage.setItem(PRICE_STORAGE_KEY, JSON.stringify(v)); } catch (e) { /* prices are a convenience only */ } }
+
+const marketStatus = m => (m.evidence.status === 'provisional' && m.evidence.strength === 'none') ? 'league' : m.evidence.status;
+
+/* Every selection of a published prediction. `group` holds the outcomes that make up one
+   book, so a full set of prices can remove the bookmaker's margin. */
+function allSelections(pred) {
+  const out = [], mk = pred.markets;
+  if (mk.result) mk.result.selections.forEach(s => out.push({ id: 'result:' + s.key, group: 'result', market: 'result', label: s.label, p: s.p, fair: s.fair_odds, status: marketStatus(mk.result), strength: mk.result.evidence.strength, tier: mk.result.tier }));
+  for (const key of ['goals', 'corners', 'cards', 'shots']) {
+    const m = mk[key];
+    if (!m || m.unavailable) continue;
+    for (const l of m.lines) for (const side of ['over', 'under'])
+      out.push({ id: key + ':' + side + ':' + l.line, group: key + ':' + l.line, market: key, label: MARKETS[key].name + ': ' + l[side].label, p: l[side].p, fair: l[side].fair_odds, status: marketStatus(m), strength: m.evidence.strength });
+  }
+  if (mk.btts) mk.btts.selections.forEach(s => out.push({ id: 'btts:' + s.key, group: 'btts', market: 'btts', label: 'Both teams to score: ' + s.label, p: s.p, fair: s.fair_odds, status: marketStatus(mk.btts), strength: mk.btts.evidence.strength }));
+  return out;
+}
+
+/* Value test for one selection at a price the user saw elsewhere. MatchIQ's probability
+   comes from results-based models, never from these prices, so the comparison is
+   independent. Only the validated model, at a well-backtested probability, can call value. */
+function valueVerdict(sel, priceText, siblings, prices) {
+  const dec = calc.parseFractionalOdds(priceText);
+  if (!Number.isFinite(dec) || dec <= 1) return null;
+  const implied = 1 / dec, ev = sel.p * dec - 1;
+  const sibDec = siblings.map(x => calc.parseFractionalOdds(prices[x.id]));
+  const complete = siblings.length > 0 && sibDec.every(d => Number.isFinite(d) && d > 1);
+  const book = complete ? implied + sibDec.reduce((t, d) => t + 1 / d, 0) : null;
+  const out = { dec, implied, ev, margin: complete ? book - 1 : null, fairImplied: complete ? implied / book : null, priceText: calc.formatFractionalOdds(dec) };
+  if (sel.status !== 'validated') return { ...out, verdict: 'no_bet', why: 'MatchIQ’s estimate for this market has no proven edge over league averages, so no price can be called value here.' };
+  const band = reliabilityBand(sel.p);
+  if (!(band && band.established)) return { ...out, verdict: 'no_bet', why: 'Too few backtested picks at this probability to trust a value call.' };
+  const compared = out.fairImplied != null ? out.fairImplied : implied;
+  if (ev >= VALUE_MIN_EV) return { ...out, verdict: 'value', why: 'At ' + out.priceText + ' the price implies ' + pct(compared) + (out.fairImplied != null ? ' once the margin is removed' : '') + ', below MatchIQ’s ' + pct(sel.p) + '. An estimate, not a guarantee.' };
+  return { ...out, verdict: 'no_value', why: 'At ' + out.priceText + ' the estimated expected value is ' + (ev >= 0 ? '+' : '') + Math.round(100 * ev) + '%, under the +' + Math.round(100 * VALUE_MIN_EV) + '% needed to call it value.' };
+}
+
+function selectionFor(pred, m) {
+  const id = m.market === 'result' ? 'result:' + m.key : m.market === 'btts' ? 'btts:' + m.key : m.market + ':' + m.key + ':' + m.line;
+  return allSelections(pred).find(s => s.id === id);
+}
+
+function mostLikelyBlock(pred, big) {
+  const m = (pred.recommendations || {}).most_likely;
+  if (!m || m.decision !== 'most_likely') return '<div class="rec-card nobet"><div class="rec-kicker">Most likely to win</div><div class="rec-pick">No bet</div><p class="muted">' + esc((m && m.reason) || 'No selection has enough evidence.') + '</p></div>';
+  const sel = selectionFor(pred, m);
+  const status = m.status === 'provisional' && m.strength === 'none' ? 'league' : m.status;
+  const diary = { id: pred.match_id, market: MARKETS[m.market].diary, selection: sel ? sel.label : m.label, p: m.p, fair: sel ? sel.fair : '', rec: 'most_likely' };
+  return '<div class="rec-card' + (big ? ' big' : '') + '"><div class="rec-kicker">Most likely to win</div>' +
+    '<div class="rec-main">' + ring(m.p, big ? 112 : 72, status === 'validated' ? '' : 'provisional') +
+    '<div><div class="rec-market">' + esc(MARKETS[m.market].name) + '</div><div class="rec-pick">' + esc(m.label) + '</div>' +
+    '<div class="market-odds">Model fair odds <b>' + esc(diary.fair) + '</b> · not a bookmaker price</div></div></div>' +
+    '<div class="evidence-row">' + statusBadge(status) + meter(m.strength) + '</div>' +
+    '<p class="muted" style="font-size:13.5px">About ' + Math.round(m.p * 10) + ' times in 10. Chosen on credible chance (' + pct(m.lower_bound) + ' at the cautious end) from ' + esc(m.basis) + '. Likely does not mean good value.</p>' +
+    '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button></div>';
+}
+
+function bestValueBlock(pred) {
+  const sels = allSelections(pred), prices = readPrices()[pred.match_id] || {};
+  const sel = sels.find(s => s.id === prices._selected) || sels.find(s => s.id === 'result:' + pred.markets.result.pick.key) || sels[0];
+  const siblings = sels.filter(s => s.group === sel.group && s.id !== sel.id);
+  const verdict = valueVerdict(sel, prices[sel.id], siblings, prices);
+  const v = verdict ? verdict.verdict : 'no_bet';
+  const head = { value: ['value', 'Possible value'], no_value: ['nobet', 'No value at this price'], no_bet: ['nobet', 'No bet'] }[v];
+  let detail;
+  if (!verdict) {
+    detail = '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded: there is no lawful free odds feed. Type a fractional price you have seen to test it against MatchIQ’s independent estimate.</p>';
+  } else {
+    detail = '<div class="value-grid"><div><span>Price</span><b>' + esc(verdict.priceText) + '</b></div><div><span>Price implies</span><b>' + pct(verdict.implied) + '</b></div>' +
+      (verdict.fairImplied != null ? '<div><span>Margin removed</span><b>' + pct(verdict.fairImplied) + '</b></div>' : '') +
+      '<div><span>MatchIQ</span><b>' + pct(sel.p) + '</b></div><div><span>Expected value</span><b class="' + (verdict.ev >= 0 ? 'pos' : 'neg') + '">' + (verdict.ev >= 0 ? '+' : '') + Math.round(100 * verdict.ev) + '%</b></div>' +
+      (verdict.margin != null ? '<div><span>Bookmaker margin</span><b>' + (100 * verdict.margin).toFixed(1) + '%</b></div>' : '') + '</div>' +
+      '<p class="muted" style="font-size:13.5px">' + esc(verdict.why) + (verdict.margin == null && siblings.length && verdict.verdict !== 'no_bet' ? ' Add the other outcomes’ prices below to remove the bookmaker’s margin.' : '') + '</p>';
+  }
+  const opts = sels.map(s => '<option value="' + esc(s.id) + '"' + (s.id === sel.id ? ' selected' : '') + '>' + esc(s.label) + ' · ' + pct(s.p) + '</option>').join('');
+  const priceInput = (s, main) => '<label class="field"><span class="lbl">' + esc(main ? 'Bookmaker price you were offered' : s.label) + '</span><input class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or Evens" data-price="' + esc(s.id) + '" data-match="' + esc(pred.match_id) + '" value="' + esc(prices[s.id] || '') + '"></label>';
+  const diary = verdict ? { id: pred.match_id, market: MARKETS[sel.market].diary, selection: sel.label, p: sel.p, fair: sel.fair, odds: verdict.priceText, rec: 'best_value' } : null;
+  return '<div class="rec-card ' + head[0] + '"><div class="rec-kicker">Best value</div><div class="rec-pick">' + esc(head[1]) + '</div>' +
+    '<label class="field"><span class="lbl">Selection to test</span><select class="ctl" data-value-select="' + esc(pred.match_id) + '">' + opts + '</select></label>' +
+    priceInput(sel, true) + detail +
+    (siblings.length ? '<details class="compare"' + (siblings.some(s => prices[s.id]) ? ' open' : '') + '><summary>Other outcomes’ prices (removes the margin)</summary><div class="grid" style="margin-top:8px">' + siblings.map(s => priceInput(s, false)).join('') + '</div></details>' : '') +
+    (diary ? '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary at ' + esc(verdict.priceText) + '</button>' : '') + '</div>';
+}
+
+function refreshValue(matchId) {
+  const pred = DATA.predictions && DATA.predictions.predictions[matchId], box = $('value-' + matchId);
+  if (!pred || !box) return;
+  const focused = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.price : null;
+  box.innerHTML = bestValueBlock(pred);
+  if (focused) { const input = box.querySelector('[data-price="' + CSS.escape(focused) + '"]'); if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); } }
+}
+
+function recommendationPair(pred) {
+  return '<div class="rec-pair">' + mostLikelyBlock(pred, true) + '<div id="value-' + esc(pred.match_id) + '">' + bestValueBlock(pred) + '</div></div>';
+}
+
+
 /* Turn a full (predictions.json) or compact (history) market into one display shape. */
 function normaliseMarket(key, m) {
   if (!m) return null;
   if (m.unavailable) return { key, unavailable: true, status: 'unavailable', strength: 'none', summary: (m.evidence && m.evidence.summary) || 'No data for this market.' };
-  const out = { key, status: m.evidence.status, strength: m.evidence.strength, summary: m.evidence.summary || '', version: m.model_version,
+  const league = m.evidence.status === 'provisional' && m.evidence.strength === 'none';
+  const out = { key, status: league ? 'league' : m.evidence.status, strength: m.evidence.strength, summary: m.evidence.summary || '', version: m.model_version,
     tier: m.tier, pick: { label: m.pick.label, p: m.pick.p, fair: m.pick.fair_odds, key: m.pick.key, line: m.pick.line },
     explanation: m.explanation || [], method: m.method || '', rows: [], frozen: m.frozen_reference || null };
   if (m.selections) out.rows = m.selections.map(s => ({ label: s.label, p: s.p, fair: s.fair_odds, picked: s.key === m.pick.key }));
@@ -294,34 +400,66 @@ function marketCard(key, m, ctx) {
 }
 
 // ------------------------------------------------------------ views
+function lowerBoundOf(pred) {
+  const m = (pred.recommendations || {}).most_likely;
+  return m && m.decision === 'most_likely' ? m.lower_bound : -1;
+}
+
+function valueStatus(pred) {
+  const prices = readPrices()[pred.match_id] || {};
+  const sels = allSelections(pred);
+  const verdicts = sels.filter(s => prices[s.id]).map(s => valueVerdict(s, prices[s.id], sels.filter(x => x.group === s.group && x.id !== s.id), prices)).filter(Boolean);
+  if (verdicts.some(v => v.verdict === 'value')) return '<span class="badge validated">Possible value at your price</span>';
+  if (verdicts.length) return '<span class="badge unavailable">No value at your prices</span>';
+  return '<span class="badge unavailable">Value: no bet, no price</span>';
+}
+
+function matchRecRow(pred) {
+  const f = pred.fixture, ms = kickoffMs(f), m = (pred.recommendations || {}).most_likely || {}, r = pred.markets.result;
+  const status = m.status === 'provisional' && m.strength === 'none' ? 'league' : m.status;
+  const pick = m.decision === 'most_likely'
+    ? ring(m.p, 56, status === 'validated' ? '' : 'provisional') + '<span><span class="dim" style="display:block;font-size:12px">Most likely · ' + esc(MARKETS[m.market].name) + '</span><b class="rec-row-pick">' + esc(m.label) + '</b></span>'
+    : '<span><b class="rec-row-pick">No bet</b><span class="dim" style="display:block;font-size:12px">Not enough evidence</span></span>';
+  return '<a class="rec-row" href="#/match/' + encodeURIComponent(pred.match_id) + '">' +
+    '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small></span>' +
+    '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span></span>' +
+    '<span class="rec-row-main">' + pick + '</span>' +
+    '<span class="rec-row-side"><span class="dim">Result lean: <b style="color:#fff">' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (r.evidence.status !== 'validated' ? ' <span class="badge provisional">Provisional</span>' : '') + '</span>' + valueStatus(pred) + '</span>' +
+    '<span class="fx-chev" aria-hidden="true">›</span></a>';
+}
+
+function homeHero(pred) {
+  const f = pred.fixture, ms = kickoffMs(f);
+  return '<article class="hero"><div><div class="hero-meta"><strong>Most likely this round</strong><span>Premier League</span><span>' + esc(fmtDay(ms)) + ', ' + esc(fmtTime(ms)) + ' UK</span></div>' +
+    '<div class="hero-teams"><span class="hero-team">' + crest(f.home, 40) + esc(f.home) + '</span><span class="hero-v">v</span><span class="hero-team">' + crest(f.away, 40) + esc(f.away) + '</span></div>' +
+    mostLikelyBlock(pred, true) +
+    '<div class="btn-row" style="margin-top:14px"><a class="btn primary" href="#/match/' + encodeURIComponent(pred.match_id) + '">See every market and check value</a></div></div></article>';
+}
+
 function viewHome() {
   const list = upcoming();
-  let html = '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">Strongest signals</h1>' +
-    '<p class="page-sub">The most strongly supported match-result predictions for the coming fixtures, ranked by backtest-calibrated probability. One leading outcome per match.</p></div>' +
+  let html = '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">This round</h1>' +
+    '<p class="page-sub">For every upcoming match: the most likely supported outcome, the match-result lean and whether a price you have seen offers value. MatchIQ will say No bet when the evidence or the price is not good enough.</p></div>' +
     '<div class="chips">' + freshnessChips() + '</div></div>';
   if (LOAD_ERRORS.predictions) return html + errorPanel('predictions') + '</section>';
   if (!list.length) return html + '<div class="empty">No fixtures with published predictions in the next 21 days. Predictions appear automatically once the schedule lists them.</div>' + homeFixtures() + '</section>';
-  const validated = list.filter(p => p.markets.result.evidence.status === 'validated' && p.markets.result.pick.p <= SIGNAL_RULES.trivialAbove)
-    .map(p => ({ p, s: signalScore(p) })).sort((a, b) => b.s.score - a.s.score).map(x => x.p);
-  const provisional = list.filter(p => p.markets.result.evidence.status !== 'validated');
-  const trivial = list.filter(p => p.markets.result.evidence.status === 'validated' && p.markets.result.pick.p > SIGNAL_RULES.trivialAbove);
-  if (validated.length) {
-    html += '<div class="section" style="margin-top:18px">' + heroCard(validated[0], 'Strongest signal') + '</div>';
-    if (validated.length > 1) html += '<div class="section"><div class="section-head"><h2 class="section-title">Next strongest</h2><span class="section-note">Same market, same validated model, so directly comparable.</span></div>' +
-      '<div class="grid grid-2">' + validated.slice(1, 5).map(signalCard).join('') + '</div></div>';
-  } else {
-    html += '<div class="notice" style="margin-top:18px">No validated-model predictions qualify for ranking in this window. Provisional estimates are listed below.</div>';
-  }
-  if (trivial.length) html += '<p class="section-note" style="margin-top:10px">' + trivial.length + ' heavy favourite' + (trivial.length > 1 ? 's' : '') + ' above 85% left out of the ranking: likely, but not informative.</p>';
-  if (provisional.length) html += '<div class="section"><div class="section-head"><h2 class="section-title">Provisional predictions</h2><span class="section-note">Promoted or newly seen clubs. These use Championship history and are pulled halfway to league averages, so they are kept apart from the ranking.</span></div>' +
-    '<div class="grid grid-2">' + provisional.slice(0, 6).map(signalCard).join('') + '</div></div>';
-  html += homeFixtures();
-  html += '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">How the ranking works</summary><ol class="explain" style="margin-top:8px">' +
-    '<li>Only predictions from the validated match-result model are ranked. Every other market and every provisional estimate stays out, because their backtests show no proven edge over league averages.</li>' +
-    '<li>Each probability is pulled toward how often picks in the same range actually landed in the 409-match backtest, so an over-confident range is marked down.</li>' +
-    '<li>Matches where a side has fewer than 10 Premier League venue games are marked down for completeness. Favourites above 85% are left out as trivial.</li>' +
-    '<li>Model fair odds are 1 ÷ probability with no bookmaker margin, rounded to the nearest familiar UK price. They are not bookmaker prices and not a value judgement.</li></ol></details>';
-  return html + '</section>';
+  const first = kickoffMs(list[0].fixture);
+  const round = list.filter(p => kickoffMs(p.fixture) - first < 5 * 86400000);
+  const later = list.filter(p => kickoffMs(p.fixture) - first >= 5 * 86400000);
+  const best = round.slice().sort((a, b) => lowerBoundOf(b) - lowerBoundOf(a))[0];
+  if (best && lowerBoundOf(best) >= 0) html += '<div class="section" style="margin-top:18px">' + homeHero(best) + '</div>';
+  html += '<div class="section"><div class="section-head"><h2 class="section-title">Match by match</h2><span class="section-note">Most likely uses every market but ranks on credible chance, so a big number with little evidence behind it does not win.</span></div>' +
+    round.map(matchRecRow).join('') + '</div>';
+  if (later.length) html += '<details class="section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Following round (' + later.length + ' matches)</summary>' + later.map(matchRecRow).join('') + '</details>';
+  const validated = list.filter(p => p.markets.result.evidence.status === 'validated').map(p => ({ p, s: signalScore(p) })).sort((a, b) => b.s.score - a.s.score).map(x => x.p);
+  if (validated.length) html += '<div class="section"><div class="section-head"><h2 class="section-title">Strongest match-result signals</h2><span class="section-note">The validated match-result model only, ranked by backtest-calibrated probability.</span></div>' +
+    '<div class="grid grid-2">' + validated.slice(0, 4).map(signalCard).join('') + '</div></div>';
+  html += '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">How Most Likely, Best Value and No Bet work</summary><ol class="explain" style="margin-top:8px">' +
+    '<li><b>Most likely</b> looks at every backtested selection in every market, including heavy favourites. Each chance is pulled toward how often similar picks landed in the backtest, then ranked by the cautious end of a 90% range. Thin evidence therefore counts for less than a well-tested estimate, even with a bigger number.</li>' +
+    '<li><b>Best value</b> needs a real bookmaker price. MatchIQ has no lawful free odds feed, so enter a price you have seen. Add every outcome’s price to remove the bookmaker’s margin. Only the validated match-result model, at a well-backtested probability, can call value, and only at +5% estimated expected value or more.</li>' +
+    '<li><b>No bet</b> is a real answer: when evidence is thin, the price is short or no price exists. The predictions stay visible underneath.</li>' +
+    '<li>Model fair odds are 1 ÷ probability with no margin, rounded to a familiar UK price. They are never bookmaker prices.</li></ol></details>';
+  return html + homeFixtures() + '</section>';
 }
 
 function homeFixtures() {
@@ -374,12 +512,18 @@ function viewMatch(id) {
 
   if (pred && ms > Date.now()) {
     const r = pred.markets.result;
-    html += '<div class="section">' + heroCard(pred, 'Leading prediction') + '</div>' +
-      '<details class="card section" open><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Why this prediction</summary><ul class="explain" style="margin-top:6px">' + resultExplanation(pred) + '</ul>' +
+    html += '<div class="section">' + recommendationPair(pred) + '</div>' +
+      '<div class="section">' + heroCard(pred, 'Match result') + '</div>' +
+      '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Why this match-result prediction</summary><ul class="explain" style="margin-top:6px">' + resultExplanation(pred) + '</ul>' +
       '<p class="dim" style="font-size:13px;margin-top:10px">' + esc(r.evidence.summary) + ' The models use results and match statistics only. They know nothing about injuries, team news, line-ups or motivation.</p></details>';
     html += '<div class="section"><div class="section-head"><h2 class="section-title">Every market</h2><span class="section-note">Published ' + esc(ago(pred.published_at)) + ' · record ' + esc(pred.record_id) + '. Probability and evidence strength are shown separately: a 60% estimate with weak evidence is still weak.</span></div>' +
       '<div class="grid grid-2">' + MARKET_ORDER.map(k => marketCard(k, normaliseMarket(k, pred.markets[k]), { id, canLog: true })).join('') + '</div></div>';
   } else if (rec) {
+    const ml = (rec.recommendations || {}).most_likely, mls = (rec.settlement || {}).most_likely;
+    if (ml) html += '<div class="section card"><h2 class="section-title">Sealed recommendations</h2><p style="margin-top:8px">' +
+      (ml.decision === 'most_likely' ? 'Most likely: <b>' + esc(ml.label) + '</b> (' + esc(MARKETS[ml.market].name) + ') at ' + pct(ml.p) + '. ' : 'Most likely: No bet. ') +
+      (mls && 'won' in mls ? '<span class="badge ' + (mls.won ? 'won' : 'lost') + '">' + (mls.won ? 'Landed' : 'Missed') + '</span>' : mls ? '<span class="badge pending">Result pending</span>' : '') +
+      '</p><p class="muted" style="margin-top:6px">Best value: ' + esc(((rec.recommendations || {}).best_value || {}).reason || 'No bet') + '</p></div>';
     html += '<div class="section"><div class="section-head"><h2 class="section-title">What MatchIQ predicted</h2><span class="section-note">Published ' + esc(london(Date.parse(rec.published_at), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })) + ' UK, before kick-off. Sealed record ' + esc(rec.record_id) + ': it cannot be changed after the result.</span></div>' +
       '<div class="grid grid-2">' + MARKET_ORDER.filter(k => rec.markets[k]).map(k => marketCard(k, normaliseMarket(k, rec.markets[k]), { id, canLog: false, settlement: rec.settlement })).join('') + '</div></div>';
   } else {
@@ -414,6 +558,7 @@ function viewResults() {
   html += '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Calibration, live</h2><p class="section-note" style="margin:4px 0 12px">Pale bar: average predicted chance. Green bar: how often it happened.</p>' + (bandRows ? '<div class="calib">' + bandRows + '</div>' : '<p class="muted">Appears once predictions settle.</p>') + '</div>' +
     backtestCard(rel) + '</div>';
 
+  html += scorecard(perf);
   const tiers = perf.tiers || {};
   const tierLabel = { T1: 'Validated frozen model', T2: 'Provisional: promoted clubs', T3: 'League average fallback' };
   const teams = Object.entries(perf.teams || {}).filter(([, t]) => t.n >= 5).sort((a, b) => b[1].n - a[1].n);
@@ -430,6 +575,32 @@ function viewResults() {
     [['settled', 'Settled'], ['pending', 'Awaiting result'], ['future', 'Upcoming']].map(([k, l]) => '<button type="button" data-rfilter="' + k + '" aria-pressed="' + (resultsFilter === k) + '">' + l + '</button>').join('') + '</div></div>' +
     (shown.length ? shown.map(logRow).join('') : '<p class="muted" style="padding:16px">Nothing here yet.</p>') + '</div>';
   return html + '</section>';
+}
+
+function diaryByRecommendation() {
+  const groups = { most_likely: [], best_value: [], other: [] };
+  for (const e of getStoredDiary()) (groups[e.recommendation] || groups.other).push(e);
+  return Object.entries(groups).map(([k, list]) => {
+    const settled = list.filter(e => e.outcome && e.outcome !== 'pending');
+    const s = calc.summarizeBetDiary(settled);
+    return { key: k, n: list.length, settled: settled.length, won: s.wonCount, lost: s.lostCount, void: s.voidCount, staked: s.settledStaked, profit: s.netProfit, roi: s.roiPct };
+  });
+}
+
+function scorecard(perf) {
+  const ml = perf.most_likely || { n: 0 };
+  const byMarket = Object.entries(perf.most_likely_by_market || {});
+  const dec = perf.decisions || {};
+  const labels = { most_likely: 'Most Likely picks', best_value: 'Best Value picks', other: 'Other bets' };
+  const rows = diaryByRecommendation().map(g => '<tr><td>' + labels[g.key] + '</td><td class="num">' + g.n + '</td><td class="num">' + g.won + '–' + g.lost + '–' + g.void + '</td><td class="num">£' + g.staked.toFixed(2) + '</td><td class="num ' + (g.profit > 0 ? 'pos' : g.profit < 0 ? 'neg' : '') + '">' + (g.profit >= 0 ? '+' : '−') + '£' + Math.abs(g.profit).toFixed(2) + '</td><td class="num">' + (g.settled ? g.roi.toFixed(0) + '%' : '—') + '</td></tr>').join('');
+  return '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Most Likely scorecard (sealed)</h2>' +
+    '<p class="section-note" style="margin:4px 0 10px">Every Most Likely pick is sealed before kick-off and scored when the result is confirmed.</p>' +
+    (ml.n ? '<div class="tiles"><div class="tile"><div class="k">Settled</div><div class="v">' + ml.n + '</div></div><div class="tile"><div class="k">Landed</div><div class="v">' + pct(ml.pick_hit_rate) + '</div><div class="s">average estimate ' + pct(ml.mean_pick_p) + '</div></div><div class="tile"><div class="k">Brier</div><div class="v">' + ml.brier.toFixed(3) + '</div></div></div>' +
+      (byMarket.length ? '<table class="table" style="margin-top:10px"><tbody>' + byMarket.map(([k, v]) => '<tr><td>' + esc(MARKETS[k].name) + '</td><td class="num">' + v.n + '</td><td class="num">' + pct(v.pick_hit_rate) + '</td></tr>').join('') + '</tbody></table>' : '')
+      : '<p class="muted">No Most Likely pick has settled yet. The first ones settle once the 31 October fixtures have confirmed results.</p>') +
+    '<p class="section-note" style="margin-top:10px">Value decisions so far: ' + (dec['best_value:no_bet'] || 0) + ' No Bet (no bookmaker price available), ' + (dec['best_value:value'] || 0) + ' value calls.' + (ml.n && !ml.sufficient_sample ? ' Small sample: treat these figures as anecdotes.' : '') + '</p></div>' +
+    '<div class="card"><h2 class="section-title">Your recorded bets</h2><p class="section-note" style="margin:4px 0 10px">From your Bet Diary in this browser, at the prices you actually took. A high hit rate is not the same as profit.</p>' +
+    '<div style="overflow-x:auto"><table class="table"><thead><tr><th>Type</th><th style="text-align:right">Bets</th><th style="text-align:right">W–L–V</th><th style="text-align:right">Settled stake</th><th style="text-align:right">Profit</th><th style="text-align:right">ROI</th></tr></thead><tbody>' + rows + '</tbody></table></div></div></div>';
 }
 
 function backtestCard(rel) {
@@ -494,7 +665,8 @@ function betCard(entry) {
   const legs = entry.type === 'accumulator' ? (entry.legs || []).map((leg, i) => '<div class="leg"><span>' + esc(leg.selection) + ' · <b class="mono">' + calc.formatFractionalOdds(+leg.odds) + '</b></span>' +
     outcomeSelect(leg.outcome, 'data-leg="' + esc(entry.id) + '" data-index="' + i + '"', 'Settle ' + leg.selection) + '</div>').join('') : '';
   return '<article class="card bet"><div class="bet-top"><div><div class="bet-sel">' + esc(entry.selection) + '</div><div class="dim" style="font-size:13px">' + esc(entry.fixture || '') + ' · ' + esc(entry.date || '') + ' · ' + esc(entry.marketName || entry.market || '') + '</div></div>' +
-    '<span class="badge ' + (entry.origin === 'independent' ? 'market' : 'validated') + '">' + (entry.origin === 'independent' ? 'Own choice' : 'MatchIQ pick') + '</span></div>' + legs +
+    '<span style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end"><span class="badge ' + (entry.origin === 'independent' ? 'market' : 'validated') + '">' + (entry.origin === 'independent' ? 'Own choice' : 'MatchIQ pick') + '</span>' +
+      (entry.recommendation ? '<span class="badge provisional">' + esc(REC_LABEL[entry.recommendation] || entry.recommendation) + '</span>' : '') + '</span></div>' + legs +
     '<div class="bet-facts"><div><span>Price taken</span><b>' + calc.formatFractionalOdds(+entry.odds) + '</b></div>' +
       (entry.model_fair_odds ? '<div><span>Model fair odds</span><b>' + esc(entry.model_fair_odds) + '</b></div>' : '') +
       '<div><span>Stake</span><b>' + money(+entry.stake) + '</b></div><div><span>Bookmaker</span><b style="font-family:var(--body)">' + esc(entry.bookmaker || '—') + '</b></div>' +
@@ -591,10 +763,11 @@ function openDiary(prefill) {
   $('modal-market-select').value = modalPrefill.market || 'wins';
   $('modal-selection-input').value = modalPrefill.selection || '';
   $('modal-origin-select').value = modalPrefill.selection ? 'matchiq' : 'independent';
-  $('modal-odds-input').value = '';
+  $('modal-odds-input').value = modalPrefill.odds || '';
   $('modal-bet-type').value = 'single';
   $('modal-fair-hint').textContent = modalPrefill.fair ? 'MatchIQ model fair odds ' + modalPrefill.fair + '. That is not a bookmaker price: enter the price you were actually offered.' : '';
   toggleAccumulatorFields();
+  updateModalPnlPreview();
   $('diary-modal').hidden = false;
   setTimeout(() => (modalPrefill.selection ? $('modal-odds-input') : $('modal-selection-input')).focus(), 30);
 }
@@ -650,6 +823,7 @@ function handleDiaryFormSubmit(event) {
     origin: $('modal-origin-select').value, bookmaker: $('modal-bookmaker-input').value.trim() || 'Bookmaker',
     odds, stake, potentialReturn: stake * odds, outcome: 'pending', timestamp: new Date().toISOString(),
     model_p: linked && modalPrefill.p != null ? modalPrefill.p : undefined, model_fair_odds: linked ? modalPrefill.fair : undefined,
+    recommendation: linked && modalPrefill.rec && $('modal-selection-input').value.trim() === modalPrefill.selection ? modalPrefill.rec : undefined,
     notes: $('modal-notes-input').value.trim()
   };
   try { const diary = getStoredDiary(); diary.unshift(entry); saveStoredDiary(diary); }
@@ -756,8 +930,27 @@ document.addEventListener('click', event => {
   else if (t.dataset.chip) { feedbackState.chips.has(t.dataset.chip) ? feedbackState.chips.delete(t.dataset.chip) : feedbackState.chips.add(t.dataset.chip); render(); }
   else if (t.closest('#bookmaker-quick')) $('modal-bookmaker-input').value = t.textContent;
 });
+document.addEventListener('input', event => {
+  const t = event.target;
+  if (t.dataset && t.dataset.price) {
+    const all = readPrices(), mine = all[t.dataset.match] || {};
+    if (t.value.trim()) mine[t.dataset.price] = t.value.trim(); else delete mine[t.dataset.price];
+    all[t.dataset.match] = mine;
+    writePrices(all);
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => refreshValue(t.dataset.match), 250);
+  }
+});
 document.addEventListener('change', event => {
   const t = event.target;
+  if (t.dataset && t.dataset.valueSelect) {
+    const all = readPrices(), mine = all[t.dataset.valueSelect] || {};
+    mine._selected = t.value;
+    all[t.dataset.valueSelect] = mine;
+    writePrices(all);
+    refreshValue(t.dataset.valueSelect);
+    return;
+  }
   if (t.dataset.outcome) updateDiaryEntryOutcome(t.dataset.outcome, t.value);
   else if (t.dataset.leg) updateAccumulatorLegOutcome(t.dataset.leg, +t.dataset.index, t.value);
   else if (t.id === 'diary-profile-filter') { diaryProfileFilter = t.value; render(); }
