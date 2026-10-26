@@ -1,0 +1,46 @@
+name: MatchIQ fixture, prediction and history refresh
+# Scheduled runs only fire from the default branch, so this stays inactive until the
+# owner merges it. Run it manually on a branch with "Run workflow" to test.
+on:
+  schedule:
+    - cron: '40 */6 * * *'   # every 6 hours: 4 football-data.org requests a day, far under 10/minute
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: matchiq-data-writes   # never overlaps another data commit from this workflow
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned dependencies
+        run: python -m pip install -r pipeline/requirements.txt
+      - name: Run tests before touching data
+        run: |
+          python -m unittest discover -s tests -p "test_*.py"
+          for t in tests/*.js; do node "$t"; done
+      - name: Refresh fixtures, publish predictions, settle results
+        env:
+          # Optional free token from football-data.org. Without it the run uses
+          # OpenLigaDB and openfootball only. The token is never written to any file.
+          FOOTBALL_DATA_ORG_TOKEN: ${{ secrets.FOOTBALL_DATA_ORG_TOKEN }}
+        run: python -m pipeline.run
+      - name: Rebuild public bundle
+        run: python build_public_dist.py
+      - name: Commit data (pipeline_status is committed even when the refresh failed)
+        if: always()
+        run: |
+          git config user.name 'matchiq-data-bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/fixtures.json data/predictions.json data/prediction_history.json data/shadow_history.json data/performance.json data/pipeline_status.json public-dist
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh fixtures, predictions and prediction history'
+            git pull --rebase
+            git push
+          fi
