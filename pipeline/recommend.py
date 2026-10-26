@@ -33,8 +33,15 @@ def _band(reliability, p):
     return next((b for b in bands if b["lo"] <= p < b["hi"]), None)
 
 
-def candidates(markets, reliability):
+def candidates(markets, reliability, validation=None):
+    """`validation` (data/league_validation.json entry) is given for leagues other than the
+    Premier League: their sample sizes come from that league's own backtest, never from the
+    Premier League's 409 matches."""
     out = []
+    vmarkets = (validation or {}).get("markets") or {}
+    league_name = (validation or {}).get("name", "league")
+    blend_n = lambda market: vmarkets.get(market, {}).get("n", 0) if validation else BLEND_BACKTEST_N
+    basis_n = lambda market: f"league-anchored blend, {blend_n(market)} {league_name + ' ' if validation else ''}backtest matches"
     result = markets.get("result")
     if result:
         for s in [result["pick"]]:  # backtest calibration bands describe top picks only
@@ -49,6 +56,11 @@ def candidates(markets, reliability):
                 league = dict(zip("HDA", result.get("league_p") or [1 / 3] * 3))[s["key"]]
                 p = (T2_BACKTEST_N * s["p"] + SHRINK_WEIGHT * league) / (T2_BACKTEST_N + SHRINK_WEIGHT)
                 n, basis = T2_BACKTEST_N, "promoted-club model, 41 backtest matches"
+            elif result["tier"] == "L1" and validation and result["evidence"]["strength"] != "none":
+                league = dict(zip("HDA", result.get("league_p") or [1 / 3] * 3))[s["key"]]
+                n = vmarkets.get("result", {}).get("n", 0)
+                p = (n * s["p"] + SHRINK_WEIGHT * league) / (n + SHRINK_WEIGHT) if n else league
+                basis = f"{league_name} model, {n} backtest matches ({validation.get('test_season_label')})"
             else:
                 continue  # league average: says nothing about this match
             out.append({"market": "result", "key": s["key"], "label": s["label"], "p": s["p"], "credible_p": round(p, 4),
@@ -62,26 +74,26 @@ def candidates(markets, reliability):
             s = line[side]
             league = line.get("league_p")
             league = None if league is None else (league if side == "over" else 1 - league)
-            credible = s["p"] if league is None else (BLEND_BACKTEST_N * s["p"] + SHRINK_WEIGHT * league) / (BLEND_BACKTEST_N + SHRINK_WEIGHT)
+            credible = s["p"] if league is None else (blend_n(market) * s["p"] + SHRINK_WEIGHT * league) / (blend_n(market) + SHRINK_WEIGHT)
             out.append({"market": market, "key": side, "line": line["line"], "label": s["label"], "p": s["p"], "credible_p": round(credible, 4),
-                        "n": BLEND_BACKTEST_N, "status": m["evidence"]["status"], "strength": m["evidence"]["strength"],
-                        "basis": "league-anchored blend, 409 backtest matches"})
+                        "n": blend_n(market), "status": m["evidence"]["status"], "strength": m["evidence"]["strength"],
+                        "basis": basis_n(market)})
     btts = markets.get("btts")
     if btts and btts["evidence"]["strength"] != "none":
         for s in btts["selections"]:
             league = btts.get("league_p")
             league = None if league is None else (league if s["key"] == "yes" else 1 - league)
-            credible = s["p"] if league is None else (BLEND_BACKTEST_N * s["p"] + SHRINK_WEIGHT * league) / (BLEND_BACKTEST_N + SHRINK_WEIGHT)
-            out.append({"market": "btts", "key": s["key"], "label": s["label"], "p": s["p"], "credible_p": round(credible, 4), "n": BLEND_BACKTEST_N,
+            credible = s["p"] if league is None else (blend_n(market) * s["p"] + SHRINK_WEIGHT * league) / (blend_n(market) + SHRINK_WEIGHT)
+            out.append({"market": "btts", "key": s["key"], "label": s["label"], "p": s["p"], "credible_p": round(credible, 4), "n": blend_n("btts"),
                         "status": btts["evidence"]["status"], "strength": btts["evidence"]["strength"],
-                        "basis": "league-anchored blend, 409 backtest matches"})
+                        "basis": basis_n("btts")})
     for c in out:
         c["lower_bound"] = round(lower_bound(c["credible_p"], c["n"]), 4)
     return out
 
 
-def recommend(markets, reliability):
-    pool = candidates(markets, reliability)
+def recommend(markets, reliability, validation=None):
+    pool = candidates(markets, reliability, validation)
     if not pool:
         most = {"decision": "no_bet", "reason": "No market has enough evidence about this match to feature a selection."}
     else:

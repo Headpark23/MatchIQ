@@ -212,10 +212,20 @@ def _band(p):
 
 
 def performance(ledger):
+    """Premier League summaries in the established top-level keys, plus the same summary for
+    every other competition under `by_competition` (leagues are never pooled)."""
+    records = ledger["records"]
+    main = _performance([r for r in records if r["fixture"]["competition"] == "PL"], records)
+    others = sorted({r["fixture"]["competition"] for r in records} - {"PL"})
+    main["by_competition"] = {c: _performance([r for r in records if r["fixture"]["competition"] == c], records) for c in others}
+    return main
+
+
+def _performance(records, all_records=None):
     """Summaries from evaluated records only. Groups below MIN_REPORT_N are flagged."""
     groups = defaultdict(list)
     timeline = []
-    for r in ledger["records"]:
+    for r in records:
         if not r.get("evaluated"):
             continue
         for market, s in (r.get("settlement") or {}).items():
@@ -254,7 +264,7 @@ def performance(ledger):
     timeline.sort(key=lambda x: x["kickoff_utc"])
     out["result_timeline"] = timeline
     most_rows, most_by_market, decisions = [], defaultdict(list), defaultdict(int)
-    for r in ledger["records"]:
+    for r in records:
         if not r.get("evaluated"):
             continue
         rec = r.get("recommendations") or {}
@@ -269,8 +279,8 @@ def performance(ledger):
     out["most_likely"] = summary(most_rows) if most_rows else {"n": 0, "sufficient_sample": False}
     out["most_likely_by_market"] = {k: summary(v) for k, v in most_by_market.items()}
     out["decisions"] = dict(decisions)
-    out["evaluated_matches"] = len({r["match_id"] for r in ledger["records"] if r.get("evaluated")})
-    out["published_records"] = len(ledger["records"])
+    out["evaluated_matches"] = len({r["match_id"] for r in records if r.get("evaluated")})
+    out["published_records"] = len(records)
     return json.loads(json.dumps(out))
 
 

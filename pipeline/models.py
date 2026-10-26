@@ -38,6 +38,7 @@ STAT_FIELDS = {"goals": ("FTHG", "FTAG"), "corners": ("HC", "AC"), "cards": ("HY
 MARKET_NAMES = {"result": "Match result", "goals": "Total goals", "btts": "Both teams to score",
                 "corners": "Total corners", "cards": "Total cards (yellow)", "shots": "Shots on target"}
 POOLED_SHRINK = 0.5
+LEAGUE_MODEL_VERSION = "dc-league-v1"  # kept out of VERSIONS: VERSIONS feeds the Premier League input fingerprint
 VERSIONS = {"T1": "dixon-coles-v1-forward-frozen", "T2": "dc-pooled-shrunk50-v1", "T3": "league-average-v1",
             "blend": "blend30-league-v1", "corners_frozen": "v0.9-frozen-poisson"}
 SHADOW_VERSION = "dc-decay-epl-v1-shadow"
@@ -58,23 +59,26 @@ class Context:
     """Everything fitted from results strictly before `as_of`. Built once per run (or
     once per backtest day) so every fixture on that day sees identical inputs."""
 
-    def __init__(self, results, as_of, promoted_by_season=None, frozen_ledger=None):
+    def __init__(self, results, as_of, promoted_by_season=None, frozen_ledger=None, competition="PL", league_name="Premier League", validation=None):
         self.as_of = as_of
+        self.competition, self.league_name, self.validation = competition, league_name, validation or {}
         self.prior = sorted([r for r in results if r["date"] < as_of], key=lambda r: r["date"])
-        self.epl = [r for r in self.prior if r["competition"] == "PL"]
+        self.epl = [r for r in self.prior if r["competition"] == competition]  # the league being predicted
         self.frozen_ledger = frozen_ledger or {}
         self.promoted_by_season = promoted_by_season or {}
         self.home_counts = Counter(r["home"] for r in self.epl)
         self.away_counts = Counter(r["away"] for r in self.epl)
-        self.frozen = self._fit(self.epl, weighted=False) if len(self.epl) > 100 else None
+        other = competition != "PL"  # frozen/pooled/shadow models exist for the Premier League only
+        self.frozen = self._fit(self.epl, weighted=False) if len(self.epl) > 100 and not other else None
         window = as_of - dt.timedelta(days=POOLED_WINDOW_DAYS)
         self.pooled_counts = Counter()
         for r in self.prior:
             if r["date"] >= window:
                 self.pooled_counts[r["home"]] += 1
                 self.pooled_counts[r["away"]] += 1
-        self.pooled = self._fit(self.prior, weighted=True) if len(self.prior) > 100 else None
-        self.shadow = self._fit(self.epl, weighted=True) if len(self.epl) > 100 else None
+        self.pooled = self._fit(self.prior, weighted=True) if len(self.prior) > 100 and not other else None
+        self.shadow = self._fit(self.epl, weighted=True) if len(self.epl) > 100 and not other else None
+        self.league_model = self._fit(self.epl, weighted=True) if other and len(self.epl) > 100 else None
         self.base = self._base_rates()
         self.prior_rates = self._promoted_prior()
 
@@ -113,8 +117,22 @@ class Context:
     def frozen_eligible(self, home, away):
         return self.frozen is not None and self.home_counts[home] >= 5 and self.away_counts[away] >= 5
 
+    def league_result(self, fixture):
+        """Other leagues: Dixon-Coles with time decay fitted on that league's own results.
+        A club with fewer than POOLED_MIN_MATCHES recent matches (a newly promoted side)
+        falls back to the league average, because no second-division data is held."""
+        home, away = fixture["home"], fixture["away"]
+        if self.league_model is not None and min(self.pooled_counts[home], self.pooled_counts[away]) >= POOLED_MIN_MATCHES:
+            pred = self.league_model.predict(home, away)
+            return {"tier": "L1", "p": [float(x) for x in pred.home_draw_away], "grid": pred, "note": f"{self.league_name} Dixon-Coles fitted on {self.league_name} results only",
+                    "training_matches": len(self.epl)}
+        return {"tier": "T3", "p": self.base["result"], "note": f"{self.league_name} average result frequencies (not enough recent matches for one of the clubs)",
+                "training_matches": len(self.epl)}
+
     def result(self, fixture):
         home, away = fixture["home"], fixture["away"]
+        if self.competition != "PL":
+            return self.league_result(fixture)
         ledger = self.frozen_ledger.get((fixture["date"].isoformat(), home, away))
         if ledger:
             p = [ledger["probabilities"][k] for k in "HDA"]
@@ -180,7 +198,23 @@ def _sel(key, label, p):
     return {"key": key, "label": label, "p": round(float(p), 4), "fair_odds": fair_odds(p)}
 
 
-def _ou_market(market, lines_p, base, model_label, model_note, inputs, explanation, model_version):
+def league_evidence(ctx, market, has_inputs, label="the model"):
+    """Evidence block for the blended markets. Premier League keeps its Mission 063/064
+    wording; other leagues use their own walk-forward backtest (data/league_validation.json)."""
+    if ctx is None or ctx.competition == "PL":
+        return {"status": "provisional", "strength": "none" if not has_inputs else "weak",
+                "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by " + label + "."
+                if has_inputs else "No team-level data for this market; this is the Premier League average."}
+    v = (ctx.validation.get("markets") or {}).get(market)
+    if not v:
+        return {"status": "provisional", "strength": "none", "summary": f"Not yet backtested for the {ctx.league_name}: read this as the {ctx.league_name} rate."}
+    ok = has_inputs and v["blend_brier"] <= v["league_brier"] + 0.0005
+    return {"status": "provisional", "strength": "weak" if ok else "none",
+            "summary": f"{ctx.league_name} backtest ({v['n']} matches, {ctx.validation.get('test_season_label')}): Brier {v['blend_brier']:.3f} against {v['league_brier']:.3f} for the league average. "
+                       + (f"No proven edge: read this as the league rate nudged by {label}." if ok else "No better than the league average, so this is shown as the league rate.")}
+
+
+def _ou_market(market, lines_p, base, model_label, model_note, inputs, explanation, model_version, ctx=None):
     lines = []
     for line, p_model in lines_p.items():
         base_p = base[line]
@@ -190,9 +224,7 @@ def _ou_market(market, lines_p, base, model_label, model_note, inputs, explanati
     main = next(x for x in lines if x["line"] == MAIN_LINE[market])
     pick = main["over"] if main["over"]["p"] >= 0.5 else main["under"]
     return {"market": market, "name": MARKET_NAMES[market], "model_version": model_version,
-            "evidence": {"status": "provisional", "strength": "none" if not any(v is not None for v in lines_p.values()) else "weak",
-                         "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by " + model_label + "."
-                         if any(v is not None for v in lines_p.values()) else "No team-level data for this market; this is the Premier League average."},
+            "evidence": league_evidence(ctx, market, any(v is not None for v in lines_p.values()), model_label),
             "pick": {**pick, "line": main["line"]}, "lines": lines, "inputs": inputs, "explanation": explanation, "method": model_note}
 
 
@@ -206,7 +238,7 @@ def predict(fixture, ctx, evidence=None):
     pick = max(selections, key=lambda s: s["p"])
     tier_evidence = evidence.get(res["tier"], {})
     result_market = {
-        "market": "result", "name": MARKET_NAMES["result"], "tier": res["tier"], "model_version": VERSIONS[res["tier"]],
+        "market": "result", "name": MARKET_NAMES["result"], "tier": res["tier"], "model_version": VERSIONS.get(res["tier"], LEAGUE_MODEL_VERSION),
         "evidence": {"status": "validated" if res["tier"] == "T1" else "provisional",
                      "strength": tier_evidence.get("strength", {"T1": "moderate", "T2": "weak"}.get(res["tier"], "none")),
                      "summary": tier_evidence.get("summary", res["note"])},
@@ -234,23 +266,24 @@ def predict(fixture, ctx, evidence=None):
         dist = lambda d: float(sum(k * p for k, p in enumerate(np.asarray(d() if callable(d) else d))))
         expected = [round(dist(grid.home_goal_distribution), 2), round(dist(grid.away_goal_distribution), 2)]
     base_goals = ctx.base["lines"]["goals"]
-    goal_expl = [f"Premier League matches average {base_goals['mean']:.2f} goals; {round(100 * base_goals[2.5])}% go over 2.5."]
+    goal_expl = [f"{ctx.league_name} matches average {base_goals['mean']:.2f} goals; {round(100 * base_goals[2.5])}% go over 2.5."]
     if expected:
         goal_expl.insert(0, f"The score model expects about {expected[0]:.1f} goals for {home} and {expected[1]:.1f} for {away}.")
     goals = _ou_market("goals", goal_lines, base_goals, "the Dixon-Coles score model",
-                       "30% score-model probability + 70% Premier League rate for each line",
+                       f"30% score-model probability + 70% {ctx.league_name} rate for each line",
                        {"league_mean_goals": round(base_goals["mean"], 2), "expected_goals": expected},
-                       goal_expl, VERSIONS["blend"])
+                       goal_expl, VERSIONS["blend"], ctx)
     btts_model = float(grid.btts_yes) if grid is not None else None
     btts_p = BLEND_MODEL_WEIGHT * btts_model + (1 - BLEND_MODEL_WEIGHT) * ctx.base["btts"] if btts_model is not None else ctx.base["btts"]
     yes, no = _sel("yes", "Yes", btts_p), _sel("no", "No", 1 - btts_p)
     btts = {"market": "btts", "name": MARKET_NAMES["btts"], "model_version": VERSIONS["blend"],
-            "evidence": {"status": "provisional", "strength": "weak" if btts_model is not None else "none",
-                         "summary": "Backtests show no proven edge over the league average (409 matches)."},
+            "evidence": ({"status": "provisional", "strength": "weak" if btts_model is not None else "none",
+                          "summary": "Backtests show no proven edge over the league average (409 matches)."}
+                         if ctx.competition == "PL" else league_evidence(ctx, "btts", btts_model is not None, "the Dixon-Coles score model")),
             "pick": yes if yes["p"] >= 0.5 else no, "selections": [yes, no],
             "model_p": None if btts_model is None else round(btts_model, 4), "league_p": round(ctx.base["btts"], 4),
-            "explanation": [f"Both teams scored in {round(100 * ctx.base['btts'])}% of Premier League matches in the training data."],
-            "method": "30% score-model probability + 70% Premier League rate"}
+            "explanation": [f"Both teams scored in {round(100 * ctx.base['btts'])}% of {ctx.league_name} matches in the training data."],
+            "method": f"30% score-model probability + 70% {ctx.league_name} rate"}
 
     markets = {"result": result_market, "goals": goals, "btts": btts}
     for market in ("corners", "cards", "shots"):
@@ -261,14 +294,14 @@ def predict(fixture, ctx, evidence=None):
             continue
         mean, nh, na = ctx.rolling_mean(market, home, away)
         line_p = {line: (poisson_over(mean, line) if mean else None) for line in LINES[market]}
-        expl = [f"Premier League average: {base['mean']:.1f} per match; {round(100 * base[MAIN_LINE[market]])}% go over {MAIN_LINE[market]}."]
+        expl = [f"{ctx.league_name} average: {base['mean']:.1f} per match; {round(100 * base[MAIN_LINE[market]])}% go over {MAIN_LINE[market]}."]
         if mean:
             expl.insert(0, f"Recent venue form points to about {mean:.1f} (last {nh} {home} home games, last {na} {away} away games).")
         else:
             expl.insert(0, f"Not enough venue statistics yet ({nh} home / {na} away games with data), so this is the league average.")
-        m = _ou_market(market, line_p, base, "recent venue averages", "30% venue-average Poisson + 70% Premier League rate",
+        m = _ou_market(market, line_p, base, "recent venue averages", f"30% venue-average Poisson + 70% {ctx.league_name} rate",
                        {"venue_expected": None if mean is None else round(mean, 2), "league_mean": round(base["mean"], 2),
-                        "home_games": nh, "away_games": na}, expl, VERSIONS["blend"])
+                        "home_games": nh, "away_games": na}, expl, VERSIONS["blend"], ctx)
         if market == "corners" and mean:
             raw = poisson_over(mean, 9.5)
             m["frozen_reference"] = {"model_version": VERSIONS["corners_frozen"], "over_9_5": round(raw, 4),

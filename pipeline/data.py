@@ -47,7 +47,9 @@ def load_co_uk(path=ROOT / "data" / "matches.json"):
 
 def load_snapshot(name, competition, season):
     payload = json.loads((SNAPSHOTS / name).read_text(encoding="utf-8"))
-    return [m for m in parse_openfootball(payload, competition, season)]
+    # Legacy club naming: the Premier League models and their input fingerprint were built
+    # with it. The Championship as a league of its own uses canonical_for("ELC", ...).
+    return [m for m in parse_openfootball(payload, competition, season, namer=canonical)]
 
 
 def championship_history():
@@ -146,7 +148,7 @@ def co_uk_as_matches(rows, season):
         if r["season"] != season:
             continue
         kickoff = dt.datetime.combine(r["date"], dt.time(12, 0), dt.timezone.utc)
-        out.append({"competition": "PL", "season": season, "home": r["home"], "away": r["away"],
+        out.append({"competition": r["competition"], "season": season, "home": r["home"], "away": r["away"],
                     "kickoff_utc": kickoff.isoformat().replace("+00:00", "Z"), "status": "FINISHED",
                     "score": [r["hg"], r["ag"]], "source": "football-data.co.uk", "source_updated": None})
     return out

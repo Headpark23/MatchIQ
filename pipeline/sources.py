@@ -17,10 +17,11 @@ import urllib.error
 import urllib.request
 from zoneinfo import ZoneInfo
 
-from .teams import canonical
+from .teams import canonical, canonical_for
 
 UK = ZoneInfo("Europe/London")
 UTC = dt.timezone.utc
+CET = ZoneInfo("Europe/Paris")  # openfootball lists German, Spanish, Italian and French kick-offs in local time
 USER_AGENT = "MatchIQ-pipeline/1.0 (+https://github.com/Headpark23/MatchIQ)"
 SOURCE_LABELS = {
     "football-data.org": "football-data.org (free tier)",
@@ -54,8 +55,9 @@ def http_json(url, headers=None, retries=3, timeout=20, opener=None):
     raise RuntimeError(f"{url}: {last}")
 
 
-def _match(competition, season, home, away, kickoff, status, score, source, updated=None):
-    return {"competition": competition, "season": season, "home": canonical(home), "away": canonical(away),
+def _match(competition, season, home, away, kickoff, status, score, source, updated=None, namer=None):
+    name = namer or (lambda raw: canonical_for(competition, raw))
+    return {"competition": competition, "season": season, "home": name(home), "away": name(away),
             "kickoff_utc": kickoff.astimezone(UTC).isoformat().replace("+00:00", "Z"),
             "status": status, "score": score, "source": source, "source_updated": updated}
 
@@ -69,7 +71,7 @@ def fetch_football_data_org(competition, season_start, season, token=None, opene
     token = token or os.environ.get("FOOTBALL_DATA_ORG_TOKEN")
     if not token:
         return [], "skipped: FOOTBALL_DATA_ORG_TOKEN not configured"
-    code = {"PL": "PL", "ELC": "ELC"}[competition]
+    code = {"PL": "PL", "ELC": "ELC", "BL1": "BL1", "PD": "PD", "SA": "SA", "FL1": "FL1"}[competition]
     try:
         payload = http_json(f"https://api.football-data.org/v4/competitions/{code}/matches?season={season_start}",
                             headers={"X-Auth-Token": token}, opener=opener)
@@ -87,7 +89,7 @@ def fetch_football_data_org(competition, season_start, season, token=None, opene
 
 
 def fetch_openligadb(competition, season_start, season, opener=None):
-    shortcut = {"PL": "pl"}.get(competition)
+    shortcut = {"PL": "pl", "BL1": "bl1"}.get(competition)
     if not shortcut:
         return [], "skipped: competition not covered by OpenLigaDB"
     try:
@@ -104,21 +106,21 @@ def fetch_openligadb(competition, season_start, season, opener=None):
     return out, None
 
 
-def parse_openfootball(payload, competition, season):
+def parse_openfootball(payload, competition, season, namer=None):
     out = []
     for m in payload.get("matches", []):
         day = dt.date.fromisoformat(m["date"])
         hour, minute = map(int, (m.get("time") or "15:00").split(":")[:2])
-        kickoff = dt.datetime.combine(day, dt.time(hour, minute), UK)
+        kickoff = dt.datetime.combine(day, dt.time(hour, minute), UK if competition in ("PL", "ELC") else CET)
         ft = (m.get("score") or {}).get("ft") if isinstance(m.get("score"), dict) else None
         score = [int(ft[0]), int(ft[1])] if ft else None
         out.append(_match(competition, season, m["team1"], m["team2"], kickoff,
-                          "FINISHED" if score else "SCHEDULED", score, "openfootball"))
+                          "FINISHED" if score else "SCHEDULED", score, "openfootball", namer=namer))
     return out
 
 
 def fetch_openfootball(competition, season_label, season, opener=None):
-    league = {"PL": "en.1", "ELC": "en.2"}[competition]
+    league = {"PL": "en.1", "ELC": "en.2", "BL1": "de.1", "PD": "es.1", "SA": "it.1", "FL1": "fr.1"}[competition]
     try:
         payload = http_json(f"https://raw.githubusercontent.com/openfootball/football.json/master/{season_label}/{league}.json", opener=opener)
     except RuntimeError as error:

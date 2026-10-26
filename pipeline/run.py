@@ -20,7 +20,8 @@ from . import odds as odds_feed
 from .data import (ROOT, championship_history, co_uk_as_matches, load_co_uk, merge_fixtures,
                    promoted_by_season, uk_date)
 from .fairodds import fair_odds
-from .models import SHADOW_VERSION, VERSIONS, Context, predict, shadow_result
+from .leagues import EXTRA, LEAGUES, load_results as load_league_results, promoted_by_season as league_promoted, refresh_current
+from .models import LEAGUE_MODEL_VERSION, SHADOW_VERSION, VERSIONS, Context, predict, shadow_result
 from .recommend import RULE_VERSION, recommend
 from .sources import SOURCE_LABELS, fetch_football_data_org, fetch_openfootball, fetch_openligadb
 from .teams import canonical, match_id
@@ -90,15 +91,38 @@ def import_frozen_ledgers(ledger, data_dir, now):
     return added
 
 
-def fingerprint(results):
+def fingerprint(results, salt=None):
     digest = hashlib.sha256()
     for r in sorted(results, key=lambda r: (r["date"], r["home"])):
         digest.update(f"{r['date']}|{r['home']}|{r['away']}|{r['hg']}|{r['ag']}\n".encode())
     digest.update(json.dumps({**VERSIONS, "recommend": RULE_VERSION}, sort_keys=True).encode())
+    if salt:  # other leagues only: the Premier League fingerprint must not change
+        digest.update(salt.encode())
     return digest.hexdigest()[:16]
 
 
-def run(out_dir, now, offline=False, fetchers=None):
+def league_evidence_tiers(validation):
+    """Evidence text for the league-specific result tiers, from that league's own backtest."""
+    r = (validation or {}).get("markets", {}).get("result")
+    name = (validation or {}).get("name", "this league")
+    if not r:
+        return {"L1": {"strength": "none", "summary": f"The {name} model has not been backtested yet."}, "T3": {"strength": "none", "summary": f"Not enough data on one club, so this is the {name} average."}}
+    return {"L1": {"strength": r["strength"], "summary": f"Backtest on {r['n']} {name} matches ({validation['test_season_label']}): Brier {r['model_brier']:.3f} against {r['league_brier']:.3f} for the league average. A single-season test with no forward record yet, so provisional."},
+            "T3": {"strength": "none", "summary": f"Not enough recent matches for one club (for example a newly promoted side), so this is the {name} average. Limited evidence."}}
+
+
+def default_extra_fetchers():
+    out = {}
+    for code in EXTRA:
+        f = {"football-data.org": (lambda c=code: fetch_football_data_org(c, SEASON_START, SEASON)),
+             "openfootball": (lambda c=code: fetch_openfootball(c, SEASON_LABEL, SEASON))}
+        if LEAGUES[code].get("openligadb"):
+            f["openligadb"] = (lambda c=code: fetch_openligadb(c, SEASON_START, SEASON))
+        out[code] = f
+    return out
+
+
+def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_rows=None):
     out_dir = Path(out_dir)
     data_dir = ROOT / "data"
     status = {"attempted_at": now.isoformat(), "season": SEASON, "sources": {}, "warnings": [], "errors": []}
@@ -110,6 +134,7 @@ def run(out_dir, now, offline=False, fetchers=None):
     previous = read_json(out_dir / "fixtures.json", {}).get("fixtures", [])
 
     co_uk = load_co_uk(data_dir / "matches.json")
+    live_default = fetchers is None
     fetchers = fetchers or {
         "football-data.org": lambda: fetch_football_data_org("PL", SEASON_START, SEASON),
         "openligadb": lambda: fetch_openligadb("PL", SEASON_START, SEASON),
@@ -130,7 +155,38 @@ def run(out_dir, now, offline=False, fetchers=None):
         status["warnings"].append("No fixture source responded; keeping the previous schedule.")
         lists.append([{k: f[k] for k in ("competition", "season", "home", "away", "kickoff_utc", "status", "score")} | {"source": f["sources"][0] if f.get("sources") else "openfootball", "source_updated": None}
                       for f in previous if f.get("status") != "REMOVED_FROM_SCHEDULE"])
+    # Other leagues: fixtures from every source, results and statistics from football-data.co.uk.
+    if extra_fetchers is None and live_default:
+        extra_fetchers = default_extra_fetchers()
+    extras_on = bool(extra_fetchers) or league_rows is not None
+    stored_results = (league_rows if league_rows is not None else load_league_results()) if extras_on else []
+    if extras_on and not offline and league_rows is None:
+        league_all, league_status = refresh_current(stored_results, SEASON)
+    else:
+        league_all, league_status = stored_results, {}
+    for code, fs in (extra_fetchers or {}).items():
+        got = []
+        for name, fetch in fs.items():
+            if offline:
+                status["sources"][f"{code}:{name}"] = {"ok": False, "label": SOURCE_LABELS[name], "note": "offline run"}
+                continue
+            matches, error = fetch()
+            status["sources"][f"{code}:{name}"] = {"ok": bool(matches), "label": SOURCE_LABELS[name], "matches": len(matches),
+                                                   "results": sum(1 for m in matches if m["score"]), "note": error}
+            got.append(matches)
+        if not any(got):
+            kept = [f for f in previous if f["competition"] == code and f.get("status") != "REMOVED_FROM_SCHEDULE"]
+            if kept and not offline:
+                status["warnings"].append(f"{LEAGUES[code]['name']}: no fixture source responded; keeping the previous schedule.")
+            lists.append([{k: f[k] for k in ("competition", "season", "home", "away", "kickoff_utc", "status", "score")} | {"source": f["sources"][0] if f.get("sources") else "openfootball", "source_updated": None}
+                          for f in kept])
+        lists.extend(got)
+    for code, st in league_status.items():
+        status["sources"][f"football-data.co.uk:{code}"] = {"label": SOURCE_LABELS["football-data.co.uk"], **st}
+        if not st["ok"]:
+            status["warnings"].append(f"{LEAGUES[code]['name']}: results and statistics download failed, using the stored copy ({st['note']}).")
     lists.append(co_uk_as_matches(co_uk, SEASON))
+    lists.append(co_uk_as_matches(league_all, SEASON))
     status["sources"]["football-data.co.uk"] = {"ok": True, "label": SOURCE_LABELS["football-data.co.uk"], "results": sum(r["season"] == SEASON for r in co_uk),
                                                  "latest_result": max(r["date"] for r in co_uk).isoformat()}
     fixtures = merge_fixtures(lists, previous, now) if any(lists) else previous
@@ -139,7 +195,7 @@ def run(out_dir, now, offline=False, fetchers=None):
     known = {match_id("PL", r["season"], r["home"], r["away"]) for r in co_uk}
     epl = list(co_uk)
     for f in fixtures:
-        if f["status"] == "FINISHED" and f["id"] not in known:
+        if f["competition"] == "PL" and f["status"] == "FINISHED" and f["id"] not in known:
             kickoff = dt.datetime.fromisoformat(f["kickoff_utc"].replace("Z", "+00:00"))
             epl.append({"date": uk_date(kickoff), "competition": "PL", "season": f["season"], "home": f["home"], "away": f["away"],
                         "hg": f["score"][0], "ag": f["score"][1], "stats": None, "source": f["result_source"]})
@@ -158,6 +214,25 @@ def run(out_dir, now, offline=False, fetchers=None):
     imported = import_frozen_ledgers(ledger, data_dir, now)
     fp = fingerprint(results)
 
+    league_validation = (read_json(data_dir / "league_validation.json", {}) or {}).get("leagues", {})
+    league_ctx = {}
+
+    def context_for(code):
+        if code not in league_ctx:
+            rows = [r for r in league_all if r["competition"] == code]
+            known_l = {match_id(code, r["season"], r["home"], r["away"]) for r in rows}
+            for fx in fixtures:
+                if fx["competition"] == code and fx["status"] == "FINISHED" and fx["id"] not in known_l:
+                    kick = dt.datetime.fromisoformat(fx["kickoff_utc"].replace("Z", "+00:00"))
+                    rows.append({"date": uk_date(kick), "competition": code, "season": fx["season"], "home": fx["home"], "away": fx["away"],
+                                 "hg": fx["score"][0], "ag": fx["score"][1], "stats": None, "source": fx["result_source"]})
+            validation = league_validation.get(code)
+            promoted_l = league_promoted(rows, code, fixtures)
+            league_ctx[code] = {"ctx": Context(rows, as_of, promoted_l, None, competition=code, league_name=LEAGUES[code]["name"], validation=validation),
+                                "fp": fingerprint(rows, LEAGUE_MODEL_VERSION), "validation": validation, "promoted": promoted_l,
+                                "evidence": league_evidence_tiers(validation)}
+        return league_ctx[code]
+
     published, predictions = 0, {}
     horizon = now + dt.timedelta(days=HORIZON_DAYS)
     for f in fixtures:
@@ -165,20 +240,27 @@ def run(out_dir, now, offline=False, fetchers=None):
         if f["status"] != "SCHEDULED" or not now < kickoff <= horizon:
             continue
         fixture = {**f, "date": uk_date(kickoff)}
-        markets = predict(fixture, ctx, evidence)
-        recommendations = recommend(markets, reliability)
-        if hist.publish(ledger, f, markets, fp, [s for s in f["sources"]], now, recommendations=recommendations):
+        code = f["competition"]
+        if code == "PL":
+            f_ctx, f_fp, f_evidence, f_validation, f_promoted = ctx, fp, evidence, None, promoted
+        else:
+            lc = context_for(code)
+            f_ctx, f_fp, f_evidence, f_validation, f_promoted = lc["ctx"], lc["fp"], lc["evidence"], lc["validation"], lc["promoted"]
+        markets = predict(fixture, f_ctx, f_evidence)
+        recommendations = recommend(markets, reliability, f_validation)
+        if hist.publish(ledger, f, markets, f_fp, [s for s in f["sources"]], now, recommendations=recommendations):
             published += 1
-        challenger = shadow_result(fixture, ctx)
+        challenger = shadow_result(fixture, f_ctx) if code == "PL" else None
         if challenger:
-            hist.publish(shadow, f, challenger, fp, [s for s in f["sources"]], now, origin="shadow")
+            hist.publish(shadow, f, challenger, f_fp, [s for s in f["sources"]], now, origin="shadow")
         latest = [r for r in ledger["records"] if r["match_id"] == f["id"]][-1]
         predictions[f["id"]] = {"match_id": f["id"], "record_id": latest["record_id"], "published_at": latest["published_at"],
                                 "fixture": {k: f[k] for k in ("competition", "season", "home", "away", "kickoff_utc", "status", "kickoff_history")},
-                                "promoted": [t for t in (f["home"], f["away"]) if t in promoted.get(f["season"], set())],
+                                "promoted": [t for t in (f["home"], f["away"]) if t in f_promoted.get(f["season"], set())],
                                 "markets": markets, "recommendations": latest.get("recommendations") or recommendations}
 
     stats_by_match = {match_id("PL", r["season"], r["home"], r["away"]): r["stats"] for r in co_uk}
+    stats_by_match.update({match_id(r["competition"], r["season"], r["home"], r["away"]): r["stats"] for r in league_all})
     settled = hist.settle(ledger, fixtures, stats_by_match, now)
     hist.settle(shadow, fixtures, stats_by_match, now)
     hist.verify(ledger)
