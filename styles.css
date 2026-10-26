@@ -363,3 +363,10 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .stat-grid dd.pos { color: var(--pick); }
 .stat-grid dd.neg { color: #fca5a5; }
 @media (max-width: 760px) { .stat-cards { grid-template-columns: 1fr; } }
+
+/* Competition filter */
+.comp-bar { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 8px; margin: 12px 0 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.comp-bar::-webkit-scrollbar { display: none; }
+.comp-bar button { flex: 0 0 auto; min-height: 40px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line-strong); font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.comp-bar button[aria-pressed="true"] { background: rgba(52, 211, 153, 0.16); color: #fff; border-color: rgba(52, 211, 153, 0.5); }
+.lg-tag { display: block; margin-top: 2px; font-size: 10.5px; letter-spacing: 0.06em; color: var(--dim); }

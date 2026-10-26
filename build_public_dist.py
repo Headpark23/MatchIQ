@@ -40,7 +40,8 @@ ALLOWLIST_DATA = [
     "prediction_history.json",
     "performance.json",
     "pipeline_status.json",
-    "odds.json"
+    "odds.json",
+    "league_validation.json"
 ]
 
 def build():

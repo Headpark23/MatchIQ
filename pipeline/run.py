@@ -20,7 +20,7 @@ from . import odds as odds_feed
 from .data import (ROOT, championship_history, co_uk_as_matches, load_co_uk, merge_fixtures,
                    promoted_by_season, uk_date)
 from .fairodds import fair_odds
-from .leagues import EXTRA, LEAGUES, load_results as load_league_results, promoted_by_season as league_promoted, refresh_current
+from .leagues import EXTRA, LEAGUES, load_results as load_league_results, promoted_by_season as league_promoted, refresh_current, save_results as save_league_results
 from .models import LEAGUE_MODEL_VERSION, SHADOW_VERSION, VERSIONS, Context, predict, shadow_result
 from .recommend import RULE_VERSION, recommend
 from .sources import SOURCE_LABELS, fetch_football_data_org, fetch_openfootball, fetch_openligadb
@@ -266,10 +266,15 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
     hist.verify(ledger)
     hist.verify(shadow)
 
-    odds_cache, odds_note = odds_feed.refresh(read_json(out_dir / "odds.json", {}), now) if not offline else (read_json(out_dir / "odds.json", {}), "offline run")
+    old_odds = read_json(out_dir / "odds.json", {})
+    odds_cache, odds_notes = odds_feed.refresh(old_odds, now, fixtures) if not offline else (old_odds, {"all": "offline run"})
     status["sources"]["the-odds-api"] = {"ok": bool(odds_cache.get("matches")), "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
-                                         "matches": len(odds_cache.get("matches", {})), "note": odds_note,
-                                         "credits_used_this_month": (odds_cache.get("credits") or {}).get("spent_by_month", {}).get(odds_feed.month_of(now), 0)}
+                                         "matches": len(odds_cache.get("matches", {})), "notes": odds_notes,
+                                         "credits_used_this_month": odds_feed.spent_this_month(odds_cache, now),
+                                         "credits_remaining_reported": (odds_cache.get("credits") or {}).get("provider_remaining")}
+    for code, note in odds_notes.items():
+        if note.startswith("failed"):
+            status["warnings"].append(f"Odds feed {code}: {note}")
 
     ok = not status["errors"]
     status.update({"ok": ok, "last_success": now.isoformat() if ok else previous_status.get("last_success"),
@@ -282,6 +287,8 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
         write_json(out_dir / "predictions.json", {"generated_at": now.isoformat(), "horizon_days": HORIZON_DAYS, "predictions": predictions})
         write_json(out_dir / "prediction_history.json", ledger)
         write_json(out_dir / "shadow_history.json", shadow)
+        if league_status and any(st["ok"] for st in league_status.values()):
+            save_league_results(league_all, out_dir / "league_results.json")
         write_json(out_dir / "odds.json", odds_cache or {"fetched_at": None, "source": None, "matches": {}})
         write_json(out_dir / "performance.json", {"generated_at": now.isoformat(), **hist.performance(ledger),
                                                   "challenger": hist.compare_challenger(ledger, shadow)})

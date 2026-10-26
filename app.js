@@ -11,9 +11,19 @@ const DIARY_STORAGE_KEY = 'matchiq_bet_diary_v1';
 const FEEDBACK_STORAGE_KEY = 'matchiq_ux_feedback_v1';
 const FILES = {
   predictions: 'data/predictions.json', fixtures: 'data/fixtures.json', history: 'data/prediction_history.json',
-  performance: 'data/performance.json', status: 'data/pipeline_status.json', reliability: 'data/model_reliability.json', odds: 'data/odds.json'
+  performance: 'data/performance.json', leagueValidation: 'data/league_validation.json', status: 'data/pipeline_status.json', reliability: 'data/model_reliability.json', odds: 'data/odds.json'
 };
 const DATA = {};
+const LEAGUES = { PL: 'Premier League', ELC: 'Championship', BL1: 'Bundesliga', PD: 'La Liga', SA: 'Serie A', FL1: 'Ligue 1' };
+const leagueName = c => LEAGUES[c] || c || 'Premier League';
+const COMP_KEY = 'matchiq_competition_v1';
+let compFilter = 'ALL';
+try { const v = localStorage.getItem(COMP_KEY); if (v && LEAGUES[v]) compFilter = v; } catch (e) { /* the filter is a convenience */ }
+const inComp = code => compFilter === 'ALL' || (code || 'PL') === compFilter;
+function compBar() {
+  const items = [['ALL', 'All competitions']].concat(Object.entries(LEAGUES));
+  return '<div class="comp-bar" role="group" aria-label="Competition">' + items.map(([k, l]) => '<button type="button" data-comp="' + k + '" aria-pressed="' + (compFilter === k) + '">' + esc(l) + '</button>').join('') + '</div>';
+}
 const LOAD_ERRORS = {};
 const SIGNAL_RULES = Object.freeze({ trivialAbove: 0.85, shrinkWeight: 20, fullSample: 10 });
 
@@ -107,12 +117,19 @@ const PRICE_STORAGE_KEY = 'matchiq_seen_prices_v1';
 const REC_LABEL = { most_likely: 'Most Likely pick', best_value: 'Best Value pick' };
 
 function readPrices() { try { const v = JSON.parse(localStorage.getItem(PRICE_STORAGE_KEY) || '{}'); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } }
-/* Feed prices (data/odds.json, best UK price) are defaults; anything the user typed wins. */
-function feedMatch(id) { return ((DATA.odds && DATA.odds.matches) || {})[id] || null; }
-function pricesFor(id) {
-  const feed = feedMatch(id), out = {};
-  if (feed) for (const [k, v] of Object.entries(feed.selections)) out[k] = v.fractional;
-  return Object.assign(out, readPrices()[id] || {});
+/* Automatic prices (data/odds.json) are defaults only while fresh; anything the user typed wins. */
+function feedFor(id) { return calc.feedPrices(((DATA.odds && DATA.odds.matches) || {})[id], Date.now(), (DATA.odds && DATA.odds.max_age_hours) || 12); }
+function pricesFor(id) { return Object.assign({}, feedFor(id).prices, readPrices()[id] || {}); }
+/* Where an automatic price came from, or why it is not being used. */
+function feedNote(id) {
+  const feed = feedFor(id), mine = readPrices()[id] || {};
+  if (feed.state === 'none') return '';
+  const ago = feed.ageHours < 1 ? 'under an hour ago' : Math.round(feed.ageHours) + ' h ago';
+  if (feed.state === 'stale') return '<p class="muted" style="font-size:12.5px">Automatic prices for this match were last retrieved ' + esc(ago) + ' and are too old to use as current prices. Type the price you see now.</p>';
+  const books = {};
+  for (const [sid, d] of Object.entries(feed.details)) if (!mine[sid]) (books[d.bookmaker] = books[d.bookmaker] || []).push(d.last_update || '');
+  const names = Object.keys(books);
+  return names.length ? '<p class="muted" style="font-size:12.5px">Automatic prices: ' + names.map(esc).join(', ') + ', retrieved ' + esc(ago) + ' (Match Result and Total Goals only). Prices move: check the bookmaker before betting.</p>' : '';
 }
 function writePrices(v) { try { localStorage.setItem(PRICE_STORAGE_KEY, JSON.stringify(v)); } catch (e) { /* prices are a convenience only */ } }
 
@@ -166,6 +183,7 @@ function bestValueBlock(pred) {
   } else if (prices[sel.id]) {
     detail += '<p class="muted" style="font-size:13.5px">' + esc(verdict.why) + '</p>';
   }
+  detail += feedNote(pred.match_id);
   const opts = sels.map(s => '<option value="' + esc(s.id) + '"' + (s.id === sel.id ? ' selected' : '') + '>' + esc(s.label) + ' · ' + pct(s.p) + '</option>').join('');
   const priceInput = (s, main) => '<label class="field"><span class="lbl">' + esc(main ? 'Bookmaker price you were offered' : s.label) + '</span><input class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or Evens" data-price="' + esc(s.id) + '" data-match="' + esc(pred.match_id) + '" value="' + esc(prices[s.id] || '') + '"></label>';
   const diary = verdict.verdict !== 'awaiting_odds' ? { id: pred.match_id, market: MARKETS[sel.market].diary, selection: sel.label, p: sel.p, fair: sel.fair, odds: verdict.priceText, rec: 'best_value' } : null;
@@ -264,7 +282,7 @@ const predictionsList = () => Object.values((DATA.predictions && DATA.prediction
 const fixturesList = () => (DATA.fixtures && DATA.fixtures.fixtures) || [];
 const historyRecords = () => (DATA.history && DATA.history.records) || [];
 const fixtureById = id => fixturesList().find(f => f.id === id);
-const upcoming = () => predictionsList().filter(p => kickoffMs(p.fixture) > Date.now()).sort((a, b) => kickoffMs(a.fixture) - kickoffMs(b.fixture));
+const upcoming = () => predictionsList().filter(p => kickoffMs(p.fixture) > Date.now() && inComp(p.fixture.competition)).sort((a, b) => kickoffMs(a.fixture) - kickoffMs(b.fixture));
 
 function finalRecord(id) {
   const recs = historyRecords().filter(r => r.match_id === id);
@@ -305,7 +323,7 @@ function formStrip(games) {
 function resultExplanation(pred) {
   const r = pred.markets.result, f = pred.fixture, lines = [];
   const line = (team, where, games) => {
-    if (!games || !games.length) return '<li>' + esc(team) + ' has no Premier League ' + where + ' games in the data yet.</li>';
+    if (!games || !games.length) return '<li>' + esc(team) + ' has no ' + leagueName(f.competition) + ' ' + where + ' games in the data yet.</li>';
     const w = games.filter(g => g.res === 'W').length, d = games.filter(g => g.res === 'D').length, l = games.length - w - d;
     const gf = games.reduce((s, g) => s + g.gf, 0) / games.length, ga = games.reduce((s, g) => s + g.ga, 0) / games.length;
     return '<li>' + esc(team) + ' ' + where + ', last ' + games.length + ': ' + w + ' won, ' + d + ' drawn, ' + l + ' lost ' + formStrip(games) + ', scoring ' + gf.toFixed(1) + ' and conceding ' + ga.toFixed(1) + ' a game.</li>';
@@ -333,7 +351,7 @@ function heroCard(pred, rankNote) {
   const f = pred.fixture, r = pred.markets.result, ms = kickoffMs(f), provisional = r.evidence.status !== 'validated';
   return '<article class="hero' + (provisional ? ' provisional' : '') + '">' +
     '<div>' +
-      '<div class="hero-meta"><strong>' + esc(rankNote) + '</strong><span>Premier League</span><span>' + esc(fmtDay(ms)) + ', ' + esc(fmtTime(ms)) + ' UK</span></div>' +
+      '<div class="hero-meta"><strong>' + esc(rankNote) + '</strong><span>' + esc(leagueName(f.competition)) + '</span><span>' + esc(fmtDay(ms)) + ', ' + esc(fmtTime(ms)) + ' UK</span></div>' +
       '<div class="hero-teams"><span class="hero-team">' + crest(f.home, 40) + esc(f.home) + '</span><span class="hero-v">v</span><span class="hero-team">' + crest(f.away, 40) + esc(f.away) + '</span></div>' +
       '<h3 class="hero-pick">' + esc(r.pick.label) + '</h3>' +
       '<p class="hero-plain">' + esc(plainResult(r.pick.p)) + '</p>' +
@@ -377,7 +395,7 @@ function fixtureRow(f) {
     lean = '<span class="dim">Prediction published within 21 days of kick-off</span>';
   }
   return '<a class="fx" href="#/match/' + encodeURIComponent(f.id) + '">' +
-    '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small></span>' +
+    '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small>' + (compFilter === 'ALL' ? '<small class="lg-tag">' + esc(f.competition || 'PL') + '</small>' : '') + '</span>' +
     '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span></span>' +
     '<span class="fx-lean">' + lean + '</span><span class="fx-chev" aria-hidden="true">›</span></a>';
 }
@@ -440,7 +458,7 @@ function matchRecRow(pred) {
     ? ring(m.p, 56, status === 'validated' ? '' : 'provisional') + '<span><span class="dim" style="display:block;font-size:12px">Most likely · ' + esc(MARKETS[m.market].name) + '</span><b class="rec-row-pick">' + esc(m.label) + '</b></span>'
     : '<span><b class="rec-row-pick">No bet</b><span class="dim" style="display:block;font-size:12px">Not enough evidence</span></span>';
   return '<a class="rec-row" href="#/match/' + encodeURIComponent(pred.match_id) + '">' +
-    '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small></span>' +
+    '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small>' + (compFilter === 'ALL' ? '<small class="lg-tag">' + esc(f.competition || 'PL') + '</small>' : '') + '</span>' +
     '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span></span>' +
     '<span class="rec-row-main">' + pick + '</span>' +
     '<span class="rec-row-side"><span class="dim">Result lean: <b style="color:#fff">' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (r.evidence.status !== 'validated' ? ' <span class="badge provisional">Provisional</span>' : '') + '</span>' + valueStatus(pred) + '</span>' +
@@ -449,7 +467,7 @@ function matchRecRow(pred) {
 
 function homeHero(pred) {
   const f = pred.fixture, ms = kickoffMs(f);
-  return '<article class="hero"><div><div class="hero-meta"><strong>Most likely this round</strong><span>Premier League</span><span>' + esc(fmtDay(ms)) + ', ' + esc(fmtTime(ms)) + ' UK</span></div>' +
+  return '<article class="hero"><div><div class="hero-meta"><strong>Most likely this round</strong><span>' + esc(leagueName(f.competition)) + '</span><span>' + esc(fmtDay(ms)) + ', ' + esc(fmtTime(ms)) + ' UK</span></div>' +
     '<div class="hero-teams"><span class="hero-team">' + crest(f.home, 40) + esc(f.home) + '</span><span class="hero-v">v</span><span class="hero-team">' + crest(f.away, 40) + esc(f.away) + '</span></div>' +
     mostLikelyBlock(pred, true) +
     '<div class="btn-row" style="margin-top:14px"><a class="btn primary" href="#/match/' + encodeURIComponent(pred.match_id) + '">See every market and check value</a></div></div></article>';
@@ -459,7 +477,7 @@ function viewHome() {
   const list = upcoming();
   let html = '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">This round</h1>' +
     '<p class="page-sub">For every upcoming match: the most likely supported outcome, the match-result lean and whether a price you have seen offers value. MatchIQ will say No bet when the evidence or the price is not good enough.</p></div>' +
-    '<div class="chips">' + freshnessChips() + '</div></div>';
+    '<div class="chips">' + freshnessChips() + '</div></div>' + compBar();
   if (LOAD_ERRORS.predictions) return html + errorPanel('predictions') + '</section>';
   if (!list.length) return html + '<div class="empty">No fixtures with published predictions in the next 21 days. Predictions appear automatically once the schedule lists them.</div>' + homeFixtures() + '</section>';
   const first = kickoffMs(list[0].fixture);
@@ -482,7 +500,7 @@ function viewHome() {
 }
 
 function homeFixtures() {
-  const next = fixturesList().filter(f => f.status === 'SCHEDULED' && kickoffMs(f) > Date.now()).sort((a, b) => kickoffMs(a) - kickoffMs(b)).slice(0, 10);
+  const next = fixturesList().filter(f => inComp(f.competition) && f.status === 'SCHEDULED' && kickoffMs(f) > Date.now()).sort((a, b) => kickoffMs(a) - kickoffMs(b)).slice(0, 10);
   if (!next.length) return '';
   return '<div class="section"><div class="section-head"><h2 class="section-title">Next fixtures</h2><a class="link-btn" href="#/fixtures">All fixtures ›</a></div>' + groupedRows(next) + '</div>';
 }
@@ -490,7 +508,7 @@ function homeFixtures() {
 let fixturesTab = 'upcoming';
 let fixturesShowAll = false;
 function viewFixtures() {
-  const all = fixturesList(), now = Date.now();
+  const all = fixturesList().filter(f => inComp(f.competition)), now = Date.now();
   const tabs = { upcoming: 'Upcoming', awaiting: 'Awaiting result', results: 'Results' };
   let list;
   if (fixturesTab === 'upcoming') {
@@ -501,9 +519,9 @@ function viewFixtures() {
   } else {
     list = all.filter(f => f.status === 'FINISHED').sort((a, b) => kickoffMs(b) - kickoffMs(a)).slice(0, fixturesShowAll ? 400 : 30);
   }
-  let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">Premier League 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
+  let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">' + (compFilter === 'ALL' ? 'All six competitions' : esc(leagueName(compFilter))) + ' 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
     '<div class="section" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between"><div class="seg" role="group" aria-label="Fixture list">' +
-    Object.entries(tabs).map(([k, label]) => '<button type="button" data-tab="' + k + '" aria-pressed="' + (fixturesTab === k) + '">' + label + '</button>').join('') + '</div><div class="chips">' + freshnessChips() + '</div></div>';
+    compBar() + Object.entries(tabs).map(([k, label]) => '<button type="button" data-tab="' + k + '" aria-pressed="' + (fixturesTab === k) + '">' + label + '</button>').join('') + '</div><div class="chips">' + freshnessChips() + '</div></div>';
   if (LOAD_ERRORS.fixtures) return html + errorPanel('fixtures') + '</section>';
   html += list.length ? groupedRows(list) : '<div class="empty" style="margin-top:16px">' + (fixturesTab === 'awaiting' ? 'No matches are waiting for a confirmed result.' : 'Nothing to show yet.') + '</div>';
   if ((fixturesTab === 'upcoming' || fixturesTab === 'results') && !fixturesShowAll) html += '<button type="button" class="btn" data-showall style="margin-top:8px">Show ' + (fixturesTab === 'upcoming' ? 'the rest of the season' : 'all results') + '</button>';
@@ -524,7 +542,7 @@ function viewMatch(id) {
       '<div class="match-team">' + crest(fx.home, 64) + esc(fx.home) + (promoted.includes(fx.home) ? '<small>Promoted club</small>' : '') + '</div>' +
       '<div class="match-centre">' + centre + '</div>' +
       '<div class="match-team">' + crest(fx.away, 64) + esc(fx.away) + (promoted.includes(fx.away) ? '<small>Promoted club</small>' : '') + '</div></div>' +
-      '<div class="facts"><span><b>Premier League</b> 2026/27</span><span>' + esc(fmtFull(ms)) + '</span><span>Home ground: <b>' + esc((CLUBS[fx.home] || [])[3] || 'not listed') + '</b></span></div>' +
+      '<div class="facts"><span><b>' + esc(leagueName(fx.competition)) + '</b> 2026/27</span><span>' + esc(fmtFull(ms)) + '</span><span>Home ground: <b>' + esc((CLUBS[fx.home] || [])[3] || 'not listed') + '</b></span></div>' +
       '<div class="chips" style="justify-content:center"><span class="chip ' + statusChip[0] + '"><span class="dot"></span>' + esc(statusChip[1]) + '</span>' + freshnessChips() + '</div>' +
       (f && f.kickoff_history && f.kickoff_history.length ? '<p class="dim" style="text-align:center;font-size:13px">Rescheduled from ' + esc(fmtFull(Date.parse(f.kickoff_history[f.kickoff_history.length - 1].from))) + '</p>' : '') +
     '</header>';
@@ -556,18 +574,23 @@ function viewMatch(id) {
 
 let resultsFilter = 'settled';
 function viewResults() {
-  const perf = DATA.performance || {}, rel = DATA.reliability;
+  const allPerf = DATA.performance || {};
+  const other = compFilter !== 'ALL' && compFilter !== 'PL';
+  const perf = other ? ((allPerf.by_competition || {})[compFilter] || {}) : allPerf;  // leagues are never pooled
+  const lv = other ? (((DATA.leagueValidation || {}).leagues || {})[compFilter] || null) : null;
+  const rel = other ? null : DATA.reliability;
   const res = (perf.markets || {}).result;
   const latest = {};
   for (const r of historyRecords()) latest[r.match_id] = r.evaluated ? r : (latest[r.match_id] && latest[r.match_id].evaluated ? latest[r.match_id] : r);
-  const recs = Object.values(latest).sort((a, b) => kickoffMs(b.fixture) - kickoffMs(a.fixture));
+  const recs = Object.values(latest).filter(r => inComp(r.fixture.competition)).sort((a, b) => kickoffMs(b.fixture) - kickoffMs(a.fixture));
   const settled = recs.filter(r => r.evaluated), pending = recs.filter(r => !r.evaluated && kickoffMs(r.fixture) <= Date.now() && !r.result), future = recs.filter(r => kickoffMs(r.fixture) > Date.now());
-  let html = '<section class="view"><h1 class="page-title">Results & performance</h1><p class="page-sub">Every prediction MatchIQ publishes is sealed before kick-off and scored once the result is confirmed. Nothing here is edited after the fact.</p>';
+  let html = '<section class="view"><h1 class="page-title">Results & performance</h1><p class="page-sub">Every prediction MatchIQ publishes is sealed before kick-off and scored once the result is confirmed. Nothing here is edited after the fact.</p>' + compBar() +
+    (compFilter === 'ALL' ? '<div class="notice section">Scorecards are kept per competition and never pooled. The figures below are the Premier League; choose a competition above for another.</div>' + byCompetitionCards(allPerf) : '');
   if (LOAD_ERRORS.history) return html + errorPanel('history') + '</section>';
   html += '<div class="tiles section" style="margin-top:18px">' +
     '<div class="tile"><div class="k">Settled predictions</div><div class="v">' + settled.length + '</div><div class="s">' + pending.length + ' awaiting a result · ' + future.length + ' upcoming</div></div>' +
     '<div class="tile"><div class="k">Match-result picks right</div><div class="v">' + (res ? pct(res.pick_hit_rate) : '—') + '</div><div class="s">' + (res ? res.n + ' matches · average pick ' + pct(res.mean_pick_p) : 'none settled yet') + '</div></div>' +
-    '<div class="tile"><div class="k">Match-result Brier (live)</div><div class="v">' + (res ? res.brier.toFixed(3) : '—') + '</div><div class="s">Lower is better. League average scored ' + (rel ? rel.markets.wins.league_average_brier.toFixed(3) : '0.660') + ' in the backtest.</div></div>' +
+    '<div class="tile"><div class="k">Match-result Brier (live)</div><div class="v">' + (res ? res.brier.toFixed(3) : '—') + '</div><div class="s">Lower is better. League average scored ' + (lv && lv.markets.result ? lv.markets.result.league_brier.toFixed(3) : rel ? rel.markets.wins.league_average_brier.toFixed(3) : '0.660') + ' in the backtest.</div></div>' +
     '<div class="tile"><div class="k">Published records</div><div class="v">' + (perf.published_records || 0) + '</div><div class="s">including earlier revisions</div></div></div>';
   if (!res || !res.sufficient_sample) html += '<div class="notice section">Early days: ' + (res ? res.n : 0) + ' settled match-result predictions. Live figures need at least ' + (perf.min_report_n || 20) + ' before they mean much, so lean on the backtest below until then.</div>';
 
@@ -580,11 +603,11 @@ function viewResults() {
   const bands = (perf.bands || {}).result || {};
   const bandRows = Object.entries(bands).sort().map(([band, b]) => '<div class="calib-row"><span class="mono">' + esc(band) + '</span><div class="calib-bars" aria-label="Predicted ' + pct(b.mean_pick_p) + ', happened ' + pct(b.pick_hit_rate) + '"><span class="pred" style="width:' + (100 * b.mean_pick_p).toFixed(0) + '%"></span><span class="obs" style="width:' + (100 * b.pick_hit_rate).toFixed(0) + '%"></span></div><span class="mono dim">' + pct(b.pick_hit_rate) + ' · n=' + b.n + '</span></div>').join('');
   html += '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Calibration, live</h2><p class="section-note" style="margin:4px 0 12px">Pale bar: average predicted chance. Green bar: how often it happened.</p>' + (bandRows ? '<div class="calib">' + bandRows + '</div>' : '<p class="muted">Appears once predictions settle.</p>') + '</div>' +
-    backtestCard(rel) + '</div>';
+    (other ? leagueBacktestCard(lv) : backtestCard(rel)) + '</div>';
 
   html += scorecard(perf);
   const tiers = perf.tiers || {};
-  const tierLabel = { T1: 'Validated frozen model', T2: 'Provisional: promoted clubs', T3: 'League average fallback' };
+  const tierLabel = { T1: 'Validated frozen model', T2: 'Provisional: promoted clubs', T3: 'League average fallback', L1: 'League model (provisional, one-season backtest)' };
   const teams = Object.entries(perf.teams || {}).filter(([, t]) => t.n >= 5).sort((a, b) => b[1].n - a[1].n);
   const ch = perf.challenger;
   html += '<div class="section grid grid-2"><div class="card"><h2 class="section-title">By prediction source</h2><table class="table" style="margin-top:8px"><tbody>' +
@@ -636,6 +659,22 @@ function scorecard(perf) {
     '<p class="section-note" style="margin-top:12px">Value decisions so far: ' + (dec['best_value:no_bet'] || 0) + ' No Bet (no bookmaker price available), ' + (dec['best_value:value'] || 0) + ' value calls.' + (ml.n && !ml.sufficient_sample ? ' Small sample: treat these figures as anecdotes.' : '') + '</p></div>' +
     '<div class="section card"><h2 class="section-title">Your recorded bets</h2><p class="section-note" style="margin:4px 0 12px">From your Bet Diary in this browser, at the prices you actually took. A high hit rate is not the same as profit.</p>' +
     '<div class="stat-cards">' + bets + '</div></div>';
+}
+
+function byCompetitionCards(allPerf) {
+  const rows = [['PL', allPerf]].concat(Object.entries(allPerf.by_competition || {}));
+  return '<div class="section"><div class="stat-cards">' + rows.map(([code, p]) => { const r = (p.markets || {}).result;
+    return statCard(esc(leagueName(code)), r && r.sufficient_sample ? '' : '<span class="badge pending">' + (r ? 'small sample' : 'none settled yet') + '</span>',
+      [['Settled', r ? r.n : 0], ['Picks right', r ? pct(r.pick_hit_rate) : '—'], ['Brier', r ? r.brier.toFixed(3) : '—']], r ? { claimed: r.mean_pick_p, actual: r.pick_hit_rate } : null); }).join('') + '</div></div>';
+}
+
+function leagueBacktestCard(lv) {
+  if (!lv) return '<div class="card"><h2 class="section-title">Backtest reference</h2><p class="muted">This league has not been backtested yet, so every estimate is provisional.</p></div>';
+  const names = { result: 'Match result', goals: 'Over 2.5 goals', btts: 'Both teams to score', corners: 'Corners 9.5', cards: 'Cards 3.5', shots: 'Shots 8.5' };
+  const rows = Object.entries(names).filter(([k]) => lv.markets[k]).map(([k, l]) => { const m = lv.markets[k], b = m.model_brier != null ? m.model_brier : m.blend_brier;
+    return '<tr><td>' + l + '</td><td class="num">' + b.toFixed(3) + '</td><td class="num">' + m.league_brier.toFixed(3) + '</td><td class="num">' + m.n + '</td></tr>'; }).join('');
+  return '<div class="card"><h2 class="section-title">Backtest reference</h2><p class="section-note" style="margin:4px 0 8px">' + esc(lv.name) + ', ' + esc(lv.test_season_label) + ': each match predicted from earlier results only, model refitted weekly. One season is a small test, so every ' + esc(lv.name) + ' estimate stays provisional until a forward record builds up.</p>' +
+    '<table class="table"><thead><tr><th>Market</th><th style="text-align:right">Brier</th><th style="text-align:right">League avg</th><th style="text-align:right">Matches</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
 }
 
 function backtestCard(rel) {
@@ -886,6 +925,7 @@ function viewMore() {
       '<tr><td><b>Match result</b></td><td>Validated frozen Dixon-Coles model. For promoted clubs without enough Premier League games: Premier League + Championship model, pulled halfway to league averages (provisional). With no usable history: league averages (limited evidence).</td></tr>' +
       '<tr><td><b>Goals, both teams to score</b></td><td>Provisional: 30% score model, 70% league rate. Backtests show no proven edge.</td></tr>' +
       '<tr><td><b>Corners, cards, shots</b></td><td>Provisional: 30% recent venue averages, 70% league rate. The frozen corners model is shown for reference only, because it backtested worse than the league average.</td></tr>' +
+      '<tr><td><b>Other competitions</b></td><td>Championship, Bundesliga, La Liga, Serie A and Ligue 1 each use their own time-weighted Dixon-Coles model fitted on that league only, backtested on 2025-26 against that league’s average. They stay provisional (no value calls) until a forward record exists. A club with too little recent history, such as a newly promoted side, gets the league average instead.</td></tr>' +
       '<tr><td><b>Fair odds</b></td><td>1 ÷ probability, rounded to a familiar UK price. Not a bookmaker price.</td></tr></tbody></table></div></div>' +
     '<div class="section card"><h2 class="section-title">Tell us what you think</h2><form id="fb-form" class="grid" style="margin-top:12px">' +
       stars('understand', 'How clear were the predictions? (1 confusing, 5 crystal clear)') + stars('convincing', 'How convincing was the evidence?') +
@@ -947,10 +987,11 @@ function render() {
 }
 
 document.addEventListener('click', event => {
-  const t = event.target.closest('[data-diary],[data-close],[data-tab],[data-showall],[data-rfilter],[data-export],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#bookmaker-quick button');
+  const t = event.target.closest('[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#bookmaker-quick button');
   if (!t) { if (event.target.id === 'diary-modal') closeDiary(); return; }
   if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));
   else if (t.dataset.close !== undefined) closeDiary();
+  else if (t.dataset.comp) { compFilter = t.dataset.comp; try { localStorage.setItem(COMP_KEY, compFilter); } catch (e) { /* ignore */ } render(); }
   else if (t.dataset.tab) { fixturesTab = t.dataset.tab; fixturesShowAll = false; render(); }
   else if (t.dataset.showall !== undefined) { fixturesShowAll = true; render(); }
   else if (t.dataset.rfilter) { resultsFilter = t.dataset.rfilter; render(); }

@@ -431,7 +431,22 @@
     return priced.filter((x) => x.v.verdict === 'value').sort(byEv)[0] || priced.sort(byEv)[0] || null;
   }
 
+  /* Automatic bookmaker prices (data/odds.json). A price older than maxAgeHours, or for a match that
+     has started, is shown as stale and is never used as a current price for a value verdict. */
+  function feedPrices(entry, nowMs, maxAgeHours = 12) {
+    if (!entry || !entry.selections || !Object.keys(entry.selections).length) return { state: 'none', prices: {}, details: {} };
+    const retrieved = Date.parse(entry.retrieved_at);
+    const ageHours = Number.isFinite(retrieved) ? (nowMs - retrieved) / 3600000 : Infinity;
+    const started = Date.parse(entry.kickoff_utc) <= nowMs;
+    const details = entry.selections;
+    if (started || !(ageHours <= maxAgeHours)) return { state: 'stale', ageHours, prices: {}, details };
+    const prices = {};
+    for (const [id, s] of Object.entries(details)) prices[id] = s.fractional;
+    return { state: 'fresh', ageHours, prices, details };
+  }
+
   return {
+    feedPrices,
     MARKET_LABELS,
     number,
     average,

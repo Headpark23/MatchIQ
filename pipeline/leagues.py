@@ -119,15 +119,21 @@ def promoted_by_season(rows, competition, fixtures=()):
     return out
 
 
+def save_results(rows, path=RESULTS_PATH):
+    rows = sorted(rows, key=lambda r: (r["competition"], r["date"], r["home"]))
+    tmp = Path(str(path) + ".tmp")
+    tmp.write_text(json.dumps({"source": "football-data.co.uk (personal/research use)", "results": _dump(rows)},
+                              separators=(",", ":"), ensure_ascii=False) + "\n", encoding="utf-8")
+    tmp.replace(path)
+
+
 def build(seasons=BUILD_SEASONS):
     rows = []
     for code in EXTRA:
         for season in seasons:
             rows += parse_csv(fetch_csv(code, season), code, season)
             print(code, season, len(rows), file=sys.stderr)
-    rows.sort(key=lambda r: (r["competition"], r["date"], r["home"]))
-    RESULTS_PATH.write_text(json.dumps({"source": "football-data.co.uk (personal/research use)", "results": _dump(rows)},
-                                       separators=(",", ":"), ensure_ascii=False) + "\n", encoding="utf-8")
+    save_results(rows)
 
 
 if __name__ == "__main__":

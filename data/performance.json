@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-26T13:47:13.496188+00:00",
+ "generated_at": "2026-10-26T16:41:41.654981+00:00",
  "min_report_n": 20,
  "markets": {
   "result": {
@@ -272,6 +272,93 @@
  "decisions": {},
  "evaluated_matches": 7,
  "published_records": 55,
+ "by_competition": {
+  "BL1": {
+   "min_report_n": 20,
+   "markets": {},
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 0,
+    "sufficient_sample": false
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 0,
+   "published_records": 18
+  },
+  "ELC": {
+   "min_report_n": 20,
+   "markets": {},
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 0,
+    "sufficient_sample": false
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 0,
+   "published_records": 36
+  },
+  "FL1": {
+   "min_report_n": 20,
+   "markets": {},
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 0,
+    "sufficient_sample": false
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 0,
+   "published_records": 18
+  },
+  "PD": {
+   "min_report_n": 20,
+   "markets": {},
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 0,
+    "sufficient_sample": false
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 0,
+   "published_records": 20
+  },
+  "SA": {
+   "min_report_n": 20,
+   "markets": {},
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 0,
+    "sufficient_sample": false
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 0,
+   "published_records": 30
+  }
+ },
  "challenger": {
   "challenger": "dc-decay-epl-v1-shadow",
   "production": "dixon-coles-v1-forward-frozen",

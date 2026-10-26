@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-10-26T13:47:13.496188+00:00",
+ "attempted_at": "2026-10-26T16:41:41.654981+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -23,20 +23,137 @@
    "results": 45,
    "note": null
   },
+  "ELC:football-data.org": {
+   "ok": false,
+   "label": "football-data.org (free tier)",
+   "matches": 0,
+   "results": 0,
+   "note": "skipped: FOOTBALL_DATA_ORG_TOKEN not configured"
+  },
+  "ELC:openfootball": {
+   "ok": true,
+   "label": "openfootball/football.json (CC0 public domain)",
+   "matches": 552,
+   "results": 88,
+   "note": null
+  },
+  "BL1:football-data.org": {
+   "ok": false,
+   "label": "football-data.org (free tier)",
+   "matches": 0,
+   "results": 0,
+   "note": "skipped: FOOTBALL_DATA_ORG_TOKEN not configured"
+  },
+  "BL1:openfootball": {
+   "ok": true,
+   "label": "openfootball/football.json (CC0 public domain)",
+   "matches": 306,
+   "results": 33,
+   "note": null
+  },
+  "BL1:openligadb": {
+   "ok": true,
+   "label": "OpenLigaDB (ODbL 1.0, © OpenLigaDB contributors)",
+   "matches": 306,
+   "results": 63,
+   "note": null
+  },
+  "PD:football-data.org": {
+   "ok": false,
+   "label": "football-data.org (free tier)",
+   "matches": 0,
+   "results": 0,
+   "note": "skipped: FOOTBALL_DATA_ORG_TOKEN not configured"
+  },
+  "PD:openfootball": {
+   "ok": true,
+   "label": "openfootball/football.json (CC0 public domain)",
+   "matches": 380,
+   "results": 64,
+   "note": null
+  },
+  "SA:football-data.org": {
+   "ok": false,
+   "label": "football-data.org (free tier)",
+   "matches": 0,
+   "results": 0,
+   "note": "skipped: FOOTBALL_DATA_ORG_TOKEN not configured"
+  },
+  "SA:openfootball": {
+   "ok": true,
+   "label": "openfootball/football.json (CC0 public domain)",
+   "matches": 380,
+   "results": 50,
+   "note": null
+  },
+  "FL1:football-data.org": {
+   "ok": false,
+   "label": "football-data.org (free tier)",
+   "matches": 0,
+   "results": 0,
+   "note": "skipped: FOOTBALL_DATA_ORG_TOKEN not configured"
+  },
+  "FL1:openfootball": {
+   "ok": true,
+   "label": "openfootball/football.json (CC0 public domain)",
+   "matches": 306,
+   "results": 41,
+   "note": null
+  },
+  "football-data.co.uk:ELC": {
+   "label": "football-data.co.uk (personal/research use; match statistics)",
+   "ok": true,
+   "results": 132,
+   "latest_result": "2026-10-20"
+  },
+  "football-data.co.uk:BL1": {
+   "label": "football-data.co.uk (personal/research use; match statistics)",
+   "ok": true,
+   "results": 54,
+   "latest_result": "2026-10-18"
+  },
+  "football-data.co.uk:PD": {
+   "label": "football-data.co.uk (personal/research use; match statistics)",
+   "ok": true,
+   "results": 89,
+   "latest_result": "2026-10-21"
+  },
+  "football-data.co.uk:SA": {
+   "label": "football-data.co.uk (personal/research use; match statistics)",
+   "ok": true,
+   "results": 70,
+   "latest_result": "2026-10-19"
+  },
+  "football-data.co.uk:FL1": {
+   "label": "football-data.co.uk (personal/research use; match statistics)",
+   "ok": true,
+   "results": 63,
+   "latest_result": "2026-10-18"
+  },
   "football-data.co.uk": {
    "ok": true,
    "label": "football-data.co.uk (personal/research use; match statistics)",
    "results": 70,
    "latest_result": "2026-10-19"
+  },
+  "the-odds-api": {
+   "ok": false,
+   "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
+   "matches": 0,
+   "notes": {
+    "all": "skipped: ODDS_API_KEY not configured"
+   },
+   "credits_used_this_month": 0,
+   "credits_remaining_reported": null
   }
  },
  "warnings": [],
  "errors": [],
  "ok": true,
- "last_success": "2026-10-26T13:47:13.496188+00:00",
- "fixtures": 380,
- "upcoming_predicted": 20,
- "published_revisions": 0,
+ "last_success": "2026-10-26T16:41:41.654981+00:00",
+ "fixtures": 2304,
+ "upcoming_predicted": 142,
+ "published_revisions": 122,
  "imported_frozen_records": 0,
  "settlement_updates": 0,
  "training_results": 1908,
