@@ -98,3 +98,14 @@ cd public-dist && npx vercel link --yes --project matchiq --scope martin-whites-
    - Run the workflow once by hand on the branch and confirm that the preview deploy and the data commit both happen.
 2. The Most Likely scorecard still has 0 settled picks; the populated mobile cards were only checked with mock numbers in the browser.
 3. Possible follow-ups: show the backtest comparison in the app (it lives only in the experiment report); a browser-level test for the Top Six cards.
+
+## Final release sweep (this session)
+
+- **Verified baseline** at `6ed8ec7`: 96 Python tests + 5 JS suites passing; user-owned `.gitignore`, `.claude/`, `public-dist/.gitignore` left untouched.
+- **C5: bookmaker odds feed (built, locally tested, NOT operational).**
+  - `pipeline/odds.py`: The Odds API free Starter plan (500 credits/month). Requests Match Result + Total Goals 1.5/2.5/3.5 for the Premier League, UK region = 2 credits/call. Self-caps at 400 credits/month, minimum 12 h between calls, keeps the old cache on any failure, drops started matches, key read from `ODDS_API_KEY` env only and never written. Output `data/odds.json` (best UK price per selection, bookmaker, timestamp, fractional + decimal, credits used), included in `public-dist` and the service-worker precache (cache v6).
+  - App: `pricesFor()` in `app.js` uses feed prices as defaults; anything the user types overrides them. BTTS, corners, cards and shots stay manual-entry (not requested from the feed; coverage on the free plan was not verified).
+  - Tests: `tests/test_odds.py` (5). Full suite now 101 Python tests.
+  - **Not verified:** a live call (no key), and the feed-prefill in a browser (the preview pane failed to load the page this session). Do both before trusting it.
+  - Activation: register free at the-odds-api.com, add GitHub secret `ODDS_API_KEY`. The workflow already passes it.
+- **Not done this session (by design, needs owner/credentials or is a research programme):** multi-league expansion (football-data.org free tier lists PL, ELC, BL1, PD, SA, FL1, but models, promoted-team handling and calibration are PL-only and each league needs its own validation), extra markets for Best Value, live GitHub Actions run, push/deploy.

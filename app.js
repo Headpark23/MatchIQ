@@ -11,7 +11,7 @@ const DIARY_STORAGE_KEY = 'matchiq_bet_diary_v1';
 const FEEDBACK_STORAGE_KEY = 'matchiq_ux_feedback_v1';
 const FILES = {
   predictions: 'data/predictions.json', fixtures: 'data/fixtures.json', history: 'data/prediction_history.json',
-  performance: 'data/performance.json', status: 'data/pipeline_status.json', reliability: 'data/model_reliability.json'
+  performance: 'data/performance.json', status: 'data/pipeline_status.json', reliability: 'data/model_reliability.json', odds: 'data/odds.json'
 };
 const DATA = {};
 const LOAD_ERRORS = {};
@@ -107,6 +107,13 @@ const PRICE_STORAGE_KEY = 'matchiq_seen_prices_v1';
 const REC_LABEL = { most_likely: 'Most Likely pick', best_value: 'Best Value pick' };
 
 function readPrices() { try { const v = JSON.parse(localStorage.getItem(PRICE_STORAGE_KEY) || '{}'); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } }
+/* Feed prices (data/odds.json, best UK price) are defaults; anything the user typed wins. */
+function feedMatch(id) { return ((DATA.odds && DATA.odds.matches) || {})[id] || null; }
+function pricesFor(id) {
+  const feed = feedMatch(id), out = {};
+  if (feed) for (const [k, v] of Object.entries(feed.selections)) out[k] = v.fractional;
+  return Object.assign(out, readPrices()[id] || {});
+}
 function writePrices(v) { try { localStorage.setItem(PRICE_STORAGE_KEY, JSON.stringify(v)); } catch (e) { /* prices are a convenience only */ } }
 
 const allSelections = calc.allSelections;
@@ -136,7 +143,7 @@ function mostLikelyBlock(pred, big) {
 const VALUE_HEAD = { value: ['value', 'Potential Value'], no_value: ['nobet', 'No Bet'], no_bet: ['nobet', 'No Bet'], awaiting_odds: ['awaiting', 'Awaiting Odds'] };
 
 function bestValueBlock(pred) {
-  const sels = allSelections(pred), prices = readPrices()[pred.match_id] || {};
+  const sels = allSelections(pred), prices = pricesFor(pred.match_id);
   const best = calc.bestValue(pred, prices, matchIQBands());
   const sel = sels.find(s => s.id === prices._selected) || (best && best.sel) || sels.find(s => s.id === 'result:' + pred.markets.result.pick.key) || sels[0];
   const siblings = sels.filter(s => s.group === sel.group && s.id !== sel.id);
@@ -148,7 +155,7 @@ function bestValueBlock(pred) {
   if (best) {
     detail += '<p class="muted" style="font-size:13.5px"><b>' + (v === 'value' ? 'Best value found: ' : 'Closest to value: ') + esc(best.sel.label) + '</b> at ' + esc(best.v.priceText) + ' (' + (best.v.ev >= 0 ? '+' : '') + Math.round(100 * best.v.ev) + '% estimated expected value). Checked ' + pricedCount + ' priced selection' + (pricedCount === 1 ? '' : 's') + ' across every market, not only the top six.</p>';
   } else {
-    detail += '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded: there is no lawful free odds feed. Type a fractional price you have seen on any selection, here or in the top six, and MatchIQ will check every priced selection for value.</p>';
+    detail += '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded for this match (the automatic feed covers Match Result and Total Goals only, when it is enabled). Type a fractional price you have seen on any selection, here or in the top six, and MatchIQ will check every priced selection for value.</p>';
   }
   if (verdict.verdict !== 'awaiting_odds') {
     detail += '<div class="value-grid"><div><span>Price</span><b>' + esc(verdict.priceText) + '</b></div><div><span>Price implies</span><b>' + pct(verdict.implied) + '</b></div>' +
@@ -191,7 +198,7 @@ function topSixCard(s, pred, rank, isMostLikely, prices) {
 }
 
 function topSixBlock(pred) {
-  const six = calc.topSix(pred, DATA.reliability), prices = readPrices()[pred.match_id] || {};
+  const six = calc.topSix(pred, DATA.reliability), prices = pricesFor(pred.match_id);
   const ml = (pred.recommendations || {}).most_likely || {};
   const isML = s => ml.decision === 'most_likely' && s.market === ml.market && s.key === ml.key && (ml.line == null || s.line === ml.line);
   if (!six.length) return '<div class="empty">No selection has enough evidence to rank for this match. Every prediction is still listed below.</div>';
@@ -418,7 +425,7 @@ function lowerBoundOf(pred) {
 }
 
 function valueStatus(pred) {
-  const prices = readPrices()[pred.match_id] || {};
+  const prices = pricesFor(pred.match_id);
   const sels = allSelections(pred);
   const best = calc.bestValue(pred, prices, matchIQBands());
   if (best && best.v.verdict === 'value') return '<span class="badge validated">Potential Value at your price</span>';

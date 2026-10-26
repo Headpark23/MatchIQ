@@ -39,7 +39,8 @@ ALLOWLIST_DATA = [
     "predictions.json",
     "prediction_history.json",
     "performance.json",
-    "pipeline_status.json"
+    "pipeline_status.json",
+    "odds.json"
 ]
 
 def build():

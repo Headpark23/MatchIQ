@@ -16,6 +16,7 @@ import sys
 from pathlib import Path
 
 from . import history as hist
+from . import odds as odds_feed
 from .data import (ROOT, championship_history, co_uk_as_matches, load_co_uk, merge_fixtures,
                    promoted_by_season, uk_date)
 from .fairodds import fair_odds
@@ -183,6 +184,11 @@ def run(out_dir, now, offline=False, fetchers=None):
     hist.verify(ledger)
     hist.verify(shadow)
 
+    odds_cache, odds_note = odds_feed.refresh(read_json(out_dir / "odds.json", {}), now) if not offline else (read_json(out_dir / "odds.json", {}), "offline run")
+    status["sources"]["the-odds-api"] = {"ok": bool(odds_cache.get("matches")), "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
+                                         "matches": len(odds_cache.get("matches", {})), "note": odds_note,
+                                         "credits_used_this_month": (odds_cache.get("credits") or {}).get("spent_by_month", {}).get(odds_feed.month_of(now), 0)}
+
     ok = not status["errors"]
     status.update({"ok": ok, "last_success": now.isoformat() if ok else previous_status.get("last_success"),
                    "fixtures": len(fixtures), "upcoming_predicted": len(predictions), "published_revisions": published,
@@ -194,6 +200,7 @@ def run(out_dir, now, offline=False, fetchers=None):
         write_json(out_dir / "predictions.json", {"generated_at": now.isoformat(), "horizon_days": HORIZON_DAYS, "predictions": predictions})
         write_json(out_dir / "prediction_history.json", ledger)
         write_json(out_dir / "shadow_history.json", shadow)
+        write_json(out_dir / "odds.json", odds_cache or {"fetched_at": None, "source": None, "matches": {}})
         write_json(out_dir / "performance.json", {"generated_at": now.isoformat(), **hist.performance(ledger),
                                                   "challenger": hist.compare_challenger(ledger, shadow)})
     write_json(out_dir / "pipeline_status.json", status)
