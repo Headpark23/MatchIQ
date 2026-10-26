@@ -285,6 +285,50 @@
     return true;
   }
 
+  // Bet Diary backup and import. Storage is per web address (origin), so every Vercel preview URL
+  // starts with an empty diary; a backup file moves entries between addresses without ever
+  // overwriting or deleting what is already stored.
+  function diaryBackup(entries, meta = {}) {
+    return { matchiq_diary_backup: 1, exported_at: meta.exportedAt || new Date().toISOString(), origin: meta.origin || '', count: entries.length, entries };
+  }
+
+  function parseDiaryImport(text) {
+    let parsed;
+    try { parsed = JSON.parse(text); } catch (error) { return { entries: [], rejected: 0, error: 'This file is not valid JSON.' }; }
+    const list = Array.isArray(parsed) ? parsed : parsed && Array.isArray(parsed.entries) ? parsed.entries : null;
+    if (!list) return { entries: [], rejected: 0, error: 'No Bet Diary entries were found in this file.' };
+    const entries = [];
+    let rejected = 0;
+    const odds = v => (typeof v === 'number' ? v : parseFractionalOdds(v));
+    for (const raw of list) {
+      if (!raw || typeof raw !== 'object' || typeof raw.id !== 'string' || !raw.id) { rejected++; continue; }
+      const { odds_fractional, legs, ...rest } = raw;
+      const dec = Number.isFinite(rest.odds) ? rest.odds : odds(odds_fractional);
+      const stake = Number(rest.stake);
+      if (!(dec > 1) || !Number.isFinite(stake) || stake < 0) { rejected++; continue; }
+      const entry = { ...rest, odds: dec, stake };
+      if (Array.isArray(legs)) {
+        const fixed = legs.map(({ odds_fractional: lf, ...l }) => ({ ...l, odds: Number.isFinite(l.odds) ? l.odds : odds(lf) }));
+        if (fixed.some(l => !(l.odds > 1))) { rejected++; continue; }
+        entry.legs = fixed;
+      }
+      entries.push(entry);
+    }
+    return { entries, rejected, error: null };
+  }
+
+  function mergeDiaryEntries(existing, incoming) {
+    const have = new Set(existing.map(e => e.id));
+    const added = [];
+    let duplicates = 0;
+    for (const e of incoming) {
+      if (have.has(e.id)) { duplicates++; continue; }
+      have.add(e.id);
+      added.push(e);
+    }
+    return { merged: existing.concat(added), added: added.length, duplicates };
+  }
+
   function calculateBrierScore(probabilities, actualOutcome, marketType = 'binary') {
     if (marketType === '1x2') {
       if (!probabilities || typeof probabilities !== 'object') return null;
@@ -467,6 +511,9 @@
     settleAccumulator,
     loadBetDiary,
     saveBetDiary,
+    diaryBackup,
+    parseDiaryImport,
+    mergeDiaryEntries,
     calculateBrierScore,
     MARKET_NAMES,
     FEATURE_LINES,

@@ -86,13 +86,25 @@ def load_history(path=HISTORY_PATH):
              "hg": i["hg"], "ag": i["ag"], "stats": {}, "source": "football-data.org"} for i in items]
 
 
+def permitted_result(f):
+    """A confirmed result usable by the public path: adopted from a permitted source and never
+    decided by a vote that involved a conflicting (possibly restricted) source."""
+    return bool(f["status"] == "FINISHED" and f.get("score") and f.get("result_source") in PERMITTED_RESULT_SOURCES
+                and not f.get("conflicting_scores"))
+
+
+def public_fixtures(fixtures):
+    """Fixtures as the public path may see them: a finished match whose result is not
+    permitted-source is treated as awaiting its result, never as settled."""
+    return [f if f["status"] != "FINISHED" or permitted_result(f) else {**f, "status": "AWAITING_RESULT", "score": None} for f in fixtures]
+
+
 def training_rows(history, fixtures, season):
     """History plus confirmed current-season results from permitted sources only."""
     known = {match_id(r["competition"], r["season"], r["home"], r["away"]) for r in history}
     rows = list(history)
     for f in fixtures:
-        if f["status"] == "FINISHED" and f.get("score") and f["season"] == season and f["id"] not in known \
-                and f.get("result_source") in PERMITTED_RESULT_SOURCES:
+        if permitted_result(f) and f["season"] == season and f["id"] not in known:
             kick = dt.datetime.fromisoformat(f["kickoff_utc"].replace("Z", "+00:00"))
             rows.append({"date": uk_date(kick), "competition": f["competition"], "season": f["season"], "home": f["home"], "away": f["away"],
                          "hg": f["score"][0], "ag": f["score"][1], "stats": {}, "source": f["result_source"]})
@@ -154,7 +166,9 @@ def run_public(now, fixtures, season, horizon_days, history=None, validation=Non
     lv = validation.get("leagues", {})
     ledger = ledger or empty_ledger()
     hist.verify(ledger)
+    fixtures = public_fixtures(fixtures)
     rows = training_rows(history, fixtures, season)
+    assert all(r["source"] in PERMITTED_RESULT_SOURCES for r in rows), "restricted data reached the public training set"
     fp = fingerprint(rows)
     contexts, predictions = {}, {}
     horizon = now + dt.timedelta(days=horizon_days)

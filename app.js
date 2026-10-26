@@ -714,8 +714,8 @@ function viewDiary() {
   const diary = diaryProfileFilter === 'all' ? all : all.filter(e => (e.profile || 'Default') === diaryProfileFilter);
   const s = calc.summarizeBetDiary(diary);
   const profiles = Array.from(new Set(all.map(e => e.profile || 'Default'))).sort();
-  let html = '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">Bet Diary</h1><p class="page-sub">Your private record of bets and prices. Stored only in this browser: it does not sync between devices, and clearing site data removes it, so export a copy now and then.</p></div>' +
-    '<div class="btn-row"><button type="button" class="btn primary" data-diary="{}">Add a bet</button><button type="button" class="btn" data-export="csv">Export CSV</button><button type="button" class="btn" data-export="json">Export JSON</button></div></div>';
+  let html = '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">Bet Diary</h1><p class="page-sub">Your private record of bets and prices. Stored only in this browser and only for this web address: it does not sync between devices, a different preview address starts empty, and clearing site data removes it. Use Backup, then Import on the other address, to move it.</p></div>' +
+    '<div class="btn-row"><button type="button" class="btn primary" data-diary="{}">Add a bet</button><button type="button" class="btn" data-export="csv">Export CSV</button><button type="button" class="btn" data-export="json">Export JSON</button><button type="button" class="btn" data-export="backup">Backup</button><button type="button" class="btn" data-import="diary">Import</button><input type="file" id="diary-import" accept="application/json,.json" hidden></div></div>';
   if (diaryReadFailed) html += '<div class="notice error">Saved diary data could not be read. It has been left untouched, and saving is disabled to protect it.</div>';
   html += '<div class="tiles section" style="margin-top:16px">' +
     '<div class="tile"><div class="k">Profit / loss</div><div class="v ' + (s.netProfit > 0 ? 'pos' : s.netProfit < 0 ? 'neg' : '') + '">' + (s.netProfit > 0 ? '+' : s.netProfit < 0 ? '−' : '') + money(s.netProfit) + '</div><div class="s">ROI ' + s.roiPct.toFixed(1) + '% on settled stakes</div></div>' +
@@ -813,6 +813,27 @@ function exportDiaryJSON() {
       ...(Array.isArray(legs) ? { legs: legs.map(leg => { const { odds: legOdds, ...legRest } = leg; return { ...legRest, odds_fractional: calc.formatFractionalOdds(legOdds) }; }) } : {}) };
   });
   downloadFile(JSON.stringify(exportEntries, null, 2), 'matchiq_bet_diary_' + new Date().toISOString().slice(0, 10) + '.json', 'application/json');
+}
+
+function exportDiaryBackup() {
+  const entries = getStoredDiary();
+  downloadFile(JSON.stringify(calc.diaryBackup(entries, { origin: location.origin }), null, 2), 'matchiq_bet_diary_backup_' + new Date().toISOString().slice(0, 10) + '.json', 'application/json');
+  toast('Backup of ' + entries.length + ' entries saved.');
+}
+
+function importDiaryFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const parsed = calc.parseDiaryImport(String(reader.result));
+    if (parsed.error) { toast(parsed.error, 'error'); return; }
+    try {
+      const { merged, added, duplicates } = calc.mergeDiaryEntries(getStoredDiary(), parsed.entries);
+      if (added) saveStoredDiary(merged);
+      toast('Imported ' + added + ' new ' + (added === 1 ? 'entry' : 'entries') + '; ' + duplicates + ' already here' + (parsed.rejected ? '; ' + parsed.rejected + ' skipped as invalid' : '') + '. Nothing was overwritten.');
+      render();
+    } catch (error) { toast('Import stopped: ' + error.message, 'error'); }
+  };
+  reader.readAsText(file);
 }
 
 function downloadFile(content, fileName, type) {
@@ -989,7 +1010,7 @@ function render() {
 }
 
 document.addEventListener('click', event => {
-  const t = event.target.closest('[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#bookmaker-quick button');
+  const t = event.target.closest('[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-import],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#bookmaker-quick button');
   if (!t) { if (event.target.id === 'diary-modal') closeDiary(); return; }
   if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));
   else if (t.dataset.close !== undefined) closeDiary();
@@ -999,6 +1020,8 @@ document.addEventListener('click', event => {
   else if (t.dataset.rfilter) { resultsFilter = t.dataset.rfilter; render(); }
   else if (t.dataset.export === 'csv') exportDiaryCSV();
   else if (t.dataset.export === 'json') exportDiaryJSON();
+  else if (t.dataset.export === 'backup') exportDiaryBackup();
+  else if (t.dataset.import === 'diary') { const inp = $('diary-import'); if (inp) inp.click(); }
   else if (t.dataset.export === 'feedback') downloadFile(JSON.stringify(getStoredFeedback(), null, 2), 'matchiq_feedback.json', 'application/json');
   else if (t.dataset.delete) deleteDiaryEntry(t.dataset.delete);
   else if (t.dataset.clearDiary !== undefined) clearDiary();
@@ -1020,6 +1043,7 @@ document.addEventListener('input', event => {
   }
 });
 document.addEventListener('change', event => {
+  if (event.target && event.target.id === 'diary-import') { const f = event.target.files && event.target.files[0]; if (f) importDiaryFile(f); event.target.value = ''; return; }
   const t = event.target;
   if (t.dataset && t.dataset.valueSelect) {
     const all = readPrices(), mine = all[t.dataset.valueSelect] || {};

@@ -150,3 +150,21 @@ assert.throws(() => calc.saveBetDiary({ setItem() { throw new Error('quota'); } 
 assert.throws(() => calc.loadBetDiary({ getItem() { throw new Error('blocked'); } }, 'diary'), /blocked/);
 
 console.log('PASS: All Bet Diary and Brier score unit tests successfully verified.');
+
+// 7. Backup / import across web addresses: never overwrites or loses entries
+{
+  const existing = [{ id: 'bet-1', odds: 2.5, stake: 10, outcome: 'pending' }];
+  const backup = calc.diaryBackup([{ id: 'bet-1', odds: 2.5, stake: 10 }, { id: 'bet-2', odds: 1.5, stake: 5, legs: [{ odds: 1.5, selection: 'A' }] }], { origin: 'https://a.example' });
+  const parsed = calc.parseDiaryImport(JSON.stringify(backup));
+  assert.equal(parsed.error, null); assert.equal(parsed.entries.length, 2);
+  const m = calc.mergeDiaryEntries(existing, parsed.entries);
+  assert.equal(m.added, 1); assert.equal(m.duplicates, 1); assert.equal(m.merged.length, 2); assert.strictEqual(m.merged[0], existing[0], 'existing entry untouched');
+  // the user-facing JSON export (fractional odds) can be re-imported too
+  const exported = calc.parseDiaryImport(JSON.stringify([{ id: 'bet-9', odds_fractional: '6/4', stake: 2, legs: [{ odds_fractional: '2/1', selection: 'B' }] }]));
+  close(exported.entries[0].odds, 2.5, 'fractional odds restored'); close(exported.entries[0].legs[0].odds, 3, 'leg odds restored');
+  // bad files are refused without touching storage
+  assert.ok(calc.parseDiaryImport('not json').error); assert.ok(calc.parseDiaryImport('{"a":1}').error);
+  const bad = calc.parseDiaryImport(JSON.stringify([{ id: 'x', odds: 1, stake: 5 }, { stake: 1 }, 7]));
+  assert.equal(bad.entries.length, 0); assert.equal(bad.rejected, 3);
+  console.log('PASS: Bet Diary backup, import and non-destructive merge');
+}
