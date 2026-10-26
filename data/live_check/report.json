@@ -1,0 +1,449 @@
+{
+ "generated_at": "2026-10-26T16:58:56.904642+00:00",
+ "football_data_org": {
+  "PL": {
+   "http": 200,
+   "x-requests-available-minute": "9",
+   "matches": 380,
+   "by_status": {
+    "FINISHED": 80,
+    "TIMED": 300
+   },
+   "latest_finished_utc": "2026-10-25T16:30:00Z",
+   "next_kickoff_utc": "2026-10-31T12:30:00Z",
+   "clubs": 20,
+   "unresolved_clubs": [],
+   "fixture_id_overlap_with_current_schedule": "380 of 380",
+   "competition_listed": "Premier League"
+  },
+  "ELC": {
+   "http": 200,
+   "x-requests-available-minute": "9",
+   "matches": 552,
+   "by_status": {
+    "FINISHED": 144,
+    "TIMED": 144,
+    "SCHEDULED": 264
+   },
+   "latest_finished_utc": "2026-10-24T14:00:00Z",
+   "next_kickoff_utc": "2026-10-30T20:00:00Z",
+   "clubs": 24,
+   "unresolved_clubs": [],
+   "fixture_id_overlap_with_current_schedule": "552 of 552",
+   "competition_listed": "Championship"
+  },
+  "BL1": {
+   "http": 200,
+   "x-requests-available-minute": "8",
+   "matches": 306,
+   "by_status": {
+    "FINISHED": 63,
+    "TIMED": 45,
+    "SCHEDULED": 198
+   },
+   "latest_finished_utc": "2026-10-25T16:30:00Z",
+   "next_kickoff_utc": "2026-10-30T19:30:00Z",
+   "clubs": 18,
+   "unresolved_clubs": [],
+   "fixture_id_overlap_with_current_schedule": "306 of 306",
+   "competition_listed": "Bundesliga"
+  },
+  "PD": {
+   "http": 200,
+   "x-requests-available-minute": "7",
+   "matches": 380,
+   "by_status": {
+    "FINISHED": 98,
+    "CANCELLED": 1,
+    "TIMED": 31,
+    "SCHEDULED": 250
+   },
+   "latest_finished_utc": "2026-10-25T20:00:00Z",
+   "next_kickoff_utc": "2026-10-26T20:00:00Z",
+   "clubs": 20,
+   "unresolved_clubs": [],
+   "fixture_id_overlap_with_current_schedule": "380 of 380",
+   "competition_listed": "Primera Division"
+  },
+  "SA": {
+   "http": 200,
+   "x-requests-available-minute": "6",
+   "matches": 380,
+   "by_status": {
+    "FINISHED": 80,
+    "TIMED": 110,
+    "SCHEDULED": 190
+   },
+   "latest_finished_utc": "2026-10-25T19:45:00Z",
+   "next_kickoff_utc": "2026-10-27T17:30:00Z",
+   "clubs": 20,
+   "unresolved_clubs": [],
+   "fixture_id_overlap_with_current_schedule": "380 of 380",
+   "competition_listed": "Serie A"
+  },
+  "FL1": {
+   "http": 200,
+   "x-requests-available-minute": "5",
+   "matches": 306,
+   "by_status": {
+    "FINISHED": 71,
+    "TIMED": 95,
+    "SCHEDULED": 140
+   },
+   "latest_finished_utc": "2026-10-25T16:15:00Z",
+   "next_kickoff_utc": "2026-10-26T19:30:00Z",
+   "clubs": 18,
+   "unresolved_clubs": [],
+   "fixture_id_overlap_with_current_schedule": "306 of 306",
+   "competition_listed": "Ligue 1"
+  }
+ },
+ "the_odds_api": {
+  "endpoint_host": "api.the-odds-api.com",
+  "sports_http": 200,
+  "sports_credit_headers": {
+   "x-requests-used": "0",
+   "x-requests-remaining": "500",
+   "x-requests-last": "0"
+  },
+  "soccer_keys_listed": [
+   "soccer_argentina_primera_division",
+   "soccer_australia_aleague",
+   "soccer_austria_bundesliga",
+   "soccer_belgium_first_div",
+   "soccer_brazil_campeonato",
+   "soccer_brazil_serie_b",
+   "soccer_chile_campeonato",
+   "soccer_conmebol_copa_libertadores",
+   "soccer_conmebol_copa_sudamericana",
+   "soccer_denmark_superliga",
+   "soccer_efl_champ",
+   "soccer_england_efl_cup",
+   "soccer_england_league1",
+   "soccer_england_league2",
+   "soccer_epl",
+   "soccer_finland_veikkausliiga",
+   "soccer_france_ligue_one",
+   "soccer_france_ligue_two",
+   "soccer_germany_bundesliga",
+   "soccer_germany_bundesliga2",
+   "soccer_germany_dfb_pokal",
+   "soccer_germany_liga3",
+   "soccer_greece_super_league",
+   "soccer_italy_serie_a",
+   "soccer_italy_serie_b",
+   "soccer_japan_j_league",
+   "soccer_league_of_ireland",
+   "soccer_mexico_ligamx",
+   "soccer_netherlands_eredivisie",
+   "soccer_norway_eliteserien",
+   "soccer_poland_ekstraklasa",
+   "soccer_portugal_primeira_liga",
+   "soccer_russia_premier_league",
+   "soccer_saudi_arabia_pro_league",
+   "soccer_spain_la_liga",
+   "soccer_spain_segunda_division",
+   "soccer_spl",
+   "soccer_sweden_allsvenskan",
+   "soccer_sweden_superettan",
+   "soccer_switzerland_superleague",
+   "soccer_turkey_super_league",
+   "soccer_uefa_champs_league",
+   "soccer_uefa_champs_league_women",
+   "soccer_uefa_europa_conference_league",
+   "soccer_uefa_europa_league",
+   "soccer_uefa_nations_league",
+   "soccer_usa_mls"
+  ],
+  "leagues": {
+   "PL": {
+    "sport_key": "soccer_epl",
+    "listed": true,
+    "active": true,
+    "markets_requested": "h2h,totals",
+    "http": 200,
+    "x-requests-used": "2",
+    "x-requests-remaining": "498",
+    "x-requests-last": "2",
+    "events": 21,
+    "bookmakers": [
+     "888sport",
+     "Bet Victor",
+     "Betano (UK)",
+     "Betfair",
+     "Betfair Sportsbook",
+     "Betfred (UK)",
+     "Betway",
+     "BoyleSports",
+     "Casumo",
+     "Coral",
+     "Grosvenor",
+     "Ladbrokes",
+     "LeoVegas",
+     "LiveScore Bet",
+     "Matchbook",
+     "Paddy Power",
+     "Sky Bet",
+     "Smarkets",
+     "Unibet (UK)",
+     "Virgin Bet",
+     "William Hill"
+    ],
+    "market_counts": {
+     "h2h": 372,
+     "totals": 89,
+     "h2h_lay": 51
+    },
+    "totals_lines_seen": [
+     2.5,
+     3.5
+    ],
+    "matched_to_our_schedule": 21,
+    "unmatched": [],
+    "selections_priced": 111
+   },
+   "ELC": {
+    "sport_key": "soccer_efl_champ",
+    "listed": true,
+    "active": true,
+    "markets_requested": "h2h,totals",
+    "http": 200,
+    "x-requests-used": "4",
+    "x-requests-remaining": "496",
+    "x-requests-last": "2",
+    "events": 12,
+    "bookmakers": [
+     "888sport",
+     "Bet Victor",
+     "Betano (UK)",
+     "Betfair",
+     "Betfair Sportsbook",
+     "Betfred (UK)",
+     "Betway",
+     "BoyleSports",
+     "Casumo",
+     "Coral",
+     "Grosvenor",
+     "Ladbrokes",
+     "LeoVegas",
+     "LiveScore Bet",
+     "Matchbook",
+     "Paddy Power",
+     "Sky Bet",
+     "Smarkets",
+     "Unibet (UK)",
+     "Virgin Bet",
+     "William Hill"
+    ],
+    "market_counts": {
+     "h2h": 248,
+     "totals": 54,
+     "h2h_lay": 36
+    },
+    "totals_lines_seen": [
+     2.5,
+     3.5
+    ],
+    "matched_to_our_schedule": 12,
+    "unmatched": [],
+    "selections_priced": 68
+   },
+   "BL1": {
+    "sport_key": "soccer_germany_bundesliga",
+    "listed": true,
+    "active": true,
+    "markets_requested": "h2h,totals",
+    "http": 200,
+    "x-requests-used": "6",
+    "x-requests-remaining": "494",
+    "x-requests-last": "2",
+    "events": 18,
+    "bookmakers": [
+     "888sport",
+     "Bet Victor",
+     "Betano (UK)",
+     "Betfair",
+     "Betfair Sportsbook",
+     "Betfred (UK)",
+     "Betway",
+     "BoyleSports",
+     "Casumo",
+     "Coral",
+     "Grosvenor",
+     "Ladbrokes",
+     "LeoVegas",
+     "LiveScore Bet",
+     "Matchbook",
+     "Paddy Power",
+     "Sky Bet",
+     "Smarkets",
+     "Unibet (UK)",
+     "Virgin Bet",
+     "William Hill"
+    ],
+    "market_counts": {
+     "h2h": 296,
+     "totals": 60,
+     "h2h_lay": 45
+    },
+    "totals_lines_seen": [
+     2.5,
+     3.5,
+     4.5
+    ],
+    "matched_to_our_schedule": 18,
+    "unmatched": [],
+    "selections_priced": 120
+   },
+   "PD": {
+    "sport_key": "soccer_spain_la_liga",
+    "listed": true,
+    "active": true,
+    "markets_requested": "h2h,totals",
+    "http": 200,
+    "x-requests-used": "8",
+    "x-requests-remaining": "492",
+    "x-requests-last": "2",
+    "events": 21,
+    "bookmakers": [
+     "Bet Victor",
+     "Betano (UK)",
+     "Betfair",
+     "Betfair Sportsbook",
+     "Betfred (UK)",
+     "Betway",
+     "BoyleSports",
+     "Casumo",
+     "Coral",
+     "Grosvenor",
+     "Ladbrokes",
+     "LeoVegas",
+     "LiveScore Bet",
+     "Matchbook",
+     "Paddy Power",
+     "Sky Bet",
+     "Smarkets",
+     "Unibet (UK)",
+     "Virgin Bet",
+     "William Hill"
+    ],
+    "market_counts": {
+     "h2h": 283,
+     "totals": 67,
+     "h2h_lay": 39
+    },
+    "totals_lines_seen": [
+     1.5,
+     2.5,
+     3.5,
+     4.5
+    ],
+    "matched_to_our_schedule": 9,
+    "unmatched": [
+     "Sevilla v CA Osasuna (kick-off differs from our schedule)",
+     "Villarreal v Espanyol (kick-off differs from our schedule)",
+     "Levante v Atl\u00e9tico Madrid (kick-off differs from our schedule)",
+     "Rayo Vallecano v Celta Vigo (kick-off differs from our schedule)",
+     "Real Betis v M\u00e1laga (kick-off differs from our schedule)",
+     "Barcelona v Alav\u00e9s (kick-off differs from our schedule)",
+     "Deportivo La Coru\u00f1a v CA Osasuna (kick-off differs from our schedule)",
+     "Sevilla v Alav\u00e9s (kick-off differs from our schedule)"
+    ],
+    "selections_priced": 51
+   },
+   "SA": {
+    "sport_key": "soccer_italy_serie_a",
+    "listed": true,
+    "active": true,
+    "markets_requested": "h2h,totals",
+    "http": 200,
+    "x-requests-used": "10",
+    "x-requests-remaining": "490",
+    "x-requests-last": "2",
+    "events": 20,
+    "bookmakers": [
+     "888sport",
+     "Bet Victor",
+     "Betano (UK)",
+     "Betfair",
+     "Betfair Sportsbook",
+     "Betfred (UK)",
+     "Betway",
+     "BoyleSports",
+     "Casumo",
+     "Coral",
+     "Grosvenor",
+     "Ladbrokes",
+     "LeoVegas",
+     "LiveScore Bet",
+     "Matchbook",
+     "Paddy Power",
+     "Sky Bet",
+     "Smarkets",
+     "Unibet (UK)",
+     "Virgin Bet",
+     "William Hill"
+    ],
+    "market_counts": {
+     "h2h": 372,
+     "totals": 94,
+     "h2h_lay": 48
+    },
+    "totals_lines_seen": [
+     2.5,
+     3.5
+    ],
+    "matched_to_our_schedule": 20,
+    "unmatched": [],
+    "selections_priced": 108
+   },
+   "FL1": {
+    "sport_key": "soccer_france_ligue_one",
+    "listed": true,
+    "active": true,
+    "markets_requested": "h2h,totals",
+    "http": 200,
+    "x-requests-used": "12",
+    "x-requests-remaining": "488",
+    "x-requests-last": "2",
+    "events": 19,
+    "bookmakers": [
+     "888sport",
+     "Bet Victor",
+     "Betano (UK)",
+     "Betfair",
+     "Betfair Sportsbook",
+     "Betfred (UK)",
+     "Betway",
+     "BoyleSports",
+     "Casumo",
+     "Coral",
+     "Grosvenor",
+     "Ladbrokes",
+     "LeoVegas",
+     "LiveScore Bet",
+     "Paddy Power",
+     "Sky Bet",
+     "Smarkets",
+     "Unibet (UK)",
+     "Virgin Bet",
+     "William Hill"
+    ],
+    "market_counts": {
+     "h2h": 306,
+     "totals": 76,
+     "h2h_lay": 38
+    },
+    "totals_lines_seen": [
+     2.5,
+     3.5
+    ],
+    "matched_to_our_schedule": 18,
+    "unmatched": [
+     "Paris Saint Germain v Lyon (kick-off differs from our schedule)"
+    ],
+    "selections_priced": 100
+   }
+  }
+ }
+}
