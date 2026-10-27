@@ -213,3 +213,27 @@ Football-data.org had not yet reported tonight's matches when requested (it was 
 - `pipeline/forward_check.py`: seven checks (sealed before kick-off, result matched to fixture from a permitted unconflicted source, independent win/loss recomputation, immutability versus the baseline, scorecards recomputed per league, finished fixtures out of Upcoming but kept in history, idempotent re-settlement). Self-tested on a replay in a temp directory (not counted as forward): 7 of 7 PASS.
 - `.github/workflows/forward-settlement-check.yml`: dev-branch only, triggered by pushing `.github/forward-check-request.txt`; football-data.org token only, the Odds API key is not passed (zero bookmaker credits); no deploy.
 - A one-off scheduled task (`matchiq-forward-settlement-check`) runs it on 27 Oct 08:30 UTC and appends the PASS/FAIL result here. It needs the desktop app open (otherwise it runs at next launch). Manual alternative: create the request file, commit, push to the dev branch, then read `data/forward_check/report.json`.
+
+## First live forward settlement (27 Oct)
+
+Run 2026-10-27 08:31Z via `.github/forward-check-request.txt` (request 1), workflow commit `9ce8da0` "Forward settlement check". Dev branch only; no deploy, no Odds API credits, nothing merged to main. Baseline: 144 sealed PUB- records (published 2026-10-26, baseline committed 17:53Z).
+
+**Verdict: PASS (7 of 7).** Forward-settled records: **2** (not 144; football-data.org had reported only these two of the 26 Oct evening matches as FINISHED, the free tier delays scores). The sample is tiny and proves the mechanism, not model quality.
+
+| # | Check | Result |
+|---|---|---|
+| 1 | Sealed before kick-off | PASS (n 2) |
+| 2 | Results match fixtures | PASS |
+| 3 | Settlement correct | PASS (picks won 3, lost 3) |
+| 4 | History immutable vs baseline | PASS (ledger verified; 286 records, 142 new revisions since baseline, no baseline record altered) |
+| 5 | Scorecards accurate | PASS |
+| 6 | Left Upcoming, kept in history | PASS |
+| 7 | Idempotent | PASS |
+
+**Settled per league:** FL1 1 (Paris SG 2-0 Lyon), PD 1 (Sevilla 2-0 Osasuna); PL, ELC, BL1, SA 0. Result-market picks: 2 won, 0 lost. Goals O/U 2.5: 1 won (Sevilla under), 1 lost (PSG over). BTTS: 0 won, 2 lost (both picked Yes, both games ended 2-0). Most Likely: 1 won (PSG win), 1 lost (Sevilla BTTS Yes).
+
+**Hand spot-check against `data/fixtures.json`** (both 2-0, source football-data.org): outcome H for both; PSG goals total 2 vs Over 2.5 pick = lost, BTTS no vs Yes = lost; Sevilla total 2 vs Under pick = won, BTTS lost. All match the ledger. Only 2 records were settled, so a third could not be checked.
+
+**Tests:** 131 Python tests OK; all JS suites PASS.
+
+**Blockers / remaining:** other 26 Oct matches and later rounds are not yet settled (delayed free-tier scores), so per-league samples stay far below any meaningful size; scorecards are flagged insufficient sample. Owner items from the earlier sections (provider terms, Vercel secrets, merge to main) are unchanged.
