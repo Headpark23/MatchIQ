@@ -473,9 +473,115 @@ function homeHero(pred) {
     '<div class="btn-row" style="margin-top:14px"><a class="btn primary" href="#/match/' + encodeURIComponent(pred.match_id) + '">See every market and check value</a></div></div></article>';
 }
 
+// ------------------------------------------------------------ Bet Builder (home hero)
+const BUILDER_KEY = 'matchiq_builder_v1';
+const builderState = { stake: 10, legs: 4, win: 50 };
+try {
+  const v = JSON.parse(localStorage.getItem(BUILDER_KEY) || 'null');
+  if (v && v.stake > 0 && v.win > 0 && v.legs >= 1 && v.legs <= MatchIQBuilder.MAX_LEGS) Object.assign(builderState, { stake: +v.stake, legs: +v.legs, win: +v.win });
+} catch (e) { /* the inputs are a convenience */ }
+let builderResult = null, builderTimer = null;
+
+function builderCompute() {
+  const { stake, legs, win } = builderState;
+  const pool = MatchIQBuilder.legPool(predictionsList(), { calc, reliability: DATA.reliability, feedFor, nowMs: Date.now() });
+  builderResult = MatchIQBuilder.buildSlips(pool, { stake, win, legs });
+  try { localStorage.setItem(BUILDER_KEY, JSON.stringify(builderState)); } catch (e) { /* ignore */ }
+}
+
+function slipLegRow(l) {
+  const f = l.fixture, ms = l.kickoff;
+  const price = l.priceSource === 'live'
+    ? '<span class="slip-price live" title="Bookmaker price from ' + esc(l.bookmaker) + '">' + esc(l.fractional) + '<small>' + esc(l.bookmaker) + '</small></span>'
+    : '<span class="slip-price est" title="No fresh bookmaker price. Estimated from the model chance plus a typical margin: check your bookmaker.">' + esc(l.fractional) + '<small>estimate</small></span>';
+  return '<li class="slip-leg"><span class="slip-teams">' + crest(f.home, 22) + '<span class="slip-match">' + esc(f.home) + ' v ' + esc(f.away) +
+    '<small>' + esc(fmtDay(ms)) + ' ' + esc(fmtTime(ms)) + ' · ' + esc(leagueName(f.competition)) + '</small></span></span>' +
+    '<span class="slip-pick"><b>' + esc(l.label) + '</b><small>' + pct(l.p) + ' chance' + (l.support === 'provisional' ? ' · provisional' : '') + '</small></span>' + price + '</li>';
+}
+
+function slipCard(slip, idx, stake) {
+  const m = MatchIQBuilder.money, primary = idx === 0;
+  const chance = slip.chance >= 0.1 ? Math.round(slip.chance * 100) : (slip.chance * 100).toFixed(1);
+  return '<article class="slip' + (primary ? ' primary' : '') + '"><div class="slip-head"><div><div class="slip-kicker">' + (primary ? 'Best match for your target' : 'Alternative ' + idx) + '</div>' +
+    '<div class="slip-odds mono">' + esc(calc.formatFractionalOdds(slip.odds)) + ' <small>(' + slip.odds.toFixed(2) + ')</small></div></div>' +
+    '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every bet lands</small></div></div>' +
+    '<ol class="slip-legs">' + slip.legs.map(slipLegRow).join('') + '</ol>' +
+    '<div class="slip-sum"><span>Stake <b class="mono">' + m(stake) + '</b></span><span>Returns <b class="mono">' + m(slip.ret) + '</b></span><span>Profit <b class="mono">' + m(slip.profit) + '</b></span></div>' +
+    (slip.chance < 0.05 ? '<p class="slip-warn">Long shot: roughly 1 in ' + Math.round(1 / slip.chance) + '. Most slips like this lose.</p>' : '') +
+    (slip.estimated ? '<p class="slip-note">Some prices are estimates, not live bookmaker prices. The price you are actually offered will differ, so the profit will too.</p>' : '') +
+    '<div class="btn-row"><button type="button" class="btn' + (primary ? ' primary' : '') + '" data-slip="' + idx + '">Save slip to Bet Diary</button></div></article>';
+}
+
+function builderOutput() {
+  const r = builderResult, { stake, win } = builderState, m = MatchIQBuilder.money;
+  if (!r) return '';
+  const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from a <b>' + m(stake) + '</b> stake you need a total return of <b>' + m(stake + win) + '</b>: combined odds of about <b class="mono">' + ((stake + win) / stake).toFixed(2) + '</b>.</p>';
+  if (r.error) return need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>';
+  const first = r.slips[0];
+  const miss = r.exact ? '' : '<p class="slip-warn">No combination lands on that target. This is the closest available: it returns ' + m(first.ret) + ' (profit ' + m(first.profit) + ').</p>';
+  const fine = '<p class="builder-fine">Chances are MatchIQ model estimates, not promises. On average this slip is expected to ' + (first.ev >= 0 ? 'make ' : 'lose ') + '<b>' + m(Math.abs(first.ev)) + '</b> per ' + m(stake) + ' staked; bookmaker margins usually push that below zero. Never stake more than you can afford to lose.</p>';
+  return need + miss + r.slips.map((s, i) => slipCard(s, i, stake)).join('') + fine;
+}
+
+function viewBuilder() {
+  builderCompute();
+  const { stake, legs, win } = builderState;
+  const legChips = [2, 3, 4, 5, 6, 8].map(n => '<button type="button" class="legpick" data-legs="' + n + '" aria-pressed="' + (legs === n) + '">' + n + '</button>').join('');
+  return '<section class="builder" aria-labelledby="builder-title"><div class="builder-kicker">Bet Builder</div><h1 class="page-title" id="builder-title">Tell us the win. We’ll build the bet.</h1>' +
+    '<p class="page-sub">Pick a stake, how many bets and how much you want to win. MatchIQ searches every upcoming match for the accumulator that hits your target with the best chance of landing.</p>' +
+    '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake"></div>' +
+    '<div class="field"><span class="lbl" id="b-legs-l">Number of bets</span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
+    '<input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Number of bets"></div></div>' +
+    '<div class="field full"><label for="b-win">I want to win: <b class="mono" id="b-win-out">' + MatchIQBuilder.money(win) + '</b></label><input id="b-win" class="builder-range" type="range" min="1" max="1000" step="1" value="' + Math.min(win, 1000) + '" data-b="win"></div></div>' +
+    '<div id="builder-out" class="builder-out" aria-live="polite">' + builderOutput() + '</div>' +
+    '<p class="builder-foot">18+ only. Gambling can be addictive; play responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a>. MatchIQ does not take bets, and nothing here is a guarantee.</p></section>';
+}
+
+function updateBuilder() {
+  builderCompute();
+  const out = $('builder-out');
+  if (out) out.innerHTML = builderOutput();
+}
+
+function markLegChips() {
+  document.querySelectorAll('.legpick').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.legs === builderState.legs)));
+}
+
+function setBuilderLegs(n) {
+  builderState.legs = n;
+  const inp = $('b-legs'); if (inp) inp.value = n;
+  markLegChips();
+  updateBuilder();
+}
+
+function onBuilderInput(t) {
+  const v = Number(t.value);
+  if (t.dataset.b === 'win') {
+    builderState.win = Math.max(1, v);
+    $('b-win-out').textContent = MatchIQBuilder.money(builderState.win);
+  } else if (!Number.isFinite(v) || v <= 0) return;
+  else if (t.dataset.b === 'stake') builderState.stake = Math.min(10000, v);
+  else if (t.dataset.b === 'legs') { builderState.legs = Math.max(1, Math.min(MatchIQBuilder.MAX_LEGS, Math.round(v))); markLegChips(); }
+  clearTimeout(builderTimer);
+  builderTimer = setTimeout(updateBuilder, 120);
+}
+
+function saveSlipToDiary(i) {
+  const slip = builderResult && builderResult.slips && builderResult.slips[i];
+  if (!slip) return;
+  openDiary({});
+  $('modal-bet-type').value = 'accumulator';
+  toggleAccumulatorFields();
+  $('modal-legs-input').value = slip.legs.map(l => l.fixture.home + ' v ' + l.fixture.away + ': ' + l.label + ' | ' + String(l.fractional).replace('≈', '')).join('\n');
+  $('modal-stake-input').value = builderState.stake.toFixed(2);
+  $('modal-origin-select').value = 'matchiq';
+  $('modal-notes-input').value = 'Built by MatchIQ Bet Builder for a £' + builderState.win + ' win. Check any price marked estimate with your bookmaker.';
+  updateModalPnlPreview();
+}
+
 function viewHome() {
   const list = upcoming();
-  let html = '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">This round</h1>' +
+  let html = '<section class="view">' + viewBuilder() + '<div class="section-head" style="align-items:flex-end;margin-top:36px"><div><h2 class="page-title">This round</h2>' +
     '<p class="page-sub">For every upcoming match: the most likely supported outcome, the match-result lean and whether a price you have seen offers value. MatchIQ will say No bet when the evidence or the price is not good enough.</p></div>' +
     '<div class="chips">' + freshnessChips() + '</div></div>' + compBar();
   if (LOAD_ERRORS.predictions) return html + errorPanel('predictions') + '</section>';
@@ -1010,9 +1116,11 @@ function render() {
 }
 
 document.addEventListener('click', event => {
-  const t = event.target.closest('[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-import],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#bookmaker-quick button');
+  const t = event.target.closest('[data-slip],[data-legs],[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-import],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#bookmaker-quick button');
   if (!t) { if (event.target.id === 'diary-modal') closeDiary(); return; }
-  if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));
+  if (t.dataset.slip !== undefined) saveSlipToDiary(+t.dataset.slip);
+  else if (t.dataset.legs) setBuilderLegs(+t.dataset.legs);
+  else if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));
   else if (t.dataset.close !== undefined) closeDiary();
   else if (t.dataset.comp) { compFilter = t.dataset.comp; try { localStorage.setItem(COMP_KEY, compFilter); } catch (e) { /* ignore */ } render(); }
   else if (t.dataset.tab) { fixturesTab = t.dataset.tab; fixturesShowAll = false; render(); }
@@ -1033,6 +1141,7 @@ document.addEventListener('click', event => {
 });
 document.addEventListener('input', event => {
   const t = event.target;
+  if (t.dataset && t.dataset.b) { onBuilderInput(t); return; }
   if (t.dataset && t.dataset.price) {
     const all = readPrices(), mine = all[t.dataset.match] || {};
     if (t.value.trim()) mine[t.dataset.price] = t.value.trim(); else delete mine[t.dataset.price];

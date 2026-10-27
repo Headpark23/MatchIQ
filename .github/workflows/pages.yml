@@ -1,0 +1,36 @@
+name: Publish MatchIQ to GitHub Pages
+# Free hosting. Publishes only the allowlisted public-dist/ bundle (see build_public_dist.py),
+# never the repository root. Runs on every push to main that touches the bundle, and after each
+# data refresh, so the live site always shows the latest committed predictions and prices.
+on:
+  push:
+    branches: [main]
+    paths: ['public-dist/**']
+  workflow_run:
+    workflows: ['MatchIQ fixture, prediction and history refresh']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public-dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

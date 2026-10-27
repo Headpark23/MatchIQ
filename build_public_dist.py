@@ -22,6 +22,7 @@ ALLOWLIST_FILES = [
     "app.js",
     "styles.css",
     "market_calculations.js",
+    "bet_builder.js",
     "manifest.json",
     "sw.js",
     "vercel.json"
