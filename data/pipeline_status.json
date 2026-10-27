@@ -1,12 +1,12 @@
 {
- "attempted_at": "2026-10-26T17:32:31.484448+00:00",
+ "attempted_at": "2026-10-27T08:31:04.550362+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
    "ok": true,
    "label": "football-data.org (free tier)",
    "matches": 380,
-   "results": 75,
+   "results": 80,
    "note": null
   },
   "openligadb": {
@@ -62,7 +62,7 @@
    "ok": true,
    "label": "football-data.org (free tier)",
    "matches": 380,
-   "results": 98,
+   "results": 99,
    "note": null
   },
   "PD:openfootball": {
@@ -90,7 +90,7 @@
    "ok": true,
    "label": "football-data.org (free tier)",
    "matches": 306,
-   "results": 71,
+   "results": 72,
    "note": null
   },
   "FL1:openfootball": {
@@ -151,12 +151,7 @@
    "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
    "matches": 60,
    "notes": {
-    "PL": "skipped: no Premier League match in the next 36 h",
-    "ELC": "skipped: no Championship match in the next 36 h",
-    "BL1": "skipped: no Bundesliga match in the next 36 h",
-    "PD": "skipped: polled 0.5 h ago (minimum 3 h)",
-    "SA": "skipped: polled 0.5 h ago (minimum 8 h)",
-    "FL1": "skipped: polled 0.5 h ago (minimum 3 h)"
+    "all": "skipped: ODDS_API_KEY not configured"
    },
    "credits_used_this_month": 6,
    "credits_remaining_reported": 470
@@ -165,14 +160,14 @@
  "warnings": [],
  "errors": [],
  "ok": true,
- "last_success": "2026-10-26T17:32:31.484448+00:00",
+ "last_success": "2026-10-27T08:31:04.550362+00:00",
  "fixtures": 2304,
- "upcoming_predicted": 144,
- "published_revisions": 0,
+ "upcoming_predicted": 142,
+ "published_revisions": 58,
  "imported_frozen_records": 0,
- "settlement_updates": 4,
- "training_results": 1913,
- "results_latest": "2026-10-24",
+ "settlement_updates": 12,
+ "training_results": 1918,
+ "results_latest": "2026-10-25",
  "model_versions": {
   "T1": "dixon-coles-v1-forward-frozen",
   "T2": "dc-pooled-shrunk50-v1",
@@ -183,8 +178,8 @@
  "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk.",
  "public": {
   "model_version": "dc-public-v1",
-  "predictions": 144,
-  "records": 144,
+  "predictions": 142,
+  "records": 286,
   "validated": true
  }
 }

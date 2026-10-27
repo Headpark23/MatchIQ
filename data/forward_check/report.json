@@ -1,0 +1,86 @@
+{
+ "generated_at": "2026-10-27T08:31:18.105548+00:00",
+ "baseline_recorded_at": "2026-10-26T17:53:21.500743+00:00",
+ "baseline_records": 144,
+ "forward_settled_records": 2,
+ "checks": {
+  "1_sealed_before_kickoff": {
+   "pass": true,
+   "violations": [],
+   "n": 2
+  },
+  "2_results_match_fixtures": {
+   "pass": true,
+   "violations": []
+  },
+  "3_settlement_correct": {
+   "pass": true,
+   "violations": [],
+   "picks_won": 3,
+   "picks_lost": 3
+  },
+  "4_history_immutable": {
+   "pass": true,
+   "violations": [],
+   "ledger_verified": true,
+   "records_now": 286,
+   "new_revisions_since_baseline": 142
+  },
+  "5_scorecards_accurate": {
+   "pass": true,
+   "mismatches": [],
+   "evaluated_records": 2,
+   "per_league": {
+    "PL": {
+     "result": null,
+     "n": 0
+    },
+    "BL1": {
+     "result": null,
+     "n": 0
+    },
+    "ELC": {
+     "result": null,
+     "n": 0
+    },
+    "FL1": {
+     "result": {
+      "n": 1,
+      "brier": 0.218,
+      "logloss": 0.479,
+      "pick_hit_rate": 1.0,
+      "mean_pick_p": 0.6194,
+      "sufficient_sample": false
+     },
+     "n": 1
+    },
+    "PD": {
+     "result": {
+      "n": 1,
+      "brier": 0.419,
+      "logloss": 0.7518,
+      "pick_hit_rate": 1.0,
+      "mean_pick_p": 0.4715,
+      "sufficient_sample": false
+     },
+     "n": 1
+    },
+    "SA": {
+     "result": null,
+     "n": 0
+    }
+   }
+  },
+  "6_left_upcoming_kept_in_history": {
+   "pass": true,
+   "still_listed_upcoming": [],
+   "missing_from_history": []
+  },
+  "7_idempotent": {
+   "pass": true,
+   "second_run_identical": true,
+   "no_new_or_altered_records": true
+  }
+ },
+ "verdict": "PASS"
+}
