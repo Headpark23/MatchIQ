@@ -132,3 +132,4 @@ if old_row_fn in app_src:
     app_src = app_src.replace(old_row_fn, new_row_fn)
     app_path.write_text(app_src, encoding='utf-8')
     print("app.js matchRecRow updated with distribution bar.")
+
