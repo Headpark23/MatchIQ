@@ -111,3 +111,4 @@ assert old_test in test_src, "old_test not found in test_bet_diary.js"
 test_src = test_src.replace(old_test, new_test)
 test_path.write_text(test_src, encoding='utf-8')
 print("test_bet_diary.js updated.")
+

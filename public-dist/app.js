@@ -494,13 +494,23 @@ function matchRecRow(pred) {
   const f = pred.fixture, ms = kickoffMs(f), m = (pred.recommendations || {}).most_likely || {}, r = pred.markets.result;
   const status = m.status === 'provisional' && m.strength === 'none' ? 'league' : m.status;
   const pick = m.decision === 'most_likely'
-    ? ring(m.p, 56, status === 'validated' ? '' : 'provisional') + '<span><span class="dim" style="display:block;font-size:12px">Most likely · ' + esc(MARKETS[m.market].name) + '</span><b class="rec-row-pick">' + esc(m.label) + '</b></span>'
-    : '<span><b class="rec-row-pick">No bet</b><span class="dim" style="display:block;font-size:12px">Not enough evidence</span></span>';
+    ? ring(m.p, 54, status === 'validated' ? '' : 'provisional') + '<span><span class="dim" style="display:block;font-size:11.5px">Most likely · ' + esc(MARKETS[m.market].name) + '</span><b class="rec-row-pick">' + esc(m.label) + '</b></span>'
+    : '<span><b class="rec-row-pick">No bet</b><span class="dim" style="display:block;font-size:11.5px">Not enough evidence</span></span>';
+
+  // Horizontal match result distribution bar
+  const sels = (r && r.selections) || [];
+  const hP = Math.round(((sels.find(s => s.outcome === 'home') || {}).p || 0) * 100);
+  const dP = Math.round(((sels.find(s => s.outcome === 'draw') || {}).p || 0) * 100);
+  const aP = Math.max(0, 100 - hP - dP);
+  const distBar = sels.length >= 3
+    ? '<div class="match-dist-bar" title="Model probabilities: Home ' + hP + '%, Draw ' + dP + '%, Away ' + aP + '%"><span class="bar-seg home" style="width:' + hP + '%"></span><span class="bar-seg draw" style="width:' + dP + '%"></span><span class="bar-seg away" style="width:' + aP + '%"></span></div>'
+    : '';
+
   return '<a class="rec-row" href="#/match/' + encodeURIComponent(pred.match_id) + '">' +
     '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small>' + (compFilter === 'ALL' ? '<small class="lg-tag">' + esc(f.competition || 'PL') + '</small>' : '') + '</span>' +
-    '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span></span>' +
+    '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span>' + distBar + '</span>' +
     '<span class="rec-row-main">' + pick + '</span>' +
-    '<span class="rec-row-side"><span class="dim">Result lean: <b style="color:#fff">' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (r.evidence.status !== 'validated' ? ' <span class="badge provisional">Provisional</span>' : '') + '</span>' + valueStatus(pred) + '</span>' +
+    '<span class="rec-row-side"><span class="dim">Lean: <b style="color:#fff">' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (r.evidence.status !== 'validated' ? ' <span class="badge provisional">Provisional</span>' : '') + '</span>' + valueStatus(pred) + '</span>' +
     '<span class="fx-chev" aria-hidden="true">›</span></a>';
 }
 
