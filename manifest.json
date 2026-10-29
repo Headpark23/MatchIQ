@@ -1,13 +1,13 @@
 {
-  "name": "MatchIQ Pro — Football Intelligence",
+  "name": "MatchIQ — Football Intelligence",
   "short_name": "MatchIQ",
-  "description": "Stadium Control & Matchweek Predictions for Premier League Football",
+  "description": "Premier League predictions with honest evidence, a permanent track record and a private Bet Diary.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#070b14",
-  "theme_color": "#070b14",
+  "background_color": "#060d19",
+  "theme_color": "#060d19",
   "categories": [
     "sports",
     "entertainment"
@@ -17,13 +17,25 @@
       "src": "assets/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "assets/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

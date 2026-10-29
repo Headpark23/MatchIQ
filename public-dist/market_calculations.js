@@ -218,6 +218,25 @@
     return bestError > 1e-10 ? `≈${fraction}` : fraction;
   }
 
+  function formatDecimalOdds(odds) {
+    const o = number(odds);
+    if (o === null || o < 1) return '—';
+    return o.toFixed(2);
+  }
+
+  function formatDisplayOdds(odds, format = 'fractional') {
+    return format === 'decimal' ? formatDecimalOdds(odds) : formatFractionalOdds(odds);
+  }
+
+  function parseOdds(value) {
+    const frac = parseFractionalOdds(value);
+    if (frac !== null) return frac;
+    const text = String(value ?? '').trim();
+    const num = Number(text);
+    if (Number.isFinite(num) && num > 1) return num;
+    return null;
+  }
+
   // Standard UK bookmaker price ladder, used only to express model-derived fair odds.
   const UK_PRICE_LADDER = Object.freeze([
     '1/20', '1/16', '1/14', '1/12', '1/10', '1/9', '1/8', '1/7', '1/6', '1/5', '2/9', '1/4', '2/7',
@@ -230,9 +249,12 @@
 
   // Model fair odds are 1 / probability with no bookmaker margin. They are always an
   // approximation, so they are snapped to the nearest familiar UK price and marked "≈".
-  function formatFairOdds(probability) {
+  function formatFairOdds(probability, format = 'fractional') {
     const p = number(probability);
     if (p === null || p <= 0 || p >= 1) return '—';
+    if (format === 'decimal') {
+      return '≈' + (1 / p).toFixed(2);
+    }
     let best = UK_PRICE_LADDER[0], bestGap = Infinity;
     for (const price of UK_PRICE_LADDER) {
       const implied = 1 / parseFractionalOdds(price);
@@ -446,11 +468,11 @@
      calibration bands of the frozen match-result model. */
   function valueVerdict(sel, priceText, siblings, prices, bands) {
     const text = priceText == null ? '' : String(priceText).trim();
-    if (!text) return { verdict: 'awaiting_odds', why: 'No bookmaker price yet. Type a fractional price you have seen to test it.' };
-    const dec = parseFractionalOdds(text);
-    if (!Number.isFinite(dec) || dec <= 1) return { verdict: 'awaiting_odds', why: 'That price was not understood. Use a fractional price such as 6/4 or Evens.' };
+    if (!text) return { verdict: 'awaiting_odds', why: 'No bookmaker price yet. Type a price you have seen to test it.' };
+    const dec = parseFractionalOdds(text) ?? (Number.isFinite(+text) && +text > 1 ? +text : null);
+    if (!Number.isFinite(dec) || dec <= 1) return { verdict: 'awaiting_odds', why: 'That price was not understood. Enter fractional (e.g. 6/4) or decimal (e.g. 2.50).' };
     const implied = 1 / dec, ev = sel.p * dec - 1;
-    const sibDec = siblings.map((x) => parseFractionalOdds((prices || {})[x.id]));
+    const sibDec = siblings.map((x) => parseFractionalOdds((prices || {})[x.id]) ?? (Number.isFinite(+(prices || {})[x.id]) && +(prices || {})[x.id] > 1 ? +(prices || {})[x.id] : null));
     const complete = siblings.length > 0 && sibDec.every((d) => Number.isFinite(d) && d > 1);
     const book = complete ? implied + sibDec.reduce((t, d) => t + 1 / d, 0) : null;
     const out = { dec, implied, ev, margin: complete ? book - 1 : null, fairImplied: complete ? implied / book : null, priceText: formatFractionalOdds(dec) };
@@ -504,9 +526,12 @@
     calculateBetProfit,
     summarizeBetDiary,
     formatFractionalOdds,
+    formatDecimalOdds,
+    formatDisplayOdds,
     formatFairOdds,
     UK_PRICE_LADDER,
     parseFractionalOdds,
+    parseOdds,
     createAccumulator,
     settleAccumulator,
     loadBetDiary,

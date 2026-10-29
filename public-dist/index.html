@@ -11,9 +11,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MatchIQ">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
@@ -30,8 +31,11 @@
       <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5zm-10 10 10 5 10-5M2 17l10 5 10-5" fill="none" stroke="#04140d" stroke-width="2"/></svg></span>
       <span class="brand-word">Match<b>IQ</b></span>
     </a>
+    <div class="header-tools">
+      <button type="button" class="odds-toggle" id="odds-toggle" aria-label="Toggle odds format" title="Switch between Fractional (6/4) and Decimal (2.50) odds">Odds: <b class="mono" id="odds-mode-val">Fractional</b></button>
+    </div>
     <nav class="nav" aria-label="Main">
-      <a href="#/" data-nav="home"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>Signals</a>
+      <a href="#/" data-nav="home"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>Picks</a>
       <a href="#/fixtures" data-nav="fixtures"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Fixtures</a>
       <a href="#/results" data-nav="results"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Results</a>
       <a href="#/diary" data-nav="diary"><svg viewBox="0 0 24 24"><path d="M5 3h12a2 2 0 0 1 2 2v16l-4-2-4 2-4-2-4 2V5a2 2 0 0 1 2-2z"/><path d="M9 8h6M9 12h6"/></svg>Diary<span class="count" id="diary-count"></span></a>
@@ -87,12 +91,12 @@
             <input id="modal-selection-input" class="ctl" placeholder="e.g. Arsenal win, Under 2.5 goals" autocomplete="off">
           </div>
           <div class="field full" id="accumulator-legs-row" hidden>
-            <label for="modal-legs-input">Accumulator legs, one per line: selection | fractional odds</label>
+            <label for="modal-legs-input">Accumulator legs, one per line: selection | fractional odds (or decimal e.g. 2.50)</label>
             <textarea id="modal-legs-input" class="ctl" rows="4" oninput="updateModalPnlPreview()" placeholder="Arsenal win | 6/4&#10;Over 2.5 goals | 10/11"></textarea>
           </div>
           <div class="field" id="single-odds-row">
-            <label for="modal-odds-input">Fractional Odds Actually Offered</label>
-            <input type="text" id="modal-odds-input" class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or Evens" oninput="updateModalPnlPreview()">
+            <label for="modal-odds-input">Fractional Odds Actually Offered <span class="dim">(or Decimal)</span></label>
+            <input type="text" id="modal-odds-input" class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or 2.50" oninput="updateModalPnlPreview()">
             <span class="dim" id="modal-fair-hint" style="font-size:12.5px"></span>
           </div>
           <div class="field">

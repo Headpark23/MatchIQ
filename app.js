@@ -27,6 +27,42 @@ function compBar() {
 const LOAD_ERRORS = {};
 const SIGNAL_RULES = Object.freeze({ trivialAbove: 0.85, shrinkWeight: 20, fullSample: 10 });
 
+// ------------------------------------------------------------ Odds format & preferences
+const ODDS_FORMAT_KEY = 'matchiq_odds_pref_v1';
+let oddsFormat = 'fractional';
+try {
+  const savedFmt = localStorage.getItem(ODDS_FORMAT_KEY);
+  if (savedFmt === 'decimal' || savedFmt === 'fractional') oddsFormat = savedFmt;
+} catch (e) { /* ignore */ }
+
+function getOddsFormat() { return oddsFormat; }
+function setOddsFormat(mode) {
+  oddsFormat = mode === 'decimal' ? 'decimal' : 'fractional';
+  try { localStorage.setItem(ODDS_FORMAT_KEY, oddsFormat); } catch (e) { /* ignore */ }
+  updateOddsToggleLabel();
+  render();
+}
+function toggleOddsFormat() {
+  setOddsFormat(oddsFormat === 'fractional' ? 'decimal' : 'fractional');
+}
+function updateOddsToggleLabel() {
+  const lbl = $('odds-mode-val');
+  if (lbl) lbl.textContent = oddsFormat === 'decimal' ? 'Decimal' : 'Fractional';
+}
+function fmtOdds(decimalOdds) {
+  if (oddsFormat === 'decimal') return calc.formatDecimalOdds(decimalOdds);
+  return calc.formatFractionalOdds(decimalOdds);
+}
+function fmtFairOdds(fairStr, prob) {
+  if (oddsFormat === 'decimal') {
+    if (prob != null && prob > 0 && prob < 1) return '≈' + (1 / prob).toFixed(2);
+    const parsed = calc.parseFractionalOdds(String(fairStr || '').replace('≈', ''));
+    if (parsed) return '≈' + calc.formatDecimalOdds(parsed);
+  }
+  return fairStr;
+}
+let clubFilter = '';
+
 // ------------------------------------------------------------ clubs
 const CLUBS = {
   'Arsenal': ['#EF0107', '#FFFFFF', 'ARS', 'Emirates Stadium'], 'Aston Villa': ['#670E36', '#95BFE5', 'AVL', 'Villa Park'],
@@ -151,7 +187,7 @@ function mostLikelyBlock(pred, big) {
   return '<div class="rec-card' + (big ? ' big' : '') + '"><div class="rec-kicker">Most likely to win</div>' +
     '<div class="rec-main">' + ring(m.p, big ? 112 : 72, status === 'validated' ? '' : 'provisional') +
     '<div><div class="rec-market">' + esc(MARKETS[m.market].name) + '</div><div class="rec-pick">' + esc(m.label) + '</div>' +
-    '<div class="market-odds">Model fair odds <b>' + esc(diary.fair) + '</b> · not a bookmaker price</div></div></div>' +
+    '<div class="market-odds">Model fair odds <b>' + esc(fmtFairOdds(diary.fair, m.p)) + '</b> · not a bookmaker price</div></div></div>' +
     '<div class="evidence-row">' + statusBadge(status) + meter(m.strength) + '</div>' +
     '<p class="muted" style="font-size:13.5px">About ' + Math.round(m.p * 10) + ' times in 10. Chosen on credible chance (' + pct(m.lower_bound) + ' at the cautious end) from ' + esc(m.basis) + '. Likely does not mean good value.</p>' +
     '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button></div>';
@@ -207,10 +243,10 @@ function topSixCard(s, pred, rank, isMostLikely, prices) {
   return '<article class="card top-card ' + cls + '"><div class="top-head"><span class="top-rank">' + rank + '</span><span class="market-name"><svg viewBox="0 0 24 24">' + ICONS[s.market] + '</svg>' + esc(MARKETS[s.market].name) + '</span>' +
     (isMostLikely ? '<span class="badge validated">Most Likely</span>' : '') + '</div>' +
     '<div class="market-main">' + ring(s.p, 64, s.support === 'validated' ? '' : s.support === 'unsupported' ? 'limited' : 'provisional') +
-    '<div><div class="market-pick">' + esc(s.label.replace(/^[^:]+: /, '')) + '</div><div class="market-odds">Model fair odds <b>' + esc(s.fair) + '</b> · not a bookmaker price</div></div></div>' +
+    '<div><div class="market-pick">' + esc(s.label.replace(/^[^:]+: /, '')) + '</div><div class="market-odds">Model fair odds <b>' + esc(fmtFairOdds(s.fair, s.p)) + '</b> · not a bookmaker price</div></div></div>' +
     '<div class="evidence-row"><span class="badge ' + cls + '">' + label + '</span>' + (s.support === 'unsupported' ? '' : meter(s.strength)) + '</div>' +
     '<p class="muted" style="font-size:13px">' + esc(note) + '</p>' +
-    '<label class="field"><span class="lbl">Price you saw ' + chip + '</span><input class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or Evens" aria-label="Bookmaker price for ' + esc(s.label) + '" data-price="' + esc(s.id) + '" data-match="' + esc(pred.match_id) + '" value="' + esc(prices[s.id] || '') + '"></label>' +
+    '<label class="field"><span class="lbl">Price you saw ' + chip + '</span><input class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or 2.50" aria-label="Bookmaker price for ' + esc(s.label) + '" data-price="' + esc(s.id) + '" data-match="' + esc(pred.match_id) + '" value="' + esc(prices[s.id] || '') + '"></label>' +
     (prices[s.id] && v.verdict !== 'awaiting_odds' ? '<p class="muted" style="font-size:12.5px">' + esc(v.why) + '</p>' : '') +
     '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button></article>';
 }
@@ -361,7 +397,7 @@ function heroCard(pred, rankNote) {
         '<button type="button" class="btn" data-diary=\'' + esc(JSON.stringify({ id: pred.match_id, market: 'wins', selection: r.pick.label, p: r.pick.p, fair: r.pick.fair_odds })) + '\'>Add to Bet Diary</button></div>' +
     '</div>' +
     '<div class="hero-side">' + ring(r.pick.p, 180, 'big' + (provisional ? ' provisional' : ''), 'model estimate') +
-      '<div class="odds-pair"><span>Model fair odds <strong>' + esc(r.pick.fair_odds) + '</strong></span><span>Bookmaker odds: not available</span></div></div>' +
+      '<div class="odds-pair"><span>Model fair odds <strong>' + esc(fmtFairOdds(r.pick.fair_odds, r.pick.p)) + '</strong></span><span>Bookmaker odds: not available</span></div></div>' +
   '</article>';
 }
 
@@ -372,7 +408,7 @@ function signalCard(pred) {
     ring(r.pick.p, 64, provisional ? 'provisional' : '') +
     '<span><span class="fixture">' + crest(f.home, 18) + crest(f.away, 18) + '<span>' + esc(f.home) + ' v ' + esc(f.away) + '</span></span>' +
       '<span class="pick" style="display:block">' + esc(r.pick.label) + '</span>' +
-      '<span class="meta" style="display:block">' + esc(fmtDay(ms)) + ' ' + esc(fmtTime(ms)) + ' · fair ' + esc(r.pick.fair_odds) + '</span>' +
+      '<span class="meta" style="display:block">' + esc(fmtDay(ms)) + ' ' + esc(fmtTime(ms)) + ' · fair ' + esc(fmtFairOdds(r.pick.fair_odds, r.pick.p)) + '</span>' +
       '<span class="meta" style="display:block;color:' + (provisional || !(band && band.established) ? 'var(--amber)' : 'var(--dim)') + '">' +
         (provisional ? 'Provisional: ' + (pred.promoted.length ? 'promoted club, little top-flight data' : 'limited data') : band && band.established ? 'Backtest: picks at ' + band.band + ' landed ' + pct(band.observed_rate) : 'Limited evidence') + '</span></span></a>';
 }
@@ -491,9 +527,10 @@ function builderCompute() {
 
 function slipLegRow(l) {
   const f = l.fixture, ms = l.kickoff;
+  const legPrice = oddsFormat === 'decimal' ? calc.formatDecimalOdds(l.odds) : esc(l.fractional);
   const price = l.priceSource === 'live'
-    ? '<span class="slip-price live" title="Bookmaker price from ' + esc(l.bookmaker) + '">' + esc(l.fractional) + '<small>' + esc(l.bookmaker) + '</small></span>'
-    : '<span class="slip-price est" title="No fresh bookmaker price. Estimated from the model chance plus a typical margin: check your bookmaker.">' + esc(l.fractional) + '<small>estimate</small></span>';
+    ? '<span class="slip-price live" title="Bookmaker price from ' + esc(l.bookmaker) + '">' + legPrice + '<small>' + esc(l.bookmaker) + '</small></span>'
+    : '<span class="slip-price est" title="No fresh bookmaker price. Estimated from the model chance plus a typical margin: check your bookmaker.">' + legPrice + '<small>estimate</small></span>';
   return '<li class="slip-leg"><span class="slip-teams">' + crest(f.home, 22) + '<span class="slip-match">' + esc(f.home) + ' v ' + esc(f.away) +
     '<small>' + esc(fmtDay(ms)) + ' ' + esc(fmtTime(ms)) + ' · ' + esc(leagueName(f.competition)) + '</small></span></span>' +
     '<span class="slip-pick"><b>' + esc(l.label) + '</b><small>' + pct(l.p) + ' chance' + (l.support === 'provisional' ? ' · provisional' : '') + '</small></span>' + price + '</li>';
@@ -502,8 +539,10 @@ function slipLegRow(l) {
 function slipCard(slip, idx, stake) {
   const m = MatchIQBuilder.money, primary = idx === 0;
   const chance = slip.chance >= 0.1 ? Math.round(slip.chance * 100) : (slip.chance * 100).toFixed(1);
+  const mainOdds = fmtOdds(slip.odds);
+  const subOdds = oddsFormat === 'decimal' ? calc.formatFractionalOdds(slip.odds) : '(' + calc.formatDecimalOdds(slip.odds) + ')';
   return '<article class="slip' + (primary ? ' primary' : '') + '"><div class="slip-head"><div><div class="slip-kicker">' + (primary ? 'Best match for your target' : 'Alternative ' + idx) + '</div>' +
-    '<div class="slip-odds mono">' + esc(calc.formatFractionalOdds(slip.odds)) + ' <small>(' + slip.odds.toFixed(2) + ')</small></div></div>' +
+    '<div class="slip-odds mono">' + esc(mainOdds) + ' <small>' + esc(subOdds) + '</small></div></div>' +
     '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every bet lands</small></div></div>' +
     '<ol class="slip-legs">' + slip.legs.map(slipLegRow).join('') + '</ol>' +
     '<div class="slip-sum"><span>Stake <b class="mono">' + m(stake) + '</b></span><span>Returns <b class="mono">' + m(slip.ret) + '</b></span><span>Profit <b class="mono">' + m(slip.profit) + '</b></span></div>' +
@@ -515,7 +554,7 @@ function slipCard(slip, idx, stake) {
 function builderOutput() {
   const r = builderResult, { stake, win } = builderState, m = MatchIQBuilder.money;
   if (!r) return '';
-  const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from a <b>' + m(stake) + '</b> stake you need a total return of <b>' + m(stake + win) + '</b>: combined odds of about <b class="mono">' + ((stake + win) / stake).toFixed(2) + '</b>.</p>';
+  const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from a <b>' + m(stake) + '</b> stake you need a total return of <b>' + m(stake + win) + '</b>: combined odds of about <b class="mono">' + fmtOdds((stake + win) / stake) + '</b>.</p>';
   if (r.error) return need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>';
   const first = r.slips[0];
   const miss = r.exact ? '' : '<p class="slip-warn">No combination lands on that target. This is the closest available: it returns ' + m(first.ret) + ' (profit ' + m(first.profit) + ').</p>';
@@ -527,12 +566,15 @@ function viewBuilder() {
   builderCompute();
   const { stake, legs, win } = builderState;
   const legChips = [2, 3, 4, 5, 6, 8].map(n => '<button type="button" class="legpick" data-legs="' + n + '" aria-pressed="' + (legs === n) + '">' + n + '</button>').join('');
+  const winPresets = [10, 25, 50, 100, 250].map(w => '<button type="button" class="win-chip" data-win="' + w + '" aria-pressed="' + (win === w) + '">£' + w + '</button>').join('');
   return '<section class="builder" aria-labelledby="builder-title"><div class="builder-kicker">Bet Builder</div><h1 class="page-title" id="builder-title">Tell us the win. We’ll build the bet.</h1>' +
-    '<p class="page-sub">Pick a stake, how many bets and how much you want to win. MatchIQ searches every upcoming match for the accumulator that hits your target with the best chance of landing.</p>' +
+    '<p class="page-sub">Pick a stake, how many bets and how much you want to win. MatchIQ searches every upcoming match for the combined bet (accumulator) that hits your target with the best chance of landing.</p>' +
     '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake"></div>' +
     '<div class="field"><span class="lbl" id="b-legs-l">Number of bets</span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
     '<input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Number of bets"></div></div>' +
-    '<div class="field full"><label for="b-win">I want to win: <b class="mono" id="b-win-out">' + MatchIQBuilder.money(win) + '</b></label><input id="b-win" class="builder-range" type="range" min="1" max="1000" step="1" value="' + Math.min(win, 1000) + '" data-b="win"></div></div>' +
+    '<div class="field full"><label for="b-win">Target profit (£): <b class="mono" id="b-win-out">' + MatchIQBuilder.money(win) + '</b></label>' +
+    '<div class="win-input-wrap"><input id="b-win" class="ctl mono win-input" type="number" inputmode="decimal" min="1" max="10000" step="1" value="' + win + '" data-b="win" placeholder="50">' +
+    '<div class="win-chips" role="group" aria-label="Preset profit targets">' + winPresets + '</div></div></div></div>' +
     '<div id="builder-out" class="builder-out" aria-live="polite">' + builderOutput() + '</div>' +
     '<p class="builder-foot">18+ only. Gambling can be addictive; play responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a>. MatchIQ does not take bets, and nothing here is a guarantee.</p></section>';
 }
@@ -547,6 +589,10 @@ function markLegChips() {
   document.querySelectorAll('.legpick').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.legs === builderState.legs)));
 }
 
+function markWinChips() {
+  document.querySelectorAll('.win-chip').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.win === builderState.win)));
+}
+
 function setBuilderLegs(n) {
   builderState.legs = n;
   const inp = $('b-legs'); if (inp) inp.value = n;
@@ -559,6 +605,7 @@ function onBuilderInput(t) {
   if (t.dataset.b === 'win') {
     builderState.win = Math.max(1, v);
     $('b-win-out').textContent = MatchIQBuilder.money(builderState.win);
+    markWinChips();
   } else if (!Number.isFinite(v) || v <= 0) return;
   else if (t.dataset.b === 'stake') builderState.stake = Math.min(10000, v);
   else if (t.dataset.b === 'legs') { builderState.legs = Math.max(1, Math.min(MatchIQBuilder.MAX_LEGS, Math.round(v))); markLegChips(); }
@@ -591,9 +638,14 @@ function viewHome() {
   const later = list.filter(p => kickoffMs(p.fixture) - first >= 5 * 86400000);
   const best = round.slice().sort((a, b) => lowerBoundOf(b) - lowerBoundOf(a))[0];
   if (best && lowerBoundOf(best) >= 0) html += '<div class="section" style="margin-top:18px">' + homeHero(best) + '</div>';
+  const matchFilter = p => !clubFilter || (p.fixture.home.toLowerCase().includes(clubFilter) || p.fixture.away.toLowerCase().includes(clubFilter));
+  const filteredRound = round.filter(matchFilter);
+  const filteredLater = later.filter(matchFilter);
+  const searchBar = '<div class="search-bar"><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search by club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off"></div>';
   html += '<div class="section"><div class="section-head"><h2 class="section-title">Match by match</h2><span class="section-note">Most likely uses every market but ranks on credible chance, so a big number with little evidence behind it does not win.</span></div>' +
-    round.map(matchRecRow).join('') + '</div>';
-  if (later.length) html += '<details class="section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Following round (' + later.length + ' matches)</summary>' + later.map(matchRecRow).join('') + '</details>';
+    searchBar +
+    (filteredRound.length ? filteredRound.map(matchRecRow).join('') : '<div class="empty">No matches found for "' + esc(clubFilter) + '".</div>') + '</div>';
+  if (filteredLater.length) html += '<details class="section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Following round (' + filteredLater.length + ' matches)</summary>' + filteredLater.map(matchRecRow).join('') + '</details>';
   const validated = list.filter(p => p.markets.result.evidence.status === 'validated').map(p => ({ p, s: signalScore(p) })).sort((a, b) => b.s.score - a.s.score).map(x => x.p);
   if (validated.length) html += '<div class="section"><div class="section-head"><h2 class="section-title">Strongest match-result signals</h2><span class="section-note">The validated match-result model only, ranked by backtest-calibrated probability.</span></div>' +
     '<div class="grid grid-2">' + validated.slice(0, 4).map(signalCard).join('') + '</div></div>';
@@ -606,7 +658,8 @@ function viewHome() {
 }
 
 function homeFixtures() {
-  const next = fixturesList().filter(f => inComp(f.competition) && f.status === 'SCHEDULED' && kickoffMs(f) > Date.now()).sort((a, b) => kickoffMs(a) - kickoffMs(b)).slice(0, 10);
+  const matchFilter = f => !clubFilter || f.home.toLowerCase().includes(clubFilter) || f.away.toLowerCase().includes(clubFilter);
+  const next = fixturesList().filter(f => inComp(f.competition) && f.status === 'SCHEDULED' && kickoffMs(f) > Date.now()).filter(matchFilter).sort((a, b) => kickoffMs(a) - kickoffMs(b)).slice(0, 10);
   if (!next.length) return '';
   return '<div class="section"><div class="section-head"><h2 class="section-title">Next fixtures</h2><a class="link-btn" href="#/fixtures">All fixtures ›</a></div>' + groupedRows(next) + '</div>';
 }
@@ -625,8 +678,10 @@ function viewFixtures() {
   } else {
     list = all.filter(f => f.status === 'FINISHED').sort((a, b) => kickoffMs(b) - kickoffMs(a)).slice(0, fixturesShowAll ? 400 : 30);
   }
+  if (clubFilter) list = list.filter(f => f.home.toLowerCase().includes(clubFilter) || f.away.toLowerCase().includes(clubFilter));
+  const searchBar = '<div class="search-bar"><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off"></div>';
   let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">' + (compFilter === 'ALL' ? 'All six competitions' : esc(leagueName(compFilter))) + ' 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
-    compBar() + '<div class="section" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between"><div class="seg" role="group" aria-label="Fixture list">' +
+    compBar() + searchBar + '<div class="section" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between"><div class="seg" role="group" aria-label="Fixture list">' +
     Object.entries(tabs).map(([k, label]) => '<button type="button" data-tab="' + k + '" aria-pressed="' + (fixturesTab === k) + '">' + label + '</button>').join('') + '</div><div class="chips">' + freshnessChips() + '</div></div>';
   if (LOAD_ERRORS.fixtures) return html + errorPanel('fixtures') + '</section>';
   html += list.length ? groupedRows(list) : '<div class="empty" style="margin-top:16px">' + (fixturesTab === 'awaiting' ? 'No matches are waiting for a confirmed result.' : 'Nothing to show yet.') + '</div>';
@@ -637,13 +692,13 @@ function viewFixtures() {
 function viewMatch(id) {
   const f = fixtureById(id), pred = DATA.predictions && DATA.predictions.predictions[id], rec = finalRecord(id);
   const fx = f || (pred && { id, ...pred.fixture }) || (rec && { id, ...rec.fixture });
-  if (!fx) return '<section class="view"><a class="link-btn" href="#/fixtures">‹ Fixtures</a><div class="empty">This match is not in the current schedule.</div></section>';
+  if (!fx) return '<section class="view"><button type="button" class="link-btn" data-back aria-label="Go back">&larr; Back</button><div class="empty">This match is not in the current schedule.</div></section>';
   const ms = kickoffMs(fx), status = (f && f.status) || (ms > Date.now() ? 'SCHEDULED' : 'AWAITING_RESULT');
   const promoted = pred ? pred.promoted : [];
   const centre = status === 'FINISHED' ? '<span class="score">' + f.score[0] + '–' + f.score[1] + '</span><div style="font-size:13px">Full time</div>' : '<span>v</span>';
   const statusChip = { SCHEDULED: ['ok', 'Upcoming'], AWAITING_RESULT: ['warn', 'Kicked off, awaiting confirmed result'], RESULT_CONFLICT: ['warn', 'Sources disagree on the score'],
     FINISHED: ['ok', 'Result confirmed' + (f && f.result_source ? ' by ' + f.result_source : '')], POSTPONED: ['warn', 'Postponed'], CANCELLED: ['bad', 'Cancelled'], REMOVED_FROM_SCHEDULE: ['warn', 'Removed from the schedule'] }[status] || ['', status];
-  let html = '<section class="view"><a class="link-btn" href="#/fixtures">‹ Fixtures</a>' +
+  let html = '<section class="view"><button type="button" class="link-btn" data-back aria-label="Go back">&larr; Back</button>' +
     '<header class="match-head"><div class="match-teams">' +
       '<div class="match-team">' + crest(fx.home, 64) + esc(fx.home) + (promoted.includes(fx.home) ? '<small>Promoted club</small>' : '') + '</div>' +
       '<div class="match-centre">' + centre + '</div>' +
@@ -698,7 +753,7 @@ function viewResults() {
   html += '<div class="tiles section" style="margin-top:18px">' +
     '<div class="tile"><div class="k">Settled predictions</div><div class="v">' + settled.length + '</div><div class="s">' + pending.length + ' awaiting a result · ' + future.length + ' upcoming</div></div>' +
     '<div class="tile"><div class="k">Match-result picks right</div><div class="v">' + (res ? pct(res.pick_hit_rate) : '—') + '</div><div class="s">' + (res ? res.n + ' matches · average pick ' + pct(res.mean_pick_p) : 'none settled yet') + '</div></div>' +
-    '<div class="tile"><div class="k">Match-result Brier (live)</div><div class="v">' + (res ? res.brier.toFixed(3) : '—') + '</div><div class="s">Lower is better. League average scored ' + (lv && lv.markets.result ? lv.markets.result.league_brier.toFixed(3) : rel ? rel.markets.wins.league_average_brier.toFixed(3) : '0.660') + ' in the backtest.</div></div>' +
+    '<div class="tile"><div class="k">Forecast accuracy (Brier score)</div><div class="v">' + (res ? res.brier.toFixed(3) : '—') + '</div><div class="s">Lower is better (closer to 0 is more accurate). League average was ' + (lv && lv.markets.result ? lv.markets.result.league_brier.toFixed(3) : rel ? rel.markets.wins.league_average_brier.toFixed(3) : '0.660') + ' in the backtest.</div></div>' +
     '<div class="tile"><div class="k">Published records</div><div class="v">' + (perf.published_records || 0) + '</div><div class="s">including earlier revisions</div></div></div>';
   if (!res || !res.sufficient_sample) html += '<div class="notice section">Early days: ' + (res ? res.n : 0) + ' settled match-result predictions. Live figures need at least ' + (perf.min_report_n || 20) + ' before they mean much, so lean on the backtest below until then.</div>';
 
@@ -844,15 +899,17 @@ function betCard(entry) {
   const profit = calc.calculateBetProfit(entry.stake, entry.odds, entry.outcome);
   const pl = profit === null ? '<span class="dim">Potential return ' + money(entry.stake * (entry.odds || 0)) + '</span>'
     : '<span class="' + (profit > 0 ? 'pos' : profit < 0 ? 'neg' : '') + '">' + (profit > 0 ? '+' : profit < 0 ? '−' : '') + money(profit) + '</span> <span class="dim">returned ' + money(entry.stake + profit) + '</span>';
-  const legs = entry.type === 'accumulator' ? (entry.legs || []).map((leg, i) => '<div class="leg"><span>' + esc(leg.selection) + ' · <b class="mono">' + calc.formatFractionalOdds(+leg.odds) + '</b></span>' +
+  const legOddsText = leg => (oddsFormat === 'decimal' ? calc.formatDecimalOdds(+leg.odds) : calc.formatFractionalOdds(+leg.odds));
+  const legs = entry.type === 'accumulator' ? (entry.legs || []).map((leg, i) => '<div class="leg"><span>' + esc(leg.selection) + ' · <b class="mono">' + legOddsText(leg) + '</b></span>' +
     outcomeSelect(leg.outcome, 'data-leg="' + esc(entry.id) + '" data-index="' + i + '"', 'Settle ' + leg.selection) + '</div>').join('') : '';
+  const priceTaken = oddsFormat === 'decimal' ? calc.formatDecimalOdds(+entry.odds) : calc.formatFractionalOdds(+entry.odds);
   return '<article class="card bet"><div class="bet-top"><div><div class="bet-sel">' + esc(entry.selection) + '</div><div class="dim" style="font-size:13px">' + esc(entry.fixture || '') + ' · ' + esc(entry.date || '') + ' · ' + esc(entry.marketName || entry.market || '') + '</div></div>' +
     '<span style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end"><span class="badge ' + (entry.origin === 'independent' ? 'market' : 'validated') + '">' + (entry.origin === 'independent' ? 'Own choice' : 'MatchIQ pick') + '</span>' +
       (entry.recommendation ? '<span class="badge provisional">' + esc(REC_LABEL[entry.recommendation] || entry.recommendation) + '</span>' : '') + '</span></div>' + legs +
-    '<div class="bet-facts"><div><span>Price taken</span><b>' + calc.formatFractionalOdds(+entry.odds) + '</b></div>' +
-      (entry.model_fair_odds ? '<div><span>Model fair odds</span><b>' + esc(entry.model_fair_odds) + '</b></div>' : '') +
+    '<div class="bet-facts"><div><span>Price taken</span><b>' + priceTaken + '</b></div>' +
+      (entry.model_fair_odds ? '<div><span>Model fair odds</span><b>' + esc(fmtFairOdds(entry.model_fair_odds, entry.model_p)) + '</b></div>' : '') +
       '<div><span>Stake</span><b>' + money(+entry.stake) + '</b></div><div><span>Bookmaker</span><b style="font-family:var(--body)">' + esc(entry.bookmaker || '—') + '</b></div>' +
-      '<div><span>Profile</span><b style="font-family:var(--body)">' + esc(entry.profile || 'Default') + (entry.type === 'accumulator' ? ' · ' + (entry.legs || []).length + '-leg acca' : '') + '</b></div></div>' +
+      '<div><span>Profile</span><b style="font-family:var(--body)">' + esc(entry.profile || 'Default') + (entry.type === 'accumulator' ? ' · ' + (entry.legs || []).length + '-pick combined bet' : '') + '</b></div></div>' +
     '<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span>' + pl + '</span><span style="display:flex;gap:8px;align-items:center">' +
       outcomeSelect(entry.outcome, 'data-outcome="' + esc(entry.id) + '"', 'Settle bet') +
       '<button type="button" class="btn small danger" data-delete="' + esc(entry.id) + '" aria-label="Delete bet">Delete</button></span></div>' +
@@ -986,19 +1043,22 @@ function toggleAccumulatorFields() {
 function parseAccumulatorLegs() {
   return ($('modal-legs-input').value || '').split('\n').map(l => l.trim()).filter(Boolean).map(line => {
     const [selection, oddsText] = line.split('|').map(part => (part || '').trim());
-    return { selection, odds: calc.parseFractionalOdds(oddsText), outcome: 'pending' };
+    const parsedOdds = (calc.parseOdds ? calc.parseOdds(oddsText) : null) ?? calc.parseFractionalOdds(oddsText);
+    return { selection, odds: parsedOdds, outcome: 'pending' };
   });
 }
 
 function updateModalPnlPreview() {
   const acc = $('modal-bet-type').value === 'accumulator';
   const legs = acc ? parseAccumulatorLegs() : [];
-  const odds = acc ? (legs.length >= 2 && legs.every(l => Number.isFinite(l.odds) && l.odds > 1) ? legs.reduce((t, l) => t * l.odds, 1) : 0) : (calc.parseFractionalOdds($('modal-odds-input').value) || 0);
+  const singleOdds = (calc.parseOdds ? calc.parseOdds($('modal-odds-input').value) : null) ?? calc.parseFractionalOdds($('modal-odds-input').value);
+  const odds = acc ? (legs.length >= 2 && legs.every(l => Number.isFinite(l.odds) && l.odds > 1) ? legs.reduce((t, l) => t * l.odds, 1) : 0) : (singleOdds || 0);
   const stake = Number($('modal-stake-input').value) || 0;
   const preview = $('modal-pnl-preview');
   if (odds > 1 && stake > 0) {
     const profit = calc.calculateBetProfit(stake, odds, 'won');
-    preview.textContent = 'Potential return £' + (stake * odds).toFixed(2) + ' (profit £' + profit.toFixed(2) + ') at ' + calc.formatFractionalOdds(odds) + (acc ? ' combined' : '') + '.';
+    const oddsStr = oddsFormat === 'decimal' ? calc.formatDecimalOdds(odds) : calc.formatFractionalOdds(odds);
+    preview.textContent = 'Potential return £' + (stake * odds).toFixed(2) + ' (profit £' + profit.toFixed(2) + ') at ' + oddsStr + (acc ? ' combined' : '') + '.';
   } else preview.textContent = acc ? 'Add at least two legs as "selection | fractional odds", such as "Arsenal win | 4/6".' : 'Enter valid UK fractional odds, such as 6/4, 1/2 or Evens, and a stake.';
 }
 
@@ -1007,7 +1067,7 @@ function handleDiaryFormSubmit(event) {
   const acc = $('modal-bet-type').value === 'accumulator';
   const legs = acc ? parseAccumulatorLegs() : [];
   const stake = Number($('modal-stake-input').value);
-  const singleOdds = calc.parseFractionalOdds($('modal-odds-input').value);
+  const singleOdds = (calc.parseOdds ? calc.parseOdds($('modal-odds-input').value) : null) ?? calc.parseFractionalOdds($('modal-odds-input').value);
   if (!Number.isFinite(stake) || stake <= 0) { toast('Enter a stake greater than £0.', 'error'); return; }
   if (acc && (legs.length < 2 || legs.some(l => !l.selection || !Number.isFinite(l.odds) || l.odds <= 1))) { toast('Add at least two legs as "selection | fractional odds", such as 6/4 or Evens.', 'error'); return; }
   if (!acc && (!Number.isFinite(singleOdds) || singleOdds <= 1)) { toast('Enter valid UK fractional odds, such as 6/4, 1/2 or Evens.', 'error'); return; }
@@ -1101,9 +1161,10 @@ function render() {
   const [view, arg] = currentRoute();
   const navKey = view === 'match' ? 'fixtures' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  updateOddsToggleLabel();
   const html = view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Strongest signals', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', more: 'Data & methods' };
+  const titles = { home: 'Best Picks', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', more: 'Data & methods' };
   document.title = (titles[view] || 'MatchIQ') + ' · MatchIQ';
   const key = view + '/' + arg;
   if (key !== lastRoute) {
@@ -1116,9 +1177,21 @@ function render() {
 }
 
 document.addEventListener('click', event => {
-  const t = event.target.closest('[data-slip],[data-legs],[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-import],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#bookmaker-quick button');
+  const t = event.target.closest('[data-slip],[data-legs],[data-win],[data-back],[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-import],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#odds-toggle,#bookmaker-quick button');
   if (!t) { if (event.target.id === 'diary-modal') closeDiary(); return; }
-  if (t.dataset.slip !== undefined) saveSlipToDiary(+t.dataset.slip);
+  if (t.id === 'odds-toggle') toggleOddsFormat();
+  else if (t.dataset.back !== undefined) {
+    if (window.history.length > 1) window.history.back();
+    else window.location.hash = '#/';
+  }
+  else if (t.dataset.win !== undefined) {
+    builderState.win = +t.dataset.win;
+    const inp = $('b-win'); if (inp) inp.value = builderState.win;
+    const out = $('b-win-out'); if (out) out.textContent = MatchIQBuilder.money(builderState.win);
+    markWinChips();
+    updateBuilder();
+  }
+  else if (t.dataset.slip !== undefined) saveSlipToDiary(+t.dataset.slip);
   else if (t.dataset.legs) setBuilderLegs(+t.dataset.legs);
   else if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));
   else if (t.dataset.close !== undefined) closeDiary();
@@ -1141,6 +1214,13 @@ document.addEventListener('click', event => {
 });
 document.addEventListener('input', event => {
   const t = event.target;
+  if (t.id === 'club-search') {
+    clubFilter = t.value.toLowerCase().trim();
+    render();
+    const inp = $('club-search');
+    if (inp) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+    return;
+  }
   if (t.dataset && t.dataset.b) { onBuilderInput(t); return; }
   if (t.dataset && t.dataset.price) {
     const all = readPrices(), mine = all[t.dataset.match] || {};

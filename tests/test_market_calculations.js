@@ -119,4 +119,15 @@ close(calc.calculateBrierScore(0.60, 1, 'binary'), 0.16, 'Binary Brier score');
 // Multi-class 1X2: H:0.55, D:0.25, A:0.20, outcome 'H' => (0.55-1)^2 + 0.25^2 + 0.20^2 = 0.2025 + 0.0625 + 0.04 = 0.305
 close(calc.calculateBrierScore({ H: 0.55, D: 0.25, A: 0.20 }, 'H', '1x2'), 0.305, '1X2 Multi-class Brier score');
 
+// 4. Fractional and Decimal Odds Preference formatters
+assert.equal(calc.formatDecimalOdds(2.5), '2.50');
+assert.equal(calc.formatDecimalOdds(1.333), '1.33');
+assert.equal(calc.formatDisplayOdds(2.5, 'fractional'), '6/4');
+assert.equal(calc.formatDisplayOdds(2.5, 'decimal'), '2.50');
+assert.equal(calc.parseOdds('6/4'), 2.5);
+assert.equal(calc.parseOdds('2.50'), 2.5);
+assert.equal(calc.parseOdds('Evens'), 2.0);
+assert.equal(calc.formatFairOdds(0.4, 'decimal'), '≈2.50');
+assert.equal(calc.formatFairOdds(0.4, 'fractional'), '≈6/4');
+
 console.log('All six market calculations, labels, freshness states, Bet Diary, and Brier PASS');
