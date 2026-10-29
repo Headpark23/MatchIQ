@@ -71,3 +71,4 @@ if "/* Floating currency symbol and celebration */" not in styles:
 
 styles_path.write_text(styles, encoding='utf-8')
 print("styles.css updated successfully.")
+

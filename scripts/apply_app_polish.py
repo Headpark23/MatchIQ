@@ -104,3 +104,4 @@ app_src = app_src.replace(old_explain, new_explain)
 
 app_path.write_text(app_src, encoding='utf-8')
 print("app.js updated successfully.")
+

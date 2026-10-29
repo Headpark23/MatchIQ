@@ -539,6 +539,35 @@ function slipLegRow(l) {
     '<span class="slip-pick"><b>' + esc(l.label) + '</b><small>' + pct(l.p) + ' chance' + (l.support === 'provisional' ? ' · provisional' : '') + '</small></span>' + price + '</li>';
 }
 
+function shareAccaSlip(idx) {
+  const r = builderResult;
+  if (!r || !r.slips || !r.slips[idx]) return;
+  const slip = r.slips[idx];
+  const stake = builderState.stake;
+  const m = MatchIQBuilder.money;
+  const lines = [
+    '🎯 Bet Buddy Acca (Target: ' + m(slip.profit) + ' profit)',
+    'Odds: ' + fmtOdds(slip.odds) + ' · Estimated Chance: ' + Math.round(slip.chance * 100) + '%',
+    'Stake: ' + m(stake) + ' · Potential Return: ' + m(slip.ret),
+    '',
+    ...slip.legs.map((l, i) => (i + 1) + '. ' + l.fixture.home + ' v ' + l.fixture.away + ': ' + l.label + ' (' + l.fractional + ')'),
+    '',
+    'Built with Bet Buddy'
+  ].join('\n');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(lines).then(() => {
+      toast('Acca slip copied to clipboard ready for your bookmaker.');
+    }).catch(() => {
+      toast('Slip ready.');
+    });
+  } else if (navigator.share) {
+    navigator.share({ title: 'Bet Buddy Acca', text: lines }).catch(() => {});
+  } else {
+    toast('Slip details ready.');
+  }
+}
+
 function slipCard(slip, idx, stake) {
   const m = MatchIQBuilder.money, primary = idx === 0;
   const chance = slip.chance >= 0.1 ? Math.round(slip.chance * 100) : (slip.chance * 100).toFixed(1);
@@ -551,7 +580,11 @@ function slipCard(slip, idx, stake) {
     '<div class="slip-sum"><span>Stake <b class="mono">' + m(stake) + '</b></span><span>Returns <b class="mono">' + m(slip.ret) + '</b></span><span>Profit <b class="mono">' + m(slip.profit) + '</b></span></div>' +
     (slip.chance < 0.05 ? '<p class="slip-warn">Long shot: roughly 1 in ' + Math.round(1 / slip.chance) + '. Most slips like this lose.</p>' : '') +
     (slip.estimated ? '<p class="slip-note">Some prices are estimates, not live bookmaker prices. The price you are actually offered will differ, so the profit will too.</p>' : '') +
-    '<div class="btn-row"><button type="button" class="btn' + (primary ? ' primary' : '') + '" data-slip="' + idx + '">Save slip to Bet Diary</button></div></article>';
+    '<div class="btn-row">' +
+      '<button type="button" class="btn' + (primary ? ' primary' : '') + '" data-slip="' + idx + '">Save slip to Bet Diary</button>' +
+      '<button type="button" class="btn small" data-share-slip="' + idx + '" title="Copy formatted slip to clipboard or share with friends"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share / Copy</button>' +
+      '<button type="button" class="btn small partner-cta" data-partner-slip="' + idx + '" title="Bookmaker integration: transfer slip to partner bookmaker"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg> Place with Bookmaker</button>' +
+    '</div></article>';
 }
 
 function builderOutput() {
@@ -1219,7 +1252,7 @@ function render() {
 }
 
 document.addEventListener('click', event => {
-  const t = event.target.closest('[data-slip],[data-legs],[data-win],[data-back],[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-import],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#odds-toggle,#bookmaker-quick button');
+  const t = event.target.closest('[data-slip],[data-share-slip],[data-partner-slip],[data-legs],[data-win],[data-back],[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-import],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#odds-toggle,#bookmaker-quick button');
   if (!t) { if (event.target.id === 'diary-modal') closeDiary(); return; }
   if (t.id === 'odds-toggle') toggleOddsFormat();
   else if (t.dataset.back !== undefined) {
@@ -1234,6 +1267,11 @@ document.addEventListener('click', event => {
     updateBuilder();
   }
   else if (t.dataset.slip !== undefined) saveSlipToDiary(+t.dataset.slip);
+  else if (t.dataset.shareSlip !== undefined) shareAccaSlip(+t.dataset.shareSlip);
+  else if (t.dataset.partnerSlip !== undefined) {
+    shareAccaSlip(+t.dataset.partnerSlip);
+    toast('Acca copied! Ready to paste into Bet365, SkyBet or Betfair.');
+  }
   else if (t.dataset.legs) setBuilderLegs(+t.dataset.legs);
   else if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));
   else if (t.dataset.close !== undefined) closeDiary();
