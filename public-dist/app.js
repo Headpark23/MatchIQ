@@ -208,12 +208,12 @@ function bestValueBlock(pred) {
   if (best) {
     detail += '<p class="muted" style="font-size:13.5px"><b>' + (v === 'value' ? 'Best value found: ' : 'Closest to value: ') + esc(best.sel.label) + '</b> at ' + esc(best.v.priceText) + ' (' + (best.v.ev >= 0 ? '+' : '') + Math.round(100 * best.v.ev) + '% estimated expected value). Checked ' + pricedCount + ' priced selection' + (pricedCount === 1 ? '' : 's') + ' across every market, not only the top six.</p>';
   } else {
-    detail += '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded for this match (the automatic feed covers Match Result and Total Goals only, when it is enabled). Type a fractional price you have seen on any selection, here or in the top six, and MatchIQ will check every priced selection for value.</p>';
+    detail += '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded for this match (the automatic feed covers Match Result and Total Goals only, when it is enabled). Type a fractional price you have seen on any selection, here or in the top six, and Bet Buddy will check every priced selection for value.</p>';
   }
   if (verdict.verdict !== 'awaiting_odds') {
     detail += '<div class="value-grid"><div><span>Price</span><b>' + esc(verdict.priceText) + '</b></div><div><span>Price implies</span><b>' + pct(verdict.implied) + '</b></div>' +
       (verdict.fairImplied != null ? '<div><span>Margin removed</span><b>' + pct(verdict.fairImplied) + '</b></div>' : '') +
-      '<div><span>MatchIQ</span><b>' + pct(sel.p) + '</b></div><div><span>Expected value</span><b class="' + (verdict.ev >= 0 ? 'pos' : 'neg') + '">' + (verdict.ev >= 0 ? '+' : '') + Math.round(100 * verdict.ev) + '%</b></div>' +
+      '<div><span>Bet Buddy</span><b>' + pct(sel.p) + '</b></div><div><span>Expected value</span><b class="' + (verdict.ev >= 0 ? 'pos' : 'neg') + '">' + (verdict.ev >= 0 ? '+' : '') + Math.round(100 * verdict.ev) + '%</b></div>' +
       (verdict.margin != null ? '<div><span>Bookmaker margin</span><b>' + (100 * verdict.margin).toFixed(1) + '%</b></div>' : '') + '</div>' +
       '<p class="muted" style="font-size:13.5px"><b>' + esc(sel.label) + ':</b> ' + esc(verdict.why) + (verdict.margin == null && siblings.length && verdict.verdict !== 'no_bet' ? ' Add the other outcomes’ prices below to remove the bookmaker’s margin.' : '') + '</p>';
   } else if (prices[sel.id]) {
@@ -558,7 +558,7 @@ function builderOutput() {
   if (r.error) return need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>';
   const first = r.slips[0];
   const miss = r.exact ? '' : '<p class="slip-warn">No combination lands on that target. This is the closest available: it returns ' + m(first.ret) + ' (profit ' + m(first.profit) + ').</p>';
-  const fine = '<p class="builder-fine">Chances are MatchIQ model estimates, not promises. On average this slip is expected to ' + (first.ev >= 0 ? 'make ' : 'lose ') + '<b>' + m(Math.abs(first.ev)) + '</b> per ' + m(stake) + ' staked; bookmaker margins usually push that below zero. Never stake more than you can afford to lose.</p>';
+  const fine = '<p class="builder-fine">Chances are Bet Buddy model estimates, not promises. On average this slip is expected to ' + (first.ev >= 0 ? 'make ' : 'lose ') + '<b>' + m(Math.abs(first.ev)) + '</b> per ' + m(stake) + ' staked; bookmaker margins usually push that below zero. Never stake more than you can afford to lose.</p>';
   return need + miss + r.slips.map((s, i) => slipCard(s, i, stake)).join('') + fine;
 }
 
@@ -568,7 +568,7 @@ function viewBuilder() {
   const legChips = [2, 3, 4, 5, 6, 8].map(n => '<button type="button" class="legpick" data-legs="' + n + '" aria-pressed="' + (legs === n) + '">' + n + '</button>').join('');
   const winPresets = [10, 25, 50, 100, 250].map(w => '<button type="button" class="win-chip" data-win="' + w + '" aria-pressed="' + (win === w) + '">£' + w + '</button>').join('');
   return '<section class="builder" aria-labelledby="builder-title"><div class="builder-kicker">Bet Builder</div><h1 class="page-title" id="builder-title">Tell us the win. We’ll build the bet.</h1>' +
-    '<p class="page-sub">Pick a stake, how many bets and how much you want to win. MatchIQ searches every upcoming match for the combined bet (accumulator) that hits your target with the best chance of landing.</p>' +
+    '<p class="page-sub">Pick a stake, how many bets and how much you want to win. Bet Buddy searches every upcoming match for the combined bet (accumulator) that hits your target with the best chance of landing.</p>' +
     '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake"></div>' +
     '<div class="field"><span class="lbl" id="b-legs-l">Number of bets</span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
     '<input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Number of bets"></div></div>' +
@@ -576,7 +576,7 @@ function viewBuilder() {
     '<div class="win-input-wrap"><input id="b-win" class="ctl mono win-input" type="number" inputmode="decimal" min="1" max="10000" step="1" value="' + win + '" data-b="win" placeholder="50">' +
     '<div class="win-chips" role="group" aria-label="Preset profit targets">' + winPresets + '</div></div></div></div>' +
     '<div id="builder-out" class="builder-out" aria-live="polite">' + builderOutput() + '</div>' +
-    '<p class="builder-foot">18+ only. Gambling can be addictive; play responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a>. MatchIQ does not take bets, and nothing here is a guarantee.</p></section>';
+    '<p class="builder-foot">18+ only. Gambling can be addictive; play responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a>. Bet Buddy does not take bets, and nothing here is a guarantee.</p></section>';
 }
 
 function updateBuilder() {
@@ -622,14 +622,14 @@ function saveSlipToDiary(i) {
   $('modal-legs-input').value = slip.legs.map(l => l.fixture.home + ' v ' + l.fixture.away + ': ' + l.label + ' | ' + String(l.fractional).replace('≈', '')).join('\n');
   $('modal-stake-input').value = builderState.stake.toFixed(2);
   $('modal-origin-select').value = 'matchiq';
-  $('modal-notes-input').value = 'Built by MatchIQ Bet Builder for a £' + builderState.win + ' win. Check any price marked estimate with your bookmaker.';
+  $('modal-notes-input').value = 'Built by Bet Buddy Bet Builder for a £' + builderState.win + ' win. Check any price marked estimate with your bookmaker.';
   updateModalPnlPreview();
 }
 
 function viewHome() {
   const list = upcoming();
   let html = '<section class="view">' + viewBuilder() + '<div class="section-head" style="align-items:flex-end;margin-top:36px"><div><h2 class="page-title">This round</h2>' +
-    '<p class="page-sub">For every upcoming match: the most likely supported outcome, the match-result lean and whether a price you have seen offers value. MatchIQ will say No bet when the evidence or the price is not good enough.</p></div>' +
+    '<p class="page-sub">For every upcoming match: the most likely supported outcome, the match-result lean and whether a price you have seen offers value. Bet Buddy will say No bet when the evidence or the price is not good enough.</p></div>' +
     '<div class="chips">' + freshnessChips() + '</div></div>' + compBar();
   if (LOAD_ERRORS.predictions) return html + errorPanel('predictions') + '</section>';
   if (!list.length) return html + '<div class="empty">No fixtures with published predictions in the next 21 days. Predictions appear automatically once the schedule lists them.</div>' + homeFixtures() + '</section>';
@@ -714,7 +714,7 @@ function viewMatch(id) {
       '<div class="section">' + heroCard(pred, 'Match result') + '</div>' +
       '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Why this match-result prediction</summary><ul class="explain" style="margin-top:6px">' + resultExplanation(pred) + '</ul>' +
       '<p class="dim" style="font-size:13px;margin-top:10px">' + esc(r.evidence.summary) + ' The models use results and match statistics only. They know nothing about injuries, team news, line-ups or motivation.</p></details>';
-    html += '<div class="section"><div class="section-head"><h2 class="section-title">Top six selections</h2><span class="section-note">The six strongest individual selections from every market and Over/Under line, ranked on the cautious end of their chance so thin evidence cannot win on a big number. Lines MatchIQ never backtested rank last and are labelled unsupported.</span></div>' +
+    html += '<div class="section"><div class="section-head"><h2 class="section-title">Top six selections</h2><span class="section-note">The six strongest individual selections from every market and Over/Under line, ranked on the cautious end of their chance so thin evidence cannot win on a big number. Lines Bet Buddy never backtested rank last and are labelled unsupported.</span></div>' +
       '<div id="top-' + esc(id) + '">' + topSixBlock(pred) + '</div></div>' +
       '<details class="card section all-markets"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Every market and line (' + allSelections(pred).length + ' selections)</summary>' +
       '<p class="dim" style="font-size:13px;margin:6px 0 12px">Published ' + esc(ago(pred.published_at)) + ' · record ' + esc(pred.record_id) + '. Probability and evidence strength are shown separately: a 60% estimate with weak evidence is still weak.</p>' +
@@ -725,10 +725,10 @@ function viewMatch(id) {
       (ml.decision === 'most_likely' ? 'Most likely: <b>' + esc(ml.label) + '</b> (' + esc(MARKETS[ml.market].name) + ') at ' + pct(ml.p) + '. ' : 'Most likely: No bet. ') +
       (mls && 'won' in mls ? '<span class="badge ' + (mls.won ? 'won' : 'lost') + '">' + (mls.won ? 'Landed' : 'Missed') + '</span>' : mls ? '<span class="badge pending">Result pending</span>' : '') +
       '</p><p class="muted" style="margin-top:6px">Best value: ' + esc(((rec.recommendations || {}).best_value || {}).reason || 'No bet') + '</p></div>';
-    html += '<div class="section"><div class="section-head"><h2 class="section-title">What MatchIQ predicted</h2><span class="section-note">Published ' + esc(london(Date.parse(rec.published_at), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })) + ' UK, before kick-off. Sealed record ' + esc(rec.record_id) + ': it cannot be changed after the result.</span></div>' +
+    html += '<div class="section"><div class="section-head"><h2 class="section-title">What Bet Buddy predicted</h2><span class="section-note">Published ' + esc(london(Date.parse(rec.published_at), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })) + ' UK, before kick-off. Sealed record ' + esc(rec.record_id) + ': it cannot be changed after the result.</span></div>' +
       '<div class="grid grid-2">' + MARKET_ORDER.filter(k => rec.markets[k]).map(k => marketCard(k, normaliseMarket(k, rec.markets[k]), { id, canLog: false, settlement: rec.settlement })).join('') + '</div></div>';
   } else {
-    html += '<div class="empty section">No prediction was published for this match. MatchIQ publishes up to 21 days before kick-off, and the history starts in October 2026.</div>';
+    html += '<div class="empty section">No prediction was published for this match. Bet Buddy publishes up to 21 days before kick-off, and the history starts in October 2026.</div>';
   }
   return html + '</section>';
 }
@@ -747,7 +747,7 @@ function viewResults() {
   for (const r of historyRecords()) latest[r.match_id] = r.evaluated ? r : (latest[r.match_id] && latest[r.match_id].evaluated ? latest[r.match_id] : r);
   const recs = Object.values(latest).filter(r => inComp(r.fixture.competition)).sort((a, b) => kickoffMs(b.fixture) - kickoffMs(a.fixture));
   const settled = recs.filter(r => r.evaluated), pending = recs.filter(r => !r.evaluated && kickoffMs(r.fixture) <= Date.now() && !r.result), future = recs.filter(r => kickoffMs(r.fixture) > Date.now());
-  let html = '<section class="view"><h1 class="page-title">Results & performance</h1><p class="page-sub">Every prediction MatchIQ publishes is sealed before kick-off and scored once the result is confirmed. Nothing here is edited after the fact.</p>' + compBar() +
+  let html = '<section class="view"><h1 class="page-title">Results & performance</h1><p class="page-sub">Every prediction Bet Buddy publishes is sealed before kick-off and scored once the result is confirmed. Nothing here is edited after the fact.</p>' + compBar() +
     (compFilter === 'ALL' ? '<div class="notice section">Scorecards are kept per competition and never pooled. The figures below are the Premier League; choose a competition above for another.</div>' + byCompetitionCards(allPerf) : '');
   if (LOAD_ERRORS.history) return html + errorPanel('history') + '</section>';
   html += '<div class="tiles section" style="margin-top:18px">' +
@@ -882,7 +882,7 @@ function viewDiary() {
     '<div class="tile"><div class="k">Profit / loss</div><div class="v ' + (s.netProfit > 0 ? 'pos' : s.netProfit < 0 ? 'neg' : '') + '">' + (s.netProfit > 0 ? '+' : s.netProfit < 0 ? '−' : '') + money(s.netProfit) + '</div><div class="s">ROI ' + s.roiPct.toFixed(1) + '% on settled stakes</div></div>' +
     '<div class="tile"><div class="k">Staked</div><div class="v">' + money(s.totalStaked) + '</div><div class="s">' + money(s.settledStaked) + ' settled · ' + s.pendingCount + ' pending</div></div>' +
     '<div class="tile"><div class="k">Returned</div><div class="v">' + money(s.totalReturned) + '</div><div class="s">winnings plus void stakes</div></div>' +
-    '<div class="tile"><div class="k">Won · lost · void</div><div class="v">' + s.wonCount + ' · ' + s.lostCount + ' · ' + s.voidCount + '</div><div class="s">' + s.originBreakdown.matchiq.count + ' following MatchIQ · ' + s.originBreakdown.independent.count + ' own choice</div></div></div>';
+    '<div class="tile"><div class="k">Won · lost · void</div><div class="v">' + s.wonCount + ' · ' + s.lostCount + ' · ' + s.voidCount + '</div><div class="s">' + s.originBreakdown.matchiq.count + ' following Bet Buddy · ' + s.originBreakdown.independent.count + ' own choice</div></div></div>';
   html += '<div class="section" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><label class="field" style="grid-auto-flow:column;align-items:center;gap:10px"><span class="lbl">Profile</span><select id="diary-profile-filter" class="ctl" style="width:auto"><option value="all">All profiles</option>' +
     profiles.map(p => '<option value="' + esc(p) + '"' + (diaryProfileFilter === p ? ' selected' : '') + '>' + esc(p) + '</option>').join('') + '</select></label>' +
     (all.length ? '<button type="button" class="btn small danger" data-clear-diary>Clear diary</button>' : '') + '</div>';
@@ -904,7 +904,7 @@ function betCard(entry) {
     outcomeSelect(leg.outcome, 'data-leg="' + esc(entry.id) + '" data-index="' + i + '"', 'Settle ' + leg.selection) + '</div>').join('') : '';
   const priceTaken = oddsFormat === 'decimal' ? calc.formatDecimalOdds(+entry.odds) : calc.formatFractionalOdds(+entry.odds);
   return '<article class="card bet"><div class="bet-top"><div><div class="bet-sel">' + esc(entry.selection) + '</div><div class="dim" style="font-size:13px">' + esc(entry.fixture || '') + ' · ' + esc(entry.date || '') + ' · ' + esc(entry.marketName || entry.market || '') + '</div></div>' +
-    '<span style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end"><span class="badge ' + (entry.origin === 'independent' ? 'market' : 'validated') + '">' + (entry.origin === 'independent' ? 'Own choice' : 'MatchIQ pick') + '</span>' +
+    '<span style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end"><span class="badge ' + (entry.origin === 'independent' ? 'market' : 'validated') + '">' + (entry.origin === 'independent' ? 'Own choice' : 'Bet Buddy pick') + '</span>' +
       (entry.recommendation ? '<span class="badge provisional">' + esc(REC_LABEL[entry.recommendation] || entry.recommendation) + '</span>' : '') + '</span></div>' + legs +
     '<div class="bet-facts"><div><span>Price taken</span><b>' + priceTaken + '</b></div>' +
       (entry.model_fair_odds ? '<div><span>Model fair odds</span><b>' + esc(fmtFairOdds(entry.model_fair_odds, entry.model_p)) + '</b></div>' : '') +
@@ -1025,7 +1025,7 @@ function openDiary(prefill) {
   $('modal-origin-select').value = modalPrefill.selection ? 'matchiq' : 'independent';
   $('modal-odds-input').value = modalPrefill.odds || '';
   $('modal-bet-type').value = 'single';
-  $('modal-fair-hint').textContent = modalPrefill.fair ? 'MatchIQ model fair odds ' + modalPrefill.fair + '. That is not a bookmaker price: enter the price you were actually offered.' : '';
+  $('modal-fair-hint').textContent = modalPrefill.fair ? 'Bet Buddy model fair odds ' + modalPrefill.fair + '. That is not a bookmaker price: enter the price you were actually offered.' : '';
   toggleAccumulatorFields();
   updateModalPnlPreview();
   $('diary-modal').hidden = false;
@@ -1120,7 +1120,7 @@ function viewMore() {
       stars('understand', 'How clear were the predictions? (1 confusing, 5 crystal clear)') + stars('convincing', 'How convincing was the evidence?') +
       '<div class="field"><span class="lbl">Was it useful?</span><div class="stars">' + [['useful', 'Very useful'], ['neutral', 'Somewhat'], ['not_useful', 'Not useful']].map(([v, l]) => '<button type="button" class="opt" data-useful="' + v + '" aria-pressed="' + (feedbackState.useful === v) + '">' + l + '</button>').join('') + '</div></div>' +
       '<div class="field"><span class="lbl">Anything confusing?</span><div class="stars">' + ['Evidence labels', 'Odds vs probabilities', 'Provisional estimates', 'Navigation', 'Diary returns', 'All clear'].map(c => '<button type="button" class="opt" data-chip="' + esc(c) + '" aria-pressed="' + feedbackState.chips.has(c) + '">' + esc(c) + '</button>').join('') + '</div></div>' +
-      '<div class="field"><label for="fb-improvements">What would make MatchIQ better?</label><textarea id="fb-improvements" class="ctl"></textarea></div>' +
+      '<div class="field"><label for="fb-improvements">What would make Bet Buddy better?</label><textarea id="fb-improvements" class="ctl"></textarea></div>' +
       '<div class="btn-row"><button type="submit" class="btn primary">Send feedback</button>' + (fb.length ? '<button type="button" class="btn" data-export="feedback">Export ' + fb.length + ' responses</button>' : '') + '</div>' +
       '<p class="section-note">Feedback is stored in this browser only.</p></form></div></section>';
 }
@@ -1165,7 +1165,7 @@ function render() {
   const html = view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
   const titles = { home: 'Best Picks', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', more: 'Data & methods' };
-  document.title = (titles[view] || 'MatchIQ') + ' · MatchIQ';
+  document.title = (titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {
     // Animate and scroll only on navigation, not on in-page updates.

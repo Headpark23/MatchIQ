@@ -1,10 +1,10 @@
-"""Generate high-fidelity, vibrant MatchIQ PWA and iOS home screen icons.
+"""Generate Bet Buddy mobile icons featuring a cute, high-contrast Panda logo.
 
 Features:
-- Premium pitch night stadium backdrop (#060d19) with radial floodlight ambiance.
-- Glowing stadium confidence ring.
-- Vibrant emerald (#059669) to cyan (#06b6d4) gradient stadium badge.
-- Bold 3-tier stadium intelligence mark in obsidian (#03140d).
+- Premium stadium backdrop (#060d19) with radial floodlight ambiance.
+- Glowing cyan/emerald confidence arc.
+- Radiant emerald (#059669) to cyan (#06b6d4) stadium badge.
+- Adorable, minimalist vector panda face centered on badge.
 - Generates 512x512, 192x192, 180x180 (Apple Touch), and 32x32 (Favicon).
 - Anti-aliased at 2048x2048 master resolution.
 """
@@ -17,52 +17,46 @@ PUBLIC_ASSETS = ROOT / "public-dist" / "assets"
 
 MASTER = 2048
 
-def make_master_icon():
+def make_panda_icon():
     im = Image.new("RGBA", (MASTER, MASTER), (6, 13, 25, 255))
+    cx, cy = MASTER // 2, MASTER // 2
     
     # 1. Radial stadium ambient floodlight
     glow = Image.new("RGBA", (MASTER, MASTER), (0, 0, 0, 0))
     gdraw = ImageDraw.Draw(glow)
-    cx, cy = MASTER // 2, MASTER // 2
-    
     for r in range(960, 0, -20):
         f = 1 - r / 960
         a = int(80 * (f ** 1.8))
         gdraw.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(6, 182, 212, a))
-        
     for r in range(640, 0, -16):
         f = 1 - r / 640
         a = int(110 * (f ** 1.5))
         gdraw.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(52, 211, 153, a))
-        
     im = Image.alpha_composite(im, glow)
     
     # 2. Glowing confidence arc in background
     ring_layer = Image.new("RGBA", (MASTER, MASTER), (0, 0, 0, 0))
     r_draw = ImageDraw.Draw(ring_layer)
-    r_box = (cx - 780, cy - 780, cx + 780, cy + 780)
-    # Background subtle track
-    r_draw.arc(r_box, start=0, end=360, fill=(255, 255, 255, 24), width=28)
-    # Glowing active arc
-    r_draw.arc(r_box, start=-220, end=40, fill=(52, 211, 153, 200), width=36)
-    r_draw.arc(r_box, start=-120, end=40, fill=(103, 232, 249, 230), width=36)
+    r_box = (cx - 820, cy - 820, cx + 820, cy + 820)
+    r_draw.arc(r_box, start=0, end=360, fill=(255, 255, 255, 24), width=32)
+    r_draw.arc(r_box, start=-220, end=40, fill=(52, 211, 153, 200), width=40)
+    r_draw.arc(r_box, start=-120, end=40, fill=(103, 232, 249, 230), width=40)
     
-    # Soft glow around arc
-    ring_glow = ring_layer.filter(ImageFilter.GaussianBlur(16))
+    ring_glow = ring_layer.filter(ImageFilter.GaussianBlur(20))
     im = Image.alpha_composite(im, ring_glow)
     im = Image.alpha_composite(im, ring_layer)
     
     # 3. Main Stadium Badge (Squircle)
-    b_inset = 320
+    b_inset = 280
     b_left, b_top = b_inset, b_inset
     b_right, b_bottom = MASTER - b_inset, MASTER - b_inset
-    radius = 320
+    radius = 340
     
     # Drop shadow
     shadow = Image.new("RGBA", (MASTER, MASTER), (0, 0, 0, 0))
     sdraw = ImageDraw.Draw(shadow)
     sdraw.rounded_rectangle(
-        (b_left - 10, b_top + 36, b_right + 10, b_bottom + 56),
+        (b_left - 12, b_top + 36, b_right + 12, b_bottom + 60),
         radius=radius,
         fill=(0, 0, 0, 190)
     )
@@ -74,19 +68,15 @@ def make_master_icon():
     m_draw = ImageDraw.Draw(badge_mask)
     m_draw.rounded_rectangle((b_left, b_top, b_right, b_bottom), radius=radius, fill=255)
     
-    # Vibrant emerald-to-cyan diagonal gradient
+    # Emerald-to-cyan gradient
     badge_grad = Image.new("RGBA", (MASTER, MASTER), (0, 0, 0, 0))
     pixels = badge_grad.load()
-    c1 = (5, 150, 105)    # deep emerald (#059669)
-    c2 = (16, 185, 129)   # pitch green (#10b981)
-    c3 = (52, 211, 153)   # bright mint (#34d399)
-    c4 = (6, 182, 212)    # electric cyan (#06b6d4)
-    c5 = (103, 232, 249)  # sky cyan (#67e8f9)
+    c1 = (5, 150, 105)    # #059669
+    c2 = (16, 185, 129)   # #10b981
+    c3 = (52, 211, 153)   # #34d399
+    c5 = (103, 232, 249)  # #67e8f9
     
-    span_x = b_right - b_left
-    span_y = b_bottom - b_top
-    total_span = span_x + span_y
-    
+    total_span = (b_right - b_left) + (b_bottom - b_top)
     for y in range(b_top, b_bottom):
         for x in range(b_left, b_right):
             t = ((x - b_left) + (y - b_top)) / total_span
@@ -110,49 +100,86 @@ def make_master_icon():
     badge_grad.putalpha(badge_mask)
     im = Image.alpha_composite(im, badge_grad)
     
-    # Subtle inner edge highlight on badge
-    edge = Image.new("RGBA", (MASTER, MASTER), (0, 0, 0, 0))
-    edraw = ImageDraw.Draw(edge)
-    edraw.rounded_rectangle((b_left, b_top, b_right, b_bottom), radius=radius, outline=(255, 255, 255, 75), width=8)
-    edge.putalpha(badge_mask)
-    im = Image.alpha_composite(im, edge)
+    # 4. Cute Panda Face inside the badge
+    panda = Image.new("RGBA", (MASTER, MASTER), (0, 0, 0, 0))
+    pdraw = ImageDraw.Draw(panda)
+    dark_fur = (4, 18, 14, 255)      # Deep obsidian panda black
+    white_fur = (252, 254, 255, 255) # Clean brilliant white
+    mint_glow = (52, 211, 153, 255)  # Bet Buddy mint
     
-    # 4. Bold 3-Tier Stadium Isometric Mark
-    mark_draw = ImageDraw.Draw(im)
-    obsidian = (4, 20, 13, 255)
-    line_w = 64
+    head_cy = cy + 40
     
-    # Diamond (Tier 1)
-    d1 = [
-        (cx, cy - 350),
-        (cx - 370, cy - 180),
-        (cx, cy - 10),
-        (cx + 370, cy - 180),
-        (cx, cy - 350)
-    ]
-    mark_draw.line(d1, fill=obsidian, width=line_w, joint="round")
+    # Ears
+    ear_r = 180
+    left_ear_center = (cx - 360, head_cy - 360)
+    right_ear_center = (cx + 360, head_cy - 360)
     
-    # Middle Chevron (Tier 2)
-    d2 = [
-        (cx - 370, cy + 20),
-        (cx, cy + 190),
-        (cx + 370, cy + 20)
-    ]
-    mark_draw.line(d2, fill=obsidian, width=line_w, joint="round")
+    pdraw.ellipse((left_ear_center[0] - ear_r, left_ear_center[1] - ear_r,
+                   left_ear_center[0] + ear_r, left_ear_center[1] + ear_r), fill=dark_fur)
+    pdraw.ellipse((right_ear_center[0] - ear_r, right_ear_center[1] - ear_r,
+                   right_ear_center[0] + ear_r, right_ear_center[1] + ear_r), fill=dark_fur)
+                   
+    # Inner ear mint highlights
+    inner_r = 90
+    pdraw.ellipse((left_ear_center[0] - inner_r, left_ear_center[1] - inner_r,
+                   left_ear_center[0] + inner_r, left_ear_center[1] + inner_r), fill=mint_glow)
+    pdraw.ellipse((right_ear_center[0] - inner_r, right_ear_center[1] - inner_r,
+                   right_ear_center[0] + inner_r, right_ear_center[1] + inner_r), fill=mint_glow)
     
-    # Bottom Chevron (Tier 3)
-    d3 = [
-        (cx - 370, cy + 220),
-        (cx, cy + 390),
-        (cx + 370, cy + 220)
-    ]
-    mark_draw.line(d3, fill=obsidian, width=line_w, joint="round")
+    # Head Base (broad cute ellipse)
+    head_rx = 490
+    head_ry = 420
+    pdraw.ellipse((cx - head_rx, head_cy - head_ry, cx + head_rx, head_cy + head_ry), fill=white_fur)
     
+    # Big Eye Patches (classic tilted panda ovals)
+    patch_w = 135
+    patch_h = 175
+    # Left patch
+    left_patch_center = (cx - 190, head_cy - 30)
+    pdraw.ellipse((left_patch_center[0] - patch_w, left_patch_center[1] - patch_h,
+                   left_patch_center[0] + patch_w, left_patch_center[1] + patch_h), fill=dark_fur)
+    # Right patch
+    right_patch_center = (cx + 190, head_cy - 30)
+    pdraw.ellipse((right_patch_center[0] - patch_w, right_patch_center[1] - patch_h,
+                   right_patch_center[0] + patch_w, right_patch_center[1] + patch_h), fill=dark_fur)
+    
+    # Big Sparkly Eyes
+    eye_r = 55
+    # Left eye
+    pdraw.ellipse((left_patch_center[0] - eye_r + 10, left_patch_center[1] - eye_r - 20,
+                   left_patch_center[0] + eye_r + 10, left_patch_center[1] + eye_r - 20), fill=white_fur)
+    pdraw.ellipse((left_patch_center[0] - 22 + 10, left_patch_center[1] - 22 - 20,
+                   left_patch_center[0] + 22 + 10, left_patch_center[1] + 22 - 20), fill=mint_glow)
+    # Right eye
+    pdraw.ellipse((right_patch_center[0] - eye_r - 10, right_patch_center[1] - eye_r - 20,
+                   right_patch_center[0] + eye_r - 10, right_patch_center[1] + eye_r - 20), fill=white_fur)
+    pdraw.ellipse((right_patch_center[0] - 22 - 10, right_patch_center[1] - 22 - 20,
+                   right_patch_center[0] + 22 - 10, right_patch_center[1] + 22 - 20), fill=mint_glow)
+    
+    # Cute Panda Nose (soft rounded triangle / oval)
+    nose_rx = 75
+    nose_ry = 50
+    nose_y = head_cy + 90
+    pdraw.ellipse((cx - nose_rx, nose_y - nose_ry, cx + nose_rx, nose_y + nose_ry), fill=dark_fur)
+    # Nose shine
+    pdraw.ellipse((cx - 25, nose_y - 30, cx + 5, nose_y - 12), fill=(60, 80, 75, 255))
+    
+    # Smiling Mouth
+    pdraw.arc((cx - 90, nose_y + 10, cx, nose_y + 90), start=20, end=160, fill=dark_fur, width=24)
+    pdraw.arc((cx, nose_y + 10, cx + 90, nose_y + 90), start=20, end=160, fill=dark_fur, width=24)
+    
+    # Cheeks (soft cute blush)
+    blush_rx = 70
+    blush_ry = 35
+    pdraw.ellipse((cx - 330 - blush_rx, head_cy + 80 - blush_ry, cx - 330 + blush_rx, head_cy + 80 + blush_ry), fill=(52, 211, 153, 90))
+    pdraw.ellipse((cx + 330 - blush_rx, head_cy + 80 - blush_ry, cx + 330 + blush_rx, head_cy + 80 + blush_ry), fill=(52, 211, 153, 90))
+
+    im = Image.alpha_composite(im, panda)
     return im
 
 def main():
-    print("Generating master icon (2048x2048)...")
-    master = make_master_icon()
+    print("Generating Bet Buddy master panda icon (2048x2048)...")
+    master = make_panda_icon()
     
     targets = [
         (512, "icon-512.png"),
@@ -170,13 +197,11 @@ def main():
         resized.save(out_path, "PNG", optimize=True)
         print(f"Saved {out_path} ({size}x{size})")
         
-        # Also copy to public-dist
         pub_path = PUBLIC_ASSETS / filename
         resized.save(pub_path, "PNG", optimize=True)
         print(f"Saved {pub_path} ({size}x{size})")
 
-    print("All icons successfully generated.")
+    print("All Bet Buddy panda icons successfully generated.")
 
 if __name__ == "__main__":
     main()
-
