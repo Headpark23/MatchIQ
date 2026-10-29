@@ -13,3 +13,4 @@ with open('styles.css', 'w', encoding='utf-8') as f:
     f.write(css_text)
 
 print('Updated styles.css with rose mood card styling')
+

@@ -9,3 +9,4 @@ with open('app.js', 'w', encoding='utf-8') as f:
     f.write(app_text)
 
 print('Replaced slipOdds.toFixed(1) with integer rounding')
+
