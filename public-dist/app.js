@@ -1058,6 +1058,119 @@ function diaryPerformanceChart(diary) {
   '</div>';
 }
 
+
+// ------------------------------------------------------------ Phase 2: Buddy Leagues & User Profile
+const USER_PROFILE_KEY = 'betbuddy_user_profile_v1';
+const LEAGUES_STORAGE_KEY = 'betbuddy_leagues_v1';
+
+function getUserProfile() {
+  try {
+    const p = JSON.parse(localStorage.getItem(USER_PROFILE_KEY) || 'null');
+    if (p && p.handle) return p;
+  } catch (e) { /* ignore */ }
+  const randomSuffix = Math.floor(Math.random() * 899 + 100);
+  const defaultProfile = { handle: 'Punter_' + randomSuffix, avatar: '⚽' };
+  try { localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(defaultProfile)); } catch (e) { /* ignore */ }
+  return defaultProfile;
+}
+
+function saveUserProfile(handle) {
+  const clean = (handle || '').trim().replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 24) || 'Punter';
+  const prof = { ...getUserProfile(), handle: clean };
+  try { localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(prof)); } catch (e) { /* ignore */ }
+  return prof;
+}
+
+function getUserLeagueStats() {
+  const diary = getStoredDiary();
+  const settled = diary.filter(e => e.outcome && e.outcome !== 'pending');
+  const won = settled.filter(e => e.outcome === 'won');
+  const totalStaked = settled.reduce((sum, e) => sum + (+e.stake || 0), 0);
+  const totalProfit = settled.reduce((sum, e) => sum + (calc.calculateBetProfit(e.stake, e.odds, e.outcome) || 0), 0);
+  const winRate = settled.length ? Math.round((won.length / settled.length) * 100) : 0;
+  const roi = totalStaked > 0 ? +( (totalProfit / totalStaked) * 100 ).toFixed(1) : 0.0;
+  const last5 = settled.slice(0, 5).map(e => e.outcome === 'won' ? 'W' : e.outcome === 'lost' ? 'L' : 'V');
+  return { settled: settled.length, won: won.length, winRate, roi, form: last5.length ? last5 : ['—'] };
+}
+
+function getStoredLeagues() {
+  try {
+    const list = JSON.parse(localStorage.getItem(LEAGUES_STORAGE_KEY) || 'null');
+    if (Array.isArray(list) && list.length) return list;
+  } catch (e) { /* ignore */ }
+  const defaults = [
+    {
+      id: 'league-weekend-contenders',
+      name: 'Weekend Contenders',
+      code: 'BUDDY-7482',
+      created_at: new Date().toISOString().slice(0, 10),
+      members: [
+        { handle: 'ModelBenchmark', winRate: 64, roi: 18.5, settled: 28, form: ['W', 'W', 'L', 'W', 'W'], isBot: true },
+        { handle: 'The10pLegend', winRate: 60, roi: 22.0, settled: 15, form: ['W', 'L', 'W', 'W', 'W'], isBot: true },
+        { handle: 'AccaArchitect', winRate: 52, roi: 14.2, settled: 19, form: ['W', 'L', 'W', 'W', 'L'], isBot: true }
+      ]
+    }
+  ];
+  try { localStorage.setItem(LEAGUES_STORAGE_KEY, JSON.stringify(defaults)); } catch (e) { /* ignore */ }
+  return defaults;
+}
+
+function saveStoredLeagues(leagues) {
+  try { localStorage.setItem(LEAGUES_STORAGE_KEY, JSON.stringify(leagues)); } catch (e) { /* ignore */ }
+}
+
+let activeLeagueId = 'league-weekend-contenders';
+
+function viewLeagues() {
+  const prof = getUserProfile();
+  const uStats = getUserLeagueStats();
+  const leagues = getStoredLeagues();
+  let currentLeague = leagues.find(l => l.id === activeLeagueId) || leagues[0];
+  if (!currentLeague) { currentLeague = leagues[0]; activeLeagueId = currentLeague.id; }
+
+  // Build combined leaderboard with the current user included
+  const allMembers = (currentLeague.members || []).slice();
+  const userEntry = { handle: prof.handle, winRate: uStats.winRate, roi: uStats.roi, settled: uStats.settled, form: uStats.form, isYou: true };
+  allMembers.push(userEntry);
+
+  // STRICT RULE: Friends leagues judged on Percentage Win, NEVER £ win.
+  allMembers.sort((a, b) => (b.winRate - a.winRate) || (b.roi - a.roi) || (b.settled - a.settled));
+
+  const rowsHtml = allMembers.map((m, idx) => {
+    const rank = idx + 1;
+    const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'standard';
+    const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const formHtml = (m.form || ['—']).map(f => f === '—' ? '<span class="dim">—</span>' : '<span class="form-chip ' + f.toLowerCase() + '">' + f + '</span>').join('');
+    const roiSign = m.roi > 0 ? '+' : '';
+    const roiClass = m.roi > 0 ? 'pos' : m.roi < 0 ? 'neg' : '';
+    return '<tr class="lb-row' + (m.isYou ? ' user-row' : '') + '">' +
+      '<td><span class="rank-badge ' + rankClass + '">' + rankIcon + '</span></td>' +
+      '<td><b>' + esc(m.handle) + '</b>' + (m.isYou ? ' <span class="bento-badge emerald" style="font-size:10px;padding:1px 6px">YOU</span>' : '') + '</td>' +
+      '<td><div class="form-chips">' + formHtml + '</div></td>' +
+      '<td class="num mono">' + m.settled + '</td>' +
+      '<td><span class="win-pct-pill">' + m.winRate + '%</span></td>' +
+      '<td><span class="roi-pct-pill ' + roiClass + '">' + roiSign + m.roi + '%</span></td>' +
+    '</tr>';
+  }).join('');
+
+  const leagueTabs = leagues.map(l => '<button type="button" class="league-tab-btn' + (l.id === currentLeague.id ? ' active' : '') + '" data-select-league="' + esc(l.id) + '">' + esc(l.name) + '</button>').join('');
+
+  return '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">Buddy Leagues</h1><p class="page-sub">Compete with friends in private mini-leagues. Pure skill: judged on percentage win rate, never cash volume.</p></div>' +
+    '<div class="btn-row"><button type="button" class="btn primary" data-open-league-modal>Create or Join League</button><button type="button" class="btn" data-share-league="' + esc(currentLeague.code) + '">Invite Friends</button></div></div>' +
+    '<div class="fair-play-banner"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 9l9-6 9 6M6 15l-3-6h6l-3 6a3 3 0 0 1-6 0zm12 0l-3-6h6l-3 6a3 3 0 0 1-6 0z"/></svg>' +
+      '<div><b>Fair Play Rule:</b> Ranked strictly by <b>Win Rate %</b> and <b>ROI %</b>, never £ staked. A 10p bet counts the exact same as £10.</div></div>' +
+    '<div class="user-profile-bar"><div class="profile-pill"><span class="profile-avatar">' + esc(prof.avatar) + '</span><span>@' + esc(prof.handle) + '</span></div>' +
+      '<div style="display:flex;gap:12px;align-items:center"><span class="dim" style="font-size:13px">Your Live Win Rate: <b class="win-pct-pill">' + uStats.winRate + '%</b> · ROI: <b class="roi-pct-pill ' + (uStats.roi >= 0 ? 'pos' : 'neg') + '">' + (uStats.roi > 0 ? '+' : '') + uStats.roi + '%</b></span>' +
+      '<button type="button" class="btn small" data-open-handle-modal>Edit Username</button></div></div>' +
+    '<div class="league-selector-bar">' + leagueTabs + '</div>' +
+    '<div class="leaderboard-card"><div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center">' +
+      '<div><h2 class="section-title">' + esc(currentLeague.name) + '</h2><span class="section-note">Invite Code: <b class="mono" style="color:var(--cyan)">' + esc(currentLeague.code) + '</b></span></div>' +
+      '<button type="button" class="btn small" data-share-league="' + esc(currentLeague.code) + '">Share Table</button></div>' +
+      '<div style="overflow-x:auto"><table class="lb-table"><thead><tr><th>Rank</th><th>Player</th><th>Form</th><th class="num">Settled</th><th>Win Rate</th><th>ROI %</th></tr></thead><tbody>' +
+      rowsHtml +
+      '</tbody></table></div></div></section>';
+}
+
 function viewDiary() {
   const all = getStoredDiary();
   const diary = diaryProfileFilter === 'all' ? all : all.filter(e => (e.profile || 'Default') === diaryProfileFilter);
@@ -1369,6 +1482,19 @@ function toast(msg, type) {
 let sharedSlipNotice = false;
 function currentRoute() {
   const hash = location.hash.replace(/^#\/?/, '');
+  if (hash.startsWith('join-league=')) {
+    try {
+      const code = decodeURIComponent(hash.slice(12)).trim().toUpperCase();
+      const leagues = getStoredLeagues();
+      if (!leagues.some(l => l.code === code)) {
+        leagues.push({ id: 'league-' + Date.now(), name: 'Buddy League (' + code + ')', code, created_at: new Date().toISOString().slice(0, 10), members: [] });
+        saveStoredLeagues(leagues);
+        activeLeagueId = leagues[leagues.length - 1].id;
+        toast('Joined league ' + code + '!');
+      }
+    } catch (e) { /* ignore */ }
+    return ['leagues'];
+  }
   if (hash.startsWith('slip=')) {
     try {
       const parts = decodeURIComponent(hash.slice(5)).split('_');
@@ -1393,9 +1519,9 @@ function render() {
   const navKey = view === 'match' ? 'fixtures' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel();
-  const html = view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'more' ? viewMore() : viewHome();
+  const html = view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Best Picks', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', more: 'Data & methods' };
+  const titles = { home: 'Best Picks', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', more: 'Data & methods' };
   document.title = (titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {
@@ -1408,7 +1534,7 @@ function render() {
 }
 
 document.addEventListener('click', event => {
-  const t = event.target.closest('[data-slip],[data-share-slip],[data-partner-slip],[data-legs],[data-win],[data-back],[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-import],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#odds-toggle,#bookmaker-quick button');
+  const t = event.target.closest('[data-open-league-modal],[data-close-league],[data-open-handle-modal],[data-close-handle],[data-share-league],[data-select-league],[data-slip],[data-share-slip],[data-partner-slip],[data-legs],[data-win],[data-back],[data-diary],[data-close],[data-comp],[data-tab],[data-showall],[data-rfilter],[data-export],[data-import],[data-delete],[data-clear-diary],[data-retry],[data-star],[data-useful],[data-chip],#odds-toggle,#bookmaker-quick button');
   if (!t) { if (event.target.id === 'diary-modal') closeDiary(); return; }
   if (t.id === 'odds-toggle') toggleOddsFormat();
   else if (t.dataset.back !== undefined) {
@@ -1422,6 +1548,22 @@ document.addEventListener('click', event => {
     markWinChips();
     updateBuilder();
   }
+  else if (t.dataset.openLeagueModal !== undefined) { $('league-modal').hidden = false; }
+  else if (t.dataset.closeLeague !== undefined) { $('league-modal').hidden = true; }
+  else if (t.dataset.openHandleModal !== undefined) { $('player-handle-input').value = getUserProfile().handle; $('handle-modal').hidden = false; }
+  else if (t.dataset.closeHandle !== undefined) { $('handle-modal').hidden = true; }
+  else if (t.dataset.selectLeague !== undefined) { activeLeagueId = t.dataset.selectLeague; render(); }
+  else if (t.dataset.shareLeague !== undefined) {
+    const code = t.dataset.shareLeague;
+    const shareText = '🏆 Join my Bet Buddy League! Code: ' + code + ' · Play with 10p bets, judged on pure Win Rate %! ' + location.origin + location.pathname + '#join-league=' + encodeURIComponent(code);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareText).then(() => toast('League invite link copied! Send it to your mates.'));
+    } else if (navigator.share) {
+      navigator.share({ title: 'Join Bet Buddy League', text: shareText }).catch(() => {});
+    }
+  }
+  else if (t.id === 'tab-create-league') { $('create-league-form').hidden = false; $('join-league-form').hidden = true; t.classList.add('active'); $('tab-join-league').classList.remove('active'); }
+  else if (t.id === 'tab-join-league') { $('create-league-form').hidden = true; $('join-league-form').hidden = false; t.classList.add('active'); $('tab-create-league').classList.remove('active'); }
   else if (t.dataset.slip !== undefined) saveSlipToDiary(+t.dataset.slip);
   else if (t.dataset.shareSlip !== undefined) shareAccaSlip(+t.dataset.shareSlip);
   else if (t.dataset.partnerSlip !== undefined) {
@@ -1485,6 +1627,43 @@ document.addEventListener('change', event => {
 });
 document.addEventListener('submit', event => {
   if (event.target.id === 'diary-form') handleDiaryFormSubmit(event);
+
+  if (event.target.id === 'create-league-form') {
+    event.preventDefault();
+    const name = ($('new-league-name').value || '').trim() || 'My Friends League';
+    const code = 'BUDDY-' + Math.floor(Math.random() * 8999 + 1000);
+    const newLeague = { id: 'league-' + Date.now(), name, code, created_at: new Date().toISOString().slice(0, 10), members: [] };
+    const list = getStoredLeagues();
+    list.unshift(newLeague);
+    saveStoredLeagues(list);
+    activeLeagueId = newLeague.id;
+    $('league-modal').hidden = true;
+    toast('League created! Share code ' + code + ' with friends.');
+    render();
+  }
+  if (event.target.id === 'join-league-form') {
+    event.preventDefault();
+    const code = ($('join-league-code').value || '').trim().toUpperCase();
+    if (!code) return;
+    const list = getStoredLeagues();
+    if (!list.some(l => l.code === code)) {
+      list.push({ id: 'league-' + Date.now(), name: 'League ' + code, code, created_at: new Date().toISOString().slice(0, 10), members: [] });
+      saveStoredLeagues(list);
+    }
+    activeLeagueId = (list.find(l => l.code === code) || list[0]).id;
+    $('league-modal').hidden = true;
+    toast('Joined league ' + code + '!');
+    render();
+  }
+  if (event.target.id === 'handle-form') {
+    event.preventDefault();
+    const handle = $('player-handle-input').value;
+    saveUserProfile(handle);
+    $('handle-modal').hidden = true;
+    toast('Username updated to @' + getUserProfile().handle + '!');
+    render();
+  }
+
   else if (event.target.id === 'fb-form') handleFeedbackSubmit(event);
 });
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('diary-modal').hidden) closeDiary(); });

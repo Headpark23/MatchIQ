@@ -265,3 +265,4 @@ if "/* Phase 1 Social: Panda Mood Badge */" not in styles:
     styles += phase1_css
     styles_path.write_text(styles, encoding='utf-8')
     print("styles.css Phase 1 social styles applied.")
+
