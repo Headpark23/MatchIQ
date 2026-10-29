@@ -11149,7 +11149,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "075d3c243b9d340977a4d5bca9623a1527880cbb52f4b63758bec6a7a41eaaa6",
-   "superseded_by": "SA-2627-sassuolo-v-lazio#r2"
+   "superseded_by": "SA-2627-sassuolo-v-lazio#r2",
+   "result": {
+    "score": [
+     2,
+     6
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-27T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "SA-2627-roma-v-cagliari#r1",
@@ -11388,7 +11398,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "c1c124d24e57efc8aab46197b5faed24475d397302e7b0045899c92b92d827ef",
-   "superseded_by": "SA-2627-roma-v-cagliari#r2"
+   "superseded_by": "SA-2627-roma-v-cagliari#r2",
+   "result": {
+    "score": [
+     4,
+     2
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-27T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "SA-2627-torino-v-como#r1",
@@ -11628,7 +11648,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "9c421d3e6f795608ba748dbf053722b5cfe59909c6976617a442926d89e51d4c",
-   "superseded_by": "SA-2627-torino-v-como#r2"
+   "superseded_by": "SA-2627-torino-v-como#r2",
+   "result": {
+    "score": [
+     1,
+     3
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-27T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "SA-2627-ac-milan-v-bologna#r1",
@@ -11868,7 +11898,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "39e4ac018cf72938f636f111503d0eab1c641443ab334457a0b5b887e9c9a98f",
-   "superseded_by": "SA-2627-ac-milan-v-bologna#r2"
+   "superseded_by": "SA-2627-ac-milan-v-bologna#r2",
+   "result": {
+    "score": [
+     2,
+     4
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "SA-2627-parma-v-udinese#r1",
@@ -12108,7 +12148,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "53a45314b2c6d7836ced57d692dd792ae15e7c3c0c32a0fefe39f8150ebb0195",
-   "superseded_by": "SA-2627-parma-v-udinese#r2"
+   "superseded_by": "SA-2627-parma-v-udinese#r2",
+   "result": {
+    "score": [
+     0,
+     0
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "SA-2627-venezia-v-inter#r1",
@@ -12348,7 +12398,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "f0a2d8c7079978fa584f3f3bf3ec07b5eb0ca8b2716216fe76c23707cc45b3b1",
-   "superseded_by": "SA-2627-venezia-v-inter#r2"
+   "superseded_by": "SA-2627-venezia-v-inter#r2",
+   "result": {
+    "score": [
+     0,
+     2
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "SA-2627-genoa-v-juventus#r1",
@@ -12588,7 +12648,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "c5d17d723df35426a73fac6a47c527f9b8bf402be8ffb31cb7dcf5a67c3f96bf",
-   "superseded_by": "SA-2627-genoa-v-juventus#r2"
+   "superseded_by": "SA-2627-genoa-v-juventus#r2",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "SA-2627-monza-v-napoli#r1",
@@ -12828,7 +12898,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "17770f3ba5121bd654de977466e536cdc9a341f77d4e1716ddfde2fbab3840c7",
-   "superseded_by": "SA-2627-monza-v-napoli#r2"
+   "superseded_by": "SA-2627-monza-v-napoli#r2",
+   "result": {
+    "score": [
+     1,
+     4
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "SA-2627-frosinone-v-lecce#r1",
@@ -13068,7 +13148,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "f6a969d66674ac474a57a5905064130b2834b6c639847171e87668af1655cd27",
-   "superseded_by": "SA-2627-frosinone-v-lecce#r2"
+   "superseded_by": "SA-2627-frosinone-v-lecce#r2",
+   "result": {
+    "score": [
+     5,
+     1
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-29T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "SA-2627-fiorentina-v-atalanta#r1",
@@ -13308,7 +13398,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "0051ee3dc1f30d0b59584d3de7368caa73d1371a95bb439fb8d33b3808c5a4d7",
-   "superseded_by": "SA-2627-fiorentina-v-atalanta#r2"
+   "superseded_by": "SA-2627-fiorentina-v-atalanta#r2",
+   "result": {
+    "score": [
+     2,
+     2
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-29T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "FL1-2627-le-havre-v-paris-sg#r1",
@@ -40859,7 +40959,51 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "7bf709c0a998728da1788aea12d3cc37f8b4d5ab345cec420c4e83bff2203809"
+   "sha256": "7bf709c0a998728da1788aea12d3cc37f8b4d5ab345cec420c4e83bff2203809",
+   "result": {
+    "score": [
+     2,
+     6
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-27T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "A",
+     "pick_won": true,
+     "brier": 0.42406,
+     "logloss": 0.75853,
+     "rps": 0.17844
+    },
+    "goals": {
+     "total": 8,
+     "line": 2.5,
+     "pick_won": false,
+     "brier": 0.26348,
+     "logloss": 0.72011
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "yes",
+     "pick_won": true,
+     "brier": 0.24059,
+     "logloss": 0.67433
+    },
+    "most_likely": {
+     "pending": "match statistics not yet available"
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "SA-2627-roma-v-cagliari#r2",
@@ -41098,7 +41242,56 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e6902f8117b0edbd768d53e0b76af60358cc2e3ce2c6fa224e7d4c327359d48c"
+   "sha256": "e6902f8117b0edbd768d53e0b76af60358cc2e3ce2c6fa224e7d4c327359d48c",
+   "result": {
+    "score": [
+     4,
+     2
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-27T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.15652,
+     "logloss": 0.38405,
+     "rps": 0.05745
+    },
+    "goals": {
+     "total": 6,
+     "line": 2.5,
+     "pick_won": false,
+     "brier": 0.26266,
+     "logloss": 0.71846
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "yes",
+     "pick_won": false,
+     "brier": 0.27228,
+     "logloss": 0.73773
+    },
+    "most_likely": {
+     "market": "result",
+     "label": "Roma win",
+     "p": 0.6811,
+     "won": true,
+     "brier": 0.1017,
+     "logloss": 0.38405
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "SA-2627-torino-v-como#r2",
@@ -41338,7 +41531,51 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "cefaeacb99926f72589fff384289e7d84736b9111805773087bfd16395a59e11"
+   "sha256": "cefaeacb99926f72589fff384289e7d84736b9111805773087bfd16395a59e11",
+   "result": {
+    "score": [
+     1,
+     3
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-27T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "A",
+     "pick_won": true,
+     "brier": 0.30577,
+     "logloss": 0.59929,
+     "rps": 0.12236
+    },
+    "goals": {
+     "total": 4,
+     "line": 2.5,
+     "pick_won": false,
+     "brier": 0.2676,
+     "logloss": 0.72836
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "yes",
+     "pick_won": false,
+     "brier": 0.2519,
+     "logloss": 0.69695
+    },
+    "most_likely": {
+     "pending": "match statistics not yet available"
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "SA-2627-ac-milan-v-bologna#r2",
@@ -41578,7 +41815,51 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "59f0e47fb76fee67b40623b9c9c5be96098eb05f7f61b3822a07106df5cbcf68"
+   "sha256": "59f0e47fb76fee67b40623b9c9c5be96098eb05f7f61b3822a07106df5cbcf68",
+   "result": {
+    "score": [
+     2,
+     4
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "A",
+     "pick_won": false,
+     "brier": 0.86626,
+     "logloss": 1.38031,
+     "rps": 0.3992
+    },
+    "goals": {
+     "total": 6,
+     "line": 2.5,
+     "pick_won": false,
+     "brier": 0.26946,
+     "logloss": 0.7321
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "yes",
+     "pick_won": true,
+     "brier": 0.24691,
+     "logloss": 0.68697
+    },
+    "most_likely": {
+     "pending": "match statistics not yet available"
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "SA-2627-parma-v-udinese#r2",
@@ -41818,7 +42099,51 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "5d27e9ba7f06b6cced4f52475ea0cf837fad45e356be7885ddb981fdb124798f"
+   "sha256": "5d27e9ba7f06b6cced4f52475ea0cf837fad45e356be7885ddb981fdb124798f",
+   "result": {
+    "score": [
+     0,
+     0
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": false,
+     "brier": 0.7381,
+     "logloss": 1.20541,
+     "rps": 0.12375
+    },
+    "goals": {
+     "total": 0,
+     "line": 2.5,
+     "pick_won": true,
+     "brier": 0.20097,
+     "logloss": 0.59475
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "no",
+     "pick_won": true,
+     "brier": 0.23203,
+     "logloss": 0.6572
+    },
+    "most_likely": {
+     "pending": "match statistics not yet available"
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "SA-2627-venezia-v-inter#r2",
@@ -42058,7 +42383,51 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2a047fe589afa6c55dd428d191c64fa7c839137dfcd3dedf186c3c4ad049d3f5"
+   "sha256": "2a047fe589afa6c55dd428d191c64fa7c839137dfcd3dedf186c3c4ad049d3f5",
+   "result": {
+    "score": [
+     0,
+     2
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "A",
+     "pick_won": false,
+     "brier": 0.70157,
+     "logloss": 1.13797,
+     "rps": 0.31353
+    },
+    "goals": {
+     "total": 2,
+     "line": 2.5,
+     "pick_won": true,
+     "brier": 0.23464,
+     "logloss": 0.66242
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "no",
+     "pick_won": false,
+     "brier": 0.2516,
+     "logloss": 0.69635
+    },
+    "most_likely": {
+     "pending": "match statistics not yet available"
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "SA-2627-genoa-v-juventus#r2",
@@ -42298,7 +42667,51 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "0ca6fee43322c1de14685fabe8306327092a17a59c4f9deb3b9099e31420eaeb"
+   "sha256": "0ca6fee43322c1de14685fabe8306327092a17a59c4f9deb3b9099e31420eaeb",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": false,
+     "brier": 0.98976,
+     "logloss": 1.60445,
+     "rps": 0.4577
+    },
+    "goals": {
+     "total": 2,
+     "line": 2.5,
+     "pick_won": true,
+     "brier": 0.2073,
+     "logloss": 0.60752
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "no",
+     "pick_won": true,
+     "brier": 0.22743,
+     "logloss": 0.64798
+    },
+    "most_likely": {
+     "pending": "match statistics not yet available"
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "SA-2627-monza-v-napoli#r2",
@@ -42538,7 +42951,51 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "66e2108e77eb459ee8d03ef4beb715bc2023b96e9170e8bac659f4431b8adbc2"
+   "sha256": "66e2108e77eb459ee8d03ef4beb715bc2023b96e9170e8bac659f4431b8adbc2",
+   "result": {
+    "score": [
+     1,
+     4
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-28T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "A",
+     "pick_won": false,
+     "brier": 0.70157,
+     "logloss": 1.13797,
+     "rps": 0.31353
+    },
+    "goals": {
+     "total": 5,
+     "line": 2.5,
+     "pick_won": false,
+     "brier": 0.26584,
+     "logloss": 0.72484
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "yes",
+     "pick_won": true,
+     "brier": 0.2484,
+     "logloss": 0.68995
+    },
+    "most_likely": {
+     "pending": "match statistics not yet available"
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "SA-2627-frosinone-v-lecce#r2",
@@ -42778,7 +43235,51 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "03faef7eda09c2d72d4caae1f1137be2b8734a9ee7c36e3c8e6786049a1cfb66"
+   "sha256": "03faef7eda09c2d72d4caae1f1137be2b8734a9ee7c36e3c8e6786049a1cfb66",
+   "result": {
+    "score": [
+     5,
+     1
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-29T17:30:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.52939,
+     "logloss": 0.90003,
+     "rps": 0.22744
+    },
+    "goals": {
+     "total": 6,
+     "line": 2.5,
+     "pick_won": false,
+     "brier": 0.26584,
+     "logloss": 0.72484
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "yes",
+     "pick_won": true,
+     "brier": 0.2484,
+     "logloss": 0.68995
+    },
+    "most_likely": {
+     "pending": "match statistics not yet available"
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "SA-2627-fiorentina-v-atalanta#r2",
@@ -43018,7 +43519,51 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "fc2619e114bdfc83cb09afe2822121b28abde94761bc6c6c3856d4c5d08adecf"
+   "sha256": "fc2619e114bdfc83cb09afe2822121b28abde94761bc6c6c3856d4c5d08adecf",
+   "result": {
+    "score": [
+     2,
+     2
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-29T19:45:00Z",
+    "confirmed_at": "2026-10-29T22:57:08.027613+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": false,
+     "brier": 0.87117,
+     "logloss": 1.39746,
+     "rps": 0.15225
+    },
+    "goals": {
+     "total": 4,
+     "line": 2.5,
+     "pick_won": true,
+     "brier": 0.2482,
+     "logloss": 0.68955
+    },
+    "corners": {
+     "pending": "match statistics not yet available"
+    },
+    "cards": {
+     "pending": "match statistics not yet available"
+    },
+    "shots": {
+     "pending": "match statistics not yet available"
+    },
+    "btts": {
+     "outcome": "yes",
+     "pick_won": true,
+     "brier": 0.22944,
+     "logloss": 0.65201
+    },
+    "most_likely": {
+     "pending": "match statistics not yet available"
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "FL1-2627-le-havre-v-paris-sg#r2",
@@ -45422,7 +45967,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "8b418570c55a9fde8fdc7713cb6160416c83eebc2b16b840201872ca53d54d3f"
+   "sha256": "8b418570c55a9fde8fdc7713cb6160416c83eebc2b16b840201872ca53d54d3f",
+   "superseded_by": "SA-2627-bologna-v-monza#r3"
   },
   {
    "record_id": "ELC-2627-bolton-v-bristol-city#r2",
@@ -49268,7 +49814,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2870fa6d15fc75596052b81340b4d62469f8c4af69a4bb34e85ac5fa833df361"
+   "sha256": "2870fa6d15fc75596052b81340b4d62469f8c4af69a4bb34e85ac5fa833df361",
+   "superseded_by": "SA-2627-udinese-v-roma#r3"
   },
   {
    "record_id": "PD-2627-real-betis-v-malaga#r2",
@@ -49990,7 +50537,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "f4a3016d7a916caf147373fe718658876f7b5a47a7f060ad266baedfecc2ba7a"
+   "sha256": "f4a3016d7a916caf147373fe718658876f7b5a47a7f060ad266baedfecc2ba7a",
+   "superseded_by": "SA-2627-ac-milan-v-inter#r3"
   },
   {
    "record_id": "FL1-2627-lorient-v-brest#r2",
@@ -51422,7 +51970,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "aee14b35f91063fb6272cd1742af2dab6f321c471087e5016d6d920fdc4350c9"
+   "sha256": "aee14b35f91063fb6272cd1742af2dab6f321c471087e5016d6d920fdc4350c9",
+   "superseded_by": "SA-2627-como-v-venezia#r3"
   },
   {
    "record_id": "PD-2627-getafe-v-sevilla#r2",
@@ -51903,7 +52452,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "464d964dfb05d1cd83b42769e26f15cc1c85da2da78eab850fd8a4bafe379392"
+   "sha256": "464d964dfb05d1cd83b42769e26f15cc1c85da2da78eab850fd8a4bafe379392",
+   "superseded_by": "SA-2627-frosinone-v-torino#r3"
   },
   {
    "record_id": "SA-2627-lazio-v-cagliari#r2",
@@ -52143,7 +52693,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "57110cad123e329a38dcb7465b2258a2e0160207cc4fa2f1028a820c1edb5da1"
+   "sha256": "57110cad123e329a38dcb7465b2258a2e0160207cc4fa2f1028a820c1edb5da1",
+   "superseded_by": "SA-2627-lazio-v-cagliari#r3"
   },
   {
    "record_id": "FL1-2627-strasbourg-v-auxerre#r2",
@@ -53347,7 +53898,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "9a29506cf2187945323a0f74f105f6ec01003fa7c4b32dc67eac2f11a01a6dd5"
+   "sha256": "9a29506cf2187945323a0f74f105f6ec01003fa7c4b32dc67eac2f11a01a6dd5",
+   "superseded_by": "SA-2627-lecce-v-genoa#r3"
   },
   {
    "record_id": "PD-2627-elche-v-valencia#r2",
@@ -53828,7 +54380,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "c1701dddbcc042fe30a528162ace259c07bb6b830c4f8defd53ba75bc3c3348d"
+   "sha256": "c1701dddbcc042fe30a528162ace259c07bb6b830c4f8defd53ba75bc3c3348d",
+   "superseded_by": "SA-2627-juventus-v-napoli#r3"
   },
   {
    "record_id": "FL1-2627-marseille-v-toulouse#r2",
@@ -54550,7 +55103,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "9b14bff33403d83237f5eafd027bf93ba68cde1f88030084a345247fa0d462e9"
+   "sha256": "9b14bff33403d83237f5eafd027bf93ba68cde1f88030084a345247fa0d462e9",
+   "superseded_by": "SA-2627-sassuolo-v-fiorentina#r3"
   },
   {
    "record_id": "SA-2627-atalanta-v-parma#r2",
@@ -54789,7 +55343,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "4420853fdf1eaa4e980ebfe28eefe794974d31c7f0a75ab7ddaaee15a09915e5"
+   "sha256": "4420853fdf1eaa4e980ebfe28eefe794974d31c7f0a75ab7ddaaee15a09915e5",
+   "superseded_by": "SA-2627-atalanta-v-parma#r3"
   },
   {
    "record_id": "PD-2627-deportivo-la-coruna-v-osasuna#r2",
@@ -58630,7 +59185,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "71b4107bf878cc5dd95149c136d95fdcd7759e9680b272a531e0bffeb4519ef7"
+   "sha256": "71b4107bf878cc5dd95149c136d95fdcd7759e9680b272a531e0bffeb4519ef7",
+   "superseded_by": "SA-2627-venezia-v-udinese#r3"
   },
   {
    "record_id": "ELC-2627-derby-v-bolton#r2",
@@ -60795,7 +61351,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "cb459881465afccfcdb1564318f864724ae8c496900bf397d97563ef5d4ce849"
+   "sha256": "cb459881465afccfcdb1564318f864724ae8c496900bf397d97563ef5d4ce849",
+   "superseded_by": "SA-2627-cagliari-v-frosinone#r3"
   },
   {
    "record_id": "SA-2627-torino-v-lecce#r2",
@@ -61035,7 +61592,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "221093469fb7ef51381647f25c3d3a458ecdb11b6d80fed14794614e4a77d411"
+   "sha256": "221093469fb7ef51381647f25c3d3a458ecdb11b6d80fed14794614e4a77d411",
+   "superseded_by": "SA-2627-torino-v-lecce#r3"
   },
   {
    "record_id": "PL-2627-arsenal-v-hull#r3",
@@ -64158,7 +64716,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "a0df3a18a233ca9b471bda80abf916fd7cff32255772373ddccf97fe1341bdbc"
+   "sha256": "a0df3a18a233ca9b471bda80abf916fd7cff32255772373ddccf97fe1341bdbc",
+   "superseded_by": "SA-2627-parma-v-bologna#r3"
   },
   {
    "record_id": "PL-2627-nottm-forest-v-man-city#r3",
@@ -65111,7 +65670,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "65f9adcecbcbc0a78f155e82a7d3a5532db649b7f27a5f91d934f388dfc5229f"
+   "sha256": "65f9adcecbcbc0a78f155e82a7d3a5532db649b7f27a5f91d934f388dfc5229f",
+   "superseded_by": "SA-2627-roma-v-sassuolo#r3"
   },
   {
    "record_id": "PD-2627-valencia-v-real-madrid#r2",
@@ -65592,7 +66152,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "0922ebf5f624c824539c93a0b9c4210dcb783dd4d4939270a4faa85be58199fe"
+   "sha256": "0922ebf5f624c824539c93a0b9c4210dcb783dd4d4939270a4faa85be58199fe",
+   "superseded_by": "SA-2627-napoli-v-lazio#r3"
   },
   {
    "record_id": "PD-2627-elche-v-real-betis#r2",
@@ -66557,7 +67118,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "6d505ddd669d53b8d1c0ddcb7a930e6aee92458bf0e38016caf589859f1c95a2"
+   "sha256": "6d505ddd669d53b8d1c0ddcb7a930e6aee92458bf0e38016caf589859f1c95a2",
+   "superseded_by": "SA-2627-genoa-v-ac-milan#r3"
   },
   {
    "record_id": "PL-2627-ipswich-v-bournemouth#r3",
@@ -67039,7 +67601,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "bab99ec38f2cee703915361d79c33ce71f9d62234f55ad07c91f76f6bba5b80e"
+   "sha256": "bab99ec38f2cee703915361d79c33ce71f9d62234f55ad07c91f76f6bba5b80e",
+   "superseded_by": "SA-2627-monza-v-atalanta#r3"
   },
   {
    "record_id": "FL1-2627-rennes-v-lille#r2",
@@ -69197,7 +69760,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "c75321aa07e94efcd02729f394ec653a62f94f50ca496e9beac215995f6b5ea4"
+   "sha256": "c75321aa07e94efcd02729f394ec653a62f94f50ca496e9beac215995f6b5ea4",
+   "superseded_by": "SA-2627-inter-v-como#r3"
   },
   {
    "record_id": "PD-2627-celta-vigo-v-levante#r2",
@@ -69919,7 +70483,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "862d4ddd01a080611d8d32b8d1a4f4d27870f223efdc19eef6257d9e5a5d4cc3"
+   "sha256": "862d4ddd01a080611d8d32b8d1a4f4d27870f223efdc19eef6257d9e5a5d4cc3",
+   "superseded_by": "SA-2627-fiorentina-v-juventus#r3"
   },
   {
    "record_id": "FL1-2627-lens-v-marseille#r2",
@@ -78119,7 +78684,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "24378eff2eaeed7641a38c2a72e708d047353cf84f7987b4d00315618e7ccda8"
+   "sha256": "24378eff2eaeed7641a38c2a72e708d047353cf84f7987b4d00315618e7ccda8",
+   "superseded_by": "FL1-2627-nice-v-rennes#r4"
   },
   {
    "record_id": "PD-2627-real-betis-v-malaga#r3",
@@ -78838,7 +79404,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "a69c3e3407796fede448c4a811858bffd888355d35898ca8bc694d5ebd528a53"
+   "sha256": "a69c3e3407796fede448c4a811858bffd888355d35898ca8bc694d5ebd528a53",
+   "superseded_by": "FL1-2627-lorient-v-brest#r4"
   },
   {
    "record_id": "FL1-2627-lyon-v-angers#r3",
@@ -79077,7 +79644,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "bf455ce5be4a62bcb005513244340b9d30a0553e9022510f30f2e9585c2cfbee"
+   "sha256": "bf455ce5be4a62bcb005513244340b9d30a0553e9022510f30f2e9585c2cfbee",
+   "superseded_by": "FL1-2627-lyon-v-angers#r4"
   },
   {
    "record_id": "FL1-2627-troyes-v-le-mans#r3",
@@ -89134,6 +89702,5520 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "85a8695d859d3045bb54613082d4fdeed6d3d35c74baee0632694da27522ed16"
+  },
+  {
+   "record_id": "FL1-2627-nice-v-rennes#r4",
+   "match_id": "FL1-2627-nice-v-rennes",
+   "revision": 4,
+   "fixture": {
+    "competition": "FL1",
+    "season": "2627",
+    "home": "Nice",
+    "away": "Rennes",
+    "kickoff_utc": "2026-10-30T18:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "5c519a9e6183b8d9",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Rennes win",
+      "p": 0.3922,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Nice win",
+       "p": 0.3562,
+       "fair_odds": "≈7/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2516,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Rennes win",
+       "p": 0.3922,
+       "fair_odds": "≈6/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5572,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7838,
+       "over_fair_odds": "≈2/7",
+       "under_fair_odds": "≈7/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5572,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3373,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5673,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5673,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4327,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5081,
+      "fair_odds": "≈Evens",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.6114,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4919,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3759,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5318,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7334,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5318,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3193,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.57,
+      "fair_odds": "≈8/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6877,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.57,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4513,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "shots",
+     "key": "over",
+     "line": 8.5,
+     "label": "Over 8.5",
+     "p": 0.57,
+     "credible_p": 0.5687,
+     "n": 306,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 306 Ligue 1 backtest matches",
+     "lower_bound": 0.5221
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "557c8b944987b10fd94bca491184140b207b1fd7758c4d7fbdfb0bf987346024"
+  },
+  {
+   "record_id": "SA-2627-bologna-v-monza#r3",
+   "match_id": "SA-2627-bologna-v-monza",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Bologna",
+    "away": "Monza",
+    "kickoff_utc": "2026-10-31T14:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "league-average-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Bologna win",
+      "p": 0.4055,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "T3",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Bologna win",
+       "p": 0.4055,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.272,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Monza win",
+       "p": 0.3225,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5147,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.737,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4853,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2541,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5024,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5024,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4976,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5395,
+      "fair_odds": "≈5/6",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5741,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4605,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3459,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5525,
+      "fair_odds": "≈4/5",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7521,
+       "over_fair_odds": "≈1/3",
+       "under_fair_odds": "≈3/1"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5525,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3525,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.549,
+      "fair_odds": "≈5/6",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.5921,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.451,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3222,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5525,
+     "credible_p": 0.5531,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5111
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "cd811788b9647e4741346d73ff7146c651f6078d54f953aeff53e551019eefef"
+  },
+  {
+   "record_id": "SA-2627-udinese-v-roma#r3",
+   "match_id": "SA-2627-udinese-v-roma",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Udinese",
+    "away": "Roma",
+    "kickoff_utc": "2026-10-31T17:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Roma win",
+      "p": 0.6165,
+      "fair_odds": "≈8/13"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Udinese win",
+       "p": 0.1577,
+       "fair_odds": "≈11/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2258,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Roma win",
+       "p": 0.6165,
+       "fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.511,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.74,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.489,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2613,
+       "over_fair_odds": "≈11/4",
+       "under_fair_odds": "≈4/11"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5067,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4933,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5067,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5513,
+      "fair_odds": "≈4/5",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5628,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4487,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3349,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5204,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.725,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5204,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.324,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5449,
+      "fair_odds": "≈5/6",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.596,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4551,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 9.5,
+       "over": 0.326,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "A",
+     "label": "Roma win",
+     "p": 0.6165,
+     "credible_p": 0.6006,
+     "n": 350,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Serie A model, 350 backtest matches (2025-26)",
+     "lower_bound": 0.5575
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "fc48457ea102f47c4e816f25b0fcab8080d38a3396819df4848ec0f964d53635"
+  },
+  {
+   "record_id": "SA-2627-ac-milan-v-inter#r3",
+   "match_id": "SA-2627-ac-milan-v-inter",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "AC Milan",
+    "away": "Inter",
+    "kickoff_utc": "2026-10-31T19:45:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Inter win",
+      "p": 0.5239,
+      "fair_odds": "≈10/11"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "AC Milan win",
+       "p": 0.2478,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2284,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Inter win",
+       "p": 0.5239,
+       "fair_odds": "≈10/11"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5217,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7626,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5217,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2928,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5336,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5336,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4664,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.6306,
+      "fair_odds": "≈4/7",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.4749,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3694,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      },
+      {
+       "line": 10.5,
+       "over": 0.2701,
+       "over_fair_odds": "≈11/4",
+       "under_fair_odds": "≈4/11"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5731,
+      "fair_odds": "≈8/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7677,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5731,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3729,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5206,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6182,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4794,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3496,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.6306,
+     "credible_p": 0.6264,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5856
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "4f8f93ca2bfeaaf97a4e80fef2e0c09b4aa7196ee1c6bd25e8817498acc8e60a"
+  },
+  {
+   "record_id": "SA-2627-como-v-venezia#r3",
+   "match_id": "SA-2627-como-v-venezia",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Como",
+    "away": "Venezia",
+    "kickoff_utc": "2026-11-01T11:30:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "league-average-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Como win",
+      "p": 0.4055,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "T3",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Como win",
+       "p": 0.4055,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.272,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Venezia win",
+       "p": 0.3225,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5147,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.737,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4853,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2541,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5024,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5024,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4976,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.575,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5388,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 9.5,
+       "over": 0.425,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3138,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5494,
+      "fair_odds": "≈5/6",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7497,
+       "over_fair_odds": "≈1/3",
+       "under_fair_odds": "≈3/1"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5494,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3495,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5285,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6111,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4715,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3417,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.575,
+     "credible_p": 0.5736,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5319
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "32c20fa7a7a0f528a8d13c5d240d510992c94b5c0dfe98c29bb56d0e544cc57f"
+  },
+  {
+   "record_id": "SA-2627-frosinone-v-torino#r3",
+   "match_id": "SA-2627-frosinone-v-torino",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Frosinone",
+    "away": "Torino",
+    "kickoff_utc": "2026-11-01T14:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "league-average-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Frosinone win",
+      "p": 0.4055,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "T3",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Frosinone win",
+       "p": 0.4055,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.272,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Torino win",
+       "p": 0.3225,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5147,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.737,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4853,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2541,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5024,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5024,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4976,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5279,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5849,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4721,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3571,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 3.5",
+      "p": 0.503,
+      "fair_odds": "≈Evens",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7025,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.497,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3057,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5091,
+      "fair_odds": "≈Evens",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6434,
+       "over_fair_odds": "≈4/7",
+       "under_fair_odds": "≈7/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.5091,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3808,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.5279,
+     "credible_p": 0.5289,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.4868
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "40f24c1fa3049f0f6c1582b1a0358011fa06d946be74513ada7308b3ef1b13a7"
+  },
+  {
+   "record_id": "SA-2627-lazio-v-cagliari#r3",
+   "match_id": "SA-2627-lazio-v-cagliari",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Lazio",
+    "away": "Cagliari",
+    "kickoff_utc": "2026-11-01T14:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Lazio win",
+      "p": 0.5721,
+      "fair_odds": "≈8/11"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Lazio win",
+       "p": 0.5721,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2441,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Cagliari win",
+       "p": 0.1839,
+       "fair_odds": "≈9/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.52,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7331,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.48,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2534,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5074,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4926,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5074,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5808,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5327,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4192,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3088,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5237,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.728,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5237,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3268,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5306,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6093,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4694,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3398,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.5808,
+     "credible_p": 0.5791,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5374
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "1606cc0013330b9fbe750205f092e3545c54f7aff9fb8f99106db2295bdd83ec"
+  },
+  {
+   "record_id": "FL1-2627-lyon-v-angers#r4",
+   "match_id": "FL1-2627-lyon-v-angers",
+   "revision": 4,
+   "fixture": {
+    "competition": "FL1",
+    "season": "2627",
+    "home": "Lyon",
+    "away": "Angers",
+    "kickoff_utc": "2026-11-01T16:15:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "5c519a9e6183b8d9",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Lyon win",
+      "p": 0.6697,
+      "fair_odds": "≈1/2"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Lyon win",
+       "p": 0.6697,
+       "fair_odds": "≈1/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2116,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Angers win",
+       "p": 0.1187,
+       "fair_odds": "≈15/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5321,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7661,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5321,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3132,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5148,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5148,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4852,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5197,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.635,
+       "over_fair_odds": "≈4/7",
+       "under_fair_odds": "≈7/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.5197,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 10.5,
+       "over": 0.4054,
+       "over_fair_odds": "≈6/4",
+       "under_fair_odds": "≈4/6"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 3.5",
+      "p": 0.5043,
+      "fair_odds": "≈Evens",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7013,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.4957,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 4.5,
+       "over": 0.2889,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5772,
+      "fair_odds": "≈8/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6936,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.5772,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.459,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Lyon win",
+     "p": 0.6697,
+     "credible_p": 0.6542,
+     "n": 275,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Ligue 1 model, 275 backtest matches (2025-26)",
+     "lower_bound": 0.607
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "5696c0b681c0233bfbf4af25e8d5fed85f124ca7cbf36f9dd8836df94a0edc83"
+  },
+  {
+   "record_id": "SA-2627-lecce-v-genoa#r3",
+   "match_id": "SA-2627-lecce-v-genoa",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Lecce",
+    "away": "Genoa",
+    "kickoff_utc": "2026-11-01T17:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Genoa win",
+      "p": 0.4088,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Lecce win",
+       "p": 0.2756,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3156,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "A",
+       "label": "Genoa win",
+       "p": 0.4088,
+       "fair_odds": "≈6/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5676,
+      "fair_odds": "≈8/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.6905,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4324,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2179,
+       "over_fair_odds": "≈7/2",
+       "under_fair_odds": "≈2/7"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5332,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4668,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5332,
+       "fair_odds": "≈10/11"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5923,
+      "fair_odds": "≈4/6",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5202,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4077,
+       "over_fair_odds": "≈6/4",
+       "under_fair_odds": "≈4/6"
+      },
+      {
+       "line": 10.5,
+       "over": 0.2993,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5204,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.725,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5204,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.324,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5886,
+      "fair_odds": "≈8/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.5518,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4114,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.2876,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.5923,
+     "credible_p": 0.59,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5485
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "5ccce3f8402b8e827e90c19476872ecf39b66b7f038c547ad1d3b8db0e9ee760"
+  },
+  {
+   "record_id": "SA-2627-juventus-v-napoli#r3",
+   "match_id": "SA-2627-juventus-v-napoli",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Juventus",
+    "away": "Napoli",
+    "kickoff_utc": "2026-11-01T19:45:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Juventus win",
+      "p": 0.3669,
+      "fair_odds": "≈7/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Juventus win",
+       "p": 0.3669,
+       "fair_odds": "≈7/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2928,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Napoli win",
+       "p": 0.3403,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.543,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.714,
+       "over_fair_odds": "≈2/5",
+       "under_fair_odds": "≈5/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.457,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2351,
+       "over_fair_odds": "≈100/30",
+       "under_fair_odds": "≈3/10"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5107,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4893,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5107,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5337,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5796,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4663,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3515,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5237,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.728,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5237,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3268,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5469,
+      "fair_odds": "≈5/6",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.594,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4531,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3241,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "shots",
+     "key": "under",
+     "line": 8.5,
+     "label": "Under 8.5",
+     "p": 0.5469,
+     "credible_p": 0.5471,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5051
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "717183e1b57d38c94d27910f63de2e31a97b2024a1133d41342ab11dbf70c1bc"
+  },
+  {
+   "record_id": "SA-2627-sassuolo-v-fiorentina#r3",
+   "match_id": "SA-2627-sassuolo-v-fiorentina",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Sassuolo",
+    "away": "Fiorentina",
+    "kickoff_utc": "2026-11-02T17:30:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Fiorentina win",
+      "p": 0.4089,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Sassuolo win",
+       "p": 0.3438,
+       "fair_odds": "≈15/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2473,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Fiorentina win",
+       "p": 0.4089,
+       "fair_odds": "≈6/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5123,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7565,
+       "over_fair_odds": "≈1/3",
+       "under_fair_odds": "≈3/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5123,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2832,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5327,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5327,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4673,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5808,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5327,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4192,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3088,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5919,
+      "fair_odds": "≈4/6",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7807,
+       "over_fair_odds": "≈2/7",
+       "under_fair_odds": "≈7/2"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5919,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3932,
+       "over_fair_odds": "≈6/4",
+       "under_fair_odds": "≈4/6"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5265,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6129,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4735,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3437,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5919,
+     "credible_p": 0.5905,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.549
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "598249037a6ae23c0b948682c85b55027793e672ee24614fc0db7969fdaf289d"
+  },
+  {
+   "record_id": "SA-2627-atalanta-v-parma#r3",
+   "match_id": "SA-2627-atalanta-v-parma",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Atalanta",
+    "away": "Parma",
+    "kickoff_utc": "2026-11-02T19:45:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Atalanta win",
+      "p": 0.6328,
+      "fair_odds": "≈4/7"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Atalanta win",
+       "p": 0.6328,
+       "fair_odds": "≈4/7"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2302,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Parma win",
+       "p": 0.137,
+       "fair_odds": "≈13/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5268,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7276,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4732,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2478,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5242,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4758,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5242,
+       "fair_odds": "≈10/11"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5298,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5832,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4702,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3552,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 3.5",
+      "p": 0.5513,
+      "fair_odds": "≈4/5",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.646,
+       "over_fair_odds": "≈8/15",
+       "under_fair_odds": "≈15/8"
+      },
+      {
+       "line": 3.5,
+       "over": 0.4487,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 4.5,
+       "over": 0.2746,
+       "over_fair_odds": "≈11/4",
+       "under_fair_odds": "≈4/11"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5657,
+      "fair_odds": "≈4/5",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.5756,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4343,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 9.5,
+       "over": 0.307,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Atalanta win",
+     "p": 0.6328,
+     "credible_p": 0.6205,
+     "n": 350,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Serie A model, 350 backtest matches (2025-26)",
+     "lower_bound": 0.5778
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "d59678b92e0181e2a45a51f7b76aa25d0ef5ae9d020415872f454d4b9f151a89"
+  },
+  {
+   "record_id": "FL1-2627-lorient-v-brest#r4",
+   "match_id": "FL1-2627-lorient-v-brest",
+   "revision": 4,
+   "fixture": {
+    "competition": "FL1",
+    "season": "2627",
+    "home": "Lorient",
+    "away": "Brest",
+    "kickoff_utc": "2026-11-02T19:45:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "5c519a9e6183b8d9",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Lorient win",
+      "p": 0.4279,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Lorient win",
+       "p": 0.4279,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2629,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Brest win",
+       "p": 0.3092,
+       "fair_odds": "≈9/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5393,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7717,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5393,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3198,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5524,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5524,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4476,
+       "fair_odds": "≈5/4"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5045,
+      "fair_odds": "≈Evens",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.6146,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4955,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3797,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 3.5",
+      "p": 0.511,
+      "fair_odds": "≈Evens",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.6947,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.489,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 4.5,
+       "over": 0.2838,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5061,
+      "fair_odds": "≈Evens",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6294,
+       "over_fair_odds": "≈4/7",
+       "under_fair_odds": "≈7/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.5061,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 9.5,
+       "over": 0.389,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5524,
+     "credible_p": 0.5519,
+     "n": 306,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 306 Ligue 1 backtest matches",
+     "lower_bound": 0.5051
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "cefb54eca2ea429c387f9d79e70641f662be7461f855bdff7d03d66c8412dfbf"
+  },
+  {
+   "record_id": "SA-2627-venezia-v-udinese#r3",
+   "match_id": "SA-2627-venezia-v-udinese",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Venezia",
+    "away": "Udinese",
+    "kickoff_utc": "2026-11-06T19:45:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "league-average-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Venezia win",
+      "p": 0.4055,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "T3",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Venezia win",
+       "p": 0.4055,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.272,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Udinese win",
+       "p": 0.3225,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5147,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.737,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4853,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2541,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5024,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5024,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4976,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5671,
+      "fair_odds": "≈4/5",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.547,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4329,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3207,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5204,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.725,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5204,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.324,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5128,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.625,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4872,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3575,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.5671,
+     "credible_p": 0.5661,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5243
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "76f35449920132719fd02d365084e2f82f134947d5c949e9fc7cec1dd2d868ef"
+  },
+  {
+   "record_id": "SA-2627-cagliari-v-frosinone#r3",
+   "match_id": "SA-2627-cagliari-v-frosinone",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Cagliari",
+    "away": "Frosinone",
+    "kickoff_utc": "2026-11-07T14:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "league-average-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Cagliari win",
+      "p": 0.4055,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "T3",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Cagliari win",
+       "p": 0.4055,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.272,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Frosinone win",
+       "p": 0.3225,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5147,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.737,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4853,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2541,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5024,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5024,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4976,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5222,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5901,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4778,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3627,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5303,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7338,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5303,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3324,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5574,
+      "fair_odds": "≈4/5",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.584,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4426,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3145,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "shots",
+     "key": "under",
+     "line": 8.5,
+     "label": "Under 8.5",
+     "p": 0.5574,
+     "credible_p": 0.5571,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5152
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "cc423b0763ba90ab54aa86d1adf7719779f1024ba09a997cc9c38eed4a862483"
+  },
+  {
+   "record_id": "SA-2627-torino-v-lecce#r3",
+   "match_id": "SA-2627-torino-v-lecce",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Torino",
+    "away": "Lecce",
+    "kickoff_utc": "2026-11-07T14:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Torino win",
+      "p": 0.4801,
+      "fair_odds": "≈11/10"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Torino win",
+       "p": 0.4801,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2845,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Lecce win",
+       "p": 0.2354,
+       "fair_odds": "≈100/30"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5464,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7109,
+       "over_fair_odds": "≈2/5",
+       "under_fair_odds": "≈5/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4536,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2325,
+       "over_fair_odds": "≈100/30",
+       "under_fair_odds": "≈3/10"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5195,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4805,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5195,
+       "fair_odds": "≈10/11"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5434,
+      "fair_odds": "≈5/6",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5704,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4566,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3422,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5303,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7338,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5303,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3324,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5553,
+      "fair_odds": "≈4/5",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.586,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4447,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3164,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "shots",
+     "key": "under",
+     "line": 8.5,
+     "label": "Under 8.5",
+     "p": 0.5553,
+     "credible_p": 0.5551,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5132
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "bea28de7ff2f30d757b8f420ad0144ef173c616f1828890c50ef0ca12b8b4d6a"
+  },
+  {
+   "record_id": "SA-2627-parma-v-bologna#r3",
+   "match_id": "SA-2627-parma-v-bologna",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Parma",
+    "away": "Bologna",
+    "kickoff_utc": "2026-11-07T17:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Bologna win",
+      "p": 0.4989,
+      "fair_odds": "≈Evens"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Parma win",
+       "p": 0.2162,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2849,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Bologna win",
+       "p": 0.4989,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.551,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7067,
+       "over_fair_odds": "≈2/5",
+       "under_fair_odds": "≈5/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.449,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2292,
+       "over_fair_odds": "≈100/30",
+       "under_fair_odds": "≈3/10"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5254,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4746,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5254,
+       "fair_odds": "≈10/11"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.6053,
+      "fair_odds": "≈4/6",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5055,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3947,
+       "over_fair_odds": "≈6/4",
+       "under_fair_odds": "≈4/6"
+      },
+      {
+       "line": 10.5,
+       "over": 0.2889,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5336,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7366,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5336,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3352,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5967,
+      "fair_odds": "≈4/6",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.543,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4033,
+       "over_fair_odds": "≈6/4",
+       "under_fair_odds": "≈4/6"
+      },
+      {
+       "line": 9.5,
+       "over": 0.281,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.6053,
+     "credible_p": 0.6024,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5611
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "c326c3c8696beec398782042751cf561019616cc02a0b4c89ac64fbb814d5d3a"
+  },
+  {
+   "record_id": "SA-2627-roma-v-sassuolo#r3",
+   "match_id": "SA-2627-roma-v-sassuolo",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Roma",
+    "away": "Sassuolo",
+    "kickoff_utc": "2026-11-07T19:45:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Roma win",
+      "p": 0.7014,
+      "fair_odds": "≈4/9"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Roma win",
+       "p": 0.7014,
+       "fair_odds": "≈4/9"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1782,
+       "fair_odds": "≈9/2"
+      },
+      {
+       "key": "A",
+       "label": "Sassuolo win",
+       "p": 0.1204,
+       "fair_odds": "≈15/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5263,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7654,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5263,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2977,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5094,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5094,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4906,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5454,
+      "fair_odds": "≈5/6",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5685,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4546,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3404,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5368,
+      "fair_odds": "≈5/6",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7393,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5368,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 4.5,
+       "over": 0.338,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5109,
+      "fair_odds": "≈Evens",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6448,
+       "over_fair_odds": "≈8/15",
+       "under_fair_odds": "≈15/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.5109,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3827,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Roma win",
+     "p": 0.7014,
+     "credible_p": 0.6854,
+     "n": 350,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Serie A model, 350 backtest matches (2025-26)",
+     "lower_bound": 0.6446
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "9ac066042051ff2c5eda81c6c0847f9454adbce2d750b22d13d8b0cac7fd0242"
+  },
+  {
+   "record_id": "SA-2627-napoli-v-lazio#r3",
+   "match_id": "SA-2627-napoli-v-lazio",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Napoli",
+    "away": "Lazio",
+    "kickoff_utc": "2026-11-08T11:30:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Napoli win",
+      "p": 0.4449,
+      "fair_odds": "≈5/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Napoli win",
+       "p": 0.4449,
+       "fair_odds": "≈5/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2757,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Lazio win",
+       "p": 0.2793,
+       "fair_odds": "≈5/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5299,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7252,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4701,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2453,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5026,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4974,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5026,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5129,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5984,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4871,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3721,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.527,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7309,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.527,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3296,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5532,
+      "fair_odds": "≈4/5",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.588,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4468,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3183,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "shots",
+     "key": "under",
+     "line": 8.5,
+     "label": "Under 8.5",
+     "p": 0.5532,
+     "credible_p": 0.5531,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5111
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "e2c6e7cecd26b866f71bfc11c52d44b14737350e1228293fcc60d668100f7393"
+  },
+  {
+   "record_id": "SA-2627-genoa-v-ac-milan#r3",
+   "match_id": "SA-2627-genoa-v-ac-milan",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Genoa",
+    "away": "AC Milan",
+    "kickoff_utc": "2026-11-08T14:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "AC Milan win",
+      "p": 0.5019,
+      "fair_odds": "≈Evens"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Genoa win",
+       "p": 0.2342,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2638,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "AC Milan win",
+       "p": 0.5019,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5257,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7286,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4743,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2487,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5037,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4963,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5037,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5904,
+      "fair_odds": "≈4/6",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5223,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4096,
+       "over_fair_odds": "≈6/4",
+       "under_fair_odds": "≈4/6"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3008,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5731,
+      "fair_odds": "≈8/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7677,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5731,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3729,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5865,
+      "fair_odds": "≈8/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.554,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4135,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.2893,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.5904,
+     "credible_p": 0.5882,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5467
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "0fe2ea6c52fb13447d84d9f0c759c6b57e04cb8f7c2922b11522b27e864142a1"
+  },
+  {
+   "record_id": "SA-2627-monza-v-atalanta#r3",
+   "match_id": "SA-2627-monza-v-atalanta",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Monza",
+    "away": "Atalanta",
+    "kickoff_utc": "2026-11-08T14:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "league-average-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Monza win",
+      "p": 0.4055,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "T3",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Monza win",
+       "p": 0.4055,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.272,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Atalanta win",
+       "p": 0.3225,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5147,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.737,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4853,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2541,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5024,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5024,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4976,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5769,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5368,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4231,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3122,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5071,
+      "fair_odds": "≈Evens",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7125,
+       "over_fair_odds": "≈2/5",
+       "under_fair_odds": "≈5/2"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5071,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3134,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5074,
+      "fair_odds": "≈Evens",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.642,
+       "over_fair_odds": "≈4/7",
+       "under_fair_odds": "≈7/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.5074,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3789,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.5769,
+     "credible_p": 0.5754,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.5337
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "80f8ab5eba54b2d0c65443dd4a5ab824545c32bec512d50dee28f043529e691c"
+  },
+  {
+   "record_id": "SA-2627-inter-v-como#r3",
+   "match_id": "SA-2627-inter-v-como",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Inter",
+    "away": "Como",
+    "kickoff_utc": "2026-11-08T17:00:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Inter win",
+      "p": 0.5149,
+      "fair_odds": "≈10/11"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Inter win",
+       "p": 0.5149,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2384,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Como win",
+       "p": 0.2468,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5081,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7537,
+       "over_fair_odds": "≈1/3",
+       "under_fair_odds": "≈3/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5081,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2791,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5233,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5233,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4767,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5093,
+      "fair_odds": "≈Evens",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.6016,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4907,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3758,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5071,
+      "fair_odds": "≈Evens",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7125,
+       "over_fair_odds": "≈2/5",
+       "under_fair_odds": "≈5/2"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5071,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3134,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5128,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.625,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4872,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3575,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5233,
+     "credible_p": 0.5223,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.4801
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "f9426663f55565899a5db629f1f54e0a8e3399319751cdc89d83ae5d7e215e19"
+  },
+  {
+   "record_id": "SA-2627-fiorentina-v-juventus#r3",
+   "match_id": "SA-2627-fiorentina-v-juventus",
+   "revision": 3,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Fiorentina",
+    "away": "Juventus",
+    "kickoff_utc": "2026-11-08T19:45:00Z"
+   },
+   "published_at": "2026-10-29T22:57:08.027613+00:00",
+   "inputs_fingerprint": "88e811e14866d3e7",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Juventus win",
+      "p": 0.4776,
+      "fair_odds": "≈11/10"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Fiorentina win",
+       "p": 0.2544,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2679,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Juventus win",
+       "p": 0.4776,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5257,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7287,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4743,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2487,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5014,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4986,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5014,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5356,
+      "fair_odds": "≈5/6",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.5778,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.4644,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      },
+      {
+       "line": 10.5,
+       "over": 0.3496,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.527,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7309,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.527,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3296,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5186,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6199,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4814,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3516,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "under",
+     "line": 9.5,
+     "label": "Under 9.5",
+     "p": 0.5356,
+     "credible_p": 0.5362,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.4941
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "ca6c5cd3a74453a0d08200b7673651312270787c6ae64f94969355625a2c6cc3"
   }
  ]
 }
