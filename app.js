@@ -610,42 +610,82 @@ function builderOutput() {
 
 
 function getPandaMood(slip, win) {
-  if (!slip) {
+  const stake = (builderState && builderState.stake) || 10;
+  const targetWin = win || (builderState && builderState.win) || 50;
+  const targetOdds = (stake + targetWin) / stake;
+  const slipOdds = (slip && slip.odds) || targetOdds;
+  const chance = (slip && slip.chance) || (1 / targetOdds);
+
+  // Helper to render panda base head (ears, white face, eye patches)
+  const baseHead = '<circle cx="8" cy="8" r="5" fill="#04140d"/><circle cx="28" cy="8" r="5" fill="#04140d"/>' +
+    '<circle cx="8" cy="8" r="2.2" fill="#a7f3d0"/><circle cx="28" cy="8" r="2.2" fill="#a7f3d0"/>' +
+    '<circle cx="18" cy="20" r="13" fill="#ffffff" stroke="#04140d" stroke-width="1.5"/>' +
+    '<ellipse cx="13" cy="18" rx="3.5" ry="4.5" fill="#04140d" transform="rotate(-15 13 18)"/>' +
+    '<ellipse cx="23" cy="18" rx="3.5" ry="4.5" fill="#04140d" transform="rotate(15 23 18)"/>' +
+    '<ellipse cx="18" cy="22" rx="2" ry="1.4" fill="#04140d"/>';
+
+  // 1. WILD MONSTER ODDS / MEGA LONGSHOT (Odds >= 40/1 or Win >= £400) -> Jaw-dropped, shocked, sweaty crazy panda
+  if (slipOdds >= 41 || targetWin >= 400 || chance < 0.04) {
     return {
-      mood: 'thinking',
-      kicker: 'Ready to build',
-      desc: 'Pick your win goal and number of bets.',
-      badgeClass: 'cyan',
-      svg: '<circle cx="12" cy="12" r="9" fill="#0f172a" stroke="var(--cyan)" stroke-width="1.5"/><circle cx="9" cy="11" r="1.5" fill="#fff"/><circle cx="15" cy="11" r="1.5" fill="#fff"/><ellipse cx="12" cy="14" rx="2" ry="1.2" fill="var(--cyan)"/>'
+      mood: 'shocked',
+      kicker: 'Crazy Longshot (' + Math.round(slipOdds) + '/1)',
+      desc: 'Jaw-dropping odds! Panda is sweating bullets. Tiny stakes only!',
+      badgeClass: 'rose',
+      svg: baseHead +
+        '<circle cx="13" cy="18" r="2.2" fill="#fff"/><circle cx="13" cy="18" r="1.1" fill="#fb7185"/>' +
+        '<circle cx="23" cy="18" r="2.2" fill="#fff"/><circle cx="23" cy="18" r="1.1" fill="#fb7185"/>' +
+        '<ellipse cx="18" cy="27" rx="3.5" ry="4.5" fill="#350810" stroke="#fb7185" stroke-width="1.2"/>' +
+        '<path d="M30 14c1 2 0 4-1 4s-2-2-1-4c.4-.8 1.6-.8 2 0z" fill="#38bdf8"/>'
     };
   }
-  const chance = slip.chance || 0;
-  const odds = slip.odds || 1;
-  if (chance >= 0.40 || slip.ev >= 0) {
+
+  // 2. BIG ACCA / ADVENTUROUS LONGSHOT (Odds >= 15/1 or Win >= £150) -> Wide-eyed, open-mouthed 'O' face, excited
+  if (slipOdds >= 15 || targetWin >= 150 || chance < 0.12) {
     return {
-      mood: 'confident',
-      kicker: 'Smart Value Bet',
-      desc: 'High probability path with solid model backing.',
-      badgeClass: 'emerald',
-      svg: '<circle cx="12" cy="12" r="9" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/><circle cx="9" cy="10.5" r="1.5" fill="#fff"/><circle cx="15" cy="10.5" r="1.5" fill="#fff"/><path d="M9.5 13.5c1.2 1.4 3.8 1.4 5 0" fill="none" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>'
+      mood: 'wild',
+      kicker: 'Ambitious Target (' + Math.round(slipOdds) + '/1)',
+      desc: 'Big odds acca! Panda has his wild eyes on the prize.',
+      badgeClass: 'amber',
+      svg: baseHead +
+        '<circle cx="13" cy="18" r="1.8" fill="#fff"/><circle cx="13" cy="18" r="1" fill="#f59e0b"/>' +
+        '<circle cx="23" cy="18" r="1.8" fill="#fff"/><circle cx="23" cy="18" r="1" fill="#f59e0b"/>' +
+        '<circle cx="18" cy="26" r="3.2" fill="#451a03" stroke="#f59e0b" stroke-width="1.2"/>'
     };
   }
-  if (chance >= 0.18 && odds <= 15) {
+
+  // 3. BALANCED WEEKEND ACCA (Odds >= 5/1 or Win >= £50) -> Cheerful, cool smirk, confident wink
+  if (slipOdds >= 5 || targetWin >= 50 || chance < 0.30) {
     return {
       mood: 'balanced',
-      kicker: 'Balanced Acca',
-      desc: 'Classic weekend accumulator. Good reward-to-risk.',
+      kicker: 'Balanced Acca (' + Math.round(slipOdds) + '/1)',
+      desc: 'Sweet spot weekend accumulator. Solid risk-to-reward.',
       badgeClass: 'cyan',
-      svg: '<circle cx="12" cy="12" r="9" fill="#082f49" stroke="#38bdf8" stroke-width="1.5"/><circle cx="9" cy="11" r="1.5" fill="#fff"/><circle cx="15" cy="11" r="1.5" fill="#fff"/><line x1="10" y1="14" x2="14" y2="14" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round"/>'
+      svg: baseHead +
+        '<circle cx="13" cy="18" r="1.6" fill="#fff"/><circle cx="13" cy="18" r="0.9" fill="#38bdf8"/>' +
+        '<path d="M21 18c1-1 3-1 4 0" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" fill="none"/>' +
+        '<path d="M15 25c1.5 1.5 4.5 1.5 6 0" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"/>'
     };
   }
+
+  // 4. LOW-RISK / HIGH CONFIDENCE (Odds < 5/1, Chance >= 30%) -> Happy beaming smile, emerald glowing eyes
   return {
-    mood: 'wild',
-    kicker: 'Wild Longshot',
-    desc: 'High odds target! Keep stakes sensible and have fun.',
-    badgeClass: 'amber',
-    svg: '<circle cx="12" cy="12" r="9" fill="#451a03" stroke="#f59e0b" stroke-width="1.5"/><circle cx="9" cy="11" r="2" fill="#fff"/><circle cx="15" cy="11" r="2" fill="#fff"/><ellipse cx="12" cy="15" rx="2.5" ry="1.8" fill="#f59e0b"/><path d="M18 7c-.5.8-1 1.5-.8 2" stroke="#38bdf8" stroke-width="1.2" fill="none"/>'
+    mood: 'confident',
+    kicker: 'High Chance Pick (' + Math.max(1, Math.round(slipOdds)) + '/1)',
+    desc: 'Short price, high probability path backed by model evidence.',
+    badgeClass: 'emerald',
+    svg: baseHead +
+      '<circle cx="13" cy="17.5" r="1.8" fill="#fff"/><circle cx="13" cy="17.5" r="1" fill="#10b981"/>' +
+      '<circle cx="23" cy="17.5" r="1.8" fill="#fff"/><circle cx="23" cy="17.5" r="1" fill="#10b981"/>' +
+      '<path d="M14 24c1.8 2.2 6.2 2.2 8 0" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>'
   };
+}
+
+function pandaMoodMarkup(slip, win) {
+  const pm = getPandaMood(slip, win);
+  return '<div class="panda-mood-card ' + pm.badgeClass + '" title="' + esc(pm.desc) + '">' +
+    '<svg viewBox="0 0 36 36" class="panda-mood-icon">' + pm.svg + '</svg>' +
+    '<div><div class="panda-mood-kicker">' + esc(pm.kicker) + '</div><div class="panda-mood-desc">' + esc(pm.desc) + '</div></div>' +
+  '</div>';
 }
 
 function viewBuilder() {
@@ -656,13 +696,7 @@ function viewBuilder() {
   return '<section class="builder" aria-labelledby="builder-title">' +
     '<div class="builder-top-bar">' +
       '<div><div class="builder-kicker">Bet Builder</div><h1 class="page-title" id="builder-title">Tell us the win. We’ll build the bet.</h1></div>' +
-      (function() {
-        const pm = getPandaMood(builderResult && builderResult.slips && builderResult.slips[0], builderState.win);
-        return '<div class="panda-mood-card ' + pm.badgeClass + '" title="' + esc(pm.desc) + '">' +
-          '<svg viewBox="0 0 24 24" class="panda-mood-icon">' + pm.svg + '</svg>' +
-          '<div><div class="panda-mood-kicker">' + esc(pm.kicker) + '</div><div class="panda-mood-desc">' + esc(pm.desc) + '</div></div>' +
-        '</div>';
-      })() +
+      '<div id="builder-panda-mood">' + pandaMoodMarkup(builderResult && builderResult.slips && builderResult.slips[0], builderState.win) + '</div>' +
     '</div>' +
     '<p class="page-sub">Pick a stake, how many bets and how much you want to win. Bet Buddy searches every upcoming match for the combined bet (accumulator) that hits your target with the best chance of landing.</p>' +
     '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake"></div>' +
@@ -679,6 +713,10 @@ function updateBuilder() {
   builderCompute();
   const out = $('builder-out');
   if (out) out.innerHTML = builderOutput();
+  const moodWrap = $('builder-panda-mood');
+  if (moodWrap) {
+    moodWrap.innerHTML = pandaMoodMarkup(builderResult && builderResult.slips && builderResult.slips[0], builderState.win);
+  }
 }
 
 function markLegChips() {

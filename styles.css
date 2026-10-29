@@ -494,11 +494,13 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .panda-mood-card.emerald { border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.1); }
 .panda-mood-card.cyan { border-color: rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.1); }
 .panda-mood-card.amber { border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.1); }
+.panda-mood-card.rose { border-color: rgba(251, 113, 133, 0.4); background: rgba(251, 113, 133, 0.12); }
 .panda-mood-icon { width: 34px; height: 34px; flex: none; }
 .panda-mood-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 .panda-mood-card.emerald .panda-mood-kicker { color: #34d399; }
 .panda-mood-card.cyan .panda-mood-kicker { color: var(--cyan); }
 .panda-mood-card.amber .panda-mood-kicker { color: #fbbf24; }
+.panda-mood-card.rose .panda-mood-kicker { color: #fb7185; }
 .panda-mood-desc { font-size: 12.5px; color: var(--soft); max-width: 28ch; }
 
 /* Phase 1 Social: P&L Performance Chart & Market Breakdown */
