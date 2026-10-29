@@ -115,7 +115,7 @@ assert.equal(calc.formatFractionalOdds(3), '2/1');
 assert.equal(calc.formatFractionalOdds(4.5), '7/2');
 assert.equal(calc.formatFractionalOdds(1.833333333333), '5/6');
 assert.equal(calc.formatFractionalOdds(1.91), '≈10/11');
-assert.equal(calc.formatFractionalOdds(3.1897), '≈35/16');
+assert.equal(calc.formatFractionalOdds(3.1897), '≈11/5'); // Snaps to standard UK betting shop price ladder instead of 35/16 or 75/17
 assert.equal(calc.parseFractionalOdds('1/2'), 1.5);
 assert.equal(calc.parseFractionalOdds('6/4'), 2.5);
 assert.equal(calc.parseFractionalOdds('Evens'), 2);
