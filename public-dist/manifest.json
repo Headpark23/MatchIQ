@@ -1,6 +1,7 @@
 {
   "name": "Bet Buddy — Football Intelligence",
   "short_name": "Bet Buddy",
+  "id": "/MatchIQ/",
   "description": "Premier League predictions with honest evidence, a permanent track record and a private Bet Diary.",
   "start_url": "./index.html",
   "scope": "./",
@@ -8,6 +9,7 @@
   "orientation": "portrait-primary",
   "background_color": "#060d19",
   "theme_color": "#060d19",
+  "prefer_related_applications": false,
   "categories": [
     "sports",
     "entertainment"

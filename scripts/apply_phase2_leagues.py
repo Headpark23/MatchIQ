@@ -350,3 +350,4 @@ if "if (event.target.id === 'create-league-form')" not in app_src:
 
 app_path.write_text(app_src, encoding='utf-8')
 print("app.js Phase 2 leagues applied.")
+

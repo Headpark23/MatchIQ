@@ -1,7 +1,7 @@
 // MatchIQ Progressive Web App Service Worker (v1)
 // Caches application shell and enables offline home screen capability
 
-const CACHE_NAME = 'matchiq-pwa-v11';
+const CACHE_NAME = 'betbuddy-pwa-v12';
 
 const PRECACHE_ASSETS = [
   './',
@@ -41,58 +41,50 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+        keys.map(k => {
+          if (k !== CACHE_NAME) {
+            return caches.delete(k);
+          }
+        })
       );
     }).then(() => self.clients.claim())
   );
 });
 
-// Fetch: Network-first for HTML and data, Cache-first for static assets
+// Fetch: Network first for dynamic JSON data, Cache first for core static assets
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // For HTML navigation requests, use Network-first with cache fallback so updates are instant
-  if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
+  // If fetching local data JSON, try network first so user gets latest predictions, fall back to cache
+  if (url.pathname.includes('/data/')) {
     event.respondWith(
-      fetch(event.request, { cache: 'no-store' }).then(response => {
-        if (response && response.status === 200) {
-          const respClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, respClone));
-        }
-        return response;
-      }).catch(() => caches.match('./index.html'))
+      fetch(event.request)
+        .then(response => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request))
     );
     return;
   }
 
-  // For data requests, use Network-first with cache: 'no-store' to ensure freshness
-  // Data and app code are network-first so a deploy or data refresh shows at once.
-  if (url.pathname.includes('/data/') || /\.(js|css)$/.test(url.pathname)) {
-    event.respondWith(
-      fetch(event.request, { cache: 'no-store' }).then(response => {
-        if (response && response.status === 200) {
-          const respClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, respClone));
-        }
-        return response;
-      }).catch(() => caches.match(event.request))
-    );
-    return;
-  }
-
-  // For static assets (images, icons): Cache-first with network fallback
+  // Static shell assets: Cache first, fall back to network
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
-      return fetch(event.request).then(networkResp => {
-        if (networkResp && networkResp.status === 200 && event.request.method === 'GET') {
-          const respClone = networkResp.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, respClone));
+      return fetch(event.request).then(response => {
+        if (response.ok && event.request.method === 'GET') {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         }
-        return networkResp;
+        return response;
       });
     }).catch(() => {
-      if (event.request.headers.get('accept')?.includes('text/html')) {
+      // Offline fallback
+      if (event.request.mode === 'navigate') {
         return caches.match('./index.html');
       }
     })
