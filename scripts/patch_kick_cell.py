@@ -24,3 +24,4 @@ if target in js and target2 in js:
         f.write(js)
 else:
     print('Target not matched')
+

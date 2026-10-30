@@ -374,3 +374,4 @@ if click_route in js and 'data-kick-player' not in js:
 
 with open('app.js', 'w', encoding='utf-8') as f:
     f.write(js)
+
