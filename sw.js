@@ -1,7 +1,7 @@
-// Bet Buddy Progressive Web App Service Worker (v15)
-// Enables offline capability, instant home screen launch, and verified PWA installation
+// Bet Buddy Progressive Web App Service Worker (v17)
+// Network-first for shell code & data, cache-first for images/fonts, instant offline fallback
 
-const CACHE_NAME = 'betbuddy-pwa-v16';
+const CACHE_NAME = 'betbuddy-pwa-v17';
 
 const PRECACHE_ASSETS = [
   './',
@@ -15,89 +15,76 @@ const PRECACHE_ASSETS = [
   './assets/icon-512.png',
   './assets/apple-touch-icon.png',
   './assets/favicon-32.png',
-  './assets/stadium_hero.jpg',
-  './data/predictions.json',
-  './data/fixtures.json',
-  './data/prediction_history.json',
-  './data/performance.json',
-  './data/pipeline_status.json',
-  './data/model_reliability.json',
-  './data/odds.json',
-  './data/league_validation.json',
-  './data/multi_sport_events.json'
+  './assets/stadium_hero.jpg'
 ];
 
-// Install: pre-cache core shell safely without atomic failure
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(async cache => {
       await Promise.allSettled(
         PRECACHE_ASSETS.map(async url => {
           try {
-            const res = await fetch(url);
-            if (res.ok) {
-              await cache.put(url, res);
-            }
-          } catch (err) {
-            // Non-critical asset fetch skip
-          }
+            const res = await fetch(url, { cache: 'no-cache' });
+            if (res.ok) await cache.put(url, res);
+          } catch (e) { /* non-critical */ }
         })
       );
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
-// Activate: clear stale caches immediately
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
         keys.map(k => {
-          if (k !== CACHE_NAME) {
-            return caches.delete(k);
-          }
+          if (k !== CACHE_NAME) return caches.delete(k);
         })
       );
     }).then(() => self.clients.claim())
   );
 });
 
-// Fetch: Network first for dynamic JSON data, Cache first for core static assets
+// Fetch: Network First for all HTML, JS, JSON code; Cache First only for static media
 self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
+  if (event.request.method !== 'GET') return;
 
-  // Dynamic predictions & multi-sport data: Network first, fall back to cache
-  if (url.pathname.includes('/data/')) {
+  const url = new URL(event.request.url);
+  const isCodeOrData = url.pathname.endsWith('.html') ||
+                       url.pathname.endsWith('.js') ||
+                       url.pathname.endsWith('.css') ||
+                       url.pathname.includes('/data/') ||
+                       url.pathname === '/' ||
+                       url.pathname.endsWith('/MatchIQ/');
+
+  if (isCodeOrData) {
+    // Network first: always fetch freshest live deployment, update cache, fallback to cache if offline
     event.respondWith(
       fetch(event.request)
         .then(response => {
-          if (response.ok) {
+          if (response && response.ok) {
             const clone = response.clone();
             caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
           }
           return response;
         })
-        .catch(() => caches.match(event.request))
+        .catch(() => caches.match(event.request).then(cached => cached || (event.request.mode === 'navigate' ? caches.match('./index.html') : null)))
     );
     return;
   }
 
-  // Static shell assets: Cache first, fall back to network
+  // Media & static assets: Cache first
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
       return fetch(event.request).then(response => {
-        if (response.ok && event.request.method === 'GET') {
+        if (response && response.ok) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         }
         return response;
       });
-    }).catch(() => {
-      // Offline fallback navigation
-      if (event.request.mode === 'navigate') {
-        return caches.match('./index.html');
-      }
     })
   );
 });
