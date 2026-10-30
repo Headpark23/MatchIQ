@@ -20,3 +20,4 @@ with open('app.js', 'w', encoding='utf-8') as f:
     f.write(app)
 
 print("Bumped sw.js, index.html, and app.js to v41.")
+

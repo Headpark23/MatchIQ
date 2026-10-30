@@ -2140,6 +2140,7 @@ async function joinCloudLeague(code) {
 
   syncLeagueToCloud(league);
   listenToActiveLeague(code);
+  toast('Joined ' + league.name + '! ⚽');
   render();
 }
 
@@ -3063,6 +3064,8 @@ function currentRoute() {
   if (hash.startsWith('join-league=')) {
     try {
       const code = decodeURIComponent(hash.slice(12)).trim().toUpperCase();
+      const inp = $('join-league-code');
+      if (inp) inp.value = code;
       joinCloudLeague(code);
     } catch (e) { /* ignore */ }
     return ['leagues'];
