@@ -221,3 +221,4 @@ if old_click_handler in js and 't.dataset.renameLeague' not in js:
 
 with open('app.js', 'w', encoding='utf-8') as f:
     f.write(js)
+

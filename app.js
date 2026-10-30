@@ -1660,6 +1660,26 @@ function saveStoredGeoMembers(docId, members) {
   } catch (e) {}
 }
 
+function extractMembersFromDoc(data) {
+  if (!data) return [];
+  const map = {};
+  if (data.members && typeof data.members === 'object') {
+    Object.entries(data.members).forEach(([k, v]) => {
+      if (v && typeof v === 'object') {
+        const handle = v.handle || k;
+        map[handle] = { ...v, handle };
+      }
+    });
+  }
+  Object.keys(data).forEach(k => {
+    if (k.startsWith('members.') && data[k] && typeof data[k] === 'object') {
+      const handle = data[k].handle || k.slice(8);
+      map[handle] = { ...data[k], handle };
+    }
+  });
+  return Object.values(map);
+}
+
 let activeGeoUnsubscribe = null;
 let currentGeoListeningDocId = null;
 function listenToActiveGeoLeague(docId) {
@@ -1674,8 +1694,7 @@ function listenToActiveGeoLeague(docId) {
     activeGeoUnsubscribe = firestoreDb.collection('geo_leagues').doc(docId).onSnapshot(doc => {
       if (!doc || !doc.exists) return;
       const data = doc.data() || {};
-      const membersObj = data.members || {};
-      const membersList = Object.values(membersObj);
+      const membersList = extractMembersFromDoc(data);
       saveStoredGeoMembers(docId, membersList);
       render();
     }, err => console.warn('Geo listener notice:', err));
@@ -1708,7 +1727,9 @@ function syncUserToGeoCloud() {
     const targets = ['geo-world', 'geo-europe', 'geo-uk', safeCountry, safeRegion, safeTown];
     targets.forEach(tId => {
       firestoreDb.collection('geo_leagues').doc(tId).set({
-        ['members.' + prof.handle]: userEntry
+        members: {
+          [prof.handle]: userEntry
+        }
       }, { merge: true }).catch(() => {});
     });
   } catch (e) {}
@@ -1851,13 +1872,66 @@ function syncLeagueToCloud(league) {
       code: league.code,
       creator_handle: prof.handle,
       created_at: league.created_at || new Date().toISOString().slice(0, 10),
-      ['members.' + prof.handle]: userEntry
+      members: {
+        [prof.handle]: userEntry
+      }
     }, { merge: true }).catch(err => console.warn('Cloud league sync notice:', err));
   } else {
-    // Member only updates their own stats, never overwrites league name or other members
     firestoreDb.collection('leagues').doc(league.code).set({
-      ['members.' + prof.handle]: userEntry
+      members: {
+        [prof.handle]: userEntry
+      }
     }, { merge: true }).catch(err => console.warn('Cloud member sync notice:', err));
+  }
+}
+
+let hasSyncedUserLeagues = false;
+async function syncUserLeaguesFromCloud() {
+  if (!firestoreDb || hasSyncedUserLeagues) return;
+  try {
+    const prof = getUserProfile();
+    const snap = await firestoreDb.collection('leagues').get();
+    if (!snap.empty) {
+      const list = getStoredLeagues();
+      let changed = false;
+      snap.forEach(doc => {
+        const d = doc.data() || {};
+        const code = d.code || doc.id;
+        const membersList = extractMembersFromDoc(d);
+        const isMember = membersList.some(m => m && m.handle === prof.handle);
+        const isCreator = d.creator_handle === prof.handle;
+        if (isMember || isCreator) {
+          let existing = list.find(l => l.code === code);
+          if (!existing) {
+            list.push({
+              id: 'league-' + code,
+              name: d.name || ('Buddy League (' + code + ')'),
+              icon: d.icon || '⚽',
+              freq: d.freq || 'weekly',
+              code: code,
+              creator_handle: d.creator_handle || prof.handle,
+              created_at: d.created_at || new Date().toISOString().slice(0, 10),
+              members: membersList.filter(m => m && m.handle && m.handle !== prof.handle)
+            });
+            changed = true;
+          } else {
+            if (d.name && (!existing.name || existing.name.startsWith('Buddy League ('))) {
+              existing.name = d.name;
+              changed = true;
+            }
+            existing.members = membersList.filter(m => m && m.handle && m.handle !== prof.handle);
+            changed = true;
+          }
+        }
+      });
+      if (changed) {
+        saveStoredLeagues(list);
+        hasSyncedUserLeagues = true;
+        render();
+      }
+    }
+  } catch (e) {
+    console.warn('Sync user leagues notice:', e);
   }
 }
 
@@ -1886,11 +1960,12 @@ function listenToActiveLeague(code) {
         }
         return;
       }
-      const data = doc.data();
+      const data = doc.data() || {};
+      const membersList = extractMembersFromDoc(data);
       if (target) {
         if (data.name) {
           if (!target.is_joined && target.name && !target.name.startsWith('Buddy League (') && data.name.startsWith('Buddy League (')) {
-            firestoreDb.collection('leagues').doc(code).update({ name: target.name }).catch(() => {});
+            firestoreDb.collection('leagues').doc(code).set({ name: target.name }, { merge: true }).catch(() => {});
           } else {
             target.name = data.name;
           }
@@ -1898,9 +1973,7 @@ function listenToActiveLeague(code) {
         if (data.icon) target.icon = data.icon;
         if (data.creator_handle) target.creator_handle = data.creator_handle;
         const prof = getUserProfile();
-        if (data.members) {
-          target.members = Object.values(data.members).filter(m => m.handle !== prof.handle);
-        }
+        target.members = membersList.filter(m => m && m.handle && m.handle !== prof.handle);
         saveStoredLeagues(list);
         render();
       }
@@ -2232,15 +2305,14 @@ function viewLeagues() {
     isYou: true
   };
 
+  syncUserLeaguesFromCloud();
   if (isGeo) {
     const geoDocId = getGeoDocId(currentLeague.id, prof);
     listenToActiveGeoLeague(geoDocId);
-    refreshGeoLeagueFromCloud(geoDocId);
     const realGeoMembers = getStoredGeoMembers(geoDocId).filter(m => m.handle !== prof.handle);
     const bots = (currentLeague.competitors || []).filter(b => !realGeoMembers.some(r => r.handle === b.handle));
     allMembers = [...realGeoMembers, userEntry, ...bots];
   } else {
-    refreshLeagueFromCloud(currentLeague.code);
     const memberMap = new Map();
     (currentLeague.members || []).forEach(m => {
       if (m && m.handle && m.handle !== prof.handle) {
@@ -2300,8 +2372,9 @@ function viewLeagues() {
 
   // Custom Buddy Leagues Tabs
   const buddyTabsHtml = customLeagues.map(l => {
+    const memCount = (l.members ? l.members.length : 0) + 1;
     return '<button type="button" class="league-tab-btn' + (l.id === activeLeagueId ? ' active' : '') + '" data-select-league="' + esc(l.id) + '">' +
-      (l.icon || '👥') + ' ' + esc(l.name) +
+      (l.icon || '👥') + ' ' + esc(l.name) + ' <span class="tab-member-count" style="opacity:0.75;font-size:11px">(' + memCount + ' ' + (memCount === 1 ? 'punter' : 'punters') + ')</span>' +
     '</button>';
   }).join('');
 
@@ -2780,7 +2853,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v38 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v39 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -4019,7 +4092,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = '2026.10.30.38';
+const APP_VERSION = '2026.10.30.39';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');

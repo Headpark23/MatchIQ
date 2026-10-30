@@ -10,3 +10,4 @@ html = html.replace('app.js?v=33', 'app.js?v=38')
 with open('index.html', 'w', encoding='utf-8') as f:
     f.write(html)
 print('Updated index.html asset cache-busters to v38')
+

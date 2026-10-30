@@ -41,3 +41,4 @@ if target in js:
     print('SUCCESS: Updated Buddy League header with Rename and Delete buttons')
 else:
     print('Target not matched')
+
