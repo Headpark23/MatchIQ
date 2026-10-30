@@ -2568,7 +2568,7 @@ function viewCommercial() {
         '<div id="comm-status-msg" style="display:none;padding:12px;border-radius:10px;background:rgba(16,185,129,0.18);border:1px solid var(--emerald);color:#fff;font-size:13px;text-align:center;"></div>' +
       '</form>' +
       '<div style="margin-top:18px;text-align:center;font-size:12.5px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;">' +
-        'Prefer direct email? Contact founders Martin White &amp; Chris Faulds at <a href="mailto:octopusigardens@gmail.com?subject=Bet%20Buddy%20Commercial%20Partnership" class="compliance-link">octopusigardens@gmail.com</a>' +
+        'Prefer direct email? Contact founders Martin White &amp; Chris Faulds at <a href="mailto:octopigardens@gmail.com?subject=Bet%20Buddy%20Commercial%20Partnership" class="compliance-link">octopigardens@gmail.com</a>' +
       '</div>' +
     '</div>' +
   '</section>';
@@ -2667,7 +2667,7 @@ function viewAdmin() {
       '<div class="bento-grid">' +
         '<div class="bento-card"><div class="bento-icon">🌐</div><div><div class="bento-kicker">Live Domain</div><h3 class="bento-title">betbuddyuk.uk</h3><p class="bento-desc">Connected and live. HTTP 301 permanently forwarding to production webapp with free SSL.</p></div><span class="bento-badge emerald">Active & Verified</span></div>' +
         '<div class="bento-card"><div class="bento-icon">🛡️</div><div><div class="bento-kicker">Copyright Protected</div><h3 class="bento-title">Martin White & Chris Faulds</h3><p class="bento-desc">Registered copyright 2026 across all proprietary Dixon-Coles algorithms, Buddy Leagues, and Bet Builder interfaces.</p></div><span class="bento-badge">Legal Notice Live</span></div>' +
-        '<div class="bento-card"><div class="bento-icon">🤝</div><div><div class="bento-kicker">Outreach Ready</div><h3 class="bento-title">bet365 & Sky Bet</h3><p class="bento-desc">Affiliate pitch dossiers prepared for <b>octopusigardens@gmail.com</b> ready for self-serve submission.</p></div><span class="bento-badge cyan">Starter CPA / Rev-Share</span></div>' +
+        '<div class="bento-card"><div class="bento-icon">🤝</div><div><div class="bento-kicker">Outreach Ready</div><h3 class="bento-title">bet365 & Sky Bet</h3><p class="bento-desc">Affiliate pitch dossiers prepared for <b>octopigardens@gmail.com</b> ready for self-serve submission.</p></div><span class="bento-badge cyan">Starter CPA / Rev-Share</span></div>' +
       '</div>' +
     '</div>' +
   '</section>';
@@ -3329,7 +3329,49 @@ document.addEventListener('submit', event => {
     $('league-modal').hidden = true;
     toast('Joined league ' + code + '!');
     render();
+  }  if (event.target.id === 'commercial-enquiry-form') {
+    event.preventDefault();
+    const name = ($('comm-name').value || '').trim();
+    const company = ($('comm-company').value || '').trim();
+    const email = ($('comm-email').value || '').trim();
+    const interest = $('comm-interest').value;
+    const message = ($('comm-message').value || '').trim();
+    if (!name || !email || !message) {
+      toast('Please complete name, email, and message fields.');
+      return;
+    }
+
+    const enquiries = getStoredEnquiries();
+    enquiries.unshift({
+      id: 'comm-' + Date.now(),
+      name, company, email, interest, message,
+      submitted_at: new Date().toISOString()
+    });
+    try { localStorage.setItem(COMMERCIAL_STORAGE_KEY, JSON.stringify(enquiries)); } catch (e) {}
+
+    const subject = encodeURIComponent('Bet Buddy Commercial Partnership: ' + (company || name));
+    const body = encodeURIComponent(
+      'Hi Martin and Chris,\n\n' +
+      'Commercial Partnership Details:\n' +
+      'Name: ' + name + '\n' +
+      'Company: ' + company + '\n' +
+      'Email: ' + email + '\n' +
+      'Interest Category: ' + interest + '\n\n' +
+      'Message / Proposal:\n' + message + '\n\n' +
+      'Sent via Bet Buddy Commercial Portal.'
+    );
+    window.open('mailto:octopigardens@gmail.com?subject=' + subject + '&body=' + body, '_blank');
+
+    const statusBox = $('comm-status-msg');
+    if (statusBox) {
+      statusBox.style.display = 'block';
+      statusBox.innerHTML = '<b>Enquiry Logged!</b> Thank you ' + esc(name) + '. Your proposal has been dispatched to founders Martin White &amp; Chris Faulds (octopigardens@gmail.com). We will reply within 24 hours.';
+    }
+    toast('Commercial enquiry submitted! Opening email to octopigardens@gmail.com...');
+    $('commercial-enquiry-form').reset();
+    return;
   }
+
     if (event.target.id === 'bug-form') {
     event.preventDefault();
     const type = $('bug-type-select').value;
@@ -3376,7 +3418,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.22';
+const APP_VERSION = '2026.10.30.23';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');

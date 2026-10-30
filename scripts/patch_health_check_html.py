@@ -175,7 +175,7 @@ extra_modals = '''
       </div>
       <div class="gdpr-section">
         <h3>6. Data Controllers &amp; Contact</h3>
-        <p>Data Controllers: Martin White and Chris Faulds.<br>Inquiries: <a href="mailto:octopusigardens@gmail.com" class="compliance-link">octopusigardens@gmail.com</a></p>
+        <p>Data Controllers: Martin White and Chris Faulds.<br>Inquiries: <a href="mailto:octopigardens@gmail.com" class="compliance-link">octopigardens@gmail.com</a></p>
       </div>
       <button type="button" class="btn primary full-width" data-close-gdpr style="margin-top:16px">Close Privacy Notice</button>
     </div>

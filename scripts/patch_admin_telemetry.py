@@ -160,7 +160,7 @@ function viewAdmin() {
       '<div class="bento-grid">' +
         '<div class="bento-card"><div class="bento-icon">🌐</div><div><div class="bento-kicker">Live Domain</div><h3 class="bento-title">betbuddyuk.uk</h3><p class="bento-desc">Connected and live. HTTP 301 permanently forwarding to production webapp with free SSL.</p></div><span class="bento-badge emerald">Active & Verified</span></div>' +
         '<div class="bento-card"><div class="bento-icon">🛡️</div><div><div class="bento-kicker">Copyright Protected</div><h3 class="bento-title">Martin White & Chris Faulds</h3><p class="bento-desc">Registered copyright 2026 across all proprietary Dixon-Coles algorithms, Buddy Leagues, and Bet Builder interfaces.</p></div><span class="bento-badge">Legal Notice Live</span></div>' +
-        '<div class="bento-card"><div class="bento-icon">🤝</div><div><div class="bento-kicker">Outreach Ready</div><h3 class="bento-title">bet365 & Sky Bet</h3><p class="bento-desc">Affiliate pitch dossiers prepared for <b>octopusigardens@gmail.com</b> ready for self-serve submission.</p></div><span class="bento-badge cyan">Starter CPA / Rev-Share</span></div>' +
+        '<div class="bento-card"><div class="bento-icon">🤝</div><div><div class="bento-kicker">Outreach Ready</div><h3 class="bento-title">bet365 & Sky Bet</h3><p class="bento-desc">Affiliate pitch dossiers prepared for <b>octopigardens@gmail.com</b> ready for self-serve submission.</p></div><span class="bento-badge cyan">Starter CPA / Rev-Share</span></div>' +
       '</div>' +
     '</div>' +
   '</section>';
