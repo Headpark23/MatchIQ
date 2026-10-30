@@ -68,3 +68,4 @@ if ".slip-bookie-bar" not in css:
     print("Added slip-bookie-bar CSS styles")
 else:
     print("slip-bookie-bar CSS already in styles.css")
+

@@ -1050,6 +1050,188 @@
    },
    "evaluated_matches": 10,
    "published_records": 80
+  },
+  "SC0": {
+   "min_report_n": 5,
+   "markets": {
+    "result": {
+     "n": 6,
+     "brier": 0.4433,
+     "logloss": 0.72,
+     "pick_hit_rate": 0.8333,
+     "mean_pick_p": 0.54,
+     "sufficient_sample": true
+    }
+   },
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 6,
+    "sufficient_sample": true
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 6,
+   "published_records": 11
+  },
+  "SC1": {
+   "min_report_n": 5,
+   "markets": {
+    "result": {
+     "n": 5,
+     "brier": 0.506,
+     "logloss": 0.72,
+     "pick_hit_rate": 0.6,
+     "mean_pick_p": 0.54,
+     "sufficient_sample": true
+    }
+   },
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 5,
+    "sufficient_sample": true
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 5,
+   "published_records": 10
+  },
+  "E2": {
+   "min_report_n": 5,
+   "markets": {
+    "result": {
+     "n": 8,
+     "brier": 0.4275,
+     "logloss": 0.72,
+     "pick_hit_rate": 0.875,
+     "mean_pick_p": 0.54,
+     "sufficient_sample": true
+    }
+   },
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 8,
+    "sufficient_sample": true
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 8,
+   "published_records": 13
+  },
+  "E3": {
+   "min_report_n": 5,
+   "markets": {
+    "result": {
+     "n": 6,
+     "brier": 0.4583,
+     "logloss": 0.72,
+     "pick_hit_rate": 0.8333,
+     "mean_pick_p": 0.54,
+     "sufficient_sample": true
+    }
+   },
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 6,
+    "sufficient_sample": true
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 6,
+   "published_records": 11
+  },
+  "N1": {
+   "min_report_n": 5,
+   "markets": {
+    "result": {
+     "n": 6,
+     "brier": 0.395,
+     "logloss": 0.72,
+     "pick_hit_rate": 1.0,
+     "mean_pick_p": 0.54,
+     "sufficient_sample": true
+    }
+   },
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 6,
+    "sufficient_sample": true
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 6,
+   "published_records": 11
+  },
+  "P1": {
+   "min_report_n": 5,
+   "markets": {
+    "result": {
+     "n": 5,
+     "brier": 0.37,
+     "logloss": 0.72,
+     "pick_hit_rate": 1.0,
+     "mean_pick_p": 0.54,
+     "sufficient_sample": true
+    }
+   },
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 5,
+    "sufficient_sample": true
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 5,
+   "published_records": 10
+  },
+  "CL": {
+   "min_report_n": 5,
+   "markets": {
+    "result": {
+     "n": 6,
+     "brier": 0.3867,
+     "logloss": 0.72,
+     "pick_hit_rate": 0.8333,
+     "mean_pick_p": 0.54,
+     "sufficient_sample": true
+    }
+   },
+   "bands": {},
+   "versions": {},
+   "tiers": {},
+   "teams": {},
+   "result_timeline": [],
+   "most_likely": {
+    "n": 6,
+    "sufficient_sample": true
+   },
+   "most_likely_by_market": {},
+   "decisions": {},
+   "evaluated_matches": 6,
+   "published_records": 11
   }
  },
  "challenger": {

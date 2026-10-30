@@ -120,3 +120,4 @@ with open('app.js', 'w', encoding='utf-8') as f:
     f.write(code)
 
 print("Finished updating app.js for Phase 2 & 3")
+
