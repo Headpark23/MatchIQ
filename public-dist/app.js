@@ -526,7 +526,7 @@ function marketCard(key, m, ctx) {
     const jsonStr = esc(JSON.stringify({ id: ctx.id, market: meta.diary, selection: selText, p: row.p, fair: row.fair }));
     return '<button type="button" class="btn small" data-diary=\'' + jsonStr + '\' aria-label="Add ' + esc(row.label) + ' to Bet Diary">+ Diary</button>' +
       '<button type="button" class="btn small acca-btn" data-add-football-acca=\'' + jsonStr + '\' title="Add to custom Acca Builder" style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
-      '<button type="button" class="btn-place-bet-inline" data-open-bookie=\'' + jsonStr + '\' title="Open in bookmaker app/site">Place Bet</button>';
+      '<button type="button" class="btn-place-bet-inline butler-btn" data-launch-butler-single=\'' + jsonStr + '\' title="Open in bookmaker app/site">Place Bet</button>';
   };
   const rows = m.rows.map(row => '<tr' + (row.picked ? ' style="color:#fff;font-weight:600"' : '') + '><td>' + esc(row.label) + (row.picked ? ' <span class="badge validated" style="font-size:10px">Pick</span>' : '') + '</td>' +
     '<td class="num">' + pct(row.p) + '</td><td class="num">' + esc(row.fair) + '</td>' + (m.rows.some(r => r.league != null) ? '<td class="num dim">' + (row.league == null ? '' : pct(row.league)) + '</td>' : '') +
@@ -872,6 +872,11 @@ function slipCard(slip, idx, stake) {
     '<div class="slip-sum"><span>Stake <b class="mono">' + m(stake) + '</b></span><span>Returns <b class="mono">' + m(slip.ret) + '</b></span><span>Profit <b class="mono">' + m(slip.profit) + '</b></span></div>' +
     (slip.chance < 0.05 ? '<p class="slip-warn">Long shot: roughly 1 in ' + Math.round(1 / slip.chance) + '. Most slips like this lose.</p>' : '') +
     (slip.estimated ? '<p class="slip-note">Some prices are estimates, not live bookmaker prices. The price you are actually offered will differ, so the profit will too.</p>' : '') +
+    '<div style="margin: 12px 0 8px;">' +
+      '<button type="button" class="btn" onclick="launchButlerAcca(' + idx + ')" style="width:100%;padding:12px;font-size:14px;font-weight:700;background:linear-gradient(135deg, #0284c7, #0369a1);color:#fff;border:none;border-radius:10px;box-shadow:0 3px 12px rgba(2,132,199,0.3);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">' +
+        '<span>⚡</span> 1-Tap Place with <span class="current-butler-name">' + esc(getButlerBookmaker().name) + '</span> ↗' +
+      '</button>' +
+    '</div>' +
     '<div class="slip-bookie-bar">' +
       '<div class="slip-bookie-header">' +
         '<span class="slip-bookie-bolt">⚡</span>' +
@@ -931,11 +936,19 @@ function customAccaCard(stake) {
       '<span>Returns <b class="mono">' + m(ret) + '</b></span>' +
       '<span>Profit <b class="mono">' + m(profit) + '</b></span>' +
     '</div>' +
-    '<div class="slip-bookie-bar" style="margin: 12px 0 8px;">' +
+    '<div style="margin: 14px 0 10px;">' +
+      '<button type="button" class="btn primary butler-acca-launch-btn" onclick="launchButlerAcca(\'custom\')" style="width:100%;padding:14px;font-size:15px;font-weight:700;background:linear-gradient(135deg, #0284c7, #0369a1);border:none;border-radius:12px;box-shadow:0 4px 14px rgba(2,132,199,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">' +
+        '<span>⚡</span> 1-Tap Place with <span class="current-butler-name">' + esc(getButlerBookmaker().name) + '</span> (Your Butler) ↗' +
+      '</button>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:0 4px;">' +
+        '<span class="dim text-xs" style="color:#94a3b8">Copies slip &amp; opens your app &middot; 2× League Bonus</span>' +
+        '<a href="javascript:void(0)" onclick="openButlerModal()" class="text-xs" style="color:var(--cyan);text-decoration:none;font-weight:600;">Change Butler ▾</a>' +
+      '</div>' +
+    '</div>' +
+    '<div class="slip-bookie-bar" style="margin: 8px 0;">' +
       '<div class="slip-bookie-header">' +
         '<span class="slip-bookie-bolt">⚡</span>' +
-        '<span class="slip-bookie-title">1-Click Load into Bookmaker:</span>' +
-        '<span class="slip-bookie-hint">Opens app &amp; copies slip</span>' +
+        '<span class="slip-bookie-title">Or switch bookmaker:</span>' +
       '</div>' +
       '<div class="slip-bookie-buttons" role="group" aria-label="1-Click bookmaker launcher">' +
         '<button type="button" class="bookie-pill coral" data-launch-bookie="coral" data-slip-idx="custom"><span class="pill-dot" style="background:#0284c7;"></span> Coral ↗</button>' +
@@ -4160,6 +4173,16 @@ document.addEventListener('click', event => {
     return;
   }
 
+  // Bet Butler single launch
+  if (t.dataset.launchButlerSingle !== undefined || (t.closest && t.closest('[data-launch-butler-single]'))) {
+    const btn = t.dataset.launchButlerSingle !== undefined ? t : t.closest('[data-launch-butler-single]');
+    try {
+      const data = JSON.parse(btn.dataset.launchButlerSingle);
+      launchButlerSingle(data);
+    } catch (e) { console.error(e); }
+    return;
+  }
+
   // Football acca addition
   if (t.dataset.addFootballAcca !== undefined || (t.closest && t.closest('[data-add-football-acca]'))) {
     const btn = t.dataset.addFootballAcca !== undefined ? t : t.closest('[data-add-football-acca]');
@@ -4619,12 +4642,13 @@ window.addEventListener('hashchange', render);
 
 $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes', 'Coral', 'William Hill', 'Betfair', 'Unibet'].map(b => '<button type="button">' + b + '</button>').join('');
 updateDiaryCount();
+try { updateButlerUI(); } catch (e) {}
 loadData().then(() => {
   fetchCloudDataRest();
   render();
 });
 
-const APP_VERSION = 'v52';
+const APP_VERSION = 'v53';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -4801,4 +4825,98 @@ document.addEventListener('visibilitychange', () => {
 if (typeof window !== 'undefined') {
   window.dismissReturnModal = dismissReturnModal;
   window.confirmRealBetPlaced = confirmRealBetPlaced;
+}
+
+
+// ============================================================
+// THE BET BUTLER: Personal Assistant for Existing Bookmaker Account
+// ============================================================
+const BUTLER_STORAGE_KEY = 'betbuddy_butler_bookie_v1';
+const BOOKMAKERS_CONFIG = {
+  coral: { key: 'coral', name: 'Coral', tag: 'CORAL', color: '#0284c7', perk: 'Football Super Series & Acca Boosts', appUrl: 'https://sports.coral.co.uk/search?q=' },
+  skybet: { key: 'skybet', name: 'Sky Bet', tag: 'SKY BET', color: '#38bdf8', perk: 'RequestABet & AccaFreeze', appUrl: 'https://m.skybet.com/search?q=' },
+  bet365: { key: 'bet365', name: 'bet365', tag: 'BET365', color: '#10b981', perk: '2 Goals Ahead Early Payout & In-Play', appUrl: 'https://www.bet365.com/#/AX/K^' },
+  betfair: { key: 'betfair', name: 'Betfair', tag: 'BETFAIR', color: '#fbbf24', perk: 'Top Exchange Prices & Multiples', appUrl: 'https://www.betfair.com/sport/football?searchTerm=' },
+  ladbrokes: { key: 'ladbrokes', name: 'Ladbrokes', tag: 'LADBROKES', color: '#ef4444', perk: '1-2-Free Predictor & High Street', appUrl: 'https://sports.ladbrokes.com/search?q=' },
+  williamhill: { key: 'williamhill', name: 'William Hill', tag: 'WILLIAM HILL', color: '#0284c7', perk: 'Epic Odds & Football Coupons', appUrl: 'https://sports.williamhill.com/betting/en-gb/search?q=' },
+  paddypower: { key: 'paddypower', name: 'Paddy Power', tag: 'PADDY POWER', color: '#059669', perk: 'Super Sub & Money Back Specials', appUrl: 'https://www.paddypower.com/search?q=' }
+};
+
+function getButlerBookmaker() {
+  try {
+    const saved = localStorage.getItem(BUTLER_STORAGE_KEY);
+    if (saved && BOOKMAKERS_CONFIG[saved]) return BOOKMAKERS_CONFIG[saved];
+  } catch (e) {}
+  return BOOKMAKERS_CONFIG.coral;
+}
+
+function setButlerBookmaker(key) {
+  if (!BOOKMAKERS_CONFIG[key]) return;
+  try {
+    localStorage.setItem(BUTLER_STORAGE_KEY, key);
+  } catch (e) {}
+  updateButlerUI();
+  closeButlerModal();
+  toast('🤵 Bet Butler set to ' + BOOKMAKERS_CONFIG[key].name + '! 1-tap buttons now launch your account.');
+  render();
+}
+
+function updateButlerUI() {
+  const current = getButlerBookmaker();
+  const nameEls = document.querySelectorAll('#header-butler-name, .current-butler-name');
+  nameEls.forEach(el => { el.textContent = current.name; });
+
+  document.querySelectorAll('.butler-choice-card').forEach(card => {
+    if (card.dataset.selectButler === current.key) {
+      card.classList.add('active');
+    } else {
+      card.classList.remove('active');
+    }
+  });
+}
+
+function openButlerModal() {
+  const modal = $('butler-modal');
+  if (modal) {
+    updateButlerUI();
+    modal.hidden = false;
+  }
+}
+
+function closeButlerModal() {
+  const modal = $('butler-modal');
+  if (modal) modal.hidden = true;
+}
+
+function launchButlerAcca(slipIdx) {
+  const butler = getButlerBookmaker();
+  launchBookmakerSlip(butler.key, slipIdx);
+}
+
+function launchButlerSingle(betData) {
+  const butler = getButlerBookmaker();
+  let copyStr = betData.selection || 'Football Bet';
+  if (betData.fair) copyStr += ' @ ' + betData.fair;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(copyStr).catch(() => {});
+    }
+  } catch (e) {}
+
+  trackBookieLaunch(butler.name, betData);
+  toast('⚡ Copied to clipboard! Launching ' + butler.name + ' app...');
+
+  const query = getBookieSearchQuery(betData);
+  const links = getBookieDeepLinks(query);
+  const targetUrl = links[butler.key] || butler.appUrl + encodeURIComponent(query);
+  window.location.href = targetUrl;
+}
+
+if (typeof window !== 'undefined') {
+  window.getButlerBookmaker = getButlerBookmaker;
+  window.setButlerBookmaker = setButlerBookmaker;
+  window.openButlerModal = openButlerModal;
+  window.closeButlerModal = closeButlerModal;
+  window.launchButlerAcca = launchButlerAcca;
+  window.launchButlerSingle = launchButlerSingle;
 }

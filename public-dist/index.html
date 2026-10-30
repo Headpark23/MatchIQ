@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="styles.css?v=50">
+<link rel="stylesheet" href="styles.css?v=53">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -70,6 +70,11 @@
       <span class="brand-word">Bet<b>Buddy</b></span>
     </a>
     <div class="header-tools">
+      <button type="button" class="butler-pill-btn" id="header-butler-btn" onclick="openButlerModal()" title="Your Bet Butler: Tailors bets and 1-tap launching to your betting account">
+        <span class="butler-icon">🤵</span>
+        <span class="butler-label">Butler: <b id="header-butler-name">Coral</b></span>
+        <span class="butler-caret">▾</span>
+      </button>
       <button type="button" class="odds-toggle" id="odds-toggle" aria-label="Toggle odds format" title="Switch between Fractional (6/4) and Decimal (2.50) odds" data-active-mode="fractional"><span class="odds-segment" data-seg="fractional">6/4</span><span class="odds-segment" data-seg="decimal">2.50</span><span class="sr-only" id="odds-mode-val">Fractional</span></button>
       <button type="button" class="pwa-install-btn" id="header-install-btn" title="Download Bet Buddy to phone / tablet" aria-label="Download App">
         <span class="install-badge-icon" style="font-size:14px">⚡</span>
@@ -213,9 +218,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-<script src="market_calculations.js?v=52"></script>
-<script src="bet_builder.js?v=52"></script>
-<script src="app.js?v=52"></script>
+<script src="market_calculations.js?v=53"></script>
+<script src="bet_builder.js?v=53"></script>
+<script src="app.js?v=53"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>
@@ -398,6 +403,107 @@
 <!-- Bookmaker Placement Selector Modal -->
 
 <!-- Return from Bookmaker Confirmation Modal -->
+
+<!-- Bet Butler Bookmaker Preference Modal -->
+<div class="modal-backdrop" id="butler-modal" hidden>
+  <div class="modal bookie-modal-card" role="dialog" aria-modal="true" aria-labelledby="butler-modal-title">
+    <div class="modal-head">
+      <div>
+        <h2 id="butler-modal-title" style="margin:0;font-size:1.15rem;display:flex;align-items:center;gap:8px;">
+          <span>🤵</span> Your Bet Butler
+        </h2>
+        <span class="text-sm muted">Choose your betting account. Bet Buddy acts as your butler inside it.</span>
+      </div>
+      <button type="button" class="icon-btn" onclick="closeButlerModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="butler-intro-box">
+        <p style="margin:0;font-size:13.5px;color:#e2e8f0;line-height:1.45;">
+          <strong>No new betting account needed.</strong> Bet Buddy sits on your side of the table — finding high-probability edges, filtering out bookmaker traps, and letting you place bets in 1 tap directly in your chosen app.
+        </p>
+      </div>
+
+      <div class="butler-bookie-grid" role="radiogroup" aria-label="Select your preferred bookmaker">
+        <!-- Coral -->
+        <button type="button" class="butler-choice-card" data-select-butler="coral" onclick="setButlerBookmaker('coral')">
+          <div class="butler-choice-top">
+            <span class="bookie-tag coral">CORAL</span>
+            <span class="butler-active-check" id="check-coral">✓ Active Butler</span>
+          </div>
+          <strong>Coral</strong>
+          <span class="text-sm muted">Football Super Series, Acca Insurance &amp; fast app loading</span>
+        </button>
+
+        <!-- Sky Bet -->
+        <button type="button" class="butler-choice-card" data-select-butler="skybet" onclick="setButlerBookmaker('skybet')">
+          <div class="butler-choice-top">
+            <span class="bookie-tag skybet">SKY BET</span>
+            <span class="butler-active-check" id="check-skybet">✓ Active Butler</span>
+          </div>
+          <strong>Sky Bet</strong>
+          <span class="text-sm muted">RequestABet, AccaFreeze &amp; UK accumulator specials</span>
+        </button>
+
+        <!-- Bet365 -->
+        <button type="button" class="butler-choice-card" data-select-butler="bet365" onclick="setButlerBookmaker('bet365')">
+          <div class="butler-choice-top">
+            <span class="bookie-tag b365">BET365</span>
+            <span class="butler-active-check" id="check-bet365">✓ Active Butler</span>
+          </div>
+          <strong>bet365</strong>
+          <span class="text-sm muted">Best in-play depth, 2 Goals Ahead early payout</span>
+        </button>
+
+        <!-- Betfair -->
+        <button type="button" class="butler-choice-card" data-select-butler="betfair" onclick="setButlerBookmaker('betfair')">
+          <div class="butler-choice-top">
+            <span class="bookie-tag bf">BETFAIR</span>
+            <span class="butler-active-check" id="check-betfair">✓ Active Butler</span>
+          </div>
+          <strong>Betfair</strong>
+          <span class="text-sm muted">Exchange value pricing &amp; Sportsbook multi-bets</span>
+        </button>
+
+        <!-- Ladbrokes -->
+        <button type="button" class="butler-choice-card" data-select-butler="ladbrokes" onclick="setButlerBookmaker('ladbrokes')">
+          <div class="butler-choice-top">
+            <span class="bookie-tag ladbrokes">LADBROKES</span>
+            <span class="butler-active-check" id="check-ladbrokes">✓ Active Butler</span>
+          </div>
+          <strong>Ladbrokes</strong>
+          <span class="text-sm muted">1-2-Free predictor &amp; UK high street network</span>
+        </button>
+
+        <!-- William Hill -->
+        <button type="button" class="butler-choice-card" data-select-butler="williamhill" onclick="setButlerBookmaker('williamhill')">
+          <div class="butler-choice-top">
+            <span class="bookie-tag wh">WILLIAM HILL</span>
+            <span class="butler-active-check" id="check-williamhill">✓ Active Butler</span>
+          </div>
+          <strong>William Hill</strong>
+          <span class="text-sm muted">Epic Odds boosts &amp; traditional UK football betting</span>
+        </button>
+
+        <!-- Paddy Power -->
+        <button type="button" class="butler-choice-card" data-select-butler="paddypower" onclick="setButlerBookmaker('paddypower')">
+          <div class="butler-choice-top">
+            <span class="bookie-tag pp">PADDY POWER</span>
+            <span class="butler-active-check" id="check-paddypower">✓ Active Butler</span>
+          </div>
+          <strong>Paddy Power</strong>
+          <span class="text-sm muted">Super Sub player bets &amp; multi-sport rewards</span>
+        </button>
+      </div>
+
+      <div class="butler-perks-box">
+        <div class="butler-perk-item">⚡ <strong>1-Tap Launching</strong>: Direct handoff to your bookmaker app with slip pre-copied.</div>
+        <div class="butler-perk-item">🛡️ <strong>2× League Points</strong>: Placing real bets via your Butler earns double points.</div>
+        <div class="butler-perk-item">🔒 <strong>100% Private</strong>: No passwords or bank details ever stored. You stay in full control.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="return-bookie-modal" hidden>
   <div class="modal bookie-modal-card" role="dialog" aria-modal="true" aria-labelledby="return-modal-title">
     <div class="modal-head">
