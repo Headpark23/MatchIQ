@@ -774,7 +774,7 @@ function shareAccaSlip(idx) {
   const m = MatchIQBuilder.money;
   const shareUrl = 'https://betbuddyuk.uk/#slip=' + encodeURIComponent(builderState.stake + '_' + builderState.win + '_' + builderState.legs);
   const text = [
-    '🎯 Bet Buddy Acca (Target: ' + m(slip.profit) + ' profit)',
+    '🎯 Bet Buddy Acca (Target: ' + m(slip.ret) + ' return)',
     'Odds: ' + fmtOdds(slip.odds) + ' · Estimated Chance: ' + Math.round(slip.chance * 100) + '%',
     'Stake: ' + m(stake) + ' · Potential Return: ' + m(slip.ret),
     '',
@@ -901,84 +901,60 @@ function builderOutput() {
 }
 
 
-function getPandaMood(slip, win) {
-  const stake = (builderState && builderState.stake) || 10;
-  const targetWin = win || (builderState && builderState.win) || 50;
-  const targetOdds = (stake + targetWin) / stake;
-  const slipOdds = (slip && slip.odds) || targetOdds;
-  const chance = (slip && slip.chance) || (1 / targetOdds);
-
-  // Helper to render panda base head (ears, white face, eye patches)
-  const baseHead = '<circle cx="8" cy="8" r="5" fill="#04140d"/><circle cx="28" cy="8" r="5" fill="#04140d"/>' +
-    '<circle cx="8" cy="8" r="2.2" fill="#a7f3d0"/><circle cx="28" cy="8" r="2.2" fill="#a7f3d0"/>' +
-    '<circle cx="18" cy="20" r="13" fill="#ffffff" stroke="#04140d" stroke-width="1.5"/>' +
-    '<ellipse cx="13" cy="18" rx="3.5" ry="4.5" fill="#04140d" transform="rotate(-15 13 18)"/>' +
-    '<ellipse cx="23" cy="18" rx="3.5" ry="4.5" fill="#04140d" transform="rotate(15 23 18)"/>' +
-    '<ellipse cx="18" cy="22" rx="2" ry="1.4" fill="#04140d"/>';
-
-  // 1. WILD MONSTER ODDS / MEGA LONGSHOT (Odds >= 40/1 or Win >= £400) -> Jaw-dropped, shocked, sweaty crazy panda
-  if (slipOdds >= 41 || targetWin >= 400 || chance < 0.04) {
+// --- ACCA RISK & VOLATILITY GAUGE (UKGC & ASA Compliant) ---
+function getAccaVolatility(slip, win) {
+  if (!slip || !slip.odds) {
     return {
-      mood: 'shocked',
-      kicker: 'Crazy Longshot (' + Math.round(slipOdds) + '/1)',
-      desc: 'Jaw-dropping odds! Panda is sweating bullets. Tiny stakes only!',
-      badgeClass: 'rose',
-      svg: baseHead +
-        '<circle cx="13" cy="18" r="2.2" fill="#fff"/><circle cx="13" cy="18" r="1.1" fill="#fb7185"/>' +
-        '<circle cx="23" cy="18" r="2.2" fill="#fff"/><circle cx="23" cy="18" r="1.1" fill="#fb7185"/>' +
-        '<ellipse cx="18" cy="27" rx="3.5" ry="4.5" fill="#350810" stroke="#fb7185" stroke-width="1.2"/>' +
-        '<path d="M30 14c1 2 0 4-1 4s-2-2-1-4c.4-.8 1.6-.8 2 0z" fill="#38bdf8"/>'
+      kicker: 'Ready to Calibrate',
+      desc: 'Select your target return and legs to gauge acca volatility.',
+      badgeClass: 'acca-volatility-calibrating',
+      svg: '<circle cx="18" cy="18" r="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="4 3"/>'
     };
   }
-
-  // 2. BIG ACCA / ADVENTUROUS LONGSHOT (Odds >= 15/1 or Win >= £150) -> Wide-eyed, open-mouthed 'O' face, excited
-  if (slipOdds >= 15 || targetWin >= 150 || chance < 0.12) {
+  const odds = slip.odds;
+  const ret = slip.ret || (slip.stake * odds);
+  
+  if (odds >= 40 || ret >= 400) {
     return {
-      mood: 'wild',
-      kicker: 'Ambitious Target (' + Math.round(slipOdds) + '/1)',
-      desc: 'Big odds acca! Panda has his wild eyes on the prize.',
-      badgeClass: 'amber',
-      svg: baseHead +
-        '<circle cx="13" cy="18" r="1.8" fill="#fff"/><circle cx="13" cy="18" r="1" fill="#f59e0b"/>' +
-        '<circle cx="23" cy="18" r="1.8" fill="#fff"/><circle cx="23" cy="18" r="1" fill="#f59e0b"/>' +
-        '<circle cx="18" cy="26" r="3.2" fill="#451a03" stroke="#f59e0b" stroke-width="1.2"/>'
+      kicker: 'Speculative Longshot',
+      desc: 'Extremely high volatility odds. Tiny recreational stakes only.',
+      badgeClass: 'acca-volatility-longshot',
+      svg: '<polygon points="18,4 22,14 32,15 25,23 27,33 18,28 9,33 11,23 4,15 14,14" fill="none" stroke="#f43f5e" stroke-width="2.5"/><circle cx="18" cy="18" r="4" fill="#f43f5e"/>'
     };
   }
-
-  // 3. BALANCED WEEKEND ACCA (Odds >= 5/1 or Win >= £50) -> Cheerful, cool smirk, confident wink
-  if (slipOdds >= 5 || targetWin >= 50 || chance < 0.30) {
+  if (odds >= 15 || ret >= 150) {
     return {
-      mood: 'balanced',
-      kicker: 'Balanced Acca (' + Math.round(slipOdds) + '/1)',
-      desc: 'Sweet spot weekend accumulator. Solid risk-to-reward.',
-      badgeClass: 'cyan',
-      svg: baseHead +
-        '<circle cx="13" cy="18" r="1.6" fill="#fff"/><circle cx="13" cy="18" r="0.9" fill="#38bdf8"/>' +
-        '<path d="M21 18c1-1 3-1 4 0" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" fill="none"/>' +
-        '<path d="M15 25c1.5 1.5 4.5 1.5 6 0" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"/>'
+      kicker: 'High Payout Acca',
+      desc: 'High variance accumulator with amplified payout potential.',
+      badgeClass: 'acca-volatility-high',
+      svg: '<path d="M18 4 L28 14 L24 30 L12 30 L8 14 Z" fill="none" stroke="#fbbf24" stroke-width="2.5"/><line x1="18" y1="10" x2="18" y2="22" stroke="#fbbf24" stroke-width="2.5"/>'
     };
   }
-
-  // 4. LOW-RISK / HIGH CONFIDENCE (Odds < 5/1, Chance >= 30%) -> Happy beaming smile, emerald glowing eyes
+  if (odds >= 5 || ret >= 50) {
+    return {
+      kicker: 'Balanced Value Acca',
+      desc: 'Moderate risk profile balancing probability and bookmaker value.',
+      badgeClass: 'acca-volatility-balanced',
+      svg: '<circle cx="18" cy="18" r="14" fill="none" stroke="#38bdf8" stroke-width="2.5"/><path d="M12 18 L16 22 L24 14" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>'
+    };
+  }
   return {
-    mood: 'confident',
-    kicker: 'High Chance Pick (' + Math.max(1, Math.round(slipOdds)) + '/1)',
-    desc: 'Short price, high probability path backed by model evidence.',
-    badgeClass: 'emerald',
-    svg: baseHead +
-      '<circle cx="13" cy="17.5" r="1.8" fill="#fff"/><circle cx="13" cy="17.5" r="1" fill="#10b981"/>' +
-      '<circle cx="23" cy="17.5" r="1.8" fill="#fff"/><circle cx="23" cy="17.5" r="1" fill="#10b981"/>' +
-      '<path d="M14 24c1.8 2.2 6.2 2.2 8 0" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>'
+    kicker: 'High Probability Combination',
+    desc: 'Lower variance accumulator targeting shorter priced selections.',
+    badgeClass: 'acca-volatility-prob',
+    svg: '<circle cx="18" cy="18" r="14" fill="none" stroke="#10b981" stroke-width="2.5"/><circle cx="18" cy="18" r="8" fill="none" stroke="#10b981" stroke-width="2"/><circle cx="18" cy="18" r="2" fill="#10b981"/>'
   };
 }
 
-function pandaMoodMarkup(slip, win) {
-  const pm = getPandaMood(slip, win);
-  return '<div class="panda-mood-card ' + pm.badgeClass + '" title="' + esc(pm.desc) + '">' +
-    '<svg viewBox="0 0 36 36" class="panda-mood-icon">' + pm.svg + '</svg>' +
-    '<div><div class="panda-mood-kicker">' + esc(pm.kicker) + '</div><div class="panda-mood-desc">' + esc(pm.desc) + '</div></div>' +
-  '</div>';
+function accaVolatilityMarkup(slip, win) {
+  const av = getAccaVolatility(slip, win);
+  return '<div class="acca-volatility-card panda-mood-card ' + av.badgeClass + '" title="' + esc(av.desc) + '">' +
+    '<svg viewBox="0 0 36 36" class="acca-volatility-icon panda-mood-icon">' + av.svg + '</svg>' +
+    '<div><div class="acca-volatility-kicker panda-mood-kicker">' + esc(av.kicker) + '</div><div class="acca-volatility-desc panda-mood-desc">' + esc(av.desc) + '</div></div>' +
+    '</div>';
 }
+window.getPandaMood = getAccaVolatility;
+window.pandaMoodMarkup = accaVolatilityMarkup;
 
 function viewBuilder() {
   builderCompute();
@@ -988,15 +964,15 @@ function viewBuilder() {
   return '<section class="builder" aria-labelledby="builder-title">' +
     '<div class="builder-top-bar">' +
       '<div><div class="builder-kicker">Bet Builder</div><h1 class="page-title" id="builder-title">Tell us the win. We’ll build the bet.</h1></div>' +
-      '<div id="builder-panda-mood">' + pandaMoodMarkup(builderResult && builderResult.slips && builderResult.slips[0], builderState.win) + '</div>' +
+      '<div id="builder-panda-mood">' + accaVolatilityMarkup(builderResult && builderResult.slips && builderResult.slips[0], builderState.win) + '</div>' +
     '</div>' +
     '<p class="page-sub">Pick a stake, how many bets and how much you want to win. Bet Buddy searches every upcoming match for the combined bet (accumulator) that hits your target with the best chance of landing.</p>' +
     '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake"></div>' +
     '<div class="field"><span class="lbl" id="b-legs-l">Number of bets</span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
     '<input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Number of bets"></div></div>' +
-    '<div class="field full"><label for="b-win">Target profit (£): <b class="mono" id="b-win-out">' + MatchIQBuilder.money(win) + '</b></label>' +
+    '<div class="field full"><label for="b-win">Target return (£): <b class="mono" id="b-win-out">' + MatchIQBuilder.money(win) + '</b></label>' +
     '<div class="win-input-wrap"><div class="currency-input-wrap"><span class="currency-symbol">£</span><input id="b-win" class="ctl mono win-input" type="number" inputmode="decimal" min="1" max="10000" step="1" value="' + win + '" data-b="win" placeholder="50"></div>' +
-    '<div class="win-chips" role="group" aria-label="Preset profit targets">' + winPresets + '</div></div></div></div>' +
+    '<div class="win-chips" role="group" aria-label="Preset return targets">' + winPresets + '</div></div></div></div>' +
     '<div id="builder-out" class="builder-out" aria-live="polite">' + builderOutput() + '</div>' +
     '<p class="builder-foot">18+ only. Gambling can be addictive; play responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a>. Bet Buddy does not take bets, and nothing here is a guarantee.</p></section>';
 }
@@ -1007,7 +983,7 @@ function updateBuilder() {
   if (out) out.innerHTML = builderOutput();
   const moodWrap = $('builder-panda-mood');
   if (moodWrap) {
-    moodWrap.innerHTML = pandaMoodMarkup(builderResult && builderResult.slips && builderResult.slips[0], builderState.win);
+    moodWrap.innerHTML = accaVolatilityMarkup(builderResult && builderResult.slips && builderResult.slips[0], builderState.win);
   }
 }
 
@@ -1058,7 +1034,7 @@ function beginnerGuides() {
     '<div class="bento-grid">' +
       '<div class="bento-card"><div class="bento-icon">🎯</div><div><div class="bento-kicker">Betting Intelligence</div><h3 class="bento-title">What is Value?</h3><p class="bento-desc">A 60% chance isn’t value if the bookmaker odds are too low. Value is when the payout beats the true risk.</p></div><span class="bento-badge emerald">+5% EV threshold</span></div>' +
       '<div class="bento-card"><div class="bento-icon">🎲</div><div><div class="bento-kicker">Odds Demystified</div><h3 class="bento-title">6/4 vs 2.50 Odds</h3><p class="bento-desc">6/4 is UK fractional: £6 profit per £4 stake. 2.50 is decimal: total return including stake. Switch anytime in the header!</p></div><span class="bento-badge">Toggle in header</span></div>' +
-      '<div class="bento-card"><div class="bento-icon">⚡</div><div><div class="bento-kicker">Accas & Builders</div><h3 class="bento-title">Target Profit Bet Builder</h3><p class="bento-desc">Combine selections for higher returns. Bet Buddy checks upcoming matches to find the highest-chance path to your win goal.</p></div><span class="bento-badge">Real-time scan</span></div>' +
+      '<div class="bento-card"><div class="bento-icon">⚡</div><div><div class="bento-kicker">Accas & Builders</div><h3 class="bento-title">Acca Odds & Return Builder</h3><p class="bento-desc">Combine selections for higher returns. Bet Buddy checks upcoming matches to find the highest-chance path to your win goal.</p></div><span class="bento-badge">Real-time scan</span></div>' +
       '<div class="bento-card"><div class="bento-icon">🛡️</div><div><div class="bento-kicker">Honest Predictions</div><h3 class="bento-title">No Bet is an Answer</h3><p class="bento-desc">When evidence is thin, odds are bad or data is missing, we say No Bet. We never invent fake confidence or forced picks.</p></div><span class="bento-badge amber">Zero hype</span></div>' +
     '</div></div>';
 }
@@ -1073,7 +1049,7 @@ function renderWelcomeHero() {
     '<!-- 1. Introduction: Ultra-compact, low real estate -->' +
     '<div class="welcome-hero-banner">' +
       '<div class="welcome-mascot-col">' +
-        '<div class="welcome-panda-avatar">' +
+        '<div class="welcome-brand-avatar">' +
           '<img src="assets/icon-192.png" alt="Bet Buddy" width="40" height="40">' +
           '<span class="mascot-online-dot" title="Live Predictions Ready"></span>' +
         '</div>' +
@@ -1098,7 +1074,7 @@ function renderWelcomeHero() {
             '<div class="portal-icon-large">⚽🎯</div>' +
             '<div class="portal-hero-text">' +
               '<h2 class="portal-hero-heading">Pick a Bet &amp; Build Acca</h2>' +
-              '<p class="portal-hero-desc">Target £10–£1000 profit across 2–6 legs with verified mathematical edge.</p>' +
+              '<p class="portal-hero-desc">Target £10–£1000 return across 2–6 legs with verified mathematical edge.</p>' +
             '</div>' +
             '<div class="portal-card-action">' +
               '<span class="btn primary portal-cta-btn">' +
@@ -1204,7 +1180,7 @@ function viewPicks() {
   '</div>';
   const list = upcoming();
   const sharedBanner = sharedSlipNotice
-    ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🐼</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' profit across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
+    ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🐼</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' return across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
     : '';
   let html = '<section class="view">' +
     topHubNav +
@@ -2970,7 +2946,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v43 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v44 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3687,7 +3663,7 @@ function openAuthModal() {
     unauthed.hidden = false;
     authed.hidden = true;
     const curProfile = getUserProfile();
-    $('google-display-name').value = curProfile.handle !== 'PandaPunter' ? curProfile.handle : '';
+    $('google-display-name').value = curProfile.handle !== 'SmartPunter' ? curProfile.handle : '';
   }
   modal.hidden = false;
 }
@@ -3759,7 +3735,7 @@ function openInstallModal() {
     '<p class="auth-sub" style="margin-bottom:8px">To add to your phone / tablet home screen:</p>' +
     '<div class="install-step-item"><span class="install-step-num">1</span><div class="install-step-body"><strong>Tap Share</strong><span>Look for the square icon with an arrow pointing up at the bottom of your screen (or Chrome menu).</span></div></div>' +
     '<div class="install-step-item"><span class="install-step-num">2</span><div class="install-step-body"><strong>Select "Add to Home Screen"</strong><span>Scroll down and tap <b>Add to Home Screen</b>.</span></div></div>' +
-    '<div class="install-step-item"><span class="install-step-num">3</span><div class="install-step-body"><strong>Tap "Add"</strong><span>Bet Buddy with the Panda Football mascot icon appears instantly on your home screen.</span></div></div>' +
+    '<div class="install-step-item"><span class="install-step-num">3</span><div class="install-step-body"><strong>Tap "Add"</strong><span>Bet Buddy with the Sports Intelligence radar icon appears instantly on your home screen.</span></div></div>' +
     '</div>';
   modal.hidden = false;
 }
@@ -3775,7 +3751,7 @@ window.addEventListener('beforeinstallprompt', e => {
   const btn = $('header-install-btn');
   if (btn) {
     btn.style.display = 'inline-flex';
-    btn.innerHTML = '<span class="install-panda-emoji" style="font-size:15px">🐼</span> <span class="install-label">Download App</span>';
+    btn.innerHTML = '<span class="install-badge-icon" style="font-size:14px">⚡</span> <span class="install-label">Download App</span>';
   }
 });
 
@@ -4249,7 +4225,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = '2026.10.30.43';
+const APP_VERSION = '2026.10.30.44';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
