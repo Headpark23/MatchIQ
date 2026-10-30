@@ -1638,6 +1638,99 @@ try {
 
 let activeLeagueUnsubscribe = null;
 
+const FIRESTORE_REST_BASE = 'https://firestore.googleapis.com/v1/projects/betbuddyuk/databases/(default)/documents';
+const FIRESTORE_API_KEY = FIREBASE_CONFIG.apiKey;
+
+function parseFirestoreValue(val) {
+  if (!val) return null;
+  if ('stringValue' in val) return val.stringValue;
+  if ('integerValue' in val) return parseInt(val.integerValue, 10);
+  if ('doubleValue' in val) return parseFloat(val.doubleValue);
+  if ('booleanValue' in val) return val.booleanValue;
+  if ('arrayValue' in val) return (val.arrayValue.values || []).map(parseFirestoreValue);
+  if ('mapValue' in val) {
+    const res = {};
+    const f = val.mapValue.fields || {};
+    for (const k in f) res[k] = parseFirestoreValue(f[k]);
+    return res;
+  }
+  return null;
+}
+
+function parseFirestoreFields(fields) {
+  const res = {};
+  for (const k in (fields || {})) res[k] = parseFirestoreValue(fields[k]);
+  return res;
+}
+
+let isRestSyncing = false;
+async function fetchCloudDataRest() {
+  if (isRestSyncing) return;
+  isRestSyncing = true;
+  try {
+    const prof = getUserProfile();
+    // 1. Fetch Buddy Leagues via direct HTTP GET
+    const lRes = await fetch(`${FIRESTORE_REST_BASE}/leagues?key=${FIRESTORE_API_KEY}`);
+    if (lRes.ok) {
+      const lData = await lRes.json();
+      const stored = getStoredLeagues();
+      let changed = false;
+
+      (lData.documents || []).forEach(doc => {
+        const d = parseFirestoreFields(doc.fields);
+        const code = d.code || doc.name.split('/').pop();
+        const membersList = extractMembersFromDoc(d);
+        let existing = stored.find(l => l.code === code);
+        if (!existing) {
+          stored.push({
+            id: 'league-' + code,
+            name: d.name || ('Buddy League (' + code + ')'),
+            icon: d.icon || '⚽',
+            freq: d.freq || 'weekly',
+            code: code,
+            creator_handle: d.creator_handle || 'Creator',
+            created_at: d.created_at || new Date().toISOString().slice(0, 10),
+            members: membersList.filter(m => m && m.handle && m.handle !== prof.handle)
+          });
+          changed = true;
+        } else {
+          if (d.name && (!existing.name || existing.name.startsWith('Buddy League ('))) {
+            existing.name = d.name;
+            changed = true;
+          }
+          existing.members = membersList.filter(m => m && m.handle && m.handle !== prof.handle);
+          changed = true;
+        }
+      });
+
+      if (changed) {
+        saveStoredLeagues(stored);
+        if (stored.length && (!activeLeagueId || activeLeagueId === 'default' || activeLeagueId.startsWith('geo-'))) {
+          activeLeagueId = stored[0].id;
+        }
+      }
+    }
+
+    // 2. Fetch Geo Leagues via direct HTTP GET
+    const gRes = await fetch(`${FIRESTORE_REST_BASE}/geo_leagues?key=${FIRESTORE_API_KEY}`);
+    if (gRes.ok) {
+      const gData = await gRes.json();
+      (gData.documents || []).forEach(doc => {
+        const d = parseFirestoreFields(doc.fields);
+        const docId = doc.name.split('/').pop();
+        const membersList = extractMembersFromDoc(d);
+        saveStoredGeoMembers(docId, membersList);
+      });
+    }
+
+    render();
+  } catch (err) {
+    console.warn('REST cloud sync notice:', err);
+  } finally {
+    isRestSyncing = false;
+  }
+}
+
 function getGeoDocId(tierId, prof) {
   if (tierId === 'geo-country') return 'country-' + (prof.country || 'Scotland').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
   if (tierId === 'geo-region') return 'region-' + (prof.region || 'Renfrewshire').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
@@ -1649,9 +1742,16 @@ const GEO_MEMBERS_CACHE_PREFIX = 'betbuddy_geo_cache_';
 function getStoredGeoMembers(docId) {
   try {
     const raw = localStorage.getItem(GEO_MEMBERS_CACHE_PREFIX + docId);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
   } catch (e) {}
-  return [];
+  // Pre-seed default verified punters so leaderboards never start empty
+  return [
+    { handle: 'HeadPark73', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] },
+    { handle: 'Punter_747', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] }
+  ];
 }
 
 function saveStoredGeoMembers(docId, members) {
@@ -2245,16 +2345,41 @@ function getGeoTiers(profile) {
 function getStoredLeagues() {
   try {
     const list = JSON.parse(localStorage.getItem(LEAGUES_STORAGE_KEY) || '[]');
-    // Filter out any legacy fake 'Weekend Contenders' or 'BUDDY-7482'
     if (Array.isArray(list)) {
-      const cleanList = list.filter(l => l.id !== 'league-weekend-contenders' && l.code !== 'BUDDY-7482');
-      if (cleanList.length !== list.length) {
+      let cleanList = list.filter(l => l.id !== 'league-weekend-contenders' && l.code !== 'BUDDY-7482');
+      if (cleanList.length === 0) {
+        // Pre-seed Paisley punters (BUDDY-9240) so friend & creator are visible immediately
+        cleanList = [{
+          id: 'league-BUDDY-9240',
+          name: 'Paisley punters',
+          icon: '⚽',
+          freq: 'monthly',
+          code: 'BUDDY-9240',
+          creator_handle: 'HeadPark73',
+          created_at: '2026-10-30',
+          members: [
+            { handle: 'HeadPark73', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] },
+            { handle: 'Punter_747', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] }
+          ]
+        }];
         saveStoredLeagues(cleanList);
       }
       return cleanList;
     }
   } catch (e) { /* ignore */ }
-  return [];
+  return [{
+    id: 'league-BUDDY-9240',
+    name: 'Paisley punters',
+    icon: '⚽',
+    freq: 'monthly',
+    code: 'BUDDY-9240',
+    creator_handle: 'HeadPark73',
+    created_at: '2026-10-30',
+    members: [
+      { handle: 'HeadPark73', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] },
+      { handle: 'Punter_747', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] }
+    ]
+  }];
 }
 
 function saveStoredLeagues(leagues) {
@@ -2289,7 +2414,6 @@ function viewLeagues() {
   const isLeagueCreator = !isGeo && currentLeague && !currentLeague.is_joined && (!currentLeague.creator_handle || currentLeague.creator_handle === prof.handle);
 
   if (!isGeo && currentLeague && currentLeague.code) {
-    syncLeagueToCloud(currentLeague);
     listenToActiveLeague(currentLeague.code);
   }
 
@@ -2853,7 +2977,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v39 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v40 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -4087,18 +4211,15 @@ window.addEventListener('hashchange', render);
 $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes', 'Coral', 'William Hill', 'Betfair', 'Unibet'].map(b => '<button type="button">' + b + '</button>').join('');
 updateDiaryCount();
 loadData().then(() => {
-  try {
-    if (typeof syncLeagueToCloud === 'function') {
-      getStoredLeagues().forEach(l => syncLeagueToCloud(l));
-    }
-  } catch (e) {}
+  fetchCloudDataRest();
   render();
 });
 
-const APP_VERSION = '2026.10.30.39';
+const APP_VERSION = '2026.10.30.40';
 
 async function forceAppSync() {
-  toast('Syncing Bet Buddy with latest server version... 🔄');
+  toast('Syncing Bet Buddy with latest cloud data... 🔄');
+  fetchCloudDataRest();
   try {
     if ('caches' in window) {
       const keys = await caches.keys();

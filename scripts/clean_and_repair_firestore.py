@@ -83,3 +83,4 @@ clean_doc("leagues", "BUDDY-5310")
 # Clean all geo leagues
 for geo in ["geo-world", "geo-europe", "geo-uk", "country-scotland", "region-renfrewshire", "town-paisley"]:
     clean_doc("geo_leagues", geo)
+
