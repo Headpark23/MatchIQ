@@ -1618,6 +1618,49 @@ try {
 
 let activeLeagueUnsubscribe = null;
 
+function getGeoDocId(tierId, prof) {
+  if (tierId === 'geo-country') return 'country-' + (prof.country || 'Scotland').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+  if (tierId === 'geo-region') return 'region-' + (prof.region || 'Renfrewshire').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+  if (tierId === 'geo-town') return 'town-' + (prof.town || 'Paisley').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+  return tierId;
+}
+
+const GEO_MEMBERS_CACHE_PREFIX = 'betbuddy_geo_cache_';
+function getStoredGeoMembers(docId) {
+  try {
+    const raw = localStorage.getItem(GEO_MEMBERS_CACHE_PREFIX + docId);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return [];
+}
+
+function saveStoredGeoMembers(docId, members) {
+  try {
+    localStorage.setItem(GEO_MEMBERS_CACHE_PREFIX + docId, JSON.stringify(members));
+  } catch (e) {}
+}
+
+let activeGeoUnsubscribe = null;
+function listenToActiveGeoLeague(docId) {
+  if (!firestoreDb || !docId) return;
+  if (activeGeoUnsubscribe) {
+    try { activeGeoUnsubscribe(); } catch (e) {}
+    activeGeoUnsubscribe = null;
+  }
+  try {
+    activeGeoUnsubscribe = firestoreDb.collection('geo_leagues').doc(docId).onSnapshot(doc => {
+      if (!doc || !doc.exists) return;
+      const data = doc.data() || {};
+      const membersObj = data.members || {};
+      const membersList = Object.values(membersObj);
+      saveStoredGeoMembers(docId, membersList);
+      render();
+    }, err => console.warn('Geo listener notice:', err));
+  } catch (e) {
+    console.warn('Geo listener error:', e);
+  }
+}
+
 function syncUserToGeoCloud() {
   if (!firestoreDb) return;
   try {
@@ -1636,9 +1679,9 @@ function syncUserToGeoCloud() {
       form: uStats.form,
       updated_at: new Date().toISOString()
     };
-    const safeTown = 'geo-town-' + (prof.town || 'Paisley').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
-    const safeRegion = 'geo-region-' + (prof.region || 'Renfrewshire').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
-    const safeCountry = 'geo-country-' + (prof.country || 'Scotland').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+    const safeTown = getGeoDocId('geo-town', prof);
+    const safeRegion = getGeoDocId('geo-region', prof);
+    const safeCountry = getGeoDocId('geo-country', prof);
     const targets = ['geo-world', 'geo-europe', 'geo-uk', safeCountry, safeRegion, safeTown];
     targets.forEach(tId => {
       firestoreDb.collection('geo_leagues').doc(tId).set({
@@ -1647,6 +1690,7 @@ function syncUserToGeoCloud() {
     });
   } catch (e) {}
 }
+
 
 
 function syncLeagueToCloud(league) {
@@ -2033,8 +2077,8 @@ function viewLeagues() {
     listenToActiveLeague(currentLeague.code);
   }
 
-  // Build combined leaderboard with current user
-  const allMembers = (currentLeague.competitors || currentLeague.members || []).slice();
+  // Build combined leaderboard with current user & Firestore real players
+  let allMembers = [];
   const userEntry = {
     handle: prof.handle,
     points: uStats.points,
@@ -2044,7 +2088,17 @@ function viewLeagues() {
     form: uStats.form,
     isYou: true
   };
-  allMembers.push(userEntry);
+
+  if (isGeo) {
+    const geoDocId = getGeoDocId(currentLeague.id, prof);
+    listenToActiveGeoLeague(geoDocId);
+    const realGeoMembers = getStoredGeoMembers(geoDocId).filter(m => m.handle !== prof.handle);
+    const bots = (currentLeague.competitors || []).filter(b => !realGeoMembers.some(r => r.handle === b.handle));
+    allMembers = [...realGeoMembers, userEntry, ...bots];
+  } else {
+    allMembers = (currentLeague.members || []).slice();
+    allMembers.push(userEntry);
+  }
 
   // OPTION A SCORING RANK:
   // Primary: Points (odds-weighted)
@@ -2561,7 +2615,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v30 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v31 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3574,7 +3628,7 @@ document.addEventListener('click', event => {
   else if (t.dataset.export === 'feedback') downloadFile(JSON.stringify(getStoredFeedback(), null, 2), 'matchiq_feedback.json', 'application/json');
   else if (t.dataset.delete) deleteDiaryEntry(t.dataset.delete);
   else if (t.dataset.clearDiary !== undefined) clearDiary();
-  else if (t.dataset.retry !== undefined) loadData().then(render);
+  else if (t.dataset.retry !== undefined) loadData().then(() => { syncUserToGeoCloud(); render(); });
   else if (t.dataset.star) { feedbackState[t.dataset.star] = +t.dataset.value; render(); }
   else if (t.dataset.useful) { feedbackState.useful = t.dataset.useful; render(); }
   else if (t.dataset.chip) { feedbackState.chips.has(t.dataset.chip) ? feedbackState.chips.delete(t.dataset.chip) : feedbackState.chips.add(t.dataset.chip); render(); }
@@ -3756,7 +3810,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.30';
+const APP_VERSION = '2026.10.30.31';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
