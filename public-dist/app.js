@@ -1985,16 +1985,28 @@ function getUserLeagueStats(freq = 'weekly') {
   }
 
   const settled = filteredDiary.filter(e => e.outcome && e.outcome !== 'pending');
-  const won = settled.filter(e => e.outcome === 'won');
-  const totalStaked = settled.reduce((sum, e) => sum + (+e.stake || 0), 0);
-  const totalProfit = settled.reduce((sum, e) => sum + (calc.calculateBetProfit(e.stake, e.odds, e.outcome) || 0), 0);
+
+  // FAIR PLAY RULE: Exactly 1 settled bet per calendar day counts toward league standings.
+  // Chronologically earliest bet logged each day qualifies; extra bets on the same day are excluded.
+  const dailyQualifyingMap = new Map();
+  settled.slice().reverse().forEach(e => {
+    const dayKey = (e.date || (e.timestamp ? e.timestamp.slice(0, 10) : '') || 'undated').slice(0, 10);
+    if (!dailyQualifyingMap.has(dayKey)) {
+      dailyQualifyingMap.set(dayKey, e);
+    }
+  });
+  const leagueBets = Array.from(dailyQualifyingMap.values()).reverse();
+
+  const won = leagueBets.filter(e => e.outcome === 'won');
+  const totalStaked = leagueBets.reduce((sum, e) => sum + (+e.stake || 0), 0);
+  const totalProfit = leagueBets.reduce((sum, e) => sum + (calc.calculateBetProfit(e.stake, e.odds, e.outcome) || 0), 0);
   
   // Option A Scoring: (Decimal Odds - 1) * 10 on won; -2 on lost; 0 on void
-  const points = settled.reduce((sum, e) => sum + (calc.calculateLeaguePoints(e.odds, e.outcome) || 0), 0);
-  const winRate = settled.length ? Math.round((won.length / settled.length) * 100) : 0;
+  const points = leagueBets.reduce((sum, e) => sum + (calc.calculateLeaguePoints(e.odds, e.outcome) || 0), 0);
+  const winRate = leagueBets.length ? Math.round((won.length / leagueBets.length) * 100) : 0;
   const roi = totalStaked > 0 ? +( (totalProfit / totalStaked) * 100 ).toFixed(1) : 0.0;
-  const last5 = settled.slice(0, 5).map(e => e.outcome === 'won' ? 'W' : e.outcome === 'lost' ? 'L' : 'V');
-  return { points, settled: settled.length, won: won.length, winRate, roi, form: last5.length ? last5 : ['—'] };
+  const last5 = leagueBets.slice(0, 5).map(e => e.outcome === 'won' ? 'W' : e.outcome === 'lost' ? 'L' : 'V');
+  return { points, settled: leagueBets.length, won: won.length, winRate, roi, form: last5.length ? last5 : ['—'] };
 }
 
 // ------------------------------------------------------------ Trophy Cabinet System
@@ -2266,9 +2278,13 @@ function viewLeagues() {
   '</div>';
 
   return '<section class="view">' +
+    '<div class="fair-play-banner">' +
+      '<span class="fair-play-icon">🛡️</span>' +
+      '<div><strong>Fair Play Rule (1 Bet Per Day Cap):</strong> Exactly <strong>1 settled bet per calendar day</strong> counts toward your league score. Placing multiple small bets on the same day in your diary will not inflate your score.</div>' +
+    '</div>' +
     '<div class="section-head" style="align-items:flex-end"><div>' +
       '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
-      '<p class="page-sub">Compete in your 6 automatic hometown and global leagues, or create private mini-leagues with mates. Option A: 20/1 winner = 200 pts, Evens = 10 pts, Loss = -2 pts.</p>' +
+      '<p class="page-sub">Compete in your 6 automatic hometown and global leagues, or create private mini-leagues with mates. Option A: 20/1 winner = 200 pts, Evens = 10 pts, Loss = -2 pts. <b>Max 1 qualifying bet per day.</b></p>' +
     '</div>' +
     '<div class="btn-row">' +
       '<button type="button" class="btn primary" data-open-league-modal>Create or Join League</button>' +
@@ -2297,7 +2313,7 @@ function viewLeagues() {
         '<div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">' +
           '<div>' +
             '<h2 class="section-title">' + (typeof currentLeague.name === 'function' ? currentLeague.name() : currentLeague.name) + '</h2>' +
-            '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze</span>' +
+            '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze · <b style="color:var(--cyan)">Max 1 bet/day</b></span>' +
           '</div>' +
           '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
             '<div class="frequency-toggle-bar">' +
@@ -2335,7 +2351,7 @@ function viewLeagues() {
         '<div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">' +
           '<div>' +
             '<h2 class="section-title">' + (typeof currentLeague.name === 'function' ? currentLeague.name() : currentLeague.name) + '</h2>' +
-            '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze</span>' +
+            '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze · <b style="color:var(--cyan)">Max 1 bet/day</b></span>' +
           '</div>' +
           '<div style="display:flex;gap:10px;align-items:center">' +
             '<div class="frequency-toggle-bar">' +
@@ -2711,7 +2727,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v36 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v37 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3947,7 +3963,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = '2026.10.30.36';
+const APP_VERSION = '2026.10.30.37';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');

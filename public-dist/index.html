@@ -27,7 +27,7 @@
 <script>
   // Instant App & PWA Upgrade Sync + Landing Enforcement
   (function() {
-    var APP_VER = '2026.10.30.36';
+    var APP_VER = '2026.10.30.37';
     try {
       var prevVer = localStorage.getItem('betbuddy_app_version');
       if (prevVer !== APP_VER) {
@@ -252,7 +252,7 @@
             <option value="yearly">Yearly (Season Championship)</option>
           </select>
         </div>
-        <p class="section-note" style="margin:8px 0 14px"><b>Option A Scoring:</b> Win points = (Decimal Odds - 1) &times; 10. A 20/1 winner scores 200 pts, Evens scores 10 pts. Losses deduct -2 pts. Win % &amp; ROI % used as tie-breakers. Top 3 win Gold, Silver &amp; Bronze!</p>
+        <p class="section-note" style="margin:8px 0 14px"><b>Option A Scoring:</b> Win points = (Decimal Odds - 1) &times; 10. Losses deduct -2 pts. <b>🛡️ Fair Play Cap: Exactly 1 settled bet per calendar day counts toward league standings</b> to prevent spamming multiple small bets.</p>
         <button type="submit" class="btn primary full-width">Create League & Get Invite Code</button>
       </form>
       <form id="join-league-form" style="margin-top:14px" hidden>
