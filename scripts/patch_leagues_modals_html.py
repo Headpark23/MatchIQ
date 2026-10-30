@@ -104,3 +104,4 @@ with open('index.html', 'w', encoding='utf-8', newline='\n') as f:
     f.write(html)
 
 print('Updated index.html with enhanced leagues, geo profile, and trophy cabinet modal')
+

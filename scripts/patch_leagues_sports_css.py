@@ -361,3 +361,4 @@ with open('styles.css', 'a', encoding='utf-8') as f:
     f.write(css_additions)
 
 print('Appended Leagues, Silverware and Multi-Sport CSS to styles.css')
+

@@ -1,7 +1,7 @@
-// MatchIQ Progressive Web App Service Worker (v1)
-// Caches application shell and enables offline home screen capability
+// Bet Buddy Progressive Web App Service Worker (v15)
+// Enables offline capability, instant home screen launch, and verified PWA installation
 
-const CACHE_NAME = 'betbuddy-pwa-v12';
+const CACHE_NAME = 'betbuddy-pwa-v15';
 
 const PRECACHE_ASSETS = [
   './',
@@ -24,19 +24,30 @@ const PRECACHE_ASSETS = [
   './data/model_reliability.json',
   './data/odds.json',
   './data/league_validation.json',
-  './data/rights.json'
+  './data/multi_sport_events.json'
 ];
 
-// Install: pre-cache core shell
+// Install: pre-cache core shell safely without atomic failure
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(PRECACHE_ASSETS);
+    caches.open(CACHE_NAME).then(async cache => {
+      await Promise.allSettled(
+        PRECACHE_ASSETS.map(async url => {
+          try {
+            const res = await fetch(url);
+            if (res.ok) {
+              await cache.put(url, res);
+            }
+          } catch (err) {
+            // Non-critical asset fetch skip
+          }
+        })
+      );
     }).then(() => self.skipWaiting())
   );
 });
 
-// Activate: clear stale caches
+// Activate: clear stale caches immediately
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => {
@@ -55,7 +66,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // If fetching local data JSON, try network first so user gets latest predictions, fall back to cache
+  // Dynamic predictions & multi-sport data: Network first, fall back to cache
   if (url.pathname.includes('/data/')) {
     event.respondWith(
       fetch(event.request)
@@ -83,7 +94,7 @@ self.addEventListener('fetch', event => {
         return response;
       });
     }).catch(() => {
-      // Offline fallback
+      // Offline fallback navigation
       if (event.request.mode === 'navigate') {
         return caches.match('./index.html');
       }

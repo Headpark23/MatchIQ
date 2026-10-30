@@ -39,3 +39,4 @@ with open('market_calculations.js', 'w', encoding='utf-8', newline='\n') as f:
     f.write(text)
 
 print('Added calculateLeaguePoints to market_calculations.js')
+

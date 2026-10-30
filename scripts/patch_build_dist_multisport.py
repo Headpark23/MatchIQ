@@ -11,3 +11,4 @@ with open('build_public_dist.py', 'w', encoding='utf-8', newline='\n') as f:
     f.write(text)
 
 print('Added multi_sport_events.json to build_public_dist.py')
+
