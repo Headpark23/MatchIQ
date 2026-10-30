@@ -1926,12 +1926,7 @@ function getGeoTiers(profile) {
       trophyIcon: '💎🌍',
       trophyName: 'Grand Diamond Globe',
       badgeClass: 'tier-worldwide',
-      competitors: [
-        { handle: 'TokyoDrifter', points: 480, winRate: 68, roi: 34.2, settled: 32, form: ['W', 'W', 'W', 'L', 'W'] },
-        { handle: 'NordicSharpshooter', points: 410, winRate: 64, roi: 28.5, settled: 28, form: ['W', 'L', 'W', 'W', 'W'] },
-        { handle: 'SydneyPunter', points: 350, winRate: 59, roi: 22.0, settled: 24, form: ['W', 'W', 'L', 'W', 'L'] },
-        { handle: 'SaoPauloSamba', points: 310, winRate: 56, roi: 19.4, settled: 26, form: ['L', 'W', 'W', 'W', 'L'] }
-      ]
+      competitors: []
     },
     {
       id: 'geo-europe',
@@ -1942,11 +1937,7 @@ function getGeoTiers(profile) {
       trophyIcon: '🌟🇪🇺',
       trophyName: 'Continental Star Cup',
       badgeClass: 'tier-europe',
-      competitors: [
-        { handle: 'MunichPredictor', points: 390, winRate: 66, roi: 31.0, settled: 25, form: ['W', 'W', 'W', 'W', 'L'] },
-        { handle: 'MadridMatador', points: 330, winRate: 61, roi: 24.8, settled: 22, form: ['W', 'L', 'W', 'W', 'W'] },
-        { handle: 'AmsterdamAjax', points: 290, winRate: 57, roi: 18.2, settled: 20, form: ['L', 'W', 'W', 'L', 'W'] }
-      ]
+      competitors: []
     },
     {
       id: 'geo-uk',
@@ -1957,11 +1948,7 @@ function getGeoTiers(profile) {
       trophyIcon: '🛡️🇬🇧',
       trophyName: 'Sovereign Britannia Shield',
       badgeClass: 'tier-uk',
-      competitors: [
-        { handle: 'BelfastBettor', points: 340, winRate: 63, roi: 27.5, settled: 24, form: ['W', 'W', 'L', 'W', 'W'] },
-        { handle: 'CardiffCityKing', points: 300, winRate: 60, roi: 23.0, settled: 20, form: ['W', 'L', 'W', 'W', 'L'] },
-        { handle: 'YorkshireTyke', points: 260, winRate: 55, roi: 17.5, settled: 19, form: ['L', 'W', 'W', 'W', 'L'] }
-      ]
+      competitors: []
     },
     {
       id: 'geo-country',
@@ -1972,11 +1959,7 @@ function getGeoTiers(profile) {
       trophyIcon: '🦁🏴󠁧󠁢󠁳󠁣󠁴󠁿',
       trophyName: 'National Lion Trophy',
       badgeClass: 'tier-country',
-      competitors: [
-        { handle: 'EdinburghAcca', points: 310, winRate: 62, roi: 25.0, settled: 21, form: ['W', 'W', 'W', 'L', 'W'] },
-        { handle: 'GlasgowGreen', points: 280, winRate: 59, roi: 21.4, settled: 20, form: ['W', 'L', 'W', 'W', 'L'] },
-        { handle: 'AberdeenAngus', points: 240, winRate: 54, roi: 16.0, settled: 18, form: ['L', 'W', 'L', 'W', 'W'] }
-      ]
+      competitors: []
     },
     {
       id: 'geo-region',
@@ -1987,11 +1970,7 @@ function getGeoTiers(profile) {
       trophyIcon: '🏛️',
       trophyName: 'Regional Civic Chalice',
       badgeClass: 'tier-region',
-      competitors: [
-        { handle: 'BraeheadBettor', points: 270, winRate: 60, roi: 22.5, settled: 18, form: ['W', 'W', 'L', 'W', 'W'] },
-        { handle: 'JohnstonePunter', points: 230, winRate: 56, roi: 18.0, settled: 16, form: ['W', 'L', 'W', 'L', 'W'] },
-        { handle: 'ErskineEagle', points: 190, winRate: 51, roi: 13.5, settled: 15, form: ['L', 'W', 'W', 'L', 'L'] }
-      ]
+      competitors: []
     },
     {
       id: 'geo-town',
@@ -2002,37 +1981,24 @@ function getGeoTiers(profile) {
       trophyIcon: '🏅',
       trophyName: 'Hometown Plaque',
       badgeClass: 'tier-town',
-      competitors: [
-        { handle: 'BuddieLegend', points: 250, winRate: 58, roi: 20.0, settled: 16, form: ['W', 'W', 'L', 'W', 'W'] },
-        { handle: 'HighStreetTipster', points: 210, winRate: 54, roi: 16.5, settled: 15, form: ['W', 'L', 'W', 'W', 'L'] },
-        { handle: 'AbbeyAcca', points: 170, winRate: 50, roi: 12.0, settled: 14, form: ['L', 'W', 'W', 'L', 'L'] }
-      ]
+      competitors: []
     }
   ];
 }
 
 function getStoredLeagues() {
   try {
-    const list = JSON.parse(localStorage.getItem(LEAGUES_STORAGE_KEY) || 'null');
-    if (Array.isArray(list) && list.length) return list;
-  } catch (e) { /* ignore */ }
-  const defaults = [
-    {
-      id: 'league-weekend-contenders',
-      name: 'Weekend Contenders',
-      icon: '⚽',
-      freq: 'weekly',
-      code: 'BUDDY-7482',
-      created_at: new Date().toISOString().slice(0, 10),
-      members: [
-        { handle: 'ModelBenchmark', points: 280, winRate: 64, roi: 18.5, settled: 28, form: ['W', 'W', 'L', 'W', 'W'], isBot: true },
-        { handle: 'The10pLegend', points: 220, winRate: 60, roi: 22.0, settled: 15, form: ['W', 'L', 'W', 'W', 'W'], isBot: true },
-        { handle: 'AccaArchitect', points: 140, winRate: 52, roi: 14.2, settled: 19, form: ['W', 'L', 'W', 'W', 'L'], isBot: true }
-      ]
+    const list = JSON.parse(localStorage.getItem(LEAGUES_STORAGE_KEY) || '[]');
+    // Filter out any legacy fake 'Weekend Contenders' or 'BUDDY-7482'
+    if (Array.isArray(list)) {
+      const cleanList = list.filter(l => l.id !== 'league-weekend-contenders' && l.code !== 'BUDDY-7482');
+      if (cleanList.length !== list.length) {
+        saveStoredLeagues(cleanList);
+      }
+      return cleanList;
     }
-  ];
-  try { localStorage.setItem(LEAGUES_STORAGE_KEY, JSON.stringify(defaults)); } catch (e) { /* ignore */ }
-  return defaults;
+  } catch (e) { /* ignore */ }
+  return [];
 }
 
 function saveStoredLeagues(leagues) {
@@ -2195,7 +2161,7 @@ function viewLeagues() {
     // 1. Private Buddy Mini-Leagues Selector
     '<div class="section" style="margin-top:20px">' +
       '<div class="section-head"><div><h2 class="section-title">Private Buddy Mini-Leagues</h2><span class="section-note">Custom leagues with your friends, work colleagues, and pub crew.</span></div></div>' +
-      '<div class="league-selector-bar">' + buddyTabsHtml + '</div>' +
+      (buddyTabsHtml ? '<div class="league-selector-bar">' + buddyTabsHtml + '</div>' : '<div style="padding:14px 18px;border-radius:12px;background:rgba(255,255,255,0.03);color:var(--dim);font-size:13.5px">No private leagues joined yet. Tap <b>Create or Join League</b> above to start with friends.</div>') +
     '</div>' +
 
     // If Buddy League selected, show table directly underneath!
@@ -2615,7 +2581,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v31 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v32 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -2781,42 +2747,64 @@ function closeBookieModal() {
   if (modal) modal.hidden = true;
 }
 
-const DEFAULT_DAILY_HISTORY = [
-  { day: 'Mon', visits: 115, clicks: 14 },
-  { day: 'Tue', visits: 132, clicks: 18 },
-  { day: 'Wed', visits: 154, clicks: 22 },
-  { day: 'Thu', visits: 148, clicks: 19 },
-  { day: 'Fri', visits: 210, clicks: 38 },
-  { day: 'Sat', visits: 345, clicks: 72 },
-  { day: 'Sun', visits: 290, clicks: 54 }
-];
+function getPast7Days() {
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const res = [];
+  const now = new Date();
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    res.push({
+      dateStr: d.toISOString().slice(0, 10),
+      day: days[d.getDay()],
+      visits: 0,
+      clicks: 0
+    });
+  }
+  return res;
+}
 
 function getTrafficStats() {
   let stats = null;
   try {
     stats = JSON.parse(localStorage.getItem(TRAFFIC_STORAGE_KEY) || 'null');
-  } catch (e) { /* ignore */ }
+  } catch (e) {}
 
   const today = new Date().toISOString().slice(0, 10);
+  const clicks = getAffiliateClicks();
+  const past7 = getPast7Days();
+
   if (!stats || typeof stats !== 'object' || stats.date !== today) {
+    const prevVisits = (stats && stats.totalVisits) || 0;
     stats = {
       date: today,
-      visitsToday: ((stats && stats.visitsToday) || 0) + 1,
-      totalVisits: ((stats && stats.totalVisits) || 142) + 1,
-      uniquePunters: ((stats && stats.uniquePunters) || 88) + 1,
-      slipsBuilt: ((stats && stats.slipsBuilt) || 64) + 1,
+      visitsToday: 1,
+      totalVisits: prevVisits + 1,
+      uniquePunters: 1,
+      slipsBuilt: 0,
       lastRefreshed: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      dailyHistory: DEFAULT_DAILY_HISTORY
+      dailyHistory: past7
     };
-    try { localStorage.setItem(TRAFFIC_STORAGE_KEY, JSON.stringify(stats)); } catch (e) { /* ignore */ }
+    // set today's visits
+    const lastDay = stats.dailyHistory[stats.dailyHistory.length - 1];
+    if (lastDay) {
+      lastDay.visits = 1;
+      lastDay.clicks = clicks.length;
+    }
+    try { localStorage.setItem(TRAFFIC_STORAGE_KEY, JSON.stringify(stats)); } catch (e) {}
   } else {
     stats.visitsToday = (stats.visitsToday || 0) + 1;
-    stats.totalVisits = (stats.totalVisits || 142) + 1;
+    stats.totalVisits = (stats.totalVisits || 0) + 1;
     if (!Array.isArray(stats.dailyHistory) || stats.dailyHistory.length < 2) {
-      stats.dailyHistory = DEFAULT_DAILY_HISTORY;
+      stats.dailyHistory = past7;
+    }
+    const lastDay = stats.dailyHistory[stats.dailyHistory.length - 1];
+    if (lastDay) {
+      lastDay.visits = stats.visitsToday;
+      lastDay.clicks = clicks.length;
     }
     stats.lastRefreshed = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    try { localStorage.setItem(TRAFFIC_STORAGE_KEY, JSON.stringify(stats)); } catch (e) { /* ignore */ }
+    try { localStorage.setItem(TRAFFIC_STORAGE_KEY, JSON.stringify(stats)); } catch (e) {}
   }
   return stats;
 }
@@ -3810,7 +3798,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.31';
+const APP_VERSION = '2026.10.30.32';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
