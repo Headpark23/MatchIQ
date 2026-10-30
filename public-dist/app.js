@@ -707,7 +707,7 @@ function openUniversalShare({ title, text, url }, forceModal = false) {
 
   const fullText = currentSharePayload.text.includes(finalUrl)
     ? currentSharePayload.text
-    : currentSharePayload.text + (finalUrl ? '\n\n' + finalUrl : '');
+    : currentSharePayload.text + (finalUrl ? '\n' + finalUrl : '');
 
   // If forceModal is true (e.g. user clicked 'Share app with friend'), directly show WhatsApp, SMS, Facebook, X options!
   if (forceModal || !navigator.share) {
@@ -2983,7 +2983,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v40 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v41 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -4001,14 +4001,11 @@ document.addEventListener('click', event => {
   }
   else if (t.dataset.shareLeague !== undefined) {
     const code = t.dataset.shareLeague;
-    const isGithub = window.location.origin.includes('github.io');
-    const baseUrl = isGithub ? 'https://headpark23.github.io/MatchIQ/' : 'https://betbuddyuk.uk/';
-    const shareUrl = baseUrl + '#join-league=' + encodeURIComponent(code);
-    const altUrl = isGithub ? 'https://betbuddyuk.uk/#join-league=' + encodeURIComponent(code) : 'https://headpark23.github.io/MatchIQ/#join-league=' + encodeURIComponent(code);
-    const text = '🏆 Join my Bet Buddy League! Code: ' + code + '\nJoin: ' + shareUrl + '\n(Unfiltered WiFi link: ' + altUrl + ')\nCompete with friends!';
+    const shareUrl = 'https://betbuddyuk.uk/#join-league=' + encodeURIComponent(code);
+    const text = '🏆 Join my Bet Buddy League (Code: ' + code + ')';
     openUniversalShare({
       title: 'Join my Bet Buddy League (' + code + ')',
-      text,
+      text: text,
       url: shareUrl
     });
   }
@@ -4221,7 +4218,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = '2026.10.30.40';
+const APP_VERSION = '2026.10.30.41';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
