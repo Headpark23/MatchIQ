@@ -539,8 +539,46 @@ let builderResult = null, builderTimer = null;
 
 function builderCompute() {
   const { stake, legs, win } = builderState;
-  const pool = MatchIQBuilder.legPool(predictionsList(), { calc, reliability: DATA.reliability, feedFor, nowMs: Date.now() });
-  builderResult = MatchIQBuilder.buildSlips(pool, { stake, win, legs });
+  const footballPool = activeSports.includes('football')
+    ? MatchIQBuilder.legPool(predictionsList(), { calc, reliability: DATA.reliability, feedFor, nowMs: Date.now() })
+    : [];
+
+  // Multi-Sport Pool Injection
+  const multiSportPool = [];
+  if (DATA.multiSport && DATA.multiSport.sports) {
+    activeSports.forEach(sportKey => {
+      if (sportKey === 'football') return;
+      const sp = DATA.multiSport.sports[sportKey];
+      if (!sp || !sp.tournaments) return;
+      sp.tournaments.forEach(t => {
+        (t.events || []).forEach(ev => {
+          (ev.selections || []).forEach(sel => {
+            if (sel.decimal && sel.decimal > 1.05) {
+              const estimatedProb = 1 / (sel.decimal * 1.07);
+              multiSportPool.push({
+                matchId: ev.id,
+                fixture: { home: ev.title, away: sp.name, competition: sportKey.toUpperCase() },
+                kickoff: Date.now() + 86400000,
+                id: ev.id + '-' + sel.label,
+                label: sel.label + ' (' + sp.name + ')',
+                market: 'match',
+                p: estimatedProb,
+                odds: sel.decimal,
+                fractional: sel.fractional,
+                bookmaker: sel.bookmaker || 'UK Bookmaker',
+                priceSource: 'live',
+                support: 'validated',
+                basis: sp.name + ' UK Odds'
+              });
+            }
+          });
+        });
+      });
+    });
+  }
+
+  const combinedPool = footballPool.concat(multiSportPool);
+  builderResult = MatchIQBuilder.buildSlips(combinedPool, { stake, win, legs });
   try { localStorage.setItem(BUILDER_KEY, JSON.stringify(builderState)); } catch (e) { /* ignore */ }
 }
 
@@ -951,9 +989,6 @@ function viewHome() {
 }
 
 function viewPicks() {
-  if (currentSport !== 'football') {
-    return viewMultiSport(currentSport);
-  }
   const list = upcoming();
   const sharedBanner = sharedSlipNotice
     ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🐼</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' profit across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
@@ -987,7 +1022,63 @@ function viewPicks() {
     '<li><b>Best value</b> needs a real bookmaker price. Prices come from The Odds API for Match Result and Total Goals; for anything else enter a price you have seen. Add every outcome’s price to remove the bookmaker’s margin. Only the validated match-result model, at a well-backtested probability, can call value, and only at +5% estimated expected value or more.</li>' +
     '<li><b>No bet</b> is a real answer: when evidence is thin, the price is short or no price exists. The predictions stay visible underneath.</li>' +
     '<li>Model fair odds are 1 ÷ probability with no margin, rounded to a familiar UK price. They are never bookmaker prices.</li></ol></details>';
+    // Append any active other sports below football
+  const otherActive = activeSports.filter(s => s !== 'football');
+  if (otherActive.length > 0) {
+    html += '<div class="section"><div class="section-head"><div><h2 class="section-title">Cross-Sport Fixtures &amp; Markets</h2>' +
+      '<span class="section-note">Active sports: ' + otherActive.map(s => s.toUpperCase()).join(', ') + '</span></div>' +
+      '<span class="badge validated">The Odds API Feed</span></div>' +
+      otherActive.map(renderMultiSportSection).join('') +
+    '</div>';
+  }
+
   return html + homeFixtures() + '</section>';
+}
+
+function renderMultiSportSection(sportKey) {
+  const sportData = (DATA.multiSport && DATA.multiSport.sports && DATA.multiSport.sports[sportKey]);
+  if (!sportData) return '';
+  return (sportData.tournaments || []).map(t => {
+    const eventsHtml = (t.events || []).map(ev => {
+      const selectionsHtml = (ev.selections || []).map(sel => {
+        const betData = esc(JSON.stringify({
+          selection: ev.title + ' · ' + sel.label,
+          fair: sel.fractional,
+          odds: sel.decimal,
+          bookmaker: sel.bookmaker
+        }));
+        return '<div class="sport-selection-row">' +
+          '<div class="sport-sel-info">' +
+            '<span class="sport-sel-name">' + esc(sel.label) + '</span>' +
+            '<span class="sport-sel-bookie">Best price: ' + esc(sel.bookmaker) + '</span>' +
+          '</div>' +
+          '<div class="sport-sel-actions">' +
+            '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Place with ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
+            '<button type="button" class="btn small" data-diary=\'' + betData + '\' title="Add to Bet Diary">+ Diary</button>' +
+            '<button type="button" class="btn-add-cross-acca" data-add-cross-acca=\'' + betData + '\' title="Add to Accumulator">+ Acca</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      return '<div class="sport-event-card">' +
+        '<div class="sport-card-head">' +
+          '<div>' +
+            '<h3 class="sport-event-title">' + esc(ev.title) + '</h3>' +
+            '<div class="sport-tournament-sub">' + esc(t.tournament) + ' · ' + esc(ev.round) + '</div>' +
+          '</div>' +
+          '<span class="badge validated">' + esc(ev.date) + '</span>' +
+        '</div>' +
+        '<div class="sport-odds-list">' + selectionsHtml + '</div>' +
+      '</div>';
+    }).join('');
+
+    return '<div class="sport-tournament-block" style="margin-bottom:18px">' +
+      '<div class="section-head" style="margin-bottom:10px"><div><h3 class="section-title" style="font-size:1.15rem">' + esc(sportData.icon) + ' ' + esc(t.tournament) + '</h3>' +
+      '<span class="section-note">' + esc(t.course || t.venue || t.surface || 'Official UK Bookmaker Prices') + '</span></div>' +
+      '<span class="badge provisional">UK Odds Live</span></div>' +
+      '<div class="sport-events-grid">' + eventsHtml + '</div>' +
+    '</div>';
+  }).join('');
 }
 
 function homeFixtures() {
@@ -2244,7 +2335,35 @@ function viewAdmin() {
 
 
 // ------------------------------------------------------------ Multi-Sport State & View
-let currentSport = 'football';
+const ACTIVE_SPORTS_KEY = 'betbuddy_active_sports_v1';
+let activeSports = ['football'];
+try {
+  const savedSports = JSON.parse(localStorage.getItem(ACTIVE_SPORTS_KEY) || 'null');
+  if (Array.isArray(savedSports) && savedSports.length > 0) {
+    activeSports = savedSports;
+  }
+} catch (e) { /* ignore */ }
+
+function toggleSport(sportKey) {
+  if (activeSports.includes(sportKey)) {
+    if (activeSports.length > 1) {
+      activeSports = activeSports.filter(s => s !== sportKey);
+    } else {
+      toast('At least one sport must be selected!');
+      return;
+    }
+  } else {
+    activeSports.push(sportKey);
+  }
+  try { localStorage.setItem(ACTIVE_SPORTS_KEY, JSON.stringify(activeSports)); } catch (e) { /* ignore */ }
+  toast((activeSports.includes(sportKey) ? 'Added ' : 'Removed ') + sportKey.toUpperCase() + ' from Acca &amp; view');
+  updateBuilder();
+  render();
+}
+
+function isSportActive(sportKey) {
+  return activeSports.includes(sportKey);
+}
 
 function setSport(sportKey) {
   currentSport = sportKey || 'football';
@@ -2259,8 +2378,21 @@ function renderSportFilterBar() {
     { key: 'darts', label: '🎯 Darts' },
     { key: 'rugby', label: '🏉 Rugby' }
   ];
-  return '<div class="sport-filter-bar">' +
-    sports.map(s => '<button type="button" class="sport-pill' + (currentSport === s.key ? ' active' : '') + '" data-switch-sport="' + s.key + '">' + s.label + '</button>').join('') +
+  const count = activeSports.length;
+  return '<div class="sport-filter-section">' +
+    '<div class="sport-filter-head">' +
+      '<span class="sport-filter-title">Mix Sports in Acca (' + count + ' active)</span>' +
+      '<span class="sport-filter-hint">Tap any sport to toggle ON / OFF</span>' +
+    '</div>' +
+    '<div class="sport-filter-bar" role="group" aria-label="Toggle sports on and off">' +
+      sports.map(s => {
+        const active = activeSports.includes(s.key);
+        return '<button type="button" class="sport-pill' + (active ? ' active' : '') + '" data-toggle-sport="' + s.key + '" aria-pressed="' + active + '">' +
+          '<span class="sport-toggle-dot' + (active ? ' on' : '') + '"></span>' +
+          '<span>' + s.label + '</span>' +
+        '</button>';
+      }).join('') +
+    '</div>' +
   '</div>';
 }
 
@@ -2507,8 +2639,12 @@ document.addEventListener('click', event => {
   // Bug reporting modal
   
   // Multi-Sport Switcher
+  if (t.dataset.toggleSport !== undefined) {
+    toggleSport(t.dataset.toggleSport);
+    return;
+  }
   if (t.dataset.switchSport !== undefined) {
-    setSport(t.dataset.switchSport);
+    toggleSport(t.dataset.switchSport);
     return;
   }
 

@@ -1594,3 +1594,50 @@ textarea.ctl { min-height: 96px; resize: vertical; }
     height: 64px;
   }
 }
+
+
+/* Multi-Sport Toggle Header & Indicator */
+.sport-filter-section {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.sport-filter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sport-filter-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #38bdf8;
+}
+.sport-filter-hint {
+  font-size: 0.76rem;
+  color: #94a3b8;
+}
+.sport-toggle-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #64748b;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+.sport-toggle-dot.on {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+.sport-pill.active {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: #10b981;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+}
