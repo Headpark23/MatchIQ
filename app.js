@@ -1795,7 +1795,7 @@ async function joinCloudLeague(code) {
 
 const TROPHY_CABINET_KEY = 'betbuddy_trophy_cabinet_v1';
 
-let activeLeagueId = 'geo-world';
+let activeLeagueId = 'default';
 let activeLeagueFreq = 'weekly';
 let activeMoreTab = 'account';
 
@@ -2012,21 +2012,12 @@ function viewLeagues() {
   const customLeagues = getStoredLeagues();
   const trophies = getStoredTrophies();
 
-  // Find active league (prefer user custom league if starting from default geo-world)
-  let currentLeague = null;
+  // Find active league
+  let currentLeague = customLeagues.find(l => l.id === activeLeagueId);
   let isGeo = false;
-  if (activeLeagueId === 'geo-world' && customLeagues.length) {
-    currentLeague = customLeagues[0];
-    activeLeagueId = currentLeague.id;
-    isGeo = false;
-  } else {
-    currentLeague = customLeagues.find(l => l.id === activeLeagueId);
-    if (currentLeague) {
-      isGeo = false;
-    } else {
-      currentLeague = geoTiers.find(g => g.id === activeLeagueId);
-      isGeo = true;
-    }
+  if (!currentLeague) {
+    currentLeague = geoTiers.find(g => g.id === activeLeagueId);
+    if (currentLeague) isGeo = true;
   }
   if (!currentLeague) {
     if (customLeagues.length) {
@@ -2581,7 +2572,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v32 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v33 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3798,7 +3789,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.32';
+const APP_VERSION = '2026.10.30.33';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
