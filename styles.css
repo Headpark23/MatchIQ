@@ -1816,3 +1816,19 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   transform: rotate(180deg);
   transition: transform 0.3s ease;
 }
+
+/* ------------------------------------------------------------ Commercial & Sponsorship */
+.commercial-pitch-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  background: rgba(14, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  transition: transform .18s ease, border-color .18s ease;
+}
+.commercial-pitch-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan);
+}

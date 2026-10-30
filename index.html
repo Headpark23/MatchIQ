@@ -27,7 +27,7 @@
 <script>
   // Instant App & PWA Upgrade Sync + Landing Enforcement
   (function() {
-    var APP_VER = '2026.10.30.21';
+    var APP_VER = '2026.10.30.22';
     try {
       var prevVer = localStorage.getItem('betbuddy_app_version');
       if (prevVer !== APP_VER) {
@@ -91,7 +91,7 @@
   <div class="sub-header-inner">
     <div class="sub-header-left">
       <span class="badge-dot-live"></span>
-      <span class="sub-header-tagline">Premier League Intelligence · Private Bet Diary</span> · <a href="#/admin" class="sub-admin-link">Founder Telemetry</a>
+      <span class="sub-header-tagline">Premier League &amp; Multi-Sport Intelligence &middot; Private Bet Diary</span>
     </div>
     <div id="header-auth-container" class="sub-header-auth-wrap">
       <button type="button" class="google-sub-btn" id="header-auth-btn" title="Sign in with Google">
@@ -109,7 +109,7 @@
 <footer class="site-foot">
   <div>Statistical estimates for information and entertainment. No prediction is guaranteed, and a high probability is not the same as good betting value. Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0) and openfootball (CC0). Bookmaker prices: The Odds API.</div>
   <div class="copyright-bar">
-    <span>© Copyright Martin White and Chris Faulds 2026. All rights reserved.</span>
+    <span>&copy; Copyright Martin White and Chris Faulds 2026. All rights reserved. &middot; <a href="#/admin" class="subtle-admin-link" style="color:var(--dim);text-decoration:none;" title="Founder Telemetry">Founder Telemetry</a></span>
     <button type="button" class="btn small report-bug-btn" id="btn-report-bug" title="Report an issue or bug">
       <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88M14.12 3.88 16 2M9 7.13v-1a3.003 3.003 0 1 1 6 0v1M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6Z"/><path d="M12 20v-9M6.53 9C4.6 8.8 3 7.1 3 5M6 13H2M3 21c0-2.1 1.7-3.9 3.8-4M20.97 5c0 2.1-1.6 3.8-3.5 4M18 13h4M21 21c0-2.1-1.7-3.9-3.8-4"/></svg>
       <span>Report a Bug</span>
@@ -120,7 +120,7 @@
     <span>Please Gamble Responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener" class="compliance-link">BeGambleAware.org</a> · <a href="https://www.gamcare.org.uk" target="_blank" rel="noopener" class="compliance-link">GamCare</a></span>
     <span>Take Time To Think</span>
     <span><button type="button" class="compliance-link-btn" id="btn-open-gdpr">Privacy & GDPR</button></span>
-    <span style="margin-left:auto"><a href="#/more" class="compliance-link">Commercial & Sponsorship Inquiries</a></span>
+    <span style="margin-left:auto"><a href="#/commercial" class="compliance-link">Commercial &amp; Sponsorship Inquiries</a></span>
   </div>
 </footer>
 
@@ -196,9 +196,9 @@
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
-<script src="market_calculations.js?v=21"></script>
-<script src="bet_builder.js?v=21"></script>
-<script src="app.js?v=21"></script>
+<script src="market_calculations.js?v=22"></script>
+<script src="bet_builder.js?v=22"></script>
+<script src="app.js?v=22"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>

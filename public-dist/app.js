@@ -1157,6 +1157,25 @@ function scrollToBuilder() {
 }
 
 function viewHome() {
+  
+  // Commercial Inquiries Ledger
+  const enquiries = getStoredEnquiries();
+  const enquiryRows = enquiries.length ? enquiries.map(e =>
+    '<tr>' +
+      '<td><b>' + esc(e.company || e.name) + '</b><br><small class="muted">' + esc(e.name) + ' &middot; <a href="mailto:' + esc(e.email) + '" style="color:var(--cyan)">' + esc(e.email) + '</a></small></td>' +
+      '<td><span class="badge validated">' + esc(e.interest) + '</span></td>' +
+      '<td style="max-width:280px;font-size:12px;color:var(--muted);">' + esc(e.message) + '</td>' +
+      '<td style="font-size:11px;font-family:var(--mono);color:var(--dim);white-space:nowrap;">' + esc(e.submitted_at ? e.submitted_at.slice(0, 16).replace('T', ' ') : 'Just now') + '</td>' +
+    '</tr>'
+  ).join('') : '<tr><td colspan="4" class="muted" style="text-align:center;padding:20px;">No commercial enquiries submitted yet.</td></tr>';
+
+  const enquiryCard = '<div class="section card" style="margin-top:24px;">' +
+    '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries (' + enquiries.length + ')</h2><p class="section-note">Incoming bookmaker, brand, and affiliate proposals submitted via #/commercial.</p></div>' +
+    (enquiries.length ? '<button type="button" class="btn small" data-admin-action="clear-enquiries" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Enquiries</button>' : '') +
+    '</div>' +
+    '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
+  '</div>';
+
   return '<section class="view">' +
     renderWelcomeHero() +
     beginnerGuides() +
@@ -1890,6 +1909,25 @@ function viewLeagues() {
   const trophyTitle = currentLeague.trophyName || (currentLeague.name + ' Silverware');
   const trophyIcon = currentLeague.trophyIcon || currentLeague.icon || '🏆';
 
+  
+  // Commercial Inquiries Ledger
+  const enquiries = getStoredEnquiries();
+  const enquiryRows = enquiries.length ? enquiries.map(e =>
+    '<tr>' +
+      '<td><b>' + esc(e.company || e.name) + '</b><br><small class="muted">' + esc(e.name) + ' &middot; <a href="mailto:' + esc(e.email) + '" style="color:var(--cyan)">' + esc(e.email) + '</a></small></td>' +
+      '<td><span class="badge validated">' + esc(e.interest) + '</span></td>' +
+      '<td style="max-width:280px;font-size:12px;color:var(--muted);">' + esc(e.message) + '</td>' +
+      '<td style="font-size:11px;font-family:var(--mono);color:var(--dim);white-space:nowrap;">' + esc(e.submitted_at ? e.submitted_at.slice(0, 16).replace('T', ' ') : 'Just now') + '</td>' +
+    '</tr>'
+  ).join('') : '<tr><td colspan="4" class="muted" style="text-align:center;padding:20px;">No commercial enquiries submitted yet.</td></tr>';
+
+  const enquiryCard = '<div class="section card" style="margin-top:24px;">' +
+    '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries (' + enquiries.length + ')</h2><p class="section-note">Incoming bookmaker, brand, and affiliate proposals submitted via #/commercial.</p></div>' +
+    (enquiries.length ? '<button type="button" class="btn small" data-admin-action="clear-enquiries" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Enquiries</button>' : '') +
+    '</div>' +
+    '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
+  '</div>';
+
   return '<section class="view">' +
     '<div class="section-head" style="align-items:flex-end"><div>' +
       '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
@@ -2246,9 +2284,9 @@ function viewMore() {
       '<div class="btn-row"><button type="submit" class="btn primary">Send feedback</button>' + (fb.length ? '<button type="button" class="btn" data-export="feedback">Export ' + fb.length + ' responses</button>' : '') + '</div>' +
       '<p class="section-note">Feedback is stored in this browser only.</p></form></div>' +
     '<div class="section card commercial-card">' +
-      '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Founder Portal</h2><p class="section-note">Private founder access for Martin White &amp; Chris Faulds: punter traffic, bookmaker outbound clicks, and revenue telemetry.</p></div><span class="commercial-badge">Private</span></div>' +
+      '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries</h2><p class="section-note">Partner with Bet Buddy: bookmaker odds feeds, accumulator deep-links, silverware league title sponsors, and commercial affiliate placements.</p></div><span class="badge validated">Partnerships Open</span></div>' +
       '<div class="btn-row" style="margin-top:14px">' +
-        '<a href="#/admin" class="btn primary">Open Founder Admin Dashboard</a>' +
+        '<a href="#/commercial" class="btn primary">Open Commercial &amp; Sponsorship Form</a>' +
         '<button type="button" class="btn" id="btn-more-gdpr">Privacy Notice &amp; UK GDPR</button>' +
       '</div>' +
     '</div></section>';
@@ -2318,6 +2356,14 @@ let lastRoute = '';
 // ------------------------------------------------------------ Site Traffic & Commercial Telemetry
 const TRAFFIC_STORAGE_KEY = 'betbuddy_traffic_stats_v1';
 const BUGS_STORAGE_KEY = 'betbuddy_bug_reports_v1';
+const COMMERCIAL_STORAGE_KEY = 'betbuddy_commercial_enquiries_v1';
+function getStoredEnquiries() {
+  try {
+    const list = JSON.parse(localStorage.getItem(COMMERCIAL_STORAGE_KEY) || '[]');
+    return Array.isArray(list) ? list : [];
+  } catch (e) { return []; }
+}
+
 
 // ------------------------------------------------------------ Commercial & Affiliate Tracking
 const AFFILIATE_TRACKING_KEY = 'betbuddy_affiliate_clicks_v1';
@@ -2450,6 +2496,84 @@ function renderTrafficChartSvg(history) {
   '</svg>';
 }
 
+function viewCommercial() {
+  
+  // Commercial Inquiries Ledger
+  const enquiries = getStoredEnquiries();
+  const enquiryRows = enquiries.length ? enquiries.map(e =>
+    '<tr>' +
+      '<td><b>' + esc(e.company || e.name) + '</b><br><small class="muted">' + esc(e.name) + ' &middot; <a href="mailto:' + esc(e.email) + '" style="color:var(--cyan)">' + esc(e.email) + '</a></small></td>' +
+      '<td><span class="badge validated">' + esc(e.interest) + '</span></td>' +
+      '<td style="max-width:280px;font-size:12px;color:var(--muted);">' + esc(e.message) + '</td>' +
+      '<td style="font-size:11px;font-family:var(--mono);color:var(--dim);white-space:nowrap;">' + esc(e.submitted_at ? e.submitted_at.slice(0, 16).replace('T', ' ') : 'Just now') + '</td>' +
+    '</tr>'
+  ).join('') : '<tr><td colspan="4" class="muted" style="text-align:center;padding:20px;">No commercial enquiries submitted yet.</td></tr>';
+
+  const enquiryCard = '<div class="section card" style="margin-top:24px;">' +
+    '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries (' + enquiries.length + ')</h2><p class="section-note">Incoming bookmaker, brand, and affiliate proposals submitted via #/commercial.</p></div>' +
+    (enquiries.length ? '<button type="button" class="btn small" data-admin-action="clear-enquiries" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Enquiries</button>' : '') +
+    '</div>' +
+    '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
+  '</div>';
+
+  return '<section class="view">' +
+    '<div class="section-head"><div>' +
+      '<h1 class="page-title">Commercial &amp; Sponsorship Opportunities</h1>' +
+      '<p class="page-sub">Partner with Bet Buddy &mdash; the transparent, mathematical sports betting co-pilot driving high-margin accumulator engagement across the UK &amp; beyond.</p>' +
+    '</div></div>' +
+
+    '<div class="section grid grid-3">' +
+      '<div class="card commercial-pitch-card">' +
+        '<div class="portal-card-top"><span class="portal-pill highlight">⚡ High Margin Hold</span></div>' +
+        '<h3 class="card-title" style="margin-top:8px">Accumulator Engine</h3>' +
+        '<p class="muted" style="font-size:13px;line-height:1.5">Punters use our transparent Dixon-Coles model to build 2 to 6-leg accumulators. Accas deliver <b>25%–35% gross operator margin</b> &mdash; the most profitable betting product in sports.</p>' +
+      '</div>' +
+      '<div class="card commercial-pitch-card">' +
+        '<div class="portal-card-top"><span class="portal-pill">🏆 Title Sponsorship</span></div>' +
+        '<h3 class="card-title" style="margin-top:8px">6-Tier Silverware Leagues</h3>' +
+        '<p class="muted" style="font-size:13px;line-height:1.5">Branded silverware across Hometown (Paisley Plaque), Regional (Civic Chalice), National (Lion Trophy &amp; Britannia Shield), and Worldwide ladders with persistent punter engagement.</p>' +
+      '</div>' +
+      '<div class="card commercial-pitch-card">' +
+        '<div class="portal-card-top"><span class="portal-pill">🎯 Direct Transfer</span></div>' +
+        '<h3 class="card-title" style="margin-top:8px">1-Click Betslip Deep-Linking</h3>' +
+        '<p class="muted" style="font-size:13px;line-height:1.5">Deep-link integration into licensed UK sportsbooks (Bet365, Sky Bet, Paddy Power, Ladbrokes, Coral, William Hill, Betfair, Unibet) with tracked affiliate attribution.</p>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="section card" style="max-width:760px;margin:24px auto 0;">' +
+      '<div class="section-head"><div><h2 class="section-title">Submit a Commercial Enquiry</h2>' +
+        '<p class="section-note">Direct communication with founders Martin White &amp; Chris Faulds.</p></div>' +
+        '<span class="badge validated">Response &lt; 24h</span>' +
+      '</div>' +
+
+      '<form id="commercial-enquiry-form" style="display:grid;gap:14px;margin-top:16px;">' +
+        '<div class="field"><label for="comm-name">Your Name / Representative</label>' +
+          '<input id="comm-name" class="ctl" type="text" placeholder="e.g. Sarah Jenkins" required></div>' +
+        '<div class="field"><label for="comm-company">Organisation / Bookmaker / Brand</label>' +
+          '<input id="comm-company" class="ctl" type="text" placeholder="e.g. Flutter Entertainment / Bet365 / Sponsor Brand" required></div>' +
+        '<div class="field"><label for="comm-email">Work Email</label>' +
+          '<input id="comm-email" class="ctl" type="email" placeholder="name@company.com" required></div>' +
+        '<div class="field"><label for="comm-interest">Partnership Category</label>' +
+          '<select id="comm-interest" class="ctl">' +
+            '<option value="Bookmaker Live Odds & Acca Placement Integration">Bookmaker Live Odds &amp; Acca Placement Integration</option>' +
+            '<option value="Accumulator Engine Exclusive Sponsorship">Accumulator Engine Exclusive Sponsorship</option>' +
+            '<option value="6-Tier Silverware & Geo-League Title Sponsor">6-Tier Silverware &amp; Geo-League Title Sponsor</option>' +
+            '<option value="Brand Partnership & Commercial Promotion">Brand Partnership &amp; Commercial Promotion</option>' +
+            '<option value="Data Feed, Odds API & Syndicate Licensing">Data Feed, Odds API &amp; Syndicate Licensing</option>' +
+            '<option value="Other Commercial Collaboration">Other Commercial Collaboration</option>' +
+          '</select></div>' +
+        '<div class="field"><label for="comm-message">Proposal / Details</label>' +
+          '<textarea id="comm-message" class="ctl" rows="4" placeholder="Tell us about your brand, partnership goals, or integration requirements..." required></textarea></div>' +
+        '<button type="submit" class="btn primary full-width" style="padding:12px;font-size:14px;font-weight:700;">Submit Partnership Enquiry</button>' +
+        '<div id="comm-status-msg" style="display:none;padding:12px;border-radius:10px;background:rgba(16,185,129,0.18);border:1px solid var(--emerald);color:#fff;font-size:13px;text-align:center;"></div>' +
+      '</form>' +
+      '<div style="margin-top:18px;text-align:center;font-size:12.5px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;">' +
+        'Prefer direct email? Contact founders Martin White &amp; Chris Faulds at <a href="mailto:octopusigardens@gmail.com?subject=Bet%20Buddy%20Commercial%20Partnership" class="compliance-link">octopusigardens@gmail.com</a>' +
+      '</div>' +
+    '</div>' +
+  '</section>';
+}
+
 function viewAdmin() {
   const authUser = getAuthUser();
   const clicks = getAffiliateClicks();
@@ -2475,6 +2599,25 @@ function viewAdmin() {
       '<td class="dim">' + esc(b.contact || 'Anonymous') + '</td>' +
       '<td class="dim" style="font-size:12px">' + esc(new Date(b.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) + '</td></tr>';
   }).join('');
+
+  
+  // Commercial Inquiries Ledger
+  const enquiries = getStoredEnquiries();
+  const enquiryRows = enquiries.length ? enquiries.map(e =>
+    '<tr>' +
+      '<td><b>' + esc(e.company || e.name) + '</b><br><small class="muted">' + esc(e.name) + ' &middot; <a href="mailto:' + esc(e.email) + '" style="color:var(--cyan)">' + esc(e.email) + '</a></small></td>' +
+      '<td><span class="badge validated">' + esc(e.interest) + '</span></td>' +
+      '<td style="max-width:280px;font-size:12px;color:var(--muted);">' + esc(e.message) + '</td>' +
+      '<td style="font-size:11px;font-family:var(--mono);color:var(--dim);white-space:nowrap;">' + esc(e.submitted_at ? e.submitted_at.slice(0, 16).replace('T', ' ') : 'Just now') + '</td>' +
+    '</tr>'
+  ).join('') : '<tr><td colspan="4" class="muted" style="text-align:center;padding:20px;">No commercial enquiries submitted yet.</td></tr>';
+
+  const enquiryCard = '<div class="section card" style="margin-top:24px;">' +
+    '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries (' + enquiries.length + ')</h2><p class="section-note">Incoming bookmaker, brand, and affiliate proposals submitted via #/commercial.</p></div>' +
+    (enquiries.length ? '<button type="button" class="btn small" data-admin-action="clear-enquiries" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Enquiries</button>' : '') +
+    '</div>' +
+    '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
+  '</div>';
 
   return '<section class="view">' +
     '<div class="section-head"><div><h1 class="page-title">Commercial & Founder Telemetry</h1>' +
@@ -2597,7 +2740,26 @@ function renderSportFilterBar() {
 function viewMultiSport(sportKey) {
   const sportData = (DATA.multiSport && DATA.multiSport.sports && DATA.multiSport.sports[sportKey]);
   if (!sportData) {
-    return '<section class="view">' + renderSportFilterBar() +
+    
+  // Commercial Inquiries Ledger
+  const enquiries = getStoredEnquiries();
+  const enquiryRows = enquiries.length ? enquiries.map(e =>
+    '<tr>' +
+      '<td><b>' + esc(e.company || e.name) + '</b><br><small class="muted">' + esc(e.name) + ' &middot; <a href="mailto:' + esc(e.email) + '" style="color:var(--cyan)">' + esc(e.email) + '</a></small></td>' +
+      '<td><span class="badge validated">' + esc(e.interest) + '</span></td>' +
+      '<td style="max-width:280px;font-size:12px;color:var(--muted);">' + esc(e.message) + '</td>' +
+      '<td style="font-size:11px;font-family:var(--mono);color:var(--dim);white-space:nowrap;">' + esc(e.submitted_at ? e.submitted_at.slice(0, 16).replace('T', ' ') : 'Just now') + '</td>' +
+    '</tr>'
+  ).join('') : '<tr><td colspan="4" class="muted" style="text-align:center;padding:20px;">No commercial enquiries submitted yet.</td></tr>';
+
+  const enquiryCard = '<div class="section card" style="margin-top:24px;">' +
+    '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries (' + enquiries.length + ')</h2><p class="section-note">Incoming bookmaker, brand, and affiliate proposals submitted via #/commercial.</p></div>' +
+    (enquiries.length ? '<button type="button" class="btn small" data-admin-action="clear-enquiries" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Enquiries</button>' : '') +
+    '</div>' +
+    '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
+  '</div>';
+
+  return '<section class="view">' + renderSportFilterBar() +
       '<div class="empty">No live events loaded for ' + esc(sportKey) + '. Check back soon!</div></section>';
   }
 
@@ -2645,6 +2807,25 @@ function viewMultiSport(sportKey) {
     '</div>';
   }).join('');
 
+  
+  // Commercial Inquiries Ledger
+  const enquiries = getStoredEnquiries();
+  const enquiryRows = enquiries.length ? enquiries.map(e =>
+    '<tr>' +
+      '<td><b>' + esc(e.company || e.name) + '</b><br><small class="muted">' + esc(e.name) + ' &middot; <a href="mailto:' + esc(e.email) + '" style="color:var(--cyan)">' + esc(e.email) + '</a></small></td>' +
+      '<td><span class="badge validated">' + esc(e.interest) + '</span></td>' +
+      '<td style="max-width:280px;font-size:12px;color:var(--muted);">' + esc(e.message) + '</td>' +
+      '<td style="font-size:11px;font-family:var(--mono);color:var(--dim);white-space:nowrap;">' + esc(e.submitted_at ? e.submitted_at.slice(0, 16).replace('T', ' ') : 'Just now') + '</td>' +
+    '</tr>'
+  ).join('') : '<tr><td colspan="4" class="muted" style="text-align:center;padding:20px;">No commercial enquiries submitted yet.</td></tr>';
+
+  const enquiryCard = '<div class="section card" style="margin-top:24px;">' +
+    '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries (' + enquiries.length + ')</h2><p class="section-note">Incoming bookmaker, brand, and affiliate proposals submitted via #/commercial.</p></div>' +
+    (enquiries.length ? '<button type="button" class="btn small" data-admin-action="clear-enquiries" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Enquiries</button>' : '') +
+    '</div>' +
+    '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
+  '</div>';
+
   return '<section class="view">' +
     '<div class="section-head" style="align-items:flex-end"><div>' +
       '<h1 class="page-title">' + esc(sportData.icon) + ' ' + esc(sportData.name) + ' Markets</h1>' +
@@ -2661,9 +2842,9 @@ function render() {
   const navKey = view === 'match' ? 'fixtures' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
-  const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'more' ? viewMore() : viewHome();
+  const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', admin: 'Founder Admin & Affiliates', more: 'Data & methods' };
+  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'Data & methods' };
   document.title = (titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {
@@ -2960,6 +3141,10 @@ document.addEventListener('click', event => {
       logAffiliateClick('bet365');
       toast('Test affiliate click logged to bet365!');
       render();
+    } else if (act === 'clear-enquiries') {
+      localStorage.setItem(COMMERCIAL_STORAGE_KEY, '[]');
+      toast('Commercial enquiries cleared.');
+      render();
     } else if (act === 'clear-bugs') {
       localStorage.setItem(BUGS_STORAGE_KEY, '[]');
       toast('Bug reports cleared.');
@@ -3191,7 +3376,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.21';
+const APP_VERSION = '2026.10.30.22';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
