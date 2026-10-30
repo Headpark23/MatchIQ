@@ -570,6 +570,12 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .league-tab-btn { flex: 0 0 auto; min-height: 42px; padding: 8px 16px; border-radius: 12px; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.04); font-size: 13.5px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .15s ease; }
 .league-tab-btn:hover { border-color: var(--cyan); color: #fff; }
 .league-tab-btn.active { background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(16, 185, 129, 0.2)); border-color: var(--cyan); color: #fff; box-shadow: 0 0 14px rgba(56, 189, 248, 0.2); }
+.more-nav-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 16px 0 20px; }
+@media (min-width: 640px) { .more-nav-grid { grid-template-columns: repeat(4, 1fr); } }
+.more-nav-btn { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 42px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.04); font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .15s ease; text-align: center; }
+.more-nav-btn:hover { border-color: var(--cyan); color: #fff; }
+.more-nav-btn.active { background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(16, 185, 129, 0.2)); border-color: var(--cyan); color: #fff; box-shadow: 0 0 14px rgba(56, 189, 248, 0.2); }
+
 
 .leaderboard-card { padding: 0; overflow: hidden; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); backdrop-filter: blur(14px); }
 .lb-table { width: 100%; border-collapse: collapse; text-align: left; }

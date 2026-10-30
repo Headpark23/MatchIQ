@@ -2492,14 +2492,14 @@ function viewMore() {
   const stars = (q, label) => '<div class="field"><span class="lbl">' + label + '</span><div class="stars">' + [1, 2, 3, 4, 5].map(n => '<button type="button" data-star="' + q + '" data-value="' + n + '" aria-pressed="' + (feedbackState[q] === n) + '">' + n + '</button>').join('') + '</div></div>';
 
   const tabs = [
-    { id: 'account', label: '👤 Account & Settings' },
+    { id: 'account', label: '👤 Account' },
     { id: 'data', label: '📊 Data & Methods' },
     { id: 'feedback', label: '💬 Feedback' },
-    { id: 'commercial', label: '💼 Commercial & Sponsors' }
+    { id: 'commercial', label: '💼 Commercial' }
   ];
 
-  const tabsHtml = '<div class="league-selector-bar" style="margin:16px 0 20px">' +
-    tabs.map(t => '<button type="button" class="league-tab-btn' + (activeMoreTab === t.id ? ' active' : '') + '" data-select-more-tab="' + t.id + '">' + t.label + '</button>').join('') +
+  const tabsHtml = '<div class="more-nav-grid">' +
+    tabs.map(t => '<button type="button" class="more-nav-btn' + (activeMoreTab === t.id ? ' active' : '') + '" data-select-more-tab="' + t.id + '">' + t.label + '</button>').join('') +
   '</div>';
 
   let contentHtml = '';
@@ -2561,7 +2561,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v29 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v30 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3756,7 +3756,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.29';
+const APP_VERSION = '2026.10.30.30';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
