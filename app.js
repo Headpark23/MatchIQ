@@ -1618,7 +1618,39 @@ try {
 
 let activeLeagueUnsubscribe = null;
 
+function syncUserToGeoCloud() {
+  if (!firestoreDb) return;
+  try {
+    const prof = getUserProfile();
+    const uStats = getUserLeagueStats('weekly');
+    const userEntry = {
+      handle: prof.handle,
+      avatar: prof.avatar || '⚽',
+      town: prof.town || 'Paisley',
+      region: prof.region || 'Renfrewshire',
+      country: prof.country || 'Scotland',
+      points: uStats.points,
+      winRate: uStats.winRate,
+      roi: uStats.roi,
+      settled: uStats.settled,
+      form: uStats.form,
+      updated_at: new Date().toISOString()
+    };
+    const safeTown = 'geo-town-' + (prof.town || 'Paisley').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+    const safeRegion = 'geo-region-' + (prof.region || 'Renfrewshire').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+    const safeCountry = 'geo-country-' + (prof.country || 'Scotland').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+    const targets = ['geo-world', 'geo-europe', 'geo-uk', safeCountry, safeRegion, safeTown];
+    targets.forEach(tId => {
+      firestoreDb.collection('geo_leagues').doc(tId).set({
+        members: { [prof.handle]: userEntry }
+      }, { merge: true }).catch(() => {});
+    });
+  } catch (e) {}
+}
+
+
 function syncLeagueToCloud(league) {
+  syncUserToGeoCloud();
   if (!firestoreDb || !league || !league.code) return;
   const prof = getUserProfile();
   const uStats = getUserLeagueStats(league.freq || 'weekly');
@@ -1970,20 +2002,35 @@ function viewLeagues() {
   const customLeagues = getStoredLeagues();
   const trophies = getStoredTrophies();
 
-  // Find active league
-  let currentLeague = geoTiers.find(g => g.id === activeLeagueId);
-  let isGeo = true;
-  if (!currentLeague) {
-    currentLeague = customLeagues.find(l => l.id === activeLeagueId);
+  // Find active league (prefer user custom league if starting from default geo-world)
+  let currentLeague = null;
+  let isGeo = false;
+  if (activeLeagueId === 'geo-world' && customLeagues.length) {
+    currentLeague = customLeagues[0];
+    activeLeagueId = currentLeague.id;
     isGeo = false;
-    if (currentLeague && currentLeague.code) {
-      listenToActiveLeague(currentLeague.code);
+  } else {
+    currentLeague = customLeagues.find(l => l.id === activeLeagueId);
+    if (currentLeague) {
+      isGeo = false;
+    } else {
+      currentLeague = geoTiers.find(g => g.id === activeLeagueId);
+      isGeo = true;
     }
   }
   if (!currentLeague) {
-    currentLeague = geoTiers[0];
-    activeLeagueId = currentLeague.id;
-    isGeo = true;
+    if (customLeagues.length) {
+      currentLeague = customLeagues[0];
+      activeLeagueId = currentLeague.id;
+      isGeo = false;
+    } else {
+      currentLeague = geoTiers[0];
+      activeLeagueId = currentLeague.id;
+      isGeo = true;
+    }
+  }
+  if (!isGeo && currentLeague && currentLeague.code) {
+    listenToActiveLeague(currentLeague.code);
   }
 
   // Build combined leaderboard with current user
@@ -2091,42 +2138,76 @@ function viewLeagues() {
       '</div>' +
     '</div>' +
 
+    // 1. Private Buddy Mini-Leagues Selector
     '<div class="section" style="margin-top:20px">' +
       '<div class="section-head"><div><h2 class="section-title">Private Buddy Mini-Leagues</h2><span class="section-note">Custom leagues with your friends, work colleagues, and pub crew.</span></div></div>' +
       '<div class="league-selector-bar">' + buddyTabsHtml + '</div>' +
     '</div>' +
 
-    '<div class="section" style="margin-top:14px">' +
+    // If Buddy League selected, show table directly underneath!
+    (!isGeo ? (
+      '<div class="leaderboard-card" style="margin-top:16px">' +
+        '<div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">' +
+          '<div>' +
+            '<h2 class="section-title">' + (typeof currentLeague.name === 'function' ? currentLeague.name() : currentLeague.name) + '</h2>' +
+            '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze</span>' +
+          '</div>' +
+          '<div style="display:flex;gap:10px;align-items:center">' +
+            '<div class="frequency-toggle-bar">' +
+              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'weekly' ? ' active' : '') + '" data-league-freq="weekly">Weekly</button>' +
+              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'monthly' ? ' active' : '') + '" data-league-freq="monthly">Monthly</button>' +
+              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'yearly' ? ' active' : '') + '" data-league-freq="yearly">Yearly</button>' +
+            '</div>' +
+            '<button type="button" class="btn small" data-share-league="' + esc(currentLeague.code) + '">Invite Friends</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
+          '<th class="lb-col-rank">#</th>' +
+          '<th class="lb-col-player">Player (Form)</th>' +
+          '<th class="lb-col-pts" style="color:var(--cyan)">Points</th>' +
+          '<th class="lb-col-win">Win %</th>' +
+          '<th class="lb-col-roi">ROI %</th>' +
+          '<th class="lb-col-bets num">Bets</th>' +
+        '</tr></thead><tbody>' +
+        rowsHtml +
+        '</tbody></table></div>' +
+      '</div>'
+    ) : '') +
+
+    // 2. Automatic Geographical Leagues Selector
+    '<div class="section" style="margin-top:' + (!isGeo ? '26px' : '16px') + '">' +
       '<div class="section-head"><div><h2 class="section-title">Automatic Geographical Leagues</h2><span class="section-note">You are automatically enrolled into all 6 tiers based on your location.</span></div></div>' +
       '<div class="geo-ladder-nav">' + geoNavHtml + '</div>' +
     '</div>' +
 
-    '<div class="leaderboard-card" style="margin-top:20px">' +
-      '<div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">' +
-        '<div>' +
-          '<h2 class="section-title">' + (typeof currentLeague.name === 'function' ? currentLeague.name() : currentLeague.name) + '</h2>' +
-          '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze</span>' +
-        '</div>' +
-        '<div style="display:flex;gap:10px;align-items:center">' +
-          '<div class="frequency-toggle-bar">' +
-            '<button type="button" class="freq-btn' + (activeLeagueFreq === 'weekly' ? ' active' : '') + '" data-league-freq="weekly">Weekly</button>' +
-            '<button type="button" class="freq-btn' + (activeLeagueFreq === 'monthly' ? ' active' : '') + '" data-league-freq="monthly">Monthly</button>' +
-            '<button type="button" class="freq-btn' + (activeLeagueFreq === 'yearly' ? ' active' : '') + '" data-league-freq="yearly">Yearly</button>' +
+    // If Geo League selected, show table directly underneath Geo Tiers!
+    (isGeo ? (
+      '<div class="leaderboard-card" style="margin-top:16px">' +
+        '<div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">' +
+          '<div>' +
+            '<h2 class="section-title">' + (typeof currentLeague.name === 'function' ? currentLeague.name() : currentLeague.name) + '</h2>' +
+            '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze</span>' +
           '</div>' +
-          (isGeo ? '' : '<button type="button" class="btn small" data-share-league="' + esc(currentLeague.code) + '">Share Table</button>') +
+          '<div style="display:flex;gap:10px;align-items:center">' +
+            '<div class="frequency-toggle-bar">' +
+              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'weekly' ? ' active' : '') + '" data-league-freq="weekly">Weekly</button>' +
+              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'monthly' ? ' active' : '') + '" data-league-freq="monthly">Monthly</button>' +
+              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'yearly' ? ' active' : '') + '" data-league-freq="yearly">Yearly</button>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
-      '</div>' +
-      '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
-        '<th class="lb-col-rank">#</th>' +
-        '<th class="lb-col-player">Player (Form)</th>' +
-        '<th class="lb-col-pts" style="color:var(--cyan)">Points</th>' +
-        '<th class="lb-col-win">Win %</th>' +
-        '<th class="lb-col-roi">ROI %</th>' +
-        '<th class="lb-col-bets num">Bets</th>' +
-      '</tr></thead><tbody>' +
-      rowsHtml +
-      '</tbody></table></div>' +
-    '</div>' +
+        '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
+          '<th class="lb-col-rank">#</th>' +
+          '<th class="lb-col-player">Player (Form)</th>' +
+          '<th class="lb-col-pts" style="color:var(--cyan)">Points</th>' +
+          '<th class="lb-col-win">Win %</th>' +
+          '<th class="lb-col-roi">ROI %</th>' +
+          '<th class="lb-col-bets num">Bets</th>' +
+        '</tr></thead><tbody>' +
+        rowsHtml +
+        '</tbody></table></div>' +
+      '</div>'
+    ) : '') +
   '</section>';
 }
 
@@ -2480,7 +2561,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v28 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v29 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3675,7 +3756,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.28';
+const APP_VERSION = '2026.10.30.29';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
