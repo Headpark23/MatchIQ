@@ -3871,8 +3871,11 @@ document.addEventListener('click', event => {
   }
   else if (t.dataset.shareLeague !== undefined) {
     const code = t.dataset.shareLeague;
-    const shareUrl = 'https://betbuddyuk.uk/#join-league=' + encodeURIComponent(code);
-    const text = '🏆 Join my Bet Buddy League! Code: ' + code + '\nCompete with friends to see who is the champion bettor!';
+    const isGithub = window.location.origin.includes('github.io');
+    const baseUrl = isGithub ? 'https://headpark23.github.io/MatchIQ/' : 'https://betbuddyuk.uk/';
+    const shareUrl = baseUrl + '#join-league=' + encodeURIComponent(code);
+    const altUrl = isGithub ? 'https://betbuddyuk.uk/#join-league=' + encodeURIComponent(code) : 'https://headpark23.github.io/MatchIQ/#join-league=' + encodeURIComponent(code);
+    const text = '🏆 Join my Bet Buddy League! Code: ' + code + '\nJoin: ' + shareUrl + '\n(Unfiltered WiFi link: ' + altUrl + ')\nCompete with friends!';
     openUniversalShare({
       title: 'Join my Bet Buddy League (' + code + ')',
       text,
