@@ -3414,10 +3414,9 @@ function launchBookmakerSlip(bookieKey, slipIdx) {
     localStorage.setItem('betbuddy_telemetry_events_v1', JSON.stringify(stats));
   } catch (e) {}
 
-  toast('⚡ Slip copied! Opening ' + bName + ' betslip...');
-  setTimeout(() => {
-    window.open(targetUrl, '_blank', 'noopener,noreferrer');
-  }, 350);
+  toast('⚡ Slip copied! Launching ' + bName + ' app...');
+  // Direct location navigation triggers iOS/Android Universal Links straight into native app
+  window.location.href = targetUrl;
 }
 if (typeof window !== 'undefined') window.launchBookmakerSlip = launchBookmakerSlip;
 
@@ -4625,7 +4624,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = 'v51';
+const APP_VERSION = 'v52';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');

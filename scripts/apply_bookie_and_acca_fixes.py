@@ -553,3 +553,4 @@ if old_badge_in_bet in app:
 with open('app.js', 'w', encoding='utf-8') as f:
     f.write(app)
 print("Updated app.js successfully.")
+

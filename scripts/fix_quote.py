@@ -10,3 +10,4 @@ if bad in text:
 
 with open('app.js', 'w', encoding='utf-8') as f:
     f.write(text)
+
