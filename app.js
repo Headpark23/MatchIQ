@@ -1664,17 +1664,28 @@ function viewLeagues() {
     const rank = idx + 1;
     const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'standard';
     const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
-    const formHtml = (m.form || ['—']).map(f => f === '—' ? '<span class="dim">—</span>' : '<span class="form-chip ' + f.toLowerCase() + '">' + f + '</span>').join('');
+    const formChips = (m.form || ['—']).map(f => f === '—' ? '<span class="dim">—</span>' : '<span class="form-chip ' + f.toLowerCase() + '">' + f + '</span>').join('');
     const roiSign = m.roi > 0 ? '+' : '';
     const roiClass = m.roi > 0 ? 'pos' : m.roi < 0 ? 'neg' : '';
+    const formStr = (m.form || []).join(' · ');
+    const memberId = 'mem-form-' + idx;
+
     return '<tr class="lb-row' + (m.isYou ? ' user-row' : '') + '">' +
-      '<td><span class="rank-badge ' + rankClass + '">' + rankIcon + '</span></td>' +
-      '<td><b>' + esc(m.handle) + '</b>' + (m.isYou ? ' <span class="bento-badge emerald" style="font-size:10px;padding:1px 6px">YOU</span>' : '') + '</td>' +
-      '<td><div class="form-chips">' + formHtml + '</div></td>' +
-      '<td class="num mono">' + m.settled + '</td>' +
-      '<td><b style="color:var(--cyan);font-family:monospace;font-size:14px">' + m.points + '</b></td>' +
-      '<td><span class="win-pct-pill">' + m.winRate + '%</span></td>' +
-      '<td><span class="roi-pct-pill ' + roiClass + '">' + roiSign + m.roi + '%</span></td>' +
+      '<td class="lb-col-rank"><span class="rank-badge ' + rankClass + '">' + rankIcon + '</span></td>' +
+      '<td class="lb-col-player">' +
+        '<button type="button" class="lb-player-btn" onclick="toggleMemberForm(\'' + memberId + '\')" title="Click to view recent form">' +
+          '<b class="lb-handle">' + esc(m.handle) + '</b>' +
+          (m.isYou ? ' <span class="bento-badge emerald lb-you-tag">YOU</span>' : '') +
+          '<span class="lb-form-indicator" title="Form: ' + esc(formStr) + '">📊</span>' +
+        '</button>' +
+        '<div id="' + memberId + '" class="lb-member-form-drawer" hidden>' +
+          '<div class="lb-drawer-inner"><span class="lb-drawer-label">Form:</span><div class="form-chips">' + formChips + '</div></div>' +
+        '</div>' +
+      '</td>' +
+      '<td class="lb-col-pts"><b class="lb-pts-val">' + m.points + '</b></td>' +
+      '<td class="lb-col-win"><span class="win-pct-pill">' + m.winRate + '%</span></td>' +
+      '<td class="lb-col-roi"><span class="roi-pct-pill ' + roiClass + '">' + roiSign + m.roi + '%</span></td>' +
+      '<td class="lb-col-bets num mono">' + m.settled + '</td>' +
     '</tr>';
   }).join('');
 
@@ -1741,9 +1752,13 @@ function viewLeagues() {
           (isGeo ? '' : '<button type="button" class="btn small" data-share-league="' + esc(currentLeague.code) + '">Share Table</button>') +
         '</div>' +
       '</div>' +
-      '<div style="overflow-x:auto"><table class="lb-table"><thead><tr>' +
-        '<th>Rank</th><th>Player</th><th>Form</th><th class="num">Settled</th>' +
-        '<th style="color:var(--cyan)">Points (Odds)</th><th>Win Rate</th><th>ROI %</th>' +
+      '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
+        '<th class="lb-col-rank">#</th>' +
+        '<th class="lb-col-player">Player (Form)</th>' +
+        '<th class="lb-col-pts" style="color:var(--cyan)">Points</th>' +
+        '<th class="lb-col-win">Win %</th>' +
+        '<th class="lb-col-roi">ROI %</th>' +
+        '<th class="lb-col-bets num">Bets</th>' +
       '</tr></thead><tbody>' +
       rowsHtml +
       '</tbody></table></div>' +
@@ -2964,4 +2979,12 @@ if ('serviceWorker' in navigator) {
       });
     }).catch(() => {});
   });
+}
+
+
+function toggleMemberForm(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.hidden = !el.hidden;
+  }
 }
