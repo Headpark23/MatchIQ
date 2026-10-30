@@ -494,3 +494,4 @@ with open('styles.css', 'a', encoding='utf-8') as f:
     f.write('\n' + compact_css)
 
 print("Updated styles.css with compact dashboard layout.")
+

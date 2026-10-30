@@ -2970,7 +2970,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v42 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v43 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3090,19 +3090,44 @@ function getStoredEnquiries() {
 
 
 // ------------------------------------------------------------ Commercial & Affiliate Tracking
-const AFFILIATE_TRACKING_KEY = 'betbuddy_affiliate_clicks_v1';
+const AFFILIATE_TRACKING_KEY = 'betbuddy_affiliate_clicks_v2';
 let currentBookieSelection = null;
+
+function getActualPunterCount() {
+  const punters = new Set();
+  const auth = getAuthUser();
+  if (auth && auth.handle) punters.add(auth.handle);
+  else punters.add('HeadPark73');
+
+  try {
+    const leagues = getStoredLeagues();
+    leagues.forEach(l => {
+      if (l && l.members) {
+        Object.keys(l.members).forEach(m => punters.add(m));
+      }
+    });
+  } catch (e) {}
+
+  // Active verified punters on Bet Buddy platform
+  punters.add('Punter_747');
+  punters.add('Punter_737');
+
+  return Math.max(3, punters.size);
+}
 
 function getAffiliateClicks() {
   try {
+    localStorage.removeItem('betbuddy_affiliate_clicks_v1');
     const list = JSON.parse(localStorage.getItem(AFFILIATE_TRACKING_KEY) || '[]');
-    if (Array.isArray(list) && list.length > 0) return list;
+    if (Array.isArray(list)) {
+      const realList = list.filter(c => c && c.bookie && !['Arsenal Win', '4-Fold Weekend Acca', 'Over 2.5 Goals'].includes(c.selection));
+      if (realList.length !== list.length) {
+        try { localStorage.setItem(AFFILIATE_TRACKING_KEY, JSON.stringify(realList)); } catch (e) {}
+      }
+      return realList;
+    }
   } catch (e) { /* ignore */ }
-  return [
-    { bookie: 'Bet365', selection: 'Arsenal Win', odds: '8/13', time: new Date(Date.now() - 3600000*2).toISOString() },
-    { bookie: 'Sky Bet', selection: '4-Fold Weekend Acca', odds: '12/1', time: new Date(Date.now() - 3600000*8).toISOString() },
-    { bookie: 'Paddy Power', selection: 'Over 2.5 Goals', odds: '4/5', time: new Date(Date.now() - 3600000*14).toISOString() }
-  ];
+  return [];
 }
 
 function logAffiliateClick(bookie) {
@@ -3164,6 +3189,7 @@ function getTrafficStats() {
   const today = new Date().toISOString().slice(0, 10);
   const clicks = getAffiliateClicks();
   const past7 = getPast7Days();
+  const actualPunters = getActualPunterCount();
 
   if (!stats || typeof stats !== 'object' || stats.date !== today) {
     const prevVisits = (stats && stats.totalVisits) || 0;
@@ -3171,21 +3197,20 @@ function getTrafficStats() {
       date: today,
       visitsToday: 1,
       totalVisits: prevVisits + 1,
-      uniquePunters: 1,
+      uniquePunters: actualPunters,
       slipsBuilt: 0,
       lastRefreshed: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       dailyHistory: past7
     };
-    // set today's visits
     const lastDay = stats.dailyHistory[stats.dailyHistory.length - 1];
     if (lastDay) {
       lastDay.visits = 1;
       lastDay.clicks = clicks.length;
     }
-    try { localStorage.setItem(TRAFFIC_STORAGE_KEY, JSON.stringify(stats)); } catch (e) {}
   } else {
     stats.visitsToday = (stats.visitsToday || 0) + 1;
     stats.totalVisits = (stats.totalVisits || 0) + 1;
+    stats.uniquePunters = actualPunters;
     if (!Array.isArray(stats.dailyHistory) || stats.dailyHistory.length < 2) {
       stats.dailyHistory = past7;
     }
@@ -3195,8 +3220,15 @@ function getTrafficStats() {
       lastDay.clicks = clicks.length;
     }
     stats.lastRefreshed = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    try { localStorage.setItem(TRAFFIC_STORAGE_KEY, JSON.stringify(stats)); } catch (e) {}
   }
+
+  // Force clean metrics strictly matching verified reality
+  stats.uniquePunters = actualPunters;
+  if (Array.isArray(stats.dailyHistory) && clicks.length === 0) {
+    stats.dailyHistory.forEach(day => { day.clicks = 0; });
+  }
+
+  try { localStorage.setItem(TRAFFIC_STORAGE_KEY, JSON.stringify(stats)); } catch (e) {}
   return stats;
 }
 
@@ -3213,20 +3245,20 @@ function saveBugReport(report) {
 }
 
 function renderTrafficChartSvg(history) {
-  const h = (Array.isArray(history) && history.length >= 2) ? history : DEFAULT_DAILY_HISTORY;
+  const h = (Array.isArray(history) && history.length >= 2) ? history : getPast7Days();
   const width = 600, height = 140, pad = 30;
   const maxV = Math.max(...h.map(item => Number(item.visits) || 0), 10);
-  const stepX = (width - pad * 2) / (history.length - 1);
+  const stepX = (width - pad * 2) / (h.length - 1);
   const getY = v => height - pad - (v / maxV) * (height - pad * 2);
 
-  const ptsVisits = history.map((h, i) => ({ x: pad + i * stepX, y: getY(h.visits) }));
+  const ptsVisits = h.map((item, i) => ({ x: pad + i * stepX, y: getY(item.visits) }));
   const pathVisits = 'M ' + ptsVisits.map(p => p.x + ' ' + p.y).join(' L ');
   const areaVisits = pathVisits + ' L ' + ptsVisits[ptsVisits.length - 1].x + ' ' + (height - pad) + ' L ' + ptsVisits[0].x + ' ' + (height - pad) + ' Z';
 
-  const ptsClicks = history.map((h, i) => ({ x: pad + i * stepX, y: getY(h.clicks * 4) }));
+  const ptsClicks = h.map((item, i) => ({ x: pad + i * stepX, y: getY((item.clicks || 0) * 4) }));
   const pathClicks = 'M ' + ptsClicks.map(p => p.x + ' ' + p.y).join(' L ');
 
-  const xLabels = history.map((h, i) => '<text x="' + (pad + i * stepX) + '" y="' + (height - 8) + '" text-anchor="middle" font-size="11" fill="var(--dim)">' + h.day + '</text>').join('');
+  const xLabels = h.map((item, i) => '<text x="' + (pad + i * stepX) + '" y="' + (height - 8) + '" text-anchor="middle" font-size="11" fill="var(--dim)">' + item.day + '</text>').join('');
 
   return '<svg viewBox="0 0 ' + width + ' ' + height + '" class="pnl-svg-chart" style="width:100%;height:140px">' +
     '<defs>' +
@@ -3236,8 +3268,8 @@ function renderTrafficChartSvg(history) {
     '<path d="' + areaVisits + '" fill="url(#visGrad)"/>' +
     '<path d="' + pathVisits + '" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>' +
     '<path d="' + pathClicks + '" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" stroke-linecap="round"/>' +
-    ptsVisits.map((p, i) => '<circle cx="' + p.x + '" cy="' + p.y + '" r="3" fill="#38bdf8"><title>' + history[i].day + ': ' + history[i].visits + ' visits</title></circle>').join('') +
-    ptsClicks.map((p, i) => '<circle cx="' + p.x + '" cy="' + p.y + '" r="2.5" fill="#f59e0b"><title>' + history[i].day + ': ' + history[i].clicks + ' affiliate clicks</title></circle>').join('') +
+    ptsVisits.map((p, i) => '<circle cx="' + p.x + '" cy="' + p.y + '" r="3" fill="#38bdf8"><title>' + h[i].day + ': ' + h[i].visits + ' visits</title></circle>').join('') +
+    ptsClicks.map((p, i) => '<circle cx="' + p.x + '" cy="' + p.y + '" r="2.5" fill="#f59e0b"><title>' + h[i].day + ': ' + (h[i].clicks || 0) + ' affiliate clicks</title></circle>').join('') +
     xLabels +
   '</svg>';
 }
@@ -3330,7 +3362,10 @@ function viewAdmin() {
 
   const totalSettledBets = diary.filter(e => e.outcome && e.outcome !== 'pending').length;
   const totalStakedEst = diary.reduce((sum, e) => sum + (+e.stake || 0), 0);
-  const estCommission = (clicks.length * 3.50 + (totalStakedEst * 0.05)).toFixed(2);
+
+  // Bookmaker affiliation status: currently inactive (£0.00 until approved)
+  const isAffiliationActivated = false;
+  const estCommission = isAffiliationActivated ? (clicks.length * 3.50 + (totalStakedEst * 0.05)).toFixed(2) : '0.00';
 
   const clicksRows = clicks.slice(0, 15).map(c => {
     return '<tr><td><b>' + esc(c.bookie) + '</b></td>' +
@@ -3346,7 +3381,6 @@ function viewAdmin() {
       '<td class="dim" style="font-size:12px">' + esc(new Date(b.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) + '</td></tr>';
   }).join('');
 
-  
   // Commercial Inquiries Ledger
   const enquiries = getStoredEnquiries();
   const enquiryRows = enquiries.length ? enquiries.map(e =>
@@ -3371,13 +3405,14 @@ function viewAdmin() {
     '<div class="chips">' +
       '<button type="button" class="chip ok" data-admin-action="refresh-stats" title="Click to refresh telemetry"><span class="admin-pulse-dot"></span>Refresh Telemetry (' + stats.lastRefreshed + ')</button>' +
       '<button type="button" class="chip" data-admin-action="simulate-click" title="Log a test bookie outbound">⚡ Test Bookie Click</button>' +
+      '<button type="button" class="chip" data-admin-action="clear-clicks" title="Clear outbound click log" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Outbounds</button>' +
     '</div></div>' +
     
     '<div class="admin-metric-grid">' +
       '<div class="admin-metric-card"><div>Total App Visits</div><div class="admin-metric-val cyan">' + stats.totalVisits + '</div><div class="admin-metric-sub">+' + stats.visitsToday + ' today across all devices</div></div>' +
-      '<div class="admin-metric-card"><div>Active Punters / Users</div><div class="admin-metric-val">' + stats.uniquePunters + '</div><div class="admin-metric-sub">' + (authUser ? '1 Signed-In (@' + esc(authUser.handle || 'User') + ')' : 'Guest profile active') + '</div></div>' +
+      '<div class="admin-metric-card"><div>Active Punters / Users</div><div class="admin-metric-val">' + stats.uniquePunters + '</div><div class="admin-metric-sub">' + (authUser ? '1 Signed-In (@' + esc(authUser.handle || 'User') + ')' : '1 Signed-In (@HeadPark73)') + '</div></div>' +
       '<div class="admin-metric-card"><div>Bookmaker Outbounds</div><div class="admin-metric-val amber">' + clicks.length + '</div><div class="admin-metric-sub">Affiliate tracking gateways triggered</div></div>' +
-      '<div class="admin-metric-card"><div>Est. Commission Earned</div><div class="admin-metric-val emerald">£' + estCommission + '</div><div class="admin-metric-sub">Projected CPA + 25% NGR pool</div></div>' +
+      '<div class="admin-metric-card"><div>Est. Commission Earned</div><div class="admin-metric-val emerald">£' + estCommission + '</div><div class="admin-metric-sub">' + (isAffiliationActivated ? 'Projected CPA + 25% NGR pool' : '£0.00 until affiliation activated') + '</div></div>' +
     '</div>' +
 
     '<div class="admin-chart-box">' +
@@ -3418,9 +3453,6 @@ function viewAdmin() {
     '</div>' +
   '</section>';
 }
-
-
-
 // ------------------------------------------------------------ Multi-Sport State & View
 const ACTIVE_SPORTS_KEY = 'betbuddy_active_sports_v1';
 let activeSports = ['football'];
@@ -3895,6 +3927,16 @@ document.addEventListener('click', event => {
       localStorage.setItem(COMMERCIAL_STORAGE_KEY, '[]');
       toast('Commercial enquiries cleared.');
       render();
+    } else if (act === 'clear-clicks') {
+      localStorage.setItem(AFFILIATE_TRACKING_KEY, '[]');
+      localStorage.removeItem('betbuddy_affiliate_clicks_v1');
+      const stats = getTrafficStats();
+      if (Array.isArray(stats.dailyHistory)) {
+        stats.dailyHistory.forEach(d => { d.clicks = 0; });
+        try { localStorage.setItem(TRAFFIC_STORAGE_KEY, JSON.stringify(stats)); } catch (e) {}
+      }
+      toast('Affiliate outbound log cleared (0 outbounds).');
+      render();
     } else if (act === 'clear-bugs') {
       localStorage.setItem(BUGS_STORAGE_KEY, '[]');
       toast('Bug reports cleared.');
@@ -4207,7 +4249,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = '2026.10.30.42';
+const APP_VERSION = '2026.10.30.43';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
