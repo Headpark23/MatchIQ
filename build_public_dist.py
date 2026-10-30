@@ -68,6 +68,8 @@ def build():
     for fname in ALLOWLIST_FILES:
         src = ROOT / fname
         if not src.exists():
+            if fname == "CNAME":
+                continue
             raise FileNotFoundError(f"Missing required public file: {fname}")
         shutil.copy2(src, DIST / fname)
         copied.append(fname)

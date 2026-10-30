@@ -36,3 +36,4 @@ with open('styles.css', 'w', encoding='utf-8') as f:
     f.write(css)
 
 print('Updated styles.css with copyright, bug button and chart styles')
+
