@@ -9,7 +9,7 @@
 <title>Bet Buddy</title>
 <meta name="ga-site-verification" content="efAD1_u0oz693jUZ51ek49c-">
 <meta name="description" content="Premier League predictions with honest evidence, a permanent track record and a private Bet Diary.">
-<link rel="manifest" href="manifest.json?v=46">
+<link rel="manifest" href="manifest.json?v=47">
 <meta name="theme-color" content="#050b14">
 <meta name="application-name" content="Bet Buddy">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,18 +17,18 @@
 <meta name="apple-mobile-web-app-title" content="Bet Buddy">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="msapplication-TileColor" content="#060d19">
-<meta name="msapplication-TileImage" content="assets/icon-192.png?v=46">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=46">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=46">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png?v=46">
-<link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png?v=46">
+<meta name="msapplication-TileImage" content="assets/icon-192.png?v=47">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=47">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=47">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png?v=47">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png?v=47">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
 <script>
   // Instant App & PWA Upgrade Sync + Landing Enforcement
   (function() {
-    var APP_VER = '2026.10.30.46';
+    var APP_VER = '2026.10.30.47';
     try {
       var prevVer = localStorage.getItem('betbuddy_app_version');
       if (prevVer !== APP_VER) {
@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="styles.css?v=46">
+<link rel="stylesheet" href="styles.css?v=47">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -66,7 +66,7 @@
 <header class="app-header">
   <div class="app-header-inner">
     <a class="brand" href="#/" aria-label="Bet Buddy home">
-      <img src="assets/icon-192.png?v=46" width="34" height="34" alt="Bet Buddy Sports Intelligence" class="brand-logo-img">
+      <img src="assets/icon-192.png?v=47" width="34" height="34" alt="Bet Buddy Sports Intelligence" class="brand-logo-img">
       <span class="brand-word">Bet<b>Buddy</b></span>
     </a>
     <div class="header-tools">
@@ -215,7 +215,7 @@
 
 <script src="market_calculations.js?v=43"></script>
 <script src="bet_builder.js?v=43"></script>
-<script src="app.js?v=46"></script>
+<script src="app.js?v=47"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>
@@ -380,7 +380,7 @@
   <div class="modal install-modal-box" role="dialog" aria-modal="true" aria-labelledby="install-modal-title">
     <div class="modal-head">
       <div class="install-head-badge">
-        <img src="assets/icon-192.png?v=46" alt="Bet Buddy Sports Intelligence" width="38" height="38" class="install-logo-thumb">
+        <img src="assets/icon-192.png?v=47" alt="Bet Buddy Sports Intelligence" width="38" height="38" class="install-logo-thumb">
         <div>
           <h2 id="install-modal-title" style="margin:0;font-size:1.15rem">Download Bet Buddy</h2>
           <span class="text-sm muted">Fast, offline-ready &amp; zero app store hassle</span>
@@ -447,7 +447,13 @@
           <div><strong>William Hill</strong><span class="text-sm muted">Epic Odds & traditional UK betting shop</span></div>
           <span class="bookie-go-arrow">›</span>
         </a>
+        <a href="https://www.leovegas.com/en-gb/betting#search/football" target="_blank" rel="noopener noreferrer" class="bookie-choice-btn" data-bookie-click="LeoVegas">
+          <span class="bookie-tag" style="background:#ff6600;color:#fff;font-weight:700;">LV</span>
+          <div><strong>LeoVegas Sport</strong><span class="text-sm muted">Top mobile betting app & fast acca builder</span></div>
+          <span class="bookie-go-arrow">›</span>
+        </a>
       </div>
+      <div id="bookie-legs-drawer" hidden></div>
       <p class="section-note" style="margin-top:14px;font-size:11.5px;color:var(--dim)">18+ GambleAware.org. Bet Buddy routes via verified bookmaker gateways. We may earn commission at zero extra cost to you.</p>
     </div>
   </div>

@@ -870,6 +870,19 @@ function slipCard(slip, idx, stake) {
     '<div class="slip-sum"><span>Stake <b class="mono">' + m(stake) + '</b></span><span>Returns <b class="mono">' + m(slip.ret) + '</b></span><span>Profit <b class="mono">' + m(slip.profit) + '</b></span></div>' +
     (slip.chance < 0.05 ? '<p class="slip-warn">Long shot: roughly 1 in ' + Math.round(1 / slip.chance) + '. Most slips like this lose.</p>' : '') +
     (slip.estimated ? '<p class="slip-note">Some prices are estimates, not live bookmaker prices. The price you are actually offered will differ, so the profit will too.</p>' : '') +
+    '<div class="slip-bookie-bar">' +
+      '<div class="slip-bookie-header">' +
+        '<span class="slip-bookie-bolt">⚡</span>' +
+        '<span class="slip-bookie-title">1-Click Load into Bookmaker:</span>' +
+        '<span class="slip-bookie-hint">Auto-copies slip & opens match search</span>' +
+      '</div>' +
+      '<div class="slip-bookie-buttons" role="group" aria-label="1-Click bookmaker launcher">' +
+        '<button type="button" class="bookie-pill b365" data-launch-bookie="bet365" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#10b981;"></span> Bet365 ↗</button>' +
+        '<button type="button" class="bookie-pill sky" data-launch-bookie="skybet" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#38bdf8;"></span> Sky Bet ↗</button>' +
+        '<button type="button" class="bookie-pill lv" data-launch-bookie="leovegas" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#f97316;"></span> LeoVegas ↗</button>' +
+        '<button type="button" class="bookie-pill bf" data-launch-bookie="betfair" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#fbbf24;"></span> Betfair ↗</button>' +
+      '</div>' +
+    '</div>' +
     '<div class="btn-row">' +
       '<button type="button" class="btn' + (primary ? ' primary' : '') + '" data-slip="' + idx + '">Save slip to Bet Diary</button>' +
       '<button type="button" class="btn small" data-share-slip="' + idx + '" title="Copy formatted slip to clipboard or share with friends"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share / Copy</button>' +
@@ -3249,6 +3262,88 @@ function logAffiliateClick(bookie) {
   try { localStorage.setItem(AFFILIATE_TRACKING_KEY, JSON.stringify(list.slice(0, 50))); } catch (e) { /* ignore */ }
 }
 
+
+// ------------------------------------------------------------ Phase 1: Smart Direct Bookmaker Deep Links
+function getBookieSearchQuery(betData) {
+  if (!betData) return 'Football';
+  if (betData.legs && betData.legs.length > 0) {
+    const firstLeg = betData.legs[0];
+    if (firstLeg.fixture) {
+      return (firstLeg.fixture.home + ' ' + firstLeg.fixture.away).trim();
+    }
+  }
+  if (betData.fixture) {
+    return (betData.fixture.home + ' ' + betData.fixture.away).trim();
+  }
+  return (betData.selection || 'Football').split(':')[0].replace(/ v /i, ' ').trim();
+}
+
+function getBookieDeepLinks(query) {
+  const enc = encodeURIComponent(query);
+  return {
+    bet365: 'https://www.bet365.com/#/AX/K^' + enc + '/',
+    skybet: 'https://m.skybet.com/search?q=' + enc,
+    paddypower: 'https://www.paddypower.com/search?q=' + enc,
+    betfair: 'https://www.betfair.com/sport/football?searchTerm=' + enc,
+    leovegas: 'https://www.leovegas.com/en-gb/betting#search/' + enc
+  };
+}
+
+
+// ------------------------------------------------------------ Phase 2 & 3: 1-Click Bookmaker Launcher
+function launchBookmakerSlip(bookieKey, slipIdx) {
+  const r = builderResult;
+  let slip = null;
+  if (slipIdx === 'custom') {
+    if (customAccaLegs.length === 0) return;
+    const stake = (builderState && builderState.stake) || 10;
+    const odds = customAccaLegs.reduce((t, l) => t * (l.odds || 2.0), 1);
+    slip = { legs: customAccaLegs, stake, odds, ret: stake * odds };
+  } else {
+    slip = r && r.slips && r.slips[+slipIdx];
+  }
+  if (!slip) return;
+
+  const bookieNames = {
+    bet365: 'bet365',
+    skybet: 'Sky Bet',
+    leovegas: 'LeoVegas',
+    betfair: 'Betfair',
+    paddypower: 'Paddy Power'
+  };
+  const bName = bookieNames[bookieKey] || 'Bookmaker';
+
+  // Format slip payload for bookmaker quick-slip paste
+  const textLines = [
+    '🎯 Bet Buddy ' + slip.legs.length + '-Leg Acca (' + fmtOdds(slip.odds) + ')',
+    ...slip.legs.map((l, i) => (i + 1) + '. ' + l.fixture.home + ' v ' + l.fixture.away + ': ' + l.label + ' (' + (l.fractional || fmtOdds(l.odds)) + ')'),
+    'Stake: £' + slip.stake + ' · Target Return: £' + (slip.ret ? slip.ret.toFixed(2) : (slip.stake * slip.odds).toFixed(2))
+  ];
+  const copyStr = textLines.join('\n');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(copyStr).catch(() => {});
+  }
+
+  // Generate deep-link for this bookmaker
+  const query = getBookieSearchQuery({ legs: slip.legs });
+  const links = getBookieDeepLinks(query);
+  const targetUrl = links[bookieKey] || links.skybet;
+
+  // Track telemetry
+  try {
+    const stats = getTrafficStats();
+    stats.push({ type: 'bookie_click', bookie: bName, ts: Date.now() });
+    localStorage.setItem('betbuddy_telemetry_events_v1', JSON.stringify(stats));
+  } catch (e) {}
+
+  toast('⚡ Slip copied! Opening ' + bName + ' betslip...');
+  setTimeout(() => {
+    window.open(targetUrl, '_blank', 'noopener,noreferrer');
+  }, 350);
+}
+if (typeof window !== 'undefined') window.launchBookmakerSlip = launchBookmakerSlip;
+
 function openBookieModal(betData) {
   currentBookieSelection = betData || { selection: 'Bet Buddy Selection', fair: 'Best Price' };
   const modal = $('bookie-modal');
@@ -3258,10 +3353,56 @@ function openBookieModal(betData) {
   if (labelEl) labelEl.textContent = currentBookieSelection.selection;
   if (oddsEl) oddsEl.textContent = currentBookieSelection.fair ? 'Odds: ' + currentBookieSelection.fair : '';
   
-  const copyStr = currentBookieSelection.selection + (currentBookieSelection.fair ? ' @ ' + currentBookieSelection.fair : '');
+  // Format clipboard payload for bookie slip pasting
+  let copyStr = currentBookieSelection.selection;
+  if (currentBookieSelection.legs && currentBookieSelection.legs.length > 0) {
+    copyStr = currentBookieSelection.legs.map((l, i) => (i + 1) + '. ' + l.fixture.home + ' v ' + l.fixture.away + ': ' + l.label + ' (' + (l.fractional || fmtOdds(l.odds)) + ')').join('\n');
+  } else if (currentBookieSelection.fair) {
+    copyStr += ' @ ' + currentBookieSelection.fair;
+  }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(copyStr).catch(() => {});
   }
+
+  // Phase 1: Dynamic Match Deep-Links on all bookie buttons
+  const query = getBookieSearchQuery(currentBookieSelection);
+  const links = getBookieDeepLinks(query);
+  const b365Btn = modal.querySelector('[data-bookie-click="Bet365"]');
+  if (b365Btn) b365Btn.href = links.bet365;
+  const skyBtn = modal.querySelector('[data-bookie-click="Sky Bet"]');
+  if (skyBtn) skyBtn.href = links.skybet;
+  const ppBtn = modal.querySelector('[data-bookie-click="Paddy Power"]');
+  if (ppBtn) ppBtn.href = links.paddypower;
+  const bfBtn = modal.querySelector('[data-bookie-click="Betfair"]');
+  if (bfBtn) bfBtn.href = links.betfair;
+  const lvBtn = modal.querySelector('[data-bookie-click="LeoVegas"]');
+  if (lvBtn) lvBtn.href = links.leovegas;
+
+  // Render individual leg direct match launchers if this is an Acca
+  const legDrawer = $('bookie-legs-drawer');
+  if (legDrawer) {
+    if (currentBookieSelection.legs && currentBookieSelection.legs.length > 0) {
+      legDrawer.innerHTML = '<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">' +
+        '<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--pick);letter-spacing:0.08em;margin-bottom:8px;">Direct Match Launchers (' + currentBookieSelection.legs.length + ' legs)</div>' +
+        currentBookieSelection.legs.map((l, i) => {
+          const lQuery = (l.fixture.home + ' ' + l.fixture.away).trim();
+          const lLinks = getBookieDeepLinks(lQuery);
+          return '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12.5px;">' +
+            '<span style="font-weight:600;color:#fff;">' + (i + 1) + '. ' + esc(l.fixture.home) + ' v ' + esc(l.fixture.away) + '<small style="display:block;color:var(--soft);">' + esc(l.label) + ' (' + esc(l.fractional || fmtOdds(l.odds)) + ')</small></span>' +
+            '<span style="display:flex;gap:4px;flex-shrink:0;">' +
+              '<a href="' + lLinks.skybet + '" target="_blank" rel="noopener noreferrer" class="btn small" style="padding:2px 8px;font-size:11px;background:rgba(56,189,248,0.15);border:1px solid var(--cyan);color:#38bdf8;">SkyBet ↗</a>' +
+              '<a href="' + lLinks.bet365 + '" target="_blank" rel="noopener noreferrer" class="btn small" style="padding:2px 8px;font-size:11px;background:rgba(16,185,129,0.15);border:1px solid var(--emerald);color:#34d399;">Bet365 ↗</a>' +
+            '</span>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+      legDrawer.hidden = false;
+    } else {
+      legDrawer.innerHTML = '';
+      legDrawer.hidden = true;
+    }
+  }
+
   modal.hidden = false;
 }
 
@@ -4072,7 +4213,10 @@ document.addEventListener('click', event => {
     const slip = r && r.slips && r.slips[+t.dataset.partnerSlip];
     openBookieModal({
       selection: slip ? slip.legs.map(l => l.fixture.home + ' v ' + l.fixture.away + ': ' + l.label).join(' + ') : 'Acca Slip',
-      fair: slip ? fmtOdds(slip.odds) : ''
+      fair: slip ? fmtOdds(slip.odds) : '',
+      legs: slip ? slip.legs : [],
+      stake: slip ? slip.stake : 10,
+      odds: slip ? slip.odds : 1
     });
     return;
   }
@@ -4154,6 +4298,10 @@ document.addEventListener('click', event => {
   else if (t.dataset.partnerSlip !== undefined) {
     shareAccaSlip(+t.dataset.partnerSlip);
     toast('Acca copied! Ready to paste into Bet365, SkyBet or Betfair.');
+  }
+  else if (t.closest('[data-launch-bookie]')) {
+    const btn = t.closest('[data-launch-bookie]');
+    launchBookmakerSlip(btn.dataset.launchBookie, btn.dataset.slipIdx);
   }
   else if (t.closest('[data-timing]')) {
     const timingBtn = t.closest('[data-timing]');

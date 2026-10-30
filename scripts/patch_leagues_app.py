@@ -86,3 +86,4 @@ if "'Celtic'" not in app_js:
 with open('app.js', 'w', encoding='utf-8') as f:
     f.write(app_js)
 print("Updated app.js with 13 leagues and clubs")
+
