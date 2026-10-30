@@ -1502,6 +1502,11 @@ function saveStoredDiary(entries) {
   if (diaryReadFailed) throw new Error('Bet Diary read failed; refusing to overwrite existing data.');
   calc.saveBetDiary(localStorage, DIARY_STORAGE_KEY, entries);
   updateDiaryCount();
+  try {
+    if (typeof syncLeagueToCloud === 'function') {
+      getStoredLeagues().forEach(l => syncLeagueToCloud(l));
+    }
+  } catch (e) {}
 }
 function updateDiaryCount() { const n = getStoredDiary().length; $('diary-count').textContent = n ? String(n) : ''; }
 const money = v => '£' + Math.abs(v).toFixed(2);
@@ -1588,10 +1593,136 @@ function diaryPerformanceChart(diary) {
 // ------------------------------------------------------------ Phase 2: Buddy Leagues & User Profile
 const USER_PROFILE_KEY = 'betbuddy_user_profile_v1';
 const LEAGUES_STORAGE_KEY = 'betbuddy_leagues_v1';
+
+// ------------------------------------------------------------ Firebase Firestore Cloud Sync
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDPTMcwfVP6v8Y1jsrnUqdM5EeIMwXKxw4",
+  authDomain: "betbuddyuk.firebaseapp.com",
+  projectId: "betbuddyuk",
+  storageBucket: "betbuddyuk.firebasestorage.app",
+  messagingSenderId: "875941513115",
+  appId: "1:875941513115:web:c5366ae899be00547c833e",
+  measurementId: "G-K1N7N0G8NF"
+};
+
+let firestoreDb = null;
+try {
+  if (typeof firebase !== 'undefined' && firebase.initializeApp) {
+    if (!firebase.apps || !firebase.apps.length) {
+      firebase.initializeApp(FIREBASE_CONFIG);
+    }
+    firestoreDb = firebase.firestore();
+  }
+} catch (e) {
+  console.warn('Firebase init notice:', e);
+}
+
+let activeLeagueUnsubscribe = null;
+
+function syncLeagueToCloud(league) {
+  if (!firestoreDb || !league || !league.code) return;
+  const prof = getUserProfile();
+  const uStats = getUserLeagueStats(league.freq || 'weekly');
+  const userEntry = {
+    handle: prof.handle,
+    avatar: prof.avatar || '⚽',
+    points: uStats.points,
+    winRate: uStats.winRate,
+    roi: uStats.roi,
+    settled: uStats.settled,
+    form: uStats.form,
+    updated_at: new Date().toISOString()
+  };
+  firestoreDb.collection('leagues').doc(league.code).set({
+    name: league.name,
+    icon: league.icon || '⚽',
+    freq: league.freq || 'weekly',
+    code: league.code,
+    created_at: league.created_at || new Date().toISOString().slice(0, 10),
+    members: {
+      [prof.handle]: userEntry
+    }
+  }, { merge: true }).catch(err => console.warn('Cloud league sync notice:', err));
+}
+
+function listenToActiveLeague(code) {
+  if (!firestoreDb || !code) return;
+  if (activeLeagueUnsubscribe) {
+    try { activeLeagueUnsubscribe(); } catch (e) {}
+    activeLeagueUnsubscribe = null;
+  }
+  try {
+    activeLeagueUnsubscribe = firestoreDb.collection('leagues').doc(code).onSnapshot(doc => {
+      if (!doc || !doc.exists) return;
+      const data = doc.data();
+      const list = getStoredLeagues();
+      const target = list.find(l => l.code === code);
+      if (target) {
+        if (data.name) target.name = data.name;
+        if (data.icon) target.icon = data.icon;
+        if (data.members) {
+          const prof = getUserProfile();
+          // Store remote members (excluding current user to avoid duplicate)
+          target.members = Object.values(data.members).filter(m => m.handle !== prof.handle);
+        }
+        saveStoredLeagues(list);
+        if (activeLeagueId === target.id) {
+          render();
+        }
+      }
+    }, err => console.warn('League listener notice:', err));
+  } catch (e) {
+    console.warn('Listener error:', e);
+  }
+}
+
+async function joinCloudLeague(code) {
+  if (!code) return;
+  const list = getStoredLeagues();
+  let league = list.find(l => l.code === code);
+  if (!league) {
+    league = {
+      id: 'league-' + Date.now(),
+      name: 'Buddy League (' + code + ')',
+      icon: '⚽',
+      freq: 'weekly',
+      code: code,
+      created_at: new Date().toISOString().slice(0, 10),
+      members: []
+    };
+    list.push(league);
+    saveStoredLeagues(list);
+  }
+  activeLeagueId = league.id;
+
+  if (firestoreDb) {
+    try {
+      const snap = await firestoreDb.collection('leagues').doc(code).get();
+      if (snap.exists) {
+        const data = snap.data();
+        if (data.name) league.name = data.name;
+        if (data.icon) league.icon = data.icon;
+        if (data.freq) league.freq = data.freq;
+        const prof = getUserProfile();
+        if (data.members) {
+          league.members = Object.values(data.members).filter(m => m.handle !== prof.handle);
+        }
+        saveStoredLeagues(list);
+        syncLeagueToCloud(league);
+        listenToActiveLeague(code);
+      }
+    } catch (e) {
+      console.warn('Join cloud fetch notice:', e);
+    }
+  }
+  render();
+}
+
 const TROPHY_CABINET_KEY = 'betbuddy_trophy_cabinet_v1';
 
 let activeLeagueId = 'geo-world';
 let activeLeagueFreq = 'weekly';
+let activeMoreTab = 'account';
 
 function getUserProfile() {
   try {
@@ -1846,6 +1977,9 @@ function viewLeagues() {
   if (!currentLeague) {
     currentLeague = customLeagues.find(l => l.id === activeLeagueId);
     isGeo = false;
+    if (currentLeague && currentLeague.code) {
+      listenToActiveLeague(currentLeague.code);
+    }
   }
   if (!currentLeague) {
     currentLeague = geoTiers[0];
@@ -1954,7 +2088,7 @@ function viewLeagues() {
         '<span style="font-size:11px;color:var(--dim);margin-left:4px">(' + esc(prof.town) + ', ' + esc(prof.region) + ')</span></div>' +
       '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">' +
         '<span class="dim" style="font-size:13px">Your Live Form: <b style="color:var(--cyan)">' + uStats.points + ' Pts</b> · Win: <b class="win-pct-pill">' + uStats.winRate + '%</b> · ROI: <b class="roi-pct-pill ' + (uStats.roi >= 0 ? 'pos' : 'neg') + '">' + (uStats.roi > 0 ? '+' : '') + uStats.roi + '%</b></span>' +
-        '<button type="button" class="btn small" data-open-handle-modal>Edit Username &amp; Location</button>' +
+        '<a href="#/more" data-select-more-tab="account" class="btn small" style="text-decoration:none">Edit in More &rarr;</a>' +
       '</div>' +
     '</div>' +
 
@@ -2271,35 +2405,130 @@ const feedbackState = { understand: 0, convincing: 0, useful: '', chips: new Set
 function getStoredFeedback() { try { const v = JSON.parse(localStorage.getItem(FEEDBACK_STORAGE_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
 
 function viewMore() {
+  const prof = getUserProfile();
   const s = DATA.status || {};
   const sourceRows = Object.entries(s.sources || {}).map(([name, src]) => '<tr><td>' + esc(src.label || name) + '</td><td>' + (src.ok ? '<span class="badge validated">Responding</span>' : '<span class="badge provisional">' + esc(/TOKEN not configured/.test(src.note || '') ? 'Optional: needs a free API token' : src.note || 'Not used') + '</span>') + '</td><td class="num">' + (src.matches != null ? src.matches : '') + '</td><td class="num">' + (src.results != null ? src.results : '') + '</td></tr>').join('');
   const fb = getStoredFeedback();
   const stars = (q, label) => '<div class="field"><span class="lbl">' + label + '</span><div class="stars">' + [1, 2, 3, 4, 5].map(n => '<button type="button" data-star="' + q + '" data-value="' + n + '" aria-pressed="' + (feedbackState[q] === n) + '">' + n + '</button>').join('') + '</div></div>';
-  return '<section class="view"><h1 class="page-title">Data, methods & feedback</h1>' +
-    '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Update status</h2><div class="chips" style="margin:10px 0">' + freshnessChips() + '</div>' +
+
+  const tabs = [
+    { id: 'account', label: '👤 Account & Settings' },
+    { id: 'data', label: '📊 Data & Methods' },
+    { id: 'feedback', label: '💬 Feedback' },
+    { id: 'commercial', label: '💼 Commercial & Sponsors' }
+  ];
+
+  const tabsHtml = '<div class="league-selector-bar" style="margin:16px 0 20px">' +
+    tabs.map(t => '<button type="button" class="league-tab-btn' + (activeMoreTab === t.id ? ' active' : '') + '" data-select-more-tab="' + t.id + '">' + t.label + '</button>').join('') +
+  '</div>';
+
+  let contentHtml = '';
+
+  if (activeMoreTab === 'account') {
+    contentHtml = '<div class="section card">' +
+      '<div class="section-head">' +
+        '<div>' +
+          '<h2 class="section-title">Player Profile &amp; Account</h2>' +
+          '<p class="section-note">Your custom gamertag, location for 6-tier regional leagues, and display preferences.</p>' +
+        '</div>' +
+        '<button type="button" class="btn primary small" data-open-handle-modal>Edit Profile &amp; Location</button>' +
+      '</div>' +
+      '<div class="tiles" style="margin-top:16px">' +
+        '<div class="tile">' +
+          '<div class="k">Gamertag / Username</div>' +
+          '<div class="v" style="font-size:18px;color:var(--cyan)">' + esc(prof.avatar) + ' @' + esc(prof.handle) + '</div>' +
+          '<div class="s">Displayed on Buddy Leagues &amp; Silverware leaderboards</div>' +
+        '</div>' +
+        '<div class="tile">' +
+          '<div class="k">Hometown / City</div>' +
+          '<div class="v" style="font-size:18px">' + esc(prof.town) + '</div>' +
+          '<div class="s">Hometown League &amp; Civic Plaque</div>' +
+        '</div>' +
+        '<div class="tile">' +
+          '<div class="k">County / Region</div>' +
+          '<div class="v" style="font-size:18px">' + esc(prof.region) + '</div>' +
+          '<div class="s">County League &amp; Chalice</div>' +
+        '</div>' +
+        '<div class="tile">' +
+          '<div class="k">Country</div>' +
+          '<div class="v" style="font-size:18px">' + esc(prof.country) + '</div>' +
+          '<div class="s">National Trophy &amp; Shield</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="btn-row" style="margin-top:16px">' +
+        '<button type="button" class="btn primary" data-open-handle-modal>Change Username / Location</button>' +
+        '<button type="button" class="btn" data-open-auth>Switch / Connect Google Account</button>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="section card" style="margin-top:16px">' +
+      '<div class="section-head">' +
+        '<div>' +
+          '<h2 class="section-title">App Preferences &amp; Sync</h2>' +
+          '<p class="section-note">Live Firebase cloud sync, odds pricing format, and cache controls.</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="tiles" style="margin-top:16px">' +
+        '<div class="tile">' +
+          '<div class="k">Odds Display Format</div>' +
+          '<div class="v" style="font-size:18px">' + (oddsFormat === 'decimal' ? 'Decimal (e.g. 3.50)' : 'Fractional (e.g. 5/2)') + '</div>' +
+          '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" id="toggle-odds-format">Switch to ' + (oddsFormat === 'decimal' ? 'Fractional' : 'Decimal') + '</button></div>' +
+        '</div>' +
+        '<div class="tile">' +
+          '<div class="k">Cloud League Sync</div>' +
+          '<div class="v" style="font-size:16px;color:var(--emerald)">⚡ Firebase Live</div>' +
+          '<div class="s">Connected to betbuddyuk project</div>' +
+        '</div>' +
+        '<div class="tile">' +
+          '<div class="k">App Version &amp; Engine</div>' +
+          '<div class="v mono" style="font-size:16px">v27 (Live)</div>' +
+          '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="btn-row" style="margin-top:16px">' +
+        '<button type="button" class="btn" id="btn-more-gdpr">Privacy Notice &amp; UK GDPR</button>' +
+        '<button type="button" class="btn danger small" data-clear-diary>Reset Local Diary Data</button>' +
+      '</div>' +
+    '</div>';
+  } else if (activeMoreTab === 'data') {
+    contentHtml = '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Update status</h2><div class="chips" style="margin:10px 0">' + freshnessChips() + '</div>' +
       '<p class="muted" style="font-size:13.5px">Last attempt ' + esc(s.attempted_at ? ago(s.attempted_at) : 'unknown') + '. Last success ' + esc(s.last_success ? ago(s.last_success) : 'never') + '. ' + (s.errors && s.errors.length ? 'Errors: ' + esc(s.errors.join(' ')) : 'No errors.') + '</p>' +
       '<div style="overflow-x:auto"><table class="table" style="margin-top:8px"><thead><tr><th>Source</th><th>Status</th><th style="text-align:right">Fixtures</th><th style="text-align:right">Results</th></tr></thead><tbody>' + sourceRows + '</tbody></table></div>' +
       '<p class="section-note" style="margin-top:10px">' + esc(s.attribution || '') + ' Bookmaker prices come from The Odds API (UK bookmakers; Match Result and Total Goals only) and are ignored once older than 12 hours; for any other market, enter a price you have seen. Corners, cards and shots are not shown: their statistics come from a source whose terms exclude public use.</p></div>' +
-    '<div class="card"><h2 class="section-title">Where each number comes from</h2><table class="table" style="margin-top:8px"><tbody>' +
-      '<tr><td><b>Match result</b></td><td>Dixon-Coles model with time decay, fitted for each league on football-data.org final scores only (model dc-public-v1) and backtested chronologically on 2025-26. A club with too little recent history, such as a newly promoted side, gets the league average (limited evidence). All estimates are provisional until a forward record builds up.</td></tr>' +
-      '<tr><td><b>Goals, both teams to score</b></td><td>Provisional: 30% score model, 70% league rate. Backtests show no proven edge.</td></tr>' +
-      '<tr><td><b>Corners, cards, shots</b></td><td>Not shown. The only available match statistics come from a source that does not permit public use. Earlier research predictions for these markets are private.</td></tr>' +
-      '<tr><td><b>Records</b></td><td>Public records (ids starting PUB-) are produced by the public model and sealed before kick-off from the day it went live. They are not the earlier research predictions, which are kept privately and are not shown or recreated here.</td></tr>' +
-      '<tr><td><b>Fair odds</b></td><td>1 ÷ probability, rounded to a familiar UK price. Not a bookmaker price.</td></tr></tbody></table></div></div>' +
-    '<div class="section card"><h2 class="section-title">Tell us what you think</h2><form id="fb-form" class="grid" style="margin-top:12px">' +
+      '<div class="card"><h2 class="section-title">Where each number comes from</h2><table class="table" style="margin-top:8px"><tbody>' +
+        '<tr><td><b>Match result</b></td><td>Dixon-Coles model with time decay, fitted for each league on football-data.org final scores only (model dc-public-v1) and backtested chronologically on 2025-26. A club with too little recent history, such as a newly promoted side, gets the league average (limited evidence). All estimates are provisional until a forward record builds up.</td></tr>' +
+        '<tr><td><b>Goals, both teams to score</b></td><td>Provisional: 30% score model, 70% league rate. Backtests show no proven edge.</td></tr>' +
+        '<tr><td><b>Corners, cards, shots</b></td><td>Not shown. The only available match statistics come from a source that does not permit public use. Earlier research predictions for these markets are private.</td></tr>' +
+        '<tr><td><b>Records</b></td><td>Public records (ids starting PUB-) are produced by the public model and sealed before kick-off from the day it went live. They are not the earlier research predictions, which are kept privately and are not shown or recreated here.</td></tr>' +
+        '<tr><td><b>Fair odds</b></td><td>1 ÷ probability, rounded to a familiar UK price. Not a bookmaker price.</td></tr></tbody></table></div></div>';
+  } else if (activeMoreTab === 'feedback') {
+    contentHtml = '<div class="section card"><h2 class="section-title">Tell us what you think</h2><form id="fb-form" class="grid" style="margin-top:12px">' +
       stars('understand', 'How clear were the predictions? (1 confusing, 5 crystal clear)') + stars('convincing', 'How convincing was the evidence?') +
       '<div class="field"><span class="lbl">Was it useful?</span><div class="stars">' + [['useful', 'Very useful'], ['neutral', 'Somewhat'], ['not_useful', 'Not useful']].map(([v, l]) => '<button type="button" class="opt" data-useful="' + v + '" aria-pressed="' + (feedbackState.useful === v) + '">' + l + '</button>').join('') + '</div></div>' +
       '<div class="field"><span class="lbl">Anything confusing?</span><div class="stars">' + ['Evidence labels', 'Odds vs probabilities', 'Provisional estimates', 'Navigation', 'Diary returns', 'All clear'].map(c => '<button type="button" class="opt" data-chip="' + esc(c) + '" aria-pressed="' + feedbackState.chips.has(c) + '">' + esc(c) + '</button>').join('') + '</div></div>' +
       '<div class="field"><label for="fb-improvements">What would make Bet Buddy better?</label><textarea id="fb-improvements" class="ctl"></textarea></div>' +
       '<div class="btn-row"><button type="submit" class="btn primary">Send feedback</button>' + (fb.length ? '<button type="button" class="btn" data-export="feedback">Export ' + fb.length + ' responses</button>' : '') + '</div>' +
-      '<p class="section-note">Feedback is stored in this browser only.</p></form></div>' +
-    '<div class="section card commercial-card">' +
+      '<p class="section-note">Feedback is stored in this browser only.</p></form></div>';
+  } else if (activeMoreTab === 'commercial') {
+    contentHtml = '<div class="section card commercial-card">' +
       '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries</h2><p class="section-note">Partner with Bet Buddy: bookmaker odds feeds, accumulator deep-links, silverware league title sponsors, and commercial affiliate placements.</p></div><span class="badge validated">Partnerships Open</span></div>' +
       '<div class="btn-row" style="margin-top:14px">' +
         '<a href="#/commercial" class="btn primary">Open Commercial &amp; Sponsorship Form</a>' +
         '<button type="button" class="btn" id="btn-more-gdpr">Privacy Notice &amp; UK GDPR</button>' +
       '</div>' +
-    '</div></section>';
+    '</div>';
+  }
+
+  return '<section class="view">' +
+    '<div class="section-head" style="align-items:flex-end">' +
+      '<div>' +
+        '<h1 class="page-title">Settings &amp; Information</h1>' +
+        '<p class="page-sub">Account profile, preferences, model intelligence methods, feedback, and commercial partnerships.</p>' +
+      '</div>' +
+    '</div>' +
+    tabsHtml +
+    contentHtml +
+  '</section>';
 }
 
 function handleFeedbackSubmit(event) {
@@ -2332,13 +2561,7 @@ function currentRoute() {
   if (hash.startsWith('join-league=')) {
     try {
       const code = decodeURIComponent(hash.slice(12)).trim().toUpperCase();
-      const leagues = getStoredLeagues();
-      if (!leagues.some(l => l.code === code)) {
-        leagues.push({ id: 'league-' + Date.now(), name: 'Buddy League (' + code + ')', code, created_at: new Date().toISOString().slice(0, 10), members: [] });
-        saveStoredLeagues(leagues);
-        activeLeagueId = leagues[leagues.length - 1].id;
-        toast('Joined league ' + code + '!');
-      }
+      joinCloudLeague(code);
     } catch (e) { /* ignore */ }
     return ['leagues'];
   }
@@ -3191,7 +3414,12 @@ document.addEventListener('click', event => {
   if (t.dataset.closeInstall !== undefined) { closeInstallModal(); return; }
   if (t.id === 'header-auth-btn' || t.id === 'header-user-btn') { openAuthModal(); return; }
   if (t.dataset.closeAuth !== undefined) { closeAuthModal(); return; }
-  if (t.id === 'btn-switch-handle') { closeAuthModal(); $('player-handle-input').value = getUserProfile().handle; $('handle-modal').hidden = false; return; }
+  if (t.id === 'btn-switch-handle') { closeAuthModal(); const _p = getUserProfile();
+    $('player-handle-input').value = _p.handle;
+    if ($('player-town-input')) $('player-town-input').value = _p.town || 'Paisley';
+    if ($('player-region-input')) $('player-region-input').value = _p.region || 'Renfrewshire';
+    if ($('player-country-input')) $('player-country-input').value = _p.country || 'Scotland';
+    $('handle-modal').hidden = false; return; }
   if (t.id === 'btn-google-signout') {
     saveAuthUser(null);
     closeAuthModal();
@@ -3224,9 +3452,16 @@ document.addEventListener('click', event => {
   }
   else if (t.dataset.openLeagueModal !== undefined) { $('league-modal').hidden = false; }
   else if (t.dataset.closeLeague !== undefined) { $('league-modal').hidden = true; }
-  else if (t.dataset.openHandleModal !== undefined) { $('player-handle-input').value = getUserProfile().handle; $('handle-modal').hidden = false; }
+  else if (t.dataset.openHandleModal !== undefined) { const _p = getUserProfile();
+    $('player-handle-input').value = _p.handle;
+    if ($('player-town-input')) $('player-town-input').value = _p.town || 'Paisley';
+    if ($('player-region-input')) $('player-region-input').value = _p.region || 'Renfrewshire';
+    if ($('player-country-input')) $('player-country-input').value = _p.country || 'Scotland';
+    $('handle-modal').hidden = false; }
   else if (t.dataset.closeHandle !== undefined) { $('handle-modal').hidden = true; }
   else if (t.dataset.selectLeague !== undefined) { activeLeagueId = t.dataset.selectLeague; render(); }
+  else if (t.dataset.selectMoreTab !== undefined) { activeMoreTab = t.dataset.selectMoreTab; render(); }
+  else if (t.id === 'toggle-odds-format') { toggleOddsFormat(); render(); }
   else if (t.dataset.shareLeague !== undefined) {
     const code = t.dataset.shareLeague;
     const shareUrl = 'https://betbuddyuk.uk/#join-league=' + encodeURIComponent(code);
@@ -3322,6 +3557,8 @@ document.addEventListener('submit', event => {
     list.unshift(newLeague);
     saveStoredLeagues(list);
     activeLeagueId = newLeague.id;
+    syncLeagueToCloud(newLeague);
+    listenToActiveLeague(code);
     $('league-modal').hidden = true;
     toast('League ' + icon + ' ' + name + ' created! Share code ' + code);
     render();
@@ -3330,15 +3567,9 @@ document.addEventListener('submit', event => {
     event.preventDefault();
     const code = ($('join-league-code').value || '').trim().toUpperCase();
     if (!code) return;
-    const list = getStoredLeagues();
-    if (!list.some(l => l.code === code)) {
-      list.push({ id: 'league-' + Date.now(), name: 'League ' + code, code, created_at: new Date().toISOString().slice(0, 10), members: [] });
-      saveStoredLeagues(list);
-    }
-    activeLeagueId = (list.find(l => l.code === code) || list[0]).id;
     $('league-modal').hidden = true;
-    toast('Joined league ' + code + '!');
-    render();
+    toast('Joining league ' + code + '...');
+    joinCloudLeague(code);
   }  if (event.target.id === 'commercial-enquiry-form') {
     event.preventDefault();
     const name = ($('comm-name').value || '').trim();
@@ -3430,7 +3661,9 @@ document.addEventListener('submit', event => {
     const country = $('player-country-input') ? $('player-country-input').value : 'Scotland';
     saveUserProfile(handle, town, region, country);
     $('handle-modal').hidden = true;
-    toast('Profile and Regional Ladders updated!');
+    toast('Profile and Regional Leagues updated!');
+    // Sync all user's custom leagues to cloud with new handle/location
+    getStoredLeagues().forEach(l => syncLeagueToCloud(l));
     render();
   }
 
@@ -3443,7 +3676,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.26';
+const APP_VERSION = '2026.10.30.27';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');

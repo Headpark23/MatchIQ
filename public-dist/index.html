@@ -27,7 +27,7 @@
 <script>
   // Instant App & PWA Upgrade Sync + Landing Enforcement
   (function() {
-    var APP_VER = '2026.10.30.26';
+    var APP_VER = '2026.10.30.27';
     try {
       var prevVer = localStorage.getItem('betbuddy_app_version');
       if (prevVer !== APP_VER) {
@@ -196,9 +196,13 @@
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
-<script src="market_calculations.js?v=26"></script>
-<script src="bet_builder.js?v=26"></script>
-<script src="app.js?v=26"></script>
+<!-- Firebase Compat SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script src="market_calculations.js?v=27"></script>
+<script src="bet_builder.js?v=27"></script>
+<script src="app.js?v=27"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>
