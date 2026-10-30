@@ -46,7 +46,7 @@ global.window = {
   location: { hash: '#/leagues', origin: 'https://headpark23.github.io', pathname: '/MatchIQ/' },
   addEventListener: () => {},
   scrollTo: () => {},
-  MatchIQCalculations: marketCalculations
+  MatchIQCalculations: marketCalculations, MatchIQBuilder: require('../bet_builder.js')
 };
 let registeredSubmitHandler = null;
 global.document = {
@@ -59,7 +59,7 @@ global.document = {
   },
   body: mockElement('body')
 };
-global.location = global.window.location;
+global.location = global.window.location; global.MatchIQBuilder = global.window.MatchIQBuilder;
 global.localStorage = mockLocalStorage;
 global.navigator = { clipboard: { writeText: async () => {} } };
 
@@ -173,6 +173,33 @@ try {
   console.log('PASS: Custom Buddy League created with icon, frequency, and code.');
 } catch (e) {
   console.error('FAIL Custom League creation:', e);
+  process.exit(1);
+}
+
+// 6. Test Hero Home Page & Tab Navigation Round-Trip
+try {
+  location.hash = '#/';
+  render();
+  const homeHtml1 = elements.app.innerHTML;
+  if (!homeHtml1.includes('Your Honest Sports Betting Co-Pilot') || !homeHtml1.includes('Pick a Bet &amp; Build Acca')) {
+    throw new Error('Hero Home page failed to render 5-card welcome hub on initial load');
+  }
+  for (const r of ['#/picks', '#/fixtures', '#/results', '#/diary', '#/leagues', '#/more']) {
+    location.hash = r;
+    render();
+    if (!elements.app.innerHTML || elements.app.innerHTML.length < 100) {
+      throw new Error('Route failed to render: ' + r);
+    }
+  }
+  location.hash = '#/';
+  render();
+  const homeHtml2 = elements.app.innerHTML;
+  if (!homeHtml2.includes('Your Honest Sports Betting Co-Pilot') || !homeHtml2.includes('Pick a Bet &amp; Build Acca')) {
+    throw new Error('Hero Home page failed to render when returning to Home after visiting other tabs');
+  }
+  console.log('PASS: Hero Home page & full bottom-nav round-trip verified.');
+} catch (e) {
+  console.error('FAIL Hero Home / Navigation:', e);
   process.exit(1);
 }
 

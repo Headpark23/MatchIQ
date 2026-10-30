@@ -1035,7 +1035,7 @@ function beginnerGuides() {
 }
 
 function renderWelcomeHero() {
-  const diaryItems = readDiary();
+  const diaryItems = getStoredDiary();
   const diaryCount = diaryItems.length;
   const user = getAuthUser();
   const userName = user && user.displayName ? user.displayName.split(' ')[0] : 'Punter';
@@ -1078,11 +1078,11 @@ function renderWelcomeHero() {
             '</div>' +
           '</div>' +
           '<div class="portal-card-action">' +
-            '<button type="button" class="btn primary portal-cta-btn" onclick="scrollToBuilder();event.stopPropagation()">' +
+            '<span class="btn primary portal-cta-btn">' +
               '<span>Launch Bet Builder &amp; Predictions</span>' +
               '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
-            '</button>' +
-            '<span class="portal-sub-action-hint">Or scroll down for this round’s matches</span>' +
+            '</span>' +
+            '<span class="portal-sub-action-hint">Tap to open Acca Builder &amp; Multi-Sport Picks</span>' +
           '</div>' +
         '</div>' +
       '</a>' +
@@ -1160,7 +1160,6 @@ function viewHome() {
   return '<section class="view">' +
     renderWelcomeHero() +
     beginnerGuides() +
-    homeFixtures() +
   '</section>';
 }
 
@@ -1465,6 +1464,7 @@ function logRow(r) {
 // ------------------------------------------------------------ Bet Diary
 let diaryReadFailed = false;
 let diaryProfileFilter = 'all';
+function readDiary() { return getStoredDiary(); }
 function getStoredDiary() {
   try { const entries = calc.loadBetDiary(localStorage, DIARY_STORAGE_KEY); diaryReadFailed = false; return entries; }
   catch (error) { diaryReadFailed = true; console.error('Bet Diary could not be read:', error); return []; }
@@ -2838,6 +2838,25 @@ document.addEventListener('click', event => {
 
   // Bug reporting modal
   
+  // Explicit bottom nav & hash-link routing so Home (#/) and all tabs always work immediately
+  if (t.dataset && t.dataset.nav) {
+    event.preventDefault();
+    const targetHash = t.dataset.nav === 'home' ? '#/' : '#/' + t.dataset.nav;
+    if (location.hash !== targetHash) {
+      location.hash = targetHash;
+    }
+    render();
+    return;
+  }
+  if (t.tagName === 'A' && t.getAttribute && t.getAttribute('href') && t.getAttribute('href').startsWith('#/')) {
+    const targetHash = t.getAttribute('href');
+    if (location.hash === targetHash) {
+      event.preventDefault();
+      render();
+      return;
+    }
+  }
+
   // Multi-Sport Switcher
   if (t.dataset.toggleSport !== undefined) {
     toggleSport(t.dataset.toggleSport);
@@ -3172,7 +3191,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.20';
+const APP_VERSION = '2026.10.30.21';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
