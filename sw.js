@@ -1,7 +1,7 @@
 // Bet Buddy Progressive Web App Service Worker (v17)
 // Network-first for shell code & data, cache-first for images/fonts, instant offline fallback
 
-const CACHE_NAME = 'betbuddy-pwa-v44';
+const CACHE_NAME = 'betbuddy-pwa-v44-radar';
 
 const PRECACHE_ASSETS = [
   './',
@@ -57,7 +57,11 @@ self.addEventListener('fetch', event => {
                        url.pathname.endsWith('.css') ||
                        url.pathname.includes('/data/') ||
                        url.pathname === '/' ||
-                       url.pathname.endsWith('/MatchIQ/');
+                       url.pathname.endsWith('/MatchIQ/') ||
+                       url.pathname.includes('/assets/icon-') ||
+                       url.pathname.includes('/assets/apple-touch') ||
+                       url.pathname.includes('/assets/favicon') ||
+                       url.search.includes('v=');
 
   if (isCodeOrData) {
     // Network first: always fetch freshest live deployment, update cache, fallback to cache if offline

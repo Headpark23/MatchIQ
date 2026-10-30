@@ -8,7 +8,7 @@
 <meta http-equiv="Expires" content="0">
 <title>Bet Buddy</title>
 <meta name="description" content="Premier League predictions with honest evidence, a permanent track record and a private Bet Diary.">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json?v=44">
 <meta name="theme-color" content="#050b14">
 <meta name="application-name" content="Bet Buddy">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,18 +16,18 @@
 <meta name="apple-mobile-web-app-title" content="Bet Buddy">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="msapplication-TileColor" content="#060d19">
-<meta name="msapplication-TileImage" content="assets/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png">
+<meta name="msapplication-TileImage" content="assets/icon-192.png?v=44">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=44">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=44">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png?v=44">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png?v=44">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
 <script>
   // Instant App & PWA Upgrade Sync + Landing Enforcement
   (function() {
-    var APP_VER = '2026.10.30.38';
+    var APP_VER = '2026.10.30.44';
     try {
       var prevVer = localStorage.getItem('betbuddy_app_version');
       if (prevVer !== APP_VER) {
@@ -35,6 +35,11 @@
         if ('caches' in window) {
           caches.keys().then(function(keys) {
             keys.forEach(function(k) { caches.delete(k); });
+          });
+        }
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(regs) {
+            regs.forEach(function(r) { r.update(); });
           });
         }
       }
@@ -60,7 +65,7 @@
 <header class="app-header">
   <div class="app-header-inner">
     <a class="brand" href="#/" aria-label="Bet Buddy home">
-      <img src="assets/icon-192.png" width="34" height="34" alt="Bet Buddy Sports Intelligence" class="brand-logo-img">
+      <img src="assets/icon-192.png?v=44" width="34" height="34" alt="Bet Buddy Sports Intelligence" class="brand-logo-img">
       <span class="brand-word">Bet<b>Buddy</b></span>
     </a>
     <div class="header-tools">
@@ -278,7 +283,7 @@
       <div class="modal-body">
         <div class="field">
           <label for="player-handle-input">Your Custom Username / Gamertag</label>
-          <input id="player-handle-input" class="ctl" placeholder="e.g. PandaPunter, TheAccaKing" maxlength="24" required>
+          <input id="player-handle-input" class="ctl" placeholder="e.g. SmartPunter, TheAccaKing" maxlength="24" required>
         </div>
         <div class="field" style="margin-top:10px">
           <label for="player-town-input">Hometown / City</label>
@@ -374,7 +379,7 @@
   <div class="modal install-modal-box" role="dialog" aria-modal="true" aria-labelledby="install-modal-title">
     <div class="modal-head">
       <div class="install-head-badge">
-        <img src="assets/icon-192.png" alt="Bet Buddy Sports Intelligence" width="38" height="38" class="install-logo-thumb">
+        <img src="assets/icon-192.png?v=44" alt="Bet Buddy Sports Intelligence" width="38" height="38" class="install-logo-thumb">
         <div>
           <h2 id="install-modal-title" style="margin:0;font-size:1.15rem">Download Bet Buddy</h2>
           <span class="text-sm muted">Fast, offline-ready &amp; zero app store hassle</span>

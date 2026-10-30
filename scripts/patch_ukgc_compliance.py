@@ -235,3 +235,4 @@ if __name__ == '__main__':
     patch_sw_js()
     patch_styles_css()
     print("All patches applied cleanly.")
+

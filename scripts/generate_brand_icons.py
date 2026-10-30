@@ -89,3 +89,4 @@ for sz, path in [
     print(f"Generated {path} ({sz}x{sz})")
 
 print("All brand icons generated successfully!")
+
