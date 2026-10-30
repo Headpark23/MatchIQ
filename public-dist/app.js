@@ -2031,6 +2031,7 @@ function viewLeagues() {
     }
   }
   if (!isGeo && currentLeague && currentLeague.code) {
+    syncLeagueToCloud(currentLeague);
     listenToActiveLeague(currentLeague.code);
   }
 
@@ -2572,7 +2573,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v33 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v34 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3787,9 +3788,16 @@ window.addEventListener('hashchange', render);
 
 $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes', 'Coral', 'William Hill', 'Betfair', 'Unibet'].map(b => '<button type="button">' + b + '</button>').join('');
 updateDiaryCount();
-loadData().then(render);
+loadData().then(() => {
+  try {
+    if (typeof syncLeagueToCloud === 'function') {
+      getStoredLeagues().forEach(l => syncLeagueToCloud(l));
+    }
+  } catch (e) {}
+  render();
+});
 
-const APP_VERSION = '2026.10.30.33';
+const APP_VERSION = '2026.10.30.34';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
