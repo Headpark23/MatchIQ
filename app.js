@@ -3361,10 +3361,21 @@ function getBookieSearchQuery(betData) {
   return (betData.selection || 'Football').split(':')[0].replace(/ v /i, ' ').trim();
 }
 
+
+const BOOKIE_APP_SCHEMES = {
+  coral: 'coral://',
+  skybet: 'skybet://',
+  bet365: 'bet365://',
+  betfair: 'betfair://',
+  ladbrokes: 'ladbrokes://',
+  paddypower: 'paddypower://',
+  williamhill: 'williamhill://'
+};
+
 function getBookieDeepLinks(query) {
   const enc = encodeURIComponent(query);
   return {
-    coral: 'https://sports.coral.co.uk/search?q=' + enc,
+    coral: 'https://www.coral.co.uk/en/sportsapp/search?q=' + enc,
     ladbrokes: 'https://sports.ladbrokes.com/search?q=' + enc,
     skybet: 'https://m.skybet.com/search?q=' + enc,
     bet365: 'https://www.bet365.com/#/AX/K^' + enc + '/',
@@ -3428,8 +3439,21 @@ function launchBookmakerSlip(bookieKey, slipIdx) {
   } catch (e) {}
 
   toast('⚡ Slip copied! Launching ' + bName + ' app...');
-  // Direct location navigation triggers iOS/Android Universal Links straight into native app
-  window.location.href = targetUrl;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const appScheme = BOOKIE_APP_SCHEMES[bookieKey];
+  
+  if (isMobile && appScheme) {
+    // 1. Try native installed app URI scheme directly (e.g. coral://) - opens logged-in native app
+    window.location.href = appScheme;
+    // 2. Fallback to web link if app is not installed
+    setTimeout(() => {
+      if (document.visibilityState === 'visible') {
+        window.location.href = targetUrl;
+      }
+    }, 1200);
+  } else {
+    window.location.href = targetUrl;
+  }
 }
 if (typeof window !== 'undefined') window.launchBookmakerSlip = launchBookmakerSlip;
 
@@ -4648,7 +4672,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = 'v53';
+const APP_VERSION = 'v54';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -4909,7 +4933,19 @@ function launchButlerSingle(betData) {
   const query = getBookieSearchQuery(betData);
   const links = getBookieDeepLinks(query);
   const targetUrl = links[butler.key] || butler.appUrl + encodeURIComponent(query);
-  window.location.href = targetUrl;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const appScheme = BOOKIE_APP_SCHEMES[butler.key];
+  
+  if (isMobile && appScheme) {
+    window.location.href = appScheme;
+    setTimeout(() => {
+      if (document.visibilityState === 'visible') {
+        window.location.href = targetUrl;
+      }
+    }, 1200);
+  } else {
+    window.location.href = targetUrl;
+  }
 }
 
 if (typeof window !== 'undefined') {
