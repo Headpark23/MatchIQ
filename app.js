@@ -847,7 +847,7 @@ function renderWelcomeHero() {
     '<!-- 5 Bento Portal Cards -->' +
     '<div class="portal-grid">' +
       '<!-- 1. Top Large Card: Pick a Bet -->' +
-      '<div class="portal-card portal-card-hero" onclick="scrollToBuilder()">' +
+      '<a href="#/picks" class="portal-card portal-card-hero" style="text-decoration:none">' +
         '<div class="portal-card-hero-glow"></div>' +
         '<div class="portal-card-content">' +
           '<div class="portal-card-top">' +
@@ -871,7 +871,7 @@ function renderWelcomeHero() {
             '<span class="portal-sub-action-hint">Or scroll down for this round’s matches</span>' +
           '</div>' +
         '</div>' +
-      '</div>' +
+      '</a>' +
 
       '<!-- 4 Bento Grid Cards Below -->' +
       '<div class="portal-subgrid">' +
@@ -943,6 +943,14 @@ function scrollToBuilder() {
 }
 
 function viewHome() {
+  return '<section class="view">' +
+    renderWelcomeHero() +
+    beginnerGuides() +
+    homeFixtures() +
+  '</section>';
+}
+
+function viewPicks() {
   if (currentSport !== 'football') {
     return viewMultiSport(currentSport);
   }
@@ -953,8 +961,6 @@ function viewHome() {
   let html = '<section class="view">' +
     renderSportFilterBar() +
     sharedBanner +
-    renderWelcomeHero() +
-    '<div id="builder-anchor" style="padding-top:12px"></div>' +
     viewBuilder() + '<div class="section-head" style="align-items:flex-end;margin-top:36px"><div><h2 class="page-title">This round</h2>' +
     '<p class="page-sub">For every upcoming match: the most likely supported outcome, the match-result lean and whether a price you have seen offers value. Bet Buddy will say No bet when the evidence or the price is not good enough.</p></div>' +
     '<div class="chips">' + freshnessChips() + '</div></div>' + compBar();
@@ -2010,9 +2016,9 @@ function currentRoute() {
         }
       }
     } catch (e) { /* ignore */ }
-    return ['home'];
+    return ['picks'];
   }
-  if (hash.startsWith('match=')) return ['home'];
+  if (hash.startsWith('match=')) return ['picks'];
   const [view, ...rest] = hash.split('/');
   return [view || 'home', decodeURIComponent(rest.join('/'))];
 }
@@ -2323,9 +2329,9 @@ function render() {
   const navKey = view === 'match' ? 'fixtures' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
-  const html = view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'more' ? viewMore() : viewHome();
+  const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Best Picks', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', admin: 'Founder Admin & Affiliates', more: 'Data & methods' };
+  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', admin: 'Founder Admin & Affiliates', more: 'Data & methods' };
   document.title = (titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {

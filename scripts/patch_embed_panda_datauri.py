@@ -57,3 +57,4 @@ app_js = app_js.replace(old_modal_dyn2, new_modal_dyn2, 1)
 
 app_path.write_text(app_js, encoding="utf-8")
 print("Updated app.js with inline data_uri fallbacks!")
+

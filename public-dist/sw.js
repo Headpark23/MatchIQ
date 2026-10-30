@@ -1,7 +1,7 @@
 // Bet Buddy Progressive Web App Service Worker (v15)
 // Enables offline capability, instant home screen launch, and verified PWA installation
 
-const CACHE_NAME = 'betbuddy-pwa-v15';
+const CACHE_NAME = 'betbuddy-pwa-v16';
 
 const PRECACHE_ASSETS = [
   './',
