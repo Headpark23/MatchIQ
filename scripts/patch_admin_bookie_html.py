@@ -70,3 +70,4 @@ with open('index.html', 'w', encoding='utf-8') as f:
     f.write(html)
 
 print('Updated index.html: added Admin nav and Bookmaker modal')
+

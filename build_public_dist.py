@@ -25,7 +25,8 @@ ALLOWLIST_FILES = [
     "bet_builder.js",
     "manifest.json",
     "sw.js",
-    "vercel.json"
+    "vercel.json",
+    "CNAME"
 ]
 
 ALLOWLIST_ASSETS = [
