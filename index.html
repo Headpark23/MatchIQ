@@ -43,6 +43,10 @@
         <span class="install-panda-emoji" style="font-size:15px">🐼</span>
         <span class="install-label">Download App</span>
       </button>
+      <button type="button" class="sync-refresh-btn" id="header-sync-btn" title="Force sync latest app upgrades" aria-label="Sync App" onclick="forceAppSync()">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        <span class="sync-label">Sync</span>
+      </button>
     </div>
     <nav class="nav" aria-label="Main">
       <a href="#/" data-nav="home"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a>
@@ -167,7 +171,7 @@
 
 <script src="market_calculations.js"></script>
 <script src="bet_builder.js"></script>
-<script src="app.js?v=16"></script>
+<script src="app.js?v=18"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>

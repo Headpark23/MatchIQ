@@ -1743,3 +1743,30 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   .lb-col-bets { width: 34px; }
   .lb-handle { max-width: 75px; font-size: 11.5px; }
 }
+
+
+/* Header Live Sync Button */
+.sync-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  min-height: 32px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.sync-refresh-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--cyan);
+  color: #fff;
+}
+.sync-refresh-btn:active svg {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}

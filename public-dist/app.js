@@ -2963,16 +2963,47 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
+const APP_VERSION = '2026.10.30.18';
+
+async function forceAppSync() {
+  toast('Syncing with latest Bet Buddy server... 🐼');
+  if ('caches' in window) {
+    try {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    } catch (e) { /* ignore */ }
+  }
+  if ('serviceWorker' in navigator) {
+    try {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.update()));
+    } catch (e) { /* ignore */ }
+  }
+  setTimeout(() => {
+    window.location.href = window.location.origin + window.location.pathname + '?sync=' + Date.now() + '#/';
+    window.location.reload(true);
+  }, 400);
+}
+
 if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    toast('App updated to latest version! Refreshing... 🐼');
+    setTimeout(() => window.location.reload(), 600);
+  });
+
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(reg => {
       reg.update();
+      setInterval(() => reg.update(), 60000); // Check for server updates every 60 seconds
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              window.location.reload();
+            if (newWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                toast('New Bet Buddy upgrade ready! Auto-syncing... 🐼');
+                setTimeout(() => window.location.reload(), 800);
+              }
             }
           });
         }
