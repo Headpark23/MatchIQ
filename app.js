@@ -1,3 +1,12 @@
+// Session Start: Always land on Hero Welcome Hub (#/) on fresh app launch
+try {
+  if (!sessionStorage.getItem('betbuddy_session_started')) {
+    sessionStorage.setItem('betbuddy_session_started', '1');
+    if (!location.hash || location.hash === '#' || location.hash === '#picks' || location.hash === '#/picks') {
+      location.hash = '#/';
+    }
+  }
+} catch (e) {}
 'use strict';
 /* MatchIQ app: one design system, hash routes, data produced by pipeline/run.py.
    The browser never computes predictions: it renders the published ones, so the
@@ -536,6 +545,41 @@ try {
   if (v && v.stake > 0 && v.win > 0 && v.legs >= 1 && v.legs <= MatchIQBuilder.MAX_LEGS) Object.assign(builderState, { stake: +v.stake, legs: +v.legs, win: +v.win });
 } catch (e) { /* the inputs are a convenience */ }
 let builderResult = null, builderTimer = null;
+// Custom Multi-Sport Acca State
+let customAccaLegs = [];
+try {
+  const savedCustom = JSON.parse(localStorage.getItem('betbuddy_custom_acca_v1') || '[]');
+  if (Array.isArray(savedCustom)) customAccaLegs = savedCustom;
+} catch (e) {}
+
+function addCrossSportAccaLeg(leg) {
+  if (!customAccaLegs.some(l => l.id === leg.id || (l.label === leg.label && l.matchId === leg.matchId))) {
+    customAccaLegs.push(leg);
+    try { localStorage.setItem('betbuddy_custom_acca_v1', JSON.stringify(customAccaLegs)); } catch (e) {}
+    toast('Added ' + leg.label + ' to Custom Acca! 🎯');
+    updateBuilder();
+    render();
+  } else {
+    toast(leg.label + ' already in Acca!');
+  }
+}
+
+function removeCrossSportAccaLeg(legId) {
+  customAccaLegs = customAccaLegs.filter(l => l.id !== legId);
+  try { localStorage.setItem('betbuddy_custom_acca_v1', JSON.stringify(customAccaLegs)); } catch (e) {}
+  toast('Selection removed from Acca.');
+  updateBuilder();
+  render();
+}
+
+function clearCustomAcca() {
+  customAccaLegs = [];
+  try { localStorage.removeItem('betbuddy_custom_acca_v1'); } catch (e) {}
+  toast('Custom Acca cleared.');
+  updateBuilder();
+  render();
+}
+
 
 function builderCompute() {
   const { stake, legs, win } = builderState;
@@ -557,6 +601,7 @@ function builderCompute() {
               const estimatedProb = 1 / (sel.decimal * 1.07);
               multiSportPool.push({
                 matchId: ev.id,
+                selId: ev.id + '-' + sel.label,
                 fixture: { home: ev.title, away: sp.name, competition: sportKey.toUpperCase() },
                 kickoff: Date.now() + 86400000,
                 id: ev.id + '-' + sel.label,
@@ -568,7 +613,8 @@ function builderCompute() {
                 bookmaker: sel.bookmaker || 'UK Bookmaker',
                 priceSource: 'live',
                 support: 'validated',
-                basis: sp.name + ' UK Odds'
+                basis: sp.name + ' UK Odds',
+                sport: sportKey
               });
             }
           });
@@ -579,6 +625,45 @@ function builderCompute() {
 
   const combinedPool = footballPool.concat(multiSportPool);
   builderResult = MatchIQBuilder.buildSlips(combinedPool, { stake, win, legs });
+
+  // When non-football sports are active, synthesize a guaranteed Cross-Sport Mix Acca
+  const otherActive = activeSports.filter(s => s !== 'football');
+  if (builderResult && builderResult.slips && builderResult.slips.length > 0 && otherActive.length > 0 && multiSportPool.length > 0) {
+    const hasOtherSport = builderResult.slips[0].legs.some(l => l.sport && l.sport !== 'football');
+    if (!hasOtherSport) {
+      // Pick top selection from each active non-football sport
+      const crossLegs = [];
+      otherActive.forEach(sk => {
+        const best = multiSportPool.find(l => l.sport === sk && !crossLegs.some(c => c.matchId === l.matchId));
+        if (best) crossLegs.push(best);
+      });
+      // Fill remaining legs from footballPool
+      const remainingNeeded = Math.max(0, legs - crossLegs.length);
+      for (const fb of footballPool) {
+        if (crossLegs.length >= legs) break;
+        if (!crossLegs.some(c => c.matchId === fb.matchId)) crossLegs.push(fb);
+      }
+      if (crossLegs.length === legs) {
+        const odds = crossLegs.reduce((t, c) => t * c.odds, 1);
+        const chance = crossLegs.reduce((t, c) => t * c.p, 1);
+        const crossSlip = {
+          legs: crossLegs,
+          odds,
+          chance,
+          ret: stake * odds,
+          profit: stake * odds - stake,
+          ev: chance * stake * odds - stake,
+          onTarget: true,
+          estimated: crossLegs.some(c => c.priceSource !== 'live'),
+          isCrossSportMix: true
+        };
+        // Insert as top recommendation!
+        builderResult.slips.unshift(crossSlip);
+        if (builderResult.slips.length > 3) builderResult.slips.pop();
+      }
+    }
+  }
+
   try { localStorage.setItem(BUILDER_KEY, JSON.stringify(builderState)); } catch (e) { /* ignore */ }
 }
 
@@ -588,7 +673,18 @@ function slipLegRow(l) {
   const price = l.priceSource === 'live'
     ? '<span class="slip-price live" title="Bookmaker price from ' + esc(l.bookmaker) + '">' + legPrice + '<small>' + esc(l.bookmaker) + '</small></span>'
     : '<span class="slip-price est" title="No fresh bookmaker price. Estimated from the model chance plus a typical margin: check your bookmaker.">' + legPrice + '<small>estimate</small></span>';
-  return '<li class="slip-leg"><span class="slip-teams">' + crest(f.home, 22) + '<span class="slip-match">' + esc(f.home) + ' v ' + esc(f.away) +
+
+  const sportEmojis = { TENNIS: '🎾', GOLF: '⛳', DARTS: '🎯', RUGBY: '🏉' };
+  const sportEmoji = sportEmojis[f.competition] || (l.sport && sportEmojis[l.sport.toUpperCase()]);
+  const crestOrIcon = sportEmoji
+    ? '<span class="sport-badge-icon" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.4);font-size:13px;flex-shrink:0">' + sportEmoji + '</span>'
+    : crest(f.home, 22);
+
+  const teamDisplay = f.away && f.away !== f.home && f.away !== 'TENNIS' && f.away !== 'GOLF' && f.away !== 'DARTS' && f.away !== 'RUGBY'
+    ? esc(f.home) + ' v ' + esc(f.away)
+    : esc(f.home);
+
+  return '<li class="slip-leg"><span class="slip-teams">' + crestOrIcon + '<span class="slip-match">' + teamDisplay +
     '<small>' + esc(fmtDay(ms)) + ' ' + esc(fmtTime(ms)) + ' · ' + esc(leagueName(f.competition)) + '</small></span></span>' +
     '<span class="slip-pick"><b>' + esc(l.label) + '</b><small>' + pct(l.p) + ' chance' + (l.support === 'provisional' ? ' · provisional' : '') + '</small></span>' + price + '</li>';
 }
@@ -684,15 +780,95 @@ function slipCard(slip, idx, stake) {
     '</div></article>';
 }
 
+function customAccaCard(stake) {
+  const m = MatchIQBuilder.money;
+  const legs = customAccaLegs;
+  const odds = legs.reduce((t, l) => t * (l.odds || 2.0), 1);
+  const ret = stake * odds;
+  const profit = ret - stake;
+  const chance = legs.reduce((t, l) => t * (l.p || 0.5), 1);
+  const chancePct = chance >= 0.1 ? Math.round(chance * 100) : (chance * 100).toFixed(1);
+  const mainOdds = fmtOdds(odds);
+
+  return '<article class="slip custom-acca-slip" style="border: 2px solid #38bdf8; background: linear-gradient(160deg, rgba(56, 189, 248, 0.16), rgba(15, 23, 42, 0.95)); margin-bottom: 20px;">' +
+    '<div class="slip-head">' +
+      '<div>' +
+        '<div class="slip-kicker" style="color: #38bdf8;">🎯 Your Custom Mixed Acca (' + legs.length + ' selections)</div>' +
+        '<div class="slip-odds mono" style="color: #fff;">' + esc(mainOdds) + '</div>' +
+      '</div>' +
+      '<div class="slip-chance"><b class="mono">' + chancePct + '%</b><small>estimated chance</small></div>' +
+    '</div>' +
+    '<ul class="slip-legs">' +
+      legs.map(l => {
+        const sportIcons = { TENNIS: '🎾', GOLF: '⛳', DARTS: '🎯', RUGBY: '🏉', FOOTBALL: '⚽' };
+        const icon = sportIcons[(l.sport || '').toUpperCase()] || '🎯';
+        return '<li class="slip-leg" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);">' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<span style="font-size:16px;">' + icon + '</span>' +
+            '<div><b>' + esc(l.label) + '</b><small style="display:block;color:#94a3b8">' + esc(l.bookmaker || 'UK Odds') + '</small></div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<span class="slip-price live">' + esc(l.fractional || fmtOdds(l.odds)) + '</span>' +
+            '<button type="button" class="btn small" data-remove-cross-leg="' + esc(l.id) + '" title="Remove from Acca" style="padding:2px 8px;font-size:11px;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;">✕</button>' +
+          '</div>' +
+        '</li>';
+      }).join('') +
+    '</ul>' +
+    '<div class="slip-sum">' +
+      '<span>Stake <b class="mono">' + m(stake) + '</b></span>' +
+      '<span>Returns <b class="mono">' + m(ret) + '</b></span>' +
+      '<span>Profit <b class="mono">' + m(profit) + '</b></span>' +
+    '</div>' +
+    '<div class="btn-row" style="margin-top:12px;">' +
+      '<button type="button" class="btn primary" onclick="saveCustomAccaToDiary()">Save Custom Acca to Bet Diary</button>' +
+      '<button type="button" class="btn small" onclick="shareCustomAcca()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share / Copy</button>' +
+      '<button type="button" class="btn small" data-clear-custom-acca style="background:rgba(255,255,255,0.05);color:#94a3b8;">Clear Acca</button>' +
+    '</div>' +
+  '</article>';
+}
+
+function saveCustomAccaToDiary() {
+  const legs = customAccaLegs;
+  if (!legs.length) return;
+  const stake = (builderState && builderState.stake) || 10;
+  const odds = legs.reduce((t, l) => t * (l.odds || 2.0), 1);
+  openDiary({});
+  $('modal-bet-type').value = 'accumulator';
+  toggleAccumulatorFields();
+  $('modal-stake').value = stake;
+  $('modal-odds').value = fmtOdds(odds);
+  $('modal-legs-input').value = legs.map(l => l.label + ' | ' + (l.fractional || fmtOdds(l.odds))).join('\n');
+  toast('Custom Acca loaded into Bet Diary modal!');
+}
+
+function shareCustomAcca() {
+  const legs = customAccaLegs;
+  if (!legs.length) return;
+  const stake = (builderState && builderState.stake) || 10;
+  const odds = legs.reduce((t, l) => t * (l.odds || 2.0), 1);
+  const ret = stake * odds;
+  const text = [
+    '🎯 Bet Buddy Custom Mixed Acca (' + legs.length + ' legs)',
+    'Odds: ' + fmtOdds(odds) + ' · Potential Return: £' + ret.toFixed(2),
+    ...legs.map(l => '• ' + l.label + ' (' + (l.fractional || fmtOdds(l.odds)) + ' via ' + (l.bookmaker || 'UK Bookie') + ')')
+  ].join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    toast('Custom Acca copied to clipboard!');
+  }).catch(() => {
+    openUniversalShare({ title: 'Bet Buddy Acca', text, url: location.href });
+  });
+}
+
 function builderOutput() {
   const r = builderResult, { stake, win } = builderState, m = MatchIQBuilder.money;
-  if (!r) return '';
+  let customHtml = customAccaLegs.length > 0 ? customAccaCard(stake) : '';
+  if (!r) return customHtml;
   const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from a <b>' + m(stake) + '</b> stake you need a total return of <b>' + m(stake + win) + '</b>: combined odds of about <b class="mono">' + fmtOdds((stake + win) / stake) + '</b>.</p>';
-  if (r.error) return need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>';
+  if (r.error) return customHtml + need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>';
   const first = r.slips[0];
   const miss = r.exact ? '' : '<p class="slip-warn">No combination lands on that target. This is the closest available: it returns ' + m(first.ret) + ' (profit ' + m(first.profit) + ').</p>';
   const fine = '<p class="builder-fine">Chances are Bet Buddy model estimates, not promises. On average this slip is expected to ' + (first.ev >= 0 ? 'make ' : 'lose ') + '<b>' + m(Math.abs(first.ev)) + '</b> per ' + m(stake) + ' staked; bookmaker margins usually push that below zero. Never stake more than you can afford to lose.</p>';
-  return need + miss + r.slips.map((s, i) => slipCard(s, i, stake)).join('') + fine;
+  return customHtml + need + miss + r.slips.map((s, i) => slipCard(s, i, stake)).join('') + fine;
 }
 
 
@@ -989,11 +1165,16 @@ function viewHome() {
 }
 
 function viewPicks() {
+  const topHubNav = '<div class="picks-top-bar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:4px 0;">' +
+    '<a href="#/" class="btn small" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;background:rgba(56,189,248,0.14);border:1px solid var(--cyan);color:#fff;">← Welcome Hub</a>' +
+    '<span class="badge validated" style="font-size:11.5px;">🎯 Multi-Sport Acca Engine</span>' +
+  '</div>';
   const list = upcoming();
   const sharedBanner = sharedSlipNotice
     ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🐼</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' profit across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
     : '';
   let html = '<section class="view">' +
+    topHubNav +
     renderSportFilterBar() +
     sharedBanner +
     viewBuilder() + '<div class="section-head" style="align-items:flex-end;margin-top:36px"><div><h2 class="page-title">This round</h2>' +
@@ -1042,6 +1223,8 @@ function renderMultiSportSection(sportKey) {
     const eventsHtml = (t.events || []).map(ev => {
       const selectionsHtml = (ev.selections || []).map(sel => {
         const betData = esc(JSON.stringify({
+          eventId: ev.id,
+          sport: sportKey,
           selection: ev.title + ' · ' + sel.label,
           fair: sel.fractional,
           odds: sel.decimal,
@@ -2422,6 +2605,8 @@ function viewMultiSport(sportKey) {
     const eventsHtml = (t.events || []).map(ev => {
       const selectionsHtml = (ev.selections || []).map(sel => {
         const betData = esc(JSON.stringify({
+          eventId: ev.id,
+          sport: sportKey,
           selection: ev.title + ' · ' + sel.label,
           fair: sel.fractional,
           odds: sel.decimal,
@@ -2667,9 +2852,33 @@ document.addEventListener('click', event => {
   if (t.dataset.addCrossAcca !== undefined) {
     try {
       const data = JSON.parse(t.dataset.addCrossAcca);
-      toast('Added ' + data.selection + ' (' + data.fair + ') to Accumulator!');
-      location.hash = '#slip';
-    } catch (e) { toast('Selection ready for Acca!'); }
+      addCrossSportAccaLeg({
+        id: 'cross-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+        matchId: data.eventId || ('ev-' + Date.now()),
+        fixture: { home: data.selection.split(' · ')[0] || data.selection, away: '', competition: (data.sport || 'SPORT').toUpperCase() },
+        kickoff: Date.now() + 86400000,
+        selId: 'sel-' + data.selection,
+        label: data.selection,
+        market: 'match',
+        p: data.odds ? 1 / (data.odds * 1.07) : 0.5,
+        odds: Number(data.odds) || 2.0,
+        fractional: data.fair || 'Evs',
+        bookmaker: data.bookmaker || 'UK Bookmaker',
+        priceSource: 'live',
+        support: 'validated',
+        basis: (data.sport || 'Sport') + ' Bookmaker Price',
+        sport: data.sport || 'sport'
+      });
+      scrollToBuilder();
+    } catch (e) { console.error(e); }
+    return;
+  }
+  if (t.dataset.removeCrossLeg !== undefined) {
+    removeCrossSportAccaLeg(t.dataset.removeCrossLeg);
+    return;
+  }
+  if (t.dataset.clearCustomAcca !== undefined) {
+    clearCustomAcca();
     return;
   }
 
@@ -2963,26 +3172,25 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.18';
+const APP_VERSION = '2026.10.30.20';
 
 async function forceAppSync() {
-  toast('Syncing with latest Bet Buddy server... 🐼');
-  if ('caches' in window) {
-    try {
+  toast('Syncing Bet Buddy with latest server version... 🔄');
+  try {
+    if ('caches' in window) {
       const keys = await caches.keys();
       await Promise.all(keys.map(k => caches.delete(k)));
-    } catch (e) { /* ignore */ }
-  }
-  if ('serviceWorker' in navigator) {
-    try {
+    }
+    if ('serviceWorker' in navigator) {
       const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map(r => r.update()));
-    } catch (e) { /* ignore */ }
-  }
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+    localStorage.setItem('betbuddy_app_version', APP_VERSION);
+  } catch (e) { /* ignore */ }
   setTimeout(() => {
-    window.location.href = window.location.origin + window.location.pathname + '?sync=' + Date.now() + '#/';
+    window.location.href = window.location.origin + window.location.pathname + '?v=' + Date.now() + '#/';
     window.location.reload(true);
-  }, 400);
+  }, 350);
 }
 
 if ('serviceWorker' in navigator) {

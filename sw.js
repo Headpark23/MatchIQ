@@ -1,7 +1,7 @@
 // Bet Buddy Progressive Web App Service Worker (v17)
 // Network-first for shell code & data, cache-first for images/fonts, instant offline fallback
 
-const CACHE_NAME = 'betbuddy-pwa-v18';
+const CACHE_NAME = 'betbuddy-pwa-v20';
 
 const PRECACHE_ASSETS = [
   './',
@@ -15,7 +15,8 @@ const PRECACHE_ASSETS = [
   './assets/icon-512.png',
   './assets/apple-touch-icon.png',
   './assets/favicon-32.png',
-  './assets/stadium_hero.jpg'
+  './assets/stadium_hero.jpg',
+  './data/multi_sport_events.json'
 ];
 
 self.addEventListener('install', event => {

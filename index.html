@@ -24,6 +24,33 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+<script>
+  // Instant App & PWA Upgrade Sync + Landing Enforcement
+  (function() {
+    var APP_VER = '2026.10.30.20';
+    try {
+      var prevVer = localStorage.getItem('betbuddy_app_version');
+      if (prevVer !== APP_VER) {
+        localStorage.setItem('betbuddy_app_version', APP_VER);
+        if ('caches' in window) {
+          caches.keys().then(function(keys) {
+            keys.forEach(function(k) { caches.delete(k); });
+          });
+        }
+      }
+    } catch (e) {}
+
+    // First load in session: guarantee landing on Hero Welcome Page (#/)
+    try {
+      if (!sessionStorage.getItem('betbuddy_session_started')) {
+        sessionStorage.setItem('betbuddy_session_started', '1');
+        if (!location.hash || location.hash === '#' || location.hash === '#picks' || location.hash === '#/picks') {
+          location.hash = '#/';
+        }
+      }
+    } catch (e) {}
+  })();
+</script>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -169,9 +196,9 @@
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
-<script src="market_calculations.js"></script>
-<script src="bet_builder.js"></script>
-<script src="app.js?v=18"></script>
+<script src="market_calculations.js?v=20"></script>
+<script src="bet_builder.js?v=20"></script>
+<script src="app.js?v=20"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>
