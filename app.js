@@ -1661,12 +1661,15 @@ function saveStoredGeoMembers(docId, members) {
 }
 
 let activeGeoUnsubscribe = null;
+let currentGeoListeningDocId = null;
 function listenToActiveGeoLeague(docId) {
   if (!firestoreDb || !docId) return;
+  if (currentGeoListeningDocId === docId && activeGeoUnsubscribe) return;
   if (activeGeoUnsubscribe) {
     try { activeGeoUnsubscribe(); } catch (e) {}
     activeGeoUnsubscribe = null;
   }
+  currentGeoListeningDocId = docId;
   try {
     activeGeoUnsubscribe = firestoreDb.collection('geo_leagues').doc(docId).onSnapshot(doc => {
       if (!doc || !doc.exists) return;
@@ -1705,13 +1708,65 @@ function syncUserToGeoCloud() {
     const targets = ['geo-world', 'geo-europe', 'geo-uk', safeCountry, safeRegion, safeTown];
     targets.forEach(tId => {
       firestoreDb.collection('geo_leagues').doc(tId).set({
-        members: { [prof.handle]: userEntry }
+        ['members.' + prof.handle]: userEntry
       }, { merge: true }).catch(() => {});
     });
   } catch (e) {}
 }
 
 
+
+
+async function kickPlayerFromLeague(leagueCode, handle) {
+  if (!confirm('Are you sure you want to throw @' + handle + ' out of this league?')) return;
+  toast('Removing @' + handle + '...');
+
+  const list = getStoredLeagues();
+  const target = list.find(l => l.code === leagueCode);
+  if (target && target.members) {
+    target.members = target.members.filter(m => m.handle !== handle);
+    saveStoredLeagues(list);
+  }
+
+  if (firestoreDb && leagueCode) {
+    try {
+      const fieldPath = 'members.' + handle;
+      const FieldValue = firebase.firestore.FieldValue;
+      await firestoreDb.collection('leagues').doc(leagueCode).update({
+        [fieldPath]: FieldValue.delete()
+      });
+      toast('@' + handle + ' thrown out of league.');
+    } catch (e) {
+      console.warn('Kick error:', e);
+      toast('@' + handle + ' removed.');
+    }
+  }
+  render();
+}
+
+async function deleteLeague(leagueId, leagueCode) {
+  const list = getStoredLeagues();
+  const target = list.find(l => l.id === leagueId || l.code === leagueCode);
+  const name = target ? (typeof target.name === 'function' ? target.name() : target.name) : 'this league';
+  if (!confirm('Are you sure you want to permanently delete ' + name + '?\nThis will remove the league for all members.')) return;
+
+  toast('Deleting league...');
+
+  if (firestoreDb && leagueCode) {
+    try {
+      await firestoreDb.collection('leagues').doc(leagueCode).delete();
+    } catch (e) {
+      console.warn('Cloud league delete notice:', e);
+    }
+  }
+
+  const updated = list.filter(l => l.id !== leagueId && l.code !== leagueCode);
+  saveStoredLeagues(updated);
+
+  activeLeagueId = 'default';
+  toast('League deleted.');
+  render();
+}
 
 function syncLeagueToCloud(league) {
   syncUserToGeoCloud();
@@ -1728,36 +1783,76 @@ function syncLeagueToCloud(league) {
     form: uStats.form,
     updated_at: new Date().toISOString()
   };
-  firestoreDb.collection('leagues').doc(league.code).set({
-    name: league.name,
-    icon: league.icon || '⚽',
-    freq: league.freq || 'weekly',
-    code: league.code,
-    created_at: league.created_at || new Date().toISOString().slice(0, 10),
-    members: {
-      [prof.handle]: userEntry
-    }
-  }, { merge: true }).catch(err => console.warn('Cloud league sync notice:', err));
+
+  const isLeagueCreator = !league.is_joined && (!league.creator_handle || league.creator_handle === prof.handle);
+
+  if (isLeagueCreator) {
+    if (!league.creator_handle) league.creator_handle = prof.handle;
+    firestoreDb.collection('leagues').doc(league.code).set({
+      name: league.name,
+      icon: league.icon || '⚽',
+      freq: league.freq || 'weekly',
+      code: league.code,
+      creator_handle: prof.handle,
+      created_at: league.created_at || new Date().toISOString().slice(0, 10),
+      ['members.' + prof.handle]: userEntry
+    }, { merge: true }).catch(err => console.warn('Cloud league sync notice:', err));
+  } else {
+    // Member only updates their own stats, never overwrites league name or other members
+    firestoreDb.collection('leagues').doc(league.code).set({
+      ['members.' + prof.handle]: userEntry
+    }, { merge: true }).catch(err => console.warn('Cloud member sync notice:', err));
+  }
 }
 
+let currentLeagueListeningCode = null;
 function listenToActiveLeague(code) {
   if (!firestoreDb || !code) return;
+  if (currentLeagueListeningCode === code && activeLeagueUnsubscribe) return;
   if (activeLeagueUnsubscribe) {
     try { activeLeagueUnsubscribe(); } catch (e) {}
     activeLeagueUnsubscribe = null;
   }
+  currentLeagueListeningCode = code;
   try {
     activeLeagueUnsubscribe = firestoreDb.collection('leagues').doc(code).onSnapshot(doc => {
-      if (!doc || !doc.exists) return;
-      const data = doc.data();
       const list = getStoredLeagues();
       const target = list.find(l => l.code === code);
+      if (!doc || !doc.exists) {
+        if (target) {
+          const updated = list.filter(l => l.code !== code);
+          saveStoredLeagues(updated);
+          if (activeLeagueId === target.id) {
+            activeLeagueId = 'default';
+            toast('This league was deleted by the creator.');
+            render();
+          }
+        }
+        return;
+      }
+      const data = doc.data();
       if (target) {
-        if (data.name) target.name = data.name;
+        if (data.name) {
+          if (!target.is_joined && target.name && !target.name.startsWith('Buddy League (') && data.name.startsWith('Buddy League (')) {
+            firestoreDb.collection('leagues').doc(code).update({ name: target.name }).catch(() => {});
+          } else {
+            target.name = data.name;
+          }
+        }
         if (data.icon) target.icon = data.icon;
+        if (data.creator_handle) target.creator_handle = data.creator_handle;
+        const prof = getUserProfile();
         if (data.members) {
-          const prof = getUserProfile();
-          // Store remote members (excluding current user to avoid duplicate)
+          if (target.is_joined && !data.members[prof.handle]) {
+            const updated = list.filter(l => l.code !== code);
+            saveStoredLeagues(updated);
+            if (activeLeagueId === target.id) {
+              activeLeagueId = 'default';
+              toast('You have been removed from ' + (target.name || 'this league') + '.');
+              render();
+            }
+            return;
+          }
           target.members = Object.values(data.members).filter(m => m.handle !== prof.handle);
         }
         saveStoredLeagues(list);
@@ -1773,43 +1868,55 @@ function listenToActiveLeague(code) {
 
 async function joinCloudLeague(code) {
   if (!code) return;
-  const list = getStoredLeagues();
-  let league = list.find(l => l.code === code);
-  if (!league) {
-    league = {
-      id: 'league-' + Date.now(),
-      name: 'Buddy League (' + code + ')',
-      icon: '⚽',
-      freq: 'weekly',
-      code: code,
-      created_at: new Date().toISOString().slice(0, 10),
-      members: []
-    };
-    list.push(league);
-    saveStoredLeagues(list);
-  }
-  activeLeagueId = league.id;
+  let leagueName = 'Buddy League (' + code + ')';
+  let leagueIcon = '⚽';
+  let leagueFreq = 'weekly';
+  let creatorHandle = null;
 
   if (firestoreDb) {
     try {
       const snap = await firestoreDb.collection('leagues').doc(code).get();
       if (snap.exists) {
-        const data = snap.data();
-        if (data.name) league.name = data.name;
-        if (data.icon) league.icon = data.icon;
-        if (data.freq) league.freq = data.freq;
-        const prof = getUserProfile();
-        if (data.members) {
-          league.members = Object.values(data.members).filter(m => m.handle !== prof.handle);
-        }
-        saveStoredLeagues(list);
-        syncLeagueToCloud(league);
-        listenToActiveLeague(code);
+        const d = snap.data();
+        if (d.name) leagueName = d.name;
+        if (d.icon) leagueIcon = d.icon;
+        if (d.freq) leagueFreq = d.freq;
+        if (d.creator_handle) creatorHandle = d.creator_handle;
       }
     } catch (e) {
       console.warn('Join cloud fetch notice:', e);
     }
   }
+
+  const list = getStoredLeagues();
+  let league = list.find(l => l.code === code);
+  if (!league) {
+    league = {
+      id: 'league-' + Date.now(),
+      name: leagueName,
+      icon: leagueIcon,
+      freq: leagueFreq,
+      code: code,
+      is_joined: true,
+      creator_handle: creatorHandle,
+      created_at: new Date().toISOString().slice(0, 10),
+      members: []
+    };
+    list.push(league);
+  } else {
+    // Only update name if not creator or if local name is default
+    if (league.is_joined || !league.name || league.name.startsWith('Buddy League (')) {
+      league.name = leagueName;
+    }
+    league.icon = leagueIcon;
+    league.freq = leagueFreq;
+    if (creatorHandle) league.creator_handle = creatorHandle;
+  }
+  saveStoredLeagues(list);
+  activeLeagueId = league.id;
+
+  syncLeagueToCloud(league);
+  listenToActiveLeague(code);
   render();
 }
 
@@ -2050,6 +2157,8 @@ function viewLeagues() {
       isGeo = true;
     }
   }
+  const isLeagueCreator = !isGeo && currentLeague && !currentLeague.is_joined && (!currentLeague.creator_handle || currentLeague.creator_handle === prof.handle);
+
   if (!isGeo && currentLeague && currentLeague.code) {
     syncLeagueToCloud(currentLeague);
     listenToActiveLeague(currentLeague.code);
@@ -2093,6 +2202,11 @@ function viewLeagues() {
     const roiClass = m.roi > 0 ? 'pos' : m.roi < 0 ? 'neg' : '';
     const formStr = (m.form || []).join(' · ');
     const memberId = 'mem-form-' + idx;
+    const kickCell = isLeagueCreator ? (
+      m.isYou
+        ? '<td class="lb-col-action"><span class="bento-badge cyan text-xs">Host</span></td>'
+        : '<td class="lb-col-action"><button type="button" class="kick-player-btn" data-kick-player="' + esc(m.handle) + '" data-league-code="' + esc(currentLeague.code) + '" title="Throw @' + esc(m.handle) + ' out of this league">Kick ✕</button></td>'
+    ) : '';
 
     return '<tr class="lb-row' + (m.isYou ? ' user-row' : '') + '">' +
       '<td class="lb-col-rank"><span class="rank-badge ' + rankClass + '">' + rankIcon + '</span></td>' +
@@ -2110,6 +2224,7 @@ function viewLeagues() {
       '<td class="lb-col-win"><span class="win-pct-pill">' + m.winRate + '%</span></td>' +
       '<td class="lb-col-roi"><span class="roi-pct-pill ' + roiClass + '">' + roiSign + m.roi + '%</span></td>' +
       '<td class="lb-col-bets num mono">' + m.settled + '</td>' +
+      kickCell +
     '</tr>';
   }).join('');
 
@@ -2184,13 +2299,14 @@ function viewLeagues() {
             '<h2 class="section-title">' + (typeof currentLeague.name === 'function' ? currentLeague.name() : currentLeague.name) + '</h2>' +
             '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze</span>' +
           '</div>' +
-          '<div style="display:flex;gap:10px;align-items:center">' +
+          '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
             '<div class="frequency-toggle-bar">' +
               '<button type="button" class="freq-btn' + (activeLeagueFreq === 'weekly' ? ' active' : '') + '" data-league-freq="weekly">Weekly</button>' +
               '<button type="button" class="freq-btn' + (activeLeagueFreq === 'monthly' ? ' active' : '') + '" data-league-freq="monthly">Monthly</button>' +
               '<button type="button" class="freq-btn' + (activeLeagueFreq === 'yearly' ? ' active' : '') + '" data-league-freq="yearly">Yearly</button>' +
             '</div>' +
             '<button type="button" class="btn small" data-share-league="' + esc(currentLeague.code) + '">Invite Friends</button>' +
+            (isLeagueCreator ? '<button type="button" class="btn danger small" data-delete-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '" title="Permanently delete this league">Delete League 🗑️</button>' : '') +
           '</div>' +
         '</div>' +
         '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
@@ -2200,6 +2316,7 @@ function viewLeagues() {
           '<th class="lb-col-win">Win %</th>' +
           '<th class="lb-col-roi">ROI %</th>' +
           '<th class="lb-col-bets num">Bets</th>' +
+          (isLeagueCreator ? '<th class="lb-col-action">Manage</th>' : '') +
         '</tr></thead><tbody>' +
         rowsHtml +
         '</tbody></table></div>' +
@@ -2594,7 +2711,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v35 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v36 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3601,6 +3718,12 @@ document.addEventListener('click', event => {
   else if (t.dataset.selectLeague !== undefined) { activeLeagueId = t.dataset.selectLeague; render(); }
   else if (t.dataset.selectMoreTab !== undefined) { activeMoreTab = t.dataset.selectMoreTab; render(); }
   else if (t.id === 'toggle-odds-format') { toggleOddsFormat(); render(); }
+  else if (t.dataset.kickPlayer !== undefined) {
+    kickPlayerFromLeague(t.dataset.leagueCode, t.dataset.kickPlayer);
+  }
+  else if (t.dataset.deleteLeague !== undefined) {
+    deleteLeague(t.dataset.deleteLeague, t.dataset.leagueCode);
+  }
   else if (t.dataset.shareLeague !== undefined) {
     const code = t.dataset.shareLeague;
     const shareUrl = 'https://betbuddyuk.uk/#join-league=' + encodeURIComponent(code);
@@ -3683,12 +3806,14 @@ document.addEventListener('submit', event => {
     const icon = ($('new-league-icon') && $('new-league-icon').value) || '⚽';
     const freq = ($('new-league-freq') && $('new-league-freq').value) || 'weekly';
     const code = 'BUDDY-' + Math.floor(Math.random() * 8999 + 1000);
+    const prof = getUserProfile();
     const newLeague = {
       id: 'league-' + Date.now(),
       name,
       icon,
       freq,
       code,
+      creator_handle: prof.handle,
       created_at: new Date().toISOString().slice(0, 10),
       members: []
     };
@@ -3822,7 +3947,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = '2026.10.30.35';
+const APP_VERSION = '2026.10.30.36';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
