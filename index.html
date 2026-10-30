@@ -27,7 +27,7 @@
 <script>
   // Instant App & PWA Upgrade Sync + Landing Enforcement
   (function() {
-    var APP_VER = '2026.10.30.27';
+    var APP_VER = '2026.10.30.28';
     try {
       var prevVer = localStorage.getItem('betbuddy_app_version');
       if (prevVer !== APP_VER) {
@@ -40,13 +40,12 @@
       }
     } catch (e) {}
 
-    // First load in session: guarantee landing on Hero Welcome Page (#/)
+    // App Launch: Guarantee landing on Home screen (#/) unless explicit deep-link (#join-league or #slip)
     try {
-      if (!sessionStorage.getItem('betbuddy_session_started')) {
-        sessionStorage.setItem('betbuddy_session_started', '1');
-        if (!location.hash || location.hash === '#' || location.hash === '#picks' || location.hash === '#/picks') {
-          location.hash = '#/';
-        }
+      var h = window.location.hash || '';
+      var isSharedDeepLink = h.indexOf('join-league=') !== -1 || h.indexOf('slip=') !== -1;
+      if (!isSharedDeepLink) {
+        window.location.hash = '#/';
       }
     } catch (e) {}
   })();
@@ -200,9 +199,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-<script src="market_calculations.js?v=27"></script>
-<script src="bet_builder.js?v=27"></script>
-<script src="app.js?v=27"></script>
+<script src="market_calculations.js?v=28"></script>
+<script src="bet_builder.js?v=28"></script>
+<script src="app.js?v=28"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>

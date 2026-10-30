@@ -1,10 +1,9 @@
-// Session Start: Always land on Hero Welcome Hub (#/) on fresh app launch
+// App Launch: Guarantee landing on Home screen (#/) unless explicit deep-link (#join-league or #slip)
 try {
-  if (!sessionStorage.getItem('betbuddy_session_started')) {
-    sessionStorage.setItem('betbuddy_session_started', '1');
-    if (!location.hash || location.hash === '#' || location.hash === '#picks' || location.hash === '#/picks') {
-      location.hash = '#/';
-    }
+  const h = window.location.hash || '';
+  const isSharedDeepLink = h.includes('join-league=') || h.includes('slip=');
+  if (!isSharedDeepLink) {
+    window.location.hash = '#/';
   }
 } catch (e) {}
 'use strict';
@@ -2481,7 +2480,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v27 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v28 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3676,7 +3675,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.27';
+const APP_VERSION = '2026.10.30.28';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
