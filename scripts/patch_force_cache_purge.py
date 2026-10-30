@@ -113,3 +113,4 @@ if __name__ == '__main__':
     patch_sw_js()
     patch_app_js()
     print("All cache-busting and brand icon patches applied.")
+

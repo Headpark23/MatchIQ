@@ -26,7 +26,8 @@ ALLOWLIST_FILES = [
     "manifest.json",
     "sw.js",
     "vercel.json",
-    "CNAME"
+    "CNAME",
+    "gag0p29escioankmdh.html"
 ]
 
 ALLOWLIST_ASSETS = [
@@ -69,7 +70,7 @@ def build():
     for fname in ALLOWLIST_FILES:
         src = ROOT / fname
         if not src.exists():
-            if fname == "CNAME":
+            if fname in {"CNAME", "gag0p29escioankmdh.html"}:
                 continue
             raise FileNotFoundError(f"Missing required public file: {fname}")
         shutil.copy2(src, DIST / fname)

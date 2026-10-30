@@ -12,3 +12,4 @@ with open('app.js', 'w', encoding='utf-8') as f:
     f.write(c)
 
 print("Base64 panda strings purged from app.js")
+
