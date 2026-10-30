@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-10-29T22:57:08.027613+00:00",
+ "attempted_at": "2026-10-30T06:22:48.976860+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -149,28 +149,30 @@
   "the-odds-api": {
    "ok": true,
    "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
-   "matches": 89,
+   "matches": 110,
    "notes": {
-    "PL": "skipped: no Premier League match in the next 36 h",
-    "ELC": "ok: 24 of 24 events matched, 2 credits",
-    "BL1": "ok: 18 of 18 events matched, 2 credits",
-    "PD": "ok: 20 of 20 events matched, 2 credits",
-    "SA": "skipped: no Serie A match in the next 36 h",
-    "FL1": "ok: 17 of 18 events matched, 2 credits"
+    "PL": "ok: 21 of 21 events matched, 2 credits",
+    "ELC": "skipped: polled 7.4 h ago (minimum 8 h)",
+    "BL1": "skipped: polled 7.4 h ago (minimum 8 h)",
+    "PD": "skipped: polled 7.4 h ago (minimum 8 h)",
+    "SA": "ok: 10 of 10 events matched, 2 credits",
+    "FL1": "skipped: polled 7.4 h ago (minimum 8 h)"
    },
-   "credits_used_this_month": 14,
-   "credits_remaining_reported": 438
+   "credits_used_this_month": 18,
+   "credits_remaining_reported": 434
   }
  },
- "warnings": [],
+ "warnings": [
+  "Match statistics (corners, cards, shots) end on 2026-10-19; those markets use older data."
+ ],
  "errors": [],
  "ok": true,
- "last_success": "2026-10-29T22:57:08.027613+00:00",
+ "last_success": "2026-10-30T06:22:48.976860+00:00",
  "fixtures": 2304,
  "upcoming_predicted": 132,
- "published_revisions": 23,
+ "published_revisions": 0,
  "imported_frozen_records": 0,
- "settlement_updates": 40,
+ "settlement_updates": 20,
  "training_results": 1918,
  "results_latest": "2026-10-25",
  "model_versions": {

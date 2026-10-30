@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-29T22:57:08.027613+00:00",
+ "generated_at": "2026-10-30T06:22:48.976860+00:00",
  "horizon_days": 21,
  "model_version": "dc-public-v1",
  "predictions": {
@@ -3007,7 +3007,7 @@
      ],
      "pooled_matches": {
       "home": 42,
-      "away": 43
+      "away": 42
      },
      "derivation": "public-derived"
     },
@@ -3182,31 +3182,31 @@
      "pick": {
       "key": "H",
       "label": "Bologna win",
-      "p": 0.4055,
+      "p": 0.4057,
       "fair_odds": "≈6/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Bologna win",
-       "p": 0.4055,
+       "p": 0.4057,
        "fair_odds": "≈6/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.272,
+       "p": 0.2724,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Monza win",
-       "p": 0.3225,
+       "p": 0.322,
        "fair_odds": "≈2/1"
       }
      ],
      "method": "Serie A average result frequencies (not enough recent matches for one of the clubs)",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -3288,9 +3288,9 @@
       "away": 43
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -3310,7 +3310,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5147,
+      "p": 0.5138,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -3320,59 +3320,59 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.737,
+        "p": 0.7374,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.263,
+        "p": 0.2626,
         "fair_odds": "≈11/4"
        },
        "model_p": null,
-       "league_p": 0.737
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4853,
+        "p": 0.4862,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5147,
+        "p": 0.5138,
         "fair_odds": "≈10/11"
        },
        "model_p": null,
-       "league_p": 0.4853
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2541,
+        "p": 0.2553,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7459,
+        "p": 0.7447,
         "fair_odds": "≈1/3"
        },
        "model_p": null,
-       "league_p": 0.2541
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": null
      },
      "explanation": [
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -3389,25 +3389,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5024,
+      "p": 0.5033,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5024,
+       "p": 0.5033,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4976,
+       "p": 0.4967,
        "fair_odds": "≈Evens"
       }
      ],
      "model_p": null,
-     "league_p": 0.5024,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -8649,7 +8649,7 @@
       0.2817
      ],
      "pooled_matches": {
-      "home": 42,
+      "home": 41,
       "away": 42
      },
      "derivation": "public-derived"
@@ -8826,31 +8826,31 @@
      "pick": {
       "key": "A",
       "label": "Roma win",
-      "p": 0.6165,
+      "p": 0.6145,
       "fair_odds": "≈8/13"
      },
      "selections": [
       {
        "key": "H",
        "label": "Udinese win",
-       "p": 0.1577,
+       "p": 0.1586,
        "fair_odds": "≈11/2"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2258,
-       "fair_odds": "≈7/2"
+       "p": 0.2269,
+       "fair_odds": "≈100/30"
       },
       {
        "key": "A",
        "label": "Roma win",
-       "p": 0.6165,
+       "p": 0.6145,
        "fair_odds": "≈8/13"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -8932,9 +8932,9 @@
       "away": 61
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -8954,7 +8954,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.511,
+      "p": 0.5112,
       "fair_odds": "≈Evens",
       "line": 2.5
      },
@@ -8964,63 +8964,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.74,
+        "p": 0.7397,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.26,
+        "p": 0.2603,
         "fair_odds": "≈11/4"
        },
-       "model_p": 0.747,
-       "league_p": 0.737
+       "model_p": 0.7451,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.489,
+        "p": 0.4888,
         "fair_odds": "≈Evens"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.511,
+        "p": 0.5112,
         "fair_odds": "≈Evens"
        },
-       "model_p": 0.4977,
-       "league_p": 0.4853
+       "model_p": 0.4951,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2613,
+        "p": 0.2614,
         "fair_odds": "≈11/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7387,
+        "p": 0.7386,
         "fair_odds": "≈4/11"
        },
-       "model_p": 0.2781,
-       "league_p": 0.2541
+       "model_p": 0.2758,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
        0.81,
-       1.85
+       1.84
       ]
      },
      "explanation": [
-      "The score model expects about 0.8 goals for Udinese and 1.9 for Roma.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "The score model expects about 0.8 goals for Udinese and 1.8 for Roma.",
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -9037,25 +9037,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5067,
+      "p": 0.5065,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4933,
+       "p": 0.4935,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5067,
+       "p": 0.5065,
        "fair_odds": "≈Evens"
       }
      ],
-     "model_p": 0.4718,
-     "league_p": 0.5024,
+     "model_p": 0.4708,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -9981,31 +9981,31 @@
      "pick": {
       "key": "A",
       "label": "Inter win",
-      "p": 0.5239,
+      "p": 0.5221,
       "fair_odds": "≈10/11"
      },
      "selections": [
       {
        "key": "H",
        "label": "AC Milan win",
-       "p": 0.2478,
+       "p": 0.2489,
        "fair_odds": "≈3/1"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2284,
+       "p": 0.229,
        "fair_odds": "≈100/30"
       },
       {
        "key": "A",
        "label": "Inter win",
-       "p": 0.5239,
+       "p": 0.5221,
        "fair_odds": "≈10/11"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -10087,9 +10087,9 @@
       "away": 61
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -10109,7 +10109,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5217,
+      "p": 0.5218,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -10128,46 +10128,46 @@
         "p": 0.2374,
         "fair_odds": "≈100/30"
        },
-       "model_p": 0.8224,
-       "league_p": 0.737
+       "model_p": 0.8214,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5217,
+        "p": 0.5218,
         "fair_odds": "≈10/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4783,
+        "p": 0.4782,
         "fair_odds": "≈11/10"
        },
-       "model_p": 0.6066,
-       "league_p": 0.4853
+       "model_p": 0.6049,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2928,
+        "p": 0.2931,
         "fair_odds": "≈5/2"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7072,
+        "p": 0.7069,
         "fair_odds": "≈2/5"
        },
-       "model_p": 0.3832,
-       "league_p": 0.2541
+       "model_p": 0.3815,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
        1.24,
        1.89
@@ -10175,7 +10175,7 @@
      },
      "explanation": [
       "The score model expects about 1.2 goals for AC Milan and 1.9 for Inter.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -10192,25 +10192,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5336,
+      "p": 0.534,
       "fair_odds": "≈10/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5336,
+       "p": 0.534,
        "fair_odds": "≈10/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4664,
+       "p": 0.466,
        "fair_odds": "≈11/10"
       }
      ],
-     "model_p": 0.6064,
-     "league_p": 0.5024,
+     "model_p": 0.6056,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -10933,7 +10933,7 @@
      ],
      "pooled_matches": {
       "home": 43,
-      "away": 43
+      "away": 42
      },
      "derivation": "public-derived"
     },
@@ -11108,31 +11108,31 @@
      "pick": {
       "key": "H",
       "label": "Como win",
-      "p": 0.4055,
+      "p": 0.4057,
       "fair_odds": "≈6/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Como win",
-       "p": 0.4055,
+       "p": 0.4057,
        "fair_odds": "≈6/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.272,
+       "p": 0.2724,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Venezia win",
-       "p": 0.3225,
+       "p": 0.322,
        "fair_odds": "≈2/1"
       }
      ],
      "method": "Serie A average result frequencies (not enough recent matches for one of the clubs)",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -11214,9 +11214,9 @@
       "away": 23
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -11236,7 +11236,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5147,
+      "p": 0.5138,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -11246,59 +11246,59 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.737,
+        "p": 0.7374,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.263,
+        "p": 0.2626,
         "fair_odds": "≈11/4"
        },
        "model_p": null,
-       "league_p": 0.737
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4853,
+        "p": 0.4862,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5147,
+        "p": 0.5138,
         "fair_odds": "≈10/11"
        },
        "model_p": null,
-       "league_p": 0.4853
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2541,
+        "p": 0.2553,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7459,
+        "p": 0.7447,
         "fair_odds": "≈1/3"
        },
        "model_p": null,
-       "league_p": 0.2541
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": null
      },
      "explanation": [
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -11315,25 +11315,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5024,
+      "p": 0.5033,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5024,
+       "p": 0.5033,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4976,
+       "p": 0.4967,
        "fair_odds": "≈Evens"
       }
      ],
      "model_p": null,
-     "league_p": 0.5024,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -11499,7 +11499,7 @@
       0.2817
      ],
      "pooled_matches": {
-      "home": 43,
+      "home": 42,
       "away": 42
      },
      "derivation": "public-derived"
@@ -11676,40 +11676,33 @@
      "pick": {
       "key": "H",
       "label": "Frosinone win",
-      "p": 0.4055,
+      "p": 0.4057,
       "fair_odds": "≈6/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Frosinone win",
-       "p": 0.4055,
+       "p": 0.4057,
        "fair_odds": "≈6/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.272,
+       "p": 0.2724,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Torino win",
-       "p": 0.3225,
+       "p": 0.322,
        "fair_odds": "≈2/1"
       }
      ],
      "method": "Serie A average result frequencies (not enough recent matches for one of the clubs)",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
-       {
-        "date": "2024-05-26",
-        "opponent": "Udinese",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
        {
         "date": "2026-08-23",
         "opponent": "Juventus",
@@ -11736,6 +11729,13 @@
         "opponent": "Sassuolo",
         "gf": 4,
         "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-29",
+        "opponent": "Lecce",
+        "gf": 5,
+        "ga": 1,
         "res": "W"
        }
       ],
@@ -11778,16 +11778,16 @@
       ]
      },
      "venue_games": {
-      "home": 23,
+      "home": 24,
       "away": 61
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
-      "home": 8,
+      "home": 9,
       "away": 43
      },
      "derivation": "public-derived"
@@ -11804,7 +11804,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5147,
+      "p": 0.5138,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -11814,59 +11814,59 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.737,
+        "p": 0.7374,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.263,
+        "p": 0.2626,
         "fair_odds": "≈11/4"
        },
        "model_p": null,
-       "league_p": 0.737
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4853,
+        "p": 0.4862,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5147,
+        "p": 0.5138,
         "fair_odds": "≈10/11"
        },
        "model_p": null,
-       "league_p": 0.4853
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2541,
+        "p": 0.2553,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7459,
+        "p": 0.7447,
         "fair_odds": "≈1/3"
        },
        "model_p": null,
-       "league_p": 0.2541
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": null
      },
      "explanation": [
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -11883,25 +11883,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5024,
+      "p": 0.5033,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5024,
+       "p": 0.5033,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4976,
+       "p": 0.4967,
        "fair_odds": "≈Evens"
       }
      ],
      "model_p": null,
-     "league_p": 0.5024,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -11950,31 +11950,31 @@
      "pick": {
       "key": "H",
       "label": "Lazio win",
-      "p": 0.5721,
+      "p": 0.5735,
       "fair_odds": "≈8/11"
      },
      "selections": [
       {
        "key": "H",
        "label": "Lazio win",
-       "p": 0.5721,
+       "p": 0.5735,
        "fair_odds": "≈8/11"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2441,
+       "p": 0.2439,
        "fair_odds": "≈3/1"
       },
       {
        "key": "A",
        "label": "Cagliari win",
-       "p": 0.1839,
+       "p": 0.1826,
        "fair_odds": "≈9/2"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -12056,9 +12056,9 @@
       "away": 62
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -12078,7 +12078,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.52,
+      "p": 0.5196,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -12088,63 +12088,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7331,
+        "p": 0.7332,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2669,
+        "p": 0.2668,
         "fair_odds": "≈11/4"
        },
-       "model_p": 0.724,
-       "league_p": 0.737
+       "model_p": 0.7235,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.48,
+        "p": 0.4804,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.52,
+        "p": 0.5196,
         "fair_odds": "≈10/11"
        },
-       "model_p": 0.4675,
-       "league_p": 0.4853
+       "model_p": 0.4668,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2534,
+        "p": 0.2541,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7466,
+        "p": 0.7459,
         "fair_odds": "≈1/3"
        },
-       "model_p": 0.2519,
-       "league_p": 0.2541
+       "model_p": 0.2513,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
        1.7,
-       0.85
+       0.84
       ]
      },
      "explanation": [
       "The score model expects about 1.7 goals for Lazio and 0.8 for Cagliari.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -12161,25 +12161,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5074,
+      "p": 0.5073,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4926,
+       "p": 0.4927,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5074,
+       "p": 0.5073,
        "fair_odds": "≈Evens"
       }
      ],
-     "model_p": 0.4695,
-     "league_p": 0.5024,
+     "model_p": 0.4681,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -14262,31 +14262,31 @@
      "pick": {
       "key": "A",
       "label": "Genoa win",
-      "p": 0.4088,
-      "fair_odds": "≈6/4"
+      "p": 0.4209,
+      "fair_odds": "≈11/8"
      },
      "selections": [
       {
        "key": "H",
        "label": "Lecce win",
-       "p": 0.2756,
+       "p": 0.2682,
        "fair_odds": "≈11/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.3156,
+       "p": 0.3109,
        "fair_odds": "≈9/4"
       },
       {
        "key": "A",
        "label": "Genoa win",
-       "p": 0.4088,
-       "fair_odds": "≈6/4"
+       "p": 0.4209,
+       "fair_odds": "≈11/8"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -14368,12 +14368,12 @@
       "away": 60
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
-      "home": 42,
+      "home": 43,
       "away": 43
      },
      "derivation": "public-derived"
@@ -14390,8 +14390,8 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5676,
-      "fair_odds": "≈8/11",
+      "p": 0.5639,
+      "fair_odds": "≈4/5",
       "line": 2.5
      },
      "lines": [
@@ -14400,63 +14400,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.6905,
+        "p": 0.694,
         "fair_odds": "≈4/9"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.3095,
+        "p": 0.306,
         "fair_odds": "≈9/4"
        },
-       "model_p": 0.5821,
-       "league_p": 0.737
+       "model_p": 0.5928,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4324,
-        "fair_odds": "≈11/8"
+        "p": 0.4361,
+        "fair_odds": "≈5/4"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5676,
-        "fair_odds": "≈8/11"
+        "p": 0.5639,
+        "fair_odds": "≈4/5"
        },
-       "model_p": 0.3088,
-       "league_p": 0.4853
+       "model_p": 0.3194,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2179,
+        "p": 0.2208,
         "fair_odds": "≈7/2"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7821,
+        "p": 0.7792,
         "fair_odds": "≈2/7"
        },
-       "model_p": 0.1333,
-       "league_p": 0.2541
+       "model_p": 0.1403,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
        0.85,
-       1.1
+       1.14
       ]
      },
      "explanation": [
       "The score model expects about 0.8 goals for Lecce and 1.1 for Genoa.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -14473,25 +14473,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5332,
+      "p": 0.5304,
       "fair_odds": "≈10/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4668,
+       "p": 0.4696,
        "fair_odds": "≈11/10"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5332,
+       "p": 0.5304,
        "fair_odds": "≈10/11"
       }
      ],
-     "model_p": 0.3838,
-     "league_p": 0.5024,
+     "model_p": 0.3911,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -14842,31 +14842,31 @@
      "pick": {
       "key": "H",
       "label": "Juventus win",
-      "p": 0.3669,
+      "p": 0.3671,
       "fair_odds": "≈7/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Juventus win",
-       "p": 0.3669,
+       "p": 0.3671,
        "fair_odds": "≈7/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2928,
+       "p": 0.2938,
        "fair_odds": "≈5/2"
       },
       {
        "key": "A",
        "label": "Napoli win",
-       "p": 0.3403,
+       "p": 0.339,
        "fair_odds": "≈2/1"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -14948,9 +14948,9 @@
       "away": 62
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -14970,7 +14970,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.543,
+      "p": 0.5434,
       "fair_odds": "≈5/6",
       "line": 2.5
      },
@@ -14980,63 +14980,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.714,
+        "p": 0.7134,
         "fair_odds": "≈2/5"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.286,
+        "p": 0.2866,
         "fair_odds": "≈5/2"
        },
-       "model_p": 0.6604,
-       "league_p": 0.737
+       "model_p": 0.6575,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.457,
+        "p": 0.4566,
         "fair_odds": "≈6/5"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.543,
+        "p": 0.5434,
         "fair_odds": "≈5/6"
        },
-       "model_p": 0.3908,
-       "league_p": 0.4853
+       "model_p": 0.3875,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2351,
+        "p": 0.2352,
         "fair_odds": "≈100/30"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7649,
+        "p": 0.7648,
         "fair_odds": "≈3/10"
        },
-       "model_p": 0.1907,
-       "league_p": 0.2541
+       "model_p": 0.1882,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
        1.15,
-       1.1
+       1.09
       ]
      },
      "explanation": [
       "The score model expects about 1.1 goals for Juventus and 1.1 for Napoli.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -15053,25 +15053,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5107,
+      "p": 0.5109,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4893,
+       "p": 0.4891,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5107,
+       "p": 0.5109,
        "fair_odds": "≈Evens"
       }
      ],
-     "model_p": 0.4588,
-     "league_p": 0.5024,
+     "model_p": 0.4561,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -15535,7 +15535,7 @@
      ],
      "pooled_matches": {
       "home": 41,
-      "away": 43
+      "away": 42
      },
      "derivation": "public-derived"
     },
@@ -15710,7 +15710,7 @@
      "pick": {
       "key": "A",
       "label": "Fiorentina win",
-      "p": 0.4089,
+      "p": 0.4095,
       "fair_odds": "≈6/4"
      },
      "selections": [
@@ -15723,18 +15723,18 @@
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2473,
+       "p": 0.2467,
        "fair_odds": "≈3/1"
       },
       {
        "key": "A",
        "label": "Fiorentina win",
-       "p": 0.4089,
+       "p": 0.4095,
        "fair_odds": "≈6/4"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -15816,13 +15816,13 @@
       "away": 61
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
-      "away": 42
+      "away": 43
      },
      "derivation": "public-derived"
     },
@@ -15838,7 +15838,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5123,
+      "p": 0.5137,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -15848,63 +15848,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7565,
+        "p": 0.7574,
         "fair_odds": "≈1/3"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2435,
+        "p": 0.2426,
         "fair_odds": "≈3/1"
        },
-       "model_p": 0.802,
-       "league_p": 0.737
+       "model_p": 0.804,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5123,
+        "p": 0.5137,
         "fair_odds": "≈10/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4877,
+        "p": 0.4863,
         "fair_odds": "≈11/10"
        },
-       "model_p": 0.5751,
-       "league_p": 0.4853
+       "model_p": 0.578,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2832,
+        "p": 0.2849,
         "fair_odds": "≈5/2"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7168,
+        "p": 0.7151,
         "fair_odds": "≈2/5"
        },
-       "model_p": 0.351,
-       "league_p": 0.2541
+       "model_p": 0.3539,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
-       1.42,
-       1.57
+       1.43,
+       1.58
       ]
      },
      "explanation": [
       "The score model expects about 1.4 goals for Sassuolo and 1.6 for Fiorentina.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -15921,25 +15921,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5327,
+      "p": 0.5339,
       "fair_odds": "≈10/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5327,
+       "p": 0.5339,
        "fair_odds": "≈10/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4673,
+       "p": 0.4661,
        "fair_odds": "≈11/10"
       }
      ],
-     "model_p": 0.6033,
-     "league_p": 0.5024,
+     "model_p": 0.6055,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -15997,31 +15997,31 @@
      "pick": {
       "key": "H",
       "label": "Atalanta win",
-      "p": 0.6328,
+      "p": 0.634,
       "fair_odds": "≈4/7"
      },
      "selections": [
       {
        "key": "H",
        "label": "Atalanta win",
-       "p": 0.6328,
+       "p": 0.634,
        "fair_odds": "≈4/7"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2302,
+       "p": 0.229,
        "fair_odds": "≈100/30"
       },
       {
        "key": "A",
        "label": "Parma win",
-       "p": 0.137,
+       "p": 0.1369,
        "fair_odds": "≈13/2"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -16103,12 +16103,12 @@
       "away": 42
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
-      "home": 42,
+      "home": 43,
       "away": 43
      },
      "derivation": "public-derived"
@@ -16125,7 +16125,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5268,
+      "p": 0.5249,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -16135,63 +16135,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7276,
+        "p": 0.729,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2724,
+        "p": 0.271,
         "fair_odds": "≈11/4"
        },
-       "model_p": 0.7058,
-       "league_p": 0.737
+       "model_p": 0.7093,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4732,
+        "p": 0.4751,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5268,
+        "p": 0.5249,
         "fair_odds": "≈10/11"
        },
-       "model_p": 0.4449,
-       "league_p": 0.4853
+       "model_p": 0.4493,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2478,
+        "p": 0.2497,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7522,
+        "p": 0.7503,
         "fair_odds": "≈1/3"
        },
-       "model_p": 0.2331,
-       "league_p": 0.2541
+       "model_p": 0.2367,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
-       1.77,
-       0.68
+       1.78,
+       0.69
       ]
      },
      "explanation": [
       "The score model expects about 1.8 goals for Atalanta and 0.7 for Parma.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -16208,25 +16208,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5242,
+      "p": 0.5227,
       "fair_odds": "≈10/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4758,
+       "p": 0.4773,
        "fair_odds": "≈11/10"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5242,
+       "p": 0.5227,
        "fair_odds": "≈10/11"
       }
      ],
-     "model_p": 0.4136,
-     "league_p": 0.5024,
+     "model_p": 0.4168,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -21183,31 +21183,31 @@
      "pick": {
       "key": "H",
       "label": "Venezia win",
-      "p": 0.4055,
+      "p": 0.4057,
       "fair_odds": "≈6/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Venezia win",
-       "p": 0.4055,
+       "p": 0.4057,
        "fair_odds": "≈6/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.272,
+       "p": 0.2724,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Udinese win",
-       "p": 0.3225,
+       "p": 0.322,
        "fair_odds": "≈2/1"
       }
      ],
      "method": "Serie A average result frequencies (not enough recent matches for one of the clubs)",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -21289,9 +21289,9 @@
       "away": 61
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 9,
@@ -21311,7 +21311,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5147,
+      "p": 0.5138,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -21321,59 +21321,59 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.737,
+        "p": 0.7374,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.263,
+        "p": 0.2626,
         "fair_odds": "≈11/4"
        },
        "model_p": null,
-       "league_p": 0.737
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4853,
+        "p": 0.4862,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5147,
+        "p": 0.5138,
         "fair_odds": "≈10/11"
        },
        "model_p": null,
-       "league_p": 0.4853
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2541,
+        "p": 0.2553,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7459,
+        "p": 0.7447,
         "fair_odds": "≈1/3"
        },
        "model_p": null,
-       "league_p": 0.2541
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": null
      },
      "explanation": [
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -21390,25 +21390,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5024,
+      "p": 0.5033,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5024,
+       "p": 0.5033,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4976,
+       "p": 0.4967,
        "fair_odds": "≈Evens"
       }
      ],
      "model_p": null,
-     "league_p": 0.5024,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -22129,7 +22129,7 @@
      ],
      "pooled_matches": {
       "home": 42,
-      "away": 43
+      "away": 42
      },
      "derivation": "public-derived"
     },
@@ -23745,31 +23745,31 @@
      "pick": {
       "key": "H",
       "label": "Cagliari win",
-      "p": 0.4055,
+      "p": 0.4057,
       "fair_odds": "≈6/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Cagliari win",
-       "p": 0.4055,
+       "p": 0.4057,
        "fair_odds": "≈6/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.272,
+       "p": 0.2724,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Frosinone win",
-       "p": 0.3225,
+       "p": 0.322,
        "fair_odds": "≈2/1"
       }
      ],
      "method": "Serie A average result frequencies (not enough recent matches for one of the clubs)",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -23851,13 +23851,13 @@
       "away": 23
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
-      "away": 8
+      "away": 9
      },
      "derivation": "public-derived"
     },
@@ -23873,7 +23873,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5147,
+      "p": 0.5138,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -23883,59 +23883,59 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.737,
+        "p": 0.7374,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.263,
+        "p": 0.2626,
         "fair_odds": "≈11/4"
        },
        "model_p": null,
-       "league_p": 0.737
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4853,
+        "p": 0.4862,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5147,
+        "p": 0.5138,
         "fair_odds": "≈10/11"
        },
        "model_p": null,
-       "league_p": 0.4853
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2541,
+        "p": 0.2553,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7459,
+        "p": 0.7447,
         "fair_odds": "≈1/3"
        },
        "model_p": null,
-       "league_p": 0.2541
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": null
      },
      "explanation": [
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -23952,25 +23952,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5024,
+      "p": 0.5033,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5024,
+       "p": 0.5033,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4976,
+       "p": 0.4967,
        "fair_odds": "≈Evens"
       }
      ],
      "model_p": null,
-     "league_p": 0.5024,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -24019,31 +24019,31 @@
      "pick": {
       "key": "H",
       "label": "Torino win",
-      "p": 0.4801,
-      "fair_odds": "≈11/10"
+      "p": 0.4959,
+      "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "H",
        "label": "Torino win",
-       "p": 0.4801,
-       "fair_odds": "≈11/10"
+       "p": 0.4959,
+       "fair_odds": "≈Evens"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2845,
+       "p": 0.278,
        "fair_odds": "≈5/2"
       },
       {
        "key": "A",
        "label": "Lecce win",
-       "p": 0.2354,
-       "fair_odds": "≈100/30"
+       "p": 0.2261,
+       "fair_odds": "≈7/2"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -24084,13 +24084,6 @@
       ],
       "away": [
        {
-        "date": "2026-05-17",
-        "opponent": "Sassuolo",
-        "gf": 3,
-        "ga": 2,
-        "res": "W"
-       },
-       {
         "date": "2026-08-23",
         "opponent": "Venezia",
         "gf": 2,
@@ -24117,21 +24110,28 @@
         "gf": 3,
         "ga": 0,
         "res": "W"
+       },
+       {
+        "date": "2026-10-29",
+        "opponent": "Frosinone",
+        "gf": 1,
+        "ga": 5,
+        "res": "L"
        }
       ]
      },
      "venue_games": {
       "home": 62,
-      "away": 61
+      "away": 62
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
-      "away": 42
+      "away": 43
      },
      "derivation": "public-derived"
     },
@@ -24147,7 +24147,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5464,
+      "p": 0.5416,
       "fair_odds": "≈5/6",
       "line": 2.5
      },
@@ -24157,63 +24157,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7109,
+        "p": 0.715,
         "fair_odds": "≈2/5"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2891,
+        "p": 0.285,
         "fair_odds": "≈5/2"
        },
-       "model_p": 0.65,
-       "league_p": 0.737
+       "model_p": 0.6627,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4536,
+        "p": 0.4584,
         "fair_odds": "≈6/5"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5464,
+        "p": 0.5416,
         "fair_odds": "≈5/6"
        },
-       "model_p": 0.3794,
-       "league_p": 0.4853
+       "model_p": 0.3935,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2325,
+        "p": 0.2365,
         "fair_odds": "≈100/30"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7675,
+        "p": 0.7635,
         "fair_odds": "≈3/10"
        },
-       "model_p": 0.1822,
-       "league_p": 0.2541
+       "model_p": 0.1927,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
-       1.35,
+       1.41,
        0.86
       ]
      },
      "explanation": [
       "The score model expects about 1.4 goals for Torino and 0.9 for Lecce.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -24230,25 +24230,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5195,
+      "p": 0.5168,
       "fair_odds": "≈10/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4805,
+       "p": 0.4832,
        "fair_odds": "≈11/10"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5195,
+       "p": 0.5168,
        "fair_odds": "≈10/11"
       }
      ],
-     "model_p": 0.4293,
-     "league_p": 0.5024,
+     "model_p": 0.4365,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -28846,31 +28846,31 @@
      "pick": {
       "key": "A",
       "label": "Bologna win",
-      "p": 0.4989,
+      "p": 0.4974,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "H",
        "label": "Parma win",
-       "p": 0.2162,
+       "p": 0.2169,
        "fair_odds": "≈7/2"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2849,
+       "p": 0.2857,
        "fair_odds": "≈5/2"
       },
       {
        "key": "A",
        "label": "Bologna win",
-       "p": 0.4989,
+       "p": 0.4974,
        "fair_odds": "≈Evens"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -28952,9 +28952,9 @@
       "away": 62
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -28974,7 +28974,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.551,
+      "p": 0.5508,
       "fair_odds": "≈4/5",
       "line": 2.5
      },
@@ -28984,63 +28984,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7067,
+        "p": 0.7066,
         "fair_odds": "≈2/5"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2933,
+        "p": 0.2934,
         "fair_odds": "≈5/2"
        },
-       "model_p": 0.6361,
-       "league_p": 0.737
+       "model_p": 0.6348,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.449,
+        "p": 0.4492,
         "fair_odds": "≈5/4"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.551,
+        "p": 0.5508,
         "fair_odds": "≈4/5"
        },
-       "model_p": 0.3643,
-       "league_p": 0.4853
+       "model_p": 0.3629,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2292,
+        "p": 0.2298,
         "fair_odds": "≈100/30"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7708,
+        "p": 0.7702,
         "fair_odds": "≈3/10"
        },
-       "model_p": 0.1712,
-       "league_p": 0.2541
+       "model_p": 0.1702,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
        0.79,
-       1.36
+       1.35
       ]
      },
      "explanation": [
       "The score model expects about 0.8 goals for Parma and 1.4 for Bologna.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -29057,25 +29057,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5254,
+      "p": 0.5251,
       "fair_odds": "≈10/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4746,
+       "p": 0.4749,
        "fair_odds": "≈11/10"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5254,
+       "p": 0.5251,
        "fair_odds": "≈10/11"
       }
      ],
-     "model_p": 0.4095,
-     "league_p": 0.5024,
+     "model_p": 0.4088,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -30268,31 +30268,31 @@
      "pick": {
       "key": "H",
       "label": "Roma win",
-      "p": 0.7014,
+      "p": 0.7001,
       "fair_odds": "≈4/9"
      },
      "selections": [
       {
        "key": "H",
        "label": "Roma win",
-       "p": 0.7014,
+       "p": 0.7001,
        "fair_odds": "≈4/9"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.1782,
+       "p": 0.1791,
        "fair_odds": "≈9/2"
       },
       {
        "key": "A",
        "label": "Sassuolo win",
-       "p": 0.1204,
+       "p": 0.1207,
        "fair_odds": "≈15/2"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -30374,9 +30374,9 @@
       "away": 43
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -30396,7 +30396,7 @@
      "pick": {
       "key": "over",
       "label": "Over 2.5",
-      "p": 0.5263,
+      "p": 0.5259,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -30406,63 +30406,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7654,
+        "p": 0.7651,
         "fair_odds": "≈3/10"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2346,
+        "p": 0.2349,
         "fair_odds": "≈100/30"
        },
-       "model_p": 0.8316,
-       "league_p": 0.737
+       "model_p": 0.8296,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5263,
+        "p": 0.5259,
         "fair_odds": "≈10/11"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4737,
+        "p": 0.4741,
         "fair_odds": "≈11/10"
        },
-       "model_p": 0.6219,
-       "league_p": 0.4853
+       "model_p": 0.6186,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2977,
+        "p": 0.2975,
         "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7023,
+        "p": 0.7025,
         "fair_odds": "≈4/9"
        },
-       "model_p": 0.3994,
-       "league_p": 0.2541
+       "model_p": 0.3959,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
-       2.34,
-       0.87
+       2.33,
+       0.86
       ]
      },
      "explanation": [
       "The score model expects about 2.3 goals for Roma and 0.9 for Sassuolo.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -30496,8 +30496,8 @@
        "fair_odds": "≈Evens"
       }
      ],
-     "model_p": 0.5257,
-     "league_p": 0.5024,
+     "model_p": 0.5236,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -30848,31 +30848,31 @@
      "pick": {
       "key": "H",
       "label": "Napoli win",
-      "p": 0.4449,
+      "p": 0.4469,
       "fair_odds": "≈5/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Napoli win",
-       "p": 0.4449,
+       "p": 0.4469,
        "fair_odds": "≈5/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2757,
+       "p": 0.2759,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Lazio win",
-       "p": 0.2793,
+       "p": 0.2772,
        "fair_odds": "≈5/2"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -30954,9 +30954,9 @@
       "away": 62
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -30976,7 +30976,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5299,
+      "p": 0.5297,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -30995,54 +30995,54 @@
         "p": 0.2748,
         "fair_odds": "≈11/4"
        },
-       "model_p": 0.6978,
-       "league_p": 0.737
+       "model_p": 0.6966,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4701,
+        "p": 0.4703,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5299,
+        "p": 0.5297,
         "fair_odds": "≈10/11"
        },
-       "model_p": 0.4347,
-       "league_p": 0.4853
+       "model_p": 0.4331,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2453,
+        "p": 0.2458,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7547,
+        "p": 0.7542,
         "fair_odds": "≈1/3"
        },
-       "model_p": 0.2248,
-       "league_p": 0.2541
+       "model_p": 0.2235,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
        1.38,
-       1.04
+       1.03
       ]
      },
      "explanation": [
       "The score model expects about 1.4 goals for Napoli and 1.0 for Lazio.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -31059,25 +31059,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5026,
+      "p": 0.5025,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4974,
+       "p": 0.4975,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5026,
+       "p": 0.5025,
        "fair_odds": "≈Evens"
       }
      ],
-     "model_p": 0.4856,
-     "league_p": 0.5024,
+     "model_p": 0.484,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -32003,31 +32003,31 @@
      "pick": {
       "key": "A",
       "label": "AC Milan win",
-      "p": 0.5019,
+      "p": 0.499,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "H",
        "label": "Genoa win",
-       "p": 0.2342,
+       "p": 0.236,
        "fair_odds": "≈100/30"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2638,
+       "p": 0.265,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "AC Milan win",
-       "p": 0.5019,
+       "p": 0.499,
        "fair_odds": "≈Evens"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -32109,9 +32109,9 @@
       "away": 62
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -32131,7 +32131,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5257,
+      "p": 0.5259,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -32141,63 +32141,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7286,
+        "p": 0.7283,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2714,
+        "p": 0.2717,
         "fair_odds": "≈11/4"
        },
-       "model_p": 0.7091,
-       "league_p": 0.737
+       "model_p": 0.707,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4743,
+        "p": 0.4741,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5257,
+        "p": 0.5259,
         "fair_odds": "≈10/11"
        },
-       "model_p": 0.4485,
-       "league_p": 0.4853
+       "model_p": 0.4459,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2487,
+        "p": 0.2489,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7513,
+        "p": 0.7511,
         "fair_odds": "≈1/3"
        },
-       "model_p": 0.2361,
-       "league_p": 0.2541
+       "model_p": 0.2339,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
        0.95,
-       1.52
+       1.51
       ]
      },
      "explanation": [
       "The score model expects about 0.9 goals for Genoa and 1.5 for AC Milan.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -32214,25 +32214,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5037,
+      "p": 0.5035,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4963,
+       "p": 0.4965,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5037,
+       "p": 0.5035,
        "fair_odds": "≈Evens"
       }
      ],
-     "model_p": 0.482,
-     "league_p": 0.5024,
+     "model_p": 0.4808,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -32564,31 +32564,31 @@
      "pick": {
       "key": "H",
       "label": "Monza win",
-      "p": 0.4055,
+      "p": 0.4057,
       "fair_odds": "≈6/4"
      },
      "selections": [
       {
        "key": "H",
        "label": "Monza win",
-       "p": 0.4055,
+       "p": 0.4057,
        "fair_odds": "≈6/4"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.272,
+       "p": 0.2724,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Atalanta win",
-       "p": 0.3225,
+       "p": 0.322,
        "fair_odds": "≈2/1"
       }
      ],
      "method": "Serie A average result frequencies (not enough recent matches for one of the clubs)",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -32629,13 +32629,6 @@
       ],
       "away": [
        {
-        "date": "2026-05-10",
-        "opponent": "AC Milan",
-        "gf": 3,
-        "ga": 2,
-        "res": "W"
-       },
-       {
         "date": "2026-05-22",
         "opponent": "Fiorentina",
         "gf": 1,
@@ -32662,21 +32655,28 @@
         "gf": 2,
         "ga": 3,
         "res": "L"
+       },
+       {
+        "date": "2026-10-29",
+        "opponent": "Fiorentina",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
        }
       ]
      },
      "venue_games": {
       "home": 42,
-      "away": 60
+      "away": 61
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 9,
-      "away": 42
+      "away": 43
      },
      "derivation": "public-derived"
     },
@@ -32692,7 +32692,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5147,
+      "p": 0.5138,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -32702,59 +32702,59 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.737,
+        "p": 0.7374,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.263,
+        "p": 0.2626,
         "fair_odds": "≈11/4"
        },
        "model_p": null,
-       "league_p": 0.737
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4853,
+        "p": 0.4862,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5147,
+        "p": 0.5138,
         "fair_odds": "≈10/11"
        },
        "model_p": null,
-       "league_p": 0.4853
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2541,
+        "p": 0.2553,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7459,
+        "p": 0.7447,
         "fair_odds": "≈1/3"
        },
        "model_p": null,
-       "league_p": 0.2541
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": null
      },
      "explanation": [
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -32771,25 +32771,25 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5024,
+      "p": 0.5033,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5024,
+       "p": 0.5033,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4976,
+       "p": 0.4967,
        "fair_odds": "≈Evens"
       }
      ],
      "model_p": null,
-     "league_p": 0.5024,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -33817,8 +33817,8 @@
       0.2817
      ],
      "pooled_matches": {
-      "home": 43,
-      "away": 42
+      "home": 42,
+      "away": 41
      },
      "derivation": "public-derived"
     },
@@ -35698,31 +35698,31 @@
      "pick": {
       "key": "H",
       "label": "Inter win",
-      "p": 0.5149,
+      "p": 0.5151,
       "fair_odds": "≈10/11"
      },
      "selections": [
       {
        "key": "H",
        "label": "Inter win",
-       "p": 0.5149,
+       "p": 0.5151,
        "fair_odds": "≈10/11"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2384,
+       "p": 0.2388,
        "fair_odds": "≈100/30"
       },
       {
        "key": "A",
        "label": "Como win",
-       "p": 0.2468,
+       "p": 0.2461,
        "fair_odds": "≈3/1"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
        {
@@ -35804,9 +35804,9 @@
       "away": 44
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
       "home": 43,
@@ -35836,17 +35836,17 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7537,
+        "p": 0.7535,
         "fair_odds": "≈1/3"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2463,
+        "p": 0.2465,
         "fair_odds": "≈3/1"
        },
-       "model_p": 0.7926,
-       "league_p": 0.737
+       "model_p": 0.7912,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
@@ -35862,37 +35862,37 @@
         "p": 0.4919,
         "fair_odds": "≈Evens"
        },
-       "model_p": 0.5612,
-       "league_p": 0.4853
+       "model_p": 0.5591,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2791,
+        "p": 0.2793,
         "fair_odds": "≈5/2"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7209,
+        "p": 0.7207,
         "fair_odds": "≈2/5"
        },
-       "model_p": 0.3374,
-       "league_p": 0.2541
+       "model_p": 0.3353,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
        1.77,
-       1.16
+       1.15
       ]
      },
      "explanation": [
-      "The score model expects about 1.8 goals for Inter and 1.2 for Como.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "The score model expects about 1.8 goals for Inter and 1.1 for Como.",
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -35926,8 +35926,8 @@
        "fair_odds": "≈11/10"
       }
      ],
-     "model_p": 0.5719,
-     "league_p": 0.5024,
+     "model_p": 0.5701,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -36396,7 +36396,7 @@
      ],
      "pooled_matches": {
       "home": 42,
-      "away": 43
+      "away": 42
      },
      "derivation": "public-derived"
     },
@@ -36838,40 +36838,33 @@
      "pick": {
       "key": "A",
       "label": "Juventus win",
-      "p": 0.4776,
+      "p": 0.4743,
       "fair_odds": "≈11/10"
      },
      "selections": [
       {
        "key": "H",
        "label": "Fiorentina win",
-       "p": 0.2544,
+       "p": 0.2577,
        "fair_odds": "≈3/1"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2679,
+       "p": 0.268,
        "fair_odds": "≈11/4"
       },
       {
        "key": "A",
        "label": "Juventus win",
-       "p": 0.4776,
+       "p": 0.4743,
        "fair_odds": "≈11/10"
       }
      ],
      "method": "Serie A Dixon-Coles fitted on Serie A results only",
-     "training_matches": 1228,
+     "training_matches": 1230,
      "form": {
       "home": [
-       {
-        "date": "2026-05-22",
-        "opponent": "Atalanta",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
        {
         "date": "2026-08-29",
         "opponent": "Frosinone",
@@ -36899,6 +36892,13 @@
         "gf": 1,
         "ga": 3,
         "res": "L"
+       },
+       {
+        "date": "2026-10-29",
+        "opponent": "Atalanta",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
        }
       ],
       "away": [
@@ -36940,16 +36940,16 @@
       ]
      },
      "venue_games": {
-      "home": 61,
+      "home": 62,
       "away": 62
      },
      "league_p": [
-      0.4055,
-      0.272,
-      0.3225
+      0.4057,
+      0.2724,
+      0.322
      ],
      "pooled_matches": {
-      "home": 42,
+      "home": 43,
       "away": 43
      },
      "derivation": "public-derived"
@@ -36966,7 +36966,7 @@
      "pick": {
       "key": "under",
       "label": "Under 2.5",
-      "p": 0.5257,
+      "p": 0.5245,
       "fair_odds": "≈10/11",
       "line": 2.5
      },
@@ -36976,63 +36976,63 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7287,
+        "p": 0.7294,
         "fair_odds": "≈4/11"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2713,
+        "p": 0.2706,
         "fair_odds": "≈11/4"
        },
-       "model_p": 0.7093,
-       "league_p": 0.737
+       "model_p": 0.7109,
+       "league_p": 0.7374
       },
       {
        "line": 2.5,
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4743,
+        "p": 0.4755,
         "fair_odds": "≈11/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5257,
+        "p": 0.5245,
         "fair_odds": "≈10/11"
        },
-       "model_p": 0.4487,
-       "league_p": 0.4853
+       "model_p": 0.4506,
+       "league_p": 0.4862
       },
       {
        "line": 3.5,
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2487,
+        "p": 0.25,
         "fair_odds": "≈3/1"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7513,
+        "p": 0.75,
         "fair_odds": "≈1/3"
        },
-       "model_p": 0.2362,
-       "league_p": 0.2541
+       "model_p": 0.2378,
+       "league_p": 0.2553
       }
      ],
      "inputs": {
-      "league_mean_goals": 2.57,
+      "league_mean_goals": 2.58,
       "expected_goals": [
-       1.0,
+       1.01,
        1.47
       ]
      },
      "explanation": [
       "The score model expects about 1.0 goals for Fiorentina and 1.5 for Juventus.",
-      "Serie A matches average 2.57 goals; 49% go over 2.5."
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Serie A rate for each line",
      "derivation": "public-derived"
@@ -37049,25 +37049,25 @@
      "pick": {
       "key": "no",
       "label": "No",
-      "p": 0.5014,
+      "p": 0.5001,
       "fair_odds": "≈Evens"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.4986,
+       "p": 0.4999,
        "fair_odds": "≈Evens"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.5014,
+       "p": 0.5001,
        "fair_odds": "≈Evens"
       }
      ],
-     "model_p": 0.4895,
-     "league_p": 0.5024,
+     "model_p": 0.4921,
+     "league_p": 0.5033,
      "explanation": [
       "Both teams scored in 50% of Serie A matches in the training data."
      ],
@@ -37530,7 +37530,7 @@
       0.2817
      ],
      "pooled_matches": {
-      "home": 43,
+      "home": 42,
       "away": 43
      },
      "derivation": "public-derived"
