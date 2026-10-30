@@ -6,5 +6,6 @@ __pycache__/
 .worktrees/
 *.png
 !assets/*.png
+!public-dist/assets/*.png
 .obsidian_vault/
 .claude/

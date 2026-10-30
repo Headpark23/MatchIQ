@@ -820,6 +820,128 @@ function beginnerGuides() {
     '</div></div>';
 }
 
+function renderWelcomeHero() {
+  const diaryItems = readDiary();
+  const diaryCount = diaryItems.length;
+  const user = getAuthUser();
+  const userName = user && user.displayName ? user.displayName.split(' ')[0] : 'Punter';
+
+  return '<div class="welcome-hero-wrap">' +
+    '<div class="welcome-hero-banner">' +
+      '<div class="welcome-mascot-col">' +
+        '<div class="welcome-panda-avatar">' +
+          '<img src="assets/icon-192.png" alt="Bet Buddy Mascot" width="76" height="76">' +
+          '<span class="mascot-online-dot" title="Live Predictions Ready"></span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="welcome-text-col">' +
+        '<div class="welcome-badge-tag"><span class="badge-dot"></span> Welcome, ' + esc(userName) + '! · 100% Free &amp; Ad-Free</div>' +
+        '<h1 class="welcome-hero-title">Your Honest Sports Betting Co-Pilot</h1>' +
+        '<p class="welcome-hero-narrative">' +
+          'Tired of bookmaker hype? Bet Buddy uses real Poisson &amp; Dixon-Coles mathematical evidence, transparent track records, and zero bull. ' +
+          'Build precision accumulators, compete in local &amp; worldwide silverware leagues, track your bets privately, and verify every single price with cold mathematics.' +
+        '</p>' +
+      '</div>' +
+    '</div>' +
+
+    '<!-- 5 Bento Portal Cards -->' +
+    '<div class="portal-grid">' +
+      '<!-- 1. Top Large Card: Pick a Bet -->' +
+      '<div class="portal-card portal-card-hero" onclick="scrollToBuilder()">' +
+        '<div class="portal-card-hero-glow"></div>' +
+        '<div class="portal-card-content">' +
+          '<div class="portal-card-top">' +
+            '<span class="portal-pill highlight">⚡ Primary Feature</span>' +
+            '<span class="portal-odds-badge">Dixon-Coles Model Calibrated</span>' +
+          '</div>' +
+          '<div class="portal-hero-body">' +
+            '<div class="portal-icon-large">⚽🎯</div>' +
+            '<div>' +
+              '<h2 class="portal-hero-heading">Pick a Bet &amp; Build Acca</h2>' +
+              '<p class="portal-hero-desc">' +
+                'Select targets (£10 to £1000 profit across 2 to 6 legs). Auto-filter the highest-edge value picks, compare live bookmaker prices, or explore cross-sport tennis, golf, darts &amp; rugby bets.' +
+              '</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="portal-card-action">' +
+            '<button type="button" class="btn primary portal-cta-btn" onclick="scrollToBuilder();event.stopPropagation()">' +
+              '<span>Launch Bet Builder &amp; Predictions</span>' +
+              '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
+            '</button>' +
+            '<span class="portal-sub-action-hint">Or scroll down for this round’s matches</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<!-- 4 Bento Grid Cards Below -->' +
+      '<div class="portal-subgrid">' +
+        '<!-- 2. Leagues & Silverware -->' +
+        '<a href="#/leagues" class="portal-subcard bento-leagues">' +
+          '<div class="portal-subcard-icon-wrap trophy-glow">🏆</div>' +
+          '<div class="portal-subcard-text">' +
+            '<div class="portal-subcard-tag">Compete &amp; Win</div>' +
+            '<h3 class="portal-subcard-title">Buddy &amp; Geo Leagues</h3>' +
+            '<p class="portal-subcard-desc">Automatic entry into Town, Region, Scotland/UK &amp; World ladders. Points for big odds winners!</p>' +
+          '</div>' +
+          '<div class="portal-subcard-footer">' +
+            '<span class="portal-link-label">View Silverware Ladders</span>' +
+            '<span class="portal-arrow">›</span>' +
+          '</div>' +
+        '</a>' +
+
+        '<!-- 3. Upcoming Fixtures -->' +
+        '<a href="#/fixtures" class="portal-subcard bento-fixtures">' +
+          '<div class="portal-subcard-icon-wrap calendar-glow">📅</div>' +
+          '<div class="portal-subcard-text">' +
+            '<div class="portal-subcard-tag">Schedule &amp; TV</div>' +
+            '<h3 class="portal-subcard-title">Upcoming Fixtures</h3>' +
+            '<p class="portal-subcard-desc">Comprehensive Premier League, European and domestic dates, kick-off clocks and match previews.</p>' +
+          '</div>' +
+          '<div class="portal-subcard-footer">' +
+            '<span class="portal-link-label">Browse Match Fixtures</span>' +
+            '<span class="portal-arrow">›</span>' +
+          '</div>' +
+        '</a>' +
+
+        '<!-- 4. Results & Performance -->' +
+        '<a href="#/results" class="portal-subcard bento-results">' +
+          '<div class="portal-subcard-icon-wrap chart-glow">📊</div>' +
+          '<div class="portal-subcard-text">' +
+            '<div class="portal-subcard-tag">Honest Track Record</div>' +
+            '<h3 class="portal-subcard-title">Results &amp; Verification</h3>' +
+            '<p class="portal-subcard-desc">Permanent audit ledger of every settled prediction, Brier calibration scores and historical match scores.</p>' +
+          '</div>' +
+          '<div class="portal-subcard-footer">' +
+            '<span class="portal-link-label">Check Settlement Ledger</span>' +
+            '<span class="portal-arrow">›</span>' +
+          '</div>' +
+        '</a>' +
+
+        '<!-- 5. Bet Diary & Trophy Cabinet -->' +
+        '<a href="#/diary" class="portal-subcard bento-diary">' +
+          '<div class="portal-subcard-icon-wrap diary-glow">📖</div>' +
+          '<div class="portal-subcard-text">' +
+            '<div class="portal-subcard-tag">Private Ledger (' + diaryCount + ' bets)</div>' +
+            '<h3 class="portal-subcard-title">Bet Diary &amp; Cabinet</h3>' +
+            '<p class="portal-subcard-desc">Track stakes, PnL and strike rates locally. Inspect your earned Gold, Silver and Bronze silverware.</p>' +
+          '</div>' +
+          '<div class="portal-subcard-footer">' +
+            '<span class="portal-link-label">Open My Diary</span>' +
+            '<span class="portal-arrow">›</span>' +
+          '</div>' +
+        '</a>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function scrollToBuilder() {
+  const el = document.getElementById('builder-anchor') || document.querySelector('.builder-shell');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
 function viewHome() {
   if (currentSport !== 'football') {
     return viewMultiSport(currentSport);
@@ -828,7 +950,12 @@ function viewHome() {
   const sharedBanner = sharedSlipNotice
     ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🐼</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' profit across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
     : '';
-  let html = '<section class="view">' + renderSportFilterBar() + sharedBanner + viewBuilder() + '<div class="section-head" style="align-items:flex-end;margin-top:36px"><div><h2 class="page-title">This round</h2>' +
+  let html = '<section class="view">' +
+    renderSportFilterBar() +
+    sharedBanner +
+    renderWelcomeHero() +
+    '<div id="builder-anchor" style="padding-top:12px"></div>' +
+    viewBuilder() + '<div class="section-head" style="align-items:flex-end;margin-top:36px"><div><h2 class="page-title">This round</h2>' +
     '<p class="page-sub">For every upcoming match: the most likely supported outcome, the match-result lean and whether a price you have seen offers value. Bet Buddy will say No bet when the evidence or the price is not good enough.</p></div>' +
     '<div class="chips">' + freshnessChips() + '</div></div>' + compBar();
   if (LOAD_ERRORS.predictions) return html + errorPanel('predictions') + '</section>';
