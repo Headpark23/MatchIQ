@@ -689,16 +689,26 @@ function slipLegRow(l) {
     '<span class="slip-pick"><b>' + esc(l.label) + '</b><small>' + pct(l.p) + ' chance' + (l.support === 'provisional' ? ' · provisional' : '') + '</small></span>' + price + '</li>';
 }
 
+function canonicalUrl(url) {
+  if (!url) return 'https://betbuddyuk.uk/';
+  return String(url)
+    .replace(/^https?:\/\/[^\/]*github\.io\/MatchIQ\/?/i, 'https://betbuddyuk.uk/')
+    .replace(/^https?:\/\/[^\/]*github\.io\/[^\/#]*\/?/i, 'https://betbuddyuk.uk/');
+}
+
 let currentSharePayload = { title: '', text: '', url: '' };
 
 function openUniversalShare({ title, text, url }) {
+  const finalUrl = canonicalUrl(url);
   currentSharePayload = {
     title: title || 'Bet Buddy',
     text: text || '',
-    url: url || (location.origin + location.pathname)
+    url: finalUrl
   };
 
-  const fullText = currentSharePayload.text + (currentSharePayload.url ? '\n\n' + currentSharePayload.url : '');
+  const fullText = currentSharePayload.text.includes(finalUrl)
+    ? currentSharePayload.text
+    : currentSharePayload.text + (finalUrl ? '\n\n' + finalUrl : '');
 
   // 1. If mobile device supports Web Share API, launch native share sheet
   if (navigator.share && /android|iphone|ipad|ipod/i.test(navigator.userAgent)) {
@@ -743,7 +753,7 @@ function shareAccaSlip(idx) {
   const slip = r.slips[idx];
   const stake = builderState.stake;
   const m = MatchIQBuilder.money;
-  const shareUrl = location.origin + location.pathname + '#slip=' + encodeURIComponent(builderState.stake + '_' + builderState.win + '_' + builderState.legs);
+  const shareUrl = 'https://betbuddyuk.uk/#slip=' + encodeURIComponent(builderState.stake + '_' + builderState.win + '_' + builderState.legs);
   const text = [
     '🎯 Bet Buddy Acca (Target: ' + m(slip.profit) + ' profit)',
     'Odds: ' + fmtOdds(slip.odds) + ' · Estimated Chance: ' + Math.round(slip.chance * 100) + '%',
@@ -3219,8 +3229,8 @@ document.addEventListener('click', event => {
   else if (t.dataset.selectLeague !== undefined) { activeLeagueId = t.dataset.selectLeague; render(); }
   else if (t.dataset.shareLeague !== undefined) {
     const code = t.dataset.shareLeague;
-    const shareUrl = location.origin + location.pathname + '#join-league=' + encodeURIComponent(code);
-    const text = '🏆 Join my Bet Buddy League! Code: ' + code + '\nPlay with 10p bets, judged on pure Win Rate %!';
+    const shareUrl = 'https://betbuddyuk.uk/#join-league=' + encodeURIComponent(code);
+    const text = '🏆 Join my Bet Buddy League! Code: ' + code + '\nCompete with friends to see who is the champion bettor!';
     openUniversalShare({
       title: 'Join my Bet Buddy League (' + code + ')',
       text,
@@ -3433,7 +3443,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.24';
+const APP_VERSION = '2026.10.30.25';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
