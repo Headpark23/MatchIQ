@@ -238,3 +238,4 @@ with open('data/performance.json', 'w', encoding='utf-8') as f:
     json.dump(perf_data, f, indent=1)
 
 print(f"Added {new_fixtures_added} finished fixtures and {new_history_added} evaluated prediction history records across 7 new leagues!")
+

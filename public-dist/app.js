@@ -22,21 +22,7 @@ const FILES = {
   performance: 'data/performance.json', leagueValidation: 'data/league_validation.json', status: 'data/pipeline_status.json', reliability: 'data/model_reliability.json', odds: 'data/odds.json', multiSport: 'data/multi_sport_events.json'
 };
 const DATA = {};
-const LEAGUES = {
-  PL: 'Premier League',
-  ELC: 'Championship',
-  E2: 'League One',
-  E3: 'League Two',
-  SC0: 'Scottish Premiership',
-  SC1: 'Scottish Championship',
-  BL1: 'Bundesliga',
-  PD: 'La Liga',
-  SA: 'Serie A',
-  FL1: 'Ligue 1',
-  N1: 'Eredivisie',
-  P1: 'Primeira Liga',
-  CL: 'Champions League'
-};
+const LEAGUES = { PL: 'Premier League', ELC: 'Championship', BL1: 'Bundesliga', PD: 'La Liga', SA: 'Serie A', FL1: 'Ligue 1' };
 const leagueName = c => LEAGUES[c] || c || 'Premier League';
 const COMP_KEY = 'matchiq_competition_v1';
 let compFilter = 'ALL';
@@ -1440,7 +1426,7 @@ function viewFixtures() {
   }
   if (clubFilter) list = list.filter(f => f.home.toLowerCase().includes(clubFilter) || f.away.toLowerCase().includes(clubFilter));
   const searchBar = '<div class="search-bar"><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off"></div>';
-  let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">' + (compFilter === 'ALL' ? 'All ' + Object.keys(LEAGUES).length + ' competitions' : esc(leagueName(compFilter))) + ' 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
+  let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">' + (compFilter === 'ALL' ? 'All six competitions' : esc(leagueName(compFilter))) + ' 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
     compBar() + searchBar + '<div class="section" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between"><div class="seg" role="group" aria-label="Fixture list">' +
     Object.entries(tabs).map(([k, label]) => '<button type="button" data-tab="' + k + '" aria-pressed="' + (fixturesTab === k) + '">' + label + '</button>').join('') + '</div><div class="chips">' + freshnessChips() + '</div></div>';
   if (LOAD_ERRORS.fixtures) return html + errorPanel('fixtures') + '</section>';
