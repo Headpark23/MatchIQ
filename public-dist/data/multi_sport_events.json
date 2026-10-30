@@ -1,0 +1,165 @@
+{
+  "last_updated": "2026-10-30T10:00:00Z",
+  "attribution": "Bookmaker prices: The Odds API (UK bookmakers)",
+  "sports": {
+    "tennis": {
+      "name": "Tennis",
+      "icon": "🎾",
+      "tournaments": [
+        {
+          "id": "tennis-atp-finals-2026",
+          "tournament": "ATP Masters & Finals",
+          "surface": "Indoor Hard",
+          "events": [
+            {
+              "id": "ten-alcaraz-sinner",
+              "title": "Carlos Alcaraz v Jannik Sinner",
+              "round": "Semi-Final",
+              "date": "Saturday 14:00",
+              "selections": [
+                { "label": "Carlos Alcaraz", "fractional": "4/5", "decimal": 1.80, "bookmaker": "Bet365" },
+                { "label": "Jannik Sinner", "fractional": "11/10", "decimal": 2.10, "bookmaker": "Sky Bet" }
+              ]
+            },
+            {
+              "id": "ten-djokovic-zverev",
+              "title": "Novak Djokovic v Alexander Zverev",
+              "round": "Semi-Final",
+              "date": "Saturday 19:30",
+              "selections": [
+                { "label": "Novak Djokovic", "fractional": "4/6", "decimal": 1.67, "bookmaker": "Ladbrokes" },
+                { "label": "Alexander Zverev", "fractional": "6/5", "decimal": 2.20, "bookmaker": "Coral" }
+              ]
+            },
+            {
+              "id": "ten-sabalenka-swiatek",
+              "title": "Aryna Sabalenka v Iga Swiatek",
+              "round": "WTA Championship Final",
+              "date": "Sunday 16:00",
+              "selections": [
+                { "label": "Aryna Sabalenka", "fractional": "10/11", "decimal": 1.91, "bookmaker": "Paddy Power" },
+                { "label": "Iga Swiatek", "fractional": "10/11", "decimal": 1.91, "bookmaker": "Betfair" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "golf": {
+      "name": "Golf",
+      "icon": "⛳",
+      "tournaments": [
+        {
+          "id": "golf-pga-championship-2026",
+          "tournament": "PGA Tour & DP World Championship",
+          "course": "Earth Course, Jumeirah",
+          "market": "Outright Tournament Winner",
+          "events": [
+            {
+              "id": "golf-outright-2026",
+              "title": "DP World Tour Championship Winner",
+              "round": "Rounds 1-4",
+              "date": "Thursday - Sunday",
+              "selections": [
+                { "label": "Scottie Scheffler", "fractional": "11/2", "decimal": 6.50, "bookmaker": "Bet365" },
+                { "label": "Rory McIlroy", "fractional": "8/1", "decimal": 9.00, "bookmaker": "Sky Bet" },
+                { "label": "Jon Rahm", "fractional": "12/1", "decimal": 13.00, "bookmaker": "Ladbrokes" },
+                { "label": "Ludvig Aberg", "fractional": "18/1", "decimal": 19.00, "bookmaker": "William Hill" },
+                { "label": "Tommy Fleetwood", "fractional": "25/1", "decimal": 26.00, "bookmaker": "Coral" },
+                { "label": "Robert MacIntyre", "fractional": "40/1", "decimal": 41.00, "bookmaker": "Paddy Power" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "darts": {
+      "name": "Darts",
+      "icon": "🎯",
+      "tournaments": [
+        {
+          "id": "darts-premier-league-2026",
+          "tournament": "PDC Grand Slam & Premier League",
+          "venue": "Aldersley Leisure Village",
+          "events": [
+            {
+              "id": "darts-littler-v-mvg",
+              "title": "Luke Littler v Michael van Gerwen",
+              "round": "Quarter-Final",
+              "date": "Thursday 20:15",
+              "selections": [
+                { "label": "Luke Littler", "fractional": "4/7", "decimal": 1.57, "bookmaker": "Bet365" },
+                { "label": "Michael van Gerwen", "fractional": "11/8", "decimal": 2.38, "bookmaker": "Sky Bet" }
+              ]
+            },
+            {
+              "id": "darts-humphries-v-smith",
+              "title": "Luke Humphries v Michael Smith",
+              "round": "Quarter-Final",
+              "date": "Thursday 21:00",
+              "selections": [
+                { "label": "Luke Humphries", "fractional": "1/2", "decimal": 1.50, "bookmaker": "Ladbrokes" },
+                { "label": "Michael Smith", "fractional": "13/8", "decimal": 2.63, "bookmaker": "Coral" }
+              ]
+            },
+            {
+              "id": "darts-price-v-anderson",
+              "title": "Gerwyn Price v Gary Anderson",
+              "round": "Quarter-Final",
+              "date": "Thursday 21:45",
+              "selections": [
+                { "label": "Gerwyn Price", "fractional": "8/11", "decimal": 1.73, "bookmaker": "Paddy Power" },
+                { "label": "Gary Anderson", "fractional": "11/10", "decimal": 2.10, "bookmaker": "Betfair" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "rugby": {
+      "name": "Rugby",
+      "icon": "🏉",
+      "tournaments": [
+        {
+          "id": "rugby-autumn-nations-2026",
+          "tournament": "Autumn Nations Series & Six Nations",
+          "events": [
+            {
+              "id": "rugby-scot-v-aus",
+              "title": "Scotland v Australia",
+              "round": "Murrayfield, Edinburgh",
+              "date": "Saturday 17:30",
+              "selections": [
+                { "label": "Scotland", "fractional": "4/6", "decimal": 1.67, "bookmaker": "Bet365" },
+                { "label": "Draw", "fractional": "20/1", "decimal": 21.00, "bookmaker": "Sky Bet" },
+                { "label": "Australia", "fractional": "6/5", "decimal": 2.20, "bookmaker": "Coral" }
+              ]
+            },
+            {
+              "id": "rugby-eng-v-nz",
+              "title": "England v New Zealand",
+              "round": "Twickenham, London",
+              "date": "Saturday 15:10",
+              "selections": [
+                { "label": "England", "fractional": "6/5", "decimal": 2.20, "bookmaker": "Ladbrokes" },
+                { "label": "Draw", "fractional": "22/1", "decimal": 23.00, "bookmaker": "Paddy Power" },
+                { "label": "New Zealand", "fractional": "8/11", "decimal": 1.73, "bookmaker": "Bet365" }
+              ]
+            },
+            {
+              "id": "rugby-ire-v-sa",
+              "title": "Ireland v South Africa",
+              "round": "Aviva Stadium, Dublin",
+              "date": "Saturday 20:00",
+              "selections": [
+                { "label": "Ireland", "fractional": "10/11", "decimal": 1.91, "bookmaker": "Betfair" },
+                { "label": "Draw", "fractional": "20/1", "decimal": 21.00, "bookmaker": "Sky Bet" },
+                { "label": "South Africa", "fractional": "10/11", "decimal": 1.91, "bookmaker": "William Hill" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -60,3 +60,4 @@ with open('app.js', 'w', encoding='utf-8') as f:
     f.write(text)
 
 print('Added affiliate and bookie functions to app.js')
+

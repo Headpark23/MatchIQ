@@ -46,7 +46,8 @@ ALLOWLIST_DATA = [
     "pipeline_status.json",
     "odds.json",
     "league_validation.json",
-    "rights.json"
+    "rights.json",
+    "multi_sport_events.json"
 ]
 
 def build():
