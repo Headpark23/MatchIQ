@@ -22,7 +22,21 @@ const FILES = {
   performance: 'data/performance.json', leagueValidation: 'data/league_validation.json', status: 'data/pipeline_status.json', reliability: 'data/model_reliability.json', odds: 'data/odds.json', multiSport: 'data/multi_sport_events.json'
 };
 const DATA = {};
-const LEAGUES = { PL: 'Premier League', ELC: 'Championship', BL1: 'Bundesliga', PD: 'La Liga', SA: 'Serie A', FL1: 'Ligue 1' };
+const LEAGUES = {
+  PL: 'Premier League',
+  ELC: 'Championship',
+  E2: 'League One',
+  E3: 'League Two',
+  SC0: 'Scottish Premiership',
+  SC1: 'Scottish Championship',
+  BL1: 'Bundesliga',
+  PD: 'La Liga',
+  SA: 'Serie A',
+  FL1: 'Ligue 1',
+  N1: 'Eredivisie',
+  P1: 'Primeira Liga',
+  CL: 'Champions League'
+};
 const leagueName = c => LEAGUES[c] || c || 'Premier League';
 const COMP_KEY = 'matchiq_competition_v1';
 let compFilter = 'ALL';
@@ -75,6 +89,55 @@ let clubFilter = '';
 
 // ------------------------------------------------------------ clubs
 const CLUBS = {
+  // Scottish Premiership & Championship
+  'Celtic': ['#018749', '#FFFFFF', 'CEL', 'Celtic Park'],
+  'Rangers': ['#1B458F', '#FFFFFF', 'RAN', 'Ibrox Stadium'],
+  'Aberdeen': ['#DA291C', '#FFFFFF', 'ABE', 'Pittodrie Stadium'],
+  'Hearts': ['#8B1E41', '#FFFFFF', 'HEA', 'Tynecastle Park'],
+  'Hibernian': ['#00693E', '#FFFFFF', 'HIB', 'Easter Road'],
+  'Dundee United': ['#ED6A12', '#000000', 'UTD', 'Tannadice Park'],
+  'Motherwell': ['#FDB913', '#660033', 'MOT', 'Fir Park'],
+  'St. Mirren': ['#111111', '#FFFFFF', 'STM', 'The SMISA Stadium'],
+  'Kilmarnock': ['#1B458F', '#FFFFFF', 'KIL', 'Rugby Park'],
+  'Ross County': ['#0B2240', '#E51B24', 'ROS', 'Victoria Park'],
+  'St. Johnstone': ['#1B458F', '#FFFFFF', 'STJ', 'McDiarmid Park'],
+  'Dundee': ['#0B2240', '#FFFFFF', 'DND', 'Dens Park'],
+  'Falkirk': ['#0B2240', '#FFFFFF', 'FAL', 'Falkirk Stadium'],
+  'Livingston': ['#FDB913', '#111111', 'LIV', 'Tony Macaroni Arena'],
+  'Partick Thistle': ['#ED1C24', '#FDB913', 'PAR', 'Firhill Stadium'],
+  'Ayr United': ['#FFFFFF', '#111111', 'AYR', 'Somerset Park'],
+  // English League One & Two
+  'Birmingham': ['#0000FF', '#FFFFFF', 'BIR', "St. Andrews"],
+  'Wrexham': ['#D62828', '#FFFFFF', 'WRE', 'Racecourse Ground'],
+  'Charlton': ['#DA291C', '#FFFFFF', 'CHA', 'The Valley'],
+  'Huddersfield': ['#0072CE', '#FFFFFF', 'HUD', "John Smiths Stadium"],
+  'Stockport': ['#00205B', '#FFFFFF', 'SKP', 'Edgeley Park'],
+  'Bolton': ['#00205B', '#DA291C', 'BOL', 'Toughsheet Community Stadium'],
+  'Reading': ['#002B7F', '#FFFFFF', 'REA', 'Select Car Leasing Stadium'],
+  'Lincoln': ['#DA291C', '#111111', 'LIN', 'Sincil Bank'],
+  'Port Vale': ['#111111', '#FDB913', 'PVL', 'Vale Park'],
+  'Walsall': ['#DA291C', '#FFFFFF', 'WAL', 'Bescot Stadium'],
+  'Doncaster': ['#DA291C', '#FFFFFF', 'DON', 'Eco-Power Stadium'],
+  'Notts County': ['#111111', '#FFFFFF', 'NCO', 'Meadow Lane'],
+  'Chesterfield': ['#00539F', '#FFFFFF', 'CHE', 'SMH Group Stadium'],
+  'Bradford City': ['#800020', '#FDB913', 'BRA', 'Valley Parade'],
+  // European & Champions League
+  'Ajax': ['#DA291C', '#FFFFFF', 'AJX', 'Johan Cruyff Arena'],
+  'PSV': ['#DA291C', '#FFFFFF', 'PSV', 'Philips Stadion'],
+  'Feyenoord': ['#DA291C', '#FFFFFF', 'FEY', 'De Kuip'],
+  'AZ Alkmaar': ['#DA291C', '#FFFFFF', 'AZ', 'AFAS Stadion'],
+  'FC Utrecht': ['#DA291C', '#FFFFFF', 'UTR', 'Stadion Galgenwaard'],
+  'FC Twente': ['#DA291C', '#FFFFFF', 'TWE', 'De Grolsch Veste'],
+  'Sporting CP': ['#008055', '#FFFFFF', 'SCP', 'Estadio Jose Alvalade'],
+  'Benfica': ['#DA291C', '#FFFFFF', 'SLB', 'Estadio da Luz'],
+  'FC Porto': ['#0038A8', '#FFFFFF', 'FCP', 'Estadio do Dragao'],
+  'SC Braga': ['#DA291C', '#FFFFFF', 'BRA', 'Estadio Municipal de Braga'],
+  'Real Madrid': ['#FFFFFF', '#00529F', 'RMA', 'Santiago Bernabeu'],
+  'AC Milan': ['#DA291C', '#111111', 'ACM', 'San Siro'],
+  'Inter Milan': ['#004DA0', '#111111', 'INT', 'San Siro'],
+  'Bayer Leverkusen': ['#DA291C', '#111111', 'B04', 'BayArena'],
+  'Bayern Munich': ['#DC052D', '#FFFFFF', 'FCB', 'Allianz Arena'],
+  'Atletico Madrid': ['#CB3524', '#FFFFFF', 'ATM', 'Metropolitano Stadium'],
   'Arsenal': ['#EF0107', '#FFFFFF', 'ARS', 'Emirates Stadium'], 'Aston Villa': ['#670E36', '#95BFE5', 'AVL', 'Villa Park'],
   'Bournemouth': ['#DA291C', '#111111', 'BOU', 'Vitality Stadium'], 'Brentford': ['#E30613', '#FFFFFF', 'BRE', 'Gtech Community Stadium'],
   'Brighton': ['#0057B8', '#FFFFFF', 'BHA', 'American Express Stadium'], 'Burnley': ['#6C1D45', '#99D6EA', 'BUR', 'Turf Moor'],

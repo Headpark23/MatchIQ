@@ -228,3 +228,4 @@ with open('app.js', 'w', encoding='utf-8') as f:
     f.write(code)
 
 print("Finished applying Today's Games Only updates to app.js")
+

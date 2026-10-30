@@ -17,3 +17,4 @@ with open('sw.js', 'w', encoding='utf-8') as f:
     f.write(s)
 
 print('Bumped version to v45 in index.html and sw.js')
+
