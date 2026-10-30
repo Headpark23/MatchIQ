@@ -122,3 +122,4 @@ with open('app.js', 'w', encoding='utf-8') as f:
     f.write(app_js)
 
 print("Updated app.js with strict future kickoff checks")
+

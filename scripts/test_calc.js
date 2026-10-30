@@ -1,0 +1,10 @@
+const path = require('path');
+const calc = require(path.join(__dirname, '../market_calculations.js'));
+console.log('formatFractionalOdds(2.0):', calc.formatFractionalOdds(2.0));
+console.log('formatFractionalOdds(1.4):', calc.formatFractionalOdds(1.4));
+console.log('formatFractionalOdds(1.7):', calc.formatFractionalOdds(1.7));
+console.log('parseFractionalOdds("Evens (1/1)"):', calc.parseFractionalOdds('Evens (1/1)'));
+console.log('parseFractionalOdds("2/5"):', calc.parseFractionalOdds('2/5'));
+console.log('parseFractionalOdds("≈2/5"):', calc.parseFractionalOdds('≈2/5'));
+console.log('parseFractionalOdds("~2/5"):', calc.parseFractionalOdds('~2/5'));
+console.log('parseFractionalOdds("≈Evens (1/1)"):', calc.parseFractionalOdds('≈Evens (1/1)'));

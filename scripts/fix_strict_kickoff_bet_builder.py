@@ -39,3 +39,4 @@ with open('bet_builder.js', 'w', encoding='utf-8') as f:
     f.write(code)
 
 print("Updated bet_builder.js with strict future kickoff check")
+

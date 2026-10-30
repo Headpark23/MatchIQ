@@ -213,9 +213,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-<script src="market_calculations.js?v=43"></script>
-<script src="bet_builder.js?v=43"></script>
-<script src="app.js?v=50"></script>
+<script src="market_calculations.js?v=51"></script>
+<script src="bet_builder.js?v=51"></script>
+<script src="app.js?v=51"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>
@@ -396,6 +396,35 @@
 
 
 <!-- Bookmaker Placement Selector Modal -->
+
+<!-- Return from Bookmaker Confirmation Modal -->
+<div class="modal-backdrop" id="return-bookie-modal" hidden>
+  <div class="modal bookie-modal-card" role="dialog" aria-modal="true" aria-labelledby="return-modal-title">
+    <div class="modal-head">
+      <div>
+        <h2 id="return-modal-title" style="margin:0;font-size:1.15rem">🎯 Returned from <span id="return-bookie-name">Bookmaker</span></h2>
+        <span class="text-sm muted">Confirm your real bet to unlock 2× League Bonus</span>
+      </div>
+      <button type="button" class="icon-btn" onclick="dismissReturnModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div id="return-bet-summary" class="bookie-summary-box" style="margin-bottom:12px;">
+        <strong id="return-bet-label">Accumulator Pick</strong>
+        <span id="return-bet-odds" class="mono text-sm" style="color:var(--pick)"></span>
+      </div>
+      <p style="margin:0 0 14px;font-size:13.5px;color:#cbd5e1;">Did you place this bet on <strong id="return-bookie-confirm-name">Coral</strong>?</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button type="button" class="btn primary" id="confirm-bet-placed-btn" onclick="confirmRealBetPlaced()" style="padding:12px;font-size:14px;font-weight:700;background:linear-gradient(135deg, #10b981, #059669);border:none;cursor:pointer;">
+          ✓ Yes, Bet Placed! (Save &amp; Claim 2× Bonus)
+        </button>
+        <button type="button" class="btn" onclick="dismissReturnModal()" style="padding:10px;background:rgba(255,255,255,0.06);color:#94a3b8;cursor:pointer;">
+          No, I changed my mind / did not place
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="bookie-modal" hidden>
   <div class="modal bookie-modal-card" role="dialog" aria-modal="true" aria-labelledby="bookie-modal-title">
     <div class="modal-head">

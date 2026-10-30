@@ -250,7 +250,10 @@ function mostLikelyBlock(pred, big) {
     '<div class="market-odds">Model fair odds <b>' + esc(fmtFairOdds(diary.fair, m.p)) + '</b> · not a bookmaker price</div></div></div>' +
     '<div class="evidence-row">' + statusBadge(status) + meter(m.strength) + '</div>' +
     '<p class="muted" style="font-size:13.5px">About ' + Math.round(m.p * 10) + ' times in 10. Chosen on credible chance (' + pct(m.lower_bound) + ' at the cautious end) from ' + esc(m.basis) + '. Likely does not mean good value.</p>' +
-    '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button></div>';
+    '<div class="btn-row" style="margin-top:8px;">' +
+      '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button>' +
+      '<button type="button" class="btn small" data-add-football-acca=\'' + esc(JSON.stringify(diary)) + '\' style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
+    '</div></div>';
 }
 
 const VALUE_HEAD = { value: ['value', 'Potential Value'], no_value: ['nobet', 'No Bet'], no_bet: ['nobet', 'No Bet'], awaiting_odds: ['awaiting', 'Awaiting Odds'] };
@@ -308,7 +311,10 @@ function topSixCard(s, pred, rank, isMostLikely, prices) {
     '<p class="muted" style="font-size:13px">' + esc(note) + '</p>' +
     '<label class="field"><span class="lbl">Price you saw ' + chip + '</span><input class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or 2.50" aria-label="Bookmaker price for ' + esc(s.label) + '" data-price="' + esc(s.id) + '" data-match="' + esc(pred.match_id) + '" value="' + esc(prices[s.id] || '') + '"></label>' +
     (prices[s.id] && v.verdict !== 'awaiting_odds' ? '<p class="muted" style="font-size:12.5px">' + esc(v.why) + '</p>' : '') +
-    '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button></article>';
+    '<div class="btn-row" style="margin-top:8px;">' +
+      '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button>' +
+      '<button type="button" class="btn small" data-add-football-acca=\'' + esc(JSON.stringify(diary)) + '\' style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
+    '</div></article>';
 }
 
 function topSixBlock(pred) {
@@ -519,6 +525,7 @@ function marketCard(key, m, ctx) {
     const selText = (key === 'btts' ? 'Both teams to score: ' : key === 'result' ? '' : meta.name + ': ') + row.label;
     const jsonStr = esc(JSON.stringify({ id: ctx.id, market: meta.diary, selection: selText, p: row.p, fair: row.fair }));
     return '<button type="button" class="btn small" data-diary=\'' + jsonStr + '\' aria-label="Add ' + esc(row.label) + ' to Bet Diary">+ Diary</button>' +
+      '<button type="button" class="btn small acca-btn" data-add-football-acca=\'' + jsonStr + '\' title="Add to custom Acca Builder" style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
       '<button type="button" class="btn-place-bet-inline" data-open-bookie=\'' + jsonStr + '\' title="Open in bookmaker app/site">Place Bet</button>';
   };
   const rows = m.rows.map(row => '<tr' + (row.picked ? ' style="color:#fff;font-weight:600"' : '') + '><td>' + esc(row.label) + (row.picked ? ' <span class="badge validated" style="font-size:10px">Pick</span>' : '') + '</td>' +
@@ -872,9 +879,9 @@ function slipCard(slip, idx, stake) {
         '<span class="slip-bookie-hint">Auto-copies slip & opens match search</span>' +
       '</div>' +
       '<div class="slip-bookie-buttons" role="group" aria-label="1-Click bookmaker launcher">' +
-        '<button type="button" class="bookie-pill b365" data-launch-bookie="bet365" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#10b981;"></span> Bet365 ↗</button>' +
+        '<button type="button" class="bookie-pill coral" data-launch-bookie="coral" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#0284c7;"></span> Coral ↗</button>' +
         '<button type="button" class="bookie-pill sky" data-launch-bookie="skybet" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#38bdf8;"></span> Sky Bet ↗</button>' +
-        '<button type="button" class="bookie-pill lv" data-launch-bookie="leovegas" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#f97316;"></span> LeoVegas ↗</button>' +
+        '<button type="button" class="bookie-pill b365" data-launch-bookie="bet365" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#10b981;"></span> Bet365 ↗</button>' +
         '<button type="button" class="bookie-pill bf" data-launch-bookie="betfair" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#fbbf24;"></span> Betfair ↗</button>' +
       '</div>' +
     '</div>' +
@@ -924,6 +931,19 @@ function customAccaCard(stake) {
       '<span>Returns <b class="mono">' + m(ret) + '</b></span>' +
       '<span>Profit <b class="mono">' + m(profit) + '</b></span>' +
     '</div>' +
+    '<div class="slip-bookie-bar" style="margin: 12px 0 8px;">' +
+      '<div class="slip-bookie-header">' +
+        '<span class="slip-bookie-bolt">⚡</span>' +
+        '<span class="slip-bookie-title">1-Click Load into Bookmaker:</span>' +
+        '<span class="slip-bookie-hint">Opens app &amp; copies slip</span>' +
+      '</div>' +
+      '<div class="slip-bookie-buttons" role="group" aria-label="1-Click bookmaker launcher">' +
+        '<button type="button" class="bookie-pill coral" data-launch-bookie="coral" data-slip-idx="custom"><span class="pill-dot" style="background:#0284c7;"></span> Coral ↗</button>' +
+        '<button type="button" class="bookie-pill sky" data-launch-bookie="skybet" data-slip-idx="custom"><span class="pill-dot" style="background:#38bdf8;"></span> Sky Bet ↗</button>' +
+        '<button type="button" class="bookie-pill b365" data-launch-bookie="bet365" data-slip-idx="custom"><span class="pill-dot" style="background:#10b981;"></span> Bet365 ↗</button>' +
+        '<button type="button" class="bookie-pill bf" data-launch-bookie="betfair" data-slip-idx="custom"><span class="pill-dot" style="background:#fbbf24;"></span> Betfair ↗</button>' +
+      '</div>' +
+    '</div>' +
     '<div class="btn-row" style="margin-top:12px;">' +
       '<button type="button" class="btn primary" onclick="saveCustomAccaToDiary()">Save Custom Acca to Bet Diary</button>' +
       '<button type="button" class="btn small" onclick="shareCustomAcca()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share / Copy</button>' +
@@ -940,9 +960,18 @@ function saveCustomAccaToDiary() {
   openDiary({});
   $('modal-bet-type').value = 'accumulator';
   toggleAccumulatorFields();
-  $('modal-stake').value = stake;
-  $('modal-odds').value = fmtOdds(odds);
-  $('modal-legs-input').value = legs.map(l => l.label + ' | ' + (l.fractional || fmtOdds(l.odds))).join('\n');
+  if ($('modal-stake-input')) $('modal-stake-input').value = Number(stake).toFixed(2);
+  if ($('modal-odds-input')) $('modal-odds-input').value = fmtOdds(odds).replace(/[≈~]/g, '');
+  if ($('modal-origin-select')) $('modal-origin-select').value = 'matchiq';
+  if ($('modal-notes-input')) $('modal-notes-input').value = 'Custom Accumulator (' + legs.length + ' legs) built in Bet Buddy.';
+  if ($('modal-legs-input')) {
+    $('modal-legs-input').value = legs.map(l => {
+      const matchLabel = l.fixture && l.fixture.home ? (l.fixture.home + (l.fixture.away ? ' v ' + l.fixture.away : '') + ': ') : '';
+      const frac = String(l.fractional || fmtOdds(l.odds)).replace(/[≈~]/g, '').trim();
+      return (matchLabel + l.label).replace(/^([^:]+:\s*)\1/, '$1') + ' | ' + (frac || 'Evens');
+    }).join('\n');
+  }
+  updateModalPnlPreview();
   toast('Custom Acca loaded into Bet Diary modal!');
 }
 
@@ -1164,10 +1193,17 @@ function saveSlipToDiary(i) {
   openDiary({});
   $('modal-bet-type').value = 'accumulator';
   toggleAccumulatorFields();
-  $('modal-legs-input').value = slip.legs.map(l => l.fixture.home + ' v ' + l.fixture.away + ': ' + l.label + ' | ' + String(l.fractional).replace('≈', '')).join('\n');
-  $('modal-stake-input').value = builderState.stake.toFixed(2);
-  $('modal-origin-select').value = 'matchiq';
-  $('modal-notes-input').value = 'Built by Bet Buddy Bet Builder for a £' + builderState.win + ' win. Check any price marked estimate with your bookmaker.';
+  if ($('modal-legs-input')) {
+    $('modal-legs-input').value = slip.legs.map(l => {
+      const matchLabel = l.fixture && l.fixture.home ? (l.fixture.home + (l.fixture.away ? ' v ' + l.fixture.away : '') + ': ') : '';
+      const frac = String(l.fractional || fmtOdds(l.odds)).replace(/[≈~]/g, '').trim();
+      return (matchLabel + l.label).replace(/^([^:]+:\s*)\1/, '$1') + ' | ' + (frac || 'Evens');
+    }).join('\n');
+  }
+  if ($('modal-stake-input')) $('modal-stake-input').value = Number((builderState && builderState.stake) || 10).toFixed(2);
+  if ($('modal-odds-input')) $('modal-odds-input').value = fmtOdds(slip.odds).replace(/[≈~]/g, '');
+  if ($('modal-origin-select')) $('modal-origin-select').value = 'matchiq';
+  if ($('modal-notes-input')) $('modal-notes-input').value = 'Built by Bet Buddy Bet Builder for a £' + ((builderState && builderState.win) || 50) + ' win. Check any price marked estimate with your bookmaker.';
   updateModalPnlPreview();
 }
 
@@ -2774,6 +2810,7 @@ function betCard(entry) {
   const priceTaken = oddsFormat === 'decimal' ? calc.formatDecimalOdds(+entry.odds) : calc.formatFractionalOdds(+entry.odds);
   return '<article class="card bet"><div class="bet-top"><div><div class="bet-sel">' + esc(entry.selection) + '</div><div class="dim" style="font-size:13px">' + esc(entry.fixture || '') + ' · ' + esc(entry.date || '') + ' · ' + esc(entry.marketName || entry.market || '') + '</div></div>' +
     '<span style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end"><span class="badge ' + (entry.origin === 'independent' ? 'market' : 'validated') + '">' + (entry.origin === 'independent' ? 'Own choice' : 'Bet Buddy pick') + '</span>' +
+      (entry.realBetVerified ? ' <span class="badge" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:700;">🛡️ Real Bet (2× Pts)</span>' : '') +
       (entry.recommendation ? '<span class="badge provisional">' + esc(REC_LABEL[entry.recommendation] || entry.recommendation) + '</span>' : '') + '</span></div>' + legs +
     '<div class="bet-facts"><div><span>Price taken</span><b>' + priceTaken + '</b></div>' +
       (entry.model_fair_odds ? '<div><span>Model fair odds</span><b>' + esc(fmtFairOdds(entry.model_fair_odds, entry.model_p)) + '</b></div>' : '') +
@@ -2925,9 +2962,43 @@ function toggleAccumulatorFields() {
 
 function parseAccumulatorLegs() {
   return ($('modal-legs-input').value || '').split('\n').map(l => l.trim()).filter(Boolean).map(line => {
-    const [selection, oddsText] = line.split('|').map(part => (part || '').trim());
-    const parsedOdds = (calc.parseOdds ? calc.parseOdds(oddsText) : null) ?? calc.parseFractionalOdds(oddsText);
-    return { selection, odds: parsedOdds, outcome: 'pending' };
+    let selection = line;
+    let oddsText = '';
+    if (line.includes('|')) {
+      const parts = line.split('|');
+      selection = parts[0].trim();
+      oddsText = parts.slice(1).join('|').trim();
+    } else {
+      const match = line.match(/^(.*?)(?:@|\sat\s|\s+)(≈?~?\d+\/\d+|≈?~?evens?|≈?~?\d+(?:\.\d+)?)\s*$/i);
+      if (match) {
+        selection = match[1].trim();
+        oddsText = match[2].trim();
+      }
+    }
+    const cleanOdds = oddsText.replace(/[≈~]/g, '').trim();
+    let parsedOdds = null;
+    if (/^evens?$/i.test(cleanOdds) || /^even money$/i.test(cleanOdds)) {
+      parsedOdds = 2.0;
+    } else {
+      parsedOdds = (calc.parseOdds ? calc.parseOdds(cleanOdds) : null) ?? (calc.parseFractionalOdds ? calc.parseFractionalOdds(cleanOdds) : null);
+    }
+    if (!parsedOdds || !Number.isFinite(parsedOdds) || parsedOdds <= 1) {
+      const fracMatch = cleanOdds.match(/(\d+)\s*\/\s*(\d+)/);
+      if (fracMatch) {
+        const num = Number(fracMatch[1]), den = Number(fracMatch[2]);
+        if (den > 0) parsedOdds = 1 + (num / den);
+      } else {
+        const decMatch = cleanOdds.match(/(\d+\.\d+)/);
+        if (decMatch) {
+          const dec = Number(decMatch[1]);
+          if (dec > 1) parsedOdds = dec;
+        }
+      }
+    }
+    if (!parsedOdds || !Number.isFinite(parsedOdds) || parsedOdds <= 1) {
+      parsedOdds = 2.0;
+    }
+    return { selection: selection || 'Leg', odds: parsedOdds, outcome: 'pending' };
   });
 }
 
@@ -3280,10 +3351,13 @@ function getBookieSearchQuery(betData) {
 function getBookieDeepLinks(query) {
   const enc = encodeURIComponent(query);
   return {
-    bet365: 'https://www.bet365.com/#/AX/K^' + enc + '/',
+    coral: 'https://sports.coral.co.uk/search?q=' + enc,
+    ladbrokes: 'https://sports.ladbrokes.com/search?q=' + enc,
     skybet: 'https://m.skybet.com/search?q=' + enc,
+    bet365: 'https://www.bet365.com/#/AX/K^' + enc + '/',
     paddypower: 'https://www.paddypower.com/search?q=' + enc,
     betfair: 'https://www.betfair.com/sport/football?searchTerm=' + enc,
+    williamhill: 'https://sports.williamhill.com/betting/en-gb/search?q=' + enc,
     leovegas: 'https://www.leovegas.com/en-gb/betting#search/' + enc
   };
 }
@@ -3304,13 +3378,17 @@ function launchBookmakerSlip(bookieKey, slipIdx) {
   if (!slip) return;
 
   const bookieNames = {
-    bet365: 'bet365',
+    coral: 'Coral',
     skybet: 'Sky Bet',
-    leovegas: 'LeoVegas',
+    bet365: 'bet365',
     betfair: 'Betfair',
-    paddypower: 'Paddy Power'
+    paddypower: 'Paddy Power',
+    ladbrokes: 'Ladbrokes',
+    williamhill: 'William Hill',
+    leovegas: 'LeoVegas'
   };
   const bName = bookieNames[bookieKey] || 'Bookmaker';
+  trackBookieLaunch(bName, slip);
 
   // Format slip payload for bookmaker quick-slip paste
   const textLines = [
@@ -3366,6 +3444,16 @@ function openBookieModal(betData) {
   // Phase 1: Dynamic Match Deep-Links on all bookie buttons
   const query = getBookieSearchQuery(currentBookieSelection);
   const links = getBookieDeepLinks(query);
+  const coralBtn = modal.querySelector('[data-bookie-click="Coral"]');
+  if (coralBtn) {
+    coralBtn.href = links.coral;
+    coralBtn.onclick = () => trackBookieLaunch('Coral', currentBookieSelection);
+  }
+  const ladBtn = modal.querySelector('[data-bookie-click="Ladbrokes"]');
+  if (ladBtn) {
+    ladBtn.href = links.ladbrokes;
+    ladBtn.onclick = () => trackBookieLaunch('Ladbrokes', currentBookieSelection);
+  }
   const b365Btn = modal.querySelector('[data-bookie-click="Bet365"]');
   if (b365Btn) b365Btn.href = links.bet365;
   const skyBtn = modal.querySelector('[data-bookie-click="Sky Bet"]');
@@ -4073,6 +4161,36 @@ document.addEventListener('click', event => {
     return;
   }
 
+  // Football acca addition
+  if (t.dataset.addFootballAcca !== undefined || (t.closest && t.closest('[data-add-football-acca]'))) {
+    const btn = t.dataset.addFootballAcca !== undefined ? t : t.closest('[data-add-football-acca]');
+    try {
+      const data = JSON.parse(btn.dataset.addFootballAcca);
+      const f = fixtureById(data.id);
+      const cleanOddsStr = String(data.fair || 'Evens').replace(/[≈~]/g, '').trim();
+      const decOdds = (calc.parseOdds ? calc.parseOdds(cleanOddsStr) : null) ?? (calc.parseFractionalOdds ? calc.parseFractionalOdds(cleanOddsStr) : 2.0) ?? 2.0;
+      addCrossSportAccaLeg({
+        id: 'fb-' + data.id + '-' + (data.selection || '').replace(/[^a-zA-Z0-9]/g, '_'),
+        matchId: data.id,
+        fixture: f ? { home: f.home, away: f.away, competition: (f.competition || 'FOOTBALL').toUpperCase() } : { home: data.selection, away: '', competition: 'FOOTBALL' },
+        kickoff: f ? kickoffMs(f) : (Date.now() + 86400000),
+        selId: 'sel-' + data.id + '-' + data.selection,
+        label: (f ? (f.home + ' v ' + f.away + ': ') : '') + data.selection,
+        market: data.market || 'wins',
+        p: data.p || 0.5,
+        odds: decOdds,
+        fractional: data.fair || 'Evens',
+        bookmaker: 'Bet Buddy Fair',
+        priceSource: 'model',
+        support: 'validated',
+        basis: 'Bet Buddy Football Model',
+        sport: 'football'
+      });
+      scrollToBuilder();
+    } catch (e) { console.error(e); }
+    return;
+  }
+
   // Cross-sport acca addition
   if (t.dataset.addCrossAcca !== undefined) {
     try {
@@ -4507,7 +4625,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = '2026.10.30.44';
+const APP_VERSION = 'v51';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -4562,4 +4680,126 @@ function toggleMemberForm(id) {
   if (el) {
     el.hidden = !el.hidden;
   }
+}
+
+
+// ------------------------------------------------------------ Return Bridge & Bookmaker Tracking
+let pendingBookieLaunch = null;
+try {
+  const stored = sessionStorage.getItem('betbuddy_pending_bookie');
+  if (stored) pendingBookieLaunch = JSON.parse(stored);
+} catch (e) {}
+
+function trackBookieLaunch(bookieName, betData) {
+  pendingBookieLaunch = {
+    bookie: bookieName,
+    data: betData,
+    time: Date.now()
+  };
+  try {
+    sessionStorage.setItem('betbuddy_pending_bookie', JSON.stringify(pendingBookieLaunch));
+  } catch (e) {}
+}
+
+function showReturnModal(launch) {
+  const modal = $('return-bookie-modal');
+  if (!modal) return;
+  const nameEl = $('return-bookie-name');
+  const confirmNameEl = $('return-bookie-confirm-name');
+  const labelEl = $('return-bet-label');
+  const oddsEl = $('return-bet-odds');
+  if (nameEl) nameEl.textContent = launch.bookie;
+  if (confirmNameEl) confirmNameEl.textContent = launch.bookie;
+  if (labelEl) {
+    if (launch.data && launch.data.legs) {
+      labelEl.textContent = launch.data.legs.length + '-Leg Accumulator (' + launch.data.legs.map(l => l.label).join(' + ') + ')';
+    } else {
+      labelEl.textContent = (launch.data && launch.data.selection) || 'Bet Selection';
+    }
+  }
+  if (oddsEl) {
+    oddsEl.textContent = (launch.data && (launch.data.fair || fmtOdds(launch.data.odds))) || '';
+  }
+  modal.hidden = false;
+}
+
+function dismissReturnModal() {
+  const modal = $('return-bookie-modal');
+  if (modal) modal.hidden = true;
+  pendingBookieLaunch = null;
+  try { sessionStorage.removeItem('betbuddy_pending_bookie'); } catch (e) {}
+}
+
+function confirmRealBetPlaced() {
+  if (!pendingBookieLaunch) return;
+  const launch = pendingBookieLaunch;
+  dismissReturnModal();
+
+  const isAcca = !!(launch.data && launch.data.legs);
+  const stake = Number((builderState && builderState.stake) || 10);
+  let odds = 2.0;
+  if (isAcca) {
+    odds = launch.data.legs.reduce((t, l) => t * (l.odds || 2.0), 1);
+  } else if (launch.data && launch.data.odds) {
+    odds = Number(launch.data.odds);
+  }
+
+  const entry = {
+    id: 'bet-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+    type: isAcca ? 'accumulator' : 'single',
+    profile: (getAuthUser() && getAuthUser().signedIn) ? ('@' + (getAuthUser().handle || (getAuthUser().name || 'User').split(' ')[0])) : 'Default',
+    date: new Date().toISOString().slice(0, 10),
+    fixture: isAcca ? 'Accumulator' : (launch.data && launch.data.fixture ? (launch.data.fixture.home + ' v ' + launch.data.fixture.away) : 'Listed Match'),
+    market: isAcca ? 'accumulator' : ((launch.data && launch.data.market) || 'wins'),
+    marketName: isAcca ? 'Accumulator' : 'Match Result',
+    selection: isAcca ? launch.data.legs.map(l => l.label).join(' + ') : ((launch.data && launch.data.selection) || 'Selection'),
+    legs: isAcca ? launch.data.legs.map(l => ({ selection: l.label, odds: l.odds || 2.0, outcome: 'pending' })) : undefined,
+    origin: 'matchiq',
+    bookmaker: launch.bookie,
+    odds,
+    stake,
+    potentialReturn: stake * odds,
+    outcome: 'pending',
+    timestamp: new Date().toISOString(),
+    realBetVerified: true,
+    bonusMultiplier: 2,
+    notes: 'Real bet confirmed placed at ' + launch.bookie + '. 2× League Bonus Active.'
+  };
+
+  try {
+    const diary = getStoredDiary();
+    diary.unshift(entry);
+    saveStoredDiary(diary);
+  } catch (e) { console.error(e); }
+
+  celebrateSave();
+  toast('🎉 ' + launch.bookie + ' real bet confirmed! Added to Bet Diary with 2× League Bonus.');
+  if (currentRoute()[0] === 'diary') render();
+}
+
+let returnCheckDebounce = false;
+function checkReturnFromBookie() {
+  if (returnCheckDebounce) return;
+  returnCheckDebounce = true;
+  setTimeout(() => { returnCheckDebounce = false; }, 2000);
+
+  if (!pendingBookieLaunch) {
+    try {
+      const stored = sessionStorage.getItem('betbuddy_pending_bookie');
+      if (stored) pendingBookieLaunch = JSON.parse(stored);
+    } catch (e) {}
+  }
+  if (pendingBookieLaunch && (Date.now() - pendingBookieLaunch.time < 3600000)) {
+    setTimeout(() => {
+      showReturnModal(pendingBookieLaunch);
+    }, 600);
+  }
+}
+window.addEventListener('focus', checkReturnFromBookie);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') checkReturnFromBookie();
+});
+if (typeof window !== 'undefined') {
+  window.dismissReturnModal = dismissReturnModal;
+  window.confirmRealBetPlaced = confirmRealBetPlaced;
 }
