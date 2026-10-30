@@ -582,3 +582,4 @@ hero_css = """
 css_code += hero_css
 css_path.write_text(css_code, encoding="utf-8")
 print("Successfully appended welcome hero styles to styles.css!")
+
