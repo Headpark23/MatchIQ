@@ -3372,16 +3372,31 @@ document.addEventListener('submit', event => {
     return;
   }
 
-    if (event.target.id === 'bug-form') {
+  if (event.target.id === 'bug-form') {
     event.preventDefault();
     const type = $('bug-type-select').value;
     const desc = ($('bug-desc-input').value || '').trim();
     const contact = ($('bug-contact-input').value || '').trim();
     if (!desc) return;
     saveBugReport({ type, desc, contact });
+
+    const subject = encodeURIComponent('Bet Buddy Bug Report: ' + type.toUpperCase());
+    const body = encodeURIComponent(
+      'Hi Martin and Chris,\n\n' +
+      'Bug Report / Suggestion Details:\n' +
+      'Category: ' + type + '\n' +
+      'Contact: ' + (contact || 'Anonymous') + '\n\n' +
+      'Description:\n' + desc + '\n\n' +
+      'Device/App Details:\n' +
+      'Platform: ' + navigator.userAgent + '\n' +
+      'URL: ' + location.href + '\n\n' +
+      'Sent via Bet Buddy Bug Reporter.'
+    );
+    window.open('mailto:octopigardens@gmail.com?subject=' + subject + '&body=' + body, '_blank');
+
     $('bug-form').reset();
     $('bug-modal').hidden = true;
-    toast('Thanks! Bug report sent to Martin and Chris.');
+    toast('Thanks! Opening email to send bug report to Martin and Chris...');
     render();
     return;
   }
@@ -3418,7 +3433,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.23';
+const APP_VERSION = '2026.10.30.24';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
