@@ -697,7 +697,7 @@ function canonicalUrl(url) {
 
 let currentSharePayload = { title: '', text: '', url: '' };
 
-function openUniversalShare({ title, text, url }) {
+function openUniversalShare({ title, text, url }, forceModal = false) {
   const finalUrl = canonicalUrl(url);
   currentSharePayload = {
     title: title || 'Bet Buddy',
@@ -709,7 +709,13 @@ function openUniversalShare({ title, text, url }) {
     ? currentSharePayload.text
     : currentSharePayload.text + (finalUrl ? '\n\n' + finalUrl : '');
 
-  // 1. If mobile device supports Web Share API, launch native share sheet
+  // If forceModal is true (e.g. user clicked 'Share app with friend'), directly show WhatsApp, SMS, Facebook, X options!
+  if (forceModal || !navigator.share) {
+    openShareSheetModal(fullText);
+    return;
+  }
+
+  // Otherwise, if mobile device supports Web Share API and not forced, launch native share sheet
   if (navigator.share && /android|iphone|ipad|ipod/i.test(navigator.userAgent)) {
     navigator.share({
       title: currentSharePayload.title,
@@ -721,8 +727,15 @@ function openUniversalShare({ title, text, url }) {
     return;
   }
 
-  // 2. Otherwise open direct multi-channel share modal (WhatsApp, SMS, Email, Copy)
   openShareSheetModal(fullText);
+}
+
+function shareAppWithFriend() {
+  openUniversalShare({
+    title: 'Bet Buddy UK - The AI Smart Acca & Mini-Leagues App',
+    text: 'Check out Bet Buddy! Smart AI football accas, real bookie odds comparison, and private betting leagues with mates:\nhttps://betbuddyuk.uk/',
+    url: 'https://betbuddyuk.uk/'
+  }, true);
 }
 
 function openShareSheetModal(fullText) {
@@ -733,12 +746,19 @@ function openShareSheetModal(fullText) {
 
   const encText = encodeURIComponent(fullText);
   const encTitle = encodeURIComponent(currentSharePayload.title || 'Bet Buddy');
+  const encUrl = encodeURIComponent(currentSharePayload.url || 'https://betbuddyuk.uk/');
 
   const waBtn = $('btn-share-whatsapp');
   if (waBtn) waBtn.href = 'https://api.whatsapp.com/send?text=' + encText;
 
   const smsBtn = $('btn-share-sms');
   if (smsBtn) smsBtn.href = 'sms:?&body=' + encText;
+
+  const fbBtn = $('btn-share-facebook');
+  if (fbBtn) fbBtn.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encUrl + '&quote=' + encText;
+
+  const xBtn = $('btn-share-x');
+  if (xBtn) xBtn.href = 'https://twitter.com/intent/tweet?text=' + encText + '&url=' + encUrl;
 
   const mailBtn = $('btn-share-email');
   if (mailBtn) mailBtn.href = 'mailto:?subject=' + encTitle + '&body=' + encText;
@@ -2549,6 +2569,7 @@ function viewMore() {
       '</div>' +
       '<div class="btn-row" style="margin-top:16px">' +
         '<button type="button" class="btn primary" data-open-handle-modal>Change Username / Location</button>' +
+        '<button type="button" class="btn" data-share-app>👥 Share App with Friend</button>' +
         '<button type="button" class="btn" data-open-auth>Switch / Connect Google Account</button>' +
       '</div>' +
     '</div>' +
@@ -2573,7 +2594,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v34 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">v35 (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -3462,6 +3483,10 @@ document.addEventListener('click', event => {
   if (t.dataset.closeGdpr !== undefined) { $('gdpr-modal').hidden = true; return; }
 
   // Share modal
+  if (t.dataset.shareApp !== undefined || t.id === 'header-share-btn' || t.id === 'footer-share-btn' || t.closest('#header-share-btn') || t.closest('#footer-share-btn')) {
+    shareAppWithFriend();
+    return;
+  }
   if (t.dataset.closeShare !== undefined) { $('share-modal').hidden = true; return; }
   if (t.id === 'btn-share-copy') {
     const textToCopy = $('share-preview-text').textContent;
@@ -3797,7 +3822,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = '2026.10.30.34';
+const APP_VERSION = '2026.10.30.35';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');

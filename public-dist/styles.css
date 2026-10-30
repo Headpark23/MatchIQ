@@ -1838,3 +1838,41 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   transform: translateY(-3px);
   border-color: var(--cyan);
 }
+
+
+/* Header & Subtle Share App Buttons */
+.header-share-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0; font-weight: 600; font-size: 13px;
+  padding: 5px 11px; min-height: 32px; border-radius: 9999px;
+  transition: all .15s ease; cursor: pointer;
+}
+.header-share-btn:hover {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+}
+@media (max-width: 600px) {
+  .header-share-btn { padding: 5px 8px; min-height: 28px; min-width: 28px; }
+  .header-share-btn .share-label { display: none !important; }
+}
+.subtle-share-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--soft);
+  padding: 4px 10px; border-radius: 6px; font-size: 12px;
+  cursor: pointer; transition: all .15s ease;
+}
+.subtle-share-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--cyan);
+  color: #fff;
+}
+.share-channel-btn.facebook svg { color: #1877f2; }
+.share-channel-btn.facebook:hover { border-color: #1877f2; }
+.share-channel-btn.x-twitter svg { color: #f3f4f6; }
+.share-channel-btn.x-twitter:hover { border-color: #f3f4f6; }
