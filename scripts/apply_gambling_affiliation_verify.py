@@ -42,3 +42,4 @@ if 'gag0p29escioankmdh.html' not in bld:
     with open('build_public_dist.py', 'w', encoding='utf-8') as f:
         f.write(bld)
     print("Updated build_public_dist.py allowlist")
+

@@ -538,10 +538,12 @@ function homeHero(pred) {
 
 // ------------------------------------------------------------ Bet Builder (home hero)
 const BUILDER_KEY = 'matchiq_builder_v1';
-const builderState = { stake: 10, legs: 4, win: 50 };
+const builderState = { stake: 10, legs: 4, win: 50, timing: 'today' };
 try {
   const v = JSON.parse(localStorage.getItem(BUILDER_KEY) || 'null');
-  if (v && v.stake > 0 && v.win > 0 && v.legs >= 1 && v.legs <= MatchIQBuilder.MAX_LEGS) Object.assign(builderState, { stake: +v.stake, legs: +v.legs, win: +v.win });
+  if (v && v.stake > 0 && v.win > 0 && v.legs >= 1 && v.legs <= MatchIQBuilder.MAX_LEGS) {
+    Object.assign(builderState, { stake: +v.stake, legs: +v.legs, win: +v.win, timing: (v.timing === 'all' ? 'all' : 'today') });
+  }
 } catch (e) { /* the inputs are a convenience */ }
 let builderResult = null, builderTimer = null;
 // Custom Multi-Sport Acca State
@@ -582,8 +584,9 @@ function clearCustomAcca() {
 
 function builderCompute() {
   const { stake, legs, win } = builderState;
+  const timing = builderState.timing || 'today';
   const footballPool = activeSports.includes('football')
-    ? MatchIQBuilder.legPool(predictionsList(), { calc, reliability: DATA.reliability, feedFor, nowMs: Date.now() })
+    ? MatchIQBuilder.legPool(predictionsList(), { calc, reliability: DATA.reliability, feedFor, nowMs: Date.now(), timing })
     : [];
 
   // Multi-Sport Pool Injection
@@ -795,7 +798,9 @@ function slipCard(slip, idx, stake) {
   const chance = slip.chance >= 0.1 ? Math.round(slip.chance * 100) : (slip.chance * 100).toFixed(1);
   const mainOdds = fmtOdds(slip.odds);
   const subOdds = oddsFormat === 'decimal' ? calc.formatFractionalOdds(slip.odds) : '(' + calc.formatDecimalOdds(slip.odds) + ')';
-  return '<article class="slip' + (primary ? ' primary' : '') + '"><div class="slip-head"><div><div class="slip-kicker">' + (primary ? 'Best match for your target' : 'Alternative ' + idx) + '</div>' +
+  const isTodayAcca = builderState.timing === 'today';
+  const todayBadge = isTodayAcca ? '<div class="today-slip-pill">⚡ TODAY\'S GAMES ONLY &bull; ALL LEGS SETTLE TONIGHT</div>' : '';
+  return '<article class="slip' + (primary ? ' primary' : '') + '">' + todayBadge + '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? 'Best match for your target' : 'Alternative ' + idx) + '</div>' +
     '<div class="slip-odds mono">' + esc(mainOdds) + ' <small>' + esc(subOdds) + '</small></div></div>' +
     '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every bet lands</small></div></div>' +
     '<ol class="slip-legs">' + slip.legs.map(slipLegRow).join('') + '</ol>' +
@@ -893,7 +898,22 @@ function builderOutput() {
   let customHtml = customAccaLegs.length > 0 ? customAccaCard(stake) : '';
   if (!r) return customHtml;
   const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from a <b>' + m(stake) + '</b> stake you need a total return of <b>' + m(stake + win) + '</b>: combined odds of about <b class="mono">' + fmtOdds((stake + win) / stake) + '</b>.</p>';
-  if (r.error) return customHtml + need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>';
+  if (r.error) {
+    let helper = '';
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayCount = predictionsList().filter(p => p.fixture && p.fixture.kickoff_utc && p.fixture.kickoff_utc.slice(0, 10) === todayStr).length;
+    if (builderState.timing === 'today' && todayCount > 0 && todayCount < builderState.legs) {
+      helper = '<div class="notice" style="margin-top:14px;border-color:var(--emerald);background:rgba(16,185,129,0.12);color:#fff;">' +
+        '<b>⚡ ' + todayCount + ' matches playing today.</b><br>' +
+        'Target is ' + builderState.legs + ' bets. Adjust legs to match today\'s available matches, or switch to the 7-day schedule:' +
+        '<div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">' +
+          '<button type="button" class="btn small" onclick="setBuilderLegs(' + todayCount + ')" style="background:var(--emerald);color:#03140d;font-weight:700;">Build ' + todayCount + '-Leg Acca for Today</button>' +
+          '<button type="button" class="btn small" onclick="setBuilderTiming(\'all\')">Switch to Next 7 Days</button>' +
+        '</div>' +
+      '</div>';
+    }
+    return customHtml + need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>' + helper;
+  }
   const first = r.slips[0];
   const miss = r.exact ? '' : '<p class="slip-warn">No combination lands on that target. This is the closest available: it returns ' + m(first.ret) + ' (profit ' + m(first.profit) + ').</p>';
   const fine = '<p class="builder-fine">Chances are Bet Buddy model estimates, not promises. On average this slip is expected to ' + (first.ev >= 0 ? 'make ' : 'lose ') + '<b>' + m(Math.abs(first.ev)) + '</b> per ' + m(stake) + ' staked; bookmaker margins usually push that below zero. Never stake more than you can afford to lose.</p>';
@@ -958,15 +978,49 @@ window.pandaMoodMarkup = accaVolatilityMarkup;
 
 function viewBuilder() {
   builderCompute();
-  const { stake, legs, win } = builderState;
+  const { stake, legs, win, timing } = builderState;
+  const curTiming = timing || 'today';
   const legChips = [2, 3, 4, 5, 6, 8].map(n => '<button type="button" class="legpick" data-legs="' + n + '" aria-pressed="' + (legs === n) + '">' + n + '</button>').join('');
   const winPresets = [10, 25, 50, 100, 250].map(w => '<button type="button" class="win-chip" data-win="' + w + '" aria-pressed="' + (win === w) + '">£' + w + '</button>').join('');
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const allPreds = predictionsList();
+  const todayMatchesCount = allPreds.filter(p => p.fixture && p.fixture.kickoff_utc && p.fixture.kickoff_utc.slice(0, 10) === todayStr).length;
+  const upcomingMatchesCount = allPreds.filter(p => kickoffMs(p.fixture) > Date.now()).length;
+
+  const scopeToggle = '<div class="builder-scope-bar">' +
+    '<div class="scope-header">' +
+      '<span class="scope-icon">⚡</span>' +
+      '<span class="scope-title">Match Schedule (Obvious Choice)</span>' +
+      '<span class="scope-hint">Tap to switch when your acca settles</span>' +
+    '</div>' +
+    '<div class="scope-pills" role="radiogroup" aria-label="Acca Match Schedule">' +
+      '<button type="button" class="scope-pill' + (curTiming === 'today' ? ' active' : '') + '" data-timing="today" role="radio" aria-checked="' + (curTiming === 'today') + '">' +
+        '<div class="scope-pill-top">' +
+          '<span class="scope-badge today">⚡ SETTLE TONIGHT</span>' +
+          '<span class="scope-count">' + todayMatchesCount + ' matches</span>' +
+        '</div>' +
+        '<div class="scope-pill-name">Today\'s Games Only</div>' +
+        '<div class="scope-pill-desc">Only picks games playing today (all legs settle tonight)</div>' +
+      '</button>' +
+      '<button type="button" class="scope-pill' + (curTiming === 'all' ? ' active' : '') + '" data-timing="all" role="radio" aria-checked="' + (curTiming === 'all') + '">' +
+        '<div class="scope-pill-top">' +
+          '<span class="scope-badge all">📅 FULL SLATE</span>' +
+          '<span class="scope-count">' + (upcomingMatchesCount || allPreds.length) + ' matches</span>' +
+        '</div>' +
+        '<div class="scope-pill-name">Next 7 Days (Weekend Slips)</div>' +
+        '<div class="scope-pill-desc">Searches full week across all upcoming weekend rounds</div>' +
+      '</button>' +
+    '</div>' +
+  '</div>';
+
   return '<section class="builder" aria-labelledby="builder-title">' +
     '<div class="builder-top-bar">' +
       '<div><div class="builder-kicker">Bet Builder</div><h1 class="page-title" id="builder-title">Tell us the win. We’ll build the bet.</h1></div>' +
       '<div id="builder-panda-mood">' + accaVolatilityMarkup(builderResult && builderResult.slips && builderResult.slips[0], builderState.win) + '</div>' +
     '</div>' +
     '<p class="page-sub">Pick a stake, how many bets and how much you want to win. Bet Buddy searches every upcoming match for the combined bet (accumulator) that hits your target with the best chance of landing.</p>' +
+    scopeToggle +
     '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake"></div>' +
     '<div class="field"><span class="lbl" id="b-legs-l">Number of bets</span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
     '<input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Number of bets"></div></div>' +
@@ -1001,6 +1055,20 @@ function setBuilderLegs(n) {
   markLegChips();
   updateBuilder();
 }
+
+function setBuilderTiming(mode) {
+  builderState.timing = mode;
+  try { localStorage.setItem(BUILDER_KEY, JSON.stringify(builderState)); } catch (e) {}
+  document.querySelectorAll('.scope-pill').forEach(b => {
+    const isActive = b.dataset.timing === mode;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-checked', String(isActive));
+  });
+  updateBuilder();
+  render();
+}
+window.setBuilderTiming = setBuilderTiming;
+window.setBuilderLegs = setBuilderLegs;
 
 function onBuilderInput(t) {
   const v = Number(t.value);
@@ -1180,7 +1248,7 @@ function viewPicks() {
   '</div>';
   const list = upcoming();
   const sharedBanner = sharedSlipNotice
-    ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🐼</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' return across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
+    ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🎯</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' return across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
     : '';
   let html = '<section class="view">' +
     topHubNav +
@@ -4023,6 +4091,10 @@ document.addEventListener('click', event => {
   else if (t.dataset.partnerSlip !== undefined) {
     shareAccaSlip(+t.dataset.partnerSlip);
     toast('Acca copied! Ready to paste into Bet365, SkyBet or Betfair.');
+  }
+  else if (t.closest('[data-timing]')) {
+    const timingBtn = t.closest('[data-timing]');
+    setBuilderTiming(timingBtn.dataset.timing);
   }
   else if (t.dataset.legs) setBuilderLegs(+t.dataset.legs);
   else if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));

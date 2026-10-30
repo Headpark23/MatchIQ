@@ -33,10 +33,18 @@
     const { calc, feedFor, reliability } = opts;
     const nowMs = opts.nowMs == null ? Date.now() : opts.nowMs;
     const horizonMs = opts.horizonMs == null ? 7 * 86400000 : opts.horizonMs;
+    const timing = opts.timing || 'all';
+    const todayStr = opts.todayDateStr || new Date(nowMs).toISOString().slice(0, 10);
     const pool = [];
     for (const pred of preds) {
       const ko = Date.parse(pred.fixture.kickoff_utc);
-      if (!(ko > nowMs && ko - nowMs <= horizonMs)) continue;
+      const koDateStr = pred.fixture.kickoff_utc ? pred.fixture.kickoff_utc.slice(0, 10) : '';
+      if (timing === 'today') {
+        if (koDateStr !== todayStr) continue;
+        if (ko < nowMs - 4 * 3600000) continue;
+      } else {
+        if (!(ko > nowMs && ko - nowMs <= horizonMs)) continue;
+      }
       const feed = feedFor ? feedFor(pred.match_id) : { state: 'none', details: {} };
       const ranked = new Map(calc.rankSelections(pred, reliability).map((r) => [r.id, r]));
       for (const s of calc.allSelections(pred)) {

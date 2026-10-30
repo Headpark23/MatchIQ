@@ -15,3 +15,4 @@ with open('build_public_dist.py', 'w', encoding='utf-8') as f:
     f.write(c)
 
 print("Fixed build_public_dist.py")
+
