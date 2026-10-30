@@ -38,12 +38,14 @@
     const pool = [];
     for (const pred of preds) {
       const ko = Date.parse(pred.fixture.kickoff_utc);
+      // HARD SAFETY RULE: Kickoff must be strictly in the future. Never pick kicked-off games!
+      if (!Number.isFinite(ko) || ko <= nowMs) continue;
+
       const koDateStr = pred.fixture.kickoff_utc ? pred.fixture.kickoff_utc.slice(0, 10) : '';
       if (timing === 'today') {
         if (koDateStr !== todayStr) continue;
-        if (ko < nowMs - 4 * 3600000) continue;
       } else {
-        if (!(ko > nowMs && ko - nowMs <= horizonMs)) continue;
+        if (ko - nowMs > horizonMs) continue;
       }
       const feed = feedFor ? feedFor(pred.match_id) : { state: 'none', details: {} };
       const ranked = new Map(calc.rankSelections(pred, reliability).map((r) => [r.id, r]));
