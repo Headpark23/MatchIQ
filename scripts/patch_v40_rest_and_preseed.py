@@ -222,3 +222,4 @@ with open('app.js', 'w', encoding='utf-8') as f:
     f.write(content)
 
 print("Patched app.js with direct REST engine and pre-seeded Buddy League v40.")
+

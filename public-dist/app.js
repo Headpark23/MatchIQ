@@ -2089,6 +2089,7 @@ async function joinCloudLeague(code) {
   let leagueIcon = '⚽';
   let leagueFreq = 'weekly';
   let creatorHandle = null;
+  let existingMembers = [];
 
   if (firestoreDb) {
     try {
@@ -2099,12 +2100,14 @@ async function joinCloudLeague(code) {
         if (d.icon) leagueIcon = d.icon;
         if (d.freq) leagueFreq = d.freq;
         if (d.creator_handle) creatorHandle = d.creator_handle;
+        existingMembers = extractMembersFromDoc(d);
       }
     } catch (e) {
       console.warn('Join cloud fetch notice:', e);
     }
   }
 
+  const prof = getUserProfile();
   const list = getStoredLeagues();
   let league = list.find(l => l.code === code);
   if (!league) {
@@ -2117,7 +2120,7 @@ async function joinCloudLeague(code) {
       is_joined: true,
       creator_handle: creatorHandle,
       created_at: new Date().toISOString().slice(0, 10),
-      members: []
+      members: existingMembers.filter(m => m && m.handle && m.handle !== prof.handle)
     };
     list.push(league);
   } else {
@@ -2128,6 +2131,9 @@ async function joinCloudLeague(code) {
     league.icon = leagueIcon;
     league.freq = leagueFreq;
     if (creatorHandle) league.creator_handle = creatorHandle;
+    if (existingMembers.length) {
+      league.members = existingMembers.filter(m => m && m.handle && m.handle !== prof.handle);
+    }
   }
   saveStoredLeagues(list);
   activeLeagueId = league.id;
