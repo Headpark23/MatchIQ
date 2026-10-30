@@ -1941,7 +1941,7 @@ function viewLeagues() {
   return '<section class="view">' +
     '<div class="section-head" style="align-items:flex-end"><div>' +
       '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
-      '<p class="page-sub">Compete in your 6 automatic hometown and global ladders, or create private mini-leagues with mates. Option A: 20/1 winner = 200 pts, Evens = 10 pts, Loss = -2 pts.</p>' +
+      '<p class="page-sub">Compete in your 6 automatic hometown and global leagues, or create private mini-leagues with mates. Option A: 20/1 winner = 200 pts, Evens = 10 pts, Loss = -2 pts.</p>' +
     '</div>' +
     '<div class="btn-row">' +
       '<button type="button" class="btn primary" data-open-league-modal>Create or Join League</button>' +
@@ -1959,13 +1959,13 @@ function viewLeagues() {
     '</div>' +
 
     '<div class="section" style="margin-top:20px">' +
-      '<div class="section-head"><div><h2 class="section-title">Automatic Geographic Ladders</h2><span class="section-note">You are automatically enrolled into all 6 tiers based on your location.</span></div></div>' +
-      '<div class="geo-ladder-nav">' + geoNavHtml + '</div>' +
+      '<div class="section-head"><div><h2 class="section-title">Private Buddy Mini-Leagues</h2><span class="section-note">Custom leagues with your friends, work colleagues, and pub crew.</span></div></div>' +
+      '<div class="league-selector-bar">' + buddyTabsHtml + '</div>' +
     '</div>' +
 
     '<div class="section" style="margin-top:14px">' +
-      '<div class="section-head"><div><h2 class="section-title">Private Buddy Mini-Leagues</h2><span class="section-note">Custom leagues with your friends, work colleagues, and pub crew.</span></div></div>' +
-      '<div class="league-selector-bar">' + buddyTabsHtml + '</div>' +
+      '<div class="section-head"><div><h2 class="section-title">Automatic Geographical Leagues</h2><span class="section-note">You are automatically enrolled into all 6 tiers based on your location.</span></div></div>' +
+      '<div class="geo-ladder-nav">' + geoNavHtml + '</div>' +
     '</div>' +
 
     '<div class="leaderboard-card" style="margin-top:20px">' +
@@ -3443,7 +3443,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 loadData().then(render);
 
-const APP_VERSION = '2026.10.30.25';
+const APP_VERSION = '2026.10.30.26';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest server version... 🔄');
