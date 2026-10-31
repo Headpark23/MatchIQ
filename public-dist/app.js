@@ -2411,6 +2411,13 @@ function getGeoDocId(tierId, prof) {
   return tierId;
 }
 
+// Only real Google-registered users may appear on any leaderboard: no placeholder "Punter_###" handles,
+// no seeded names, and every non-self member must carry an account uid.
+const BLOCKED_MEMBER_HANDLES = ['HeadPark73', 'Punter_747', 'Punter_737'];
+function isRealMember(m) {
+  return !!(m && m.handle && m.uid && !/^Punter_\d*$/i.test(String(m.handle)) && !BLOCKED_MEMBER_HANDLES.includes(m.handle));
+}
+
 const GEO_MEMBERS_CACHE_PREFIX = 'betbuddy_geo_cache_';
 function getStoredGeoMembers(docId) {
   try {
@@ -2418,7 +2425,7 @@ function getStoredGeoMembers(docId) {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed)) {
-        return parsed.filter(m => m && m.handle && m.handle !== 'HeadPark73' && m.handle !== 'Punter_747' && m.handle !== 'Punter_737');
+        return parsed.filter(isRealMember);
       }
     }
   } catch (e) {}
@@ -2427,7 +2434,7 @@ function getStoredGeoMembers(docId) {
 
 function saveStoredGeoMembers(docId, members) {
   try {
-    localStorage.setItem(GEO_MEMBERS_CACHE_PREFIX + docId, JSON.stringify(members));
+    localStorage.setItem(GEO_MEMBERS_CACHE_PREFIX + docId, JSON.stringify((members || []).filter(isRealMember)));
   } catch (e) {}
 }
 
@@ -2733,7 +2740,7 @@ async function syncUserLeaguesFromCloud() {
                 creatorHandle: lData.creatorHandle || 'Creator',
                 created_at: lData.createdAt ? lData.createdAt.slice(0, 10) : new Date().toISOString().slice(0, 10),
                 is_joined: !isCreator,
-                members: membersList.filter(m => m.uid !== user.uid)
+                members: membersList.filter(m => isRealMember(m) && m.uid !== user.uid)
               });
               changed = true;
             } else {
@@ -2742,7 +2749,7 @@ async function syncUserLeaguesFromCloud() {
               existing.freq = lData.freq || existing.freq;
               if (lData.creatorUid) existing.creatorUid = lData.creatorUid;
               if (lData.creatorHandle) existing.creatorHandle = lData.creatorHandle;
-              existing.members = membersList.filter(m => m.uid !== user.uid);
+              existing.members = membersList.filter(m => isRealMember(m) && m.uid !== user.uid);
               changed = true;
             }
           }
@@ -2815,7 +2822,7 @@ function listenToActiveLeague(code) {
         snap.forEach(d => {
           membersList.push({ ...d.data(), uid: d.id });
         });
-        target.members = membersList.filter(m => m.uid !== user.uid);
+        target.members = membersList.filter(m => isRealMember(m) && m.uid !== user.uid);
         saveStoredLeagues(list);
         render();
       }
@@ -2954,8 +2961,9 @@ let activeMoreTab = 'account';
 
 function getUserProfile() {
   const activeUser = currentAuthUser || cachedAuthUser;
-  if (activeUser && (activeUser.displayName || activeUser.handle)) {
-    const h = String(activeUser.handle || activeUser.displayName).replace(/^@+/, '');
+  if (activeUser && (activeUser.displayName || activeUser.handle || activeUser.email)) {
+    let h = String(activeUser.handle || activeUser.displayName || toUsername('', activeUser.email)).replace(/^@+/, '');
+    if (/^Punter_\d*$/i.test(h)) h = toUsername(activeUser.displayName || activeUser.name, activeUser.email);  // never show a placeholder handle
     if (h && !h.startsWith('Punter_')) {
       try {
         const p = JSON.parse(localStorage.getItem(USER_PROFILE_KEY) || 'null');
@@ -2980,7 +2988,9 @@ function getUserProfile() {
   }
   try {
     const p = JSON.parse(localStorage.getItem(USER_PROFILE_KEY) || 'null');
-    if (p && p.handle) {
+    if (p && p.handle && /^Punter_\d*$/i.test(String(p.handle))) {
+      localStorage.removeItem(USER_PROFILE_KEY);  // legacy placeholder profile
+    } else if (p && p.handle) {
       return {
         handle: p.handle,
         avatar: p.avatar || '⚽',
@@ -2990,15 +3000,14 @@ function getUserProfile() {
       };
     }
   } catch (e) { /* ignore */ }
-  const randomSuffix = Math.floor(Math.random() * 899 + 100);
+  // Signed-out visitors get a transient, never-saved profile: no fake handle is ever created.
   const defaultProfile = {
-    handle: 'Punter_' + randomSuffix,
+    handle: 'Guest',
     avatar: '⚽',
     town: 'Paisley',
     region: 'Renfrewshire',
     country: 'Scotland'
   };
-  try { localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(defaultProfile)); } catch (e) { /* ignore */ }
   return defaultProfile;
 }
 
@@ -3288,12 +3297,12 @@ function viewLeagues() {
   if (isGeo) {
     const geoDocId = getGeoDocId(currentLeague.id, prof);
     listenToActiveGeoLeague(geoDocId);
-    const realGeoMembers = getStoredGeoMembers(geoDocId).filter(m => m.handle !== prof.handle && m.handle !== 'HeadPark73' && m.handle !== 'Punter_747' && m.handle !== 'Punter_737');
+    const realGeoMembers = getStoredGeoMembers(geoDocId).filter(m => m.handle !== prof.handle);
     allMembers = [...realGeoMembers, userEntry];
   } else {
     const memberMap = new Map();
     (currentLeague.members || []).forEach(m => {
-      if (m && m.handle && m.handle !== prof.handle && m.handle !== 'HeadPark73' && m.handle !== 'Punter_747' && m.handle !== 'Punter_737') {
+      if (isRealMember(m) && m.handle !== prof.handle) {
         memberMap.set(m.handle, m);
       }
     });
@@ -4943,7 +4952,7 @@ async function ensureUserProfile(user) {
   try {
     let baseHandle = (user.displayName || (user.email ? user.email.split('@')[0] : 'Punter'))
       .replace(/[^A-Za-z0-9_]/g, '');
-    if (baseHandle.length < 3) baseHandle = 'Punter_' + baseHandle;
+    if (baseHandle.length < 3) baseHandle = 'Player' + String(user.uid || '').replace(/[^A-Za-z0-9]/g, '').slice(0, 6);
     if (baseHandle.length > 20) baseHandle = baseHandle.slice(0, 20);
 
     if (firestoreDb) {
