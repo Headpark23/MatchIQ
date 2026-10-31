@@ -11,3 +11,7 @@ __pycache__/
 .claude/
 node_modules/
 tests/rules/node_modules/
+backups/
+*service-account*.json
+*.serviceAccount.json
+*firebase-adminsdk*.json
