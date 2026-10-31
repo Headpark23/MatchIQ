@@ -5767,7 +5767,20 @@ document.addEventListener('submit', event => {
   else if (event.target.id === 'fb-form') handleFeedbackSubmit(event);
 });
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('diary-modal').hidden) closeDiary(); });
-window.addEventListener('hashchange', () => { render(); if (window.location.hash.startsWith('#/results')) checkAutoUpdateResults(); });
+// Opening Results from anywhere else always starts on Football, all competitions, settled predictions.
+let wasOnResults = false;
+function applyResultsDefaults() {
+  const onResults = window.location.hash.startsWith('#/results');
+  if (onResults && !wasOnResults) {
+    resultsSportFilter = 'football';
+    resultsFilter = 'settled';
+    compFilter = 'ALL';
+    try { localStorage.setItem(COMP_KEY, 'ALL'); } catch (e) { /* ignore */ }
+  }
+  wasOnResults = onResults;
+}
+applyResultsDefaults();
+window.addEventListener('hashchange', () => { applyResultsDefaults(); render(); if (window.location.hash.startsWith('#/results')) checkAutoUpdateResults(); });
 
 // ------------------------------------------------------------ Live Results Auto-Update Tracking
 let lastResultsAutoSync = 0;
