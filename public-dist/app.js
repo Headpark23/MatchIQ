@@ -666,8 +666,16 @@ let builderResult = null, builderTimer = null;
 // Custom Multi-Sport Acca State
 let customAccaLegs = [];
 try {
-  // Wipe stale custom acca state on startup to ensure a completely clean app per user directive
+  // Wipe stale custom acca state and stale geo cache on startup to ensure a completely clean app
   localStorage.removeItem('betbuddy_custom_acca_v1');
+  Object.keys(localStorage).forEach(k => {
+    if (k.startsWith('betbuddy_geo_cache_')) localStorage.removeItem(k);
+  });
+  const savedLeagues = JSON.parse(localStorage.getItem(LEAGUES_STORAGE_KEY) || '[]');
+  if (Array.isArray(savedLeagues)) {
+    const cleanLeagues = savedLeagues.filter(l => l && l.code !== 'BUDDY-9240' && l.code !== 'BUDDY-7482');
+    localStorage.setItem(LEAGUES_STORAGE_KEY, JSON.stringify(cleanLeagues));
+  }
 } catch (e) {}
 
 function addCrossSportAccaLeg(leg) {
@@ -2324,13 +2332,12 @@ function getStoredGeoMembers(docId) {
     const raw = localStorage.getItem(GEO_MEMBERS_CACHE_PREFIX + docId);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed)) {
+        return parsed.filter(m => m && m.handle && m.handle !== 'HeadPark73' && m.handle !== 'Punter_747' && m.handle !== 'Punter_737');
+      }
     }
   } catch (e) {}
-  return [
-    { handle: 'HeadPark73', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] },
-    { handle: 'Punter_747', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] }
-  ];
+  return [];
 }
 
 function saveStoredGeoMembers(docId, members) {
@@ -3066,40 +3073,10 @@ function getStoredLeagues() {
   try {
     const list = JSON.parse(localStorage.getItem(LEAGUES_STORAGE_KEY) || '[]');
     if (Array.isArray(list)) {
-      let cleanList = list.filter(l => l.id !== 'league-weekend-contenders' && l.code !== 'BUDDY-7482');
-      if (cleanList.length === 0) {
-        // Pre-seed Paisley punters (BUDDY-9240) so friend & creator are visible immediately
-        cleanList = [{
-          id: 'league-BUDDY-9240',
-          name: 'Paisley punters',
-          icon: '⚽',
-          freq: 'monthly',
-          code: 'BUDDY-9240',
-          creator_handle: 'HeadPark73',
-          created_at: '2026-10-30',
-          members: [
-            { handle: 'HeadPark73', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] },
-            { handle: 'Punter_747', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] }
-          ]
-        }];
-        saveStoredLeagues(cleanList);
-      }
-      return cleanList;
+      return list.filter(l => l && l.id && l.id !== 'league-weekend-contenders' && l.code !== 'BUDDY-7482' && l.code !== 'BUDDY-9240');
     }
   } catch (e) { /* ignore */ }
-  return [{
-    id: 'league-BUDDY-9240',
-    name: 'Paisley punters',
-    icon: '⚽',
-    freq: 'monthly',
-    code: 'BUDDY-9240',
-    creator_handle: 'HeadPark73',
-    created_at: '2026-10-30',
-    members: [
-      { handle: 'HeadPark73', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] },
-      { handle: 'Punter_747', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] }
-    ]
-  }];
+  return [];
 }
 
 function saveStoredLeagues(leagues) {
@@ -3167,13 +3144,12 @@ function viewLeagues() {
   if (isGeo) {
     const geoDocId = getGeoDocId(currentLeague.id, prof);
     listenToActiveGeoLeague(geoDocId);
-    const realGeoMembers = getStoredGeoMembers(geoDocId).filter(m => m.handle !== prof.handle);
-    const bots = (currentLeague.competitors || []).filter(b => !realGeoMembers.some(r => r.handle === b.handle));
-    allMembers = [...realGeoMembers, userEntry, ...bots];
+    const realGeoMembers = getStoredGeoMembers(geoDocId).filter(m => m.handle !== prof.handle && m.handle !== 'HeadPark73' && m.handle !== 'Punter_747' && m.handle !== 'Punter_737');
+    allMembers = [...realGeoMembers, userEntry];
   } else {
     const memberMap = new Map();
     (currentLeague.members || []).forEach(m => {
-      if (m && m.handle && m.handle !== prof.handle) {
+      if (m && m.handle && m.handle !== prof.handle && m.handle !== 'HeadPark73' && m.handle !== 'Punter_747' && m.handle !== 'Punter_737') {
         memberMap.set(m.handle, m);
       }
     });
@@ -3981,22 +3957,17 @@ function getActualPunterCount() {
   const punters = new Set();
   const auth = getAuthUser();
   if (auth && auth.handle) punters.add(auth.handle);
-  else punters.add('HeadPark73');
 
   try {
     const leagues = getStoredLeagues();
     leagues.forEach(l => {
-      if (l && l.members) {
-        Object.keys(l.members).forEach(m => punters.add(m));
+      if (l && l.members && Array.isArray(l.members)) {
+        l.members.forEach(m => { if (m && m.handle) punters.add(m.handle); });
       }
     });
   } catch (e) {}
 
-  // Active verified punters on Bet Buddy platform
-  punters.add('Punter_747');
-  punters.add('Punter_737');
-
-  return Math.max(3, punters.size);
+  return Math.max(auth && auth.signedIn ? 1 : 0, punters.size);
 }
 
 function getAffiliateClicks() {
@@ -5648,7 +5619,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v73';
+const APP_VERSION = 'v74';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
