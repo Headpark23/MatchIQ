@@ -105,3 +105,4 @@ if target in css and '.auth-divider' not in css:
     print("Added auth styles to styles.css")
 else:
     print("Styles already present or target not found")
+

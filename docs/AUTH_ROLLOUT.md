@@ -106,3 +106,4 @@ If an unexpected regression occurs in production:
 3. **Data Rollback**:
    - Run `node scripts/migrate_leagues.js --rollback --execute`.
    - Restores legacy `members` map from `_legacyMembersBackup`.
+

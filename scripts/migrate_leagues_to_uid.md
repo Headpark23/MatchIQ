@@ -231,3 +231,4 @@ If any issue arises:
 1. Run `node scripts/migrate_leagues.js --rollback --execute`.
 2. The script restores the `members` field from `_legacyMembersBackup` and leaves existing subcollections intact.
 3. The client application retains fallback logic (`extractMembersFromDoc`) to read from the root `members` map if the subcollection is empty.
+

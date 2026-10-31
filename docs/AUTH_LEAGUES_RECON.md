@@ -154,3 +154,4 @@ Inspecting `matchiq_bet_diary_v1` in `app.js` (~lines 2680–3100):
    - Provide scoped `users/{uid}/diary/{betId}` sync.
 6. **Step 6 (Rollout & Migration Documentation)**:
    - Prepare `scripts/migrate_leagues_to_uid.md` and `docs/AUTH_ROLLOUT.md`.
+

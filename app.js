@@ -888,11 +888,8 @@ function slipCard(slip, idx, stake) {
         '<span class="slip-bookie-title">1-Click Load into Bookmaker:</span>' +
         '<span class="slip-bookie-hint">Auto-copies slip & opens match search</span>' +
       '</div>' +
-      '<div class="slip-bookie-buttons" role="group" aria-label="1-Click bookmaker launcher">' +
-        '<button type="button" class="bookie-pill coral" data-launch-bookie="coral" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#0284c7;"></span> Coral ↗</button>' +
-        '<button type="button" class="bookie-pill sky" data-launch-bookie="skybet" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#38bdf8;"></span> Sky Bet ↗</button>' +
-        '<button type="button" class="bookie-pill b365" data-launch-bookie="bet365" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#10b981;"></span> Bet365 ↗</button>' +
-        '<button type="button" class="bookie-pill bf" data-launch-bookie="betfair" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#fbbf24;"></span> Betfair ↗</button>' +
+      '<div class="slip-bookie-buttons verified-only" role="group" aria-label="1-Click bookmaker launcher">' +
+        '<button type="button" class="bookie-pill sky sky-prominent" data-launch-bookie="skybet" data-slip-idx="' + idx + '"><span class="pill-dot" style="background:#38bdf8;"></span> ⚡ Open in Sky Bet App (+5 League Bonus) ↗</button>' +
       '</div>' +
     '</div>' +
     '<div class="btn-row">' +
@@ -955,11 +952,8 @@ function customAccaCard(stake) {
         '<span class="slip-bookie-bolt">⚡</span>' +
         '<span class="slip-bookie-title">Or switch bookmaker:</span>' +
       '</div>' +
-      '<div class="slip-bookie-buttons" role="group" aria-label="1-Click bookmaker launcher">' +
-        '<button type="button" class="bookie-pill coral" data-launch-bookie="coral" data-slip-idx="custom"><span class="pill-dot" style="background:#0284c7;"></span> Coral ↗</button>' +
-        '<button type="button" class="bookie-pill sky" data-launch-bookie="skybet" data-slip-idx="custom"><span class="pill-dot" style="background:#38bdf8;"></span> Sky Bet ↗</button>' +
-        '<button type="button" class="bookie-pill b365" data-launch-bookie="bet365" data-slip-idx="custom"><span class="pill-dot" style="background:#10b981;"></span> Bet365 ↗</button>' +
-        '<button type="button" class="bookie-pill bf" data-launch-bookie="betfair" data-slip-idx="custom"><span class="pill-dot" style="background:#fbbf24;"></span> Betfair ↗</button>' +
+      '<div class="slip-bookie-buttons verified-only" role="group" aria-label="1-Click bookmaker launcher">' +
+        '<button type="button" class="bookie-pill sky sky-prominent" data-launch-bookie="skybet" data-slip-idx="custom"><span class="pill-dot" style="background:#38bdf8;"></span> ⚡ Open Custom Acca in Sky Bet App (+5 League Bonus) ↗</button>' +
       '</div>' +
     '</div>' +
     '<div class="btn-row" style="margin-top:12px;">' +
@@ -1282,6 +1276,31 @@ function renderWelcomeHero() {
           '</div>' +
         '</div>' +
       '</a>' +
+
+      '<!-- Bet Butler Feature Hero Card -->' +
+      '<div class="butler-home-hero-card">' +
+        '<div class="butler-home-hero-content">' +
+          '<div class="butler-home-badge">' +
+            '<span class="badge-dot" style="background:#38bdf8;"></span>' +
+            '<span>🤵 Official App Hand-Off: Sky Bet</span>' +
+            '<span class="butler-bonus-tag">🏆 +5 League Bonus Points</span>' +
+          '</div>' +
+          '<h2 class="butler-home-title">1-Tap Bookie Hand-Off with The Bet Butler</h2>' +
+          '<p class="butler-home-desc">' +
+            'Stop retyping match names and searching for odds. Bet Butler transfers your calculated Accas and value bets straight into your installed <strong>Sky Bet</strong> app. One tap launches the app ready to place, and the Return Bridge logs your real bets for <strong>+5 bonus points in your leagues</strong>.' +
+          '</p>' +
+          '<div class="butler-home-features">' +
+            '<div class="butler-feat-item"><span class="feat-icon">⚡</span> 1-Tap App Launch</div>' +
+            '<div class="butler-feat-item"><span class="feat-icon">📋</span> Automatic Slip Transfer</div>' +
+            '<div class="butler-feat-item"><span class="feat-icon">🏆</span> +5 League Bonus Points</div>' +
+            '<div class="butler-feat-item"><span class="feat-icon">🔄</span> Return Bridge Diary Sync</div>' +
+          '</div>' +
+          '<div class="butler-home-actions">' +
+            '<a href="#/picks" class="btn primary small" style="background:#0284c7;border:none;font-weight:700;">Build Acca for Sky Bet ↗</a>' +
+            '<button type="button" class="btn small" onclick="openButlerModal()">Butler Info &amp; Settings ⚙️</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
 
       '<!-- 3. Smaller Boxes: 2x2 on Mobile, all visible without scrolling -->' +
       '<div class="portal-subgrid">' +
@@ -2461,7 +2480,12 @@ function getUserLeagueStats(freq = 'weekly') {
   const totalProfit = leagueBets.reduce((sum, e) => sum + (calc.calculateBetProfit(e.stake, e.odds, e.outcome) || 0), 0);
   
   // Option A Scoring: (Decimal Odds - 1) * 10 on won; -2 on lost; 0 on void
-  const points = leagueBets.reduce((sum, e) => sum + (calc.calculateLeaguePoints(e.odds, e.outcome) || 0), 0);
+  // Official Bet Butler Bonus: +5 points on every settled winning qualifying bet placed through Bet Butler
+  const points = leagueBets.reduce((sum, e) => {
+    const base = calc.calculateLeaguePoints(e.odds, e.outcome) || 0;
+    const bonus = (e.realBetVerified && e.outcome === 'won') ? 5 : 0;
+    return sum + base + bonus;
+  }, 0);
   const winRate = leagueBets.length ? Math.round((won.length / leagueBets.length) * 100) : 0;
   const roi = totalStaked > 0 ? +( (totalProfit / totalStaked) * 100 ).toFixed(1) : 0.0;
   const last5 = leagueBets.slice(0, 5).map(e => e.outcome === 'won' ? 'W' : e.outcome === 'lost' ? 'L' : 'V');
@@ -2769,7 +2793,7 @@ function viewLeagues() {
   return '<section class="view">' +
     '<div class="fair-play-banner">' +
       '<span class="fair-play-icon">🛡️</span>' +
-      '<div><strong>Fair Play Rule (1 Bet Per Day Cap):</strong> Exactly <strong>1 settled bet per calendar day</strong> counts toward your league score. Placing multiple small bets on the same day in your diary will not inflate your score.</div>' +
+      '<div><strong>Fair Play &amp; Bet Butler Bonus:</strong> Exactly <strong>1 settled bet per calendar day</strong> counts toward your league score. Official bets placed via <strong>The Bet Butler (Sky Bet)</strong> earn <strong>+5 League Bonus Points</strong> upon winning!</div>' +
     '</div>' +
     '<div class="section-head" style="align-items:flex-end"><div>' +
       '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
@@ -3444,13 +3468,7 @@ function getBookieSearchQuery(betData) {
 
 
 const ANDROID_PACKAGES = {
-  coral: 'com.galacoral.android',
-  skybet: 'com.skybet.app.skybet',
-  bet365: 'com.bet365Wrapper.sportsbook',
-  betfair: 'com.betfair.sports',
-  ladbrokes: 'com.ladbrokes.android',
-  williamhill: 'com.williamhill.sportsbook',
-  paddypower: 'com.paddypower.sports'
+  skybet: 'com.skybet.android'
 };
 
 const BOOKIE_APP_SCHEMES = {
@@ -5376,7 +5394,7 @@ function confirmRealBetPlaced() {
     timestamp: new Date().toISOString(),
     realBetVerified: true,
     bonusMultiplier: 2,
-    notes: 'Real bet placed at ' + launch.bookie + '. 2× League Bonus Active.'
+    notes: 'Official real bet placed at Sky Bet via Bet Butler (+5 League Bonus Active).', bonusPoints: 5
   };
 
   try {
@@ -5387,7 +5405,7 @@ function confirmRealBetPlaced() {
   }
 
   celebrateSave();
-  toast('🎉 ' + launch.bookie + ' real bet confirmed! Added to Bet Diary with 2× League Bonus.');
+  toast('🎉 Sky Bet real bet confirmed! Added to Bet Diary with +5 League Bonus.');
   if (currentRoute()[0] === 'diary') render();
 }
 
@@ -5431,21 +5449,11 @@ if (typeof window !== 'undefined') {
 // ============================================================ 
 const BUTLER_STORAGE_KEY = 'betbuddy_butler_bookie_v1';
 const BOOKMAKERS_CONFIG = {
-  coral: { key: 'coral', name: 'Coral', tag: 'CORAL', color: '#0284c7', perk: 'Football Super Series & Acca Boosts', appUrl: 'https://sports.coral.co.uk/search?q=' },
-  skybet: { key: 'skybet', name: 'Sky Bet', tag: 'SKY BET', color: '#38bdf8', perk: 'RequestABet & AccaFreeze', appUrl: 'https://m.skybet.com/search?q=' },
-  bet365: { key: 'bet365', name: 'bet365', tag: 'BET365', color: '#10b981', perk: '2 Goals Ahead Early Payout & In-Play', appUrl: 'https://www.bet365.com/#/AX/K^' },
-  betfair: { key: 'betfair', name: 'Betfair', tag: 'BETFAIR', color: '#fbbf24', perk: 'Top Exchange Prices & Multiples', appUrl: 'https://www.betfair.com/sport/football?searchTerm=' },
-  ladbrokes: { key: 'ladbrokes', name: 'Ladbrokes', tag: 'LADBROKES', color: '#ef4444', perk: '1-2-Free Predictor & High Street', appUrl: 'https://sports.ladbrokes.com/search?q=' },
-  williamhill: { key: 'williamhill', name: 'William Hill', tag: 'WILLIAM HILL', color: '#0284c7', perk: 'Epic Odds & Football Coupons', appUrl: 'https://sports.williamhill.com/betting/en-gb/search?q=' },
-  paddypower: { key: 'paddypower', name: 'Paddy Power', tag: 'PADDY POWER', color: '#059669', perk: 'Super Sub & Money Back Specials', appUrl: 'https://www.paddypower.com/search?q=' }
+  skybet: { key: 'skybet', name: 'Sky Bet', tag: 'SKY BET', color: '#38bdf8', perk: 'Official 1-Tap App Integration, AccaFreeze & RequestABet', appUrl: 'https://m.skybet.com/search?q=' }
 };
 
 function getButlerBookmaker() {
-  try {
-    const saved = localStorage.getItem(BUTLER_STORAGE_KEY);
-    if (saved && BOOKMAKERS_CONFIG[saved]) return BOOKMAKERS_CONFIG[saved];
-  } catch (e) {}
-  return BOOKMAKERS_CONFIG.coral;
+  return BOOKMAKERS_CONFIG.skybet;
 }
 
 function setButlerBookmaker(key) {
