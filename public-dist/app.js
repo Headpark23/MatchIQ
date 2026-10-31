@@ -7,6 +7,30 @@ try {
   }
 } catch (e) {}
 'use strict';
+// ------------------------------------------------------------ Data Epoch & Local State Sync
+const DATA_EPOCH = '2026-11-wipe-1';
+const EPOCH_STORAGE_KEY = 'betbuddy_data_epoch_v1';
+(function checkDataEpoch() {
+  try {
+    const storedEpoch = localStorage.getItem(EPOCH_STORAGE_KEY);
+    if (storedEpoch !== DATA_EPOCH) {
+      // Clear ONLY cached profile, handle, auth-derived and league state.
+      // Preserves local Bet Diary (DIARY_STORAGE_KEY) and Odds format preference (ODDS_FORMAT_KEY).
+      localStorage.removeItem('betbuddy_auth_user_v1');
+      localStorage.removeItem('betbuddy_user_profile_v1');
+      localStorage.removeItem('betbuddy_leagues_v1');
+      localStorage.removeItem('betbuddy_trophy_cabinet_v1');
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('betbuddy_geo_cache_') || key.startsWith('betbuddy_leagues_'))) {
+          localStorage.removeItem(key);
+        }
+      }
+      localStorage.setItem(EPOCH_STORAGE_KEY, DATA_EPOCH);
+    }
+  } catch (e) {}
+})();
+
 /* MatchIQ app: one design system, hash routes, data produced by pipeline/run.py.
    The browser never computes predictions: it renders the published ones, so the
    screen always matches the permanent prediction history. */
@@ -2330,12 +2354,8 @@ async function joinCloudLeague(code) {
   if (!code) return;
   const user = getAuthUser();
   if (!user || !user.signedIn) {
-    toast('Please sign in or create an account to join private leagues.');
-    openAuthModal();
-    return;
-  }
-  if (!user.emailVerified) {
-    toast('Please verify your email address to join private leagues.');
+    sessionStorage.setItem('betbuddy_pending_join_league', code);
+    toast('Sign in with Google to join leagues and compete with mates');
     openAuthModal();
     return;
   }
@@ -2704,6 +2724,19 @@ function saveStoredLeagues(leagues) {
 
 function viewLeagues() {
   const prof = getUserProfile();
+  const authUser = getAuthUser();
+  const signedOutBanner = (!authUser || !authUser.signedIn)
+    ? '<div class="signed-out-league-banner" style="margin-bottom:20px;padding:22px 16px;background:linear-gradient(135deg, rgba(2,132,199,0.18), rgba(15,23,42,0.95));border:1px solid rgba(56,189,248,0.4);border-radius:12px;text-align:center;">' +
+        '<div style="font-size:32px;margin-bottom:8px;">🏆</div>' +
+        '<h2 style="font-size:18px;font-weight:700;color:#fff;margin:0 0 6px;">Sign in with Google to join leagues and compete with mates</h2>' +
+        '<p class="muted" style="font-size:13.5px;max-width:480px;margin:0 auto 16px;">Create private leagues, track live leaderboards, and compete against friends with verified model predictions.</p>' +
+        '<button type="button" class="btn google-primary-btn" onclick="signInWithGoogle()" style="margin:0 auto;min-height:46px;display:inline-flex;align-items:center;gap:10px;padding:0 24px;">' +
+          '<svg class="google-g" viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>' +
+          '<span>Continue with Google</span>' +
+        '</button>' +
+      '</div>'
+    : '';
+
   const uStats = getUserLeagueStats(activeLeagueFreq);
   const geoTiers = getGeoTiers(prof);
   const customLeagues = getStoredLeagues();
@@ -2840,7 +2873,7 @@ function viewLeagues() {
     '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
   '</div>';
 
-  return '<section class="view">' +
+  return '<section class="view">' + signedOutBanner +
     '<div class="fair-play-banner">' +
       '<span class="fair-play-icon">🛡️</span>' +
       '<div><strong>Fair Play Rule:</strong> Exactly <strong>1 settled bet per calendar day</strong> counts toward your league score. Chronologically first qualifying bet logged each day counts, keeping the competition fair for all players.</div>' +
@@ -4145,23 +4178,18 @@ function mapAuthError(err) {
     return 'Domain "' + host + '" is not authorised in Firebase. To fix: Go to Firebase Console > Authentication > Settings > Authorised Domains and add ' + host + '.';
   }
   switch (code) {
-    case 'auth/wrong-password':
-    case 'auth/invalid-credential':
-      return 'Incorrect email or password. Please check and try again.';
-    case 'auth/user-not-found':
-      return 'No Bet Buddy account found with this email.';
-    case 'auth/email-already-in-use':
-      return 'An account already exists with this email. Try signing in instead.';
-    case 'auth/invalid-email':
-      return 'Please enter a valid email address.';
-    case 'auth/weak-password':
-      return 'Password should be at least 8 characters long.';
     case 'auth/popup-closed-by-user':
       return 'Sign-in window closed before completing. Please try again.';
+    case 'auth/popup-blocked':
+      return 'Sign-in popup was blocked by your browser. Please allow popups for this site.';
+    case 'auth/cancelled-popup-request':
+      return 'Previous sign-in request was cancelled. Please try again.';
+    case 'auth/network-request-failed':
+      return 'Network connection issue. Please check your internet connection.';
+    case 'auth/operation-not-allowed':
+      return 'Google sign-in is not enabled for this project. Check Firebase Console.';
     case 'auth/too-many-requests':
       return 'Too many attempts. Please wait a few minutes before trying again.';
-    case 'auth/requires-recent-login':
-      return 'Please sign out and sign in again before changing your password.';
     default:
       return err.message || 'Authentication error. Please try again.';
   }
@@ -4263,27 +4291,17 @@ async function ensureUserProfile(user) {
       return;
     }
 
+    // Clean-slate / user doc wiped: clear stale profile and send cleanly to handle-creation
+    currentAuthProfile = null;
     let baseHandle = (user.displayName || (user.email ? user.email.split('@')[0] : 'Punter'))
       .replace(/[^A-Za-z0-9_]/g, '');
     if (baseHandle.length < 3) baseHandle = 'Punter_' + baseHandle;
     if (baseHandle.length > 16) baseHandle = baseHandle.slice(0, 16);
 
-    let finalHandle = baseHandle;
-    let claimed = false;
-    for (let attempt = 0; attempt < 5; attempt++) {
-      try {
-        await claimHandleTransaction(user.uid, finalHandle, '⚽');
-        claimed = true;
-        break;
-      } catch (err) {
-        finalHandle = (baseHandle.slice(0, 14) + Math.floor(Math.random() * 899 + 100)).slice(0, 20);
-      }
-    }
-    if (claimed) {
-      currentAuthProfile = { handle: finalHandle, avatar: '⚽', createdAt: new Date().toISOString() };
-      const cur = getUserProfile();
-      saveUserProfile(finalHandle, cur.town, cur.region, cur.country);
-    }
+    if ($('player-handle-input')) $('player-handle-input').value = baseHandle;
+    const modal = $('handle-modal');
+    if (modal) modal.hidden = false;
+    toast('Welcome to Bet Buddy! Please confirm your gamertag.');
   } catch (e) {
     console.warn('ensureUserProfile notice:', e);
   }
@@ -4299,7 +4317,7 @@ function updateHeaderAuthUI() {
       '<button type="button" class="header-user-btn" id="header-user-btn" title="Signed in as ' + esc(user.name || user.email) + '">' +
         '<span class="header-avatar">' + esc(initials) + '</span>' +
         '<span>@' + esc(user.handle || 'Punter') + '</span>' +
-        (!user.emailVerified ? ' <span style="color:#fbbf24;font-size:12px;" title="Unverified Email">⚠️</span>' : '') +
+        
       '</button>' +
       '<button type="button" class="btn small" id="btn-quick-signout" title="Sign Out of account" style="min-height:32px;padding:2px 8px;font-size:11px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.35);color:#fca5a5;">Sign Out</button>' +
     '</div>';
@@ -4311,15 +4329,13 @@ function updateHeaderAuthUI() {
 }
 
 function switchAuthModalView(viewName) {
-  const views = ['auth-signin-view', 'auth-register-view', 'auth-verify-view', 'auth-forgot-view', 'auth-authed-view'];
+  const views = ['auth-signin-view', 'auth-authed-view'];
   views.forEach(id => {
     const el = $(id);
     if (el) el.hidden = (id !== viewName);
   });
-  ['signin-error', 'register-error', 'change-pass-error', 'forgot-msg'].forEach(id => {
-    const el = $(id);
-    if (el) { el.hidden = true; el.textContent = ''; }
-  });
+  const errBox = $('signin-error');
+  if (errBox) { errBox.hidden = true; errBox.textContent = ''; }
 }
 
 function openAuthModal() {
@@ -4328,29 +4344,12 @@ function openAuthModal() {
   const user = getAuthUser();
   if (user && user.signedIn) {
     switchAuthModalView('auth-authed-view');
-    $('modal-avatar-initials').textContent = (user.name || user.email || 'U').slice(0, 1).toUpperCase();
-    $('modal-auth-name').textContent = user.name || 'Bet Buddy User';
-    $('modal-auth-email').textContent = user.email || '';
-
+    const initials = (user.name || user.email || 'U').slice(0, 1).toUpperCase();
+    if ($('modal-avatar-initials')) $('modal-avatar-initials').textContent = initials;
+    if ($('modal-auth-name')) $('modal-auth-name').textContent = user.name || 'Bet Buddy User';
+    if ($('modal-auth-email')) $('modal-auth-email').textContent = user.email || '';
     const badge = $('modal-auth-badge');
-    const warning = $('modal-unverified-warning');
-    if (user.emailVerified) {
-      if (badge) { badge.textContent = 'Verified Account'; badge.className = 'badge-status-green'; }
-      if (warning) warning.hidden = true;
-    } else {
-      if (badge) { badge.textContent = 'Unverified Email'; badge.className = 'badge-status-yellow'; }
-      if (warning) warning.hidden = false;
-    }
-
-    const passSec = $('profile-password-section');
-    const googleNote = $('profile-google-note');
-    if (user.isPassword) {
-      if (passSec) passSec.hidden = false;
-      if (googleNote) googleNote.hidden = true;
-    } else {
-      if (passSec) passSec.hidden = true;
-      if (googleNote) googleNote.hidden = false;
-    }
+    if (badge) { badge.textContent = 'Verified Google Account'; badge.className = 'badge-status-green'; }
   } else {
     switchAuthModalView('auth-signin-view');
   }
@@ -4387,129 +4386,6 @@ async function signInWithGoogle() {
     } else {
       showAuthError('signin-error', mapAuthError(err));
     }
-  }
-}
-
-async function handleSignInWithEmail(email, password) {
-  if (!firebaseAuth) return;
-  try {
-    await firebaseAuth.signInWithEmailAndPassword(email, password);
-    closeAuthModal();
-    toast('Welcome back! Signed in. ⚽');
-  } catch (err) {
-    showAuthError('signin-error', mapAuthError(err));
-  }
-}
-
-async function handleRegisterWithEmail(handle, email, password, isAgeChecked) {
-  if (!isAgeChecked) {
-    showAuthError('register-error', 'You must confirm you are 18+ to create an account.');
-    return;
-  }
-  if (!isValidHandle(handle)) {
-    showAuthError('register-error', 'Gamertag must be 3–20 letters, numbers, or underscores.');
-    return;
-  }
-  if (!password || password.length < 8) {
-    showAuthError('register-error', 'Password must be at least 8 characters long.');
-    return;
-  }
-  if (!firebaseAuth) return;
-
-  try {
-    if (firestoreDb) {
-      const handleDoc = await firestoreDb.collection('handles').doc(handle.toLowerCase()).get();
-      if (handleDoc.exists) {
-        showAuthError('register-error', 'Gamertag @' + handle + ' is already taken. Please choose another.');
-        return;
-      }
-    }
-
-    const cred = await firebaseAuth.createUserWithEmailAndPassword(email, password);
-    if (cred.user) {
-      await cred.user.sendEmailVerification();
-      await claimHandleTransaction(cred.user.uid, handle, '⚽');
-      currentAuthProfile = { handle, avatar: '⚽', createdAt: new Date().toISOString() };
-      saveUserProfile(handle);
-      $('verify-email-display').textContent = email;
-      switchAuthModalView('auth-verify-view');
-      toast('Account created! Verification link sent to ' + email);
-    }
-  } catch (err) {
-    showAuthError('register-error', mapAuthError(err));
-  }
-}
-
-async function resendVerificationEmail() {
-  const now = Date.now();
-  if (now - lastResendVerificationTime < 60000) {
-    const remaining = Math.ceil((60000 - (now - lastResendVerificationTime)) / 1000);
-    toast('Please wait ' + remaining + 's before requesting another verification email.');
-    return;
-  }
-  if (!firebaseAuth || !firebaseAuth.currentUser) {
-    toast('No signed-in user found.');
-    return;
-  }
-  try {
-    await firebaseAuth.currentUser.sendEmailVerification();
-    lastResendVerificationTime = Date.now();
-    toast('Verification email resent! Check your inbox or spam folder.');
-    const status = $('verify-resend-status');
-    if (status) status.textContent = 'Verification email sent just now.';
-  } catch (err) {
-    toast(mapAuthError(err));
-  }
-}
-
-async function checkEmailVerified() {
-  if (!firebaseAuth || !firebaseAuth.currentUser) return;
-  try {
-    await firebaseAuth.currentUser.reload();
-    if (firebaseAuth.currentUser.emailVerified) {
-      toast('Email verified! You now have full league access. ⚽');
-      closeAuthModal();
-      updateHeaderAuthUI();
-      render();
-    } else {
-      toast('Email not verified yet. Please tap the link sent to your inbox.');
-    }
-  } catch (e) {
-    toast('Error checking verification: ' + (e.message || 'Try again'));
-  }
-}
-
-async function handleForgotPassword(email) {
-  if (!email || !firebaseAuth) return;
-  try {
-    await firebaseAuth.sendPasswordResetEmail(email);
-    const box = $('forgot-msg');
-    if (box) {
-      box.hidden = false;
-      box.textContent = 'Password reset email sent to ' + email + '. Follow the instructions to reset your password.';
-    }
-    toast('Password reset link dispatched.');
-  } catch (err) {
-    showAuthError('forgot-msg', mapAuthError(err));
-  }
-}
-
-async function handleChangePassword(currentPass, newPass) {
-  if (!firebaseAuth || !firebaseAuth.currentUser) return;
-  if (!newPass || newPass.length < 8) {
-    showAuthError('change-pass-error', 'New password must be at least 8 characters long.');
-    return;
-  }
-  try {
-    const cred = firebase.auth.EmailAuthProvider.credential(firebaseAuth.currentUser.email, currentPass);
-    await firebaseAuth.currentUser.reauthenticateWithCredential(cred);
-    await firebaseAuth.currentUser.updatePassword(newPass);
-    toast('Password successfully updated!');
-    const errBox = $('change-pass-error');
-    if (errBox) errBox.hidden = true;
-    $('profile-change-password-form').reset();
-  } catch (err) {
-    showAuthError('change-pass-error', mapAuthError(err));
   }
 }
 
@@ -4550,6 +4426,13 @@ function initFirebaseAuth() {
       hasSyncedUserLeagues = false;
       await syncUserLeaguesFromCloud();
       try { await syncDiaryFromCloud(); } catch (e) {}
+
+      // Preserve pending league invite across sign-in popup/redirect
+      const pendingLeague = sessionStorage.getItem('betbuddy_pending_join_league');
+      if (pendingLeague) {
+        sessionStorage.removeItem('betbuddy_pending_join_league');
+        setTimeout(() => { joinCloudLeague(pendingLeague); }, 600);
+      }
     } else {
       currentAuthProfile = null;
       try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) {}
@@ -4879,11 +4762,7 @@ document.addEventListener('click', event => {
   if (t.id === 'header-auth-btn' || t.id === 'header-user-btn' || t.dataset.openAuth !== undefined) { openAuthModal(); return; }
   if (t.dataset.closeAuth !== undefined) { closeAuthModal(); return; }
   if (t.id === 'btn-auth-google') { signInWithGoogle(); return; }
-  if (t.id === 'link-to-register') { switchAuthModalView('auth-register-view'); return; }
-  if (t.id === 'link-to-signin' || t.id === 'link-verify-to-signin' || t.id === 'link-forgot-to-signin') { switchAuthModalView('auth-signin-view'); return; }
-  if (t.id === 'link-to-forgot') { switchAuthModalView('auth-forgot-view'); return; }
-  if (t.id === 'btn-check-verified') { checkEmailVerified(); return; }
-  if (t.id === 'btn-resend-verification' || t.id === 'btn-profile-resend-verify') { resendVerificationEmail(); return; }
+
   if (t.id === 'btn-switch-handle') { closeAuthModal(); const _p = getUserProfile();
     $('player-handle-input').value = _p.handle;
     if ($('player-town-input')) $('player-town-input').value = _p.town || 'Paisley';
@@ -4918,7 +4797,15 @@ document.addEventListener('click', event => {
     markWinChips();
     updateBuilder();
   }
-  else if (t.dataset.openLeagueModal !== undefined) { $('league-modal').hidden = false; }
+  else if (t.dataset.openLeagueModal !== undefined) {
+    const u = getAuthUser();
+    if (!u || !u.signedIn) {
+      toast('Sign in with Google to join leagues and compete with mates');
+      openAuthModal();
+    } else {
+      $('league-modal').hidden = false;
+    }
+  }
   else if (t.dataset.closeLeague !== undefined) { $('league-modal').hidden = true; }
   else if (t.dataset.openHandleModal !== undefined) { const _p = getUserProfile();
     $('player-handle-input').value = _p.handle;
@@ -5026,41 +4913,12 @@ document.addEventListener('change', event => {
 document.addEventListener('submit', event => {
   if (event.target.id === 'diary-form') handleDiaryFormSubmit(event);
 
-    if (event.target.id === 'auth-signin-form') {
-    event.preventDefault();
-    handleSignInWithEmail($('signin-email').value.trim(), $('signin-password').value);
-    return;
-  }
-  if (event.target.id === 'auth-register-form') {
-    event.preventDefault();
-    handleRegisterWithEmail(
-      $('register-handle').value.trim(),
-      $('register-email').value.trim(),
-      $('register-password').value,
-      $('register-age-check').checked
-    );
-    return;
-  }
-  if (event.target.id === 'auth-forgot-form') {
-    event.preventDefault();
-    handleForgotPassword($('forgot-email').value.trim());
-    return;
-  }
-  if (event.target.id === 'profile-change-password-form') {
-    event.preventDefault();
-    handleChangePassword($('change-current-pass').value, $('change-new-pass').value);
-    return;
-  }
+  
   if (event.target.id === 'create-league-form') {
     event.preventDefault();
     const user = getAuthUser();
     if (!user || !user.signedIn) {
-      toast('Please sign in or create an account to start a private league.');
-      openAuthModal();
-      return;
-    }
-    if (!user.emailVerified) {
-      toast('Please verify your email address before creating a league.');
+      toast('Sign in with Google to create a private league.');
       openAuthModal();
       return;
     }
@@ -5219,7 +5077,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v63';
+const APP_VERSION = 'v64';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
