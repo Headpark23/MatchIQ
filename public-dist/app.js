@@ -526,7 +526,7 @@ function marketCard(key, m, ctx) {
     const jsonStr = esc(JSON.stringify({ id: ctx.id, market: meta.diary, selection: selText, p: row.p, fair: row.fair }));
     return '<button type="button" class="btn small" data-diary=\'' + jsonStr + '\' aria-label="Add ' + esc(row.label) + ' to Bet Diary">+ Diary</button>' +
       '<button type="button" class="btn small acca-btn" data-add-football-acca=\'' + jsonStr + '\' title="Add to custom Acca Builder" style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
-      '<button type="button" class="btn-place-bet-inline butler-btn" data-launch-butler-single=\'' + jsonStr + '\' title="Open in bookmaker app/site">Place Bet</button>';
+      '<a href="' + esc(getButlerLaunchSingleUrl({ id: ctx.id, market: meta.diary, selection: selText, p: row.p, fair: row.fair })) + '" class="btn-place-bet-inline butler-btn" onclick="prepareButlerSingleLaunch(this.dataset.betData)" data-bet-data=\'' + jsonStr + '\' title="Open in your bookmaker app">⚡ Place at <span class="current-butler-name">' + esc(getButlerBookmaker().name) + '</span> ↗</a>';
   };
   const rows = m.rows.map(row => '<tr' + (row.picked ? ' style="color:#fff;font-weight:600"' : '') + '><td>' + esc(row.label) + (row.picked ? ' <span class="badge validated" style="font-size:10px">Pick</span>' : '') + '</td>' +
     '<td class="num">' + pct(row.p) + '</td><td class="num">' + esc(row.fair) + '</td>' + (m.rows.some(r => r.league != null) ? '<td class="num dim">' + (row.league == null ? '' : pct(row.league)) + '</td>' : '') +
@@ -873,9 +873,9 @@ function slipCard(slip, idx, stake) {
     (slip.chance < 0.05 ? '<p class="slip-warn">Long shot: roughly 1 in ' + Math.round(1 / slip.chance) + '. Most slips like this lose.</p>' : '') +
     (slip.estimated ? '<p class="slip-note">Some prices are estimates, not live bookmaker prices. The price you are actually offered will differ, so the profit will too.</p>' : '') +
     '<div style="margin: 12px 0 8px;">' +
-      '<button type="button" class="btn" onclick="launchButlerAcca(' + idx + ')" style="width:100%;padding:12px;font-size:14px;font-weight:700;background:linear-gradient(135deg, #0284c7, #0369a1);color:#fff;border:none;border-radius:10px;box-shadow:0 3px 12px rgba(2,132,199,0.3);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">' +
+      '<a href="' + esc(getButlerLaunchUrl(idx)) + '" class="btn" onclick="prepareButlerLaunch(' + idx + ')" style="width:100%;padding:12px;font-size:14px;font-weight:700;background:linear-gradient(135deg, #0284c7, #0369a1);color:#fff;border:none;border-radius:10px;box-shadow:0 3px 12px rgba(2,132,199,0.3);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">' +
         '<span>⚡</span> 1-Tap Place with <span class="current-butler-name">' + esc(getButlerBookmaker().name) + '</span> ↗' +
-      '</button>' +
+      '</a>' +
     '</div>' +
     '<div class="slip-bookie-bar">' +
       '<div class="slip-bookie-header">' +
@@ -937,9 +937,9 @@ function customAccaCard(stake) {
       '<span>Profit <b class="mono">' + m(profit) + '</b></span>' +
     '</div>' +
     '<div style="margin: 14px 0 10px;">' +
-      '<button type="button" class="btn primary butler-acca-launch-btn" onclick="launchButlerAcca(\'custom\')" style="width:100%;padding:14px;font-size:15px;font-weight:700;background:linear-gradient(135deg, #0284c7, #0369a1);border:none;border-radius:12px;box-shadow:0 4px 14px rgba(2,132,199,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">' +
+      '<a href="' + esc(getButlerLaunchUrl('custom')) + '" class="btn primary butler-acca-launch-btn" onclick="prepareButlerLaunch(this.dataset.slipIdx)" data-slip-idx="custom" style="width:100%;padding:14px;font-size:15px;font-weight:700;background:linear-gradient(135deg, #0284c7, #0369a1);border:none;border-radius:12px;box-shadow:0 4px 14px rgba(2,132,199,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">' +
         '<span>⚡</span> 1-Tap Place with <span class="current-butler-name">' + esc(getButlerBookmaker().name) + '</span> (Your Butler) ↗' +
-      '</button>' +
+      '</a>' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:0 4px;">' +
         '<span class="dim text-xs" style="color:#94a3b8">Copies slip &amp; opens your app &middot; 2× League Bonus</span>' +
         '<a href="javascript:void(0)" onclick="openButlerModal()" class="text-xs" style="color:var(--cyan);text-decoration:none;font-weight:600;">Change Butler ▾</a>' +
@@ -4690,7 +4690,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = 'v55';
+const APP_VERSION = 'v56';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -4928,6 +4928,83 @@ function openButlerModal() {
 function closeButlerModal() {
   const modal = $('butler-modal');
   if (modal) modal.hidden = true;
+}
+
+
+function getButlerLaunchUrl(slipIdx) {
+  const butler = getButlerBookmaker();
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  const pkg = ANDROID_PACKAGES[butler.key];
+  if (isAndroid && pkg) {
+    return 'intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=' + pkg + ';end;';
+  }
+  const query = getBookieSearchQuery({ legs: slipIdx === 'custom' ? customAccaLegs : (builderResult && builderResult.slips && builderResult.slips[+slipIdx] ? builderResult.slips[+slipIdx].legs : []) });
+  const links = getBookieDeepLinks(query);
+  return links[butler.key] || butler.appUrl + encodeURIComponent(query);
+}
+
+function getButlerLaunchSingleUrl(betData) {
+  const butler = getButlerBookmaker();
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  const pkg = ANDROID_PACKAGES[butler.key];
+  if (isAndroid && pkg) {
+    return 'intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=' + pkg + ';end;';
+  }
+  const query = getBookieSearchQuery(betData);
+  const links = getBookieDeepLinks(query);
+  return links[butler.key] || butler.appUrl + encodeURIComponent(query);
+}
+
+function prepareButlerLaunch(slipIdx) {
+  const r = builderResult;
+  let slip = null;
+  if (slipIdx === 'custom') {
+    if (customAccaLegs.length === 0) return;
+    const stake = (builderState && builderState.stake) || 10;
+    const odds = customAccaLegs.reduce((t, l) => t * (l.odds || 2.0), 1);
+    slip = { legs: customAccaLegs, stake, odds, ret: stake * odds };
+  } else {
+    slip = r && r.slips && r.slips[+slipIdx];
+  }
+  if (!slip) return;
+  const butler = getButlerBookmaker();
+  trackBookieLaunch(butler.name, slip);
+
+  const textLines = [
+    '🎯 Bet Buddy ' + slip.legs.length + '-Leg Acca (' + fmtOdds(slip.odds) + ')',
+    ...slip.legs.map((l, i) => (i + 1) + '. ' + l.fixture.home + ' v ' + l.fixture.away + ': ' + l.label + ' (' + (l.fractional || fmtOdds(l.odds)) + ')'),
+    'Stake: £' + slip.stake + ' · Target Return: £' + (slip.ret ? slip.ret.toFixed(2) : (slip.stake * slip.odds).toFixed(2))
+  ];
+  const copyStr = textLines.join('\n');
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(copyStr).catch(() => {});
+    }
+  } catch (e) {}
+  toast('⚡ Slip copied! Launching ' + butler.name + ' app...');
+}
+
+function prepareButlerSingleLaunch(dataStr) {
+  try {
+    const betData = typeof dataStr === 'string' ? JSON.parse(dataStr) : dataStr;
+    const butler = getButlerBookmaker();
+    let copyStr = betData.selection || 'Football Bet';
+    if (betData.fair) copyStr += ' @ ' + betData.fair;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(copyStr).catch(() => {});
+      }
+    } catch (e) {}
+    trackBookieLaunch(butler.name, betData);
+    toast('⚡ Copied to clipboard! Launching ' + butler.name + ' app...');
+  } catch (e) {}
+}
+
+if (typeof window !== 'undefined') {
+  window.getButlerLaunchUrl = getButlerLaunchUrl;
+  window.getButlerLaunchSingleUrl = getButlerLaunchSingleUrl;
+  window.prepareButlerLaunch = prepareButlerLaunch;
+  window.prepareButlerSingleLaunch = prepareButlerSingleLaunch;
 }
 
 function launchButlerAcca(slipIdx) {
