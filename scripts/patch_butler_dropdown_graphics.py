@@ -256,3 +256,4 @@ def patch_styles_css():
 if __name__ == '__main__':
     patch_index_html()
     patch_styles_css()
+

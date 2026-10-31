@@ -758,43 +758,7 @@ function builderCompute() {
     builderResult.slips.sort((a, b) => (b.ev != null ? b.ev : 0) - (a.ev != null ? a.ev : 0));
   }
 
-  // When non-football sports are active, synthesize a guaranteed Cross-Sport Mix Acca
-  const otherActive = activeSports.filter(s => s !== 'football');
-  if (builderResult && builderResult.slips && builderResult.slips.length > 0 && otherActive.length > 0 && multiSportPool.length > 0) {
-    const hasOtherSport = builderResult.slips[0].legs.some(l => l.sport && l.sport !== 'football');
-    if (!hasOtherSport) {
-      // Pick top selection from each active non-football sport
-      const crossLegs = [];
-      otherActive.forEach(sk => {
-        const best = multiSportPool.find(l => l.sport === sk && !crossLegs.some(c => c.matchId === l.matchId));
-        if (best) crossLegs.push(best);
-      });
-      // Fill remaining legs from footballPool
-      const remainingNeeded = Math.max(0, legs - crossLegs.length);
-      for (const fb of footballPool) {
-        if (crossLegs.length >= legs) break;
-        if (!crossLegs.some(c => c.matchId === fb.matchId)) crossLegs.push(fb);
-      }
-      if (crossLegs.length === legs) {
-        const odds = crossLegs.reduce((t, c) => t * c.odds, 1);
-        const chance = crossLegs.reduce((t, c) => t * c.p, 1);
-        const crossSlip = {
-          legs: crossLegs,
-          odds,
-          chance,
-          ret: stake * odds,
-          profit: stake * odds - stake,
-          ev: chance * stake * odds - stake,
-          onTarget: true,
-          estimated: crossLegs.some(c => c.priceSource !== 'live'),
-          isCrossSportMix: true
-        };
-        // Insert as top recommendation!
-        builderResult.slips.unshift(crossSlip);
-        if (builderResult.slips.length > 4) builderResult.slips.pop();
-      }
-    }
-  }
+
 
   try { localStorage.setItem(BUILDER_KEY, JSON.stringify(builderState)); } catch (e) { /* ignore */ }
 }
@@ -5505,7 +5469,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v67';
+const APP_VERSION = 'v68';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
