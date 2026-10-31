@@ -137,3 +137,4 @@ with open(app_path, 'w', encoding='utf-8') as f:
     f.write(content)
 
 print("Successfully patched app.js with 13 leagues, live results auto-tracking, and bumped to v75!")
+

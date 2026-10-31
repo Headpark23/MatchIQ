@@ -81,7 +81,7 @@
     <div class="header-tools">
       <button type="button" class="butler-pill-btn" id="header-butler-btn" onclick="openButlerModal()" title="Your Bet Butler: Choose your bookmaker slip note">
         <span class="butler-icon">🤵</span>
-        <span class="butler-label">Butler: <b id="header-butler-name">Sky Bet</b></span>
+        <span class="butler-label">Bet Butler: <b id="header-butler-name">Sky Bet</b></span>
         <span class="butler-caret">▾</span>
       </button>
       <button type="button" class="odds-toggle" id="odds-toggle" aria-label="Toggle odds format" title="Switch between Fractional (6/4) and Decimal (2.50) odds" data-active-mode="fractional"><span class="odds-segment" data-seg="fractional">6/4</span><span class="odds-segment" data-seg="decimal">2.50</span><span class="sr-only" id="odds-mode-val">Fractional</span></button>
@@ -132,7 +132,7 @@
 <footer class="site-foot">
   <div>Statistical estimates for information and entertainment. No prediction is guaranteed, and a high probability is not the same as good betting value. Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0) and openfootball (CC0). Bookmaker prices: The Odds API.</div>
   <div class="copyright-bar">
-    <span>&copy; 2026 Bet Buddy <b id="footer-app-version" style="color:var(--cyan)">v75</b> &middot; Martin White &amp; Chris Faulds</span>
+    <span>&copy; 2026 Bet Buddy <b id="footer-app-version" style="color:var(--cyan)">v76</b> &middot; Martin White &amp; Chris Faulds</span>
         <button type="button" class="btn small subtle-share-btn" id="footer-share-btn" data-share-app title="Share Bet Buddy with a friend">
       <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       <span>Share App</span>
@@ -519,87 +519,108 @@
 
       <div class="butler-bookie-grid" role="radiogroup" aria-label="Select your preferred bookmaker">
         <!-- Sky Bet -->
-        <button type="button" class="butler-choice-card" data-select-butler="skybet" onclick="setButlerBookmaker('skybet')">
+        <button type="button" class="butler-choice-card" data-select-butler="skybet" onclick="setButlerBookmaker('skybet')" role="radio" aria-checked="false">
           <div class="butler-choice-left">
+            <span class="butler-checkbox" id="check-box-skybet">
+              <svg viewBox="0 0 24 24" class="butler-check-svg" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
             <span class="bookie-tag skybet">SKY</span>
             <div class="butler-choice-details">
               <strong>Sky Bet</strong>
               <span class="butler-choice-sub">UK Football &amp; Acca Markets</span>
             </div>
           </div>
-          <span class="butler-active-check" id="check-skybet">✓ Active</span>
+          <span class="butler-active-pill" id="check-skybet">Active ✓</span>
         </button>
 
         <!-- bet365 -->
-        <button type="button" class="butler-choice-card" data-select-butler="bet365" onclick="setButlerBookmaker('bet365')">
+        <button type="button" class="butler-choice-card" data-select-butler="bet365" onclick="setButlerBookmaker('bet365')" role="radio" aria-checked="false">
           <div class="butler-choice-left">
+            <span class="butler-checkbox" id="check-box-bet365">
+              <svg viewBox="0 0 24 24" class="butler-check-svg" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
             <span class="bookie-tag b365">365</span>
             <div class="butler-choice-details">
               <strong>bet365</strong>
               <span class="butler-choice-sub">Football &amp; Global Sports</span>
             </div>
           </div>
-          <span class="butler-active-check" id="check-bet365">✓ Active</span>
+          <span class="butler-active-pill" id="check-bet365">Active ✓</span>
         </button>
 
         <!-- William Hill -->
-        <button type="button" class="butler-choice-card" data-select-butler="williamhill" onclick="setButlerBookmaker('williamhill')">
+        <button type="button" class="butler-choice-card" data-select-butler="williamhill" onclick="setButlerBookmaker('williamhill')" role="radio" aria-checked="false">
           <div class="butler-choice-left">
+            <span class="butler-checkbox" id="check-box-williamhill">
+              <svg viewBox="0 0 24 24" class="butler-check-svg" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
             <span class="bookie-tag wh">WH</span>
             <div class="butler-choice-details">
               <strong>William Hill</strong>
               <span class="butler-choice-sub">UK Betting &amp; Daily Coup</span>
             </div>
           </div>
-          <span class="butler-active-check" id="check-williamhill">✓ Active</span>
+          <span class="butler-active-pill" id="check-williamhill">Active ✓</span>
         </button>
 
         <!-- Paddy Power -->
-        <button type="button" class="butler-choice-card" data-select-butler="paddypower" onclick="setButlerBookmaker('paddypower')">
+        <button type="button" class="butler-choice-card" data-select-butler="paddypower" onclick="setButlerBookmaker('paddypower')" role="radio" aria-checked="false">
           <div class="butler-choice-left">
+            <span class="butler-checkbox" id="check-box-paddypower">
+              <svg viewBox="0 0 24 24" class="butler-check-svg" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
             <span class="bookie-tag pp">PP</span>
             <div class="butler-choice-details">
               <strong>Paddy Power</strong>
               <span class="butler-choice-sub">Football &amp; Multi-Sport</span>
             </div>
           </div>
-          <span class="butler-active-check" id="check-paddypower">✓ Active</span>
+          <span class="butler-active-pill" id="check-paddypower">Active ✓</span>
         </button>
 
         <!-- Betfair -->
-        <button type="button" class="butler-choice-card" data-select-butler="betfair" onclick="setButlerBookmaker('betfair')">
+        <button type="button" class="butler-choice-card" data-select-butler="betfair" onclick="setButlerBookmaker('betfair')" role="radio" aria-checked="false">
           <div class="butler-choice-left">
+            <span class="butler-checkbox" id="check-box-betfair">
+              <svg viewBox="0 0 24 24" class="butler-check-svg" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
             <span class="bookie-tag bf">BF</span>
             <div class="butler-choice-details">
               <strong>Betfair Sportsbook</strong>
               <span class="butler-choice-sub">Football &amp; Exchange Odds</span>
             </div>
           </div>
-          <span class="butler-active-check" id="check-betfair">✓ Active</span>
+          <span class="butler-active-pill" id="check-betfair">Active ✓</span>
         </button>
 
         <!-- Coral -->
-        <button type="button" class="butler-choice-card" data-select-butler="coral" onclick="setButlerBookmaker('coral')">
+        <button type="button" class="butler-choice-card" data-select-butler="coral" onclick="setButlerBookmaker('coral')" role="radio" aria-checked="false">
           <div class="butler-choice-left">
+            <span class="butler-checkbox" id="check-box-coral">
+              <svg viewBox="0 0 24 24" class="butler-check-svg" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
             <span class="bookie-tag coral">COR</span>
             <div class="butler-choice-details">
               <strong>Coral</strong>
               <span class="butler-choice-sub">Football Coupon &amp; Accas</span>
             </div>
           </div>
-          <span class="butler-active-check" id="check-coral">✓ Active</span>
+          <span class="butler-active-pill" id="check-coral">Active ✓</span>
         </button>
 
         <!-- Ladbrokes -->
-        <button type="button" class="butler-choice-card" data-select-butler="ladbrokes" onclick="setButlerBookmaker('ladbrokes')">
+        <button type="button" class="butler-choice-card" data-select-butler="ladbrokes" onclick="setButlerBookmaker('ladbrokes')" role="radio" aria-checked="false">
           <div class="butler-choice-left">
+            <span class="butler-checkbox" id="check-box-ladbrokes">
+              <svg viewBox="0 0 24 24" class="butler-check-svg" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
             <span class="bookie-tag ladbrokes">LAD</span>
             <div class="butler-choice-details">
               <strong>Ladbrokes</strong>
               <span class="butler-choice-sub">Football &amp; Weekend Coupons</span>
             </div>
           </div>
-          <span class="butler-active-check" id="check-ladbrokes">✓ Active</span>
+          <span class="butler-active-pill" id="check-ladbrokes">Active ✓</span>
         </button>
       </div>
 

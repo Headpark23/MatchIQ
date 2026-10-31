@@ -2921,6 +2921,31 @@ let activeLeagueFreq = 'weekly';
 let activeMoreTab = 'account';
 
 function getUserProfile() {
+  const activeUser = currentAuthUser || cachedAuthUser;
+  if (activeUser && (activeUser.displayName || activeUser.handle)) {
+    const h = String(activeUser.handle || activeUser.displayName).replace(/^@+/, '');
+    if (h && !h.startsWith('Punter_')) {
+      try {
+        const p = JSON.parse(localStorage.getItem(USER_PROFILE_KEY) || 'null');
+        if (p) {
+          return {
+            handle: h,
+            avatar: p.avatar || '⚽',
+            town: p.town || 'Paisley',
+            region: p.region || 'Renfrewshire',
+            country: p.country || 'Scotland'
+          };
+        }
+      } catch (e) {}
+      return {
+        handle: h,
+        avatar: '⚽',
+        town: 'Paisley',
+        region: 'Renfrewshire',
+        country: 'Scotland'
+      };
+    }
+  }
   try {
     const p = JSON.parse(localStorage.getItem(USER_PROFILE_KEY) || 'null');
     if (p && p.handle) {
@@ -5707,7 +5732,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v75';
+const APP_VERSION = 'v76';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -5983,10 +6008,13 @@ function updateButlerUI() {
   const nameEls = document.querySelectorAll('#header-butler-name, .current-butler-name');
   nameEls.forEach(el => { el.textContent = current.name; });
   document.querySelectorAll('.butler-choice-card').forEach(card => {
-    if (card.dataset.selectButler === current.key) {
+    const isSelected = card.dataset.selectButler === current.key;
+    if (isSelected) {
       card.classList.add('active');
+      card.setAttribute('aria-checked', 'true');
     } else {
       card.classList.remove('active');
+      card.setAttribute('aria-checked', 'false');
     }
   });
 }
