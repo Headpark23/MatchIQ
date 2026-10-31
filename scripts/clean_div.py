@@ -10,3 +10,4 @@ with open('index.html', 'w', encoding='utf-8') as f:
     f.write(text)
 
 print("Cleaned extra closing div in index.html.")
+

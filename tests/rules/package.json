@@ -1,0 +1,14 @@
+{
+  "name": "matchiq-firestore-rules-tests",
+  "version": "1.0.0",
+  "description": "Firestore Security Rules unit test suite for Bet Buddy (MatchIQ)",
+  "main": "firestore.test.js",
+  "scripts": {
+    "test": "mocha firestore.test.js --timeout 10000"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^3.0.4",
+    "chai": "^4.3.10",
+    "mocha": "^10.4.0"
+  }
+}

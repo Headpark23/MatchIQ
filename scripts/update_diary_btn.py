@@ -41,3 +41,4 @@ lines[idx:end_idx] = new_block
 with open('app.js', 'w', encoding='utf-8') as f:
     f.writelines(lines)
 print("Updated diaryBtn in app.js successfully.")
+

@@ -27,3 +27,4 @@ idx = idx.replace('app.js?v=57', 'app.js?v=58')
 with open('index.html', 'w', encoding='utf-8') as f:
     f.write(idx)
 print("Updated index.html to v58")
+

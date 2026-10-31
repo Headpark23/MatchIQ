@@ -1684,6 +1684,9 @@ function saveStoredDiary(entries) {
     if (typeof syncLeagueToCloud === 'function') {
       getStoredLeagues().forEach(l => syncLeagueToCloud(l));
     }
+    if (typeof syncDiaryToCloud === 'function') {
+      syncDiaryToCloud();
+    }
   } catch (e) {}
 }
 function updateDiaryCount() { const n = getStoredDiary().length; $('diary-count').textContent = n ? String(n) : ''; }
@@ -1772,7 +1775,7 @@ function diaryPerformanceChart(diary) {
 const USER_PROFILE_KEY = 'betbuddy_user_profile_v1';
 const LEAGUES_STORAGE_KEY = 'betbuddy_leagues_v1';
 
-// ------------------------------------------------------------ Firebase Firestore Cloud Sync
+// ------------------------------------------------------------ Firebase Firestore & Auth Cloud Sync
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyDPTMcwfVP6v8Y1jsrnUqdM5EeIMwXKxw4",
   authDomain: "betbuddyuk.firebaseapp.com",
@@ -1784,110 +1787,49 @@ const FIREBASE_CONFIG = {
 };
 
 let firestoreDb = null;
+let firebaseAuth = null;
+
 try {
   if (typeof firebase !== 'undefined' && firebase.initializeApp) {
     if (!firebase.apps || !firebase.apps.length) {
       firebase.initializeApp(FIREBASE_CONFIG);
     }
     firestoreDb = firebase.firestore();
+    if (firebase.auth) {
+      firebaseAuth = firebase.auth();
+    }
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.search.includes('emulator=1')) {
+      if (firebaseAuth && firebaseAuth.useEmulator) {
+        firebaseAuth.useEmulator('http://127.0.0.1:9099');
+      }
+      if (firestoreDb && firestoreDb.useEmulator) {
+        firestoreDb.useEmulator('127.0.0.1', 8080);
+      }
+      console.log('Attached Firebase emulators (Auth: 9099, Firestore: 8080)');
+    }
   }
 } catch (e) {
   console.warn('Firebase init notice:', e);
 }
 
 let activeLeagueUnsubscribe = null;
+let activeMembersUnsubscribe = null;
 
-const FIRESTORE_REST_BASE = 'https://firestore.googleapis.com/v1/projects/betbuddyuk/databases/(default)/documents';
-const FIRESTORE_API_KEY = FIREBASE_CONFIG.apiKey;
-
-function parseFirestoreValue(val) {
-  if (!val) return null;
-  if ('stringValue' in val) return val.stringValue;
-  if ('integerValue' in val) return parseInt(val.integerValue, 10);
-  if ('doubleValue' in val) return parseFloat(val.doubleValue);
-  if ('booleanValue' in val) return val.booleanValue;
-  if ('arrayValue' in val) return (val.arrayValue.values || []).map(parseFirestoreValue);
-  if ('mapValue' in val) {
-    const res = {};
-    const f = val.mapValue.fields || {};
-    for (const k in f) res[k] = parseFirestoreValue(f[k]);
-    return res;
-  }
-  return null;
-}
-
-function parseFirestoreFields(fields) {
-  const res = {};
-  for (const k in (fields || {})) res[k] = parseFirestoreValue(fields[k]);
-  return res;
-}
-
-let isRestSyncing = false;
-async function fetchCloudDataRest() {
-  if (isRestSyncing) return;
-  isRestSyncing = true;
-  try {
-    const prof = getUserProfile();
-    // 1. Fetch Buddy Leagues via direct HTTP GET
-    const lRes = await fetch(`${FIRESTORE_REST_BASE}/leagues?key=${FIRESTORE_API_KEY}`);
-    if (lRes.ok) {
-      const lData = await lRes.json();
-      const stored = getStoredLeagues();
-      let changed = false;
-
-      (lData.documents || []).forEach(doc => {
-        const d = parseFirestoreFields(doc.fields);
-        const code = d.code || doc.name.split('/').pop();
-        const membersList = extractMembersFromDoc(d);
-        let existing = stored.find(l => l.code === code);
-        if (!existing) {
-          stored.push({
-            id: 'league-' + code,
-            name: d.name || ('Buddy League (' + code + ')'),
-            icon: d.icon || '⚽',
-            freq: d.freq || 'weekly',
-            code: code,
-            creator_handle: d.creator_handle || 'Creator',
-            created_at: d.created_at || new Date().toISOString().slice(0, 10),
-            members: membersList.filter(m => m && m.handle && m.handle !== prof.handle)
-          });
-          changed = true;
-        } else {
-          if (d.name && (!existing.name || existing.name.startsWith('Buddy League ('))) {
-            existing.name = d.name;
-            changed = true;
-          }
-          existing.members = membersList.filter(m => m && m.handle && m.handle !== prof.handle);
-          changed = true;
-        }
-      });
-
-      if (changed) {
-        saveStoredLeagues(stored);
-        if (stored.length && (!activeLeagueId || activeLeagueId === 'default' || activeLeagueId.startsWith('geo-'))) {
-          activeLeagueId = stored[0].id;
-        }
-      }
+const LEAGUE_CODE_CHARS = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+function generateSecureLeagueCode(length = 8) {
+  let result = '';
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    const bytes = new Uint8Array(length);
+    crypto.getRandomValues(bytes);
+    for (let i = 0; i < length; i++) {
+      result += LEAGUE_CODE_CHARS[bytes[i] % LEAGUE_CODE_CHARS.length];
     }
-
-    // 2. Fetch Geo Leagues via direct HTTP GET
-    const gRes = await fetch(`${FIRESTORE_REST_BASE}/geo_leagues?key=${FIRESTORE_API_KEY}`);
-    if (gRes.ok) {
-      const gData = await gRes.json();
-      (gData.documents || []).forEach(doc => {
-        const d = parseFirestoreFields(doc.fields);
-        const docId = doc.name.split('/').pop();
-        const membersList = extractMembersFromDoc(d);
-        saveStoredGeoMembers(docId, membersList);
-      });
+  } else {
+    for (let i = 0; i < length; i++) {
+      result += LEAGUE_CODE_CHARS[Math.floor(Math.random() * LEAGUE_CODE_CHARS.length)];
     }
-
-    render();
-  } catch (err) {
-    console.warn('REST cloud sync notice:', err);
-  } finally {
-    isRestSyncing = false;
   }
+  return result;
 }
 
 function getGeoDocId(tierId, prof) {
@@ -1906,7 +1848,6 @@ function getStoredGeoMembers(docId) {
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch (e) {}
-  // Pre-seed default verified punters so leaderboards never start empty
   return [
     { handle: 'HeadPark73', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] },
     { handle: 'Punter_747', avatar: '⚽', points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] }
@@ -1963,55 +1904,38 @@ function listenToActiveGeoLeague(docId) {
 }
 
 function syncUserToGeoCloud() {
-  if (!firestoreDb) return;
-  try {
-    const prof = getUserProfile();
-    const uStats = getUserLeagueStats('weekly');
-    const userEntry = {
-      handle: prof.handle,
-      avatar: prof.avatar || '⚽',
-      town: prof.town || 'Paisley',
-      region: prof.region || 'Renfrewshire',
-      country: prof.country || 'Scotland',
-      points: uStats.points,
-      winRate: uStats.winRate,
-      roi: uStats.roi,
-      settled: uStats.settled,
-      form: uStats.form,
-      updated_at: new Date().toISOString()
-    };
-    const safeTown = getGeoDocId('geo-town', prof);
-    const safeRegion = getGeoDocId('geo-region', prof);
-    const safeCountry = getGeoDocId('geo-country', prof);
-    const targets = ['geo-world', 'geo-europe', 'geo-uk', safeCountry, safeRegion, safeTown];
-    targets.forEach(tId => {
-      firestoreDb.collection('geo_leagues').doc(tId).set({
-        members: {
-          [prof.handle]: userEntry
-        }
-      }, { merge: true }).catch(() => {});
-    });
-  } catch (e) {}
+  // Geo leagues are read-only public leaderboards in security rules; client mutations disabled
 }
-
-
-
-
 
 async function renameLeague(code) {
   const list = getStoredLeagues();
   const target = list.find(l => l.code === code);
   const currentName = target ? (typeof target.name === 'function' ? target.name() : target.name) : 'Buddy League';
-  const newName = prompt('Enter new name for your league:', currentName);
+  const user = getAuthUser();
+  if (target && target.creatorUid && (!user || user.uid !== target.creatorUid)) {
+    toast('Only the league creator can rename this league.');
+    return;
+  }
+  const newName = prompt('Enter new name for your league (3–40 characters):', currentName);
   if (!newName || !newName.trim()) return;
   const cleanName = newName.trim();
+  if (cleanName.length < 3 || cleanName.length > 40) {
+    toast('League name must be between 3 and 40 characters.');
+    return;
+  }
   if (target) {
     target.name = cleanName;
     saveStoredLeagues(list);
   }
-  if (firestoreDb && code) {
+  if (firestoreDb && code && user && user.emailVerified) {
     try {
-      await firestoreDb.collection('leagues').doc(code).set({ name: cleanName }, { merge: true });
+      await firestoreDb.collection('leagues').doc(code).update({
+        name: cleanName,
+        updatedAt: new Date().toISOString()
+      });
+      await firestoreDb.collection('users').doc(user.uid).collection('leagueMemberships').doc(code).set({
+        name: cleanName
+      }, { merge: true }).catch(() => {});
       toast('League renamed to ' + cleanName + '!');
     } catch (e) {
       console.warn('Rename error:', e);
@@ -2023,15 +1947,18 @@ async function renameLeague(code) {
 
 async function refreshLeagueFromCloud(code) {
   if (!firestoreDb || !code) return;
+  const user = getAuthUser();
   try {
     const snap = await firestoreDb.collection('leagues').doc(code).get();
     if (snap.exists) {
       const data = snap.data();
       const list = getStoredLeagues();
       const target = list.find(l => l.code === code);
-      if (target && data.members) {
-        const prof = getUserProfile();
-        target.members = Object.values(data.members).filter(m => m.handle !== prof.handle);
+      if (target) {
+        const memSnap = await firestoreDb.collection('leagues').doc(code).collection('members').get();
+        const mems = [];
+        memSnap.forEach(d => mems.push({ ...d.data(), uid: d.id }));
+        target.members = mems.filter(m => user ? m.uid !== user.uid : true);
         saveStoredLeagues(list);
         render();
       }
@@ -2053,30 +1980,58 @@ async function refreshGeoLeagueFromCloud(docId) {
   } catch(e) {}
 }
 
-async function kickPlayerFromLeague(leagueCode, handle) {
-  if (!confirm('Are you sure you want to throw @' + handle + ' out of this league?')) return;
-  toast('Removing @' + handle + '...');
-
+async function kickPlayerFromLeague(leagueCode, memberUid, handle) {
+  const user = getAuthUser();
   const list = getStoredLeagues();
   const target = list.find(l => l.code === leagueCode);
+  if (target && target.creatorUid && (!user || user.uid !== target.creatorUid)) {
+    toast('Only the league creator can throw players out.');
+    return;
+  }
+  if (!confirm('Are you sure you want to throw @' + (handle || 'this punter') + ' out of this league?')) return;
+  toast('Removing @' + (handle || 'punter') + '...');
+
   if (target && target.members) {
-    target.members = target.members.filter(m => m.handle !== handle);
+    target.members = target.members.filter(m => (memberUid && m.uid) ? m.uid !== memberUid : m.handle !== handle);
     saveStoredLeagues(list);
   }
 
   if (firestoreDb && leagueCode) {
     try {
-      const fieldPath = 'members.' + handle;
-      const FieldValue = firebase.firestore.FieldValue;
-      await firestoreDb.collection('leagues').doc(leagueCode).update({
-        [fieldPath]: FieldValue.delete()
-      });
-      toast('@' + handle + ' thrown out of league.');
+      if (memberUid) {
+        await firestoreDb.collection('leagues').doc(leagueCode).collection('members').doc(memberUid).delete();
+      }
+      toast('@' + (handle || 'punter') + ' thrown out of league.');
     } catch (e) {
       console.warn('Kick error:', e);
-      toast('@' + handle + ' removed.');
+      toast('@' + (handle || 'punter') + ' removed locally.');
     }
   }
+  render();
+}
+
+async function leaveLeague(leagueId, leagueCode) {
+  const list = getStoredLeagues();
+  const target = list.find(l => l.id === leagueId || l.code === leagueCode);
+  const name = target ? (typeof target.name === 'function' ? target.name() : target.name) : 'this league';
+  if (!confirm('Are you sure you want to leave ' + name + '?\nYour stats will be removed from this leaderboard.')) return;
+
+  toast('Leaving league...');
+  const user = getAuthUser();
+
+  if (firestoreDb && leagueCode && user && user.uid) {
+    try {
+      await firestoreDb.collection('leagues').doc(leagueCode).collection('members').doc(user.uid).delete();
+      await firestoreDb.collection('users').doc(user.uid).collection('leagueMemberships').doc(leagueCode).delete();
+    } catch (e) {
+      console.warn('Leave league notice:', e);
+    }
+  }
+
+  const updated = list.filter(l => l.id !== leagueId && l.code !== leagueCode);
+  saveStoredLeagues(updated);
+  activeLeagueId = 'default';
+  toast('You left ' + name + '.');
   render();
 }
 
@@ -2084,13 +2039,20 @@ async function deleteLeague(leagueId, leagueCode) {
   const list = getStoredLeagues();
   const target = list.find(l => l.id === leagueId || l.code === leagueCode);
   const name = target ? (typeof target.name === 'function' ? target.name() : target.name) : 'this league';
+  const user = getAuthUser();
+
+  if (target && target.creatorUid && (!user || user.uid !== target.creatorUid)) {
+    return leaveLeague(leagueId, leagueCode);
+  }
+
   if (!confirm('Are you sure you want to permanently delete ' + name + '?\nThis will remove the league for all members.')) return;
 
   toast('Deleting league...');
 
-  if (firestoreDb && leagueCode) {
+  if (firestoreDb && leagueCode && user && user.emailVerified) {
     try {
       await firestoreDb.collection('leagues').doc(leagueCode).delete();
+      await firestoreDb.collection('users').doc(user.uid).collection('leagueMemberships').doc(leagueCode).delete().catch(() => {});
     } catch (e) {
       console.warn('Cloud league delete notice:', e);
     }
@@ -2104,107 +2066,151 @@ async function deleteLeague(leagueId, leagueCode) {
   render();
 }
 
-function syncLeagueToCloud(league) {
-  syncUserToGeoCloud();
+async function syncLeagueToCloud(league) {
   if (!firestoreDb || !league || !league.code) return;
+  const user = getAuthUser();
+  if (!user || !user.signedIn || !user.emailVerified) return;
+
   const prof = getUserProfile();
   const uStats = getUserLeagueStats(league.freq || 'weekly');
-  const userEntry = {
+  const nowIso = new Date().toISOString();
+
+  const memberPayload = {
+    uid: user.uid,
     handle: prof.handle,
     avatar: prof.avatar || '⚽',
-    points: uStats.points,
-    winRate: uStats.winRate,
-    roi: uStats.roi,
-    settled: uStats.settled,
-    form: uStats.form,
-    updated_at: new Date().toISOString()
+    points: Math.max(-1000, Math.min(50000, parseInt(uStats.points, 10) || 0)),
+    winRate: Math.max(0, Math.min(100, Math.round(+uStats.winRate || 0))),
+    roi: Math.max(-100, Math.min(10000, Math.round((+uStats.roi || 0) * 10) / 10)),
+    settled: Math.max(0, parseInt(uStats.settled, 10) || 0),
+    form: Array.isArray(uStats.form) ? uStats.form.slice(0, 10) : ['—'],
+    updatedAt: nowIso
   };
 
-  const isLeagueCreator = !league.is_joined && (!league.creator_handle || league.creator_handle === prof.handle);
+  try {
+    const batch = firestoreDb.batch();
+    const leagueRef = firestoreDb.collection('leagues').doc(league.code);
+    const memberRef = leagueRef.collection('members').doc(user.uid);
+    const membershipRef = firestoreDb.collection('users').doc(user.uid).collection('leagueMemberships').doc(league.code);
 
-  if (isLeagueCreator) {
-    if (!league.creator_handle) league.creator_handle = prof.handle;
-    firestoreDb.collection('leagues').doc(league.code).set({
-      name: league.name,
-      icon: league.icon || '⚽',
-      freq: league.freq || 'weekly',
+    const isCreator = !league.is_joined && (!league.creatorUid || league.creatorUid === user.uid);
+    if (isCreator) {
+      if (!league.creatorUid) league.creatorUid = user.uid;
+      if (!league.creatorHandle) league.creatorHandle = prof.handle;
+      batch.set(leagueRef, {
+        code: league.code,
+        name: (league.name || 'Buddy League').slice(0, 40),
+        icon: (league.icon || '⚽').slice(0, 10),
+        freq: ['weekly', 'monthly', 'yearly'].includes(league.freq) ? league.freq : 'weekly',
+        creatorUid: user.uid,
+        creatorHandle: prof.handle,
+        createdAt: league.createdAt || league.created_at || nowIso,
+        updatedAt: nowIso
+      }, { merge: true });
+    }
+
+    batch.set(memberRef, memberPayload, { merge: true });
+    batch.set(membershipRef, {
       code: league.code,
-      creator_handle: prof.handle,
-      created_at: league.created_at || new Date().toISOString().slice(0, 10),
-      members: {
-        [prof.handle]: userEntry
-      }
-    }, { merge: true }).catch(err => console.warn('Cloud league sync notice:', err));
-  } else {
-    firestoreDb.collection('leagues').doc(league.code).set({
-      members: {
-        [prof.handle]: userEntry
-      }
-    }, { merge: true }).catch(err => console.warn('Cloud member sync notice:', err));
+      name: (league.name || 'Buddy League').slice(0, 40),
+      icon: (league.icon || '⚽').slice(0, 10),
+      role: isCreator ? 'creator' : 'member',
+      joinedAt: nowIso
+    }, { merge: true });
+
+    await batch.commit();
+  } catch (err) {
+    console.warn('syncLeagueToCloud notice:', err);
   }
 }
 
 let hasSyncedUserLeagues = false;
 async function syncUserLeaguesFromCloud() {
   if (!firestoreDb || hasSyncedUserLeagues) return;
+  const user = getAuthUser();
+  if (!user || !user.signedIn || !user.emailVerified) return;
+
   try {
-    const prof = getUserProfile();
-    const snap = await firestoreDb.collection('leagues').get();
-    if (!snap.empty) {
+    const membershipsSnap = await firestoreDb.collection('users').doc(user.uid).collection('leagueMemberships').get();
+    if (!membershipsSnap.empty) {
       const list = getStoredLeagues();
       let changed = false;
-      snap.forEach(doc => {
-        const d = doc.data() || {};
-        const code = d.code || doc.id;
-        const membersList = extractMembersFromDoc(d);
-        const isMember = membersList.some(m => m && m.handle === prof.handle);
-        const isCreator = d.creator_handle === prof.handle;
-        if (isMember || isCreator) {
-          let existing = list.find(l => l.code === code);
-          if (!existing) {
-            list.push({
-              id: 'league-' + code,
-              name: d.name || ('Buddy League (' + code + ')'),
-              icon: d.icon || '⚽',
-              freq: d.freq || 'weekly',
-              code: code,
-              creator_handle: d.creator_handle || prof.handle,
-              created_at: d.created_at || new Date().toISOString().slice(0, 10),
-              members: membersList.filter(m => m && m.handle && m.handle !== prof.handle)
+
+      for (const mDoc of membershipsSnap.docs) {
+        const memData = mDoc.data() || {};
+        const code = memData.code || mDoc.id;
+        try {
+          const leagueDoc = await firestoreDb.collection('leagues').doc(code).get();
+          if (leagueDoc.exists) {
+            const lData = leagueDoc.data() || {};
+            const membersSnap = await firestoreDb.collection('leagues').doc(code).collection('members').get();
+            const membersList = [];
+            membersSnap.forEach(d => {
+              membersList.push({ ...d.data(), uid: d.id });
             });
-            changed = true;
-          } else {
-            if (d.name && (!existing.name || existing.name.startsWith('Buddy League ('))) {
-              existing.name = d.name;
+
+            let existing = list.find(l => l.code === code);
+            const isCreator = lData.creatorUid === user.uid;
+            if (!existing) {
+              list.push({
+                id: 'league-' + code,
+                name: lData.name || ('Buddy League (' + code + ')'),
+                icon: lData.icon || '⚽',
+                freq: lData.freq || 'weekly',
+                code: code,
+                creatorUid: lData.creatorUid,
+                creatorHandle: lData.creatorHandle || 'Creator',
+                created_at: lData.createdAt ? lData.createdAt.slice(0, 10) : new Date().toISOString().slice(0, 10),
+                is_joined: !isCreator,
+                members: membersList.filter(m => m.uid !== user.uid)
+              });
+              changed = true;
+            } else {
+              existing.name = lData.name || existing.name;
+              existing.icon = lData.icon || existing.icon;
+              existing.freq = lData.freq || existing.freq;
+              if (lData.creatorUid) existing.creatorUid = lData.creatorUid;
+              if (lData.creatorHandle) existing.creatorHandle = lData.creatorHandle;
+              existing.members = membersList.filter(m => m.uid !== user.uid);
               changed = true;
             }
-            existing.members = membersList.filter(m => m && m.handle && m.handle !== prof.handle);
-            changed = true;
           }
+        } catch (lErr) {
+          console.warn('Error fetching league ' + code, lErr);
         }
-      });
+      }
+
       if (changed) {
         saveStoredLeagues(list);
-        hasSyncedUserLeagues = true;
         render();
       }
     }
+    hasSyncedUserLeagues = true;
   } catch (e) {
-    console.warn('Sync user leagues notice:', e);
+    console.warn('syncUserLeaguesFromCloud notice:', e);
   }
 }
 
 let currentLeagueListeningCode = null;
 function listenToActiveLeague(code) {
   if (!firestoreDb || !code) return;
+  const user = getAuthUser();
+  if (!user || !user.signedIn || !user.emailVerified) return;
+
   if (currentLeagueListeningCode === code && activeLeagueUnsubscribe) return;
   if (activeLeagueUnsubscribe) {
     try { activeLeagueUnsubscribe(); } catch (e) {}
     activeLeagueUnsubscribe = null;
   }
+  if (activeMembersUnsubscribe) {
+    try { activeMembersUnsubscribe(); } catch (e) {}
+    activeMembersUnsubscribe = null;
+  }
   currentLeagueListeningCode = code;
+
   try {
-    activeLeagueUnsubscribe = firestoreDb.collection('leagues').doc(code).onSnapshot(doc => {
+    const leagueRef = firestoreDb.collection('leagues').doc(code);
+    activeLeagueUnsubscribe = leagueRef.onSnapshot(doc => {
       const list = getStoredLeagues();
       const target = list.find(l => l.code === code);
       if (!doc || !doc.exists) {
@@ -2220,55 +2226,83 @@ function listenToActiveLeague(code) {
         return;
       }
       const data = doc.data() || {};
-      const membersList = extractMembersFromDoc(data);
       if (target) {
-        if (data.name) {
-          if (!target.is_joined && target.name && !target.name.startsWith('Buddy League (') && data.name.startsWith('Buddy League (')) {
-            firestoreDb.collection('leagues').doc(code).set({ name: target.name }, { merge: true }).catch(() => {});
-          } else {
-            target.name = data.name;
-          }
-        }
+        if (data.name) target.name = data.name;
         if (data.icon) target.icon = data.icon;
-        if (data.creator_handle) target.creator_handle = data.creator_handle;
-        const prof = getUserProfile();
-        target.members = membersList.filter(m => m && m.handle && m.handle !== prof.handle);
+        if (data.creatorUid) target.creatorUid = data.creatorUid;
+        if (data.creatorHandle) target.creatorHandle = data.creatorHandle;
         saveStoredLeagues(list);
         render();
       }
     }, err => console.warn('League listener notice:', err));
+
+    activeMembersUnsubscribe = leagueRef.collection('members').onSnapshot(snap => {
+      const list = getStoredLeagues();
+      const target = list.find(l => l.code === code);
+      if (target && snap) {
+        const membersList = [];
+        snap.forEach(d => {
+          membersList.push({ ...d.data(), uid: d.id });
+        });
+        target.members = membersList.filter(m => m.uid !== user.uid);
+        saveStoredLeagues(list);
+        render();
+      }
+    }, err => console.warn('Members listener notice:', err));
   } catch (e) {
-    console.warn('Listener error:', e);
+    console.warn('listenToActiveLeague error:', e);
   }
 }
 
 async function joinCloudLeague(code) {
   if (!code) return;
-  let leagueName = 'Buddy League (' + code + ')';
-  let leagueIcon = '⚽';
-  let leagueFreq = 'weekly';
-  let creatorHandle = null;
-  let existingMembers = [];
+  const user = getAuthUser();
+  if (!user || !user.signedIn) {
+    toast('Please sign in or create an account to join private leagues.');
+    openAuthModal();
+    return;
+  }
+  if (!user.emailVerified) {
+    toast('Please verify your email address to join private leagues.');
+    openAuthModal();
+    return;
+  }
+
+  let leagueData = null;
+  let membersList = [];
 
   if (firestoreDb) {
     try {
       const snap = await firestoreDb.collection('leagues').doc(code).get();
-      if (snap.exists) {
-        const d = snap.data();
-        if (d.name) leagueName = d.name;
-        if (d.icon) leagueIcon = d.icon;
-        if (d.freq) leagueFreq = d.freq;
-        if (d.creator_handle) creatorHandle = d.creator_handle;
-        existingMembers = extractMembersFromDoc(d);
+      if (!snap.exists) {
+        toast('League ' + code + ' not found. Please check code.');
+        return;
+      }
+      leagueData = snap.data();
+      const memSnap = await firestoreDb.collection('leagues').doc(code).collection('members').get();
+      if (!memSnap.empty) {
+        memSnap.forEach(d => {
+          membersList.push({ ...d.data(), uid: d.id });
+        });
+      } else if (leagueData.members) {
+        membersList = extractMembersFromDoc(leagueData);
       }
     } catch (e) {
       console.warn('Join cloud fetch notice:', e);
+      toast('Could not connect to cloud league: ' + (e.message || 'Error'));
+      return;
     }
   }
 
   const prof = getUserProfile();
   const list = getStoredLeagues();
   let league = list.find(l => l.code === code);
+  const leagueName = (leagueData && leagueData.name) || ('Buddy League (' + code + ')');
+  const leagueIcon = (leagueData && leagueData.icon) || '⚽';
+  const leagueFreq = (leagueData && leagueData.freq) || 'weekly';
+  const creatorUid = (leagueData && leagueData.creatorUid) || null;
+  const creatorHandle = (leagueData && leagueData.creatorHandle) || null;
+
   if (!league) {
     league = {
       id: 'league-' + Date.now(),
@@ -2277,30 +2311,72 @@ async function joinCloudLeague(code) {
       freq: leagueFreq,
       code: code,
       is_joined: true,
-      creator_handle: creatorHandle,
-      created_at: new Date().toISOString().slice(0, 10),
-      members: existingMembers.filter(m => m && m.handle && m.handle !== prof.handle)
+      creatorUid: creatorUid,
+      creatorHandle: creatorHandle,
+      created_at: (leagueData && leagueData.createdAt) || new Date().toISOString().slice(0, 10),
+      members: membersList.filter(m => (m.uid ? m.uid !== user.uid : m.handle !== prof.handle))
     };
     list.push(league);
   } else {
-    // Only update name if not creator or if local name is default
-    if (league.is_joined || !league.name || league.name.startsWith('Buddy League (')) {
-      league.name = leagueName;
-    }
+    league.name = leagueName;
     league.icon = leagueIcon;
     league.freq = leagueFreq;
-    if (creatorHandle) league.creator_handle = creatorHandle;
-    if (existingMembers.length) {
-      league.members = existingMembers.filter(m => m && m.handle && m.handle !== prof.handle);
-    }
+    if (creatorUid) league.creatorUid = creatorUid;
+    if (creatorHandle) league.creatorHandle = creatorHandle;
+    league.members = membersList.filter(m => (m.uid ? m.uid !== user.uid : m.handle !== prof.handle));
   }
   saveStoredLeagues(list);
   activeLeagueId = league.id;
 
   syncLeagueToCloud(league);
   listenToActiveLeague(code);
-  toast('Joined ' + league.name + '! ⚽');
+  toast('Joined ' + leagueName + '! ⚽');
   render();
+}
+
+async function syncDiaryToCloud() {
+  if (!firestoreDb || !currentAuthUser) return;
+  try {
+    const diary = getStoredDiary();
+    const batch = firestoreDb.batch();
+    const userDiaryRef = firestoreDb.collection('users').doc(currentAuthUser.uid).collection('diary');
+    diary.forEach(entry => {
+      if (entry && entry.id) {
+        const docRef = userDiaryRef.doc(String(entry.id));
+        batch.set(docRef, entry, { merge: true });
+      }
+    });
+    await batch.commit();
+  } catch (e) {
+    console.warn('syncDiaryToCloud notice:', e);
+  }
+}
+
+async function syncDiaryFromCloud() {
+  if (!firestoreDb || !currentAuthUser) return;
+  try {
+    const userDiaryRef = firestoreDb.collection('users').doc(currentAuthUser.uid).collection('diary');
+    const snap = await userDiaryRef.get();
+    if (!snap.empty) {
+      const local = getStoredDiary();
+      const localMap = new Map(local.map(d => [String(d.id), d]));
+      let added = false;
+      snap.forEach(doc => {
+        const remote = doc.data();
+        if (remote && remote.id && !localMap.has(String(remote.id))) {
+          localMap.set(String(remote.id), remote);
+          added = true;
+        }
+      });
+      if (added) {
+        const merged = Array.from(localMap.values());
+        saveStoredDiary(merged);
+        render();
+      }
+    }
+  } catch (e) {
+    console.warn('syncDiaryFromCloud notice:', e);
+  }
 }
 
 const TROPHY_CABINET_KEY = 'betbuddy_trophy_cabinet_v1';
@@ -2630,7 +2706,7 @@ function viewLeagues() {
     const memberId = 'mem-form-' + idx;
     const kickCell = m.isYou
       ? '<td class="lb-col-action"><span class="bento-badge cyan text-xs">You</span></td>'
-      : '<td class="lb-col-action"><button type="button" class="kick-player-btn" data-kick-player="' + esc(m.handle) + '" data-league-code="' + esc(currentLeague.code) + '" title="Throw @' + esc(m.handle) + ' out of this league">Kick ✕</button></td>';
+      : '<td class="lb-col-action"><button type="button" class="kick-player-btn" data-kick-player="' + esc(m.handle) + '" data-kick-uid="' + esc(m.uid || '') + '" data-league-code="' + esc(currentLeague.code) + '" title="Throw @' + esc(m.handle) + ' out of this league">Kick ✕</button></td>';
 
     return '<tr class="lb-row' + (m.isYou ? ' user-row' : '') + '">' +
       '<td class="lb-col-rank"><span class="rank-badge ' + rankClass + '">' + rankIcon + '</span></td>' +
@@ -2738,7 +2814,9 @@ function viewLeagues() {
               '<button type="button" class="freq-btn' + (activeLeagueFreq === 'yearly' ? ' active' : '') + '" data-league-freq="yearly">Yearly</button>' +
             '</div>' +
             '<button type="button" class="btn small" data-share-league="' + esc(currentLeague.code) + '">Invite Friends</button>' +
-            '<button type="button" class="btn danger small" data-delete-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '" title="Delete this league">Delete League 🗑️</button>' +
+            (isLeagueCreator
+              ? '<button type="button" class="btn danger small" data-delete-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '" title="Delete this league">Delete League 🗑️</button>'
+              : '<button type="button" class="btn secondary small" data-leave-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '" title="Leave this league">Leave League 🚪</button>') +
           '</div>' +
         '</div>' +
         '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
@@ -4018,24 +4096,168 @@ function render() {
 }
 
 
-// ------------------------------------------------------------ Google Auth & PWA Installation
+// ------------------------------------------------------------ Firebase Auth & Handles
 const AUTH_STORAGE_KEY = 'betbuddy_auth_user_v1';
 let deferredInstallPrompt = null;
+let currentAuthUser = null;
+let currentAuthProfile = null;
+let lastResendVerificationTime = 0;
+
+const HANDLE_REGEX = /^[A-Za-z0-9_]{3,20}$/;
+function isValidHandle(h) {
+  return typeof h === 'string' && HANDLE_REGEX.test(h);
+}
+
+function mapAuthError(err) {
+  if (!err) return 'An unexpected error occurred. Please try again.';
+  const code = err.code || '';
+  if (code === 'auth/unauthorized-domain') {
+    console.error('Firebase Auth unauthorized domain:', window.location.hostname);
+    return 'This web domain is not authorised in Firebase Auth console. Check developer console for details.';
+  }
+  switch (code) {
+    case 'auth/wrong-password':
+    case 'auth/invalid-credential':
+      return 'Incorrect email or password. Please check and try again.';
+    case 'auth/user-not-found':
+      return 'No Bet Buddy account found with this email.';
+    case 'auth/email-already-in-use':
+      return 'An account already exists with this email. Try signing in instead.';
+    case 'auth/invalid-email':
+      return 'Please enter a valid email address.';
+    case 'auth/weak-password':
+      return 'Password should be at least 8 characters long.';
+    case 'auth/popup-closed-by-user':
+      return 'Sign-in window closed before completing. Please try again.';
+    case 'auth/too-many-requests':
+      return 'Too many attempts. Please wait a few minutes before trying again.';
+    case 'auth/requires-recent-login':
+      return 'Please sign out and sign in again before changing your password.';
+    default:
+      return err.message || 'Authentication error. Please try again.';
+  }
+}
+
+function showAuthError(boxId, message) {
+  const box = $(boxId);
+  if (box) {
+    box.textContent = message;
+    box.hidden = false;
+  }
+}
 
 function getAuthUser() {
-  try {
-    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch (e) { /* ignore */ }
-  return null;
+  if (!currentAuthUser) return null;
+  const prof = currentAuthProfile || getUserProfile();
+  const providerIds = (currentAuthUser.providerData || []).map(p => p.providerId);
+  const isGoogle = providerIds.includes('google.com');
+  const isPassword = providerIds.includes('password');
+
+  return {
+    signedIn: true,
+    uid: currentAuthUser.uid,
+    name: currentAuthUser.displayName || prof.handle || 'Punter',
+    email: currentAuthUser.email || '',
+    handle: prof.handle || 'Punter',
+    emailVerified: Boolean(currentAuthUser.emailVerified || isGoogle),
+    isGoogle,
+    isPassword
+  };
 }
 
 function saveAuthUser(user) {
   try {
-    if (user) localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
-    else localStorage.removeItem(AUTH_STORAGE_KEY);
-  } catch (e) { /* ignore */ }
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+  } catch (e) {}
   updateHeaderAuthUI();
+}
+
+async function claimHandleTransaction(uid, handle, avatar = '⚽') {
+  if (!firestoreDb) throw new Error('Firestore not initialized');
+  if (!isValidHandle(handle)) throw new Error('Gamertag must be 3–20 letters, numbers, or underscores.');
+
+  const handleLower = handle.toLowerCase();
+  const handleRef = firestoreDb.collection('handles').doc(handleLower);
+  const userRef = firestoreDb.collection('users').doc(uid);
+
+  return firestoreDb.runTransaction(async tx => {
+    const handleDoc = await tx.get(handleRef);
+    if (handleDoc.exists) {
+      const data = handleDoc.data() || {};
+      if (data.uid !== uid) {
+        throw new Error('This gamertag is already taken. Please choose another.');
+      }
+    }
+    const userDoc = await tx.get(userRef);
+    const existingUserData = userDoc.exists ? userDoc.data() : null;
+
+    let oldHandleLower = null;
+    if (existingUserData && existingUserData.handle && existingUserData.handle.toLowerCase() !== handleLower) {
+      oldHandleLower = existingUserData.handle.toLowerCase();
+    }
+
+    const nowIso = new Date().toISOString();
+    tx.set(handleRef, {
+      uid: uid,
+      handle: handle,
+      createdAt: (handleDoc.exists && handleDoc.data().createdAt) ? handleDoc.data().createdAt : nowIso
+    });
+
+    if (oldHandleLower) {
+      tx.delete(firestoreDb.collection('handles').doc(oldHandleLower));
+    }
+
+    const userPayload = {
+      handle: handle,
+      avatar: avatar,
+      updatedAt: nowIso
+    };
+    if (!existingUserData || !existingUserData.createdAt) {
+      userPayload.createdAt = nowIso;
+    } else {
+      userPayload.createdAt = existingUserData.createdAt;
+    }
+
+    tx.set(userRef, userPayload, { merge: true });
+  });
+}
+
+async function ensureUserProfile(user) {
+  if (!firestoreDb || !user) return;
+  try {
+    const userDocRef = firestoreDb.collection('users').doc(user.uid);
+    const userDoc = await userDocRef.get();
+    if (userDoc.exists) {
+      currentAuthProfile = userDoc.data();
+      const cur = getUserProfile();
+      saveUserProfile(currentAuthProfile.handle || cur.handle, cur.town, cur.region, cur.country);
+      return;
+    }
+
+    let baseHandle = (user.displayName || (user.email ? user.email.split('@')[0] : 'Punter'))
+      .replace(/[^A-Za-z0-9_]/g, '');
+    if (baseHandle.length < 3) baseHandle = 'Punter_' + baseHandle;
+    if (baseHandle.length > 16) baseHandle = baseHandle.slice(0, 16);
+
+    let finalHandle = baseHandle;
+    let claimed = false;
+    for (let attempt = 0; attempt < 5; attempt++) {
+      try {
+        await claimHandleTransaction(user.uid, finalHandle, '⚽');
+        claimed = true;
+        break;
+      } catch (err) {
+        finalHandle = (baseHandle.slice(0, 14) + Math.floor(Math.random() * 899 + 100)).slice(0, 20);
+      }
+    }
+    if (claimed) {
+      currentAuthProfile = { handle: finalHandle, avatar: '⚽', createdAt: new Date().toISOString() };
+      const cur = getUserProfile();
+      saveUserProfile(finalHandle, cur.town, cur.region, cur.country);
+    }
+  } catch (e) {
+    console.warn('ensureUserProfile notice:', e);
+  }
 }
 
 function updateHeaderAuthUI() {
@@ -4046,31 +4268,59 @@ function updateHeaderAuthUI() {
     const initials = (user.name || user.email || 'U').slice(0, 1).toUpperCase();
     container.innerHTML = '<button type="button" class="header-user-btn" id="header-user-btn" title="Signed in as ' + esc(user.name || user.email) + '">' +
       '<span class="header-avatar">' + esc(initials) + '</span>' +
-      '<span>@' + esc(user.handle || (user.name || 'Buddy').split(' ')[0]) + '</span></button>';
+      '<span>@' + esc(user.handle || 'Punter') + '</span>' +
+      (!user.emailVerified ? ' <span style="color:#fbbf24;font-size:11px;" title="Unverified Email">⚠️</span>' : '') +
+      '</button>';
   } else {
-    container.innerHTML = '<button type="button" class="google-sub-btn" id="header-auth-btn" title="Sign in with Google">' +
+    container.innerHTML = '<button type="button" class="google-sub-btn" id="header-auth-btn" title="Sign in or join">' +
       '<svg class="google-g" viewBox="0 0 24 24" width="13" height="13"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>' +
-      '<span>Sign in with Google</span></button>';
+      '<span>Sign In / Join</span></button>';
   }
+}
+
+function switchAuthModalView(viewName) {
+  const views = ['auth-signin-view', 'auth-register-view', 'auth-verify-view', 'auth-forgot-view', 'auth-authed-view'];
+  views.forEach(id => {
+    const el = $(id);
+    if (el) el.hidden = (id !== viewName);
+  });
+  ['signin-error', 'register-error', 'change-pass-error', 'forgot-msg'].forEach(id => {
+    const el = $(id);
+    if (el) { el.hidden = true; el.textContent = ''; }
+  });
 }
 
 function openAuthModal() {
   const modal = $('google-auth-modal');
   if (!modal) return;
   const user = getAuthUser();
-  const unauthed = $('auth-unauthed-view');
-  const authed = $('auth-authed-view');
   if (user && user.signedIn) {
-    unauthed.hidden = true;
-    authed.hidden = false;
+    switchAuthModalView('auth-authed-view');
     $('modal-avatar-initials').textContent = (user.name || user.email || 'U').slice(0, 1).toUpperCase();
     $('modal-auth-name').textContent = user.name || 'Bet Buddy User';
-    $('modal-auth-email').textContent = user.email || 'user@gmail.com';
+    $('modal-auth-email').textContent = user.email || '';
+
+    const badge = $('modal-auth-badge');
+    const warning = $('modal-unverified-warning');
+    if (user.emailVerified) {
+      if (badge) { badge.textContent = 'Verified Account'; badge.className = 'badge-status-green'; }
+      if (warning) warning.hidden = true;
+    } else {
+      if (badge) { badge.textContent = 'Unverified Email'; badge.className = 'badge-status-yellow'; }
+      if (warning) warning.hidden = false;
+    }
+
+    const passSec = $('profile-password-section');
+    const googleNote = $('profile-google-note');
+    if (user.isPassword) {
+      if (passSec) passSec.hidden = false;
+      if (googleNote) googleNote.hidden = true;
+    } else {
+      if (passSec) passSec.hidden = true;
+      if (googleNote) googleNote.hidden = false;
+    }
   } else {
-    unauthed.hidden = false;
-    authed.hidden = true;
-    const curProfile = getUserProfile();
-    $('google-display-name').value = curProfile.handle !== 'SmartPunter' ? curProfile.handle : '';
+    switchAuthModalView('auth-signin-view');
   }
   modal.hidden = false;
 }
@@ -4078,6 +4328,203 @@ function openAuthModal() {
 function closeAuthModal() {
   const modal = $('google-auth-modal');
   if (modal) modal.hidden = true;
+}
+
+async function signInWithGoogle() {
+  if (!firebaseAuth) {
+    toast('Authentication is not available in this browser.');
+    return;
+  }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    if (isInStandaloneMode() || isIos()) {
+      await firebaseAuth.signInWithRedirect(provider);
+      return;
+    }
+    await firebaseAuth.signInWithPopup(provider);
+    closeAuthModal();
+    toast('Signed in with Google! ⚽');
+  } catch (err) {
+    if (err.code === 'auth/popup-blocked') {
+      try {
+        await firebaseAuth.signInWithRedirect(provider);
+        return;
+      } catch (rErr) {
+        showAuthError('signin-error', mapAuthError(rErr));
+      }
+    } else {
+      showAuthError('signin-error', mapAuthError(err));
+    }
+  }
+}
+
+async function handleSignInWithEmail(email, password) {
+  if (!firebaseAuth) return;
+  try {
+    await firebaseAuth.signInWithEmailAndPassword(email, password);
+    closeAuthModal();
+    toast('Welcome back! Signed in. ⚽');
+  } catch (err) {
+    showAuthError('signin-error', mapAuthError(err));
+  }
+}
+
+async function handleRegisterWithEmail(handle, email, password, isAgeChecked) {
+  if (!isAgeChecked) {
+    showAuthError('register-error', 'You must confirm you are 18+ to create an account.');
+    return;
+  }
+  if (!isValidHandle(handle)) {
+    showAuthError('register-error', 'Gamertag must be 3–20 letters, numbers, or underscores.');
+    return;
+  }
+  if (!password || password.length < 8) {
+    showAuthError('register-error', 'Password must be at least 8 characters long.');
+    return;
+  }
+  if (!firebaseAuth) return;
+
+  try {
+    if (firestoreDb) {
+      const handleDoc = await firestoreDb.collection('handles').doc(handle.toLowerCase()).get();
+      if (handleDoc.exists) {
+        showAuthError('register-error', 'Gamertag @' + handle + ' is already taken. Please choose another.');
+        return;
+      }
+    }
+
+    const cred = await firebaseAuth.createUserWithEmailAndPassword(email, password);
+    if (cred.user) {
+      await cred.user.sendEmailVerification();
+      await claimHandleTransaction(cred.user.uid, handle, '⚽');
+      currentAuthProfile = { handle, avatar: '⚽', createdAt: new Date().toISOString() };
+      saveUserProfile(handle);
+      $('verify-email-display').textContent = email;
+      switchAuthModalView('auth-verify-view');
+      toast('Account created! Verification link sent to ' + email);
+    }
+  } catch (err) {
+    showAuthError('register-error', mapAuthError(err));
+  }
+}
+
+async function resendVerificationEmail() {
+  const now = Date.now();
+  if (now - lastResendVerificationTime < 60000) {
+    const remaining = Math.ceil((60000 - (now - lastResendVerificationTime)) / 1000);
+    toast('Please wait ' + remaining + 's before requesting another verification email.');
+    return;
+  }
+  if (!firebaseAuth || !firebaseAuth.currentUser) {
+    toast('No signed-in user found.');
+    return;
+  }
+  try {
+    await firebaseAuth.currentUser.sendEmailVerification();
+    lastResendVerificationTime = Date.now();
+    toast('Verification email resent! Check your inbox or spam folder.');
+    const status = $('verify-resend-status');
+    if (status) status.textContent = 'Verification email sent just now.';
+  } catch (err) {
+    toast(mapAuthError(err));
+  }
+}
+
+async function checkEmailVerified() {
+  if (!firebaseAuth || !firebaseAuth.currentUser) return;
+  try {
+    await firebaseAuth.currentUser.reload();
+    if (firebaseAuth.currentUser.emailVerified) {
+      toast('Email verified! You now have full league access. ⚽');
+      closeAuthModal();
+      updateHeaderAuthUI();
+      render();
+    } else {
+      toast('Email not verified yet. Please tap the link sent to your inbox.');
+    }
+  } catch (e) {
+    toast('Error checking verification: ' + (e.message || 'Try again'));
+  }
+}
+
+async function handleForgotPassword(email) {
+  if (!email || !firebaseAuth) return;
+  try {
+    await firebaseAuth.sendPasswordResetEmail(email);
+    const box = $('forgot-msg');
+    if (box) {
+      box.hidden = false;
+      box.textContent = 'Password reset email sent to ' + email + '. Follow the instructions to reset your password.';
+    }
+    toast('Password reset link dispatched.');
+  } catch (err) {
+    showAuthError('forgot-msg', mapAuthError(err));
+  }
+}
+
+async function handleChangePassword(currentPass, newPass) {
+  if (!firebaseAuth || !firebaseAuth.currentUser) return;
+  if (!newPass || newPass.length < 8) {
+    showAuthError('change-pass-error', 'New password must be at least 8 characters long.');
+    return;
+  }
+  try {
+    const cred = firebase.auth.EmailAuthProvider.credential(firebaseAuth.currentUser.email, currentPass);
+    await firebaseAuth.currentUser.reauthenticateWithCredential(cred);
+    await firebaseAuth.currentUser.updatePassword(newPass);
+    toast('Password successfully updated!');
+    const errBox = $('change-pass-error');
+    if (errBox) errBox.hidden = true;
+    $('profile-change-password-form').reset();
+  } catch (err) {
+    showAuthError('change-pass-error', mapAuthError(err));
+  }
+}
+
+async function handleSignOut() {
+  if (firebaseAuth) {
+    try {
+      await firebaseAuth.signOut();
+    } catch (e) {}
+  }
+  currentAuthUser = null;
+  currentAuthProfile = null;
+  try {
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+  } catch (e) {}
+  closeAuthModal();
+  toast('Signed out.');
+  updateHeaderAuthUI();
+  render();
+}
+
+function initFirebaseAuth() {
+  if (!firebaseAuth) return;
+
+  firebaseAuth.getRedirectResult().then(result => {
+    if (result && result.user) {
+      toast('Signed in with Google! ⚽');
+    }
+  }).catch(err => {
+    console.warn('Redirect sign-in notice:', err);
+    toast(mapAuthError(err));
+  });
+
+  firebaseAuth.onAuthStateChanged(async user => {
+    currentAuthUser = user;
+    if (user) {
+      try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) {}
+      await ensureUserProfile(user);
+      hasSyncedUserLeagues = false;
+      await syncUserLeaguesFromCloud();
+      try { await syncDiaryFromCloud(); } catch (e) {}
+    } else {
+      currentAuthProfile = null;
+      try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) {}
+    }
+    updateHeaderAuthUI();
+    render();
+  });
 }
 
 function isIos() {
@@ -4397,21 +4844,25 @@ document.addEventListener('click', event => {
   }
   if (t.id === 'header-install-btn' || t.id === 'btn-trigger-native-install') { triggerDirectDownload(); return; }
   if (t.dataset.closeInstall !== undefined) { closeInstallModal(); return; }
-  if (t.id === 'header-auth-btn' || t.id === 'header-user-btn') { openAuthModal(); return; }
+  if (t.id === 'header-auth-btn' || t.id === 'header-user-btn' || t.dataset.openAuth !== undefined) { openAuthModal(); return; }
   if (t.dataset.closeAuth !== undefined) { closeAuthModal(); return; }
+  if (t.id === 'btn-auth-google') { signInWithGoogle(); return; }
+  if (t.id === 'link-to-register') { switchAuthModalView('auth-register-view'); return; }
+  if (t.id === 'link-to-signin' || t.id === 'link-verify-to-signin' || t.id === 'link-forgot-to-signin') { switchAuthModalView('auth-signin-view'); return; }
+  if (t.id === 'link-to-forgot') { switchAuthModalView('auth-forgot-view'); return; }
+  if (t.id === 'btn-check-verified') { checkEmailVerified(); return; }
+  if (t.id === 'btn-resend-verification' || t.id === 'btn-profile-resend-verify') { resendVerificationEmail(); return; }
   if (t.id === 'btn-switch-handle') { closeAuthModal(); const _p = getUserProfile();
     $('player-handle-input').value = _p.handle;
     if ($('player-town-input')) $('player-town-input').value = _p.town || 'Paisley';
     if ($('player-region-input')) $('player-region-input').value = _p.region || 'Renfrewshire';
     if ($('player-country-input')) $('player-country-input').value = _p.country || 'Scotland';
     $('handle-modal').hidden = false; return; }
-  if (t.id === 'btn-google-signout') {
-    saveAuthUser(null);
-    closeAuthModal();
-    toast('Signed out from Google account.');
-    render();
+  if (t.id === 'btn-signout' || t.id === 'btn-google-signout') {
+    handleSignOut();
     return;
   }
+  if (t.id === 'btn-auth-open-gdpr') { $('gdpr-modal').hidden = false; return; }
   if (t.id === 'btn-trigger-native-install') {
     if (deferredInstallPrompt) {
       deferredInstallPrompt.prompt();
@@ -4451,10 +4902,13 @@ document.addEventListener('click', event => {
     renameLeague(t.dataset.renameLeague);
   }
   else if (t.dataset.kickPlayer !== undefined) {
-    kickPlayerFromLeague(t.dataset.leagueCode, t.dataset.kickPlayer);
+    kickPlayerFromLeague(t.dataset.leagueCode, t.dataset.kickUid, t.dataset.kickPlayer);
   }
   else if (t.dataset.deleteLeague !== undefined) {
     deleteLeague(t.dataset.deleteLeague, t.dataset.leagueCode);
+  }
+  else if (t.dataset.leaveLeague !== undefined) {
+    leaveLeague(t.dataset.leaveLeague, t.dataset.leagueCode);
   }
   else if (t.dataset.shareLeague !== undefined) {
     const code = t.dataset.shareLeague;
@@ -4540,12 +4994,48 @@ document.addEventListener('change', event => {
 document.addEventListener('submit', event => {
   if (event.target.id === 'diary-form') handleDiaryFormSubmit(event);
 
+    if (event.target.id === 'auth-signin-form') {
+    event.preventDefault();
+    handleSignInWithEmail($('signin-email').value.trim(), $('signin-password').value);
+    return;
+  }
+  if (event.target.id === 'auth-register-form') {
+    event.preventDefault();
+    handleRegisterWithEmail(
+      $('register-handle').value.trim(),
+      $('register-email').value.trim(),
+      $('register-password').value,
+      $('register-age-check').checked
+    );
+    return;
+  }
+  if (event.target.id === 'auth-forgot-form') {
+    event.preventDefault();
+    handleForgotPassword($('forgot-email').value.trim());
+    return;
+  }
+  if (event.target.id === 'profile-change-password-form') {
+    event.preventDefault();
+    handleChangePassword($('change-current-pass').value, $('change-new-pass').value);
+    return;
+  }
   if (event.target.id === 'create-league-form') {
     event.preventDefault();
+    const user = getAuthUser();
+    if (!user || !user.signedIn) {
+      toast('Please sign in or create an account to start a private league.');
+      openAuthModal();
+      return;
+    }
+    if (!user.emailVerified) {
+      toast('Please verify your email address before creating a league.');
+      openAuthModal();
+      return;
+    }
     const name = ($('new-league-name').value || '').trim() || 'My Friends League';
     const icon = ($('new-league-icon') && $('new-league-icon').value) || '⚽';
     const freq = ($('new-league-freq') && $('new-league-freq').value) || 'weekly';
-    const code = 'BUDDY-' + Math.floor(Math.random() * 8999 + 1000);
+    const code = generateSecureLeagueCode();
     const prof = getUserProfile();
     const newLeague = {
       id: 'league-' + Date.now(),
@@ -4553,8 +5043,10 @@ document.addEventListener('submit', event => {
       icon,
       freq,
       code,
-      creator_handle: prof.handle,
+      creatorUid: user.uid,
+      creatorHandle: prof.handle,
       created_at: new Date().toISOString().slice(0, 10),
+      is_joined: false,
       members: []
     };
     const list = getStoredLeagues();
@@ -4566,6 +5058,7 @@ document.addEventListener('submit', event => {
     $('league-modal').hidden = true;
     toast('League ' + icon + ' ' + name + ' created! Share code ' + code);
     render();
+    return;
   }
   if (event.target.id === 'join-league-form') {
     event.preventDefault();
@@ -4574,7 +5067,9 @@ document.addEventListener('submit', event => {
     $('league-modal').hidden = true;
     toast('Joining league ' + code + '...');
     joinCloudLeague(code);
-  }  if (event.target.id === 'commercial-enquiry-form') {
+    return;
+  }
+  if (event.target.id === 'commercial-enquiry-form') {
     event.preventDefault();
     const name = ($('comm-name').value || '').trim();
     const company = ($('comm-company').value || '').trim();
@@ -4645,32 +5140,40 @@ document.addEventListener('submit', event => {
     render();
     return;
   }
-  if (event.target.id === 'google-quick-signin-form') {
-    event.preventDefault();
-    const name = ($('google-display-name').value || '').trim() || 'Buddy Player';
-    const email = ($('google-email-input').value || '').trim() || 'buddy@gmail.com';
-    const handle = name.replace(/\s+/g, '').slice(0, 16);
-    const user = { signedIn: true, name, email, handle, signedAt: new Date().toISOString() };
-    saveAuthUser(user);
-    saveUserProfile(handle);
-    closeAuthModal();
-    toast('Welcome, ' + name + '! Google account linked.');
-    render();
-  }
   if (event.target.id === 'handle-form') {
     event.preventDefault();
-    const handle = $('player-handle-input').value;
-    const town = $('player-town-input') ? $('player-town-input').value : 'Paisley';
-    const region = $('player-region-input') ? $('player-region-input').value : 'Renfrewshire';
-    const country = $('player-country-input') ? $('player-country-input').value : 'Scotland';
+    const handle = ($('player-handle-input').value || '').trim();
+    const town = $('player-town-input') ? $('player-town-input').value.trim() : 'Paisley';
+    const region = $('player-region-input') ? $('player-region-input').value.trim() : 'Renfrewshire';
+    const country = $('player-country-input') ? $('player-country-input').value.trim() : 'Scotland';
+
+    if (!isValidHandle(handle)) {
+      toast('Gamertag must be 3–20 characters (letters, numbers, underscores only).');
+      return;
+    }
+
+    const user = getAuthUser();
+    if (user && user.signedIn && firestoreDb) {
+      toast('Updating gamertag...');
+      claimHandleTransaction(user.uid, handle, getUserProfile().avatar || '⚽').then(() => {
+        saveUserProfile(handle, town, region, country);
+        $('handle-modal').hidden = true;
+        toast('Gamertag and location updated! ⚽');
+        getStoredLeagues().forEach(l => syncLeagueToCloud(l));
+        render();
+      }).catch(err => {
+        toast(err.message || 'Error updating gamertag.');
+      });
+      return;
+    }
+
     saveUserProfile(handle, town, region, country);
     $('handle-modal').hidden = true;
     toast('Profile and Regional Leagues updated!');
-    // Sync all user's custom leagues to cloud with new handle/location
     getStoredLeagues().forEach(l => syncLeagueToCloud(l));
     render();
+    return;
   }
-
   else if (event.target.id === 'fb-form') handleFeedbackSubmit(event);
 });
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('diary-modal').hidden) closeDiary(); });
@@ -4680,9 +5183,9 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 try { updateButlerUI(); } catch (e) {}
 loadData().then(() => {
-  fetchCloudDataRest();
   render();
 });
+initFirebaseAuth();
 
 const APP_VERSION = 'v58';
 

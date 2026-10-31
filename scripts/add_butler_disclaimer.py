@@ -12,3 +12,4 @@ if target in text:
     print("Added responsible gambling note to butler-modal")
 else:
     print("Warning: target not found in index.html")
+

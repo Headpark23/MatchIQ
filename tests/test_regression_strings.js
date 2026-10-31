@@ -9,7 +9,7 @@ const css = fs.readFileSync(path.join(root, 'styles.css'), 'utf8');
 const predictions = JSON.parse(fs.readFileSync(path.join(root, 'data', 'predictions.json'), 'utf8')).predictions;
 
 const checks = [
-  ['one stylesheet, no legacy inline style block', html.includes('href="styles.css"') && !/<style>/.test(html)],
+  ['one stylesheet, no legacy inline style block', html.includes('href="styles.css') && !/<style>/.test(html)],
   ['no legacy Stadium Control dashboard markup', !/stadium-control-card|research-hub|ribbon-bar/.test(html + app)],
   ['every view is routed through one renderer', ['viewHome', 'viewFixtures', 'viewMatch', 'viewResults', 'viewDiary', 'viewMore'].every(v => app.includes('function ' + v + '('))],
   ['every match analysis lists all six markets', /MARKET_ORDER = \['result', 'goals', 'btts', 'corners', 'cards', 'shots'\]/.test(app)],

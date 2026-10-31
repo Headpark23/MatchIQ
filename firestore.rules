@@ -1,0 +1,219 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users/{uid}
+    // Document ID: Firebase Auth UID
+    // Fields:
+    //   - handle: string, 3-20 chars, regex '^[A-Za-z0-9_]{3,20}$' (required)
+    //   - avatar: string, max 10 chars (optional)
+    //   - createdAt: timestamp (required, immutable)
+    //   - updatedAt: timestamp (optional)
+    //
+    // Subcollection: users/{uid}/leagueMemberships/{code}
+    // Document ID: 8-char league code
+    // Access: Owner only (read/write)
+    //
+    // Subcollection: users/{uid}/diary/{betId}
+    // Document ID: Bet entry ID
+    // Access: Owner only (read/write)
+    //
+    // Collection: handles/{handleLower}
+    // Document ID: Canonical lowercase handle
+    // Fields:
+    //   - uid: string, auth UID (required, immutable)
+    //   - handle: string, original case, regex '^[A-Za-z0-9_]{3,20}$' (required, immutable)
+    //   - createdAt: timestamp (required, immutable)
+    // Access: Public read (availability checks), authenticated create/delete by owner
+    //
+    // Collection: leagues/{code}
+    // Document ID: 8-char code '^[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{8}$'
+    // Fields:
+    //   - name: string, 1-64 chars (required)
+    //   - icon: string, 1-10 chars (required)
+    //   - freq: string, 'weekly' | 'monthly' | 'yearly' (required)
+    //   - code: string, matches doc ID (required, immutable)
+    //   - creatorUid: string (required, immutable)
+    //   - createdAt: timestamp or ISO string (required, immutable)
+    //   - memberCount: int, >= 0 (optional)
+    // Access: Verified user get, no list. Creator create/update/delete.
+    //
+    // Subcollection: leagues/{code}/members/{uid}
+    // Document ID: Firebase Auth UID
+    // Fields:
+    //   - handle: string, 3-20 chars (required)
+    //   - avatar: string, max 10 chars (required)
+    //   - joinedAt: timestamp or string (required, immutable)
+    //   - points: number, -1000 to 50000 (required)
+    //   - winRate: number, 0 to 100 (required)
+    //   - roi: number, -100 to 10000 (required)
+    //   - settled: number, >= 0 (required)
+    //   - form: list of strings, size <= 10 (required)
+    //   - updatedAt: timestamp or string (required)
+    // Access: Verified user read. Member create/update. Member leave OR Creator kick on delete.
+    //
+    // Collection: geo_leagues/{tierId}
+    // Document ID: Geographic tier ID ('geo-world', etc.)
+    // Access: Public read, client write disabled (server managed).
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isAuthenticated() && (
+        request.auth.token.get('email_verified', false) == true ||
+        ('firebase' in request.auth.token &&
+         request.auth.token.firebase.get('sign_in_provider', '') == 'google.com')
+      );
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUser(data) {
+      return data.keys().hasOnly(['handle', 'avatar', 'createdAt', 'updatedAt']) &&
+        data.keys().hasAll(['handle', 'createdAt']) &&
+        data.handle is string &&
+        data.handle.matches('^[A-Za-z0-9_]{3,20}$') &&
+        (!('avatar' in data) || (data.avatar is string && data.avatar.size() <= 10)) &&
+        data.createdAt is timestamp &&
+        (!('updatedAt' in data) || (data.updatedAt is timestamp));
+    }
+
+    function isValidHandleDoc(data) {
+      return data.keys().hasOnly(['uid', 'handle', 'createdAt']) &&
+        data.keys().hasAll(['uid', 'handle', 'createdAt']) &&
+        data.uid is string &&
+        data.uid.size() <= 128 &&
+        data.handle is string &&
+        data.handle.matches('^[A-Za-z0-9_]{3,20}$') &&
+        data.createdAt is timestamp;
+    }
+
+    function isValidLeague(data) {
+      return data.keys().hasOnly(['name', 'icon', 'freq', 'code', 'creatorUid', 'createdAt', 'memberCount']) &&
+        data.keys().hasAll(['name', 'icon', 'freq', 'code', 'creatorUid', 'createdAt']) &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 64 &&
+        data.icon is string && data.icon.size() >= 1 && data.icon.size() <= 10 &&
+        data.freq is string && data.freq in ['weekly', 'monthly', 'yearly'] &&
+        data.code is string && data.code.matches('^[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{8}$') &&
+        data.creatorUid is string && data.creatorUid.size() <= 128 &&
+        (data.createdAt is timestamp || (data.createdAt is string && data.createdAt.size() <= 40)) &&
+        (!('memberCount' in data) || (data.memberCount is int && data.memberCount >= 0));
+    }
+
+    function isValidMember(data) {
+      return data.keys().hasOnly(['handle', 'avatar', 'joinedAt', 'points', 'winRate', 'roi', 'settled', 'form', 'updatedAt']) &&
+        data.keys().hasAll(['handle', 'avatar', 'joinedAt', 'points', 'winRate', 'roi', 'settled', 'form', 'updatedAt']) &&
+        data.handle is string && data.handle.matches('^[A-Za-z0-9_]{3,20}$') &&
+        data.avatar is string && data.avatar.size() <= 10 &&
+        (data.joinedAt is timestamp || (data.joinedAt is string && data.joinedAt.size() <= 40)) &&
+        data.points is number && data.points >= -1000 && data.points <= 50000 &&
+        data.winRate is number && data.winRate >= 0 && data.winRate <= 100 &&
+        data.roi is number && data.roi >= -100 && data.roi <= 10000 &&
+        data.settled is number && data.settled >= 0 && data.settled <= 1000000 &&
+        data.form is list && data.form.size() <= 10 &&
+        (data.updatedAt is timestamp || (data.updatedAt is string && data.updatedAt.size() <= 40));
+    }
+
+    // ===============================================================
+    // Collection Match Rules
+    // ===============================================================
+
+    // 1. User Profiles & Subcollections
+    match /users/{uid} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(uid) && isValidUser(request.resource.data);
+      allow update: if isOwner(uid) && isValidUser(request.resource.data) &&
+        request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if false;
+
+      // 2. User League Memberships index
+      match /leagueMemberships/{code} {
+        allow read, write: if isOwner(uid);
+      }
+
+      // 3. User Cloud Diary entries
+      match /diary/{betId} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // 4. Global Handle Registry (doc ID = handleLower)
+    match /handles/{handleLower} {
+      allow read: if true;
+      allow create: if isAuthenticated() &&
+        request.resource.data.uid == request.auth.uid &&
+        handleLower == request.resource.data.handle.lower() &&
+        isValidHandleDoc(request.resource.data);
+      allow update: if false;
+      allow delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+
+    // 5. Private Leagues
+    match /leagues/{code} {
+      allow get: if isVerifiedUser();
+      allow list: if false;
+
+      allow create: if isVerifiedUser() &&
+        request.resource.data.creatorUid == request.auth.uid &&
+        request.resource.data.code == code &&
+        isValidLeague(request.resource.data);
+
+      allow update: if isVerifiedUser() &&
+        resource.data.creatorUid == request.auth.uid &&
+        request.resource.data.creatorUid == resource.data.creatorUid &&
+        request.resource.data.code == resource.data.code &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        isValidLeague(request.resource.data);
+
+      allow delete: if isVerifiedUser() &&
+        resource.data.creatorUid == request.auth.uid;
+
+      // 6. League Members Subcollection
+      match /members/{uid} {
+        allow read: if isVerifiedUser();
+
+        allow create: if isVerifiedUser() &&
+          request.auth.uid == uid &&
+          isValidMember(request.resource.data);
+
+        allow update: if isVerifiedUser() &&
+          request.auth.uid == uid &&
+          request.resource.data.joinedAt == resource.data.joinedAt &&
+          isValidMember(request.resource.data);
+
+        allow delete: if isVerifiedUser() &&
+          (request.auth.uid == uid ||
+           get(/databases/$(database)/documents/leagues/$(code)).data.creatorUid == request.auth.uid);
+      }
+    }
+
+    // 7. Geographic Tier Leagues (Read only for clients; server-aggregated)
+    match /geo_leagues/{tierId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // 8. Default Deny on all unmatched paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

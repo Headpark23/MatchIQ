@@ -688,6 +688,99 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   padding: 12px 18px; border-radius: 12px; margin-top: 14px; transition: all .15s ease;
 }
 .google-primary-btn:hover { background: #f3f4f6; box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 16px 0;
+  color: var(--soft);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--line);
+}
+.auth-divider span {
+  padding: 0 10px;
+}
+.auth-error-box {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+.auth-info-box {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #7dd3fc;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+.auth-warning-box {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fcd34d;
+  font-size: 13px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-top: 14px;
+  line-height: 1.4;
+}
+.text-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--cyan);
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-block;
+}
+.text-link:hover { color: #fff; }
+.inline-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--cyan);
+  font-size: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline;
+}
+.auth-checkbox-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 14px 0 10px;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+.auth-checkbox-row input[type="checkbox"] {
+  margin-top: 3px;
+  accent-color: var(--pick);
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.auth-nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+}
+
 .signed-in-profile {
   display: flex; align-items: center; gap: 16px; padding: 18px;
   background: rgba(255, 255, 255, 0.03); border: 1px solid var(--line); border-radius: 14px;
