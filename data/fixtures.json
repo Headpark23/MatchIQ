@@ -11823,16 +11823,20 @@
    "home": "Chelsea",
    "away": "Man United",
    "kickoff_utc": "2026-10-31T12:30:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
    "sources": [
     "football-data.org",
     "openligadb",
     "openfootball"
    ],
    "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
+   "kickoff_history": [],
+   "confirmed_at": "2026-10-31T14:30:00Z"
   },
   {
    "id": "ELC-2627-lincoln-v-birmingham",
@@ -49252,6 +49256,846 @@
     "openfootball"
    ],
    "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC0-2627-celtic-v-kilmarnock",
+   "competition": "SC0",
+   "season": "2627",
+   "home": "Celtic",
+   "away": "Kilmarnock",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    3,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC0-2627-rangers-v-motherwell",
+   "competition": "SC0",
+   "season": "2627",
+   "home": "Rangers",
+   "away": "Motherwell",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC0-2627-aberdeen-v-hearts",
+   "competition": "SC0",
+   "season": "2627",
+   "home": "Aberdeen",
+   "away": "Hearts",
+   "kickoff_utc": "2026-10-19T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC0-2627-dundee-united-v-st-johnstone",
+   "competition": "SC0",
+   "season": "2627",
+   "home": "Dundee United",
+   "away": "St. Johnstone",
+   "kickoff_utc": "2026-10-19T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC0-2627-hibernian-v-dundee",
+   "competition": "SC0",
+   "season": "2627",
+   "home": "Hibernian",
+   "away": "Dundee",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    2
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC0-2627-st-mirren-v-ross-county",
+   "competition": "SC0",
+   "season": "2627",
+   "home": "St. Mirren",
+   "away": "Ross County",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC1-2627-falkirk-v-ayr-united",
+   "competition": "SC1",
+   "season": "2627",
+   "home": "Falkirk",
+   "away": "Ayr United",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC1-2627-livingston-v-partick-thistle",
+   "competition": "SC1",
+   "season": "2627",
+   "home": "Livingston",
+   "away": "Partick Thistle",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC1-2627-dunfermline-v-raith-rovers",
+   "competition": "SC1",
+   "season": "2627",
+   "home": "Dunfermline",
+   "away": "Raith Rovers",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC1-2627-queens-park-v-greenock-morton",
+   "competition": "SC1",
+   "season": "2627",
+   "home": "Queen's Park",
+   "away": "Greenock Morton",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "SC1-2627-hamilton-v-airdrieonians",
+   "competition": "SC1",
+   "season": "2627",
+   "home": "Hamilton",
+   "away": "Airdrieonians",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    2
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E2-2627-birmingham-v-reading",
+   "competition": "E2",
+   "season": "2627",
+   "home": "Birmingham",
+   "away": "Reading",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    3,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E2-2627-wrexham-v-charlton",
+   "competition": "E2",
+   "season": "2627",
+   "home": "Wrexham",
+   "away": "Charlton",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E2-2627-huddersfield-v-bolton",
+   "competition": "E2",
+   "season": "2627",
+   "home": "Huddersfield",
+   "away": "Bolton",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E2-2627-stockport-v-lincoln",
+   "competition": "E2",
+   "season": "2627",
+   "home": "Stockport",
+   "away": "Lincoln",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E2-2627-barnsley-v-wycombe",
+   "competition": "E2",
+   "season": "2627",
+   "home": "Barnsley",
+   "away": "Wycombe",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E2-2627-blackpool-v-wigan",
+   "competition": "E2",
+   "season": "2627",
+   "home": "Blackpool",
+   "away": "Wigan",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E2-2627-peterborough-v-leyton-orient",
+   "competition": "E2",
+   "season": "2627",
+   "home": "Peterborough",
+   "away": "Leyton Orient",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E2-2627-exeter-v-rotherham",
+   "competition": "E2",
+   "season": "2627",
+   "home": "Exeter",
+   "away": "Rotherham",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E3-2627-port-vale-v-notts-county",
+   "competition": "E3",
+   "season": "2627",
+   "home": "Port Vale",
+   "away": "Notts County",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E3-2627-doncaster-v-chesterfield",
+   "competition": "E3",
+   "season": "2627",
+   "home": "Doncaster",
+   "away": "Chesterfield",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E3-2627-bradford-city-v-walsall",
+   "competition": "E3",
+   "season": "2627",
+   "home": "Bradford City",
+   "away": "Walsall",
+   "kickoff_utc": "2026-10-18T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E3-2627-crewe-v-grimsby",
+   "competition": "E3",
+   "season": "2627",
+   "home": "Crewe",
+   "away": "Grimsby",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E3-2627-salford-city-v-fleetwood",
+   "competition": "E3",
+   "season": "2627",
+   "home": "Salford City",
+   "away": "Fleetwood",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "E3-2627-barrow-v-cheltenham",
+   "competition": "E3",
+   "season": "2627",
+   "home": "Barrow",
+   "away": "Cheltenham",
+   "kickoff_utc": "2026-10-25T14:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "N1-2627-psv-v-rkc-waalwijk",
+   "competition": "N1",
+   "season": "2627",
+   "home": "PSV",
+   "away": "RKC Waalwijk",
+   "kickoff_utc": "2026-10-18T18:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    5,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "N1-2627-ajax-v-fc-groningen",
+   "competition": "N1",
+   "season": "2627",
+   "home": "Ajax",
+   "away": "FC Groningen",
+   "kickoff_utc": "2026-10-18T18:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    3,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "N1-2627-feyenoord-v-fc-twente",
+   "competition": "N1",
+   "season": "2627",
+   "home": "Feyenoord",
+   "away": "FC Twente",
+   "kickoff_utc": "2026-10-19T13:30:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "N1-2627-az-alkmaar-v-fc-utrecht",
+   "competition": "N1",
+   "season": "2627",
+   "home": "AZ Alkmaar",
+   "away": "FC Utrecht",
+   "kickoff_utc": "2026-10-25T13:30:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "N1-2627-go-ahead-eagles-v-fortuna-sittard",
+   "competition": "N1",
+   "season": "2627",
+   "home": "Go Ahead Eagles",
+   "away": "Fortuna Sittard",
+   "kickoff_utc": "2026-10-25T15:45:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "N1-2627-sparta-rotterdam-v-sc-heerenveen",
+   "competition": "N1",
+   "season": "2627",
+   "home": "Sparta Rotterdam",
+   "away": "sc Heerenveen",
+   "kickoff_utc": "2026-10-25T19:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-sporting-cp-v-rio-ave",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Sporting CP",
+   "away": "Rio Ave",
+   "kickoff_utc": "2026-10-18T19:30:00Z",
+   "status": "FINISHED",
+   "score": [
+    3,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-fc-porto-v-vitoria-guimaraes",
+   "competition": "P1",
+   "season": "2627",
+   "home": "FC Porto",
+   "away": "Vitoria Guimaraes",
+   "kickoff_utc": "2026-10-18T19:30:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-benfica-v-santa-clara",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Benfica",
+   "away": "Santa Clara",
+   "kickoff_utc": "2026-10-19T17:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    4,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-sc-braga-v-moreirense",
+   "competition": "P1",
+   "season": "2627",
+   "home": "SC Braga",
+   "away": "Moreirense",
+   "kickoff_utc": "2026-10-25T17:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-famalicao-v-gil-vicente",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Famalicao",
+   "away": "Gil Vicente",
+   "kickoff_utc": "2026-10-25T19:30:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "CL-2627-real-madrid-v-vfb-stuttgart",
+   "competition": "CL",
+   "season": "2627",
+   "home": "Real Madrid",
+   "away": "VfB Stuttgart",
+   "kickoff_utc": "2026-09-17T19:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    3,
+    1
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "CL-2627-ac-milan-v-liverpool",
+   "competition": "CL",
+   "season": "2627",
+   "home": "AC Milan",
+   "away": "Liverpool",
+   "kickoff_utc": "2026-09-17T19:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    3
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "CL-2627-bayern-munich-v-dinamo-zagreb",
+   "competition": "CL",
+   "season": "2627",
+   "home": "Bayern Munich",
+   "away": "Dinamo Zagreb",
+   "kickoff_utc": "2026-09-17T19:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    9,
+    2
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "CL-2627-arsenal-v-paris-sg",
+   "competition": "CL",
+   "season": "2627",
+   "home": "Arsenal",
+   "away": "Paris SG",
+   "kickoff_utc": "2026-10-01T19:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "CL-2627-man-city-v-inter-milan",
+   "competition": "CL",
+   "season": "2627",
+   "home": "Man City",
+   "away": "Inter Milan",
+   "kickoff_utc": "2026-09-18T19:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    0,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "CL-2627-sporting-cp-v-lille",
+   "competition": "CL",
+   "season": "2627",
+   "home": "Sporting CP",
+   "away": "Lille",
+   "kickoff_utc": "2026-09-17T19:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.co.uk",
+   "sources": [
+    "football-data.co.uk",
+    "football-data.org"
+   ],
+   "first_seen": "2026-10-15T10:00:00.000000+00:00",
    "kickoff_history": []
   }
  ]

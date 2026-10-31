@@ -1913,7 +1913,17 @@
    ],
    "origin": "pipeline",
    "sha256": "88019d356d53ca9875bed1fca6ef80e78147badeca937d32ff83b291935467c2",
-   "superseded_by": "PL-2627-chelsea-v-man-united#r2"
+   "superseded_by": "PL-2627-chelsea-v-man-united#r2",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-31T12:30:00Z",
+    "confirmed_at": "2026-10-31T16:48:24.322297+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PL-2627-bournemouth-v-leeds#r1",
@@ -6334,7 +6344,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "b6c66f6920aa34a9c4a372db4379314d38ba4d96921bae415e4d2102edbbf4f6",
-   "superseded_by": "PL-2627-chelsea-v-man-united#r3"
+   "superseded_by": "PL-2627-chelsea-v-man-united#r3",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-31T12:30:00Z",
+    "confirmed_at": "2026-10-31T16:48:24.322297+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PL-2627-bournemouth-v-leeds#r2",
@@ -44895,7 +44915,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "52fcfb0f604c1d41fe88d30d7527c12e85f33bfa7340a5dd76f750aee7d1d361",
-   "superseded_by": "PL-2627-chelsea-v-man-united#r4"
+   "superseded_by": "PL-2627-chelsea-v-man-united#r4",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-31T12:30:00Z",
+    "confirmed_at": "2026-10-31T16:48:24.322297+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "ELC-2627-lincoln-v-birmingham#r2",
@@ -71345,7 +71375,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "ab6a3826236b27b5e93497ad8a5fb0ad451c8be8ac57728d219f770e201e820d",
-   "superseded_by": "PL-2627-chelsea-v-man-united#r5"
+   "superseded_by": "PL-2627-chelsea-v-man-united#r5",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-31T12:30:00Z",
+    "confirmed_at": "2026-10-31T16:48:24.322297+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PL-2627-bournemouth-v-leeds#r4",
@@ -77036,7 +77076,68 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "c3d5158184aab1a5230ff01588c5f35cc8d18139a35ba42fd7f090cad94b0471"
+   "sha256": "c3d5158184aab1a5230ff01588c5f35cc8d18139a35ba42fd7f090cad94b0471",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-31T12:30:00Z",
+    "confirmed_at": "2026-10-31T16:48:24.322297+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.40518,
+     "logloss": 0.73334,
+     "rps": 0.17008
+    },
+    "goals": {
+     "total": 2,
+     "line": 2.5,
+     "pick_won": false,
+     "brier": 0.3145,
+     "logloss": 0.8228
+    },
+    "corners": {
+     "total": 15,
+     "line": 9.5,
+     "pick_won": true,
+     "brier": 0.20142,
+     "logloss": 0.59566
+    },
+    "cards": {
+     "total": 4,
+     "line": 3.5,
+     "pick_won": true,
+     "brier": 0.16867,
+     "logloss": 0.52882
+    },
+    "shots": {
+     "total": 10,
+     "line": 8.5,
+     "pick_won": false,
+     "brier": 0.25604,
+     "logloss": 0.70522
+    },
+    "btts": {
+     "outcome": "no",
+     "pick_won": false,
+     "brier": 0.32879,
+     "logloss": 0.85191
+    },
+    "most_likely": {
+     "market": "cards",
+     "label": "Over 3.5",
+     "p": 0.5893,
+     "won": true,
+     "brier": 0.16867,
+     "logloss": 0.52882
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "PD-2627-levante-v-atletico-madrid#r3",
@@ -109416,6 +109517,3114 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "8c78b58835632aadc63c552d5e8983651461a220f64b5a6a539a49a8dc1a3171"
+  },
+  {
+   "record_id": "SC0-2627-celtic-v-kilmarnock#r1",
+   "match_id": "SC0-2627-celtic-v-kilmarnock",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Celtic",
+    "away": "Kilmarnock",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Celtic win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Celtic win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Kilmarnock win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     3,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.35,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "0d02980d8c18f0c82c650b5088c3509d9ab78a89b77a1d69df5e961e9e3ad5ee"
+  },
+  {
+   "record_id": "SC0-2627-rangers-v-motherwell#r1",
+   "match_id": "SC0-2627-rangers-v-motherwell",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Rangers",
+    "away": "Motherwell",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Rangers win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Rangers win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Motherwell win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.4,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "7e22e065ba231ed1743c5704b07b9e80c9d65237ae7d29ba097b5c6648c6ebeb"
+  },
+  {
+   "record_id": "SC0-2627-aberdeen-v-hearts#r1",
+   "match_id": "SC0-2627-aberdeen-v-hearts",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Aberdeen",
+    "away": "Hearts",
+    "kickoff_utc": "2026-10-19T14:00:00Z"
+   },
+   "published_at": "2026-10-19T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Aberdeen win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Aberdeen win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Hearts win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-19T14:00:00Z",
+    "confirmed_at": "2026-10-19T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.42,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "cd7735f475a7c3a66cf53d048220f2c71df45974fc3675fb1259593b9635b2b8"
+  },
+  {
+   "record_id": "SC0-2627-dundee-united-v-st-johnstone#r1",
+   "match_id": "SC0-2627-dundee-united-v-st-johnstone",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Dundee United",
+    "away": "St. Johnstone",
+    "kickoff_utc": "2026-10-19T14:00:00Z"
+   },
+   "published_at": "2026-10-19T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "D",
+      "label": "Draw",
+      "p": 0.28,
+      "fair_odds": "≈6/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Dundee United win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "St. Johnstone win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-19T14:00:00Z",
+    "confirmed_at": "2026-10-19T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": true,
+     "brier": 0.48,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "82fdb24aeb73f2756e830a0f78396969f61ea52a10d319d31432d4abbac356ce"
+  },
+  {
+   "record_id": "SC0-2627-hibernian-v-dundee#r1",
+   "match_id": "SC0-2627-hibernian-v-dundee",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Hibernian",
+    "away": "Dundee",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Hibernian win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Hibernian win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Dundee win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     2
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": false,
+     "brier": 0.62,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "1eff9e999d7db362966fc5e84854386d9cd90ee7dd5a3b08ee45630ada1ad11e"
+  },
+  {
+   "record_id": "SC0-2627-st-mirren-v-ross-county#r1",
+   "match_id": "SC0-2627-st-mirren-v-ross-county",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "St. Mirren",
+    "away": "Ross County",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "St. Mirren win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "St. Mirren win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Ross County win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.39,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "f611b07357b4e822d8299dbfcc27cc32f3f2433b8b2d0ded7b420d2bdbf0d67e"
+  },
+  {
+   "record_id": "SC1-2627-falkirk-v-ayr-united#r1",
+   "match_id": "SC1-2627-falkirk-v-ayr-united",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC1",
+    "season": "2627",
+    "home": "Falkirk",
+    "away": "Ayr United",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Falkirk win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Falkirk win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Ayr United win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.41,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "92e9adac18e859a8ccaad57923c2d6190ebd06a1b2bbf4cbe5d51fe5e115568f"
+  },
+  {
+   "record_id": "SC1-2627-livingston-v-partick-thistle#r1",
+   "match_id": "SC1-2627-livingston-v-partick-thistle",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC1",
+    "season": "2627",
+    "home": "Livingston",
+    "away": "Partick Thistle",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Livingston win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Livingston win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Partick Thistle win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": false,
+     "brier": 0.58,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "81e6741d389dd9ff1f3590f50e7dafb84fea26c2636ce3ec750810394a056c1d"
+  },
+  {
+   "record_id": "SC1-2627-dunfermline-v-raith-rovers#r1",
+   "match_id": "SC1-2627-dunfermline-v-raith-rovers",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC1",
+    "season": "2627",
+    "home": "Dunfermline",
+    "away": "Raith Rovers",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Dunfermline win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Dunfermline win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Raith Rovers win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.44,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "2f89f1e8a01d37d5668def4b7fc10936f19084a9c114d5f8ef4ade4466110926"
+  },
+  {
+   "record_id": "SC1-2627-queens-park-v-greenock-morton#r1",
+   "match_id": "SC1-2627-queens-park-v-greenock-morton",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC1",
+    "season": "2627",
+    "home": "Queen's Park",
+    "away": "Greenock Morton",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Queen's Park win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Queen's Park win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Greenock Morton win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.45,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "9d15657fc030fb4ff50ec3393411eecf5f5c451847589e8b59f968cc79c7bac1"
+  },
+  {
+   "record_id": "SC1-2627-hamilton-v-airdrieonians#r1",
+   "match_id": "SC1-2627-hamilton-v-airdrieonians",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC1",
+    "season": "2627",
+    "home": "Hamilton",
+    "away": "Airdrieonians",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "D",
+      "label": "Draw",
+      "p": 0.28,
+      "fair_odds": "≈6/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Hamilton win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Airdrieonians win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     2
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "A",
+     "pick_won": false,
+     "brier": 0.65,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "b421f8d62b1656fc849a53c60a9136055e9bf26d244ce66934650ee49b2c22a5"
+  },
+  {
+   "record_id": "E2-2627-birmingham-v-reading#r1",
+   "match_id": "E2-2627-birmingham-v-reading",
+   "revision": 1,
+   "fixture": {
+    "competition": "E2",
+    "season": "2627",
+    "home": "Birmingham",
+    "away": "Reading",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Birmingham win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Birmingham win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Reading win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     3,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.36,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "ddd5a760851dce704273b8cecb996d21b8f85f88136cb57bc995246b62f696e6"
+  },
+  {
+   "record_id": "E2-2627-wrexham-v-charlton#r1",
+   "match_id": "E2-2627-wrexham-v-charlton",
+   "revision": 1,
+   "fixture": {
+    "competition": "E2",
+    "season": "2627",
+    "home": "Wrexham",
+    "away": "Charlton",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Wrexham win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Wrexham win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Charlton win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.38,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "6d2cced3041ad834d6bebe1c783858e21a26a0743d477232f006519aa5c9cf18"
+  },
+  {
+   "record_id": "E2-2627-huddersfield-v-bolton#r1",
+   "match_id": "E2-2627-huddersfield-v-bolton",
+   "revision": 1,
+   "fixture": {
+    "competition": "E2",
+    "season": "2627",
+    "home": "Huddersfield",
+    "away": "Bolton",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Huddersfield win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Huddersfield win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Bolton win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.43,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "bb62d81fff3460e157bb0a2173b46fcd4ca5f5907c956d09ecd948d9b73cee08"
+  },
+  {
+   "record_id": "E2-2627-stockport-v-lincoln#r1",
+   "match_id": "E2-2627-stockport-v-lincoln",
+   "revision": 1,
+   "fixture": {
+    "competition": "E2",
+    "season": "2627",
+    "home": "Stockport",
+    "away": "Lincoln",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Stockport win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Stockport win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Lincoln win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.4,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "af4b4e54bc79a942a02fe228a534b2c518abace5ecfae182019c0ec3dfd8d597"
+  },
+  {
+   "record_id": "E2-2627-barnsley-v-wycombe#r1",
+   "match_id": "E2-2627-barnsley-v-wycombe",
+   "revision": 1,
+   "fixture": {
+    "competition": "E2",
+    "season": "2627",
+    "home": "Barnsley",
+    "away": "Wycombe",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Barnsley win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Barnsley win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Wycombe win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": false,
+     "brier": 0.55,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "3fd628d52cd56d7cd0fb50d82b7d87b0eb8e6a9d6fe7f1cd5a71fca3bcb49582"
+  },
+  {
+   "record_id": "E2-2627-blackpool-v-wigan#r1",
+   "match_id": "E2-2627-blackpool-v-wigan",
+   "revision": 1,
+   "fixture": {
+    "competition": "E2",
+    "season": "2627",
+    "home": "Blackpool",
+    "away": "Wigan",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Blackpool win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Blackpool win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Wigan win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.42,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "bd14b157e908e4c270b23ac56415cd3ee10ef042e1d159b62abc9614d0cd3e4b"
+  },
+  {
+   "record_id": "E2-2627-peterborough-v-leyton-orient#r1",
+   "match_id": "E2-2627-peterborough-v-leyton-orient",
+   "revision": 1,
+   "fixture": {
+    "competition": "E2",
+    "season": "2627",
+    "home": "Peterborough",
+    "away": "Leyton Orient",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Peterborough win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Peterborough win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Leyton Orient win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.39,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "eaa71400772617380ceb73a03cae76c5c56fc728ca2e9779f915eed2f2ade649"
+  },
+  {
+   "record_id": "E2-2627-exeter-v-rotherham#r1",
+   "match_id": "E2-2627-exeter-v-rotherham",
+   "revision": 1,
+   "fixture": {
+    "competition": "E2",
+    "season": "2627",
+    "home": "Exeter",
+    "away": "Rotherham",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "D",
+      "label": "Draw",
+      "p": 0.28,
+      "fair_odds": "≈6/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Exeter win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Rotherham win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": true,
+     "brier": 0.49,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "f789636fef2fb5783cff121fa6b1b8be2b0834411622d5c60d44ec34238c5d31"
+  },
+  {
+   "record_id": "E3-2627-port-vale-v-notts-county#r1",
+   "match_id": "E3-2627-port-vale-v-notts-county",
+   "revision": 1,
+   "fixture": {
+    "competition": "E3",
+    "season": "2627",
+    "home": "Port Vale",
+    "away": "Notts County",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Port Vale win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Port Vale win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Notts County win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.42,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "e6459da1221fbcfbe841db3e9c2b2dfaad9c0a665c336c1ead325e9ac429f927"
+  },
+  {
+   "record_id": "E3-2627-doncaster-v-chesterfield#r1",
+   "match_id": "E3-2627-doncaster-v-chesterfield",
+   "revision": 1,
+   "fixture": {
+    "competition": "E3",
+    "season": "2627",
+    "home": "Doncaster",
+    "away": "Chesterfield",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Doncaster win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Doncaster win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Chesterfield win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.43,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "3a3b203cc53facea8d09440f7539a865f88e3ffc3be3cc9e1d0032f0e9cee42b"
+  },
+  {
+   "record_id": "E3-2627-bradford-city-v-walsall#r1",
+   "match_id": "E3-2627-bradford-city-v-walsall",
+   "revision": 1,
+   "fixture": {
+    "competition": "E3",
+    "season": "2627",
+    "home": "Bradford City",
+    "away": "Walsall",
+    "kickoff_utc": "2026-10-18T14:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Bradford City win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Bradford City win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Walsall win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T14:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": false,
+     "brier": 0.56,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "ad0a8df28bff66acdff95d181252f03f339885b6ddf50a7bfd1f817f7328117a"
+  },
+  {
+   "record_id": "E3-2627-crewe-v-grimsby#r1",
+   "match_id": "E3-2627-crewe-v-grimsby",
+   "revision": 1,
+   "fixture": {
+    "competition": "E3",
+    "season": "2627",
+    "home": "Crewe",
+    "away": "Grimsby",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Crewe win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Crewe win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Grimsby win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.4,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "1c550bdb59ebceb2d2255bc6b5db5907ea863aeeae216712c7d175a2a0793943"
+  },
+  {
+   "record_id": "E3-2627-salford-city-v-fleetwood#r1",
+   "match_id": "E3-2627-salford-city-v-fleetwood",
+   "revision": 1,
+   "fixture": {
+    "competition": "E3",
+    "season": "2627",
+    "home": "Salford City",
+    "away": "Fleetwood",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Salford City win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Salford City win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Fleetwood win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.44,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "200185ee66aceab44d8bbc3893ed44d444d14d2a7705b81d2b0bc33dba600ed8"
+  },
+  {
+   "record_id": "E3-2627-barrow-v-cheltenham#r1",
+   "match_id": "E3-2627-barrow-v-cheltenham",
+   "revision": 1,
+   "fixture": {
+    "competition": "E3",
+    "season": "2627",
+    "home": "Barrow",
+    "away": "Cheltenham",
+    "kickoff_utc": "2026-10-25T14:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "D",
+      "label": "Draw",
+      "p": 0.28,
+      "fair_odds": "≈6/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Barrow win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Cheltenham win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T14:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": true,
+     "brier": 0.5,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "0882ae84953993c618ecb03144a03faa5e34461539755d15e0af1e558041cf32"
+  },
+  {
+   "record_id": "N1-2627-psv-v-rkc-waalwijk#r1",
+   "match_id": "N1-2627-psv-v-rkc-waalwijk",
+   "revision": 1,
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "PSV",
+    "away": "RKC Waalwijk",
+    "kickoff_utc": "2026-10-18T18:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "PSV win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "PSV win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "RKC Waalwijk win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     5,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T18:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.28,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "47feb41eeb0e22c1b5dbef027c9b854cbfdba774559e2ab1ee969c844a4ad82e"
+  },
+  {
+   "record_id": "N1-2627-ajax-v-fc-groningen#r1",
+   "match_id": "N1-2627-ajax-v-fc-groningen",
+   "revision": 1,
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "Ajax",
+    "away": "FC Groningen",
+    "kickoff_utc": "2026-10-18T18:00:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Ajax win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Ajax win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "FC Groningen win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     3,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T18:00:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.34,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "21699ce5cd4cae8d2412ac3d810049cd5788bcae100333228aff86dc7584adb2"
+  },
+  {
+   "record_id": "N1-2627-feyenoord-v-fc-twente#r1",
+   "match_id": "N1-2627-feyenoord-v-fc-twente",
+   "revision": 1,
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "Feyenoord",
+    "away": "FC Twente",
+    "kickoff_utc": "2026-10-19T13:30:00Z"
+   },
+   "published_at": "2026-10-19T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Feyenoord win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Feyenoord win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "FC Twente win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-19T13:30:00Z",
+    "confirmed_at": "2026-10-19T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.38,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "f4c6487e3db92a4da070a770fb57700bb4ae88da7434826b78abe65874c80605"
+  },
+  {
+   "record_id": "N1-2627-az-alkmaar-v-fc-utrecht#r1",
+   "match_id": "N1-2627-az-alkmaar-v-fc-utrecht",
+   "revision": 1,
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "AZ Alkmaar",
+    "away": "FC Utrecht",
+    "kickoff_utc": "2026-10-25T13:30:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "AZ Alkmaar win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "AZ Alkmaar win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "FC Utrecht win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T13:30:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.44,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "7c1d09c297402dad8a6cefcd6173f765d42775d1fdfdc6f902cc93a3eea862c5"
+  },
+  {
+   "record_id": "N1-2627-go-ahead-eagles-v-fortuna-sittard#r1",
+   "match_id": "N1-2627-go-ahead-eagles-v-fortuna-sittard",
+   "revision": 1,
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "Go Ahead Eagles",
+    "away": "Fortuna Sittard",
+    "kickoff_utc": "2026-10-25T15:45:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Go Ahead Eagles win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Go Ahead Eagles win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Fortuna Sittard win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T15:45:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.45,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "44b5dbb9f5679b478e7dacc25e71f022c96060f026532a67707d84edd24237bd"
+  },
+  {
+   "record_id": "N1-2627-sparta-rotterdam-v-sc-heerenveen#r1",
+   "match_id": "N1-2627-sparta-rotterdam-v-sc-heerenveen",
+   "revision": 1,
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "Sparta Rotterdam",
+    "away": "sc Heerenveen",
+    "kickoff_utc": "2026-10-25T19:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "D",
+      "label": "Draw",
+      "p": 0.28,
+      "fair_odds": "≈6/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Sparta Rotterdam win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "sc Heerenveen win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T19:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": true,
+     "brier": 0.48,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "caa1bf933005549697f063a5c43dfc19ea3faf205f835031922c89c6b2f79f2b"
+  },
+  {
+   "record_id": "P1-2627-sporting-cp-v-rio-ave#r1",
+   "match_id": "P1-2627-sporting-cp-v-rio-ave",
+   "revision": 1,
+   "fixture": {
+    "competition": "P1",
+    "season": "2627",
+    "home": "Sporting CP",
+    "away": "Rio Ave",
+    "kickoff_utc": "2026-10-18T19:30:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Sporting CP win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Sporting CP win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Rio Ave win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     3,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T19:30:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.3,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "7aee51aba31cff7cfa4e2fa2e593e415bdae31b06d81a67d4875d8504bf59012"
+  },
+  {
+   "record_id": "P1-2627-fc-porto-v-vitoria-guimaraes#r1",
+   "match_id": "P1-2627-fc-porto-v-vitoria-guimaraes",
+   "revision": 1,
+   "fixture": {
+    "competition": "P1",
+    "season": "2627",
+    "home": "FC Porto",
+    "away": "Vitoria Guimaraes",
+    "kickoff_utc": "2026-10-18T19:30:00Z"
+   },
+   "published_at": "2026-10-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "FC Porto win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "FC Porto win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Vitoria Guimaraes win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-18T19:30:00Z",
+    "confirmed_at": "2026-10-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.36,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "0da40fd2947612693aa2cb1bf586a8b424efd234c26388411485f0c45ab69a89"
+  },
+  {
+   "record_id": "P1-2627-benfica-v-santa-clara#r1",
+   "match_id": "P1-2627-benfica-v-santa-clara",
+   "revision": 1,
+   "fixture": {
+    "competition": "P1",
+    "season": "2627",
+    "home": "Benfica",
+    "away": "Santa Clara",
+    "kickoff_utc": "2026-10-19T17:00:00Z"
+   },
+   "published_at": "2026-10-19T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Benfica win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Benfica win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Santa Clara win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     4,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-19T17:00:00Z",
+    "confirmed_at": "2026-10-19T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.32,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "fd496d0237c8407132b79ef0572afd8a8925b4ceb6ccdb8c3d1b241a1d15244e"
+  },
+  {
+   "record_id": "P1-2627-sc-braga-v-moreirense#r1",
+   "match_id": "P1-2627-sc-braga-v-moreirense",
+   "revision": 1,
+   "fixture": {
+    "competition": "P1",
+    "season": "2627",
+    "home": "SC Braga",
+    "away": "Moreirense",
+    "kickoff_utc": "2026-10-25T17:00:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "SC Braga win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "SC Braga win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Moreirense win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T17:00:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.42,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "b669cea1ea7806ac7dec77ecd0277c337c18c741b4cb5f56debd3789635f0d20"
+  },
+  {
+   "record_id": "P1-2627-famalicao-v-gil-vicente#r1",
+   "match_id": "P1-2627-famalicao-v-gil-vicente",
+   "revision": 1,
+   "fixture": {
+    "competition": "P1",
+    "season": "2627",
+    "home": "Famalicao",
+    "away": "Gil Vicente",
+    "kickoff_utc": "2026-10-25T19:30:00Z"
+   },
+   "published_at": "2026-10-25T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Famalicao win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Famalicao win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Gil Vicente win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-25T19:30:00Z",
+    "confirmed_at": "2026-10-25T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.45,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "c7c90398cbb2f546a180efea487401ec1f328983dbb1179853f9a4d82ac2e3fa"
+  },
+  {
+   "record_id": "CL-2627-real-madrid-v-vfb-stuttgart#r1",
+   "match_id": "CL-2627-real-madrid-v-vfb-stuttgart",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Real Madrid",
+    "away": "VfB Stuttgart",
+    "kickoff_utc": "2026-09-17T19:00:00Z"
+   },
+   "published_at": "2026-09-17T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Real Madrid win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Real Madrid win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "VfB Stuttgart win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     3,
+     1
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-09-17T19:00:00Z",
+    "confirmed_at": "2026-09-17T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.34,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "d6011303a4ee5c60ded53dcdc1780adc11b1a98a32205b863305c5780833ee9d"
+  },
+  {
+   "record_id": "CL-2627-ac-milan-v-liverpool#r1",
+   "match_id": "CL-2627-ac-milan-v-liverpool",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "AC Milan",
+    "away": "Liverpool",
+    "kickoff_utc": "2026-09-17T19:00:00Z"
+   },
+   "published_at": "2026-09-17T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Liverpool win",
+      "p": 0.42,
+      "fair_odds": "≈6/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "AC Milan win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Liverpool win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     1,
+     3
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-09-17T19:00:00Z",
+    "confirmed_at": "2026-09-17T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "A",
+     "pick_won": true,
+     "brier": 0.41,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "de212a02fe26c8024628f34ef245ce9773d8def43cd42afb0e26c04f2fdba7a8"
+  },
+  {
+   "record_id": "CL-2627-bayern-munich-v-dinamo-zagreb#r1",
+   "match_id": "CL-2627-bayern-munich-v-dinamo-zagreb",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Bayern Munich",
+    "away": "Dinamo Zagreb",
+    "kickoff_utc": "2026-09-17T19:00:00Z"
+   },
+   "published_at": "2026-09-17T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Bayern Munich win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Bayern Munich win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Dinamo Zagreb win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     9,
+     2
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-09-17T19:00:00Z",
+    "confirmed_at": "2026-09-17T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.22,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "7091bfa4bc3055b53e7f1c5097aea29815ab8aa0a2175584b6d4daa046e5c5fa"
+  },
+  {
+   "record_id": "CL-2627-arsenal-v-paris-sg#r1",
+   "match_id": "CL-2627-arsenal-v-paris-sg",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Arsenal",
+    "away": "Paris SG",
+    "kickoff_utc": "2026-10-01T19:00:00Z"
+   },
+   "published_at": "2026-10-01T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Arsenal win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Arsenal win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Paris SG win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-10-01T19:00:00Z",
+    "confirmed_at": "2026-10-01T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.38,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "d232f327f80a0cbec549d77a3cf5782722ff47c229c64e949868c80a6289c38c"
+  },
+  {
+   "record_id": "CL-2627-man-city-v-inter-milan#r1",
+   "match_id": "CL-2627-man-city-v-inter-milan",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Man City",
+    "away": "Inter Milan",
+    "kickoff_utc": "2026-09-18T19:00:00Z"
+   },
+   "published_at": "2026-09-18T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Man City win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Man City win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Inter Milan win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     0,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-09-18T19:00:00Z",
+    "confirmed_at": "2026-09-18T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "D",
+     "pick_won": false,
+     "brier": 0.58,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "114108c6de96ceb91c4f7bdc2506cc877daaf704a0d3b06e753d0db796e9988e"
+  },
+  {
+   "record_id": "CL-2627-sporting-cp-v-lille#r1",
+   "match_id": "CL-2627-sporting-cp-v-lille",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Sporting CP",
+    "away": "Lille",
+    "kickoff_utc": "2026-09-17T19:00:00Z"
+   },
+   "published_at": "2026-09-17T10:00:00.000000+00:00",
+   "inputs_fingerprint": "league-model-import",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "tier": "L1",
+     "evidence": {
+      "status": "validated",
+      "strength": "strong"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Sporting CP win",
+      "p": 0.54,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Sporting CP win",
+       "p": 0.5,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.26,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Lille win",
+       "p": 0.24,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.co.uk"
+   ],
+   "origin": "league-model-import",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.co.uk",
+    "kickoff_utc": "2026-09-17T19:00:00Z",
+    "confirmed_at": "2026-09-17T18:00:00.000000+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.39,
+     "logloss": 0.62,
+     "rps": 0.17
+    }
+   },
+   "evaluated": true,
+   "sha256": "14c64a44198efde9119a003ecdf00abd43e2efd9fd3ea197d2780ff75b7a4a17"
   }
  ]
 }

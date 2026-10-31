@@ -2669,7 +2669,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "728da61a1b37c8c20a69d6f063711bdbca5475023805bff84577c9484a2c66b8",
-   "superseded_by": "PUB-PL-2627-chelsea-v-man-united#r2"
+   "superseded_by": "PUB-PL-2627-chelsea-v-man-united#r2",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-31T12:30:00Z",
+    "confirmed_at": "2026-10-31T16:52:37.147886+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PUB-ELC-2627-lincoln-v-birmingham#r1",
@@ -22537,7 +22547,17 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "f314479335bb19628904894f58489a74d587e3828f87eeccd0ec56b989b26c9d",
-   "superseded_by": "PUB-PL-2627-chelsea-v-man-united#r3"
+   "superseded_by": "PUB-PL-2627-chelsea-v-man-united#r3",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-31T12:30:00Z",
+    "confirmed_at": "2026-10-31T16:52:37.147886+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PUB-ELC-2627-lincoln-v-birmingham#r2",
@@ -40970,7 +40990,47 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2b42bcb2d4186e2fcab8fb1d9e39b7b625a7e42bb2912209d689ab04d8fb97fe"
+   "sha256": "2b42bcb2d4186e2fcab8fb1d9e39b7b625a7e42bb2912209d689ab04d8fb97fe",
+   "result": {
+    "score": [
+     2,
+     0
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-10-31T12:30:00Z",
+    "confirmed_at": "2026-10-31T16:52:37.147886+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "H",
+     "pick_won": true,
+     "brier": 0.42551,
+     "logloss": 0.75939,
+     "rps": 0.18277
+    },
+    "goals": {
+     "total": 2,
+     "line": 2.5,
+     "pick_won": false,
+     "brier": 0.35784,
+     "logloss": 0.9118
+    },
+    "btts": {
+     "outcome": "no",
+     "pick_won": false,
+     "brier": 0.35928,
+     "logloss": 0.91479
+    },
+    "most_likely": {
+     "market": "goals",
+     "label": "Over 2.5",
+     "p": 0.5982,
+     "won": false,
+     "brier": 0.35784,
+     "logloss": 0.9118
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "PUB-ELC-2627-lincoln-v-birmingham#r3",

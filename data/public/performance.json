@@ -1,19 +1,153 @@
 {
- "generated_at": "2026-10-31T13:00:38.935154+00:00",
  "min_report_n": 20,
- "markets": {},
- "bands": {},
- "versions": {},
- "tiers": {},
- "teams": {},
- "result_timeline": [],
+ "markets": {
+  "result": {
+   "n": 1,
+   "brier": 0.4255,
+   "logloss": 0.7594,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.468,
+   "sufficient_sample": false
+  },
+  "goals": {
+   "n": 1,
+   "brier": 0.3578,
+   "logloss": 0.9118,
+   "pick_hit_rate": 0.0,
+   "mean_pick_p": 0.5982,
+   "sufficient_sample": false
+  },
+  "btts": {
+   "n": 1,
+   "brier": 0.3593,
+   "logloss": 0.9148,
+   "pick_hit_rate": 0.0,
+   "mean_pick_p": 0.5994,
+   "sufficient_sample": false
+  }
+ },
+ "bands": {
+  "result": {
+   "40-50%": {
+    "n": 1,
+    "brier": 0.4255,
+    "logloss": 0.7594,
+    "pick_hit_rate": 1.0,
+    "mean_pick_p": 0.468,
+    "sufficient_sample": false
+   }
+  },
+  "goals": {
+   "50-60%": {
+    "n": 1,
+    "brier": 0.3578,
+    "logloss": 0.9118,
+    "pick_hit_rate": 0.0,
+    "mean_pick_p": 0.5982,
+    "sufficient_sample": false
+   }
+  },
+  "btts": {
+   "50-60%": {
+    "n": 1,
+    "brier": 0.3593,
+    "logloss": 0.9148,
+    "pick_hit_rate": 0.0,
+    "mean_pick_p": 0.5994,
+    "sufficient_sample": false
+   }
+  }
+ },
+ "versions": {
+  "result": {
+   "dc-public-v1": {
+    "n": 1,
+    "brier": 0.4255,
+    "logloss": 0.7594,
+    "pick_hit_rate": 1.0,
+    "mean_pick_p": 0.468,
+    "sufficient_sample": false
+   }
+  },
+  "goals": {
+   "dc-public-v1": {
+    "n": 1,
+    "brier": 0.3578,
+    "logloss": 0.9118,
+    "pick_hit_rate": 0.0,
+    "mean_pick_p": 0.5982,
+    "sufficient_sample": false
+   }
+  },
+  "btts": {
+   "dc-public-v1": {
+    "n": 1,
+    "brier": 0.3593,
+    "logloss": 0.9148,
+    "pick_hit_rate": 0.0,
+    "mean_pick_p": 0.5994,
+    "sufficient_sample": false
+   }
+  }
+ },
+ "tiers": {
+  "L1": {
+   "n": 1,
+   "brier": 0.4255,
+   "logloss": 0.7594,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.468,
+   "sufficient_sample": false
+  }
+ },
+ "teams": {
+  "Chelsea": {
+   "n": 1,
+   "brier": 0.4255,
+   "logloss": 0.7594,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.468,
+   "sufficient_sample": false
+  },
+  "Man United": {
+   "n": 1,
+   "brier": 0.4255,
+   "logloss": 0.7594,
+   "pick_hit_rate": 1.0,
+   "mean_pick_p": 0.468,
+   "sufficient_sample": false
+  }
+ },
+ "result_timeline": [
+  {
+   "kickoff_utc": "2026-10-31T12:30:00Z",
+   "won": true,
+   "brier": 0.42551
+  }
+ ],
  "most_likely": {
-  "n": 0,
+  "n": 1,
+  "brier": 0.3578,
+  "logloss": 0.9118,
+  "pick_hit_rate": 0.0,
+  "mean_pick_p": 0.5982,
   "sufficient_sample": false
  },
- "most_likely_by_market": {},
- "decisions": {},
- "evaluated_matches": 0,
+ "most_likely_by_market": {
+  "goals": {
+   "n": 1,
+   "brier": 0.3578,
+   "logloss": 0.9118,
+   "pick_hit_rate": 0.0,
+   "mean_pick_p": 0.5982,
+   "sufficient_sample": false
+  }
+ },
+ "decisions": {
+  "most_likely:most_likely": 1,
+  "best_value:no_bet": 1
+ },
+ "evaluated_matches": 1,
  "published_records": 80,
  "by_competition": {
   "BL1": {
@@ -990,6 +1124,5 @@
    "evaluated_matches": 10,
    "published_records": 100
   }
- },
- "settlement_updates": 20
+ }
 }
