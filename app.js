@@ -2216,7 +2216,12 @@ function backtestCard(rel) {
 
 function logRow(r) {
   const f = r.fixture, ms = kickoffMs(f), m = r.markets.result, s = r.settlement && r.settlement.result;
-  const right = s ? '<span class="badge ' + (s.pick_won ? 'won' : 'lost') + '">' + (s.pick_won ? 'Right' : 'Wrong') + '</span>' : r.result ? '' : '<span class="badge pending">' + (ms > Date.now() ? 'Upcoming' : 'Awaiting') + '</span>';
+  const isPast = ms <= Date.now();
+  const isStuck = isPast && (Date.now() - ms > 2.2 * 3600000);
+  const pendingBadge = isStuck
+    ? '<span class="badge warn" style="font-size:11px;" title="Match completed; awaiting official score confirmation from match feed">Full Time (Awaiting Feed)</span>'
+    : '<span class="badge pending">' + (isPast ? 'Awaiting' : 'Upcoming') + '</span>';
+  const right = s ? '<span class="badge ' + (s.pick_won ? 'won' : 'lost') + '">' + (s.pick_won ? 'Right' : 'Wrong') + '</span>' : r.result ? '' : pendingBadge;
   return '<a class="log-row" href="#/match/' + encodeURIComponent(r.match_id) + '"><span class="fx-time">' + esc(fmtDay(ms)) + '<small>' + esc(fmtTime(ms)) + '</small></span>' +
     '<span><span class="teams-line">' + crest(f.home, 18) + '<span>' + esc(f.home) + ' v ' + esc(f.away) + '</span></span><span class="dim" style="display:block;font-size:13px">Predicted <b style="color:#fff">' + esc(m.pick.label) + '</b> ' + pct(m.pick.p) + ' · fair ' + esc(m.pick.fair_odds) + (r.result ? ' · final ' + r.result.score.join('–') : '') + '</span></span>' + right + '</a>';
 }
@@ -4776,6 +4781,13 @@ function isValidHandle(h) {
   return typeof h === 'string' && HANDLE_REGEX.test(h);
 }
 
+// Gamertag-style username: strips '@', spaces and symbols so a Google display name like "Alan Park" shows as "AlanPark"
+function toUsername(raw, email) {
+  let u = String(raw || '').replace(/^@+/, '').replace(/[^A-Za-z0-9_]/g, '').slice(0, 20);
+  if (u.length < 3 && email) u = String(email).split('@')[0].replace(/[^A-Za-z0-9_]/g, '').slice(0, 20);
+  return u.length >= 3 ? u : 'Punter';
+}
+
 function mapAuthError(err) {
   if (!err) return 'An unexpected error occurred. Please try again.';
   const code = err.code || '';
@@ -4826,7 +4838,7 @@ function getAuthUser() {
                  activeUser.name ||
                  (activeUser.email ? activeUser.email.split('@')[0] : 'Punter');
 
-  username = String(username).replace(/^@+/, '').trim() || 'Punter';
+  username = toUsername(username, activeUser.email);
 
   return {
     signedIn: true,
@@ -4859,7 +4871,7 @@ function saveAuthUser(user) {
     displayName: user.displayName || username,
     name: user.displayName || username,
     email: user.email || '',
-    handle: String(username).replace(/^@+/, ''),
+    handle: toUsername(username, user.email),
     photoURL: user.photoURL || '',
     isGoogle: true
   };
@@ -4963,8 +4975,8 @@ function updateHeaderAuthUI() {
   if (!container) return;
   const user = getAuthUser();
   if (user && user.signedIn) {
-    const initials = (user.name || user.email || 'U').slice(0, 1).toUpperCase();
-    const username = user.handle || user.name || 'Punter';
+    const username = user.handle || 'Punter';
+    const initials = username.slice(0, 1).toUpperCase();
     container.innerHTML = '<div style="display:flex;align-items:center;gap:6px;">' +
       '<button type="button" class="header-user-btn" id="header-user-btn" title="Signed in as ' + esc(user.name || user.email) + '">' +
         '<span class="header-avatar">' + esc(initials) + '</span>' +
@@ -5104,8 +5116,8 @@ function initFirebaseAuth() {
     } else {
       currentAuthUser = null;
       currentAuthProfile = null;
-      cachedAuthUser = null;
-      try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) {}
+      // Do NOT wipe cachedAuthUser here: onAuthStateChanged fires with null on initial boot before resolving session.
+      // Explicit sign-out is handled by handleSignOut().
     }
     updateHeaderAuthUI();
     render();
@@ -5429,9 +5441,9 @@ document.addEventListener('click', event => {
   }
   if (t.id === 'header-install-btn' || t.id === 'btn-trigger-native-install') { triggerDirectDownload(); return; }
   if (t.dataset.closeInstall !== undefined) { closeInstallModal(); return; }
-  if (t.id === 'header-auth-btn' || t.id === 'header-user-btn' || t.dataset.openAuth !== undefined) { openAuthModal(); return; }
-  if (t.dataset.closeAuth !== undefined) { closeAuthModal(); return; }
-  if (t.id === 'btn-auth-google') { signInWithGoogle(); return; }
+  if (t.id === 'header-auth-btn' || t.id === 'header-user-btn' || t.dataset.openAuth !== undefined || t.closest('#header-auth-btn') || t.closest('#header-user-btn') || t.closest('.google-sub-btn')) { openAuthModal(); return; }
+  if (t.dataset.closeAuth !== undefined || t.closest('[data-close-auth]')) { closeAuthModal(); return; }
+  if (t.id === 'btn-auth-google' || t.closest('#btn-auth-google') || t.closest('.google-primary-btn')) { signInWithGoogle(); return; }
 
   if (t.id === 'btn-switch-handle') { closeAuthModal(); const _p = getUserProfile();
     $('player-handle-input').value = _p.handle;

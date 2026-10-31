@@ -7,3 +7,4 @@ new = 'hits = sum(1 for x in rows if x.get("won"))\n        return {"n": len(row
 assert old in text, 'old text not found'
 path.write_text(text.replace(old, new, 1), encoding='utf-8')
 print("Successfully patched pipeline/history.py")
+
