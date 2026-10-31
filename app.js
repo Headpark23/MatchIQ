@@ -700,7 +700,7 @@ function homeHero(pred) {
 
 // ------------------------------------------------------------ Bet Builder (home hero)
 const BUILDER_KEY = 'matchiq_builder_v1';
-const builderState = { stake: 10, legs: 4, win: 50, timing: 'today' };
+const builderState = { stake: 10, legs: 2, win: 25, timing: 'today' };
 try {
   const v = JSON.parse(localStorage.getItem(BUILDER_KEY) || 'null');
   if (v && v.stake > 0 && v.win > 0 && v.legs >= 1 && v.legs <= MatchIQBuilder.MAX_LEGS) {
@@ -1220,7 +1220,7 @@ function viewBuilder() {
     '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake" aria-label="Stake amount in pounds">' +
     '<div class="stake-safety-note" style="font-size:12px;color:#fbbf24;margin-top:4px;display:flex;align-items:center;gap:4px;"><span>⚠️</span><span>Recreational limit: only stake what you are happy to lose (£5–£10).</span></div></div>' +
     '<div class="field"><span class="lbl" id="b-legs-l">Number of bets in accumulator <small style="color:var(--soft);font-weight:normal;">(2 = 2-team acca, 3 = 3 teams, 4 = 4 teams...)</small></span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
-    '<input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Number of bets"></div></div>' +
+    '<div style="display:inline-flex;align-items:center;gap:6px;margin-left:4px;"><span style="font-size:12px;color:var(--soft);">Other:</span><input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Custom number of bets" title="Enter custom number of bets"></div></div></div>' +
     '<div class="field full"><label for="b-win">Target return (£): <b class="mono" id="b-win-out">' + MatchIQBuilder.money(win) + '</b></label>' +
     '<div class="win-input-wrap"><div class="currency-input-wrap"><span class="currency-symbol">£</span><input id="b-win" class="ctl mono win-input" type="number" inputmode="decimal" min="1" max="10000" step="1" value="' + win + '" data-b="win" placeholder="50"></div>' +
     '<div class="win-chips" role="group" aria-label="Preset return targets">' + winPresets + '</div></div></div></div>' +
@@ -1432,7 +1432,7 @@ function renderWelcomeHero() {
           '<div class="butler-home-features">' +
             '<div class="butler-feat-item"><span class="feat-icon">📋</span> Slip Card Checklist</div>' +
             '<div class="butler-feat-item"><span class="feat-icon">☑️</span> Tick Off Legs in View</div>' +
-            '<div class="butler-feat-item"><span class="feat-icon">📑</span> 1-Click Formatted Copy</div>' +
+            '<div class="butler-feat-item"><span class="feat-icon">📑</span> Formatted Copy</div>' +
             '<div class="butler-feat-item"><span class="feat-icon">📱</span> Open Bookmaker Football</div>' +
           '</div>' +
           '<div class="butler-home-actions">' +
@@ -1517,14 +1517,22 @@ function getTodayBestValuePicks() {
   });
   if (!pool || !pool.length) return null;
 
-  const withEv = pool.map(leg => {
-    const ev = (leg.odds * leg.p) - 1;
+  // STRICT EVIDENCE GATE: Pick MUST have validated model evidence and live bookmaker price
+  const qualified = pool.filter(leg => {
+    const isValidated = leg.support === 'validated' || (leg.evidence && leg.evidence.status === 'validated');
+    const isLive = leg.priceSource === 'live';
+    const ev = (Number(leg.odds) * Number(leg.p)) - 1;
+    return isValidated && isLive && ev >= 0.05;
+  }).map(leg => {
+    const ev = (Number(leg.odds) * Number(leg.p)) - 1;
     return { ...leg, ev };
   });
 
+  if (!qualified.length) return null;
+
   const todayStr = new Date().toISOString().slice(0, 10);
-  const todayPool = withEv.filter(l => l.fixture && l.fixture.kickoff_utc && l.fixture.kickoff_utc.slice(0, 10) === todayStr);
-  const candidatePool = todayPool.length >= 4 ? todayPool : withEv;
+  const todayPool = qualified.filter(l => l.fixture && l.fixture.kickoff_utc && l.fixture.kickoff_utc.slice(0, 10) === todayStr);
+  const candidatePool = todayPool.length >= 1 ? todayPool : qualified;
   candidatePool.sort((a, b) => b.ev - a.ev);
 
   const unique = [];
@@ -1579,7 +1587,12 @@ function renderBestValueModalContent() {
   const body = $('best-value-modal-body');
   if (!body) return;
   if (!data) {
-    body.innerHTML = '<div class="empty" style="padding:24px;text-align:center;">No upcoming fixtures with live bookmaker prices currently available. Check back soon.</div>';
+    body.innerHTML = '<div class="empty" style="padding:32px 20px;text-align:center;">' +
+      '<div style="font-size:36px;margin-bottom:12px;">⚖️</div>' +
+      '<h3 style="font-size:18px;font-weight:700;margin-bottom:8px;color:#fff;">No Value Bets Qualify Today</h3>' +
+      '<p class="muted" style="font-size:14px;max-width:440px;margin:0 auto 16px;line-height:1.5;">Bet Buddy requires backtested model evidence and at least +5% expected value before recommending any bet. No live bookmaker price currently clears our evidence threshold.</p>' +
+      '<a href="#/picks" class="btn primary" onclick="closeBestValueModal()" style="display:inline-block;padding:8px 18px;font-size:14px;">Build Acca with Most Likely Picks ↗</a>' +
+    '</div>';
     return;
   }
 
@@ -1812,7 +1825,7 @@ function renderMultiSportSection(sportKey) {
             '<span class="sport-sel-bookie">Best price: ' + esc(sel.bookmaker) + '</span>' +
           '</div>' +
           '<div class="sport-sel-actions">' +
-            '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Place with ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
+            '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Open on ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
             '<button type="button" class="btn small" data-diary=\'' + betData + '\' title="Add to Bet Diary">+ Diary</button>' +
             '<button type="button" class="btn-add-cross-acca" data-add-cross-acca=\'' + betData + '\' title="Add to Accumulator">+ Acca</button>' +
           '</div>' +
@@ -1833,7 +1846,7 @@ function renderMultiSportSection(sportKey) {
 
     return '<div class="sport-tournament-block" style="margin-bottom:18px">' +
       '<div class="section-head" style="margin-bottom:10px"><div><h3 class="section-title" style="font-size:1.15rem">' + esc(sportData.icon) + ' ' + esc(t.tournament) + '</h3>' +
-      '<span class="section-note">' + esc(t.course || t.venue || t.surface || 'Official UK Bookmaker Prices') + '</span></div>' +
+      '<span class="section-note">' + esc(t.course || t.venue || t.surface || 'Live UK Bookmaker Prices') + '</span></div>' +
       '<span class="badge provisional">UK Odds Live</span></div>' +
       '<div class="sport-events-grid">' + eventsHtml + '</div>' +
     '</div>';
@@ -1886,29 +1899,32 @@ function matchVerdictCard(pred) {
   // Line 1: our estimate
   const estLine = 'Our estimate: <b>' + esc(sel.label) + '</b> ' + pct(sel.p) + ' (fair odds <span class="mono">' + esc(fmtFairOdds(sel.fair, sel.p)) + '</span>)';
 
-  // Line 2: smallest price worth taking (+5% EV threshold)
+  // Line 2: smallest price worth taking or evidence status
   const minWorthTakingDec = (1 + (calc.VALUE_MIN_EV || 0.05)) / sel.p;
   const minOddsText = fmtOdds(minWorthTakingDec);
-  const minLine = 'Smallest price worth taking: <b class="mono">' + esc(minOddsText) + '</b> (' + minWorthTakingDec.toFixed(2) + ')';
+  let minLine = 'Smallest price worth taking: <b class="mono">' + esc(minOddsText) + '</b> (' + minWorthTakingDec.toFixed(2) + ')';
+  if (v === 'no_bet') {
+    minLine = 'Evidence status: <span class="badge provisional" style="font-size:11px;">Unvalidated market</span> <span class="dim" style="font-size:13px;">(no backtested edge)</span>';
+  }
 
   // Line 3: verdict in words
-  let verdictWords = 'Awaiting Odds — no live bookmaker price entered yet';
+  let verdictWords = 'Awaiting Odds – no live bookmaker price entered yet';
   let verdictBadge = 'awaiting';
   if (v === 'value') {
-    verdictWords = 'Potential Value — bookmaker price exceeds minimum worth taking';
+    verdictWords = 'Potential Value – bookmaker price exceeds minimum worth taking';
     verdictBadge = 'value';
   } else if (v === 'no_value') {
-    verdictWords = 'No Bet — price too short for estimated win chance';
+    verdictWords = 'No Bet – price too short for estimated win chance';
     verdictBadge = 'nobet';
   } else if (v === 'no_bet') {
-    verdictWords = 'No Bet — insufficient backtest edge or sample';
+    verdictWords = 'No Bet – The price looks high, but our model isn’t reliable enough on this market to trust it.';
     verdictBadge = 'nobet';
   }
   const verdictLine = 'Verdict: <b class="badge ' + verdictBadge + '" style="font-size:12px;vertical-align:middle;margin:0 4px;">' + (VALUE_HEAD[v] ? VALUE_HEAD[v][1] : 'No Bet') + '</b> ' + esc(verdictWords);
 
-  // High EV warning flag (> 30%)
+  // High EV warning flag (> 30%) - shown ONLY when verdict is value
   let flagHtml = '';
-  if (verdict.ev != null && verdict.ev > 0.30) {
+  if (v === 'value' && verdict.ev != null && verdict.ev > 0.30) {
     flagHtml = '<div class="ev-high-flag" style="margin-top:10px;padding:8px 12px;background:rgba(234,179,8,0.15);border:1px solid rgba(234,179,8,0.4);border-radius:8px;color:#fef08a;font-size:13px;display:flex;align-items:center;gap:8px;">' +
       '<span style="font-size:16px;">⚠️</span><span><b>Unusually high (+' + Math.round(verdict.ev * 100) + '% EV):</b> check the price with the bookmaker — market odds may have shifted or been misquoted.</span>' +
     '</div>';
@@ -2057,7 +2073,8 @@ function viewResults() {
   const isEarly = settled.length < minReportN;
   const headlineStatus = isEarly ? 'too early to judge' : 'tracking live';
   const headlineText = settled.length + ' prediction' + (settled.length === 1 ? '' : 's') + ' settled so far; ' + headlineStatus;
-  const hitRateSummary = res && res.n ? Math.round(res.pick_hit_rate * 100) + '% of match-result picks won (' + res.hits + ' of ' + res.n + ')' : 'No settled results in this competition yet';
+  const hits = res ? (res.hits != null ? res.hits : Math.round((res.pick_hit_rate || 0) * (res.n || 0))) : 0;
+  const hitRateSummary = res && res.n ? Math.round(res.pick_hit_rate * 100) + '% of match-result picks won (' + hits + ' of ' + res.n + ')' : 'No settled results in this competition yet';
 
   const sportResultsBar = '<div class="comp-bar" role="group" aria-label="Sport Selection" style="margin-bottom:14px;">' +
     [['football', '⚽ Football'], ['tennis', '🎾 Tennis'], ['golf', '⛳ Golf'], ['darts', '🎯 Darts'], ['rugby', '🏉 Rugby']].map(([k, l]) =>
@@ -2172,9 +2189,12 @@ function scorecard(perf) {
 
 function byCompetitionCards(allPerf) {
   const rows = [['PL', allPerf]].concat(Object.entries(allPerf.by_competition || {}));
-  return '<div class="section"><div class="stat-cards">' + rows.map(([code, p]) => { const r = (p.markets || {}).result;
+  return '<div class="section"><div class="stat-cards">' + rows.map(([code, p]) => {
+    const r = (p.markets || {}).result;
+    const hits = r ? (r.hits != null ? r.hits : Math.round((r.pick_hit_rate || 0) * (r.n || 0))) : 0;
     return statCard(esc(leagueName(code)), r && r.sufficient_sample ? '' : '<span class="badge pending">' + (r ? 'small sample' : 'none settled yet') + '</span>',
-      [['Settled', r ? r.n : 0], ['Picks right', r ? pct(r.pick_hit_rate) : '—'], ['Brier', r ? r.brier.toFixed(3) : '—']], r ? { claimed: r.mean_pick_p, actual: r.pick_hit_rate } : null); }).join('') + '</div></div>';
+      [['Settled', r ? r.n : 0], ['Picks won', r ? hits + ' of ' + r.n : '0 of 0'], ['Win rate', r ? pct(r.pick_hit_rate) : '—']], r ? { claimed: r.mean_pick_p, actual: r.pick_hit_rate } : null);
+  }).join('') + '</div></div>';
 }
 
 function leagueBacktestCard(lv) {
@@ -3176,6 +3196,40 @@ function viewLeagues() {
         '</button>' +
       '</div>'
     : '';
+
+  if (!isUserSignedIn) {
+    return '<section class="view">' +
+      '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
+      '<p class="page-sub">Compete on genuine model predictions with mates across hometown, county, national and private leaderboards.</p>' +
+      signedOutBanner +
+      '<div class="section card">' +
+        '<div class="section-head">' +
+          '<div>' +
+            '<h2 class="section-title">How Buddy Leagues Work</h2>' +
+            '<p class="section-note">Fair, audited competition with zero gambling.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="grid grid-2" style="margin-top:16px;gap:12px;">' +
+          '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
+            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🏆 6-Tier Geographic Ladders</h3>' +
+            '<p class="dim" style="font-size:13px;margin:0;">Automatic promotion from your Hometown to County, Region, Home Nation, UK and Global leaderboards.</p>' +
+          '</div>' +
+          '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
+            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">👥 Private Mate Leagues</h3>' +
+            '<p class="dim" style="font-size:13px;margin:0;">Create private 6-character code leagues for your WhatsApp group or pub mates with live sync.</p>' +
+          '</div>' +
+          '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
+            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🔒 Google Sign-In Only</h3>' +
+            '<p class="dim" style="font-size:13px;margin:0;">No passwords or forms. One Google tap saves your rank permanently across desktop and mobile.</p>' +
+          '</div>' +
+          '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
+            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🥇 Silverware &amp; Honours</h3>' +
+            '<p class="dim" style="font-size:13px;margin:0;">Earn weekly badges, monthly cups, and season silverware verified on the public ledger.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</section>';
+  }
 
   const uStats = getUserLeagueStats(activeLeagueFreq);
   const geoTiers = getGeoTiers(prof);
@@ -4623,7 +4677,7 @@ function viewMultiSport(sportKey) {
             '<span class="sport-sel-bookie">Best price: ' + esc(sel.bookmaker) + '</span>' +
           '</div>' +
           '<div class="sport-sel-actions">' +
-            '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Place with ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
+            '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Open on ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
             '<button type="button" class="btn small" data-diary=\'' + betData + '\' title="Add to Bet Diary">+ Diary</button>' +
             '<button type="button" class="btn-add-cross-acca" data-add-cross-acca=\'' + betData + '\' title="Add to Accumulator">+ Acca</button>' +
           '</div>' +
@@ -4644,7 +4698,7 @@ function viewMultiSport(sportKey) {
 
     return '<div class="section">' +
       '<div class="section-head"><div><h2 class="section-title">' + esc(sportData.icon) + ' ' + esc(t.tournament) + '</h2>' +
-      '<span class="section-note">' + esc(t.course || t.venue || t.surface || 'Official UK Bookmaker Prices') + '</span></div>' +
+      '<span class="section-note">' + esc(t.course || t.venue || t.surface || 'Live UK Bookmaker Prices') + '</span></div>' +
       '<span class="badge provisional">UK Odds Live</span></div>' +
       '<div class="sport-events-grid">' + eventsHtml + '</div>' +
     '</div>';
@@ -5732,7 +5786,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v76';
+const APP_VERSION = 'v77';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -6239,7 +6293,7 @@ function renderSlipCardModal(slip) {
         '</div>' +
         '<div class="slip-card-leg-right">' +
           '<span class="slip-card-leg-odds">' + esc(oddsLabel) + '</span>' +
-          '<label class="slip-card-tick-label" onclick="const cb = document.querySelector(\'#slip-card-leg-' + i + ' input\'); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event(\'change\')); }">Added to slip</label>' +
+          '<label class="slip-card-tick-label" onclick="const cb = document.querySelector(\'#slip-card-leg-' + i + ' input\'); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event(\'change\')); }">Tap when added</label>' +
         '</div>' +
       '</div>';
     }).join('');

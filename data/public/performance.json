@@ -1,1128 +1,2958 @@
 {
- "min_report_n": 20,
- "markets": {
-  "result": {
-   "n": 1,
-   "brier": 0.4255,
-   "logloss": 0.7594,
-   "pick_hit_rate": 1.0,
-   "mean_pick_p": 0.468,
-   "sufficient_sample": false
-  },
-  "goals": {
-   "n": 1,
-   "brier": 0.3578,
-   "logloss": 0.9118,
-   "pick_hit_rate": 0.0,
-   "mean_pick_p": 0.5982,
-   "sufficient_sample": false
-  },
-  "btts": {
-   "n": 1,
-   "brier": 0.3593,
-   "logloss": 0.9148,
-   "pick_hit_rate": 0.0,
-   "mean_pick_p": 0.5994,
-   "sufficient_sample": false
-  }
- },
- "bands": {
-  "result": {
-   "40-50%": {
-    "n": 1,
-    "brier": 0.4255,
-    "logloss": 0.7594,
-    "pick_hit_rate": 1.0,
-    "mean_pick_p": 0.468,
-    "sufficient_sample": false
-   }
-  },
-  "goals": {
-   "50-60%": {
-    "n": 1,
-    "brier": 0.3578,
-    "logloss": 0.9118,
-    "pick_hit_rate": 0.0,
-    "mean_pick_p": 0.5982,
-    "sufficient_sample": false
-   }
-  },
-  "btts": {
-   "50-60%": {
-    "n": 1,
-    "brier": 0.3593,
-    "logloss": 0.9148,
-    "pick_hit_rate": 0.0,
-    "mean_pick_p": 0.5994,
-    "sufficient_sample": false
-   }
-  }
- },
- "versions": {
-  "result": {
-   "dc-public-v1": {
-    "n": 1,
-    "brier": 0.4255,
-    "logloss": 0.7594,
-    "pick_hit_rate": 1.0,
-    "mean_pick_p": 0.468,
-    "sufficient_sample": false
-   }
-  },
-  "goals": {
-   "dc-public-v1": {
-    "n": 1,
-    "brier": 0.3578,
-    "logloss": 0.9118,
-    "pick_hit_rate": 0.0,
-    "mean_pick_p": 0.5982,
-    "sufficient_sample": false
-   }
-  },
-  "btts": {
-   "dc-public-v1": {
-    "n": 1,
-    "brier": 0.3593,
-    "logloss": 0.9148,
-    "pick_hit_rate": 0.0,
-    "mean_pick_p": 0.5994,
-    "sufficient_sample": false
-   }
-  }
- },
- "tiers": {
-  "L1": {
-   "n": 1,
-   "brier": 0.4255,
-   "logloss": 0.7594,
-   "pick_hit_rate": 1.0,
-   "mean_pick_p": 0.468,
-   "sufficient_sample": false
-  }
- },
- "teams": {
-  "Chelsea": {
-   "n": 1,
-   "brier": 0.4255,
-   "logloss": 0.7594,
-   "pick_hit_rate": 1.0,
-   "mean_pick_p": 0.468,
-   "sufficient_sample": false
-  },
-  "Man United": {
-   "n": 1,
-   "brier": 0.4255,
-   "logloss": 0.7594,
-   "pick_hit_rate": 1.0,
-   "mean_pick_p": 0.468,
-   "sufficient_sample": false
-  }
- },
- "result_timeline": [
-  {
-   "kickoff_utc": "2026-10-31T12:30:00Z",
-   "won": true,
-   "brier": 0.42551
-  }
- ],
- "most_likely": {
-  "n": 1,
-  "brier": 0.3578,
-  "logloss": 0.9118,
-  "pick_hit_rate": 0.0,
-  "mean_pick_p": 0.5982,
-  "sufficient_sample": false
- },
- "most_likely_by_market": {
-  "goals": {
-   "n": 1,
-   "brier": 0.3578,
-   "logloss": 0.9118,
-   "pick_hit_rate": 0.0,
-   "mean_pick_p": 0.5982,
-   "sufficient_sample": false
-  }
- },
- "decisions": {
-  "most_likely:most_likely": 1,
-  "best_value:no_bet": 1
- },
- "evaluated_matches": 1,
- "published_records": 80,
- "by_competition": {
-  "BL1": {
-   "min_report_n": 20,
-   "markets": {
+  "min_report_n": 20,
+  "markets": {
     "result": {
-     "n": 1,
-     "brier": 0.4967,
-     "logloss": 0.8531,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4261,
-     "sufficient_sample": false
+      "n": 16,
+      "hits": 9,
+      "brier": 0.5572,
+      "logloss": 0.9379,
+      "pick_hit_rate": 0.5625,
+      "mean_pick_p": 0.495,
+      "sufficient_sample": false
     },
     "goals": {
-     "n": 1,
-     "brier": 0.1399,
-     "logloss": 0.4686,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.6259,
-     "sufficient_sample": false
+      "n": 1,
+      "hits": 0,
+      "brier": 0.3578,
+      "logloss": 0.9118,
+      "pick_hit_rate": 0.0,
+      "mean_pick_p": 0.5982,
+      "sufficient_sample": false
     },
     "btts": {
-     "n": 1,
-     "brier": 0.1605,
-     "logloss": 0.5118,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.5994,
-     "sufficient_sample": false
-    }
-   },
-   "bands": {
-    "result": {
-     "40-50%": {
       "n": 1,
-      "brier": 0.4967,
-      "logloss": 0.8531,
-      "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.4261,
-      "sufficient_sample": false
-     }
-    },
-    "goals": {
-     "60-70%": {
-      "n": 1,
-      "brier": 0.1399,
-      "logloss": 0.4686,
-      "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.6259,
-      "sufficient_sample": false
-     }
-    },
-    "btts": {
-     "50-60%": {
-      "n": 1,
-      "brier": 0.1605,
-      "logloss": 0.5118,
-      "pick_hit_rate": 1.0,
+      "hits": 0,
+      "brier": 0.3593,
+      "logloss": 0.9148,
+      "pick_hit_rate": 0.0,
       "mean_pick_p": 0.5994,
       "sufficient_sample": false
-     }
     }
-   },
-   "versions": {
-    "result": {
-     "dc-public-v1": {
-      "n": 1,
-      "brier": 0.4967,
-      "logloss": 0.8531,
-      "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.4261,
-      "sufficient_sample": false
-     }
-    },
-    "goals": {
-     "dc-public-v1": {
-      "n": 1,
-      "brier": 0.1399,
-      "logloss": 0.4686,
-      "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.6259,
-      "sufficient_sample": false
-     }
-    },
-    "btts": {
-     "dc-public-v1": {
-      "n": 1,
-      "brier": 0.1605,
-      "logloss": 0.5118,
-      "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.5994,
-      "sufficient_sample": false
-     }
-    }
-   },
-   "tiers": {
-    "T3": {
-     "n": 1,
-     "brier": 0.4967,
-     "logloss": 0.8531,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4261,
-     "sufficient_sample": false
-    }
-   },
-   "teams": {
-    "Elversberg": {
-     "n": 1,
-     "brier": 0.4967,
-     "logloss": 0.8531,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4261,
-     "sufficient_sample": false
-    },
-    "Mainz": {
-     "n": 1,
-     "brier": 0.4967,
-     "logloss": 0.8531,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4261,
-     "sufficient_sample": false
-    }
-   },
-   "result_timeline": [
-    {
-     "kickoff_utc": "2026-10-30T19:30:00Z",
-     "won": true,
-     "brier": 0.49666
-    }
-   ],
-   "most_likely": {
-    "n": 0,
-    "sufficient_sample": false
-   },
-   "most_likely_by_market": {},
-   "decisions": {
-    "most_likely:no_bet": 1,
-    "best_value:no_bet": 1
-   },
-   "evaluated_matches": 1,
-   "published_records": 72
   },
-  "ELC": {
-   "min_report_n": 20,
-   "markets": {},
-   "bands": {},
-   "versions": {},
-   "tiers": {},
-   "teams": {},
-   "result_timeline": [],
-   "most_likely": {
-    "n": 0,
-    "sufficient_sample": false
-   },
-   "most_likely_by_market": {},
-   "decisions": {},
-   "evaluated_matches": 0,
-   "published_records": 143
+  "bands": {
+    "result": {
+      "40-50%": {
+        "n": 7,
+        "hits": 5,
+        "brier": 0.5531,
+        "logloss": 0.9356,
+        "pick_hit_rate": 0.7143,
+        "mean_pick_p": 0.4525,
+        "sufficient_sample": false
+      },
+      "80-100%": {
+        "n": 1,
+        "hits": 1,
+        "brier": 0.0352,
+        "logloss": 0.1615,
+        "pick_hit_rate": 1.0,
+        "mean_pick_p": 0.8509,
+        "sufficient_sample": false
+      },
+      "50-60%": {
+        "n": 4,
+        "hits": 2,
+        "brier": 0.6509,
+        "logloss": 1.0651,
+        "pick_hit_rate": 0.5,
+        "mean_pick_p": 0.538,
+        "sufficient_sample": false
+      },
+      "0-40%": {
+        "n": 3,
+        "hits": 0,
+        "brier": 0.7234,
+        "logloss": 1.1818,
+        "pick_hit_rate": 0.0,
+        "mean_pick_p": 0.3788,
+        "sufficient_sample": false
+      },
+      "60-70%": {
+        "n": 1,
+        "hits": 1,
+        "brier": 0.2341,
+        "logloss": 0.4898,
+        "pick_hit_rate": 1.0,
+        "mean_pick_p": 0.6127,
+        "sufficient_sample": false
+      }
+    },
+    "goals": {
+      "50-60%": {
+        "n": 1,
+        "hits": 0,
+        "brier": 0.3578,
+        "logloss": 0.9118,
+        "pick_hit_rate": 0.0,
+        "mean_pick_p": 0.5982,
+        "sufficient_sample": false
+      }
+    },
+    "btts": {
+      "50-60%": {
+        "n": 1,
+        "hits": 0,
+        "brier": 0.3593,
+        "logloss": 0.9148,
+        "pick_hit_rate": 0.0,
+        "mean_pick_p": 0.5994,
+        "sufficient_sample": false
+      }
+    }
   },
-  "FL1": {
-   "min_report_n": 20,
-   "markets": {
+  "versions": {
     "result": {
-     "n": 4,
-     "brier": 0.3755,
-     "logloss": 0.6871,
-     "pick_hit_rate": 0.75,
-     "mean_pick_p": 0.5317,
-     "sufficient_sample": false
+      "dixon-coles-v1-forward-frozen": {
+        "n": 15,
+        "hits": 8,
+        "brier": 0.5659,
+        "logloss": 0.9498,
+        "pick_hit_rate": 0.5333,
+        "mean_pick_p": 0.4968,
+        "sufficient_sample": false
+      },
+      "dc-public-v1": {
+        "n": 1,
+        "hits": 1,
+        "brier": 0.4255,
+        "logloss": 0.7594,
+        "pick_hit_rate": 1.0,
+        "mean_pick_p": 0.468,
+        "sufficient_sample": false
+      }
     },
     "goals": {
-     "n": 4,
-     "brier": 0.2437,
-     "logloss": 0.6806,
-     "pick_hit_rate": 0.5,
-     "mean_pick_p": 0.5462,
-     "sufficient_sample": false
+      "dc-public-v1": {
+        "n": 1,
+        "hits": 0,
+        "brier": 0.3578,
+        "logloss": 0.9118,
+        "pick_hit_rate": 0.0,
+        "mean_pick_p": 0.5982,
+        "sufficient_sample": false
+      }
     },
     "btts": {
-     "n": 4,
-     "brier": 0.2497,
-     "logloss": 0.6925,
-     "pick_hit_rate": 0.5,
-     "mean_pick_p": 0.5444,
-     "sufficient_sample": false
+      "dc-public-v1": {
+        "n": 1,
+        "hits": 0,
+        "brier": 0.3593,
+        "logloss": 0.9148,
+        "pick_hit_rate": 0.0,
+        "mean_pick_p": 0.5994,
+        "sufficient_sample": false
+      }
     }
-   },
-   "bands": {
-    "result": {
-     "60-70%": {
-      "n": 1,
-      "brier": 0.218,
-      "logloss": 0.479,
-      "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.6194,
+  },
+  "tiers": {
+    "T1": {
+      "n": 15,
+      "hits": 8,
+      "brier": 0.5659,
+      "logloss": 0.9498,
+      "pick_hit_rate": 0.5333,
+      "mean_pick_p": 0.4968,
       "sufficient_sample": false
-     },
-     "70-80%": {
-      "n": 1,
-      "brier": 0.137,
-      "logloss": 0.355,
-      "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.7012,
-      "sufficient_sample": false
-     },
-     "0-40%": {
-      "n": 1,
-      "brier": 0.6316,
-      "logloss": 1.0323,
-      "pick_hit_rate": 0.0,
-      "mean_pick_p": 0.3922,
-      "sufficient_sample": false
-     },
-     "40-50%": {
-      "n": 1,
-      "brier": 0.5152,
-      "logloss": 0.882,
-      "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.414,
-      "sufficient_sample": false
-     }
     },
-    "goals": {
-     "50-60%": {
-      "n": 4,
-      "brier": 0.2437,
-      "logloss": 0.6806,
-      "pick_hit_rate": 0.5,
-      "mean_pick_p": 0.5462,
-      "sufficient_sample": false
-     }
-    },
-    "btts": {
-     "50-60%": {
-      "n": 4,
-      "brier": 0.2497,
-      "logloss": 0.6925,
-      "pick_hit_rate": 0.5,
-      "mean_pick_p": 0.5444,
-      "sufficient_sample": false
-     }
-    }
-   },
-   "versions": {
-    "result": {
-     "dc-public-v1": {
-      "n": 4,
-      "brier": 0.3755,
-      "logloss": 0.6871,
-      "pick_hit_rate": 0.75,
-      "mean_pick_p": 0.5317,
-      "sufficient_sample": false
-     }
-    },
-    "goals": {
-     "dc-public-v1": {
-      "n": 4,
-      "brier": 0.2437,
-      "logloss": 0.6806,
-      "pick_hit_rate": 0.5,
-      "mean_pick_p": 0.5462,
-      "sufficient_sample": false
-     }
-    },
-    "btts": {
-     "dc-public-v1": {
-      "n": 4,
-      "brier": 0.2497,
-      "logloss": 0.6925,
-      "pick_hit_rate": 0.5,
-      "mean_pick_p": 0.5444,
-      "sufficient_sample": false
-     }
-    }
-   },
-   "tiers": {
     "L1": {
-     "n": 4,
-     "brier": 0.3755,
-     "logloss": 0.6871,
-     "pick_hit_rate": 0.75,
-     "mean_pick_p": 0.5317,
-     "sufficient_sample": false
-    }
-   },
-   "teams": {
-    "Paris SG": {
-     "n": 2,
-     "brier": 0.1775,
-     "logloss": 0.417,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.6603,
-     "sufficient_sample": false
-    },
-    "Lyon": {
-     "n": 1,
-     "brier": 0.218,
-     "logloss": 0.479,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.6194,
-     "sufficient_sample": false
-    },
-    "Le Havre": {
-     "n": 1,
-     "brier": 0.137,
-     "logloss": 0.355,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.7012,
-     "sufficient_sample": false
-    },
-    "Nice": {
-     "n": 1,
-     "brier": 0.6316,
-     "logloss": 1.0323,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.3922,
-     "sufficient_sample": false
-    },
-    "Rennes": {
-     "n": 1,
-     "brier": 0.6316,
-     "logloss": 1.0323,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.3922,
-     "sufficient_sample": false
-    },
-    "Lille": {
-     "n": 1,
-     "brier": 0.5152,
-     "logloss": 0.882,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.414,
-     "sufficient_sample": false
-    },
-    "Lens": {
-     "n": 1,
-     "brier": 0.5152,
-     "logloss": 0.882,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.414,
-     "sufficient_sample": false
-    }
-   },
-   "result_timeline": [
-    {
-     "kickoff_utc": "2026-10-26T19:30:00Z",
-     "won": true,
-     "brier": 0.21803
-    },
-    {
-     "kickoff_utc": "2026-10-30T18:00:00Z",
-     "won": true,
-     "brier": 0.13704
-    },
-    {
-     "kickoff_utc": "2026-10-30T18:00:00Z",
-     "won": false,
-     "brier": 0.6316
-    },
-    {
-     "kickoff_utc": "2026-10-30T20:05:00Z",
-     "won": true,
-     "brier": 0.5152
-    }
-   ],
-   "most_likely": {
-    "n": 4,
-    "brier": 0.1772,
-    "logloss": 0.5424,
-    "pick_hit_rate": 0.75,
-    "mean_pick_p": 0.6015,
-    "sufficient_sample": false
-   },
-   "most_likely_by_market": {
-    "result": {
-     "n": 2,
-     "brier": 0.1171,
-     "logloss": 0.417,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.6603,
-     "sufficient_sample": false
-    },
-    "goals": {
-     "n": 1,
-     "brier": 0.1961,
-     "logloss": 0.5848,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.5572,
-     "sufficient_sample": false
-    },
-    "btts": {
-     "n": 1,
-     "brier": 0.2788,
-     "logloss": 0.7508,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.528,
-     "sufficient_sample": false
-    }
-   },
-   "decisions": {
-    "most_likely:most_likely": 4,
-    "best_value:no_bet": 4
-   },
-   "evaluated_matches": 4,
-   "published_records": 71
-  },
-  "PD": {
-   "min_report_n": 20,
-   "markets": {
-    "result": {
-     "n": 2,
-     "brier": 0.7935,
-     "logloss": 1.3139,
-     "pick_hit_rate": 0.5,
-     "mean_pick_p": 0.5549,
-     "sufficient_sample": false
-    },
-    "goals": {
-     "n": 2,
-     "brier": 0.2568,
-     "logloss": 0.7067,
-     "pick_hit_rate": 0.5,
-     "mean_pick_p": 0.5112,
-     "sufficient_sample": false
-    },
-    "btts": {
-     "n": 2,
-     "brier": 0.2905,
-     "logloss": 0.7744,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.539,
-     "sufficient_sample": false
-    }
-   },
-   "bands": {
-    "result": {
-     "40-50%": {
       "n": 1,
-      "brier": 0.419,
-      "logloss": 0.7518,
+      "hits": 1,
+      "brier": 0.4255,
+      "logloss": 0.7594,
       "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.4715,
+      "mean_pick_p": 0.468,
       "sufficient_sample": false
-     },
-     "60-70%": {
-      "n": 1,
-      "brier": 1.168,
-      "logloss": 1.8759,
-      "pick_hit_rate": 0.0,
-      "mean_pick_p": 0.6383,
-      "sufficient_sample": false
-     }
-    },
-    "goals": {
-     "50-60%": {
-      "n": 2,
-      "brier": 0.2568,
-      "logloss": 0.7067,
-      "pick_hit_rate": 0.5,
-      "mean_pick_p": 0.5112,
-      "sufficient_sample": false
-     }
-    },
-    "btts": {
-     "50-60%": {
-      "n": 2,
-      "brier": 0.2905,
-      "logloss": 0.7744,
-      "pick_hit_rate": 0.0,
-      "mean_pick_p": 0.539,
-      "sufficient_sample": false
-     }
     }
-   },
-   "versions": {
-    "result": {
-     "dc-public-v1": {
-      "n": 2,
-      "brier": 0.7935,
-      "logloss": 1.3139,
-      "pick_hit_rate": 0.5,
-      "mean_pick_p": 0.5549,
-      "sufficient_sample": false
-     }
-    },
-    "goals": {
-     "dc-public-v1": {
-      "n": 2,
-      "brier": 0.2568,
-      "logloss": 0.7067,
-      "pick_hit_rate": 0.5,
-      "mean_pick_p": 0.5112,
-      "sufficient_sample": false
-     }
-    },
-    "btts": {
-     "dc-public-v1": {
-      "n": 2,
-      "brier": 0.2905,
-      "logloss": 0.7744,
-      "pick_hit_rate": 0.0,
-      "mean_pick_p": 0.539,
-      "sufficient_sample": false
-     }
-    }
-   },
-   "tiers": {
-    "L1": {
-     "n": 2,
-     "brier": 0.7935,
-     "logloss": 1.3139,
-     "pick_hit_rate": 0.5,
-     "mean_pick_p": 0.5549,
-     "sufficient_sample": false
-    }
-   },
-   "teams": {
-    "Sevilla": {
-     "n": 1,
-     "brier": 0.419,
-     "logloss": 0.7518,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4715,
-     "sufficient_sample": false
-    },
-    "Osasuna": {
-     "n": 1,
-     "brier": 0.419,
-     "logloss": 0.7518,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4715,
-     "sufficient_sample": false
-    },
-    "Villarreal": {
-     "n": 1,
-     "brier": 1.168,
-     "logloss": 1.8759,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.6383,
-     "sufficient_sample": false
-    },
-    "Espanyol": {
-     "n": 1,
-     "brier": 1.168,
-     "logloss": 1.8759,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.6383,
-     "sufficient_sample": false
-    }
-   },
-   "result_timeline": [
-    {
-     "kickoff_utc": "2026-10-26T20:00:00Z",
-     "won": true,
-     "brier": 0.41899
-    },
-    {
-     "kickoff_utc": "2026-10-30T20:00:00Z",
-     "won": false,
-     "brier": 1.16799
-    }
-   ],
-   "most_likely": {
-    "n": 2,
-    "brier": 0.3496,
-    "logloss": 0.8968,
-    "pick_hit_rate": 0.0,
-    "mean_pick_p": 0.5892,
-    "sufficient_sample": false
-   },
-   "most_likely_by_market": {
-    "btts": {
-     "n": 1,
-     "brier": 0.2917,
-     "logloss": 0.7768,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.5401,
-     "sufficient_sample": false
-    },
-    "result": {
-     "n": 1,
-     "brier": 0.4074,
-     "logloss": 1.0169,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.6383,
-     "sufficient_sample": false
-    }
-   },
-   "decisions": {
-    "most_likely:most_likely": 2,
-    "best_value:no_bet": 2
-   },
-   "evaluated_matches": 2,
-   "published_records": 81
   },
-  "SA": {
-   "min_report_n": 20,
-   "markets": {
-    "result": {
-     "n": 10,
-     "brier": 0.6284,
-     "logloss": 1.0505,
-     "pick_hit_rate": 0.4,
-     "mean_pick_p": 0.4795,
-     "sufficient_sample": false
+  "teams": {
+    "Brentford": {
+      "n": 1,
+      "hits": 1,
+      "brier": 0.5072,
+      "logloss": 0.8668,
+      "pick_hit_rate": 1.0,
+      "mean_pick_p": 0.4203,
+      "sufficient_sample": false
     },
-    "goals": {
-     "n": 10,
-     "brier": 0.2486,
-     "logloss": 0.6903,
-     "pick_hit_rate": 0.4,
-     "mean_pick_p": 0.5207,
-     "sufficient_sample": false
+    "Liverpool": {
+      "n": 2,
+      "hits": 2,
+      "brier": 0.4466,
+      "logloss": 0.787,
+      "pick_hit_rate": 1.0,
+      "mean_pick_p": 0.4567,
+      "sufficient_sample": false
     },
-    "btts": {
-     "n": 10,
-     "brier": 0.2449,
-     "logloss": 0.6829,
-     "pick_hit_rate": 0.7,
-     "mean_pick_p": 0.5104,
-     "sufficient_sample": false
-    }
-   },
-   "bands": {
-    "result": {
-     "40-50%": {
-      "n": 6,
-      "brier": 0.6823,
-      "logloss": 1.1187,
+    "Man City": {
+      "n": 2,
+      "hits": 1,
+      "brier": 0.4503,
+      "logloss": 0.7693,
+      "pick_hit_rate": 0.5,
+      "mean_pick_p": 0.6701,
+      "sufficient_sample": false
+    },
+    "Ipswich": {
+      "n": 2,
+      "hits": 1,
+      "brier": 0.4807,
+      "logloss": 0.7858,
+      "pick_hit_rate": 0.5,
+      "mean_pick_p": 0.7073,
+      "sufficient_sample": false
+    },
+    "Newcastle": {
+      "n": 2,
+      "hits": 1,
+      "brier": 0.6335,
+      "logloss": 1.0426,
+      "pick_hit_rate": 0.5,
+      "mean_pick_p": 0.4131,
+      "sufficient_sample": false
+    },
+    "Aston Villa": {
+      "n": 2,
+      "hits": 0,
+      "brier": 0.7958,
+      "logloss": 1.2734,
+      "pick_hit_rate": 0.0,
+      "mean_pick_p": 0.4576,
+      "sufficient_sample": false
+    },
+    "Bournemouth": {
+      "n": 2,
+      "hits": 1,
+      "brier": 0.5495,
+      "logloss": 0.9282,
+      "pick_hit_rate": 0.5,
+      "mean_pick_p": 0.4348,
+      "sufficient_sample": false
+    },
+    "Sunderland": {
+      "n": 2,
+      "hits": 1,
+      "brier": 0.5686,
+      "logloss": 0.9638,
+      "pick_hit_rate": 0.5,
+      "mean_pick_p": 0.4125,
+      "sufficient_sample": false
+    },
+    "Brighton": {
+      "n": 2,
+      "hits": 2,
+      "brier": 0.3691,
+      "logloss": 0.6847,
+      "pick_hit_rate": 1.0,
+      "mean_pick_p": 0.5044,
+      "sufficient_sample": false
+    },
+    "Crystal Palace": {
+      "n": 2,
+      "hits": 2,
+      "brier": 0.4465,
+      "logloss": 0.7889,
+      "pick_hit_rate": 1.0,
+      "mean_pick_p": 0.458,
+      "sufficient_sample": false
+    },
+    "Leeds": {
+      "n": 2,
+      "hits": 0,
+      "brier": 0.746,
+      "logloss": 1.2211,
+      "pick_hit_rate": 0.0,
+      "mean_pick_p": 0.3688,
+      "sufficient_sample": false
+    },
+    "Man United": {
+      "n": 3,
+      "hits": 1,
+      "brier": 0.6264,
+      "logloss": 1.0434,
       "pick_hit_rate": 0.3333,
-      "mean_pick_p": 0.4426,
+      "mean_pick_p": 0.4168,
       "sufficient_sample": false
-     },
-     "60-70%": {
-      "n": 1,
-      "brier": 0.1565,
-      "logloss": 0.3841,
-      "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.6811,
-      "sufficient_sample": false
-     },
-     "50-60%": {
+    },
+    "Nott'm Forest": {
       "n": 2,
-      "brier": 0.6478,
-      "logloss": 1.1019,
+      "hits": 1,
+      "brier": 0.6386,
+      "logloss": 1.033,
       "pick_hit_rate": 0.5,
-      "mean_pick_p": 0.5377,
+      "mean_pick_p": 0.5413,
       "sufficient_sample": false
-     },
-     "0-40%": {
+    },
+    "Arsenal": {
+      "n": 2,
+      "hits": 2,
+      "brier": 0.2926,
+      "logloss": 0.5728,
+      "pick_hit_rate": 1.0,
+      "mean_pick_p": 0.5658,
+      "sufficient_sample": false
+    },
+    "Everton": {
       "n": 1,
-      "brier": 0.7381,
-      "logloss": 1.2054,
+      "hits": 1,
+      "brier": 0.2341,
+      "logloss": 0.4898,
+      "pick_hit_rate": 1.0,
+      "mean_pick_p": 0.6127,
+      "sufficient_sample": false
+    },
+    "Chelsea": {
+      "n": 2,
+      "hits": 1,
+      "brier": 0.6997,
+      "logloss": 1.1458,
+      "pick_hit_rate": 0.5,
+      "mean_pick_p": 0.5108,
+      "sufficient_sample": false
+    },
+    "Tottenham": {
+      "n": 1,
+      "hits": 0,
+      "brier": 0.9739,
+      "logloss": 1.5321,
       "pick_hit_rate": 0.0,
-      "mean_pick_p": 0.3834,
+      "mean_pick_p": 0.5535,
       "sufficient_sample": false
-     }
-    },
-    "goals": {
-     "50-60%": {
-      "n": 10,
-      "brier": 0.2486,
-      "logloss": 0.6903,
-      "pick_hit_rate": 0.4,
-      "mean_pick_p": 0.5207,
-      "sufficient_sample": false
-     }
-    },
-    "btts": {
-     "50-60%": {
-      "n": 10,
-      "brier": 0.2449,
-      "logloss": 0.6829,
-      "pick_hit_rate": 0.7,
-      "mean_pick_p": 0.5104,
-      "sufficient_sample": false
-     }
     }
-   },
-   "versions": {
-    "result": {
-     "dc-public-v1": {
-      "n": 10,
-      "brier": 0.6284,
-      "logloss": 1.0505,
-      "pick_hit_rate": 0.4,
-      "mean_pick_p": 0.4795,
-      "sufficient_sample": false
-     }
+  },
+  "result_timeline": [
+    {
+      "kickoff_utc": "2026-10-17T14:00:00Z",
+      "won": true,
+      "brier": 0.50725
     },
-    "goals": {
-     "dc-public-v1": {
-      "n": 10,
-      "brier": 0.2486,
-      "logloss": 0.6903,
-      "pick_hit_rate": 0.4,
-      "mean_pick_p": 0.5207,
-      "sufficient_sample": false
-     }
+    {
+      "kickoff_utc": "2026-10-17T14:00:00Z",
+      "won": true,
+      "brier": 0.03524
     },
-    "btts": {
-     "dc-public-v1": {
-      "n": 10,
-      "brier": 0.2449,
-      "logloss": 0.6829,
-      "pick_hit_rate": 0.7,
-      "mean_pick_p": 0.5104,
-      "sufficient_sample": false
-     }
+    {
+      "kickoff_utc": "2026-10-17T16:30:00Z",
+      "won": false,
+      "brier": 0.72629
+    },
+    {
+      "kickoff_utc": "2026-10-18T13:00:00Z",
+      "won": true,
+      "brier": 0.42084
+    },
+    {
+      "kickoff_utc": "2026-10-18T13:00:00Z",
+      "won": true,
+      "brier": 0.35238
+    },
+    {
+      "kickoff_utc": "2026-10-18T13:00:00Z",
+      "won": false,
+      "brier": 0.7756
+    },
+    {
+      "kickoff_utc": "2026-10-18T15:30:00Z",
+      "won": true,
+      "brier": 0.35122
+    },
+    {
+      "kickoff_utc": "2026-10-23T19:00:00Z",
+      "won": false,
+      "brier": 0.92608
+    },
+    {
+      "kickoff_utc": "2026-10-24T11:30:00Z",
+      "won": false,
+      "brier": 0.86527
+    },
+    {
+      "kickoff_utc": "2026-10-24T14:00:00Z",
+      "won": true,
+      "brier": 0.23405
+    },
+    {
+      "kickoff_utc": "2026-10-24T16:30:00Z",
+      "won": false,
+      "brier": 0.97395
+    },
+    {
+      "kickoff_utc": "2026-10-25T14:00:00Z",
+      "won": true,
+      "brier": 0.54065
+    },
+    {
+      "kickoff_utc": "2026-10-25T14:00:00Z",
+      "won": true,
+      "brier": 0.38587
+    },
+    {
+      "kickoff_utc": "2026-10-25T14:00:00Z",
+      "won": false,
+      "brier": 0.67811
+    },
+    {
+      "kickoff_utc": "2026-10-25T16:30:00Z",
+      "won": false,
+      "brier": 0.71637
+    },
+    {
+      "kickoff_utc": "2026-10-31T12:30:00Z",
+      "won": true,
+      "brier": 0.42551
     }
-   },
-   "tiers": {
-    "L1": {
-     "n": 7,
-     "brier": 0.6217,
-     "logloss": 1.0471,
-     "pick_hit_rate": 0.4286,
-     "mean_pick_p": 0.5108,
-     "sufficient_sample": false
-    },
-    "T3": {
-     "n": 3,
-     "brier": 0.6442,
-     "logloss": 1.0587,
-     "pick_hit_rate": 0.3333,
-     "mean_pick_p": 0.4066,
-     "sufficient_sample": false
-    }
-   },
-   "teams": {
-    "Sassuolo": {
-     "n": 1,
-     "brier": 0.4241,
-     "logloss": 0.7585,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4684,
-     "sufficient_sample": false
-    },
-    "Lazio": {
-     "n": 1,
-     "brier": 0.4241,
-     "logloss": 0.7585,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4684,
-     "sufficient_sample": false
-    },
-    "Roma": {
-     "n": 1,
-     "brier": 0.1565,
-     "logloss": 0.3841,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.6811,
-     "sufficient_sample": false
-    },
-    "Cagliari": {
-     "n": 1,
-     "brier": 0.1565,
-     "logloss": 0.3841,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.6811,
-     "sufficient_sample": false
-    },
-    "Torino": {
-     "n": 1,
-     "brier": 0.3058,
-     "logloss": 0.5993,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.5492,
-     "sufficient_sample": false
-    },
-    "Como": {
-     "n": 1,
-     "brier": 0.3058,
-     "logloss": 0.5993,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.5492,
-     "sufficient_sample": false
-    },
-    "AC Milan": {
-     "n": 1,
-     "brier": 0.8663,
-     "logloss": 1.3803,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.488,
-     "sufficient_sample": false
-    },
-    "Bologna": {
-     "n": 1,
-     "brier": 0.8663,
-     "logloss": 1.3803,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.488,
-     "sufficient_sample": false
-    },
-    "Parma": {
-     "n": 1,
-     "brier": 0.7381,
-     "logloss": 1.2054,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.3834,
-     "sufficient_sample": false
-    },
-    "Udinese": {
-     "n": 1,
-     "brier": 0.7381,
-     "logloss": 1.2054,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.3834,
-     "sufficient_sample": false
-    },
-    "Venezia": {
-     "n": 1,
-     "brier": 0.7016,
-     "logloss": 1.138,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4066,
-     "sufficient_sample": false
-    },
-    "Inter": {
-     "n": 1,
-     "brier": 0.7016,
-     "logloss": 1.138,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4066,
-     "sufficient_sample": false
-    },
-    "Genoa": {
-     "n": 1,
-     "brier": 0.9898,
-     "logloss": 1.6044,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.5263,
-     "sufficient_sample": false
-    },
-    "Juventus": {
-     "n": 1,
-     "brier": 0.9898,
-     "logloss": 1.6044,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.5263,
-     "sufficient_sample": false
-    },
-    "Monza": {
-     "n": 1,
-     "brier": 0.7016,
-     "logloss": 1.138,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4066,
-     "sufficient_sample": false
-    },
-    "Napoli": {
-     "n": 1,
-     "brier": 0.7016,
-     "logloss": 1.138,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4066,
-     "sufficient_sample": false
-    },
-    "Frosinone": {
-     "n": 1,
-     "brier": 0.5294,
-     "logloss": 0.9,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4066,
-     "sufficient_sample": false
-    },
-    "Lecce": {
-     "n": 1,
-     "brier": 0.5294,
-     "logloss": 0.9,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.4066,
-     "sufficient_sample": false
-    },
-    "Fiorentina": {
-     "n": 1,
-     "brier": 0.8712,
-     "logloss": 1.3975,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4792,
-     "sufficient_sample": false
-    },
-    "Atalanta": {
-     "n": 1,
-     "brier": 0.8712,
-     "logloss": 1.3975,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4792,
-     "sufficient_sample": false
-    }
-   },
-   "result_timeline": [
-    {
-     "kickoff_utc": "2026-10-27T17:30:00Z",
-     "won": true,
-     "brier": 0.42406
-    },
-    {
-     "kickoff_utc": "2026-10-27T19:45:00Z",
-     "won": true,
-     "brier": 0.15652
-    },
-    {
-     "kickoff_utc": "2026-10-27T19:45:00Z",
-     "won": true,
-     "brier": 0.30577
-    },
-    {
-     "kickoff_utc": "2026-10-28T17:30:00Z",
-     "won": false,
-     "brier": 0.86626
-    },
-    {
-     "kickoff_utc": "2026-10-28T17:30:00Z",
-     "won": false,
-     "brier": 0.7381
-    },
-    {
-     "kickoff_utc": "2026-10-28T17:30:00Z",
-     "won": false,
-     "brier": 0.70157
-    },
-    {
-     "kickoff_utc": "2026-10-28T19:45:00Z",
-     "won": false,
-     "brier": 0.98976
-    },
-    {
-     "kickoff_utc": "2026-10-28T19:45:00Z",
-     "won": false,
-     "brier": 0.70157
-    },
-    {
-     "kickoff_utc": "2026-10-29T17:30:00Z",
-     "won": true,
-     "brier": 0.52939
-    },
-    {
-     "kickoff_utc": "2026-10-29T19:45:00Z",
-     "won": false,
-     "brier": 0.87117
-    }
-   ],
-   "most_likely": {
-    "n": 7,
-    "brier": 0.2187,
-    "logloss": 0.6287,
-    "pick_hit_rate": 0.7143,
-    "mean_pick_p": 0.5388,
+  ],
+  "most_likely": {
+    "n": 1,
+    "hits": 0,
+    "brier": 0.3578,
+    "logloss": 0.9118,
+    "pick_hit_rate": 0.0,
+    "mean_pick_p": 0.5982,
     "sufficient_sample": false
-   },
-   "most_likely_by_market": {
-    "btts": {
-     "n": 4,
-     "brier": 0.2372,
-     "logloss": 0.6676,
-     "pick_hit_rate": 0.75,
-     "mean_pick_p": 0.5038,
-     "sufficient_sample": false
-    },
-    "result": {
-     "n": 3,
-     "brier": 0.194,
-     "logloss": 0.5768,
-     "pick_hit_rate": 0.6667,
-     "mean_pick_p": 0.5855,
-     "sufficient_sample": false
+  },
+  "most_likely_by_market": {
+    "goals": {
+      "n": 1,
+      "hits": 0,
+      "brier": 0.3578,
+      "logloss": 0.9118,
+      "pick_hit_rate": 0.0,
+      "mean_pick_p": 0.5982,
+      "sufficient_sample": false
     }
-   },
-   "decisions": {
-    "most_likely:most_likely": 7,
-    "best_value:no_bet": 10,
-    "most_likely:no_bet": 3
-   },
-   "evaluated_matches": 10,
-   "published_records": 100
+  },
+  "decisions": {
+    "most_likely:most_likely": 1,
+    "best_value:no_bet": 1
+  },
+  "evaluated_matches": 16,
+  "published_records": 95,
+  "by_competition": {
+    "BL1": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4967,
+          "logloss": 0.8531,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4261,
+          "sufficient_sample": false
+        },
+        "goals": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.1399,
+          "logloss": 0.4686,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.6259,
+          "sufficient_sample": false
+        },
+        "btts": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.1605,
+          "logloss": 0.5118,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.5994,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "40-50%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.4967,
+            "logloss": 0.8531,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.4261,
+            "sufficient_sample": false
+          }
+        },
+        "goals": {
+          "60-70%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.1399,
+            "logloss": 0.4686,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.6259,
+            "sufficient_sample": false
+          }
+        },
+        "btts": {
+          "50-60%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.1605,
+            "logloss": 0.5118,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.5994,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-public-v1": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.4967,
+            "logloss": 0.8531,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.4261,
+            "sufficient_sample": false
+          }
+        },
+        "goals": {
+          "dc-public-v1": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.1399,
+            "logloss": 0.4686,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.6259,
+            "sufficient_sample": false
+          }
+        },
+        "btts": {
+          "dc-public-v1": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.1605,
+            "logloss": 0.5118,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.5994,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "T3": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4967,
+          "logloss": 0.8531,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4261,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Elversberg": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4967,
+          "logloss": 0.8531,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4261,
+          "sufficient_sample": false
+        },
+        "Mainz": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4967,
+          "logloss": 0.8531,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4261,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-30T19:30:00Z",
+          "won": true,
+          "brier": 0.49666
+        }
+      ],
+      "most_likely": {
+        "n": 0,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {},
+      "decisions": {
+        "most_likely:no_bet": 1,
+        "best_value:no_bet": 1
+      },
+      "evaluated_matches": 1,
+      "published_records": 72
+    },
+    "CL": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 6,
+          "hits": 5,
+          "brier": 0.3867,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.8333,
+          "mean_pick_p": 0.52,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "50-60%": {
+            "n": 5,
+            "hits": 4,
+            "brier": 0.382,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.8,
+            "mean_pick_p": 0.54,
+            "sufficient_sample": false
+          },
+          "40-50%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.41,
+            "logloss": 0.62,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.42,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-league-v1": {
+            "n": 6,
+            "hits": 5,
+            "brier": 0.3867,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.8333,
+            "mean_pick_p": 0.52,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 6,
+          "hits": 5,
+          "brier": 0.3867,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.8333,
+          "mean_pick_p": 0.52,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Real Madrid": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.34,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "VfB Stuttgart": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.34,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "AC Milan": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.41,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.42,
+          "sufficient_sample": false
+        },
+        "Liverpool": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.41,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.42,
+          "sufficient_sample": false
+        },
+        "Bayern Munich": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.22,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Dinamo Zagreb": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.22,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Sporting CP": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.39,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Lille": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.39,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Man City": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.58,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Inter Milan": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.58,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Arsenal": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.38,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Paris SG": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.38,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-09-17T19:00:00Z",
+          "won": true,
+          "brier": 0.34
+        },
+        {
+          "kickoff_utc": "2026-09-17T19:00:00Z",
+          "won": true,
+          "brier": 0.41
+        },
+        {
+          "kickoff_utc": "2026-09-17T19:00:00Z",
+          "won": true,
+          "brier": 0.22
+        },
+        {
+          "kickoff_utc": "2026-09-17T19:00:00Z",
+          "won": true,
+          "brier": 0.39
+        },
+        {
+          "kickoff_utc": "2026-09-18T19:00:00Z",
+          "won": false,
+          "brier": 0.58
+        },
+        {
+          "kickoff_utc": "2026-10-01T19:00:00Z",
+          "won": true,
+          "brier": 0.38
+        }
+      ],
+      "most_likely": {
+        "n": 0,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {},
+      "decisions": {},
+      "evaluated_matches": 6,
+      "published_records": 6
+    },
+    "E2": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 8,
+          "hits": 7,
+          "brier": 0.4275,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.875,
+          "mean_pick_p": 0.5075,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "50-60%": {
+            "n": 7,
+            "hits": 6,
+            "brier": 0.4186,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.8571,
+            "mean_pick_p": 0.54,
+            "sufficient_sample": false
+          },
+          "0-40%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.49,
+            "logloss": 0.62,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.28,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-league-v1": {
+            "n": 8,
+            "hits": 7,
+            "brier": 0.4275,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.875,
+            "mean_pick_p": 0.5075,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 8,
+          "hits": 7,
+          "brier": 0.4275,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.875,
+          "mean_pick_p": 0.5075,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Birmingham": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.36,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Reading": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.36,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Wrexham": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.38,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Charlton": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.38,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Huddersfield": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.43,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Bolton": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.43,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Stockport": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Lincoln": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Barnsley": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.55,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Wycombe": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.55,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Blackpool": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.42,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Wigan": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.42,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Peterborough": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.39,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Leyton Orient": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.39,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Exeter": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.49,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        },
+        "Rotherham": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.49,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": true,
+          "brier": 0.36
+        },
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": true,
+          "brier": 0.38
+        },
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": true,
+          "brier": 0.43
+        },
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": true,
+          "brier": 0.4
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": false,
+          "brier": 0.55
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": true,
+          "brier": 0.42
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": true,
+          "brier": 0.39
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": true,
+          "brier": 0.49
+        }
+      ],
+      "most_likely": {
+        "n": 0,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {},
+      "decisions": {},
+      "evaluated_matches": 8,
+      "published_records": 8
+    },
+    "E3": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 6,
+          "hits": 5,
+          "brier": 0.4583,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.8333,
+          "mean_pick_p": 0.4967,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "50-60%": {
+            "n": 5,
+            "hits": 4,
+            "brier": 0.45,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.8,
+            "mean_pick_p": 0.54,
+            "sufficient_sample": false
+          },
+          "0-40%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.5,
+            "logloss": 0.62,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.28,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-league-v1": {
+            "n": 6,
+            "hits": 5,
+            "brier": 0.4583,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.8333,
+            "mean_pick_p": 0.4967,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 6,
+          "hits": 5,
+          "brier": 0.4583,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.8333,
+          "mean_pick_p": 0.4967,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Port Vale": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.42,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Notts County": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.42,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Doncaster": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.43,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Chesterfield": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.43,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Bradford City": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.56,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Walsall": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.56,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Crewe": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Grimsby": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Salford City": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.44,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Fleetwood": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.44,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Barrow": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.5,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        },
+        "Cheltenham": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.5,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": true,
+          "brier": 0.42
+        },
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": true,
+          "brier": 0.43
+        },
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": false,
+          "brier": 0.56
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": true,
+          "brier": 0.4
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": true,
+          "brier": 0.44
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": true,
+          "brier": 0.5
+        }
+      ],
+      "most_likely": {
+        "n": 0,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {},
+      "decisions": {},
+      "evaluated_matches": 6,
+      "published_records": 6
+    },
+    "ELC": {
+      "min_report_n": 20,
+      "markets": {},
+      "bands": {},
+      "versions": {},
+      "tiers": {},
+      "teams": {},
+      "result_timeline": [],
+      "most_likely": {
+        "n": 0,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {},
+      "decisions": {},
+      "evaluated_matches": 0,
+      "published_records": 143
+    },
+    "FL1": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 4,
+          "hits": 3,
+          "brier": 0.3755,
+          "logloss": 0.6871,
+          "pick_hit_rate": 0.75,
+          "mean_pick_p": 0.5317,
+          "sufficient_sample": false
+        },
+        "goals": {
+          "n": 4,
+          "hits": 2,
+          "brier": 0.2437,
+          "logloss": 0.6806,
+          "pick_hit_rate": 0.5,
+          "mean_pick_p": 0.5462,
+          "sufficient_sample": false
+        },
+        "btts": {
+          "n": 4,
+          "hits": 2,
+          "brier": 0.2497,
+          "logloss": 0.6925,
+          "pick_hit_rate": 0.5,
+          "mean_pick_p": 0.5444,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "60-70%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.218,
+            "logloss": 0.479,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.6194,
+            "sufficient_sample": false
+          },
+          "70-80%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.137,
+            "logloss": 0.355,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.7012,
+            "sufficient_sample": false
+          },
+          "0-40%": {
+            "n": 1,
+            "hits": 0,
+            "brier": 0.6316,
+            "logloss": 1.0323,
+            "pick_hit_rate": 0.0,
+            "mean_pick_p": 0.3922,
+            "sufficient_sample": false
+          },
+          "40-50%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.5152,
+            "logloss": 0.882,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.414,
+            "sufficient_sample": false
+          }
+        },
+        "goals": {
+          "50-60%": {
+            "n": 4,
+            "hits": 2,
+            "brier": 0.2437,
+            "logloss": 0.6806,
+            "pick_hit_rate": 0.5,
+            "mean_pick_p": 0.5462,
+            "sufficient_sample": false
+          }
+        },
+        "btts": {
+          "50-60%": {
+            "n": 4,
+            "hits": 2,
+            "brier": 0.2497,
+            "logloss": 0.6925,
+            "pick_hit_rate": 0.5,
+            "mean_pick_p": 0.5444,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-public-v1": {
+            "n": 4,
+            "hits": 3,
+            "brier": 0.3755,
+            "logloss": 0.6871,
+            "pick_hit_rate": 0.75,
+            "mean_pick_p": 0.5317,
+            "sufficient_sample": false
+          }
+        },
+        "goals": {
+          "dc-public-v1": {
+            "n": 4,
+            "hits": 2,
+            "brier": 0.2437,
+            "logloss": 0.6806,
+            "pick_hit_rate": 0.5,
+            "mean_pick_p": 0.5462,
+            "sufficient_sample": false
+          }
+        },
+        "btts": {
+          "dc-public-v1": {
+            "n": 4,
+            "hits": 2,
+            "brier": 0.2497,
+            "logloss": 0.6925,
+            "pick_hit_rate": 0.5,
+            "mean_pick_p": 0.5444,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 4,
+          "hits": 3,
+          "brier": 0.3755,
+          "logloss": 0.6871,
+          "pick_hit_rate": 0.75,
+          "mean_pick_p": 0.5317,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Paris SG": {
+          "n": 2,
+          "hits": 2,
+          "brier": 0.1775,
+          "logloss": 0.417,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.6603,
+          "sufficient_sample": false
+        },
+        "Lyon": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.218,
+          "logloss": 0.479,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.6194,
+          "sufficient_sample": false
+        },
+        "Le Havre": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.137,
+          "logloss": 0.355,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.7012,
+          "sufficient_sample": false
+        },
+        "Nice": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.6316,
+          "logloss": 1.0323,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.3922,
+          "sufficient_sample": false
+        },
+        "Rennes": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.6316,
+          "logloss": 1.0323,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.3922,
+          "sufficient_sample": false
+        },
+        "Lille": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.5152,
+          "logloss": 0.882,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.414,
+          "sufficient_sample": false
+        },
+        "Lens": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.5152,
+          "logloss": 0.882,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.414,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-26T19:30:00Z",
+          "won": true,
+          "brier": 0.21803
+        },
+        {
+          "kickoff_utc": "2026-10-30T18:00:00Z",
+          "won": true,
+          "brier": 0.13704
+        },
+        {
+          "kickoff_utc": "2026-10-30T18:00:00Z",
+          "won": false,
+          "brier": 0.6316
+        },
+        {
+          "kickoff_utc": "2026-10-30T20:05:00Z",
+          "won": true,
+          "brier": 0.5152
+        }
+      ],
+      "most_likely": {
+        "n": 4,
+        "hits": 3,
+        "brier": 0.1772,
+        "logloss": 0.5424,
+        "pick_hit_rate": 0.75,
+        "mean_pick_p": 0.6015,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {
+        "result": {
+          "n": 2,
+          "hits": 2,
+          "brier": 0.1171,
+          "logloss": 0.417,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.6603,
+          "sufficient_sample": false
+        },
+        "goals": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.1961,
+          "logloss": 0.5848,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.5572,
+          "sufficient_sample": false
+        },
+        "btts": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.2788,
+          "logloss": 0.7508,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.528,
+          "sufficient_sample": false
+        }
+      },
+      "decisions": {
+        "most_likely:most_likely": 4,
+        "best_value:no_bet": 4
+      },
+      "evaluated_matches": 4,
+      "published_records": 71
+    },
+    "N1": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 6,
+          "hits": 6,
+          "brier": 0.395,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4967,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "50-60%": {
+            "n": 5,
+            "hits": 5,
+            "brier": 0.378,
+            "logloss": 0.62,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.54,
+            "sufficient_sample": false
+          },
+          "0-40%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.48,
+            "logloss": 0.62,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.28,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-league-v1": {
+            "n": 6,
+            "hits": 6,
+            "brier": 0.395,
+            "logloss": 0.62,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.4967,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 6,
+          "hits": 6,
+          "brier": 0.395,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4967,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "PSV": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.28,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "RKC Waalwijk": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.28,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Ajax": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.34,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "FC Groningen": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.34,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Feyenoord": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.38,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "FC Twente": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.38,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "AZ Alkmaar": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.44,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "FC Utrecht": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.44,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Go Ahead Eagles": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.45,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Fortuna Sittard": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.45,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Sparta Rotterdam": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.48,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        },
+        "sc Heerenveen": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.48,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-18T18:00:00Z",
+          "won": true,
+          "brier": 0.28
+        },
+        {
+          "kickoff_utc": "2026-10-18T18:00:00Z",
+          "won": true,
+          "brier": 0.34
+        },
+        {
+          "kickoff_utc": "2026-10-19T13:30:00Z",
+          "won": true,
+          "brier": 0.38
+        },
+        {
+          "kickoff_utc": "2026-10-25T13:30:00Z",
+          "won": true,
+          "brier": 0.44
+        },
+        {
+          "kickoff_utc": "2026-10-25T15:45:00Z",
+          "won": true,
+          "brier": 0.45
+        },
+        {
+          "kickoff_utc": "2026-10-25T19:00:00Z",
+          "won": true,
+          "brier": 0.48
+        }
+      ],
+      "most_likely": {
+        "n": 0,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {},
+      "decisions": {},
+      "evaluated_matches": 6,
+      "published_records": 6
+    },
+    "P1": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 5,
+          "hits": 5,
+          "brier": 0.37,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "50-60%": {
+            "n": 5,
+            "hits": 5,
+            "brier": 0.37,
+            "logloss": 0.62,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.54,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-league-v1": {
+            "n": 5,
+            "hits": 5,
+            "brier": 0.37,
+            "logloss": 0.62,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.54,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 5,
+          "hits": 5,
+          "brier": 0.37,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Sporting CP": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.3,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Rio Ave": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.3,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "FC Porto": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.36,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Vitoria Guimaraes": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.36,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Benfica": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.32,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Santa Clara": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.32,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "SC Braga": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.42,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Moreirense": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.42,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Famalicao": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.45,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Gil Vicente": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.45,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-18T19:30:00Z",
+          "won": true,
+          "brier": 0.3
+        },
+        {
+          "kickoff_utc": "2026-10-18T19:30:00Z",
+          "won": true,
+          "brier": 0.36
+        },
+        {
+          "kickoff_utc": "2026-10-19T17:00:00Z",
+          "won": true,
+          "brier": 0.32
+        },
+        {
+          "kickoff_utc": "2026-10-25T17:00:00Z",
+          "won": true,
+          "brier": 0.42
+        },
+        {
+          "kickoff_utc": "2026-10-25T19:30:00Z",
+          "won": true,
+          "brier": 0.45
+        }
+      ],
+      "most_likely": {
+        "n": 0,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {},
+      "decisions": {},
+      "evaluated_matches": 5,
+      "published_records": 5
+    },
+    "PD": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 2,
+          "hits": 1,
+          "brier": 0.7935,
+          "logloss": 1.3139,
+          "pick_hit_rate": 0.5,
+          "mean_pick_p": 0.5549,
+          "sufficient_sample": false
+        },
+        "goals": {
+          "n": 2,
+          "hits": 1,
+          "brier": 0.2568,
+          "logloss": 0.7067,
+          "pick_hit_rate": 0.5,
+          "mean_pick_p": 0.5112,
+          "sufficient_sample": false
+        },
+        "btts": {
+          "n": 2,
+          "hits": 0,
+          "brier": 0.2905,
+          "logloss": 0.7744,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.539,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "40-50%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.419,
+            "logloss": 0.7518,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.4715,
+            "sufficient_sample": false
+          },
+          "60-70%": {
+            "n": 1,
+            "hits": 0,
+            "brier": 1.168,
+            "logloss": 1.8759,
+            "pick_hit_rate": 0.0,
+            "mean_pick_p": 0.6383,
+            "sufficient_sample": false
+          }
+        },
+        "goals": {
+          "50-60%": {
+            "n": 2,
+            "hits": 1,
+            "brier": 0.2568,
+            "logloss": 0.7067,
+            "pick_hit_rate": 0.5,
+            "mean_pick_p": 0.5112,
+            "sufficient_sample": false
+          }
+        },
+        "btts": {
+          "50-60%": {
+            "n": 2,
+            "hits": 0,
+            "brier": 0.2905,
+            "logloss": 0.7744,
+            "pick_hit_rate": 0.0,
+            "mean_pick_p": 0.539,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-public-v1": {
+            "n": 2,
+            "hits": 1,
+            "brier": 0.7935,
+            "logloss": 1.3139,
+            "pick_hit_rate": 0.5,
+            "mean_pick_p": 0.5549,
+            "sufficient_sample": false
+          }
+        },
+        "goals": {
+          "dc-public-v1": {
+            "n": 2,
+            "hits": 1,
+            "brier": 0.2568,
+            "logloss": 0.7067,
+            "pick_hit_rate": 0.5,
+            "mean_pick_p": 0.5112,
+            "sufficient_sample": false
+          }
+        },
+        "btts": {
+          "dc-public-v1": {
+            "n": 2,
+            "hits": 0,
+            "brier": 0.2905,
+            "logloss": 0.7744,
+            "pick_hit_rate": 0.0,
+            "mean_pick_p": 0.539,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 2,
+          "hits": 1,
+          "brier": 0.7935,
+          "logloss": 1.3139,
+          "pick_hit_rate": 0.5,
+          "mean_pick_p": 0.5549,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Sevilla": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.419,
+          "logloss": 0.7518,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4715,
+          "sufficient_sample": false
+        },
+        "Osasuna": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.419,
+          "logloss": 0.7518,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4715,
+          "sufficient_sample": false
+        },
+        "Villarreal": {
+          "n": 1,
+          "hits": 0,
+          "brier": 1.168,
+          "logloss": 1.8759,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.6383,
+          "sufficient_sample": false
+        },
+        "Espanyol": {
+          "n": 1,
+          "hits": 0,
+          "brier": 1.168,
+          "logloss": 1.8759,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.6383,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-26T20:00:00Z",
+          "won": true,
+          "brier": 0.41899
+        },
+        {
+          "kickoff_utc": "2026-10-30T20:00:00Z",
+          "won": false,
+          "brier": 1.16799
+        }
+      ],
+      "most_likely": {
+        "n": 2,
+        "hits": 0,
+        "brier": 0.3496,
+        "logloss": 0.8968,
+        "pick_hit_rate": 0.0,
+        "mean_pick_p": 0.5892,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {
+        "btts": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.2917,
+          "logloss": 0.7768,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.5401,
+          "sufficient_sample": false
+        },
+        "result": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.4074,
+          "logloss": 1.0169,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.6383,
+          "sufficient_sample": false
+        }
+      },
+      "decisions": {
+        "most_likely:most_likely": 2,
+        "best_value:no_bet": 2
+      },
+      "evaluated_matches": 2,
+      "published_records": 81
+    },
+    "SA": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 10,
+          "hits": 4,
+          "brier": 0.6284,
+          "logloss": 1.0505,
+          "pick_hit_rate": 0.4,
+          "mean_pick_p": 0.4795,
+          "sufficient_sample": false
+        },
+        "goals": {
+          "n": 10,
+          "hits": 4,
+          "brier": 0.2486,
+          "logloss": 0.6903,
+          "pick_hit_rate": 0.4,
+          "mean_pick_p": 0.5207,
+          "sufficient_sample": false
+        },
+        "btts": {
+          "n": 10,
+          "hits": 7,
+          "brier": 0.2449,
+          "logloss": 0.6829,
+          "pick_hit_rate": 0.7,
+          "mean_pick_p": 0.5104,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "40-50%": {
+            "n": 6,
+            "hits": 2,
+            "brier": 0.6823,
+            "logloss": 1.1187,
+            "pick_hit_rate": 0.3333,
+            "mean_pick_p": 0.4426,
+            "sufficient_sample": false
+          },
+          "60-70%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.1565,
+            "logloss": 0.3841,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.6811,
+            "sufficient_sample": false
+          },
+          "50-60%": {
+            "n": 2,
+            "hits": 1,
+            "brier": 0.6478,
+            "logloss": 1.1019,
+            "pick_hit_rate": 0.5,
+            "mean_pick_p": 0.5377,
+            "sufficient_sample": false
+          },
+          "0-40%": {
+            "n": 1,
+            "hits": 0,
+            "brier": 0.7381,
+            "logloss": 1.2054,
+            "pick_hit_rate": 0.0,
+            "mean_pick_p": 0.3834,
+            "sufficient_sample": false
+          }
+        },
+        "goals": {
+          "50-60%": {
+            "n": 10,
+            "hits": 4,
+            "brier": 0.2486,
+            "logloss": 0.6903,
+            "pick_hit_rate": 0.4,
+            "mean_pick_p": 0.5207,
+            "sufficient_sample": false
+          }
+        },
+        "btts": {
+          "50-60%": {
+            "n": 10,
+            "hits": 7,
+            "brier": 0.2449,
+            "logloss": 0.6829,
+            "pick_hit_rate": 0.7,
+            "mean_pick_p": 0.5104,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-public-v1": {
+            "n": 10,
+            "hits": 4,
+            "brier": 0.6284,
+            "logloss": 1.0505,
+            "pick_hit_rate": 0.4,
+            "mean_pick_p": 0.4795,
+            "sufficient_sample": false
+          }
+        },
+        "goals": {
+          "dc-public-v1": {
+            "n": 10,
+            "hits": 4,
+            "brier": 0.2486,
+            "logloss": 0.6903,
+            "pick_hit_rate": 0.4,
+            "mean_pick_p": 0.5207,
+            "sufficient_sample": false
+          }
+        },
+        "btts": {
+          "dc-public-v1": {
+            "n": 10,
+            "hits": 7,
+            "brier": 0.2449,
+            "logloss": 0.6829,
+            "pick_hit_rate": 0.7,
+            "mean_pick_p": 0.5104,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 7,
+          "hits": 3,
+          "brier": 0.6217,
+          "logloss": 1.0471,
+          "pick_hit_rate": 0.4286,
+          "mean_pick_p": 0.5108,
+          "sufficient_sample": false
+        },
+        "T3": {
+          "n": 3,
+          "hits": 1,
+          "brier": 0.6442,
+          "logloss": 1.0587,
+          "pick_hit_rate": 0.3333,
+          "mean_pick_p": 0.4066,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Sassuolo": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4241,
+          "logloss": 0.7585,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4684,
+          "sufficient_sample": false
+        },
+        "Lazio": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4241,
+          "logloss": 0.7585,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4684,
+          "sufficient_sample": false
+        },
+        "Roma": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.1565,
+          "logloss": 0.3841,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.6811,
+          "sufficient_sample": false
+        },
+        "Cagliari": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.1565,
+          "logloss": 0.3841,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.6811,
+          "sufficient_sample": false
+        },
+        "Torino": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.3058,
+          "logloss": 0.5993,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.5492,
+          "sufficient_sample": false
+        },
+        "Como": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.3058,
+          "logloss": 0.5993,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.5492,
+          "sufficient_sample": false
+        },
+        "AC Milan": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.8663,
+          "logloss": 1.3803,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.488,
+          "sufficient_sample": false
+        },
+        "Bologna": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.8663,
+          "logloss": 1.3803,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.488,
+          "sufficient_sample": false
+        },
+        "Parma": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.7381,
+          "logloss": 1.2054,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.3834,
+          "sufficient_sample": false
+        },
+        "Udinese": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.7381,
+          "logloss": 1.2054,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.3834,
+          "sufficient_sample": false
+        },
+        "Venezia": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.7016,
+          "logloss": 1.138,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.4066,
+          "sufficient_sample": false
+        },
+        "Inter": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.7016,
+          "logloss": 1.138,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.4066,
+          "sufficient_sample": false
+        },
+        "Genoa": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.9898,
+          "logloss": 1.6044,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.5263,
+          "sufficient_sample": false
+        },
+        "Juventus": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.9898,
+          "logloss": 1.6044,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.5263,
+          "sufficient_sample": false
+        },
+        "Monza": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.7016,
+          "logloss": 1.138,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.4066,
+          "sufficient_sample": false
+        },
+        "Napoli": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.7016,
+          "logloss": 1.138,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.4066,
+          "sufficient_sample": false
+        },
+        "Frosinone": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.5294,
+          "logloss": 0.9,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4066,
+          "sufficient_sample": false
+        },
+        "Lecce": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.5294,
+          "logloss": 0.9,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.4066,
+          "sufficient_sample": false
+        },
+        "Fiorentina": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.8712,
+          "logloss": 1.3975,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.4792,
+          "sufficient_sample": false
+        },
+        "Atalanta": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.8712,
+          "logloss": 1.3975,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.4792,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-27T17:30:00Z",
+          "won": true,
+          "brier": 0.42406
+        },
+        {
+          "kickoff_utc": "2026-10-27T19:45:00Z",
+          "won": true,
+          "brier": 0.15652
+        },
+        {
+          "kickoff_utc": "2026-10-27T19:45:00Z",
+          "won": true,
+          "brier": 0.30577
+        },
+        {
+          "kickoff_utc": "2026-10-28T17:30:00Z",
+          "won": false,
+          "brier": 0.86626
+        },
+        {
+          "kickoff_utc": "2026-10-28T17:30:00Z",
+          "won": false,
+          "brier": 0.7381
+        },
+        {
+          "kickoff_utc": "2026-10-28T17:30:00Z",
+          "won": false,
+          "brier": 0.70157
+        },
+        {
+          "kickoff_utc": "2026-10-28T19:45:00Z",
+          "won": false,
+          "brier": 0.98976
+        },
+        {
+          "kickoff_utc": "2026-10-28T19:45:00Z",
+          "won": false,
+          "brier": 0.70157
+        },
+        {
+          "kickoff_utc": "2026-10-29T17:30:00Z",
+          "won": true,
+          "brier": 0.52939
+        },
+        {
+          "kickoff_utc": "2026-10-29T19:45:00Z",
+          "won": false,
+          "brier": 0.87117
+        }
+      ],
+      "most_likely": {
+        "n": 7,
+        "hits": 5,
+        "brier": 0.2187,
+        "logloss": 0.6287,
+        "pick_hit_rate": 0.7143,
+        "mean_pick_p": 0.5388,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {
+        "btts": {
+          "n": 4,
+          "hits": 3,
+          "brier": 0.2372,
+          "logloss": 0.6676,
+          "pick_hit_rate": 0.75,
+          "mean_pick_p": 0.5038,
+          "sufficient_sample": false
+        },
+        "result": {
+          "n": 3,
+          "hits": 2,
+          "brier": 0.194,
+          "logloss": 0.5768,
+          "pick_hit_rate": 0.6667,
+          "mean_pick_p": 0.5855,
+          "sufficient_sample": false
+        }
+      },
+      "decisions": {
+        "most_likely:most_likely": 7,
+        "best_value:no_bet": 10,
+        "most_likely:no_bet": 3
+      },
+      "evaluated_matches": 10,
+      "published_records": 100
+    },
+    "SC0": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 6,
+          "hits": 5,
+          "brier": 0.4433,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.8333,
+          "mean_pick_p": 0.4967,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "50-60%": {
+            "n": 5,
+            "hits": 4,
+            "brier": 0.436,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.8,
+            "mean_pick_p": 0.54,
+            "sufficient_sample": false
+          },
+          "0-40%": {
+            "n": 1,
+            "hits": 1,
+            "brier": 0.48,
+            "logloss": 0.62,
+            "pick_hit_rate": 1.0,
+            "mean_pick_p": 0.28,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-league-v1": {
+            "n": 6,
+            "hits": 5,
+            "brier": 0.4433,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.8333,
+            "mean_pick_p": 0.4967,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 6,
+          "hits": 5,
+          "brier": 0.4433,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.8333,
+          "mean_pick_p": 0.4967,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Celtic": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.35,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Kilmarnock": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.35,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Rangers": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Motherwell": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.4,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Aberdeen": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.42,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Hearts": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.42,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Dundee United": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.48,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        },
+        "St. Johnstone": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.48,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        },
+        "Hibernian": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.62,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Dundee": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.62,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "St. Mirren": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.39,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Ross County": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.39,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": true,
+          "brier": 0.35
+        },
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": true,
+          "brier": 0.4
+        },
+        {
+          "kickoff_utc": "2026-10-19T14:00:00Z",
+          "won": true,
+          "brier": 0.42
+        },
+        {
+          "kickoff_utc": "2026-10-19T14:00:00Z",
+          "won": true,
+          "brier": 0.48
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": false,
+          "brier": 0.62
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": true,
+          "brier": 0.39
+        }
+      ],
+      "most_likely": {
+        "n": 0,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {},
+      "decisions": {},
+      "evaluated_matches": 6,
+      "published_records": 6
+    },
+    "SC1": {
+      "min_report_n": 20,
+      "markets": {
+        "result": {
+          "n": 5,
+          "hits": 3,
+          "brier": 0.506,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.6,
+          "mean_pick_p": 0.488,
+          "sufficient_sample": false
+        }
+      },
+      "bands": {
+        "result": {
+          "50-60%": {
+            "n": 4,
+            "hits": 3,
+            "brier": 0.47,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.75,
+            "mean_pick_p": 0.54,
+            "sufficient_sample": false
+          },
+          "0-40%": {
+            "n": 1,
+            "hits": 0,
+            "brier": 0.65,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.0,
+            "mean_pick_p": 0.28,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "versions": {
+        "result": {
+          "dc-league-v1": {
+            "n": 5,
+            "hits": 3,
+            "brier": 0.506,
+            "logloss": 0.62,
+            "pick_hit_rate": 0.6,
+            "mean_pick_p": 0.488,
+            "sufficient_sample": false
+          }
+        }
+      },
+      "tiers": {
+        "L1": {
+          "n": 5,
+          "hits": 3,
+          "brier": 0.506,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.6,
+          "mean_pick_p": 0.488,
+          "sufficient_sample": false
+        }
+      },
+      "teams": {
+        "Falkirk": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.41,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Ayr United": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.41,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Livingston": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.58,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Partick Thistle": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.58,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Dunfermline": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.44,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Raith Rovers": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.44,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Queen's Park": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.45,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Greenock Morton": {
+          "n": 1,
+          "hits": 1,
+          "brier": 0.45,
+          "logloss": 0.62,
+          "pick_hit_rate": 1.0,
+          "mean_pick_p": 0.54,
+          "sufficient_sample": false
+        },
+        "Hamilton": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.65,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        },
+        "Airdrieonians": {
+          "n": 1,
+          "hits": 0,
+          "brier": 0.65,
+          "logloss": 0.62,
+          "pick_hit_rate": 0.0,
+          "mean_pick_p": 0.28,
+          "sufficient_sample": false
+        }
+      },
+      "result_timeline": [
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": true,
+          "brier": 0.41
+        },
+        {
+          "kickoff_utc": "2026-10-18T14:00:00Z",
+          "won": false,
+          "brier": 0.58
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": true,
+          "brier": 0.44
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": true,
+          "brier": 0.45
+        },
+        {
+          "kickoff_utc": "2026-10-25T14:00:00Z",
+          "won": false,
+          "brier": 0.65
+        }
+      ],
+      "most_likely": {
+        "n": 0,
+        "sufficient_sample": false
+      },
+      "most_likely_by_market": {},
+      "decisions": {},
+      "evaluated_matches": 5,
+      "published_records": 5
+    }
   }
- }
 }

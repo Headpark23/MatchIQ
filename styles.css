@@ -1590,7 +1590,7 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 /* Bento Subgrid: 4 cards */
 .portal-subgrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
 }
 
@@ -1602,10 +1602,10 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   background: #0a1322;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
-  padding: 18px 16px;
+  padding: 16px 18px;
   color: inherit;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-  min-height: 190px;
+  min-height: 130px;
 }
 
 .portal-subcard:hover {

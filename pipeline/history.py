@@ -243,7 +243,8 @@ def _performance(records, all_records=None):
                 timeline.append({"kickoff_utc": r["fixture"]["kickoff_utc"], "won": s["pick_won"], "brier": s["brier"]})
 
     def summary(rows):
-        return {"n": len(rows), "brier": round(sum(x["brier"] for x in rows) / len(rows), 4),
+        hits = sum(1 for x in rows if x.get("won"))
+        return {"n": len(rows), "hits": hits, "brier": round(sum(x["brier"] for x in rows) / len(rows), 4),
                 "logloss": round(sum(x["logloss"] for x in rows) / len(rows), 4),
                 "pick_hit_rate": round(sum(x["won"] for x in rows) / len(rows), 4),
                 "mean_pick_p": round(sum(x["p"] for x in rows) / len(rows), 4),
