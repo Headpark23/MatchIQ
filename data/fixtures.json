@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-30T13:29:17.402650+00:00",
+ "generated_at": "2026-10-31T13:00:38.935154+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -7535,23 +7535,6 @@
    "kickoff_history": []
   },
   {
-   "id": "PD-2627-rayo-vallecano-v-athletic-club",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Rayo Vallecano",
-   "away": "Athletic Club",
-   "kickoff_utc": "2026-10-10T12:00:00Z",
-   "status": "CANCELLED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "SA-2627-genoa-v-fiorentina",
    "competition": "SA",
    "season": "2627",
@@ -11710,9 +11693,12 @@
    "home": "Le Havre",
    "away": "Paris SG",
    "kickoff_utc": "2026-10-30T18:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    5
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -11727,9 +11713,12 @@
    "home": "Nice",
    "away": "Rennes",
    "kickoff_utc": "2026-10-30T18:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    5,
+    2
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -11750,9 +11739,12 @@
    "home": "Elversberg",
    "away": "Mainz",
    "kickoff_utc": "2026-10-30T19:30:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    4,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb",
@@ -11768,7 +11760,7 @@
    "home": "Sheffield United",
    "away": "Wrexham",
    "kickoff_utc": "2026-10-30T20:00:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -11785,9 +11777,12 @@
    "home": "Villarreal",
    "away": "Espanyol",
    "kickoff_utc": "2026-10-30T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    0,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -11808,9 +11803,12 @@
    "home": "Lille",
    "away": "Lens",
    "kickoff_utc": "2026-10-30T20:05:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -11825,7 +11823,7 @@
    "home": "Chelsea",
    "away": "Man United",
    "kickoff_utc": "2026-10-31T12:30:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -11843,7 +11841,7 @@
    "home": "Lincoln",
    "away": "Birmingham",
    "kickoff_utc": "2026-10-31T12:30:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -11860,7 +11858,7 @@
    "home": "Norwich",
    "away": "Watford",
    "kickoff_utc": "2026-10-31T12:30:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -11877,7 +11875,7 @@
    "home": "Stoke",
    "away": "Preston",
    "kickoff_utc": "2026-10-31T12:30:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -11894,7 +11892,7 @@
    "home": "Levante",
    "away": "Atletico Madrid",
    "kickoff_utc": "2026-10-31T13:00:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -18191,6 +18189,29 @@
    ],
    "first_seen": "2026-10-26T16:44:38.256231+00:00",
    "kickoff_history": []
+  },
+  {
+   "id": "PD-2627-rayo-vallecano-v-athletic-club",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Rayo Vallecano",
+   "away": "Athletic Club",
+   "kickoff_utc": "2026-12-09T19:00:00Z",
+   "status": "CANCELLED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-10-10T12:00:00Z",
+     "to": "2026-12-09T19:00:00Z",
+     "seen_at": "2026-10-31T13:00:38.935154+00:00"
+    }
+   ]
   },
   {
    "id": "ELC-2627-derby-v-bristol-city",

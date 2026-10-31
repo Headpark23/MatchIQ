@@ -4593,6 +4593,63 @@
    ],
    "origin": "shadow",
    "sha256": "9a4e70d66f35c92c750bbb925e952d686cc40af12d9059e420fdf2428de66b7e"
+  },
+  {
+   "record_id": "PL-2627-man-city-v-fulham#r1",
+   "match_id": "PL-2627-man-city-v-fulham",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Man City",
+    "away": "Fulham",
+    "kickoff_utc": "2026-11-21T12:30:00Z"
+   },
+   "published_at": "2026-10-31T13:00:38.935154+00:00",
+   "inputs_fingerprint": "afde20c0f45a32f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Man City win",
+      "p": 0.6543,
+      "fair_odds": "≈8/15"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Man City win",
+       "p": 0.6543,
+       "fair_odds": "≈8/15"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2167,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Fulham win",
+       "p": 0.129,
+       "fair_odds": "≈7/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "7bdf00a370f73a9501969dc454a2a7c3d8a40cebc2ed4caaddb1bc4a24e4163c"
   }
  ]
 }
