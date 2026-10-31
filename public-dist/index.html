@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="styles.css?v=78">
+<link rel="stylesheet" href="styles.css?v=81">
 </head>
 <body>
   <!-- PWA Service Worker Update Available Banner -->
@@ -79,11 +79,6 @@
       <span class="brand-word">Bet<b>Buddy</b></span>
     </a>
     <div class="header-tools">
-      <button type="button" class="butler-pill-btn" id="header-butler-btn" onclick="openButlerModal()" title="Your Bet Butler: Choose your bookmaker slip note">
-        <span class="butler-icon">🤵</span>
-        <span class="butler-label">Bet Butler: <b id="header-butler-name">Sky Bet</b></span>
-        <span class="butler-caret">▾</span>
-      </button>
       <button type="button" class="odds-toggle" id="odds-toggle" aria-label="Toggle odds format" title="Switch between Fractional (6/4) and Decimal (2.50) odds" data-active-mode="fractional"><span class="odds-segment" data-seg="fractional">6/4</span><span class="odds-segment" data-seg="decimal">2.50</span><span class="sr-only" id="odds-mode-val">Fractional</span></button>
     </div>
     <nav class="nav" aria-label="Main">
@@ -238,9 +233,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-<script src="market_calculations.js?v=80"></script>
-<script src="bet_builder.js?v=80"></script>
-<script src="app.js?v=80"></script>
+<script src="market_calculations.js?v=81"></script>
+<script src="bet_builder.js?v=81"></script>
+<script src="app.js?v=81"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>

@@ -3914,3 +3914,15 @@ textarea.ctl { min-height: 96px; resize: vertical; }
     margin-top: 6px !important;
   }
 }
+
+/* Bet Butler bookmaker picker inside the homepage slip card */
+.butler-home-picker { margin: 0 0 16px; }
+.butler-home-picker-label { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.butler-home-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.butler-home-chip {
+  min-height: 38px; padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 600;
+  color: #e2e8f0; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer; transition: all .15s ease;
+}
+.butler-home-chip:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.28); }
+.butler-home-chip.active { color: #04140d; background: #38bdf8; border-color: #38bdf8; }

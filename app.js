@@ -1442,9 +1442,14 @@ function renderWelcomeHero() {
             '<div class="butler-feat-item"><span class="feat-icon">📑</span> Formatted Copy</div>' +
             '<div class="butler-feat-item"><span class="feat-icon">📱</span> Open Bookmaker Football</div>' +
           '</div>' +
+          '<div class="butler-home-picker" role="radiogroup" aria-label="Pick your bookmaker">' +
+            '<div class="butler-home-picker-label">Pick your bookmaker</div>' +
+            '<div class="butler-home-chips">' +
+              Object.values(BOOKMAKERS_CONFIG).map(b => '<button type="button" class="butler-home-chip' + (getButlerBookmaker().key === b.key ? ' active' : '') + '" role="radio" aria-checked="' + (getButlerBookmaker().key === b.key) + '" onclick="setButlerBookmaker(\'' + b.key + '\')">' + esc(b.name) + '</button>').join('') +
+            '</div>' +
+          '</div>' +
           '<div class="butler-home-actions">' +
             '<a href="#/picks" class="btn primary small" style="background:#0284c7;border:none;font-weight:700;">Build Acca in Picks ↗</a>' +
-            '<button type="button" class="btn small" onclick="openButlerModal()">Bookmaker Links &amp; Settings ⚙️</button>' +
           '</div>' +
         '</div>' +
       '</div>' +
