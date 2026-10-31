@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="styles.css?v=57">
+<link rel="stylesheet" href="styles.css?v=58">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -218,9 +218,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-<script src="market_calculations.js?v=57"></script>
-<script src="bet_builder.js?v=57"></script>
-<script src="app.js?v=57"></script>
+<script src="market_calculations.js?v=58"></script>
+<script src="bet_builder.js?v=58"></script>
+<script src="app.js?v=58"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>
@@ -500,6 +500,9 @@
         <div class="butler-perk-item">🛡️ <strong>2× League Points</strong>: Placing real bets via your Butler earns double points.</div>
         <div class="butler-perk-item">🔒 <strong>100% Private</strong>: No passwords or bank details ever stored. You stay in full control.</div>
       </div>
+      <div class="responsible-gambling-note" style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);font-size:11px;color:#94a3b8;text-align:center;">
+        18+ only. Bet responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;text-decoration:underline;">BeGambleAware.org</a>.
+      </div>
     </div>
   </div>
 </div>
@@ -518,14 +521,27 @@
         <strong id="return-bet-label">Accumulator Pick</strong>
         <span id="return-bet-odds" class="mono text-sm" style="color:var(--pick)"></span>
       </div>
-      <p style="margin:0 0 14px;font-size:13.5px;color:#cbd5e1;">Did you place this bet on <strong id="return-bookie-confirm-name">Coral</strong>?</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div>
+          <label for="return-stake-input" class="text-sm" style="display:block;margin-bottom:4px;color:#94a3b8;font-weight:600;">Stake (£)</label>
+          <input type="number" id="return-stake-input" min="0.1" step="0.5" value="10" class="input" style="width:100%;padding:8px 10px;font-size:14px;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#fff;">
+        </div>
+        <div>
+          <label for="return-odds-input" class="text-sm" style="display:block;margin-bottom:4px;color:#94a3b8;font-weight:600;">Price Taken</label>
+          <input type="text" id="return-odds-input" value="Evens" placeholder="e.g. 6/4 or 2.50" class="input" style="width:100%;padding:8px 10px;font-size:14px;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#fff;">
+        </div>
+      </div>
+      <p style="margin:0 0 14px;font-size:13px;color:#cbd5e1;">Did you place this bet on <strong id="return-bookie-confirm-name">Coral</strong>?</p>
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <button type="button" class="btn primary" id="confirm-bet-placed-btn" onclick="confirmRealBetPlaced()" style="padding:12px;font-size:14px;font-weight:700;background:linear-gradient(135deg, #10b981, #059669);border:none;cursor:pointer;">
+        <button type="button" class="btn primary" id="confirm-bet-placed-btn" onclick="confirmRealBetPlaced()" style="padding:12px;font-size:14px;font-weight:700;background:linear-gradient(135deg, #10b981, #059669);border:none;border-radius:8px;cursor:pointer;">
           ✓ Yes, Bet Placed! (Save &amp; Claim 2× Bonus)
         </button>
-        <button type="button" class="btn" onclick="dismissReturnModal()" style="padding:10px;background:rgba(255,255,255,0.06);color:#94a3b8;cursor:pointer;">
+        <button type="button" class="btn" onclick="dismissReturnModal()" style="padding:10px;background:rgba(255,255,255,0.06);color:#94a3b8;border-radius:8px;border:none;cursor:pointer;">
           No, I changed my mind / did not place
         </button>
+      </div>
+      <div class="responsible-gambling-note" style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);font-size:11px;color:#94a3b8;text-align:center;">
+        18+ only. Bet responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;text-decoration:underline;">BeGambleAware.org</a>. Bet Buddy provides statistical analysis, not financial advice.
       </div>
     </div>
   </div>

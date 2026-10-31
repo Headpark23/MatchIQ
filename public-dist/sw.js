@@ -1,7 +1,7 @@
 // Bet Buddy Progressive Web App Service Worker (v17)
 // Network-first for shell code & data, cache-first for images/fonts, instant offline fallback
 
-const CACHE_NAME = 'betbuddy-pwa-v57-direct-app-intent';
+const CACHE_NAME = 'betbuddy-pwa-v58-audit-fixes';
 
 const PRECACHE_ASSETS = [
   './',

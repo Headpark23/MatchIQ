@@ -90,3 +90,4 @@ with open('sw.js', 'w', encoding='utf-8') as f:
     f.write(sw)
 
 print("Updated index.html, sw.js, and app.js for v57 successfully.")
+

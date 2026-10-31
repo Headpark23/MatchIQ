@@ -522,11 +522,16 @@ function marketCard(key, m, ctx) {
     : '<span class="badge ' + (settle.pick_won ? 'won' : 'lost') + '">' + (settle.pick_won ? 'Pick landed' : 'Pick missed') + (settle.total != null ? ' · actual ' + settle.total : settle.outcome ? ' · ' + esc(settle.outcome) : '') + '</span>') : '';
   const diaryBtn = row => {
     if (!ctx.canLog) return '';
+    const f = fixtureById(ctx.id);
+    const fxObj = f ? { home: f.home, away: f.away } : undefined;
+    const cleanOddsStr = String(row.fair || 'Evens').replace(/[≈~]/g, '').trim();
+    const decOdds = (calc.parseOdds ? calc.parseOdds(cleanOddsStr) : null) ?? (calc.parseFractionalOdds ? calc.parseFractionalOdds(cleanOddsStr) : 2.0) ?? 2.0;
     const selText = (key === 'btts' ? 'Both teams to score: ' : key === 'result' ? '' : meta.name + ': ') + row.label;
-    const jsonStr = esc(JSON.stringify({ id: ctx.id, market: meta.diary, selection: selText, p: row.p, fair: row.fair }));
+    const betPayload = { id: ctx.id, fixture: fxObj, market: meta.diary, marketName: meta.name, selection: selText, p: row.p, fair: row.fair, odds: decOdds };
+    const jsonStr = esc(JSON.stringify(betPayload));
     return '<button type="button" class="btn small" data-diary=\'' + jsonStr + '\' aria-label="Add ' + esc(row.label) + ' to Bet Diary">+ Diary</button>' +
       '<button type="button" class="btn small acca-btn" data-add-football-acca=\'' + jsonStr + '\' title="Add to custom Acca Builder" style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
-      '<a href="' + esc(getButlerLaunchSingleUrl({ id: ctx.id, market: meta.diary, selection: selText, p: row.p, fair: row.fair })) + '" class="btn-place-bet-inline butler-btn" onclick="prepareButlerSingleLaunch(this.dataset.betData)" data-bet-data=\'' + jsonStr + '\' title="Open in your bookmaker app">⚡ Place at <span class="current-butler-name">' + esc(getButlerBookmaker().name) + '</span> ↗</a>';
+      '<a href="' + esc(getButlerLaunchSingleUrl(betPayload)) + '" class="btn-place-bet-inline butler-btn" onclick="prepareButlerSingleLaunch(this.dataset.betData)" data-bet-data=\'' + jsonStr + '\' title="Open in your bookmaker app">⚡ Place at <span class="current-butler-name">' + esc(getButlerBookmaker().name) + '</span> ↗</a>';
   };
   const rows = m.rows.map(row => '<tr' + (row.picked ? ' style="color:#fff;font-weight:600"' : '') + '><td>' + esc(row.label) + (row.picked ? ' <span class="badge validated" style="font-size:10px">Pick</span>' : '') + '</td>' +
     '<td class="num">' + pct(row.p) + '</td><td class="num">' + esc(row.fair) + '</td>' + (m.rows.some(r => r.league != null) ? '<td class="num dim">' + (row.league == null ? '' : pct(row.league)) + '</td>' : '') +
@@ -2982,7 +2987,7 @@ function parseAccumulatorLegs() {
       selection = parts[0].trim();
       oddsText = parts.slice(1).join('|').trim();
     } else {
-      const match = line.match(/^(.*?)(?:@|\sat\s|\s+)(≈?~?\d+\/\d+|≈?~?evens?|≈?~?\d+(?:\.\d+)?)\s*$/i);
+      const match = line.match(/^(.*?)(?:@|\sat\s)(≈?~?\d+\/\d+|≈?~?evens?|≈?~?\d+(?:\.\d+)?)\s*$/i);
       if (match) {
         selection = match[1].trim();
         oddsText = match[2].trim();
@@ -2992,26 +2997,23 @@ function parseAccumulatorLegs() {
     let parsedOdds = null;
     if (/^evens?$/i.test(cleanOdds) || /^even money$/i.test(cleanOdds)) {
       parsedOdds = 2.0;
-    } else {
+    } else if (cleanOdds) {
       parsedOdds = (calc.parseOdds ? calc.parseOdds(cleanOdds) : null) ?? (calc.parseFractionalOdds ? calc.parseFractionalOdds(cleanOdds) : null);
-    }
-    if (!parsedOdds || !Number.isFinite(parsedOdds) || parsedOdds <= 1) {
-      const fracMatch = cleanOdds.match(/(\d+)\s*\/\s*(\d+)/);
-      if (fracMatch) {
-        const num = Number(fracMatch[1]), den = Number(fracMatch[2]);
-        if (den > 0) parsedOdds = 1 + (num / den);
-      } else {
-        const decMatch = cleanOdds.match(/(\d+\.\d+)/);
-        if (decMatch) {
-          const dec = Number(decMatch[1]);
-          if (dec > 1) parsedOdds = dec;
+      if (!parsedOdds || !Number.isFinite(parsedOdds) || parsedOdds <= 1) {
+        const fracMatch = cleanOdds.match(/(\d+)\s*\/\s*(\d+)/);
+        if (fracMatch) {
+          const num = Number(fracMatch[1]), den = Number(fracMatch[2]);
+          if (den > 0) parsedOdds = 1 + (num / den);
+        } else {
+          const decMatch = cleanOdds.match(/(\d+\.\d+)/);
+          if (decMatch) {
+            const dec = Number(decMatch[1]);
+            if (dec > 1) parsedOdds = dec;
+          }
         }
       }
     }
-    if (!parsedOdds || !Number.isFinite(parsedOdds) || parsedOdds <= 1) {
-      parsedOdds = 2.0;
-    }
-    return { selection: selection || 'Leg', odds: parsedOdds, outcome: 'pending' };
+    return { selection: selection || 'Leg', odds: (parsedOdds && Number.isFinite(parsedOdds) && parsedOdds > 1) ? parsedOdds : null, outcome: 'pending' };
   });
 }
 
@@ -3063,7 +3065,7 @@ function handleDiaryFormSubmit(event) {
   const stake = Number($('modal-stake-input').value);
   const singleOdds = (calc.parseOdds ? calc.parseOdds($('modal-odds-input').value) : null) ?? calc.parseFractionalOdds($('modal-odds-input').value);
   if (!Number.isFinite(stake) || stake <= 0) { toast('Enter a stake greater than £0.', 'error'); return; }
-  if (acc && (legs.length < 2 || legs.some(l => !l.selection || !Number.isFinite(l.odds) || l.odds <= 1))) { toast('Add at least two legs as "selection | fractional odds", such as 6/4 or Evens.', 'error'); return; }
+  if (acc && (legs.length < 2 || legs.some(l => !l.selection || !Number.isFinite(l.odds) || l.odds <= 1))) { toast('Add at least two legs with valid odds (e.g. "Arsenal win | 4/6" or "Over 2.5 @ Evens").', 'error'); return; }
   if (!acc && (!Number.isFinite(singleOdds) || singleOdds <= 1)) { toast('Enter valid UK fractional odds, such as 6/4, 1/2 or Evens.', 'error'); return; }
   if (!acc && !$('modal-selection-input').value.trim()) { toast('Enter what you backed.', 'error'); return; }
   const odds = acc ? legs.reduce((t, l) => t * l.odds, 1) : singleOdds;
@@ -3399,6 +3401,22 @@ function getBookieDeepLinks(query) {
 
 
 // ------------------------------------------------------------ Phase 2 & 3: 1-Click Bookmaker Launcher
+function buildBookmakerLaunchUrl(bookieKey, betDataOrSlip) {
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  const pkg = ANDROID_PACKAGES[bookieKey];
+  const query = getBookieSearchQuery(betDataOrSlip);
+  const links = getBookieDeepLinks(query);
+  const butler = (typeof BOOKMAKERS_CONFIG !== 'undefined' && BOOKMAKERS_CONFIG[bookieKey]) || null;
+  const targetUrl = links[bookieKey] || (butler && butler.appUrl ? (butler.appUrl + encodeURIComponent(query)) : ('https://www.google.co.uk/search?q=' + encodeURIComponent(query + ' odds')));
+
+  if (isAndroid && pkg) {
+    const hostAndPath = targetUrl.replace(/^https?:\/\//, '');
+    const fallbackEncoded = encodeURIComponent(targetUrl);
+    return 'intent://' + hostAndPath + '#Intent;scheme=https;package=' + pkg + ';S.browser_fallback_url=' + fallbackEncoded + ';end;';
+  }
+  return targetUrl;
+}
+
 function launchBookmakerSlip(bookieKey, slipIdx) {
   const r = builderResult;
   let slip = null;
@@ -3425,24 +3443,18 @@ function launchBookmakerSlip(bookieKey, slipIdx) {
   const bName = bookieNames[bookieKey] || 'Bookmaker';
   trackBookieLaunch(bName, slip);
 
-  // Format slip payload for bookmaker quick-slip paste
   const textLines = [
     '🎯 Bet Buddy ' + slip.legs.length + '-Leg Acca (' + fmtOdds(slip.odds) + ')',
     ...slip.legs.map((l, i) => (i + 1) + '. ' + l.fixture.home + ' v ' + l.fixture.away + ': ' + l.label + ' (' + (l.fractional || fmtOdds(l.odds)) + ')'),
     'Stake: £' + slip.stake + ' · Target Return: £' + (slip.ret ? slip.ret.toFixed(2) : (slip.stake * slip.odds).toFixed(2))
   ];
   const copyStr = textLines.join('\n');
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(copyStr).catch(() => {});
+    }
+  } catch (e) {}
 
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(copyStr).catch(() => {});
-  }
-
-  // Generate deep-link for this bookmaker
-  const query = getBookieSearchQuery({ legs: slip.legs });
-  const links = getBookieDeepLinks(query);
-  const targetUrl = links[bookieKey] || links.skybet;
-
-  // Track telemetry
   try {
     const stats = getTrafficStats();
     stats.push({ type: 'bookie_click', bookie: bName, ts: Date.now() });
@@ -3450,30 +3462,12 @@ function launchBookmakerSlip(bookieKey, slipIdx) {
   } catch (e) {}
 
   toast('⚡ Slip copied! Launching ' + bName + ' app...');
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  if (isAndroid && ANDROID_PACKAGES[bookieKey]) {
-    // Android Package Intent: tells Android OS to launch installed app package directly
-    const pkg = ANDROID_PACKAGES[bookieKey];
-    const fallback = encodeURIComponent(targetUrl);
-    const intentUrl = 'intent://#Intent;package=' + pkg + ';S.browser_fallback_url=' + fallback + ';end;';
-    window.location.href = intentUrl;
-    return;
-  }
-
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const appScheme = BOOKIE_APP_SCHEMES[bookieKey];
-  if (isIOS && appScheme) {
-    window.location.href = appScheme;
-    setTimeout(() => {
-      if (document.visibilityState === 'visible') {
-        window.location.href = targetUrl;
-      }
-    }, 1500);
-  } else {
-    window.location.href = targetUrl;
-  }
+  window.location.href = buildBookmakerLaunchUrl(bookieKey, { legs: slip.legs });
 }
-if (typeof window !== 'undefined') window.launchBookmakerSlip = launchBookmakerSlip;
+if (typeof window !== 'undefined') {
+  window.buildBookmakerLaunchUrl = buildBookmakerLaunchUrl;
+  window.launchBookmakerSlip = launchBookmakerSlip;
+}
 
 function openBookieModal(betData) {
   currentBookieSelection = betData || { selection: 'Bet Buddy Selection', fair: 'Best Price' };
@@ -4690,7 +4684,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = 'v57';
+const APP_VERSION = 'v58';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -4759,11 +4753,31 @@ function trackBookieLaunch(bookieName, betData) {
   pendingBookieLaunch = {
     bookie: bookieName,
     data: betData,
-    time: Date.now()
+    time: Date.now(),
+    shown: false
   };
   try {
     sessionStorage.setItem('betbuddy_pending_bookie', JSON.stringify(pendingBookieLaunch));
   } catch (e) {}
+}
+
+function enrichSingleBetData(betData) {
+  const enriched = Object.assign({}, betData);
+  if (enriched.id) {
+    const f = fixtureById(enriched.id);
+    if (f && (!enriched.fixture || !enriched.fixture.home)) {
+      enriched.fixture = { home: f.home, away: f.away };
+    }
+  }
+  if (!enriched.odds && enriched.fair) {
+    const clean = String(enriched.fair).replace(/[≈~]/g, '').trim();
+    const dec = (calc.parseOdds ? calc.parseOdds(clean) : null) ?? (calc.parseFractionalOdds ? calc.parseFractionalOdds(clean) : null);
+    if (dec && Number.isFinite(dec) && dec > 1) enriched.odds = dec;
+  }
+  if (!enriched.marketName && enriched.market) {
+    enriched.marketName = (Object.values(MARKETS).find(m => m.diary === enriched.market) || {}).name || enriched.market;
+  }
+  return enriched;
 }
 
 function showReturnModal(launch) {
@@ -4773,18 +4787,33 @@ function showReturnModal(launch) {
   const confirmNameEl = $('return-bookie-confirm-name');
   const labelEl = $('return-bet-label');
   const oddsEl = $('return-bet-odds');
+  const stakeInput = $('return-stake-input');
+  const oddsInput = $('return-odds-input');
+
   if (nameEl) nameEl.textContent = launch.bookie;
   if (confirmNameEl) confirmNameEl.textContent = launch.bookie;
+
+  const isAcca = !!(launch.data && launch.data.legs);
   if (labelEl) {
-    if (launch.data && launch.data.legs) {
+    if (isAcca) {
       labelEl.textContent = launch.data.legs.length + '-Leg Accumulator (' + launch.data.legs.map(l => l.label).join(' + ') + ')';
     } else {
       labelEl.textContent = (launch.data && launch.data.selection) || 'Bet Selection';
     }
   }
-  if (oddsEl) {
-    oddsEl.textContent = (launch.data && (launch.data.fair || fmtOdds(launch.data.odds))) || '';
+
+  const defaultStake = (launch.data && launch.data.stake) || (builderState && builderState.stake) || 10;
+  if (stakeInput) stakeInput.value = defaultStake;
+
+  let displayOdds = '';
+  if (isAcca) {
+    displayOdds = launch.data.odds ? (oddsFormat === 'decimal' ? calc.formatDecimalOdds(launch.data.odds) : calc.formatFractionalOdds(launch.data.odds)) : 'Evens';
+  } else {
+    displayOdds = launch.data.fractional || launch.data.fair || (launch.data.odds ? (oddsFormat === 'decimal' ? calc.formatDecimalOdds(launch.data.odds) : calc.formatFractionalOdds(launch.data.odds)) : 'Evens');
   }
+  if (oddsEl) oddsEl.textContent = displayOdds;
+  if (oddsInput) oddsInput.value = displayOdds;
+
   modal.hidden = false;
 }
 
@@ -4801,7 +4830,11 @@ function confirmRealBetPlaced() {
   dismissReturnModal();
 
   const isAcca = !!(launch.data && launch.data.legs);
-  const stake = Number((builderState && builderState.stake) || 10);
+  const stakeInput = $('return-stake-input');
+  const oddsInput = $('return-odds-input');
+
+  const stake = Number(stakeInput ? stakeInput.value : ((builderState && builderState.stake) || 10)) || 10;
+
   let odds = 2.0;
   if (isAcca) {
     odds = launch.data.legs.reduce((t, l) => t * (l.odds || 2.0), 1);
@@ -4809,14 +4842,26 @@ function confirmRealBetPlaced() {
     odds = Number(launch.data.odds);
   }
 
+  if (oddsInput && oddsInput.value.trim()) {
+    const rawOdds = oddsInput.value.trim().replace(/[≈~]/g, '');
+    const userOdds = (calc.parseOdds ? calc.parseOdds(rawOdds) : null) ?? (calc.parseFractionalOdds ? calc.parseFractionalOdds(rawOdds) : null);
+    if (userOdds && Number.isFinite(userOdds) && userOdds > 1) {
+      odds = userOdds;
+    }
+  }
+
+  const fixtureName = isAcca ? 'Accumulator' : (launch.data && launch.data.fixture && launch.data.fixture.home ? (launch.data.fixture.home + (launch.data.fixture.away ? (' v ' + launch.data.fixture.away) : '')) : 'Football Match');
+  const marketType = isAcca ? 'accumulator' : ((launch.data && launch.data.market) || 'wins');
+  const marketName = isAcca ? 'Accumulator' : ((launch.data && launch.data.marketName) || (Object.values(MARKETS).find(m => m.diary === marketType) || {}).name || 'Match Bet');
+
   const entry = {
     id: 'bet-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
     type: isAcca ? 'accumulator' : 'single',
     profile: (getAuthUser() && getAuthUser().signedIn) ? ('@' + (getAuthUser().handle || (getAuthUser().name || 'User').split(' ')[0])) : 'Default',
     date: new Date().toISOString().slice(0, 10),
-    fixture: isAcca ? 'Accumulator' : (launch.data && launch.data.fixture ? (launch.data.fixture.home + ' v ' + launch.data.fixture.away) : 'Listed Match'),
-    market: isAcca ? 'accumulator' : ((launch.data && launch.data.market) || 'wins'),
-    marketName: isAcca ? 'Accumulator' : 'Match Result',
+    fixture: fixtureName,
+    market: marketType,
+    marketName: marketName,
     selection: isAcca ? launch.data.legs.map(l => l.label).join(' + ') : ((launch.data && launch.data.selection) || 'Selection'),
     legs: isAcca ? launch.data.legs.map(l => ({ selection: l.label, odds: l.odds || 2.0, outcome: 'pending' })) : undefined,
     origin: 'matchiq',
@@ -4828,14 +4873,15 @@ function confirmRealBetPlaced() {
     timestamp: new Date().toISOString(),
     realBetVerified: true,
     bonusMultiplier: 2,
-    notes: 'Real bet confirmed placed at ' + launch.bookie + '. 2× League Bonus Active.'
+    notes: 'Real bet placed at ' + launch.bookie + '. 2× League Bonus Active.'
   };
 
   try {
     const diary = getStoredDiary();
     diary.unshift(entry);
     saveStoredDiary(diary);
-  } catch (e) { console.error(e); }
+  } catch (e) { console.error(e);
+  }
 
   celebrateSave();
   toast('🎉 ' + launch.bookie + ' real bet confirmed! Added to Bet Diary with 2× League Bonus.');
@@ -4854,10 +4900,18 @@ function checkReturnFromBookie() {
       if (stored) pendingBookieLaunch = JSON.parse(stored);
     } catch (e) {}
   }
-  if (pendingBookieLaunch && (Date.now() - pendingBookieLaunch.time < 3600000)) {
-    setTimeout(() => {
-      showReturnModal(pendingBookieLaunch);
-    }, 600);
+  // Only trigger if launch exists, was not already shown, and user was away for at least 4 seconds (up to 1 hour)
+  if (pendingBookieLaunch && !pendingBookieLaunch.shown) {
+    const elapsed = Date.now() - pendingBookieLaunch.time;
+    if (elapsed >= 4000 && elapsed < 3600000) {
+      pendingBookieLaunch.shown = true;
+      try {
+        sessionStorage.setItem('betbuddy_pending_bookie', JSON.stringify(pendingBookieLaunch));
+      } catch (e) {}
+      setTimeout(() => {
+        showReturnModal(pendingBookieLaunch);
+      }, 500);
+    }
   }
 }
 window.addEventListener('focus', checkReturnFromBookie);
@@ -4869,10 +4923,9 @@ if (typeof window !== 'undefined') {
   window.confirmRealBetPlaced = confirmRealBetPlaced;
 }
 
-
-// ============================================================
+// ============================================================ 
 // THE BET BUTLER: Personal Assistant for Existing Bookmaker Account
-// ============================================================
+// ============================================================ 
 const BUTLER_STORAGE_KEY = 'betbuddy_butler_bookie_v1';
 const BOOKMAKERS_CONFIG = {
   coral: { key: 'coral', name: 'Coral', tag: 'CORAL', color: '#0284c7', perk: 'Football Super Series & Acca Boosts', appUrl: 'https://sports.coral.co.uk/search?q=' },
@@ -4907,7 +4960,6 @@ function updateButlerUI() {
   const current = getButlerBookmaker();
   const nameEls = document.querySelectorAll('#header-butler-name, .current-butler-name');
   nameEls.forEach(el => { el.textContent = current.name; });
-
   document.querySelectorAll('.butler-choice-card').forEach(card => {
     if (card.dataset.selectButler === current.key) {
       card.classList.add('active');
@@ -4930,35 +4982,15 @@ function closeButlerModal() {
   if (modal) modal.hidden = true;
 }
 
-
 function getButlerLaunchUrl(slipIdx) {
   const butler = getButlerBookmaker();
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  const pkg = ANDROID_PACKAGES[butler.key];
-  const query = getBookieSearchQuery({ legs: slipIdx === 'custom' ? customAccaLegs : (builderResult && builderResult.slips && builderResult.slips[+slipIdx] ? builderResult.slips[+slipIdx].legs : []) });
-  const links = getBookieDeepLinks(query);
-  const targetUrl = links[butler.key] || butler.appUrl + encodeURIComponent(query);
-
-  if (isAndroid && pkg) {
-    const hostAndPath = targetUrl.replace(/^https?:\/\//, '');
-    return 'intent://' + hostAndPath + '#Intent;scheme=https;package=' + pkg + ';end;';
-  }
-  return targetUrl;
+  const legs = slipIdx === 'custom' ? customAccaLegs : (builderResult && builderResult.slips && builderResult.slips[+slipIdx] ? builderResult.slips[+slipIdx].legs : []);
+  return buildBookmakerLaunchUrl(butler.key, { legs });
 }
 
 function getButlerLaunchSingleUrl(betData) {
   const butler = getButlerBookmaker();
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  const pkg = ANDROID_PACKAGES[butler.key];
-  const query = getBookieSearchQuery(betData);
-  const links = getBookieDeepLinks(query);
-  const targetUrl = links[butler.key] || butler.appUrl + encodeURIComponent(query);
-
-  if (isAndroid && pkg) {
-    const hostAndPath = targetUrl.replace(/^https?:\/\//, '');
-    return 'intent://' + hostAndPath + '#Intent;scheme=https;package=' + pkg + ';end;';
-  }
-  return targetUrl;
+  return buildBookmakerLaunchUrl(butler.key, betData);
 }
 
 function prepareButlerLaunch(slipIdx) {
@@ -4992,7 +5024,8 @@ function prepareButlerLaunch(slipIdx) {
 
 function prepareButlerSingleLaunch(dataStr) {
   try {
-    const betData = typeof dataStr === 'string' ? JSON.parse(dataStr) : dataStr;
+    const raw = typeof dataStr === 'string' ? JSON.parse(dataStr) : dataStr;
+    const betData = enrichSingleBetData(raw);
     const butler = getButlerBookmaker();
     let copyStr = betData.selection || 'Football Bet';
     if (betData.fair) copyStr += ' @ ' + betData.fair;
@@ -5006,19 +5039,13 @@ function prepareButlerSingleLaunch(dataStr) {
   } catch (e) {}
 }
 
-if (typeof window !== 'undefined') {
-  window.getButlerLaunchUrl = getButlerLaunchUrl;
-  window.getButlerLaunchSingleUrl = getButlerLaunchSingleUrl;
-  window.prepareButlerLaunch = prepareButlerLaunch;
-  window.prepareButlerSingleLaunch = prepareButlerSingleLaunch;
-}
-
 function launchButlerAcca(slipIdx) {
   const butler = getButlerBookmaker();
   launchBookmakerSlip(butler.key, slipIdx);
 }
 
-function launchButlerSingle(betData) {
+function launchButlerSingle(data) {
+  const betData = enrichSingleBetData(data);
   const butler = getButlerBookmaker();
   let copyStr = betData.selection || 'Football Bet';
   if (betData.fair) copyStr += ' @ ' + betData.fair;
@@ -5031,30 +5058,7 @@ function launchButlerSingle(betData) {
   trackBookieLaunch(butler.name, betData);
   toast('⚡ Copied to clipboard! Launching ' + butler.name + ' app...');
 
-  const query = getBookieSearchQuery(betData);
-  const links = getBookieDeepLinks(query);
-  const targetUrl = links[butler.key] || butler.appUrl + encodeURIComponent(query);
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  if (isAndroid && ANDROID_PACKAGES[butler.key]) {
-    const pkg = ANDROID_PACKAGES[butler.key];
-    const fallback = encodeURIComponent(targetUrl);
-    const intentUrl = 'intent://#Intent;package=' + pkg + ';S.browser_fallback_url=' + fallback + ';end;';
-    window.location.href = intentUrl;
-    return;
-  }
-
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const appScheme = BOOKIE_APP_SCHEMES[butler.key];
-  if (isIOS && appScheme) {
-    window.location.href = appScheme;
-    setTimeout(() => {
-      if (document.visibilityState === 'visible') {
-        window.location.href = targetUrl;
-      }
-    }, 1500);
-  } else {
-    window.location.href = targetUrl;
-  }
+  window.location.href = buildBookmakerLaunchUrl(butler.key, betData);
 }
 
 if (typeof window !== 'undefined') {
@@ -5062,6 +5066,10 @@ if (typeof window !== 'undefined') {
   window.setButlerBookmaker = setButlerBookmaker;
   window.openButlerModal = openButlerModal;
   window.closeButlerModal = closeButlerModal;
+  window.getButlerLaunchUrl = getButlerLaunchUrl;
+  window.getButlerLaunchSingleUrl = getButlerLaunchSingleUrl;
+  window.prepareButlerLaunch = prepareButlerLaunch;
+  window.prepareButlerSingleLaunch = prepareButlerSingleLaunch;
   window.launchButlerAcca = launchButlerAcca;
   window.launchButlerSingle = launchButlerSingle;
 }
