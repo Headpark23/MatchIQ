@@ -3362,6 +3362,17 @@ function getBookieSearchQuery(betData) {
 }
 
 
+
+const ANDROID_PACKAGES = {
+  coral: 'com.galacoral.android',
+  skybet: 'com.skybet.app.skybet',
+  bet365: 'com.bet365Wrapper.sportsbook',
+  betfair: 'com.betfair.sports',
+  ladbrokes: 'com.ladbrokes.android',
+  williamhill: 'com.williamhill.sportsbook',
+  paddypower: 'com.paddypower.sports'
+};
+
 const BOOKIE_APP_SCHEMES = {
   coral: 'coral://',
   skybet: 'skybet://',
@@ -3439,18 +3450,25 @@ function launchBookmakerSlip(bookieKey, slipIdx) {
   } catch (e) {}
 
   toast('⚡ Slip copied! Launching ' + bName + ' app...');
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  if (isAndroid && ANDROID_PACKAGES[bookieKey]) {
+    // Android Package Intent: tells Android OS to launch installed app package directly
+    const pkg = ANDROID_PACKAGES[bookieKey];
+    const fallback = encodeURIComponent(targetUrl);
+    const intentUrl = 'intent://#Intent;package=' + pkg + ';S.browser_fallback_url=' + fallback + ';end;';
+    window.location.href = intentUrl;
+    return;
+  }
+
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const appScheme = BOOKIE_APP_SCHEMES[bookieKey];
-  
-  if (isMobile && appScheme) {
-    // 1. Try native installed app URI scheme directly (e.g. coral://) - opens logged-in native app
+  if (isIOS && appScheme) {
     window.location.href = appScheme;
-    // 2. Fallback to web link if app is not installed
     setTimeout(() => {
       if (document.visibilityState === 'visible') {
         window.location.href = targetUrl;
       }
-    }, 1200);
+    }, 1500);
   } else {
     window.location.href = targetUrl;
   }
@@ -4672,7 +4690,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = 'v54';
+const APP_VERSION = 'v55';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -4933,16 +4951,24 @@ function launchButlerSingle(betData) {
   const query = getBookieSearchQuery(betData);
   const links = getBookieDeepLinks(query);
   const targetUrl = links[butler.key] || butler.appUrl + encodeURIComponent(query);
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  if (isAndroid && ANDROID_PACKAGES[butler.key]) {
+    const pkg = ANDROID_PACKAGES[butler.key];
+    const fallback = encodeURIComponent(targetUrl);
+    const intentUrl = 'intent://#Intent;package=' + pkg + ';S.browser_fallback_url=' + fallback + ';end;';
+    window.location.href = intentUrl;
+    return;
+  }
+
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const appScheme = BOOKIE_APP_SCHEMES[butler.key];
-  
-  if (isMobile && appScheme) {
+  if (isIOS && appScheme) {
     window.location.href = appScheme;
     setTimeout(() => {
       if (document.visibilityState === 'visible') {
         window.location.href = targetUrl;
       }
-    }, 1200);
+    }, 1500);
   } else {
     window.location.href = targetUrl;
   }
