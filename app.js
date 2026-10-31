@@ -122,6 +122,8 @@ function toggleOddsFormat() {
 function updateOddsToggleLabel() {
   const lbl = $('odds-mode-val');
   if (lbl) lbl.textContent = oddsFormat === 'decimal' ? 'Decimal' : 'Fractional';
+  const cap = $('odds-caption');
+  if (cap) cap.textContent = oddsFormat === 'decimal' ? 'Decimal' : 'Fractional';
   const btn = $('odds-toggle');
   if (btn) btn.setAttribute('data-active-mode', oddsFormat);
 }
@@ -5707,7 +5709,7 @@ document.addEventListener('click', event => {
     }
     return;
   }
-  if (t.id === 'odds-toggle') toggleOddsFormat();
+  if (t.id === 'odds-toggle' || t.id === 'odds-caption') toggleOddsFormat();
   else if (t.dataset.back !== undefined) {
     if (window.history.length > 1) window.history.back();
     else window.location.hash = '#/';

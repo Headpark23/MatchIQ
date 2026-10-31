@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="styles.css?v=83">
+<link rel="stylesheet" href="styles.css?v=85">
 </head>
 <body>
   <!-- PWA Service Worker Update Available Banner -->
@@ -79,7 +79,7 @@
       <span class="brand-word">Bet<b>Buddy</b></span>
     </a>
     <div class="header-tools">
-      <button type="button" class="odds-toggle" id="odds-toggle" aria-label="Toggle odds format" title="Switch between Fractional (6/4) and Decimal (2.50) odds" data-active-mode="fractional"><span class="odds-segment" data-seg="fractional">6/4</span><span class="odds-segment" data-seg="decimal">2.50</span><span class="sr-only" id="odds-mode-val">Fractional</span></button>
+      <div class="odds-toggle-wrap"><button type="button" class="odds-toggle" id="odds-toggle" aria-label="Toggle odds format" title="Switch between Fractional (6/4) and Decimal (2.50) odds" data-active-mode="fractional"><span class="odds-segment" data-seg="fractional">6/4</span><span class="odds-segment" data-seg="decimal">2.50</span><span class="sr-only" id="odds-mode-val">Fractional</span></button><button type="button" class="odds-caption" id="odds-caption" aria-hidden="true" tabindex="-1">Fractional</button></div>
     </div>
     <nav class="nav" aria-label="Main">
       <a href="#/" data-nav="home"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a>
@@ -233,9 +233,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-<script src="market_calculations.js?v=83"></script>
-<script src="bet_builder.js?v=83"></script>
-<script src="app.js?v=83"></script>
+<script src="market_calculations.js?v=84"></script>
+<script src="bet_builder.js?v=84"></script>
+<script src="app.js?v=84"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>
