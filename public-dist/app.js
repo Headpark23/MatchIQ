@@ -5030,13 +5030,13 @@ async function signInWithGoogle() {
     return;
   }
   const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
   try {
-    if (isInStandaloneMode() || isIos()) {
-      await firebaseAuth.signInWithRedirect(provider);
-      return;
-    }
+    // Popup first on every device: redirect sign-in loses its session on iOS/PWAs because the
+    // auth domain differs from the site origin (partitioned storage), leaving the user logged out.
     const cred = await firebaseAuth.signInWithPopup(provider);
     if (cred && cred.user) {
+      currentAuthUser = cred.user;
       saveAuthUser(cred.user);
     }
     closeAuthModal();
@@ -5044,15 +5044,17 @@ async function signInWithGoogle() {
     updateHeaderAuthUI();
     render();
   } catch (err) {
-    if (err.code === 'auth/popup-blocked') {
+    if (err.code === 'auth/popup-blocked' || err.code === 'auth/operation-not-supported-in-this-environment') {
       try {
         await firebaseAuth.signInWithRedirect(provider);
         return;
       } catch (rErr) {
         showAuthError('signin-error', mapAuthError(rErr));
+        toast(mapAuthError(rErr));
       }
     } else {
       showAuthError('signin-error', mapAuthError(err));
+      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') toast(mapAuthError(err));
     }
   }
 }
@@ -5099,19 +5101,24 @@ function initFirebaseAuth() {
   firebaseAuth.onAuthStateChanged(async user => {
     currentAuthUser = user;
     if (user) {
-      saveAuthUser(user);
+      // Reflect the signed-in state immediately; cloud sync below must never block or break it.
+      try { saveAuthUser(user); } catch (e) { console.warn('saveAuthUser notice:', e); }
       updateHeaderAuthUI();
       render();
-      await ensureUserProfile(user);
-      hasSyncedUserLeagues = false;
-      await syncUserLeaguesFromCloud();
-      try { await syncDiaryFromCloud(); } catch (e) {}
+      try {
+        await ensureUserProfile(user);
+        hasSyncedUserLeagues = false;
+        await syncUserLeaguesFromCloud();
+        try { await syncDiaryFromCloud(); } catch (e) {}
 
-      // Preserve pending league invite across sign-in popup/redirect
-      const pendingLeague = sessionStorage.getItem('betbuddy_pending_join_league');
-      if (pendingLeague) {
-        sessionStorage.removeItem('betbuddy_pending_join_league');
-        setTimeout(() => { joinCloudLeague(pendingLeague); }, 600);
+        // Preserve pending league invite across sign-in popup/redirect
+        const pendingLeague = sessionStorage.getItem('betbuddy_pending_join_league');
+        if (pendingLeague) {
+          sessionStorage.removeItem('betbuddy_pending_join_league');
+          setTimeout(() => { joinCloudLeague(pendingLeague); }, 600);
+        }
+      } catch (e) {
+        console.warn('Post sign-in sync notice:', e);
       }
     } else {
       currentAuthUser = null;
