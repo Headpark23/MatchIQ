@@ -4690,7 +4690,7 @@ loadData().then(() => {
   render();
 });
 
-const APP_VERSION = 'v56';
+const APP_VERSION = 'v57';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -4935,24 +4935,30 @@ function getButlerLaunchUrl(slipIdx) {
   const butler = getButlerBookmaker();
   const isAndroid = /Android/i.test(navigator.userAgent);
   const pkg = ANDROID_PACKAGES[butler.key];
-  if (isAndroid && pkg) {
-    return 'intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=' + pkg + ';end;';
-  }
   const query = getBookieSearchQuery({ legs: slipIdx === 'custom' ? customAccaLegs : (builderResult && builderResult.slips && builderResult.slips[+slipIdx] ? builderResult.slips[+slipIdx].legs : []) });
   const links = getBookieDeepLinks(query);
-  return links[butler.key] || butler.appUrl + encodeURIComponent(query);
+  const targetUrl = links[butler.key] || butler.appUrl + encodeURIComponent(query);
+
+  if (isAndroid && pkg) {
+    const hostAndPath = targetUrl.replace(/^https?:\/\//, '');
+    return 'intent://' + hostAndPath + '#Intent;scheme=https;package=' + pkg + ';end;';
+  }
+  return targetUrl;
 }
 
 function getButlerLaunchSingleUrl(betData) {
   const butler = getButlerBookmaker();
   const isAndroid = /Android/i.test(navigator.userAgent);
   const pkg = ANDROID_PACKAGES[butler.key];
-  if (isAndroid && pkg) {
-    return 'intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=' + pkg + ';end;';
-  }
   const query = getBookieSearchQuery(betData);
   const links = getBookieDeepLinks(query);
-  return links[butler.key] || butler.appUrl + encodeURIComponent(query);
+  const targetUrl = links[butler.key] || butler.appUrl + encodeURIComponent(query);
+
+  if (isAndroid && pkg) {
+    const hostAndPath = targetUrl.replace(/^https?:\/\//, '');
+    return 'intent://' + hostAndPath + '#Intent;scheme=https;package=' + pkg + ';end;';
+  }
+  return targetUrl;
 }
 
 function prepareButlerLaunch(slipIdx) {
