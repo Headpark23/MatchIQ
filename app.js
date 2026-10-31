@@ -63,8 +63,15 @@ function jargonTip(term) {
 const DIARY_STORAGE_KEY = 'matchiq_bet_diary_v1';
 const FEEDBACK_STORAGE_KEY = 'matchiq_ux_feedback_v1';
 const FILES = {
-  predictions: 'data/predictions.json', fixtures: 'data/fixtures.json', history: 'data/prediction_history.json',
-  performance: 'data/performance.json', leagueValidation: 'data/league_validation.json', status: 'data/pipeline_status.json', reliability: 'data/model_reliability.json', odds: 'data/odds.json', multiSport: 'data/multi_sport_events.json'
+  predictions: 'data/predictions.json?v=78',
+  fixtures: 'data/fixtures.json?v=78',
+  history: 'data/prediction_history.json?v=78',
+  performance: 'data/performance.json?v=78',
+  leagueValidation: 'data/league_validation.json?v=78',
+  status: 'data/pipeline_status.json?v=78',
+  reliability: 'data/model_reliability.json?v=78',
+  odds: 'data/odds.json?v=78',
+  multiSport: 'data/multi_sport_events.json?v=78'
 };
 const DATA = {};
 const LEAGUES = {
@@ -5805,7 +5812,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v77';
+const APP_VERSION = 'v78';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
