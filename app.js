@@ -666,8 +666,8 @@ let builderResult = null, builderTimer = null;
 // Custom Multi-Sport Acca State
 let customAccaLegs = [];
 try {
-  const savedCustom = JSON.parse(localStorage.getItem('betbuddy_custom_acca_v1') || '[]');
-  if (Array.isArray(savedCustom)) customAccaLegs = savedCustom;
+  // Wipe stale custom acca state on startup to ensure a completely clean app per user directive
+  localStorage.removeItem('betbuddy_custom_acca_v1');
 } catch (e) {}
 
 function addCrossSportAccaLeg(leg) {
@@ -701,14 +701,20 @@ function clearCustomAcca() {
 
 function builderCompute() {
   const { stake, legs, win } = builderState;
+  const numLegs = Number(legs) || 4;
   const now = Date.now();
   const todayStr = new Date(now).toISOString().slice(0, 10);
-  const upcomingToday = predictionsList().filter(p => kickoffMs(p.fixture) > now && p.fixture && p.fixture.kickoff_utc && p.fixture.kickoff_utc.slice(0, 10) === todayStr);
 
-  // If user selected today, but today has fewer upcoming games than requested legs, auto fallback to upcoming slate
+  // If user selected today, verify today has enough distinct matches for requested legs; fallback to all if needed
   let effectiveTiming = builderState.timing || 'today';
-  if (effectiveTiming === 'today' && upcomingToday.length < legs) {
-    effectiveTiming = 'all';
+  if (effectiveTiming === 'today') {
+    const candidatePool = activeSports.includes('football')
+      ? MatchIQBuilder.legPool(predictionsList(), { calc, reliability: DATA.reliability, feedFor, nowMs: now, timing: 'today' })
+      : [];
+    const distinctMatches = new Set(candidatePool.map(l => l.matchId)).size;
+    if (distinctMatches < numLegs) {
+      effectiveTiming = 'all';
+    }
   }
 
   const footballPool = activeSports.includes('football')
@@ -752,7 +758,7 @@ function builderCompute() {
   }
 
   const combinedPool = footballPool.concat(multiSportPool);
-  builderResult = MatchIQBuilder.buildSlips(combinedPool, { stake, win, legs, maxSlips: 4 });
+  builderResult = MatchIQBuilder.buildSlips(combinedPool, { stake, win, legs: Number(legs), maxSlips: 4 });
   // Always sort slips by Expected Value (EV) descending so the Best Value combination is noted and at the top
   if (builderResult && builderResult.slips && builderResult.slips.length > 0) {
     builderResult.slips.sort((a, b) => (b.ev != null ? b.ev : 0) - (a.ev != null ? a.ev : 0));
@@ -907,7 +913,7 @@ function slipCard(slip, idx, stake) {
     : ('<div class="slip-trust-bar negative">⚠️ <b>' + chance + '% chance to win.</b> Expect to lose about ' + evPence + 'p per £1 on average.</div>');
 
   return '<article class="slip' + (primary ? ' primary' : '') + '">' + todayBadge +
-    '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? '💎 Best Value &amp; Target Match' : 'Option ' + (idx + 1) + ' Combination') + ' ' + jargonTip('acca') + '</div>' +
+    '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? '💎 Best Value &amp; Target Match (' + slip.legs.length + '-Leg Acca)' : 'Option ' + (idx + 1) + ' Combination (' + slip.legs.length + '-Leg Acca)') + ' ' + jargonTip('acca') + '</div>' +
     '<div class="slip-odds mono">' + esc(mainOdds) + '</div></div>' +
     '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every bet lands</small></div></div>' +
     trustBadge +
@@ -1026,30 +1032,31 @@ function shareCustomAcca() {
 }
 
 function builderOutput() {
-  const r = builderResult, { stake, win } = builderState, m = MatchIQBuilder.money;
+  const r = builderResult, { stake, win, legs } = builderState, m = MatchIQBuilder.money;
   let customHtml = customAccaLegs.length > 0 ? customAccaCard(stake) : '';
   if (!r) return customHtml;
-  const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from a <b>' + m(stake) + '</b> stake you need a total return of <b>' + m(stake + win) + '</b>: combined odds of about <b class="mono">' + fmtOdds((stake + win) / stake) + '</b>.</p>';
+  const numLegs = Number(legs) || 4;
+  const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from a <b>' + m(stake) + '</b> stake across <b>' + numLegs + ' bets</b> you need a total return of <b>' + m(stake + win) + '</b>: combined odds of about <b class="mono">' + fmtOdds((stake + win) / stake) + '</b>.</p>';
   if (r.error) {
     let helper = '';
     const todayStr = new Date().toISOString().slice(0, 10);
     const todayCount = predictionsList().filter(p => p.fixture && p.fixture.kickoff_utc && p.fixture.kickoff_utc.slice(0, 10) === todayStr).length;
-    if (builderState.timing === 'today' && todayCount > 0 && todayCount < builderState.legs) {
+    if (builderState.timing === 'today' && todayCount > 0 && todayCount < numLegs) {
       helper = '<div class="notice" style="margin-top:14px;border-color:var(--emerald);background:rgba(16,185,129,0.12);color:#fff;">' +
         '<b>⚡ ' + todayCount + ' matches playing today.</b><br>' +
-        'Target is ' + builderState.legs + ' bets. Adjust legs to match today\'s available matches, or switch to the 7-day schedule:' +
+        'Target is ' + numLegs + ' bets. Adjust legs to match today\'s available matches, or switch to the 7-day schedule:' +
         '<div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">' +
           '<button type="button" class="btn small" onclick="setBuilderLegs(' + todayCount + ')" style="background:var(--emerald);color:#03140d;font-weight:700;">Build ' + todayCount + '-Leg Acca for Today</button>' +
           '<button type="button" class="btn small" onclick="setBuilderTiming(\'all\')">Switch to Next 7 Days</button>' +
         '</div>' +
       '</div>';
     }
-    return customHtml + need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>' + helper;
+    return need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>' + helper + customHtml;
   }
   const first = r.slips[0];
   const miss = r.exact ? '' : '<p class="slip-warn">No combination lands on that target. This is the closest available: it returns ' + m(first.ret) + ' (profit ' + m(first.profit) + ').</p>';
   const fine = '<p class="builder-fine">Chances are Bet Buddy model estimates, not promises. On average this slip is expected to ' + (first.ev >= 0 ? 'make ' : 'lose ') + '<b>' + m(Math.abs(first.ev)) + '</b> per ' + m(stake) + ' staked; bookmaker margins usually push that below zero. Never stake more than you can afford to lose.</p>';
-  return customHtml + need + miss + r.slips.map((s, i) => slipCard(s, i, stake)).join('') + fine;
+  return need + miss + r.slips.map((s, i) => slipCard(s, i, stake)).join('') + fine + customHtml;
 }
 
 
@@ -1179,7 +1186,12 @@ function updateBuilder() {
 }
 
 function markLegChips() {
-  document.querySelectorAll('.legpick').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.legs === builderState.legs)));
+  const current = Number(builderState.legs);
+  document.querySelectorAll('.legpick').forEach(b => {
+    const isSel = +b.dataset.legs === current;
+    b.setAttribute('aria-pressed', String(isSel));
+    b.classList.toggle('active', isSel);
+  });
 }
 
 function markWinChips() {
@@ -1187,10 +1199,13 @@ function markWinChips() {
 }
 
 function setBuilderLegs(n) {
-  builderState.legs = n;
-  const inp = $('b-legs'); if (inp) inp.value = n;
+  const num = Math.max(1, Math.min(MatchIQBuilder.MAX_LEGS, Number(n) || 4));
+  builderState.legs = num;
+  try { localStorage.setItem(BUILDER_KEY, JSON.stringify(builderState)); } catch (e) {}
+  const inp = $('b-legs'); if (inp) inp.value = num;
   markLegChips();
   updateBuilder();
+  render();
 }
 
 function setBuilderTiming(mode) {
@@ -1215,7 +1230,14 @@ function onBuilderInput(t) {
     markWinChips();
   } else if (!Number.isFinite(v) || v <= 0) return;
   else if (t.dataset.b === 'stake') builderState.stake = Math.min(10000, v);
-  else if (t.dataset.b === 'legs') { builderState.legs = Math.max(1, Math.min(MatchIQBuilder.MAX_LEGS, Math.round(v))); markLegChips(); updateBuilder(); return; }
+  else if (t.dataset.b === 'legs') {
+    builderState.legs = Math.max(1, Math.min(MatchIQBuilder.MAX_LEGS, Math.round(v)));
+    try { localStorage.setItem(BUILDER_KEY, JSON.stringify(builderState)); } catch (e) {}
+    markLegChips();
+    updateBuilder();
+    render();
+    return;
+  }
   clearTimeout(builderTimer);
   builderTimer = setTimeout(updateBuilder, 120);
 }
@@ -5545,7 +5567,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v70';
+const APP_VERSION = 'v71';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
