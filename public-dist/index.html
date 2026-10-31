@@ -433,6 +433,22 @@
 <!-- Return from Bookmaker Confirmation Modal -->
 
 <!-- Bet Butler Bookmaker Preference Modal -->
+<!-- Today's Best Value Bet Modal / Bottom Sheet -->
+<div class="modal-backdrop" id="best-value-modal" hidden>
+  <div class="modal best-value-dialog" role="dialog" aria-modal="true" aria-labelledby="best-value-title">
+    <div class="modal-head">
+      <div>
+        <div class="slip-card-badge" style="color:var(--emerald);">💎 MATHEMATICAL EDGE &middot; LIVE PRICES</div>
+        <h2 id="best-value-title" class="slip-card-heading">Today's Best Value Bets</h2>
+      </div>
+      <button type="button" class="icon-btn" onclick="closeBestValueModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body best-value-modal-body" id="best-value-modal-body">
+      <!-- Populated dynamically by renderBestValueModalContent() -->
+    </div>
+  </div>
+</div>
+
 <!-- Slip Card Modal / Bottom Sheet -->
 <div class="modal-backdrop" id="slip-card-modal" hidden>
   <div class="modal slip-card-dialog" role="dialog" aria-modal="true" aria-labelledby="slip-card-title">
