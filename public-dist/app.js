@@ -1298,7 +1298,7 @@ function renderWelcomeHero() {
   const diaryItems = getStoredDiary();
   const diaryCount = diaryItems.length;
   const user = getAuthUser();
-  const userName = user && user.displayName ? user.displayName.split(' ')[0] : 'Punter';
+  const userName = user && user.signedIn ? (user.handle || user.name || 'Punter').replace(/^@+/, '').split(' ')[0] : 'Punter';
 
   return '<div class="welcome-hero-wrap compact-home">' +
     '<!-- 1. Introduction: Ultra-compact, low real estate -->' +
@@ -2269,6 +2269,13 @@ try {
     firestoreDb = firebase.firestore();
     if (firebase.auth) {
       firebaseAuth = firebase.auth();
+      try {
+        if (firebase.auth.Auth && firebase.auth.Auth.Persistence) {
+          firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(e) {
+            console.warn('Firebase setPersistence notice:', e);
+          });
+        }
+      } catch (e) {}
     }
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.search.includes('emulator=1')) {
       if (firebaseAuth && firebaseAuth.useEmulator) {
@@ -4648,6 +4655,16 @@ const AUTH_STORAGE_KEY = 'betbuddy_auth_user_v1';
 let deferredInstallPrompt = null;
 let currentAuthUser = null;
 let currentAuthProfile = null;
+let cachedAuthUser = null;
+try {
+  const savedUser = localStorage.getItem(AUTH_STORAGE_KEY);
+  if (savedUser) {
+    const parsed = JSON.parse(savedUser);
+    if (parsed && (parsed.uid || parsed.signedIn)) {
+      cachedAuthUser = parsed;
+    }
+  }
+} catch (e) {}
 let lastResendVerificationTime = 0;
 
 const HANDLE_REGEX = /^[A-Za-z0-9_]{3,20}$/;
@@ -4690,27 +4707,60 @@ function showAuthError(boxId, message) {
 }
 
 function getAuthUser() {
-  if (!currentAuthUser) return null;
+  const activeUser = currentAuthUser || cachedAuthUser;
+  if (!activeUser) return null;
   const prof = currentAuthProfile || getUserProfile();
-  const providerIds = (currentAuthUser.providerData || []).map(p => p.providerId);
-  const isGoogle = providerIds.includes('google.com');
-  const isPassword = providerIds.includes('password');
+  const providerIds = (activeUser.providerData || []).map(p => p.providerId);
+  const isGoogle = providerIds.includes('google.com') || activeUser.isGoogle || activeUser.providerId === 'google.com';
+  const isPassword = providerIds.includes('password') || activeUser.isPassword;
+
+  // Derive display username: custom handle > Google name > email username
+  let username = (currentAuthProfile && currentAuthProfile.handle) ||
+                 (cachedAuthUser && cachedAuthUser.handle && !cachedAuthUser.handle.startsWith('Punter_') ? cachedAuthUser.handle : '') ||
+                 (prof && prof.handle && !prof.handle.startsWith('Punter_') ? prof.handle : '') ||
+                 activeUser.displayName ||
+                 activeUser.name ||
+                 (activeUser.email ? activeUser.email.split('@')[0] : 'Punter');
+
+  username = String(username).replace(/^@+/, '').trim() || 'Punter';
 
   return {
     signedIn: true,
-    uid: currentAuthUser.uid,
-    name: currentAuthUser.displayName || prof.handle || 'Punter',
-    email: currentAuthUser.email || '',
-    handle: prof.handle || 'Punter',
-    emailVerified: Boolean(currentAuthUser.emailVerified || isGoogle),
+    uid: activeUser.uid,
+    name: activeUser.displayName || activeUser.name || username,
+    email: activeUser.email || '',
+    handle: username,
+    photoURL: activeUser.photoURL || '',
+    emailVerified: Boolean(activeUser.emailVerified || isGoogle),
     isGoogle,
     isPassword
   };
 }
 
 function saveAuthUser(user) {
+  if (!user) {
+    cachedAuthUser = null;
+    try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) {}
+    updateHeaderAuthUI();
+    return;
+  }
+  const prof = currentAuthProfile || getUserProfile();
+  const username = (currentAuthProfile && currentAuthProfile.handle) ||
+                   (prof && prof.handle && !prof.handle.startsWith('Punter_') ? prof.handle : '') ||
+                   user.displayName ||
+                   (user.email ? user.email.split('@')[0] : 'Punter');
+  cachedAuthUser = {
+    signedIn: true,
+    uid: user.uid,
+    displayName: user.displayName || username,
+    name: user.displayName || username,
+    email: user.email || '',
+    handle: String(username).replace(/^@+/, ''),
+    photoURL: user.photoURL || '',
+    isGoogle: true
+  };
   try {
-    localStorage.removeItem(AUTH_STORAGE_KEY);
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(cachedAuthUser));
   } catch (e) {}
   updateHeaderAuthUI();
 }
@@ -4766,28 +4816,39 @@ async function claimHandleTransaction(uid, handle, avatar = '⚽') {
 }
 
 async function ensureUserProfile(user) {
-  if (!firestoreDb || !user) return;
+  if (!user) return;
   try {
-    const userDocRef = firestoreDb.collection('users').doc(user.uid);
-    const userDoc = await userDocRef.get();
-    if (userDoc.exists) {
-      currentAuthProfile = userDoc.data();
-      const cur = getUserProfile();
-      saveUserProfile(currentAuthProfile.handle || cur.handle, cur.town, cur.region, cur.country);
-      return;
-    }
-
-    // Clean-slate / user doc wiped: clear stale profile and send cleanly to handle-creation
-    currentAuthProfile = null;
     let baseHandle = (user.displayName || (user.email ? user.email.split('@')[0] : 'Punter'))
       .replace(/[^A-Za-z0-9_]/g, '');
     if (baseHandle.length < 3) baseHandle = 'Punter_' + baseHandle;
-    if (baseHandle.length > 16) baseHandle = baseHandle.slice(0, 16);
+    if (baseHandle.length > 20) baseHandle = baseHandle.slice(0, 20);
 
-    if ($('player-handle-input')) $('player-handle-input').value = baseHandle;
-    const modal = $('handle-modal');
-    if (modal) modal.hidden = false;
-    toast('Welcome to Bet Buddy! Please confirm your gamertag.');
+    if (firestoreDb) {
+      const userDocRef = firestoreDb.collection('users').doc(user.uid);
+      const userDoc = await userDocRef.get();
+      if (userDoc.exists) {
+        currentAuthProfile = userDoc.data();
+        const cur = getUserProfile();
+        saveUserProfile(currentAuthProfile.handle || cur.handle, cur.town, cur.region, cur.country);
+        saveAuthUser(user);
+        return;
+      }
+      const initialProfile = {
+        uid: user.uid,
+        handle: baseHandle,
+        name: user.displayName || baseHandle,
+        email: user.email || '',
+        avatar: '⚽',
+        createdAt: new Date().toISOString()
+      };
+      await userDocRef.set(initialProfile, { merge: true });
+      currentAuthProfile = initialProfile;
+      saveUserProfile(baseHandle);
+      saveAuthUser(user);
+    } else {
+      saveUserProfile(baseHandle);
+      saveAuthUser(user);
+    }
   } catch (e) {
     console.warn('ensureUserProfile notice:', e);
   }
@@ -4799,16 +4860,16 @@ function updateHeaderAuthUI() {
   const user = getAuthUser();
   if (user && user.signedIn) {
     const initials = (user.name || user.email || 'U').slice(0, 1).toUpperCase();
+    const username = user.handle || user.name || 'Punter';
     container.innerHTML = '<div style="display:flex;align-items:center;gap:6px;">' +
       '<button type="button" class="header-user-btn" id="header-user-btn" title="Signed in as ' + esc(user.name || user.email) + '">' +
         '<span class="header-avatar">' + esc(initials) + '</span>' +
-        '<span>@' + esc(user.handle || 'Punter') + '</span>' +
-        
+        '<span class="header-username">@' + esc(username) + '</span>' +
       '</button>' +
       '<button type="button" class="btn small" id="btn-quick-signout" title="Sign Out of account" style="min-height:32px;padding:2px 8px;font-size:11px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.35);color:#fca5a5;">Sign Out</button>' +
     '</div>';
   } else {
-    container.innerHTML = '<button type="button" class="google-sub-btn" id="header-auth-btn" title="Sign in or join">' +
+    container.innerHTML = '<button type="button" class="google-sub-btn" id="header-auth-btn" title="Sign In / Join">' +
       '<svg class="google-g" viewBox="0 0 24 24" width="13" height="13"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>' +
       '<span>Sign In / Join</span></button>';
   }
@@ -4883,6 +4944,7 @@ async function handleSignOut() {
   }
   currentAuthUser = null;
   currentAuthProfile = null;
+  cachedAuthUser = null;
   try {
     localStorage.removeItem(AUTH_STORAGE_KEY);
   } catch (e) {}
@@ -4895,8 +4957,17 @@ async function handleSignOut() {
 function initFirebaseAuth() {
   if (!firebaseAuth) return;
 
+  try {
+    if (firebase.auth && firebase.auth.Auth && firebase.auth.Auth.Persistence) {
+      firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(e) {
+        console.warn('Firebase setPersistence notice:', e);
+      });
+    }
+  } catch (e) {}
+
   firebaseAuth.getRedirectResult().then(result => {
     if (result && result.user) {
+      saveAuthUser(result.user);
       toast('Signed in with Google! ⚽');
     }
   }).catch(err => {
@@ -4907,7 +4978,7 @@ function initFirebaseAuth() {
   firebaseAuth.onAuthStateChanged(async user => {
     currentAuthUser = user;
     if (user) {
-      try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) {}
+      saveAuthUser(user);
       await ensureUserProfile(user);
       hasSyncedUserLeagues = false;
       await syncUserLeaguesFromCloud();
@@ -4920,7 +4991,9 @@ function initFirebaseAuth() {
         setTimeout(() => { joinCloudLeague(pendingLeague); }, 600);
       }
     } else {
+      currentAuthUser = null;
       currentAuthProfile = null;
+      cachedAuthUser = null;
       try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) {}
     }
     updateHeaderAuthUI();
@@ -5567,7 +5640,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v71';
+const APP_VERSION = 'v72';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
