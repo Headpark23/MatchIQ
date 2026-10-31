@@ -497,92 +497,116 @@
 </div>
 
 <div class="modal-backdrop" id="butler-modal" hidden>
-  <div class="modal bookie-modal-card" role="dialog" aria-modal="true" aria-labelledby="butler-modal-title">
+  <div class="modal butler-dialog" role="dialog" aria-modal="true" aria-labelledby="butler-modal-title">
     <div class="modal-head">
-      <div>
-        <h2 id="butler-modal-title" style="margin:0;font-size:1.15rem;display:flex;align-items:center;gap:8px;">
-          <span>🤵</span> The Bet Butler (Your Slip Note)
-        </h2>
-        <span class="text-sm muted">Keep your slip in front of you while you add the bets in your bookmaker's app.</span>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="butler-avatar-badge">🤵</div>
+        <div>
+          <div class="slip-card-badge" style="color:#38bdf8;font-size:11px;font-weight:700;letter-spacing:0.06em;">BET BUTLER &middot; SLIP NOTE SETTINGS</div>
+          <h2 id="butler-modal-title" style="margin:2px 0 0;font-size:1.25rem;font-weight:800;color:#fff;">
+            Choose Your Bookmaker
+          </h2>
+        </div>
       </div>
       <button type="button" class="icon-btn" onclick="closeButlerModal()" aria-label="Close">&times;</button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="padding-top:12px;">
       <div class="butler-intro-box">
-        <p style="margin:0;font-size:13.5px;color:#e2e8f0;line-height:1.45;">
-          <strong>No new betting account needed.</strong> Choose the bookmaker you already use. When you build an acca, Bet Buddy generates a Slip Card note so you can easily check off each pick in your betting app.
+        <p style="margin:0;font-size:13.5px;color:#cbd5e1;line-height:1.45;">
+          <strong style="color:#fff;">No account transfer or betting credentials needed.</strong> Select your bookmaker below. Bet Buddy keeps your calculated accumulator slip in front of you on a <b>Slip Card</b> so you can glance, copy, and tick off each selection in your bookmaker app.
         </p>
       </div>
 
-      <div class="butler-bookie-grid" role="radiogroup" aria-label="Select your preferred bookmaker" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:10px;margin-top:14px;">
+      <div class="butler-bookie-grid" role="radiogroup" aria-label="Select your preferred bookmaker">
+        <!-- Sky Bet -->
         <button type="button" class="butler-choice-card" data-select-butler="skybet" onclick="setButlerBookmaker('skybet')">
-          <div class="butler-choice-top">
-            <span class="bookie-tag skybet">SKY BET</span>
-            <span class="butler-active-check" id="check-skybet">✓ Active</span>
+          <div class="butler-choice-left">
+            <span class="bookie-tag skybet">SKY</span>
+            <div class="butler-choice-details">
+              <strong>Sky Bet</strong>
+              <span class="butler-choice-sub">UK Football &amp; Acca Markets</span>
+            </div>
           </div>
-          <strong>Sky Bet</strong>
-          <span class="text-sm muted">Opens Sky Bet football hub in new tab.</span>
+          <span class="butler-active-check" id="check-skybet">✓ Active</span>
         </button>
 
+        <!-- bet365 -->
         <button type="button" class="butler-choice-card" data-select-butler="bet365" onclick="setButlerBookmaker('bet365')">
-          <div class="butler-choice-top">
-            <span class="bookie-tag bet365">BET365</span>
-            <span class="butler-active-check" id="check-bet365">✓ Active</span>
+          <div class="butler-choice-left">
+            <span class="bookie-tag b365">365</span>
+            <div class="butler-choice-details">
+              <strong>bet365</strong>
+              <span class="butler-choice-sub">Football &amp; Global Sports</span>
+            </div>
           </div>
-          <strong>bet365</strong>
-          <span class="text-sm muted">Opens bet365 football hub in new tab.</span>
+          <span class="butler-active-check" id="check-bet365">✓ Active</span>
         </button>
 
+        <!-- William Hill -->
         <button type="button" class="butler-choice-card" data-select-butler="williamhill" onclick="setButlerBookmaker('williamhill')">
-          <div class="butler-choice-top">
-            <span class="bookie-tag williamhill">WILLIAM HILL</span>
-            <span class="butler-active-check" id="check-williamhill">✓ Active</span>
+          <div class="butler-choice-left">
+            <span class="bookie-tag wh">WH</span>
+            <div class="butler-choice-details">
+              <strong>William Hill</strong>
+              <span class="butler-choice-sub">UK Betting &amp; Daily Coup</span>
+            </div>
           </div>
-          <strong>William Hill</strong>
-          <span class="text-sm muted">Opens William Hill football hub in new tab.</span>
+          <span class="butler-active-check" id="check-williamhill">✓ Active</span>
         </button>
 
+        <!-- Paddy Power -->
         <button type="button" class="butler-choice-card" data-select-butler="paddypower" onclick="setButlerBookmaker('paddypower')">
-          <div class="butler-choice-top">
-            <span class="bookie-tag paddypower">PADDY POWER</span>
-            <span class="butler-active-check" id="check-paddypower">✓ Active</span>
+          <div class="butler-choice-left">
+            <span class="bookie-tag pp">PP</span>
+            <div class="butler-choice-details">
+              <strong>Paddy Power</strong>
+              <span class="butler-choice-sub">Football &amp; Multi-Sport</span>
+            </div>
           </div>
-          <strong>Paddy Power</strong>
-          <span class="text-sm muted">Opens Paddy Power football hub in new tab.</span>
+          <span class="butler-active-check" id="check-paddypower">✓ Active</span>
         </button>
 
+        <!-- Betfair -->
         <button type="button" class="butler-choice-card" data-select-butler="betfair" onclick="setButlerBookmaker('betfair')">
-          <div class="butler-choice-top">
-            <span class="bookie-tag betfair">BETFAIR</span>
-            <span class="butler-active-check" id="check-betfair">✓ Active</span>
+          <div class="butler-choice-left">
+            <span class="bookie-tag bf">BF</span>
+            <div class="butler-choice-details">
+              <strong>Betfair Sportsbook</strong>
+              <span class="butler-choice-sub">Football &amp; Exchange Odds</span>
+            </div>
           </div>
-          <strong>Betfair</strong>
-          <span class="text-sm muted">Opens Betfair football hub in new tab.</span>
+          <span class="butler-active-check" id="check-betfair">✓ Active</span>
         </button>
 
+        <!-- Coral -->
         <button type="button" class="butler-choice-card" data-select-butler="coral" onclick="setButlerBookmaker('coral')">
-          <div class="butler-choice-top">
-            <span class="bookie-tag coral">CORAL</span>
-            <span class="butler-active-check" id="check-coral">✓ Active</span>
+          <div class="butler-choice-left">
+            <span class="bookie-tag coral">COR</span>
+            <div class="butler-choice-details">
+              <strong>Coral</strong>
+              <span class="butler-choice-sub">Football Coupon &amp; Accas</span>
+            </div>
           </div>
-          <strong>Coral</strong>
-          <span class="text-sm muted">Opens Coral football hub in new tab.</span>
+          <span class="butler-active-check" id="check-coral">✓ Active</span>
         </button>
 
+        <!-- Ladbrokes -->
         <button type="button" class="butler-choice-card" data-select-butler="ladbrokes" onclick="setButlerBookmaker('ladbrokes')">
-          <div class="butler-choice-top">
-            <span class="bookie-tag ladbrokes">LADBROKES</span>
-            <span class="butler-active-check" id="check-ladbrokes">✓ Active</span>
+          <div class="butler-choice-left">
+            <span class="bookie-tag ladbrokes">LAD</span>
+            <div class="butler-choice-details">
+              <strong>Ladbrokes</strong>
+              <span class="butler-choice-sub">Football &amp; Weekend Coupons</span>
+            </div>
           </div>
-          <strong>Ladbrokes</strong>
-          <span class="text-sm muted">Opens Ladbrokes football hub in new tab.</span>
+          <span class="butler-active-check" id="check-ladbrokes">✓ Active</span>
         </button>
       </div>
 
-      <div class="butler-perks-box" style="margin-top:14px;">
-        <div class="butler-perk-item"><span>📋</span> <strong>Slip Card Checklist:</strong> Keep your calculated acca open and tick off legs as you add them in your betting app.</div>
-        <div class="butler-perk-item"><span>📑</span> <strong>Copy All Selections:</strong> Fast 1-click formatted copy if you want to paste the lines into notes or chats.</div>
-        <div class="butler-perk-item"><span>💾</span> <strong>Bet Diary Tracking:</strong> Log placed bets directly into your private diary to track verified returns.</div>
+      <div class="butler-perks-box" style="margin-top:16px;">
+        <div class="butler-perk-item"><span>📋</span> <div><strong>Slip Card Checklist:</strong> View your model acca and tick off each leg as you add it.</div></div>
+        <div class="butler-perk-item"><span>📑</span> <div><strong>1-Click Copy:</strong> Copy formatted selections directly to clipboard for quick entry.</div></div>
+        <div class="butler-perk-item"><span>📱</span> <div><strong>Direct App Link:</strong> Convenient one-tap shortcut to open your bookmaker's football hub.</div></div>
       </div>
 
       <div class="responsible-gambling-note" style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);font-size:12px;color:#94a3b8;text-align:center;">

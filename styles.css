@@ -3643,3 +3643,114 @@ textarea.ctl { min-height: 96px; resize: vertical; }
     gap: 10px;
   }
 }
+
+
+/* Enhanced Butler Modal Dialog & Bookmaker Choice Cards */
+.butler-dialog {
+  max-width: 540px;
+  width: 95vw;
+  background: #081220;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.12);
+  border-radius: 18px;
+}
+.butler-avatar-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.butler-bookie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+  margin: 14px 0 16px;
+  max-height: 46vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.butler-choice-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  min-height: 52px;
+}
+.butler-choice-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: #38bdf8;
+  transform: translateY(-1px);
+}
+.butler-choice-card.active {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.22), rgba(16, 185, 129, 0.14));
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+}
+.butler-choice-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.butler-choice-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.butler-choice-details strong {
+  font-size: 14px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.butler-choice-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.butler-active-check {
+  font-size: 12px;
+  font-weight: 800;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.16);
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: none;
+  flex-shrink: 0;
+}
+.butler-choice-card.active .butler-active-check {
+  display: inline-block;
+}
+.butler-perk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #94a3b8;
+}
+.butler-perk-item strong {
+  color: #f1f5f9;
+}
+@media (max-width: 520px) {
+  .butler-bookie-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

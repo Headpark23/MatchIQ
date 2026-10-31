@@ -60,3 +60,4 @@ def patch_app_js():
 if __name__ == '__main__':
     patch_bet_builder()
     patch_app_js()
+
