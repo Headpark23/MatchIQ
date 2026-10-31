@@ -319,11 +319,16 @@ function bestValueBlock(pred) {
     detail += '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded for this match (the automatic feed covers Match Result and Total Goals only, when it is enabled). Type a fractional price you have seen on any selection, here or in the top six, and Bet Buddy will check every priced selection for value.</p>';
   }
   if (verdict.verdict !== 'awaiting_odds') {
-    detail += '<div class="value-grid"><div><span>Price</span><b>' + esc(verdict.priceText) + '</b></div><div><span>Price implies</span><b>' + pct(verdict.implied) + '</b></div>' +
+    if (verdict.ev > 0.30) {
+      detail += '<div class="ev-high-warning" style="margin:8px 0;padding:8px 12px;background:rgba(234,179,8,0.15);border:1px solid rgba(234,179,8,0.4);border-radius:6px;color:#fef08a;font-size:13px;">⚠️ <b>Unusually high (+' + Math.round(100 * verdict.ev) + '% EV):</b> check the price with the bookmaker — market odds may have shifted or been misquoted.</div>';
+    }
+    detail += '<p class="muted" style="font-size:13.5px"><b>' + esc(sel.label) + ':</b> ' + esc(verdict.why) + (verdict.margin == null && siblings.length && verdict.verdict !== 'no_bet' ? ' Add the other outcomes\' prices below to remove the bookmaker\'s margin.' : '') + '</p>';
+    detail += '<details class="maths-details" style="margin-top:8px;background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);"><summary style="cursor:pointer;font-weight:600;font-size:13px;color:var(--cyan);">🔬 Show the maths (EV & margins) ▾</summary>' +
+      '<div class="value-grid" style="margin-top:8px;"><div><span>Price</span><b>' + esc(verdict.priceText) + '</b></div><div><span>Price implies</span><b>' + pct(verdict.implied) + '</b></div>' +
       (verdict.fairImplied != null ? '<div><span>Margin removed</span><b>' + pct(verdict.fairImplied) + '</b></div>' : '') +
       '<div><span>Bet Buddy</span><b>' + pct(sel.p) + '</b></div><div><span>Expected value</span><b class="' + (verdict.ev >= 0 ? 'pos' : 'neg') + '">' + (verdict.ev >= 0 ? '+' : '') + Math.round(100 * verdict.ev) + '%</b></div>' +
       (verdict.margin != null ? '<div><span>Bookmaker margin</span><b>' + (100 * verdict.margin).toFixed(1) + '%</b></div>' : '') + '</div>' +
-      '<p class="muted" style="font-size:13.5px"><b>' + esc(sel.label) + ':</b> ' + esc(verdict.why) + (verdict.margin == null && siblings.length && verdict.verdict !== 'no_bet' ? ' Add the other outcomes’ prices below to remove the bookmaker’s margin.' : '') + '</p>';
+      '</details>';
   } else if (prices[sel.id]) {
     detail += '<p class="muted" style="font-size:13.5px">' + esc(verdict.why) + '</p>';
   }
@@ -429,7 +434,13 @@ const predictionsList = () => Object.values((DATA.predictions && DATA.prediction
 const fixturesList = () => (DATA.fixtures && DATA.fixtures.fixtures) || [];
 const historyRecords = () => (DATA.history && DATA.history.records) || [];
 const fixtureById = id => fixturesList().find(f => f.id === id);
-const upcoming = () => predictionsList().filter(p => kickoffMs(p.fixture) > Date.now() && inComp(p.fixture.competition)).sort((a, b) => kickoffMs(a.fixture) - kickoffMs(b.fixture));
+const upcoming = () => predictionsList().filter(p => {
+  const f = fixtureById(p.match_id) || p.fixture;
+  const status = (f && f.status) || (p.fixture && p.fixture.status) || 'SCHEDULED';
+  if (status !== 'SCHEDULED') return false;
+  const ms = kickoffMs(p.fixture || f);
+  return ms > Date.now() && inComp((p.fixture && p.fixture.competition) || (f && f.competition));
+}).sort((a, b) => kickoffMs(a.fixture) - kickoffMs(b.fixture));
 
 function finalRecord(id) {
   const recs = historyRecords().filter(r => r.match_id === id);
@@ -910,14 +921,18 @@ function shareAccaSlip(idx) {
 
 function slipCard(slip, idx, stake) {
   const m = MatchIQBuilder.money, primary = idx === 0;
+  const safeStake = Number(stake || (slip && slip.stake) || (builderState && builderState.stake) || 10) || 10;
+  const odds = Number(slip.odds) || 1;
+  const ret = Number.isFinite(Number(slip.ret)) ? Number(slip.ret) : (safeStake * odds);
+  const profit = Number.isFinite(Number(slip.profit)) ? Number(slip.profit) : (ret - safeStake);
   const chance = slip.chance >= 0.1 ? Math.round(slip.chance * 100) : (slip.chance * 100).toFixed(1);
-  const mainOdds = fmtOdds(slip.odds);
+  const mainOdds = fmtOdds(odds);
   const isTodayAcca = builderState.timing === 'today';
   const todayBadge = isTodayAcca ? '<div class="today-slip-pill">⚡ TODAY\'S GAMES ONLY &bull; ALL LEGS SETTLE TONIGHT</div>' : '';
   
   // Honest Trust & Expected Value transparency
-  const evVal = slip.ev != null ? slip.ev : (slip.ret * slip.chance - stake);
-  const evPerPound = evVal / (stake || 10);
+  const evVal = slip.ev != null ? slip.ev : (ret * slip.chance - safeStake);
+  const evPerPound = evVal / safeStake;
   const evPence = Math.round(Math.abs(evPerPound) * 100);
   const trustBadge = evPerPound >= 0
     ? ('<div class="slip-trust-bar positive">📈 <b>' + chance + '% chance to win.</b> Expect to gain about ' + evPence + 'p per £1 staked.</div>')
@@ -929,7 +944,7 @@ function slipCard(slip, idx, stake) {
     '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every bet lands</small></div></div>' +
     trustBadge +
     '<ol class="slip-legs">' + slip.legs.map(slipLegRow).join('') + '</ol>' +
-    '<div class="slip-sum"><span>Stake <b class="mono">' + m(stake) + '</b></span><span>Returns <b class="mono">' + m(slip.ret) + '</b></span><span>Profit <b class="mono">' + m(slip.profit) + '</b></span></div>' +
+    '<div class="slip-sum"><span>Stake <b class="mono">' + m(safeStake) + '</b></span><span>Returns <b class="mono">' + m(ret) + '</b></span><span>Profit <b class="mono">' + m(profit) + '</b></span></div>' +
     (slip.chance < 0.05 ? '<p class="slip-warn">Long shot: roughly 1 in ' + Math.round(1 / slip.chance) + '. Most slips like this lose.</p>' : '') +
     (slip.estimated ? '<p class="slip-note">Some prices are estimates, not live bookmaker prices. The price you are actually offered will differ, so the profit will too.</p>' : '') +
     '<div style="margin: 12px 0 10px;">' +
@@ -946,10 +961,11 @@ function slipCard(slip, idx, stake) {
 
 function customAccaCard(stake) {
   const m = MatchIQBuilder.money;
+  const safeStake = Number(stake || (builderState && builderState.stake) || 10) || 10;
   const legs = customAccaLegs;
-  const odds = legs.reduce((t, l) => t * (l.odds || 2.0), 1);
-  const ret = stake * odds;
-  const profit = ret - stake;
+  const odds = legs.reduce((t, l) => t * (Number(l.odds) || 2.0), 1);
+  const ret = safeStake * odds;
+  const profit = ret - safeStake;
   const chance = legs.reduce((t, l) => t * (l.p || 0.5), 1);
   const chancePct = chance >= 0.1 ? Math.round(chance * 100) : (chance * 100).toFixed(1);
   const mainOdds = fmtOdds(odds);
@@ -979,7 +995,7 @@ function customAccaCard(stake) {
       }).join('') +
     '</ul>' +
     '<div class="slip-sum">' +
-      '<span>Stake <b class="mono">' + m(stake) + '</b></span>' +
+      '<span>Stake <b class="mono">' + m(safeStake) + '</b></span>' +
       '<span>Returns <b class="mono">' + m(ret) + '</b></span>' +
       '<span>Profit <b class="mono">' + m(profit) + '</b></span>' +
     '</div>' +
@@ -1576,8 +1592,8 @@ function viewFixtures() {
   const tabs = { upcoming: 'Upcoming', awaiting: 'Awaiting result', results: 'Results' };
   let list;
   if (fixturesTab === 'upcoming') {
-    // Only display upcoming future matches; exclude past cancelled or removed fixtures
-    list = all.filter(f => ['SCHEDULED', 'POSTPONED'].includes(f.status) && kickoffMs(f) > now).sort((a, b) => kickoffMs(a) - kickoffMs(b));
+    // Strictly upcoming scheduled future matches: exclude cancelled, removed, or past fixtures
+    list = all.filter(f => f.status === 'SCHEDULED' && kickoffMs(f) > now).sort((a, b) => kickoffMs(a) - kickoffMs(b));
     if (!fixturesShowAll) list = list.filter(f => kickoffMs(f) - now < 35 * 86400000);
   } else if (fixturesTab === 'awaiting') {
     list = all.filter(f => f.status === 'AWAITING_RESULT' || f.status === 'RESULT_CONFLICT').sort((a, b) => kickoffMs(b) - kickoffMs(a));
@@ -1593,6 +1609,58 @@ function viewFixtures() {
   html += list.length ? groupedRows(list) : '<div class="empty" style="margin-top:16px">' + (fixturesTab === 'awaiting' ? 'No matches are waiting for a confirmed result.' : 'Nothing to show yet.') + '</div>';
   if ((fixturesTab === 'upcoming' || fixturesTab === 'results') && !fixturesShowAll) html += '<button type="button" class="btn" data-showall style="margin-top:8px">Show ' + (fixturesTab === 'upcoming' ? 'the rest of the season' : 'all results') + '</button>';
   return html + '</section>';
+}
+
+function matchVerdictCard(pred) {
+  if (!pred) return '';
+  const sels = allSelections(pred), prices = pricesFor(pred.match_id);
+  const best = calc.bestValue(pred, prices, matchIQBands());
+  const sel = sels.find(s => s.id === prices._selected) || (best && best.sel) || sels.find(s => s.id === 'result:' + pred.markets.result.pick.key) || sels[0];
+  if (!sel) return '';
+  const siblings = sels.filter(s => s.group === sel.group && s.id !== sel.id);
+  const verdict = valueVerdict(sel, prices[sel.id], siblings, prices);
+  const v = best ? best.v.verdict : verdict.verdict;
+
+  // Line 1: our estimate
+  const estLine = 'Our estimate: <b>' + esc(sel.label) + '</b> ' + pct(sel.p) + ' (fair odds <span class="mono">' + esc(fmtFairOdds(sel.fair, sel.p)) + '</span>)';
+
+  // Line 2: smallest price worth taking (+5% EV threshold)
+  const minWorthTakingDec = (1 + (calc.VALUE_MIN_EV || 0.05)) / sel.p;
+  const minOddsText = fmtOdds(minWorthTakingDec);
+  const minLine = 'Smallest price worth taking: <b class="mono">' + esc(minOddsText) + '</b> (' + minWorthTakingDec.toFixed(2) + ')';
+
+  // Line 3: verdict in words
+  let verdictWords = 'Awaiting Odds — no live bookmaker price entered yet';
+  let verdictBadge = 'awaiting';
+  if (v === 'value') {
+    verdictWords = 'Potential Value — bookmaker price exceeds minimum worth taking';
+    verdictBadge = 'value';
+  } else if (v === 'no_value') {
+    verdictWords = 'No Bet — price too short for estimated win chance';
+    verdictBadge = 'nobet';
+  } else if (v === 'no_bet') {
+    verdictWords = 'No Bet — insufficient backtest edge or sample';
+    verdictBadge = 'nobet';
+  }
+  const verdictLine = 'Verdict: <b class="badge ' + verdictBadge + '" style="font-size:12px;vertical-align:middle;margin:0 4px;">' + (VALUE_HEAD[v] ? VALUE_HEAD[v][1] : 'No Bet') + '</b> ' + esc(verdictWords);
+
+  // High EV warning flag (> 30%)
+  let flagHtml = '';
+  if (verdict.ev != null && verdict.ev > 0.30) {
+    flagHtml = '<div class="ev-high-flag" style="margin-top:10px;padding:8px 12px;background:rgba(234,179,8,0.15);border:1px solid rgba(234,179,8,0.4);border-radius:8px;color:#fef08a;font-size:13px;display:flex;align-items:center;gap:8px;">' +
+      '<span style="font-size:16px;">⚠️</span><span><b>Unusually high (+' + Math.round(verdict.ev * 100) + '% EV):</b> check the price with the bookmaker — market odds may have shifted or been misquoted.</span>' +
+    '</div>';
+  }
+
+  return '<div class="match-top-verdict card section" style="background:linear-gradient(145deg, rgba(15,23,42,0.95), rgba(30,41,59,0.85));border:1px solid rgba(56,189,248,0.3);box-shadow:0 8px 24px rgba(0,0,0,0.3);padding:16px 18px;border-radius:14px;margin-bottom:16px;">' +
+    '<div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px;">Match Verdict</div>' +
+    '<div class="verdict-three-lines" style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45;color:#e2e8f0;">' +
+      '<div>' + estLine + '</div>' +
+      '<div>' + minLine + '</div>' +
+      '<div>' + verdictLine + '</div>' +
+    '</div>' +
+    flagHtml +
+  '</div>';
 }
 
 function viewMatch(id) {
@@ -1616,7 +1684,8 @@ function viewMatch(id) {
 
   if (pred && ms > Date.now()) {
     const r = pred.markets.result;
-    html += '<div class="section">' + recommendationPair(pred) + '</div>' +
+    html += matchVerdictCard(pred) +
+      '<div class="section">' + recommendationPair(pred) + '</div>' +
       '<div class="section">' + heroCard(pred, 'Match result') + '</div>' +
       '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Why this match-result prediction</summary><ul class="explain" style="margin-top:6px">' + resultExplanation(pred) + '</ul>' +
       '<p class="dim" style="font-size:13px;margin-top:10px">' + esc(r.evidence.summary) + ' The models use results and match statistics only. They know nothing about injuries, team news, line-ups or motivation.</p></details>';
@@ -1653,32 +1722,55 @@ function viewResults() {
   for (const r of historyRecords()) latest[r.match_id] = r.evaluated ? r : (latest[r.match_id] && latest[r.match_id].evaluated ? latest[r.match_id] : r);
   const recs = Object.values(latest).filter(r => inComp(r.fixture.competition)).sort((a, b) => kickoffMs(b.fixture) - kickoffMs(a.fixture));
   const settled = recs.filter(r => r.evaluated), pending = recs.filter(r => !r.evaluated && kickoffMs(r.fixture) <= Date.now() && !r.result), future = recs.filter(r => kickoffMs(r.fixture) > Date.now());
+
+  const minReportN = perf.min_report_n || 20;
+  const isEarly = settled.length < minReportN;
+  const headlineStatus = isEarly ? 'too early to judge' : 'tracking live';
+  const headlineText = settled.length + ' prediction' + (settled.length === 1 ? '' : 's') + ' settled so far; ' + headlineStatus;
+  const hitRateSummary = res && res.n ? Math.round(res.pick_hit_rate * 100) + '% of match-result picks won (' + res.hits + ' of ' + res.n + ')' : 'No settled results in this competition yet';
+
   let html = '<section class="view"><h1 class="page-title">Results & performance</h1><p class="page-sub">Every prediction Bet Buddy publishes is sealed before kick-off and scored once the result is confirmed. Nothing here is edited after the fact.</p>' + compBar() +
     (compFilter === 'ALL' ? '<div class="notice section">Scorecards are kept per competition and never pooled. The figures below are the Premier League; choose a competition above for another.</div>' + byCompetitionCards(allPerf) : '');
   if (LOAD_ERRORS.history) return html + errorPanel('history') + '</section>';
-  html += '<div class="tiles section" style="margin-top:18px">' +
-    '<div class="tile"><div class="k">Settled predictions</div><div class="v">' + settled.length + '</div><div class="s">' + pending.length + ' awaiting a result · ' + future.length + ' upcoming</div></div>' +
-    '<div class="tile"><div class="k">Match-result picks right</div><div class="v">' + (res ? pct(res.pick_hit_rate) : '—') + '</div><div class="s">' + (res ? res.n + ' matches · average pick ' + pct(res.mean_pick_p) : 'none settled yet') + '</div></div>' +
-    '<div class="tile"><div class="k">Forecast accuracy (Brier score)</div><div class="v">' + (res ? res.brier.toFixed(3) : '—') + '</div><div class="s">Lower is better (closer to 0 is more accurate). League average was ' + (lv && lv.markets.result ? lv.markets.result.league_brier.toFixed(3) : rel ? rel.markets.wins.league_average_brier.toFixed(3) : '0.660') + ' in the backtest.</div></div>' +
-    '<div class="tile"><div class="k">Published records</div><div class="v">' + (perf.published_records || 0) + '</div><div class="s">including earlier revisions</div></div></div>';
-  if (!res || !res.sufficient_sample) html += '<div class="notice section">Early days: ' + (res ? res.n : 0) + ' settled match-result predictions. Live figures need at least ' + (perf.min_report_n || 20) + ' before they mean much, so lean on the backtest below until then.</div>';
 
+  // Plain headline first
+  html += '<div class="results-lead-card card section" style="background:linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.95));border:1px solid rgba(255,255,255,0.1);padding:18px 20px;border-radius:12px;margin:16px 0;">' +
+    '<h2 style="font-size:20px;font-weight:700;margin:0 0 6px;color:#fff;">' + esc(headlineText) + '</h2>' +
+    '<p style="margin:0;font-size:14.5px;color:var(--soft);">' + esc(hitRateSummary) + '. Live sample needs at least ' + minReportN + ' settled matches before accuracy figures are statistically meaningful.</p>' +
+  '</div>';
+
+  // Lead with simple "How often were we right?" tiles
+  html += '<div class="tiles section" style="margin-top:16px">' +
+    '<div class="tile"><div class="k">Settled predictions</div><div class="v">' + settled.length + '</div><div class="s">' + pending.length + ' awaiting a result • ' + future.length + ' upcoming</div></div>' +
+    '<div class="tile"><div class="k">Match-result picks won</div><div class="v">' + (res ? pct(res.pick_hit_rate) : '–') + '</div><div class="s">' + (res ? res.n + ' matches • average pick ' + pct(res.mean_pick_p) : 'none settled yet') + '</div></div>' +
+  '</div>';
+
+  // Move technical stats (Brier score, calibration, live record by market, challenger) under "Show the maths"
   const marketCards = MARKET_ORDER.filter(k => (perf.markets || {})[k]).map(k => { const m = perf.markets[k];
     return statCard(esc(MARKETS[k].name), m.sufficient_sample ? '' : '<span class="badge pending">small sample</span>',
       [['Settled', m.n], ['Picks right', pct(m.pick_hit_rate)], ['Brier', m.brier.toFixed(3)]], { claimed: m.mean_pick_p, actual: m.pick_hit_rate }); }).join('');
-  html += '<div class="section card"><div class="section-head"><h2 class="section-title">Live record by market</h2><span class="section-note">The two bars should sit close together if the estimates are honest.</span></div>' +
-    (marketCards ? '<div class="stat-cards">' + marketCards + '</div>' : '<p class="muted">No settled predictions yet.</p>') + '</div>';
 
   const bands = (perf.bands || {}).result || {};
-  const bandRows = Object.entries(bands).sort().map(([band, b]) => '<div class="calib-row"><span class="mono">' + esc(band) + '</span><div class="calib-bars" aria-label="Predicted ' + pct(b.mean_pick_p) + ', happened ' + pct(b.pick_hit_rate) + '"><span class="pred" style="width:' + (100 * b.mean_pick_p).toFixed(0) + '%"></span><span class="obs" style="width:' + (100 * b.pick_hit_rate).toFixed(0) + '%"></span></div><span class="mono dim">' + pct(b.pick_hit_rate) + ' · n=' + b.n + '</span></div>').join('');
-    const tiers = perf.tiers || {};
+  const bandRows = Object.entries(bands).sort().map(([band, b]) => '<div class="calib-row"><span class="mono">' + esc(band) + '</span><div class="calib-bars" aria-label="Predicted ' + pct(b.mean_pick_p) + ', happened ' + pct(b.pick_hit_rate) + '"><span class="pred" style="width:' + (100 * b.mean_pick_p).toFixed(0) + '%"></span><span class="obs" style="width:' + (100 * b.pick_hit_rate).toFixed(0) + '%"></span></div><span class="mono dim">' + pct(b.pick_hit_rate) + ' • n=' + b.n + '</span></div>').join('');
+  const tiers = perf.tiers || {};
   const tierLabel = { T1: 'Validated frozen model', T2: 'Provisional: promoted clubs', T3: 'League average fallback', L1: 'League model (provisional, one-season backtest)' };
   const teams = Object.entries(perf.teams || {}).filter(([, t]) => t.n >= 5).sort((a, b) => b[1].n - a[1].n);
   const ch = perf.challenger;
+
   html += '<details class="section card maths-section" style="margin-top:20px;">' +
-    '<summary><span>🔬 Advanced Model Accuracy &amp; Calibration</span><span class="btn small" style="pointer-events:none;">Show the maths ▾</span></summary>' +
+    '<summary style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;min-height:44px;font-weight:600;font-size:15px;color:var(--cyan);">' +
+      '<span>🔬 Show the maths (Brier score, calibration & model details)</span>' +
+      '<span class="btn small" style="pointer-events:none;">Toggle ▾</span>' +
+    '</summary>' +
     '<div style="padding:16px 0 6px;">' +
-      '<div class="grid grid-2"><div class="card"><h2 class="section-title">Calibration, live</h2><p class="section-note" style="margin:4px 0 12px">Pale bar: average predicted chance. Green bar: how often it happened.</p>' + (bandRows ? '<div class="calib">' + bandRows + '</div>' : '<p class="muted">Appears once predictions settle.</p>') + '</div>' +
+      '<div class="tiles section" style="margin-top:0;margin-bottom:16px;">' +
+        '<div class="tile"><div class="k">Forecast accuracy (Brier score)</div><div class="v">' + (res ? res.brier.toFixed(3) : '–') + '</div><div class="s">Lower is better (closer to 0 is more accurate). League average was ' + (lv && lv.markets.result ? lv.markets.result.league_brier.toFixed(3) : rel ? rel.markets.wins.league_average_brier.toFixed(3) : '0.660') + ' in the backtest.</div></div>' +
+        '<div class="tile"><div class="k">Published records</div><div class="v">' + (perf.published_records || 0) + '</div><div class="s">including earlier revisions</div></div>' +
+      '</div>' +
+      '<div class="section card"><div class="section-head"><h2 class="section-title">Live record by market</h2><span class="section-note">The two bars should sit close together if the estimates are honest.</span></div>' +
+        (marketCards ? '<div class="stat-cards">' + marketCards + '</div>' : '<p class="muted">No settled predictions yet.</p>') +
+      '</div>' +
+      '<div class="grid grid-2" style="margin-top:16px;"><div class="card"><h2 class="section-title">Calibration, live</h2><p class="section-note" style="margin:4px 0 12px">Pale bar: average predicted chance. Green bar: how often it happened.</p>' + (bandRows ? '<div class="calib">' + bandRows + '</div>' : '<p class="muted">Appears once predictions settle.</p>') + '</div>' +
       (other ? leagueBacktestCard(lv) : backtestCard(rel)) + '</div>' +
       scorecard(perf) +
       '<div class="grid grid-2" style="margin-top:16px;"><div class="card"><h2 class="section-title">By prediction source</h2><table class="table" style="margin-top:8px"><tbody>' +
@@ -2979,6 +3071,21 @@ function viewLeagues() {
 
 function viewDiary() {
   const all = getStoredDiary();
+  if (!all.length) {
+    return '<section class="view">' +
+      '<h1 class="page-title">Bet Diary</h1>' +
+      '<p class="page-sub">Your private record of bets and prices. Stored only in this browser and only for this web address.</p>' +
+      (diaryReadFailed ? '<div class="notice error">Saved diary data could not be read. It has been left untouched, and saving is disabled to protect it.</div>' : '') +
+      '<div class="empty-diary-card card section" style="text-align:center;padding:48px 24px;border:1px dashed rgba(255,255,255,0.18);border-radius:16px;max-width:540px;margin:28px auto 0;">' +
+        '<div style="font-size:42px;margin-bottom:12px;">📓</div>' +
+        '<h2 style="font-size:20px;font-weight:700;color:#fff;margin:0 0 8px;">Your Bet Diary is empty</h2>' +
+        '<p style="color:var(--soft);font-size:14px;line-height:1.5;margin:0 0 20px;">Keep track of your bets, monitor your returns over time, and see whether following Bet Buddy or your own picks works best.</p>' +
+        '<button type="button" class="btn primary" data-diary="{}" style="min-height:44px;padding:8px 24px;font-size:15px;font-weight:600;">Add your first bet</button>' +
+        '<input type="file" id="diary-import" accept="application/json,.json" hidden>' +
+      '</div>' +
+    '</section>';
+  }
+
   const diary = diaryProfileFilter === 'all' ? all : all.filter(e => (e.profile || 'Default') === diaryProfileFilter);
   const s = calc.summarizeBetDiary(diary);
   const profiles = Array.from(new Set(all.map(e => e.profile || 'Default'))).sort();
@@ -2986,15 +3093,15 @@ function viewDiary() {
     '<div class="btn-row"><button type="button" class="btn primary" data-diary="{}">Add a bet</button><button type="button" class="btn" data-export="csv">Export CSV</button><button type="button" class="btn" data-export="json">Export JSON</button><button type="button" class="btn" data-export="backup">Backup</button><button type="button" class="btn" data-import="diary">Import</button><input type="file" id="diary-import" accept="application/json,.json" hidden></div></div>';
   if (diaryReadFailed) html += '<div class="notice error">Saved diary data could not be read. It has been left untouched, and saving is disabled to protect it.</div>';
   html += '<div class="tiles section" style="margin-top:16px">' +
-    '<div class="tile"><div class="k">Profit / loss</div><div class="v ' + (s.netProfit > 0 ? 'pos' : s.netProfit < 0 ? 'neg' : '') + '">' + (s.netProfit > 0 ? '+' : s.netProfit < 0 ? '−' : '') + money(s.netProfit) + '</div><div class="s">ROI ' + s.roiPct.toFixed(1) + '% on settled stakes</div></div>' +
-    '<div class="tile"><div class="k">Staked</div><div class="v">' + money(s.totalStaked) + '</div><div class="s">' + money(s.settledStaked) + ' settled · ' + s.pendingCount + ' pending</div></div>' +
+    '<div class="tile"><div class="k">Profit / loss</div><div class="v ' + (s.netProfit > 0 ? 'pos' : s.netProfit < 0 ? 'neg' : '') + '">' + (s.netProfit > 0 ? '+' : s.netProfit < 0 ? '-' : '') + money(s.netProfit) + '</div><div class="s">ROI ' + s.roiPct.toFixed(1) + '% on settled stakes</div></div>' +
+    '<div class="tile"><div class="k">Staked</div><div class="v">' + money(s.totalStaked) + '</div><div class="s">' + money(s.settledStaked) + ' settled • ' + s.pendingCount + ' pending</div></div>' +
     '<div class="tile"><div class="k">Returned</div><div class="v">' + money(s.totalReturned) + '</div><div class="s">winnings plus void stakes</div></div>' +
-    '<div class="tile"><div class="k">Won · lost · void</div><div class="v">' + s.wonCount + ' · ' + s.lostCount + ' · ' + s.voidCount + '</div><div class="s">' + s.originBreakdown.matchiq.count + ' following Bet Buddy · ' + s.originBreakdown.independent.count + ' own choice</div></div></div>';
+    '<div class="tile"><div class="k">Won • lost • void</div><div class="v">' + s.wonCount + ' • ' + s.lostCount + ' • ' + s.voidCount + '</div><div class="s">' + s.originBreakdown.matchiq.count + ' following Bet Buddy • ' + s.originBreakdown.independent.count + ' own choice</div></div></div>';
   html += '<div class="section" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><label class="field" style="grid-auto-flow:column;align-items:center;gap:10px"><span class="lbl">Profile</span><select id="diary-profile-filter" class="ctl" style="width:auto"><option value="all">All profiles</option>' +
     profiles.map(p => '<option value="' + esc(p) + '"' + (diaryProfileFilter === p ? ' selected' : '') + '>' + esc(p) + '</option>').join('') + '</select></label>' +
-    (all.length ? '<button type="button" class="btn small danger" data-clear-diary>Clear diary</button>' : '') + '</div>';
+    '<button type="button" class="btn small danger" data-clear-diary>Clear diary</button></div>';
   const chartHtml = diaryPerformanceChart(diary);
-  if (!diary.length) return html + '<div class="empty section">No bets yet. Open any match and use "+ Diary" on a selection, or add one here.</div></section>';
+  if (!diary.length) return html + '<div class="empty section">No bets match this profile filter.</div></section>';
   return html + chartHtml + '<div class="grid grid-2 section">' + diary.map(betCard).join('') + '</div></section>';
 }
 
@@ -5501,8 +5608,8 @@ function openSlipCard(slipIdx) {
   let slipKey = 'slip_' + slipIdx;
   if (slipIdx === 'custom') {
     if (customAccaLegs.length === 0) return;
-    const stake = (builderState && builderState.stake) || 10;
-    const odds = customAccaLegs.reduce((t, l) => t * (l.odds || 2.0), 1);
+    const stake = Number((builderState && builderState.stake) || 10) || 10;
+    const odds = customAccaLegs.reduce((t, l) => t * (Number(l.odds) || 2.0), 1);
     slip = { legs: customAccaLegs, stake, odds, ret: stake * odds };
     slipKey = 'slip_custom';
   } else {
@@ -5510,7 +5617,11 @@ function openSlipCard(slipIdx) {
   }
   if (!slip || !slip.legs) return;
 
-  activeSlipCardData = { ...slip, slipKey };
+  const stake = Number(slip.stake || (builderState && builderState.stake) || 10) || 10;
+  const odds = Number(slip.odds) || slip.legs.reduce((t, l) => t * (Number(l.odds) || 2.0), 1);
+  const ret = Number.isFinite(Number(slip.ret)) ? Number(slip.ret) : (stake * odds);
+
+  activeSlipCardData = { ...slip, stake, odds, ret, slipKey };
   renderSlipCardModal(activeSlipCardData);
 }
 
@@ -5518,8 +5629,8 @@ function openSlipCardSingle(dataStr) {
   try {
     const raw = typeof dataStr === 'string' ? JSON.parse(dataStr) : dataStr;
     const betData = enrichSingleBetData(raw);
-    const stake = 10;
-    const odds = betData.odds || 2.0;
+    const stake = Number((builderState && builderState.stake) || 10) || 10;
+    const odds = Number(betData.odds) || 2.0;
     const leg = {
       label: betData.selection || 'Football Bet',
       fixture: betData.fixture || {},
@@ -5585,9 +5696,11 @@ function renderSlipCardModal(slip) {
 
   const sumEl = $('slip-card-summary');
   if (sumEl) {
-    const retVal = slip.ret ? slip.ret.toFixed(2) : (slip.stake * slip.odds).toFixed(2);
-    sumEl.innerHTML = '<span>Stake: <b class="mono">£' + slip.stake + '</b></span>' +
-      '<span>Total Odds: <b class="mono">' + fmtOdds(slip.odds) + ' (estimate)</b></span>' +
+    const stakeVal = Number(slip.stake || (builderState && builderState.stake) || 10) || 10;
+    const oddsVal = Number(slip.odds) || 1;
+    const retVal = Number.isFinite(Number(slip.ret)) ? Number(slip.ret).toFixed(2) : (stakeVal * oddsVal).toFixed(2);
+    sumEl.innerHTML = '<span>Stake: <b class="mono">£' + stakeVal.toFixed(2) + '</b></span>' +
+      '<span>Total Odds: <b class="mono">' + fmtOdds(oddsVal) + ' (estimate)</b></span>' +
       '<span>Return: <b class="mono">£' + retVal + ' (estimate)</b></span>';
   }
 

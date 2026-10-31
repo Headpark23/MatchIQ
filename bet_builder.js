@@ -17,7 +17,7 @@
   const MAX_LEGS = 12;
   const MARKETS = ['result', 'goals'];   // the markets the price feed covers, so every leg can be priced and placed
 
-  const money = (x) => '£' + (Math.round(x * 100) / 100).toFixed(2);
+  const money = (x) => '£' + (Number.isFinite(Number(x)) ? (Math.round(Number(x) * 100) / 100).toFixed(2) : '0.00');
 
   /* Turn published predictions into one flat pool of legs.
      preds        published prediction objects (data/predictions.json values)
@@ -138,6 +138,7 @@
       const odds = chosen.reduce((t, c) => t * c.odds, 1), chance = chosen.reduce((t, c) => t * c.p, 1);
       slips.push({
         legs: chosen, odds, chance,
+        stake: Number(stake) || 10,
         ret: stake * odds, profit: stake * odds - stake,
         ev: chance * stake * odds - stake,
         onTarget: inside.length > 0,
