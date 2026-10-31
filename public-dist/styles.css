@@ -3926,3 +3926,33 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 }
 .butler-home-chip:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.28); }
 .butler-home-chip.active { color: #04140d; background: #38bdf8; border-color: #38bdf8; }
+
+/* Larger brand header: logo and BetBuddy wordmark fill the freed header space */
+.app-header-inner { height: 80px; }
+.brand { gap: 14px; }
+.brand-logo-img, .brand-panda-img, .brand-mark { width: 54px; height: 54px; border-radius: 12px; }
+.brand-word { font-size: 32px; font-weight: 700; letter-spacing: 0.01em; }
+/* The inline nav needs ~910px, so the brand scales down on mid-width screens */
+@media (max-width: 1199px) {
+  .app-header-inner { height: 72px; }
+  .brand-logo-img, .brand-panda-img, .brand-mark { width: 46px; height: 46px; }
+  .brand-word { font-size: 26px; }
+}
+@media (min-width: 861px) and (max-width: 1199px) {
+  .app-header-inner { gap: 12px; }
+  .nav { margin-left: 4px; gap: 0; }
+  .nav a { padding: 9px 9px; font-size: 13.5px; }
+}
+@media (min-width: 861px) and (max-width: 1000px) {
+  .nav svg { display: none; }
+}
+@media (max-width: 860px) {
+  .app-header-inner { height: 68px; }
+  .brand-logo-img, .brand-panda-img, .brand-mark { width: 44px; height: 44px; }
+}
+@media (max-width: 480px) {
+  .app-header-inner { height: 62px !important; }
+  .brand { gap: 10px; }
+  .brand-logo-img, .brand-panda-img, .brand-mark { width: 42px; height: 42px; border-radius: 10px; }
+  .brand-word { font-size: 24px !important; }
+}
