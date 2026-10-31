@@ -752,7 +752,11 @@ function builderCompute() {
   }
 
   const combinedPool = footballPool.concat(multiSportPool);
-  builderResult = MatchIQBuilder.buildSlips(combinedPool, { stake, win, legs });
+  builderResult = MatchIQBuilder.buildSlips(combinedPool, { stake, win, legs, maxSlips: 4 });
+  // Always sort slips by Expected Value (EV) descending so the Best Value combination is noted and at the top
+  if (builderResult && builderResult.slips && builderResult.slips.length > 0) {
+    builderResult.slips.sort((a, b) => (b.ev != null ? b.ev : 0) - (a.ev != null ? a.ev : 0));
+  }
 
   // When non-football sports are active, synthesize a guaranteed Cross-Sport Mix Acca
   const otherActive = activeSports.filter(s => s !== 'football');
@@ -787,7 +791,7 @@ function builderCompute() {
         };
         // Insert as top recommendation!
         builderResult.slips.unshift(crossSlip);
-        if (builderResult.slips.length > 3) builderResult.slips.pop();
+        if (builderResult.slips.length > 4) builderResult.slips.pop();
       }
     }
   }
@@ -939,7 +943,7 @@ function slipCard(slip, idx, stake) {
     : ('<div class="slip-trust-bar negative">⚠️ <b>' + chance + '% chance to win.</b> Expect to lose about ' + evPence + 'p per £1 on average.</div>');
 
   return '<article class="slip' + (primary ? ' primary' : '') + '">' + todayBadge +
-    '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? 'Best match for your target' : 'Alternative ' + idx) + ' ' + jargonTip('acca') + '</div>' +
+    '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? '💎 Best Value &amp; Target Match' : 'Option ' + (idx + 1) + ' Combination') + ' ' + jargonTip('acca') + '</div>' +
     '<div class="slip-odds mono">' + esc(mainOdds) + '</div></div>' +
     '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every bet lands</small></div></div>' +
     trustBadge +
@@ -1191,7 +1195,7 @@ function viewBuilder() {
     scopeToggle +
     '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake" aria-label="Stake amount in pounds">' +
     '<div class="stake-safety-note" style="font-size:12px;color:#fbbf24;margin-top:4px;display:flex;align-items:center;gap:4px;"><span>⚠️</span><span>Recreational limit: only stake what you are happy to lose (£5–£10).</span></div></div>' +
-    '<div class="field"><span class="lbl" id="b-legs-l">Number of bets</span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
+    '<div class="field"><span class="lbl" id="b-legs-l">Number of bets in accumulator <small style="color:var(--soft);font-weight:normal;">(2 = 2-team acca, 3 = 3 teams, 4 = 4 teams...)</small></span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
     '<input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Number of bets"></div></div>' +
     '<div class="field full"><label for="b-win">Target return (£): <b class="mono" id="b-win-out">' + MatchIQBuilder.money(win) + '</b></label>' +
     '<div class="win-input-wrap"><div class="currency-input-wrap"><span class="currency-symbol">£</span><input id="b-win" class="ctl mono win-input" type="number" inputmode="decimal" min="1" max="10000" step="1" value="' + win + '" data-b="win" placeholder="50"></div>' +
@@ -1247,7 +1251,7 @@ function onBuilderInput(t) {
     markWinChips();
   } else if (!Number.isFinite(v) || v <= 0) return;
   else if (t.dataset.b === 'stake') builderState.stake = Math.min(10000, v);
-  else if (t.dataset.b === 'legs') { builderState.legs = Math.max(1, Math.min(MatchIQBuilder.MAX_LEGS, Math.round(v))); markLegChips(); }
+  else if (t.dataset.b === 'legs') { builderState.legs = Math.max(1, Math.min(MatchIQBuilder.MAX_LEGS, Math.round(v))); markLegChips(); updateBuilder(); return; }
   clearTimeout(builderTimer);
   builderTimer = setTimeout(updateBuilder, 120);
 }
@@ -5501,7 +5505,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v65';
+const APP_VERSION = 'v66';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');

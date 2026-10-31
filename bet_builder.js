@@ -71,7 +71,7 @@
 
   /* Best leg set by exact search: dynamic programming over matches, with the combined
      price held in 0.01 ln-odds buckets. Returns up to `maxSlips` slips, best first. */
-  function buildSlips(pool, { stake, win, legs, maxSlips = 3 }) {
+  function buildSlips(pool, { stake, win, legs, maxSlips = 4 }) {
     if (!(stake > 0) || !(win > 0)) return { error: 'Enter a stake and a win amount above £0.' };
     if (!Number.isInteger(legs) || legs < 1 || legs > MAX_LEGS) return { error: 'Choose between 1 and ' + MAX_LEGS + ' bets.' };
     const targetOdds = (stake + win) / stake;
