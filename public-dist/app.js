@@ -15,6 +15,27 @@ const calc = window.MatchIQCalculations;
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const pct = p => Math.round(100 * p) + '%';
+// --- Non-Bettor Jargon Explanations ---
+const JARGON_DEFS = {
+  'acca': 'Acca (Accumulator): Combines multiple match picks into 1 bet. All must win for the slip to pay out.',
+  'value': 'Value: The bookmaker is paying better odds than our statistical model thinks the true probability warrants (+5% EV).',
+  'lean': 'Lean: Which outcome our model rates as having the highest probability to win (1X2 match winner).',
+  'most likely': 'Most likely: Our highest-confidence selection across all 6 analysed betting markets.',
+  'provisional': 'Provisional: Preliminary model estimate based on limited historical match data.',
+  'fair odds': 'Fair odds: The true mathematical price with zero bookmaker profit margin built in.',
+  'brier': 'Brier score: Measures forecast accuracy from 0 to 1. Lower is better (0 is a perfect score).',
+  'roi': 'ROI (Return on Investment): Percentage profit or loss earned per £1 staked.',
+  'awaiting odds': 'Awaiting Odds: Bookmakers have not yet published official pricing for this fixture.'
+};
+
+function jargonTip(term) {
+  const key = String(term || '').toLowerCase().trim();
+  const def = JARGON_DEFS[key];
+  if (!def) return '';
+  const escaped = esc(def).replace(/'/g, "\'");
+  return '<button type="button" class="jargon-tip-btn" aria-label="' + esc(def) + '" title="' + esc(def) + '" onclick="alert(\'' + escaped + '\')">?</button>';
+}
+
 const DIARY_STORAGE_KEY = 'matchiq_bet_diary_v1';
 const FEEDBACK_STORAGE_KEY = 'matchiq_ux_feedback_v1';
 const FILES = {
@@ -531,7 +552,7 @@ function marketCard(key, m, ctx) {
     const jsonStr = esc(JSON.stringify(betPayload));
     return '<button type="button" class="btn small" data-diary=\'' + jsonStr + '\' aria-label="Add ' + esc(row.label) + ' to Bet Diary">+ Diary</button>' +
       '<button type="button" class="btn small acca-btn" data-add-football-acca=\'' + jsonStr + '\' title="Add to custom Acca Builder" style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
-      '<a href="' + esc(getButlerLaunchSingleUrl(betPayload)) + '" class="btn-place-bet-inline butler-btn" onclick="prepareButlerSingleLaunch(this.dataset.betData)" data-bet-data=\'' + jsonStr + '\' title="Open in your bookmaker app">⚡ Place at <span class="current-butler-name">' + esc(getButlerBookmaker().name) + '</span> ↗</a>';
+      '<button type="button" class="btn-place-bet-inline butler-btn" onclick="openSlipCardSingle(this.dataset.betData)" data-bet-data=\'' + jsonStr + '\' title="Open slip note">📋 Slip Note</button>';
   };
   const rows = m.rows.map(row => '<tr' + (row.picked ? ' style="color:#fff;font-weight:600"' : '') + '><td>' + esc(row.label) + (row.picked ? ' <span class="badge validated" style="font-size:10px">Pick</span>' : '') + '</td>' +
     '<td class="num">' + pct(row.p) + '</td><td class="num">' + esc(row.fair) + '</td>' + (m.rows.some(r => r.league != null) ? '<td class="num dim">' + (row.league == null ? '' : pct(row.league)) + '</td>' : '') +
@@ -887,11 +908,11 @@ function slipCard(slip, idx, stake) {
     '<div class="slip-sum"><span>Stake <b class="mono">' + m(stake) + '</b></span><span>Returns <b class="mono">' + m(slip.ret) + '</b></span><span>Profit <b class="mono">' + m(slip.profit) + '</b></span></div>' +
     (slip.chance < 0.05 ? '<p class="slip-warn">Long shot: roughly 1 in ' + Math.round(1 / slip.chance) + '. Most slips like this lose.</p>' : '') +
     (slip.estimated ? '<p class="slip-note">Some prices are estimates, not live bookmaker prices. The price you are actually offered will differ, so the profit will too.</p>' : '') +
-    '<div class="slip-bookie-bar" style="margin: 12px 0 10px;">' +
-      '<a href="' + esc(getButlerLaunchUrl(idx)) + '" class="bookie-pill sky sky-prominent" onclick="prepareButlerLaunch(' + idx + ')" style="text-decoration:none;">' +
-        '<span class="pill-dot" style="background:#38bdf8;"></span> ⚡ Open in Sky Bet App (+5 League Bonus) ↗' +
-      '</a>' +
-      '<div style="font-size:11.5px;color:var(--muted);text-align:center;margin-top:5px;">Auto-copies slip &amp; opens Sky Bet logged in</div>' +
+    '<div style="margin: 12px 0 10px;">' +
+      '<button type="button" class="btn primary" onclick="openSlipCard(' + idx + ')" style="width:100%;min-height:48px;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;">' +
+        '<span>📋</span> Open Slip Card' +
+      '</button>' +
+      '<div style="font-size:12px;color:var(--soft);text-align:center;margin-top:5px;">Tick off legs as you place them in your bookmaker app</div>' +
     '</div>' +
     '<div class="btn-row">' +
       '<button type="button" class="btn' + (primary ? ' primary' : '') + '" data-slip="' + idx + '">Save slip to Bet Diary</button>' +
@@ -939,9 +960,9 @@ function customAccaCard(stake) {
       '<span>Profit <b class="mono">' + m(profit) + '</b></span>' +
     '</div>' +
     '<div style="margin: 14px 0 10px;">' +
-      '<a href="' + esc(getButlerLaunchUrl('custom')) + '" class="btn primary butler-acca-launch-btn" onclick="prepareButlerLaunch(this.dataset.slipIdx)" data-slip-idx="custom" style="width:100%;padding:14px;font-size:15px;font-weight:700;background:linear-gradient(135deg, #0284c7, #0369a1);border:none;border-radius:12px;box-shadow:0 4px 14px rgba(2,132,199,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">' +
-        '<span>⚡</span> 1-Tap Place with <span class="current-butler-name">' + esc(getButlerBookmaker().name) + '</span> (Your Butler) ↗' +
-      '</a>' +
+      '<button type="button" class="btn primary butler-acca-launch-btn" onclick="openSlipCard(\'custom\')" style="width:100%;min-height:48px;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;">' +
+        '<span>📋</span> Open Slip Card' +
+      '</button>' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:0 4px;">' +
         '<span class="dim text-xs" style="color:#94a3b8">Copies slip &amp; opens your app &middot; 2× League Bonus</span>' +
         '<a href="javascript:void(0)" onclick="openButlerModal()" class="text-xs" style="color:var(--cyan);text-decoration:none;font-weight:600;">Change Butler ▾</a>' +
@@ -1636,6 +1657,10 @@ function viewResults() {
 
   const bands = (perf.bands || {}).result || {};
   const bandRows = Object.entries(bands).sort().map(([band, b]) => '<div class="calib-row"><span class="mono">' + esc(band) + '</span><div class="calib-bars" aria-label="Predicted ' + pct(b.mean_pick_p) + ', happened ' + pct(b.pick_hit_rate) + '"><span class="pred" style="width:' + (100 * b.mean_pick_p).toFixed(0) + '%"></span><span class="obs" style="width:' + (100 * b.pick_hit_rate).toFixed(0) + '%"></span></div><span class="mono dim">' + pct(b.pick_hit_rate) + ' · n=' + b.n + '</span></div>').join('');
+    const tiers = perf.tiers || {};
+  const tierLabel = { T1: 'Validated frozen model', T2: 'Provisional: promoted clubs', T3: 'League average fallback', L1: 'League model (provisional, one-season backtest)' };
+  const teams = Object.entries(perf.teams || {}).filter(([, t]) => t.n >= 5).sort((a, b) => b[1].n - a[1].n);
+  const ch = perf.challenger;
   html += '<details class="section card maths-section" style="margin-top:20px;">' +
     '<summary><span>🔬 Advanced Model Accuracy &amp; Calibration</span><span class="btn small" style="pointer-events:none;">Show the maths ▾</span></summary>' +
     '<div style="padding:16px 0 6px;">' +
@@ -2520,9 +2545,7 @@ function getUserLeagueStats(freq = 'weekly') {
   // Option A Scoring: (Decimal Odds - 1) * 10 on won; -2 on lost; 0 on void
   // Official Bet Butler Bonus: +5 points on every settled winning qualifying bet placed through Bet Butler
   const points = leagueBets.reduce((sum, e) => {
-    const base = calc.calculateLeaguePoints(e.odds, e.outcome) || 0;
-    const bonus = (e.realBetVerified && e.outcome === 'won') ? 5 : 0;
-    return sum + base + bonus;
+    return sum + (calc.calculateLeaguePoints(e.odds, e.outcome) || 0);
   }, 0);
   const winRate = leagueBets.length ? Math.round((won.length / leagueBets.length) * 100) : 0;
   const roi = totalStaked > 0 ? +( (totalProfit / totalStaked) * 100 ).toFixed(1) : 0.0;
@@ -2830,7 +2853,7 @@ function viewLeagues() {
   return '<section class="view">' +
     '<div class="fair-play-banner">' +
       '<span class="fair-play-icon">🛡️</span>' +
-      '<div><strong>Fair Play &amp; Bet Butler Bonus:</strong> Exactly <strong>1 settled bet per calendar day</strong> counts toward your league score. Official bets placed via <strong>The Bet Butler (Sky Bet)</strong> earn <strong>+5 League Bonus Points</strong> upon winning!</div>' +
+      '<div><strong>Fair Play Rule:</strong> Exactly <strong>1 settled bet per calendar day</strong> counts toward your league score. Chronologically first qualifying bet logged each day counts, keeping the competition fair for all players.</div>' +
     '</div>' +
     '<div class="section-head" style="align-items:flex-end"><div>' +
       '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
@@ -3504,50 +3527,10 @@ function getBookieSearchQuery(betData) {
 
 
 
-const ANDROID_PACKAGES = {
-  skybet: 'com.skybet.android'
-};
-
-const BOOKIE_APP_SCHEMES = {
-  coral: 'coral://',
-  skybet: 'skybet://',
-  bet365: 'bet365://',
-  betfair: 'betfair://',
-  ladbrokes: 'ladbrokes://',
-  paddypower: 'paddypower://',
-  williamhill: 'williamhill://'
-};
-
-function getBookieDeepLinks(query) {
-  const enc = encodeURIComponent(query);
-  return {
-    coral: 'https://www.coral.co.uk/en/sportsapp/search?q=' + enc,
-    ladbrokes: 'https://sports.ladbrokes.com/search?q=' + enc,
-    skybet: 'https://m.skybet.com/search?q=' + enc,
-    bet365: 'https://www.bet365.com/#/AX/K^' + enc + '/',
-    paddypower: 'https://www.paddypower.com/search?q=' + enc,
-    betfair: 'https://www.betfair.com/sport/football?searchTerm=' + enc,
-    williamhill: 'https://sports.williamhill.com/betting/en-gb/search?q=' + enc,
-    leovegas: 'https://www.leovegas.com/en-gb/betting#search/' + enc
-  };
-}
-
-
-// ------------------------------------------------------------ Phase 2 & 3: 1-Click Bookmaker Launcher
-function buildBookmakerLaunchUrl(bookieKey, betDataOrSlip) {
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  const pkg = ANDROID_PACKAGES[bookieKey];
-  const query = getBookieSearchQuery(betDataOrSlip);
-  const links = getBookieDeepLinks(query);
-  const butler = (typeof BOOKMAKERS_CONFIG !== 'undefined' && BOOKMAKERS_CONFIG[bookieKey]) || null;
-  const targetUrl = links[bookieKey] || (butler && butler.appUrl ? (butler.appUrl + encodeURIComponent(query)) : ('https://www.google.co.uk/search?q=' + encodeURIComponent(query + ' odds')));
-
-  if (isAndroid && pkg) {
-    const hostAndPath = targetUrl.replace(/^https?:\/\//, '');
-    const fallbackEncoded = encodeURIComponent(targetUrl);
-    return 'intent://' + hostAndPath + '#Intent;scheme=https;package=' + pkg + ';S.browser_fallback_url=' + fallbackEncoded + ';end;';
-  }
-  return targetUrl;
+// ------------------------------------------------------------ Bookmaker Football Hub URLs
+function buildBookmakerLaunchUrl(bookieKey) {
+  const cfg = BOOKMAKERS_CONFIG[bookieKey] || BOOKMAKERS_CONFIG.skybet;
+  return cfg.url;
 }
 
 function launchBookmakerSlip(bookieKey, slipIdx) {
@@ -5246,7 +5229,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v61';
+const APP_VERSION = 'v62';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
@@ -5433,9 +5416,8 @@ function confirmRealBetPlaced() {
     potentialReturn: stake * odds,
     outcome: 'pending',
     timestamp: new Date().toISOString(),
-    realBetVerified: true,
-    bonusMultiplier: 2,
-    notes: 'Official real bet placed at Sky Bet via Bet Butler (+5 League Bonus Active).', bonusPoints: 5
+    source: 'self-reported',
+    notes: 'Self-reported bet placed at ' + (launch.bookie || getButlerBookmaker().name) + '.'
   };
 
   try {
@@ -5446,7 +5428,7 @@ function confirmRealBetPlaced() {
   }
 
   celebrateSave();
-  toast('🎉 Sky Bet real bet confirmed! Added to Bet Diary with +5 League Bonus.');
+  toast('Bet saved to your Bet Diary (self-reported)!');
   if (currentRoute()[0] === 'diary') render();
 }
 
@@ -5490,10 +5472,20 @@ if (typeof window !== 'undefined') {
 // ============================================================ 
 const BUTLER_STORAGE_KEY = 'betbuddy_butler_bookie_v1';
 const BOOKMAKERS_CONFIG = {
-  skybet: { key: 'skybet', name: 'Sky Bet', tag: 'SKY BET', color: '#38bdf8', perk: 'Official 1-Tap App Integration, AccaFreeze & RequestABet', appUrl: 'https://m.skybet.com/search?q=' }
+  skybet: { key: 'skybet', name: 'Sky Bet', tag: 'SKY BET', color: '#38bdf8', url: 'https://m.skybet.com/football' },
+  bet365: { key: 'bet365', name: 'bet365', tag: 'BET365', color: '#10b981', url: 'https://www.bet365.com/#/AC/B1/' },
+  williamhill: { key: 'williamhill', name: 'William Hill', tag: 'WILLIAM HILL', color: '#0284c7', url: 'https://sports.williamhill.com/betting/en-gb/football' },
+  paddypower: { key: 'paddypower', name: 'Paddy Power', tag: 'PADDY POWER', color: '#059669', url: 'https://www.paddypower.com/football' },
+  betfair: { key: 'betfair', name: 'Betfair', tag: 'BETFAIR', color: '#f59e0b', url: 'https://www.betfair.com/sport/football' },
+  coral: { key: 'coral', name: 'Coral', tag: 'CORAL', color: '#2563eb', url: 'https://sports.coral.co.uk/sport/football' },
+  ladbrokes: { key: 'ladbrokes', name: 'Ladbrokes', tag: 'LADBROKES', color: '#dc2626', url: 'https://sports.ladbrokes.com/sport/football' }
 };
 
 function getButlerBookmaker() {
+  try {
+    const saved = localStorage.getItem(BUTLER_STORAGE_KEY);
+    if (saved && BOOKMAKERS_CONFIG[saved]) return BOOKMAKERS_CONFIG[saved];
+  } catch (e) {}
   return BOOKMAKERS_CONFIG.skybet;
 }
 
@@ -5504,7 +5496,7 @@ function setButlerBookmaker(key) {
   } catch (e) {}
   updateButlerUI();
   closeButlerModal();
-  toast('🤵 Bet Butler set to ' + BOOKMAKERS_CONFIG[key].name + '! 1-tap buttons now launch your account.');
+  toast('Slip note set to ' + BOOKMAKERS_CONFIG[key].name);
   render();
 }
 
@@ -5624,4 +5616,189 @@ if (typeof window !== 'undefined') {
   window.prepareButlerSingleLaunch = prepareButlerSingleLaunch;
   window.launchButlerAcca = launchButlerAcca;
   window.launchButlerSingle = launchButlerSingle;
+}
+
+
+// ============================================================ 
+// SLIP CARD ENGINE: Honest Slip Note & Leg Checklist
+// ============================================================ 
+let activeSlipCardData = null;
+
+function getSlipCardTicks(slipKey) {
+  try {
+    const raw = sessionStorage.getItem('betbuddy_slip_ticks_' + slipKey);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+
+function saveSlipCardTicks(slipKey, ticks) {
+  try {
+    sessionStorage.setItem('betbuddy_slip_ticks_' + slipKey, JSON.stringify(ticks));
+  } catch (e) {}
+}
+
+function toggleLegTick(slipKey, legIdx, isChecked) {
+  const ticks = getSlipCardTicks(slipKey);
+  ticks[legIdx] = !!isChecked;
+  saveSlipCardTicks(slipKey, ticks);
+  const item = document.getElementById('slip-card-leg-' + legIdx);
+  if (item) {
+    if (isChecked) item.classList.add('ticked');
+    else item.classList.remove('ticked');
+  }
+}
+
+function openSlipCard(slipIdx) {
+  let slip = null;
+  let slipKey = 'slip_' + slipIdx;
+  if (slipIdx === 'custom') {
+    if (customAccaLegs.length === 0) return;
+    const stake = (builderState && builderState.stake) || 10;
+    const odds = customAccaLegs.reduce((t, l) => t * (l.odds || 2.0), 1);
+    slip = { legs: customAccaLegs, stake, odds, ret: stake * odds };
+    slipKey = 'slip_custom';
+  } else {
+    slip = builderResult && builderResult.slips && builderResult.slips[+slipIdx];
+  }
+  if (!slip || !slip.legs) return;
+
+  activeSlipCardData = { ...slip, slipKey };
+  renderSlipCardModal(activeSlipCardData);
+}
+
+function openSlipCardSingle(dataStr) {
+  try {
+    const raw = typeof dataStr === 'string' ? JSON.parse(dataStr) : dataStr;
+    const betData = enrichSingleBetData(raw);
+    const stake = 10;
+    const odds = betData.odds || 2.0;
+    const leg = {
+      label: betData.selection || 'Football Bet',
+      fixture: betData.fixture || {},
+      odds: odds,
+      fractional: betData.fair,
+      bookmaker: 'Market price'
+    };
+    activeSlipCardData = {
+      legs: [leg],
+      stake: stake,
+      odds: odds,
+      ret: stake * odds,
+      slipKey: 'single_' + (betData.id || Date.now()),
+      isSingle: true
+    };
+    renderSlipCardModal(activeSlipCardData);
+  } catch (e) {
+    console.error('Error opening single slip card:', e);
+  }
+}
+
+function renderSlipCardModal(slip) {
+  const modal = $('slip-card-modal');
+  if (!modal) return;
+
+  const bookie = getButlerBookmaker();
+  if ($('slip-card-bookie-name')) $('slip-card-bookie-name').textContent = bookie.name;
+  if ($('btn-open-bookie-tab')) $('btn-open-bookie-tab').textContent = 'Open ' + bookie.name + ' Football ↗';
+
+  const titleEl = $('slip-card-title');
+  if (titleEl) {
+    titleEl.textContent = slip.isSingle ? 'Match Slip Note' : 'Acca Slip Note (' + slip.legs.length + ' Legs)';
+  }
+
+  const ticks = getSlipCardTicks(slip.slipKey);
+  const listEl = $('slip-card-legs-list');
+  if (listEl) {
+    listEl.innerHTML = slip.legs.map((l, i) => {
+      const isTicked = !!ticks[i];
+      const fixHome = (l.fixture && l.fixture.home) || '';
+      const fixAway = (l.fixture && l.fixture.away) || '';
+      const matchText = (fixHome && fixAway && fixHome !== fixAway) ? (fixHome + ' v ' + fixAway) : (fixHome || 'Match');
+      const oddsLabel = oddsFormat === 'decimal' ? calc.formatDecimalOdds(l.odds) : (l.fractional || fmtOdds(l.odds));
+
+      return '<div class="slip-card-leg-item' + (isTicked ? ' ticked' : '') + '" id="slip-card-leg-' + i + '">' +
+        '<div class="slip-card-leg-left">' +
+          '<label class="slip-leg-checkbox-wrap" title="Tick when added to bookmaker">' +
+            '<input type="checkbox" class="slip-leg-checkbox" ' + (isTicked ? 'checked' : '') + ' onchange="toggleLegTick(\'' + slip.slipKey + '\', ' + i + ', this.checked)" aria-label="Mark leg ' + (i + 1) + ' as added">' +
+          '</label>' +
+          '<div class="slip-card-leg-info">' +
+            '<span class="slip-card-leg-num">Leg ' + (i + 1) + '</span>' +
+            '<span class="slip-card-leg-match">' + esc(matchText) + '</span>' +
+            '<span class="slip-card-leg-sel">' + esc(l.label || l.selection) + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="slip-card-leg-right">' +
+          '<span class="slip-card-leg-odds">' + esc(oddsLabel) + '</span>' +
+          '<label class="slip-card-tick-label" onclick="const cb = document.querySelector(\'#slip-card-leg-' + i + ' input\'); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event(\'change\')); }">Added to slip</label>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  const sumEl = $('slip-card-summary');
+  if (sumEl) {
+    const retVal = slip.ret ? slip.ret.toFixed(2) : (slip.stake * slip.odds).toFixed(2);
+    sumEl.innerHTML = '<span>Stake: <b class="mono">£' + slip.stake + '</b></span>' +
+      '<span>Total Odds: <b class="mono">' + fmtOdds(slip.odds) + ' (estimate)</b></span>' +
+      '<span>Return: <b class="mono">£' + retVal + ' (estimate)</b></span>';
+  }
+
+  // Feature detect Document Picture-in-Picture
+  const pipBtn = $('btn-slip-pip');
+  if (pipBtn) {
+    if ('documentPictureInPicture' in window) {
+      pipBtn.style.display = 'inline-flex';
+      pipBtn.onclick = async () => {
+        try {
+          const pipWin = await window.documentPictureInPicture.requestWindow({ width: 360, height: 520 });
+          document.querySelectorAll('link[rel="stylesheet"], style').forEach(s => pipWin.document.head.appendChild(s.cloneNode(true)));
+          const clone = modal.querySelector('.slip-card-dialog').cloneNode(true);
+          pipWin.document.body.appendChild(clone);
+          pipWin.document.body.style.background = '#050b14';
+          pipWin.document.body.style.color = '#fff';
+          pipWin.document.body.style.padding = '10px';
+        } catch (err) { console.log('PiP not available:', err); }
+      };
+    } else {
+      pipBtn.style.display = 'none';
+    }
+  }
+
+  modal.hidden = false;
+}
+
+function closeSlipCardModal() {
+  const modal = $('slip-card-modal');
+  if (modal) modal.hidden = true;
+}
+
+function openBookmakerFootball() {
+  const bookie = getButlerBookmaker();
+  const url = buildBookmakerLaunchUrl(bookie.key);
+  if (activeSlipCardData) {
+    trackBookieLaunch(bookie.name, activeSlipCardData);
+  }
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function copySlipCardText() {
+  if (!activeSlipCardData) return;
+  const slip = activeSlipCardData;
+  const textLines = [
+    '🎯 Bet Buddy ' + slip.legs.length + '-Leg Acca (' + fmtOdds(slip.odds) + ')',
+    ...slip.legs.map((l, i) => (i + 1) + '. ' + (l.fixture ? (l.fixture.home + ' v ' + l.fixture.away + ': ') : '') + l.label + ' (' + (l.fractional || fmtOdds(l.odds)) + ')'),
+    'Stake: £' + slip.stake + ' · Target Return: £' + (slip.ret ? slip.ret.toFixed(2) : (slip.stake * slip.odds).toFixed(2)) + ' (estimate)'
+  ];
+  const copyStr = textLines.join('\n');
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(copyStr).then(() => {
+        toast('📋 Slip note copied to clipboard!');
+      }).catch(() => {
+        toast('⚠️ Unable to copy automatically. Please copy text manually.');
+      });
+      return;
+    }
+  } catch (e) {}
+  toast('⚠️ Clipboard not supported on this browser.');
 }

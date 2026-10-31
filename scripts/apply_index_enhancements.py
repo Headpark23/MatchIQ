@@ -67,3 +67,4 @@ html = re.sub(
 
 index_p.write_text(html, encoding="utf-8")
 print("index.html updated successfully")
+

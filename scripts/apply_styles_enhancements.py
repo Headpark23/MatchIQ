@@ -281,3 +281,4 @@ else:
 
 styles_p.write_text(css, encoding="utf-8")
 print("styles.css updated with contrast, jargon tips, tap targets, and layout fixes")
+
