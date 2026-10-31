@@ -2630,9 +2630,10 @@ function getUserLeagueStats(freq = 'weekly') {
   const settled = filteredDiary.filter(e => e.outcome && e.outcome !== 'pending');
 
   // FAIR PLAY RULE: Exactly 1 settled bet per calendar day counts toward league standings.
-  // Chronologically earliest bet logged each day qualifies; extra bets on the same day are excluded.
+  // Only bets explicitly entered into the league (inLeague !== false) qualify. Extra bets are Bet Diary only.
   const dailyQualifyingMap = new Map();
-  settled.slice().reverse().forEach(e => {
+  const candidateLeagueBets = settled.filter(e => e.inLeague !== false);
+  candidateLeagueBets.slice().reverse().forEach(e => {
     const dayKey = (e.date || (e.timestamp ? e.timestamp.slice(0, 10) : '') || 'undated').slice(0, 10);
     if (!dailyQualifyingMap.has(dayKey)) {
       dailyQualifyingMap.set(dayKey, e);
@@ -3113,20 +3114,33 @@ function outcomeSelect(value, attrs, label) {
 function betCard(entry) {
   const profit = calc.calculateBetProfit(entry.stake, entry.odds, entry.outcome);
   const pl = profit === null ? '<span class="dim">Potential return ' + money(entry.stake * (entry.odds || 0)) + '</span>'
-    : '<span class="' + (profit > 0 ? 'pos' : profit < 0 ? 'neg' : '') + '">' + (profit > 0 ? '+' : profit < 0 ? '−' : '') + money(profit) + '</span> <span class="dim">returned ' + money(entry.stake + profit) + '</span>';
+    : '<span class="' + (profit > 0 ? 'pos' : profit < 0 ? 'neg' : '') + '">' + (profit > 0 ? '+' : profit < 0 ? '-' : '') + money(profit) + '</span> <span class="dim">returned ' + money(entry.stake + profit) + '</span>';
   const legOddsText = leg => (oddsFormat === 'decimal' ? calc.formatDecimalOdds(+leg.odds) : calc.formatFractionalOdds(+leg.odds));
-  const legs = entry.type === 'accumulator' ? (entry.legs || []).map((leg, i) => '<div class="leg"><span>' + esc(leg.selection) + ' · <b class="mono">' + legOddsText(leg) + '</b></span>' +
+  const legs = entry.type === 'accumulator' ? (entry.legs || []).map((leg, i) => '<div class="leg"><span>' + esc(leg.selection) + ' • <b class="mono">' + legOddsText(leg) + '</b></span>' +
     outcomeSelect(leg.outcome, 'data-leg="' + esc(entry.id) + '" data-index="' + i + '"', 'Settle ' + leg.selection) + '</div>').join('') : '';
   const priceTaken = oddsFormat === 'decimal' ? calc.formatDecimalOdds(+entry.odds) : calc.formatFractionalOdds(+entry.odds);
-  return '<article class="card bet"><div class="bet-top"><div><div class="bet-sel">' + esc(entry.selection) + '</div><div class="dim" style="font-size:13px">' + esc(entry.fixture || '') + ' · ' + esc(entry.date || '') + ' · ' + esc(entry.marketName || entry.market || '') + '</div></div>' +
-    '<span style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end"><span class="badge ' + (entry.origin === 'independent' ? 'market' : 'validated') + '">' + (entry.origin === 'independent' ? 'Own choice' : 'Bet Buddy pick') + '</span>' +
-      (entry.realBetVerified ? ' <span class="badge" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:700;">🛡️ Real Bet (2× Pts)</span>' : '') +
+
+  const dayKey = (entry.date || (entry.timestamp ? entry.timestamp.slice(0, 10) : '') || '').slice(0, 10);
+  const leagueBadge = entry.inLeague
+    ? ' <span class="badge" style="background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.5);color:#34d399;font-weight:700;">🏆 League Bet</span>'
+    : ' <span class="badge" style="background:rgba(148,163,184,0.12);border:1px solid rgba(148,163,184,0.25);color:#94a3b8;">Diary only</span>';
+
+  const leagueActionBtn = entry.inLeague
+    ? '<button type="button" class="btn small" data-toggle-league="' + esc(entry.id) + '" title="Remove from league standings" style="padding:2px 8px;font-size:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:var(--muted)">Remove from League</button>'
+    : (!getLeagueBetForDay(dayKey)
+      ? '<button type="button" class="btn small" data-toggle-league="' + esc(entry.id) + '" title="Designate as your 1 qualifying league bet for this day" style="padding:2px 8px;font-size:11px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#34d399">🏆 Make League Bet</button>'
+      : '');
+
+  return '<article class="card bet"><div class="bet-top"><div><div class="bet-sel">' + esc(entry.selection) + '</div><div class="dim" style="font-size:13px">' + esc(entry.fixture || '') + ' • ' + esc(entry.date || '') + ' • ' + esc(entry.marketName || entry.market || '') + '</div></div>' +
+    '<span style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end">' + leagueBadge + '<span class="badge ' + (entry.origin === 'independent' ? 'market' : 'validated') + '">' + (entry.origin === 'independent' ? 'Own choice' : 'Bet Buddy pick') + '</span>' +
+      (entry.realBetVerified ? ' <span class="badge" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:700;">🎖️ Real Bet (2x Pts)</span>' : '') +
       (entry.recommendation ? '<span class="badge provisional">' + esc(REC_LABEL[entry.recommendation] || entry.recommendation) + '</span>' : '') + '</span></div>' + legs +
     '<div class="bet-facts"><div><span>Price taken</span><b>' + priceTaken + '</b></div>' +
       (entry.model_fair_odds ? '<div><span>Model fair odds</span><b>' + esc(fmtFairOdds(entry.model_fair_odds, entry.model_p)) + '</b></div>' : '') +
-      '<div><span>Stake</span><b>' + money(+entry.stake) + '</b></div><div><span>Bookmaker</span><b style="font-family:var(--body)">' + esc(entry.bookmaker || '—') + '</b></div>' +
-      '<div><span>Profile</span><b style="font-family:var(--body)">' + esc(entry.profile || 'Default') + (entry.type === 'accumulator' ? ' · ' + (entry.legs || []).length + '-pick combined bet' : '') + '</b></div></div>' +
+      '<div><span>Stake</span><b>' + money(+entry.stake) + '</b></div><div><span>Bookmaker</span><b style="font-family:var(--body)">' + esc(entry.bookmaker || '-') + '</b></div>' +
+      '<div><span>Profile</span><b style="font-family:var(--body)">' + esc(entry.profile || 'Default') + (entry.type === 'accumulator' ? ' • ' + (entry.legs || []).length + '-pick combined bet' : '') + '</b></div></div>' +
     '<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span>' + pl + '</span><span style="display:flex;gap:8px;align-items:center">' +
+      leagueActionBtn +
       outcomeSelect(entry.outcome, 'data-outcome="' + esc(entry.id) + '"', 'Settle bet') +
       '<button type="button" class="btn small danger" data-delete="' + esc(entry.id) + '" aria-label="Delete bet">Delete</button></span></div>' +
     (entry.notes ? '<p class="dim" style="font-size:13px">' + esc(entry.notes) + '</p>' : '') + '</article>';
@@ -3231,6 +3245,75 @@ function diaryFixtureOptions() {
     .sort((a, b) => kickoffMs(a) - kickoffMs(b));
 }
 
+function getLeagueBetForDay(dayKey) {
+  if (!dayKey) return null;
+  const diary = getStoredDiary();
+  return diary.find(e => {
+    const d = (e.date || (e.timestamp ? e.timestamp.slice(0, 10) : '') || '').slice(0, 10);
+    return d === dayKey && e.inLeague;
+  }) || null;
+}
+
+function updateDiarySubmitBtn() {
+  const submitBtn = document.querySelector('#diary-form button[type="submit"]');
+  if (!submitBtn) return;
+  const diaryRadio = $('dest-diary-radio');
+  submitBtn.textContent = (diaryRadio && diaryRadio.checked) ? 'Save to Bet Diary only' : 'Save to Diary & League';
+}
+
+function updateDiaryDestinationOptions() {
+  const acc = $('modal-bet-type') && $('modal-bet-type').value === 'accumulator';
+  const f = !acc && $('modal-fixture-select') ? fixtureById($('modal-fixture-select').value) : null;
+  const targetDate = f ? f.kickoff_utc.slice(0, 10) : ((modalPrefill && modalPrefill.date) || new Date().toISOString().slice(0, 10));
+
+  const existingLeagueBet = getLeagueBetForDay(targetDate);
+  const bothOpt = $('dest-option-both');
+  const usedNote = $('modal-dest-league-used-note');
+  const bothRadio = $('dest-both-radio');
+  const diaryRadio = $('dest-diary-radio');
+
+  if (existingLeagueBet) {
+    // If user already picked a bet for the league for that day, remove the option from future bets!
+    if (bothOpt) bothOpt.style.display = 'none';
+    if (bothRadio) bothRadio.checked = false;
+    if (diaryRadio) diaryRadio.checked = true;
+    if (usedNote) {
+      usedNote.style.display = 'block';
+      const nameEl = $('modal-existing-league-bet');
+      if (nameEl) nameEl.textContent = existingLeagueBet.selection || existingLeagueBet.fixture || 'Selected bet';
+    }
+  } else {
+    // Both options available: default to 'Add to Bet Diary & to League'
+    if (bothOpt) bothOpt.style.display = 'flex';
+    if (bothRadio && (!diaryRadio || !diaryRadio.checked)) bothRadio.checked = true;
+    if (usedNote) usedNote.style.display = 'none';
+  }
+  updateDiarySubmitBtn();
+}
+
+function toggleLeagueBet(id) {
+  const diary = getStoredDiary();
+  const entry = diary.find(e => e.id === id);
+  if (!entry) return;
+  const dayKey = (entry.date || (entry.timestamp ? entry.timestamp.slice(0, 10) : '') || '').slice(0, 10);
+  if (entry.inLeague) {
+    entry.inLeague = false;
+    saveStoredDiary(diary);
+    toast('Removed from League. Bet is now Diary only.');
+    render();
+  } else {
+    const existing = getLeagueBetForDay(dayKey);
+    if (existing && existing.id !== entry.id) {
+      toast('You already have a league bet for ' + dayKey + ' (' + (existing.selection || 'existing bet') + '). Remove it first to swap.', 'warn');
+      return;
+    }
+    entry.inLeague = true;
+    saveStoredDiary(diary);
+    toast('Designated as your League Bet for ' + dayKey + '! 🏆');
+    render();
+  }
+}
+
 function openDiary(prefill) {
   modalPrefill = prefill || {};
   const auth = getAuthUser();
@@ -3255,6 +3338,7 @@ function openDiary(prefill) {
   $('modal-fair-hint').textContent = modalPrefill.fair ? 'Bet Buddy model fair odds ' + modalPrefill.fair + '. That is not a bookmaker price: enter the price you were actually offered.' : '';
   toggleAccumulatorFields();
   updateModalPnlPreview();
+  updateDiaryDestinationOptions();
   $('diary-modal').hidden = false;
   setTimeout(() => (modalPrefill.selection ? $('modal-odds-input') : $('modal-selection-input')).focus(), 30);
 }
@@ -3268,6 +3352,7 @@ function toggleAccumulatorFields() {
     if (el) el.hidden = acc;
   });
   updateModalPnlPreview();
+  updateDiaryDestinationOptions();
 }
 
 function parseAccumulatorLegs() {
@@ -3364,15 +3449,21 @@ function handleDiaryFormSubmit(event) {
   const f = fixtureById($('modal-fixture-select').value);
   const market = $('modal-market-select').value;
   const linked = f && modalPrefill.id === f.id && !acc;
+  const targetDate = f ? f.kickoff_utc.slice(0, 10) : ((modalPrefill && modalPrefill.date) || new Date().toISOString().slice(0, 10));
+  const destVal = (document.querySelector('input[name="modal-destination"]:checked') || {}).value || 'diary';
+  const existingLeagueBet = getLeagueBetForDay(targetDate);
+  const inLeague = destVal === 'league' && !existingLeagueBet;
+
   const entry = {
     id: 'bet-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7), type: acc ? 'accumulator' : 'single',
     profile: (getAuthUser() && getAuthUser().signedIn) ? ('@' + (getAuthUser().handle || (getAuthUser().name || 'User').split(' ')[0])) : ($('modal-profile').value.trim() || 'Default'),
-    date: f ? f.kickoff_utc.slice(0, 10) : new Date().toISOString().slice(0, 10), match_id: f ? f.id : undefined,
+    date: targetDate, match_id: f ? f.id : undefined,
     fixture: f ? f.home + ' v ' + f.away : acc ? 'Accumulator' : 'Not linked to a listed match',
     market: acc ? 'accumulator' : market, marketName: acc ? 'Accumulator' : (Object.values(MARKETS).find(m => m.diary === market) || {}).name || market,
     selection: acc ? legs.map(l => l.selection).join(' + ') : $('modal-selection-input').value.trim(), legs: acc ? legs : undefined,
     origin: $('modal-origin-select').value, bookmaker: $('modal-bookmaker-input').value.trim() || 'Bookmaker',
     odds, stake, potentialReturn: stake * odds, outcome: 'pending', timestamp: new Date().toISOString(),
+    inLeague: inLeague,
     model_p: linked && modalPrefill.p != null ? modalPrefill.p : undefined, model_fair_odds: linked ? modalPrefill.fair : undefined,
     recommendation: linked && modalPrefill.rec && $('modal-selection-input').value.trim() === modalPrefill.selection ? modalPrefill.rec : undefined,
     notes: $('modal-notes-input').value.trim()
@@ -3381,7 +3472,11 @@ function handleDiaryFormSubmit(event) {
   catch (error) { console.error(error); toast('Could not save to this browser. Check storage space or privacy settings.', 'error'); return; }
   closeDiary();
   celebrateSave();
-  toast('Saved to your Bet Diary.');
+  if (inLeague) {
+    toast('Saved to Bet Diary & entered into today\'s leagues! 🏆');
+  } else {
+    toast('Saved to your Bet Diary.');
+  }
   if (currentRoute()[0] === 'diary') render();
 }
 
@@ -4963,6 +5058,7 @@ document.addEventListener('click', event => {
     setBuilderTiming(timingBtn.dataset.timing);
   }
   else if (t.dataset.legs) setBuilderLegs(+t.dataset.legs);
+  else if (t.dataset.toggleLeague) toggleLeagueBet(t.dataset.toggleLeague);
   else if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));
   else if (t.dataset.close !== undefined) closeDiary();
   else if (t.dataset.comp) { compFilter = t.dataset.comp; try { localStorage.setItem(COMP_KEY, compFilter); } catch (e) { /* ignore */ } render(); }
@@ -5016,6 +5112,8 @@ document.addEventListener('change', event => {
   else if (t.dataset.leg) updateAccumulatorLegOutcome(t.dataset.leg, +t.dataset.index, t.value);
   else if (t.id === 'diary-profile-filter') { diaryProfileFilter = t.value; render(); }
   else if (t.id === 'modal-bet-type') toggleAccumulatorFields();
+  else if (t.id === 'modal-fixture-select') updateDiaryDestinationOptions();
+  else if (t.name === 'modal-destination') updateDiarySubmitBtn();
 });
 document.addEventListener('submit', event => {
   if (event.target.id === 'diary-form') handleDiaryFormSubmit(event);

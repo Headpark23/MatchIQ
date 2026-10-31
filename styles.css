@@ -3412,3 +3412,63 @@ textarea.ctl { min-height: 96px; resize: vertical; }
     height: 16px !important;
   }
 }
+
+/* Diary destination option styles */
+.dest-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dest-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.dest-opt:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--line-strong);
+}
+.dest-opt:has(input:checked) {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
+}
+.dest-opt.diary-only:has(input:checked) {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.12);
+}
+.dest-opt input[type="radio"] {
+  margin-top: 3px;
+  accent-color: var(--pick);
+  cursor: pointer;
+}
+.dest-opt-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.dest-opt-sub {
+  display: block;
+  font-size: 12px;
+  color: var(--soft);
+  line-height: 1.35;
+}
+.dest-used-note {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  color: #fef08a;
+  font-size: 12.5px;
+  line-height: 1.45;
+  margin-top: 6px;
+}

@@ -210,6 +210,28 @@
             <label for="modal-notes-input">Notes (optional)</label>
             <input id="modal-notes-input" class="ctl" autocomplete="off">
           </div>
+          <div class="field full" id="modal-destination-row" style="margin-top:6px;">
+            <label class="lbl" style="font-weight:600;color:#fff;margin-bottom:8px;display:block;">League participation</label>
+            <div id="modal-dest-options" class="dest-toggle-group">
+              <label class="dest-opt" id="dest-option-both">
+                <input type="radio" name="modal-destination" id="dest-both-radio" value="league" checked onchange="updateDiarySubmitBtn()">
+                <div class="dest-opt-content">
+                  <span class="dest-opt-title">🏆 Add to Bet Diary &amp; to League</span>
+                  <span class="dest-opt-sub">Counts as your 1 qualifying bet for this day in your Buddy &amp; Geo Leagues.</span>
+                </div>
+              </label>
+              <label class="dest-opt diary-only" id="dest-option-diary">
+                <input type="radio" name="modal-destination" id="dest-diary-radio" value="diary" onchange="updateDiarySubmitBtn()">
+                <div class="dest-opt-content">
+                  <span class="dest-opt-title">📓 Add to Bet Diary only</span>
+                  <span class="dest-opt-sub">Track privately in your diary; does not affect your league score.</span>
+                </div>
+              </label>
+            </div>
+            <div id="modal-dest-league-used-note" class="dest-used-note" style="display:none;">
+              ℹ️ <b>League bet already chosen for this day:</b> <span id="modal-existing-league-bet"></span>. Extra bets for today are saved to your Bet Diary only.
+            </div>
+          </div>
         </div>
         <div class="preview-box" id="modal-pnl-preview">Enter the fractional odds you were offered and a stake to see the potential return.</div>
       </div>
