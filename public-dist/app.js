@@ -867,7 +867,7 @@ function slipCard(slip, idx, stake) {
   const m = MatchIQBuilder.money, primary = idx === 0;
   const chance = slip.chance >= 0.1 ? Math.round(slip.chance * 100) : (slip.chance * 100).toFixed(1);
   const mainOdds = fmtOdds(slip.odds);
-  const subOdds = oddsFormat === 'decimal' ? calc.formatFractionalOdds(slip.odds) : '(' + calc.formatDecimalOdds(slip.odds) + ')';
+  const subOdds = '';
   const isTodayAcca = builderState.timing === 'today';
   const todayBadge = isTodayAcca ? '<div class="today-slip-pill">⚡ TODAY\'S GAMES ONLY &bull; ALL LEGS SETTLE TONIGHT</div>' : '';
   return '<article class="slip' + (primary ? ' primary' : '') + '">' + todayBadge + '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? 'Best match for your target' : 'Alternative ' + idx) + '</div>' +
@@ -1398,8 +1398,19 @@ function viewPicks() {
   const sharedBanner = sharedSlipNotice
     ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🎯</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' return across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
     : '';
+  const beginnerGlossary = '<details class="section card guide-collapsible" style="margin:16px 0 20px;padding:12px 16px;background:rgba(15,23,42,0.6);border:1px solid rgba(56,189,248,0.25);border-radius:12px;">' +
+    '<summary style="font-weight:700;font-size:13.5px;color:#38bdf8;cursor:pointer;display:flex;align-items:center;gap:6px;">' +
+      '<span>💡 New to Accas &amp; Betting Intelligence? Tap for 30-Second Guide</span>' +
+    '</summary>' +
+    '<div class="grid grid-2" style="margin-top:12px;gap:10px;">' +
+      '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.45;"><strong style="color:#fff;">What is an Acca?</strong> An Accumulator combines multiple match predictions into 1 bet. All picks must land to win, multiplying your return.</div>' +
+      '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.45;"><strong style="color:#fff;">What is Mathematical Edge?</strong> Bet Buddy compares statistical probability against UK bookmaker odds. We only flag picks where the true chance is higher than the bookmaker price implies.</div>' +
+    '</div>' +
+  '</details>';
+
   let html = '<section class="view">' +
     topHubNav +
+    beginnerGlossary +
     renderSportFilterBar() +
     sharedBanner +
     viewBuilder() + '<div class="section-head" style="align-items:flex-end;margin-top:36px"><div><h2 class="page-title">This round</h2>' +
@@ -1503,8 +1514,9 @@ function viewFixtures() {
   const tabs = { upcoming: 'Upcoming', awaiting: 'Awaiting result', results: 'Results' };
   let list;
   if (fixturesTab === 'upcoming') {
-    list = all.filter(f => ['SCHEDULED', 'POSTPONED', 'CANCELLED', 'REMOVED_FROM_SCHEDULE'].includes(f.status) && (kickoffMs(f) > now || f.status !== 'SCHEDULED')).sort((a, b) => kickoffMs(a) - kickoffMs(b));
-    if (!fixturesShowAll) list = list.filter(f => kickoffMs(f) - now < 35 * 86400000 || f.status !== 'SCHEDULED');
+    // Only display upcoming future matches; exclude past cancelled or removed fixtures
+    list = all.filter(f => ['SCHEDULED', 'POSTPONED'].includes(f.status) && kickoffMs(f) > now).sort((a, b) => kickoffMs(a) - kickoffMs(b));
+    if (!fixturesShowAll) list = list.filter(f => kickoffMs(f) - now < 35 * 86400000);
   } else if (fixturesTab === 'awaiting') {
     list = all.filter(f => f.status === 'AWAITING_RESULT' || f.status === 'RESULT_CONFLICT').sort((a, b) => kickoffMs(b) - kickoffMs(a));
   } else {
@@ -2498,13 +2510,7 @@ function getStoredTrophies() {
     const list = JSON.parse(localStorage.getItem(TROPHY_CABINET_KEY) || 'null');
     if (Array.isArray(list)) return list;
   } catch (e) { /* ignore */ }
-  const defaults = [
-    { id: 't1', title: 'Paisley Hometown League', tier: 'town', freq: 'Weekly', placement: 'gold', icon: '🏅', date: 'October 2026', points: 280 },
-    { id: 't2', title: 'Renfrewshire Regional', tier: 'region', freq: 'Monthly', placement: 'silver', icon: '🏛️', date: 'September 2026', points: 340 },
-    { id: 't3', title: 'UK National League', tier: 'uk', freq: 'Monthly', placement: 'bronze', icon: '🛡️🇬🇧', date: 'August 2026', points: 310 }
-  ];
-  try { localStorage.setItem(TROPHY_CABINET_KEY, JSON.stringify(defaults)); } catch (e) { /* ignore */ }
-  return defaults;
+  return [];
 }
 
 function openTrophyCabinet() {
@@ -3277,7 +3283,7 @@ function viewMore() {
         '</div>' +
         '<div class="tile">' +
           '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">v44 (Live)</div>' +
+          '<div class="v mono" style="font-size:16px">' + APP_VERSION + ' (Live)</div>' +
           '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
         '</div>' +
       '</div>' +
@@ -5205,7 +5211,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v58';
+const APP_VERSION = 'v59';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');

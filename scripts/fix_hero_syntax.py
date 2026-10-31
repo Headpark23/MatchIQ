@@ -76,3 +76,4 @@ else:
         print("Successfully patched string syntax in app.js (normalized CRLF)")
     else:
         print("Error: snippet not found")
+

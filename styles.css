@@ -36,15 +36,28 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  box-sizing: border-box;
+}
 body {
-  min-width: 320px; font: 15px/1.55 var(--body); color: var(--ink); -webkit-font-smoothing: antialiased;
+  min-width: 320px;
+  max-width: 100vw;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  font: 15px/1.55 var(--body);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
   background:
     radial-gradient(1100px 520px at 50% -40px, rgba(56, 189, 248, 0.13), transparent 72%),
     radial-gradient(900px 600px at 90% 12%, rgba(16, 185, 129, 0.08), transparent 60%),
     radial-gradient(750px 500px at 10% 28%, rgba(99, 102, 241, 0.06), transparent 55%),
     var(--bg);
-  background-attachment: fixed; overflow-x: hidden;
+  background-attachment: fixed;
 }
 button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; border: 0; background: none; }
@@ -319,8 +332,8 @@ textarea.ctl { min-height: 96px; resize: vertical; }
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100vw;
-    max-width: 100vw;
+    width: 100%;
+    max-width: 100%;
     margin: 0;
     z-index: 60;
     gap: 0;
@@ -331,10 +344,10 @@ textarea.ctl { min-height: 96px; resize: vertical; }
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: stretch;
     box-sizing: border-box;
-    overflow-x: hidden;
+    overflow: hidden;
   }
   .nav a {
     flex: 1 1 0;
@@ -342,9 +355,9 @@ textarea.ctl { min-height: 96px; resize: vertical; }
     max-width: none;
     flex-direction: column;
     gap: 2px;
-    padding: 6px 1px 5px;
+    padding: 6px 0 5px;
     min-height: 52px;
-    font-size: 10px;
+    font-size: 9.5px;
     line-height: 1.1;
     border-radius: 0;
     justify-content: center;
@@ -2679,4 +2692,78 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .slip-bookie-buttons.verified-only {
   display: block;
   margin-top: 8px;
+}
+
+
+/* Mobile Phone Header Optimisations (<= 480px) */
+@media (max-width: 480px) {
+  .app-header-inner {
+    padding: 0 8px;
+    gap: 6px;
+    height: 54px;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  .brand-word {
+    font-size: 15.5px;
+  }
+  .header-tools {
+    gap: 4px;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .header-share-btn,
+  .sync-refresh-btn {
+    display: none !important;
+  }
+  .butler-pill-btn {
+    padding: 3px 8px;
+    min-height: 30px;
+    font-size: 11.5px;
+    gap: 4px;
+  }
+  .butler-pill-btn .butler-label {
+    font-size: 11.5px;
+  }
+  .odds-toggle {
+    padding: 2px 3px;
+    min-height: 28px;
+  }
+  .odds-segment {
+    padding: 2px 6px;
+    font-size: 10.5px;
+  }
+  .sub-header-bar {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  .sub-header-inner {
+    padding: 4px 8px;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  .sub-header-tagline {
+    display: none !important;
+  }
+  .picks-top-bar {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .sport-filter-section {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    padding: 10px 12px !important;
+  }
+  .sport-filter-bar {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    max-width: 100% !important;
+  }
+  .sport-pill {
+    padding: 5px 9px !important;
+    font-size: 12px !important;
+    min-height: 34px !important;
+  }
 }
