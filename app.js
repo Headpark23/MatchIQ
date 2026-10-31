@@ -3565,6 +3565,7 @@ function betCard(entry) {
       (entry.model_fair_odds ? '<div><span>Model fair odds</span><b>' + esc(fmtFairOdds(entry.model_fair_odds, entry.model_p)) + '</b></div>' : '') +
       '<div><span>Stake</span><b>' + money(+entry.stake) + '</b></div><div><span>Bookmaker</span><b style="font-family:var(--body)">' + esc(entry.bookmaker || '-') + '</b></div>' +
       '<div><span>Profile</span><b style="font-family:var(--body)">' + esc(entry.profile || 'Default') + (entry.type === 'accumulator' ? ' • ' + (entry.legs || []).length + '-pick combined bet' : '') + '</b></div></div>' +
+    (entry.settledBy === 'auto' ? '<p class="dim" style="font-size:12.5px;margin:0 0 6px">✅ Settled automatically' + (entry.finalScore ? ' · final score ' + esc(entry.finalScore) : '') + '</p>' : '') +
     '<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span>' + pl + '</span><span style="display:flex;gap:8px;align-items:center">' +
       leagueActionBtn +
       outcomeSelect(entry.outcome, 'data-outcome="' + esc(entry.id) + '"', 'Settle bet') +
@@ -3577,6 +3578,7 @@ function updateAccumulatorLegOutcome(id, index, outcome) {
   const entry = diary.find(item => item.id === id && item.type === 'accumulator');
   if (!entry || !entry.legs || !entry.legs[index]) return;
   entry.legs[index].outcome = outcome;
+  entry.manualOverride = true;
   const settled = calc.settleAccumulator(entry, entry.legs.map(leg => leg.outcome));
   entry.outcome = settled.outcome;
   entry.odds = settled.decimalOdds;
@@ -3585,11 +3587,120 @@ function updateAccumulatorLegOutcome(id, index, outcome) {
   render();
 }
 
+// ------------------------------------------------------------ Bet Diary auto-settlement
+// Pending bets settle themselves once the match result is confirmed. Only markets that the final score
+// decides are settled (match result, draw, double chance, total goals, both teams to score); corners,
+// cards, shots, player and handicap bets stay pending for the user to settle.
+const diaryNorm = v => String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const fixtureFinished = f => !!(f && f.status === 'FINISHED' && Array.isArray(f.score) && f.score.length === 2 && f.score.every(n => Number.isFinite(Number(n))));
+const escapeRe = v => String(v || '').toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function settleTextAgainstScore(rawText, home, away, score) {
+  const h = Number(score[0]), a = Number(score[1]);
+  const homeN = diaryNorm(home), awayN = diaryNorm(away);
+  // remove the "Home v Away" label so team names in it do not look like the pick
+  const labelRe = new RegExp(escapeRe(home) + '\\s*(?:v|vs|-)\\s*' + escapeRe(away));
+  const t = String(rawText || '').toLowerCase().replace(labelRe, ' ');
+  const tN = diaryNorm(t);
+  const pickHome = homeN && tN.includes(homeN), pickAway = awayN && tN.includes(awayN);
+
+  if (/corner|card|booking|shot|offside|foul|throw|player|scorer|anytime|first goal|half|handicap|minute|penalt|clean sheet|exact|correct score/.test(t)) return null;
+  if (/(^|[\s(])[+-]\s?\d/.test(t)) return null;
+
+  if (/both teams to score|btts|\bgg\b|\bng\b/.test(t)) {
+    const no = /\bno\b|\bng\b/.test(t) && !/\byes\b|\bgg\b/.test(t);
+    const both = h > 0 && a > 0;
+    return (no ? !both : both) ? 'won' : 'lost';
+  }
+  const ou = t.match(/\b(over|under)\s*(\d+(?:\.\d+)?)/);
+  if (ou) {
+    if (pickHome || pickAway) return null;  // team goals, not match goals
+    const line = Number(ou[2]), total = h + a;
+    if (total === line) return null;
+    return ((ou[1] === 'over') === (total > line)) ? 'won' : 'lost';
+  }
+  if (/draw no bet|\bdnb\b|no draw/.test(t)) return null;
+  const dc = t.match(/\b(1x|x2|12)\b/);
+  if (dc) return ((dc[1] === '1x' && h >= a) || (dc[1] === 'x2' && a >= h) || (dc[1] === '12' && h !== a)) ? 'won' : 'lost';
+  if (/draw/.test(t)) {
+    if (pickHome && !pickAway) return h >= a ? 'won' : 'lost';
+    if (pickAway && !pickHome) return a >= h ? 'won' : 'lost';
+    if (/\bor\b|\/|&|double chance/.test(t)) return null;
+    return h === a ? 'won' : 'lost';
+  }
+  let side = null;
+  if (pickHome && !pickAway) side = 'home';
+  else if (pickAway && !pickHome) side = 'away';
+  else if (/\bhome\b/.test(t) && !/\baway\b/.test(t)) side = 'home';
+  else if (/\baway\b/.test(t) && !/\bhome\b/.test(t)) side = 'away';
+  if (!side) return null;
+  return (side === 'home' ? h > a : a > h) ? 'won' : 'lost';
+}
+
+function findDiaryFixture(text, entry) {
+  const tN = diaryNorm(text);
+  const since = Date.parse((entry.date || (entry.timestamp || '').slice(0, 10) || '1970-01-01') + 'T00:00:00Z') - 86400000;
+  const hits = fixturesList().filter(f => tN.includes(diaryNorm(f.home)) && tN.includes(diaryNorm(f.away)) && kickoffMs(f) >= since)
+    .sort((x, y) => kickoffMs(x) - kickoffMs(y));
+  return hits[0] || null;
+}
+
+function autoSettleDiary() {
+  const diary = getStoredDiary();
+  let settledCount = 0;
+  let changed = false;
+  const stamp = new Date().toISOString();
+  diary.forEach(entry => {
+    if (!entry || entry.outcome !== 'pending' || entry.manualOverride) return;
+    if (entry.type === 'accumulator' && Array.isArray(entry.legs)) {
+      let legChanged = false;
+      entry.legs.forEach(leg => {
+        if (!leg || ['won', 'lost', 'void'].includes(leg.outcome)) return;
+        const fx = findDiaryFixture(leg.selection, entry);
+        if (!fixtureFinished(fx)) return;
+        const r = settleTextAgainstScore(leg.selection, fx.home, fx.away, fx.score);
+        if (r) { leg.outcome = r; leg.auto = true; legChanged = true; }
+      });
+      if (legChanged) {
+        changed = true;
+        const res = calc.settleAccumulator(entry, entry.legs.map(l => l.outcome));
+        if (res.outcome !== 'pending') {
+          entry.outcome = res.outcome;
+          entry.odds = res.decimalOdds;
+          entry.potentialReturn = res.potentialReturn;
+          entry.settledBy = 'auto'; entry.settledAt = stamp;
+          settledCount++;
+        }
+      }
+      return;
+    }
+    const fx = (entry.match_id && fixtureById(entry.match_id)) || findDiaryFixture((entry.fixture || '') + ' ' + (entry.selection || ''), entry);
+    if (!fixtureFinished(fx)) return;
+    const r = settleTextAgainstScore((entry.marketName && entry.marketName !== 'Match result' ? entry.marketName + ' ' : '') + (entry.selection || ''), fx.home, fx.away, fx.score);
+    if (r) {
+      entry.outcome = r; entry.settledBy = 'auto'; entry.settledAt = stamp; entry.finalScore = fx.score[0] + '-' + fx.score[1];
+      changed = true;
+      settledCount++;
+    }
+  });
+  if (!changed) return 0;
+  try { saveStoredDiary(diary); } catch (e) { console.warn('autoSettleDiary notice:', e); return 0; }
+  if (settledCount) {
+    toast('✅ ' + settledCount + (settledCount === 1 ? ' bet' : ' bets') + ' in your Bet Diary settled automatically.');
+    try { syncDiaryToCloud(); } catch (e) {}
+  }
+  try { updateDiaryCount(); } catch (e) {}
+  render();
+  return settledCount;
+}
+
 function updateDiaryEntryOutcome(id, outcome) {
   const diary = getStoredDiary();
   const entry = diary.find(e => e.id === id);
   if (!entry) return;
   entry.outcome = outcome;
+  entry.manualOverride = true;
+  entry.settledBy = 'manual';
   try { saveStoredDiary(diary); } catch (error) { toast('Could not save the settlement. Check browser storage.', 'error'); return; }
   toast('Marked ' + outcome + '.');
   render();
@@ -5794,7 +5905,10 @@ function applyResultsDefaults() {
   wasOnResults = onResults;
 }
 applyResultsDefaults();
-window.addEventListener('hashchange', () => { applyResultsDefaults(); render(); if (window.location.hash.startsWith('#/results')) checkAutoUpdateResults(); });
+window.addEventListener('hashchange', () => { applyResultsDefaults(); render(); if (/^#\/(results|diary|leagues)/.test(window.location.hash)) checkAutoUpdateResults(); });
+// Keep results fresh in the background so the Bet Diary settles itself without the user doing anything.
+setInterval(() => { if (!document.hidden) checkAutoUpdateResults(true); }, 5 * 60 * 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkAutoUpdateResults(); });
 
 // ------------------------------------------------------------ Live Results Auto-Update Tracking
 let lastResultsAutoSync = 0;
@@ -5817,6 +5931,7 @@ async function checkAutoUpdateResults(force = false) {
     if (perfRes) DATA.performance = perfRes;
     if (fixRes) DATA.fixtures = fixRes;
     if (multiRes) DATA.multiSport = multiRes;
+    try { autoSettleDiary(); } catch (e) { console.warn('autoSettleDiary notice:', e); }
     if (window.location.hash.startsWith('#/results')) {
       render();
     }
@@ -5836,6 +5951,7 @@ updateDiaryCount();
 try { updateButlerUI(); } catch (e) {}
 loadData().then(() => {
   render();
+  try { autoSettleDiary(); } catch (e) { console.warn('autoSettleDiary notice:', e); }
 });
 initFirebaseAuth();
 
