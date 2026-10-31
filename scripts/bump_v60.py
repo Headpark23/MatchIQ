@@ -11,3 +11,4 @@ sw_txt = sw_p.read_text(encoding='utf-8')
 sw_txt = re.sub(r"const CACHE_NAME = 'betbuddy-[^']+';", "const CACHE_NAME = 'betbuddy-pwa-v60';", sw_txt)
 sw_p.write_text(sw_txt, encoding='utf-8')
 print('Bumped to v60 in app.js and sw.js')
+

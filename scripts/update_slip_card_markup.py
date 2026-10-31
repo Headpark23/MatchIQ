@@ -79,3 +79,4 @@ if old_custom_leg in app_code:
 
 app_path.write_text(app_code, encoding="utf-8")
 print("app.js updated")
+

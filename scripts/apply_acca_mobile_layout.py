@@ -164,3 +164,4 @@ else:
 
 styles_path.write_text(styles, encoding="utf-8")
 print("Updated styles.css with mobile acca slip layout")
+

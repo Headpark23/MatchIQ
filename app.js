@@ -867,12 +867,22 @@ function slipCard(slip, idx, stake) {
   const m = MatchIQBuilder.money, primary = idx === 0;
   const chance = slip.chance >= 0.1 ? Math.round(slip.chance * 100) : (slip.chance * 100).toFixed(1);
   const mainOdds = fmtOdds(slip.odds);
-  const subOdds = '';
   const isTodayAcca = builderState.timing === 'today';
   const todayBadge = isTodayAcca ? '<div class="today-slip-pill">⚡ TODAY\'S GAMES ONLY &bull; ALL LEGS SETTLE TONIGHT</div>' : '';
-  return '<article class="slip' + (primary ? ' primary' : '') + '">' + todayBadge + '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? 'Best match for your target' : 'Alternative ' + idx) + '</div>' +
-    '<div class="slip-odds mono">' + esc(mainOdds) + ' <small>' + esc(subOdds) + '</small></div></div>' +
+  
+  // Honest Trust & Expected Value transparency
+  const evVal = slip.ev != null ? slip.ev : (slip.ret * slip.chance - stake);
+  const evPerPound = evVal / (stake || 10);
+  const evPence = Math.round(Math.abs(evPerPound) * 100);
+  const trustBadge = evPerPound >= 0
+    ? ('<div class="slip-trust-bar positive">📈 <b>' + chance + '% chance to win.</b> Expect to gain about ' + evPence + 'p per £1 staked.</div>')
+    : ('<div class="slip-trust-bar negative">⚠️ <b>' + chance + '% chance to win.</b> Expect to lose about ' + evPence + 'p per £1 on average.</div>');
+
+  return '<article class="slip' + (primary ? ' primary' : '') + '">' + todayBadge +
+    '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? 'Best match for your target' : 'Alternative ' + idx) + ' ' + jargonTip('acca') + '</div>' +
+    '<div class="slip-odds mono">' + esc(mainOdds) + '</div></div>' +
     '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every bet lands</small></div></div>' +
+    trustBadge +
     '<ol class="slip-legs">' + slip.legs.map(slipLegRow).join('') + '</ol>' +
     '<div class="slip-sum"><span>Stake <b class="mono">' + m(stake) + '</b></span><span>Returns <b class="mono">' + m(slip.ret) + '</b></span><span>Profit <b class="mono">' + m(slip.profit) + '</b></span></div>' +
     (slip.chance < 0.05 ? '<p class="slip-warn">Long shot: roughly 1 in ' + Math.round(1 / slip.chance) + '. Most slips like this lose.</p>' : '') +
@@ -1127,7 +1137,8 @@ function viewBuilder() {
     '</div>' +
     '<p class="page-sub">Pick a stake, how many bets and how much you want to win. Bet Buddy searches every upcoming match for the combined bet (accumulator) that hits your target with the best chance of landing.</p>' +
     scopeToggle +
-    '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake"></div>' +
+    '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake" aria-label="Stake amount in pounds">' +
+    '<div class="stake-safety-note" style="font-size:12px;color:#fbbf24;margin-top:4px;display:flex;align-items:center;gap:4px;"><span>⚠️</span><span>Recreational limit: only stake what you are happy to lose (£5–£10).</span></div></div>' +
     '<div class="field"><span class="lbl" id="b-legs-l">Number of bets</span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
     '<input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Number of bets"></div></div>' +
     '<div class="field full"><label for="b-win">Target return (£): <b class="mono" id="b-win-out">' + MatchIQBuilder.money(win) + '</b></label>' +
@@ -1220,7 +1231,28 @@ function beginnerGuides() {
     '</div></div>';
 }
 
+function dismissOnboarding() {
+  try { localStorage.setItem('betbuddy_onboarded_v1', 'true'); } catch (e) {}
+  const card = $('onboarding-card');
+  if (card) card.remove();
+}
+
 function renderWelcomeHero() {
+  let onboardHtml = '';
+  try {
+    if (!localStorage.getItem('betbuddy_onboarded_v1')) {
+      onboardHtml = '<div class="onboarding-card" id="onboarding-card">' +
+        '<h3><span>👋</span> Welcome to Bet Buddy Sports Intelligence</h3>' +
+        '<div class="onboarding-steps">' +
+          '<div class="onboarding-step-item"><span class="onboarding-step-num">1</span><div><b>Pick Your Slate</b><span>Choose today\'s games or the 7-day slate.</span></div></div>' +
+          '<div class="onboarding-step-item"><span class="onboarding-step-num">2</span><div><b>Set Target Return</b><span>Enter stake & how much you aim to win.</span></div></div>' +
+          '<div class="onboarding-step-item"><span class="onboarding-step-num">3</span><div><b>Review Model Acca</b><span>Check mathematical probability & expected value.</span></div></div>' +
+        '</div>' +
+        '<button type="button" class="btn small primary" onclick="dismissOnboarding()" style="min-height:40px;">Got It, Let\'s Go ➔</button>' +
+      '</div>';
+    }
+  } catch (e) {}
+
   const diaryItems = getStoredDiary();
   const diaryCount = diaryItems.length;
   const user = getAuthUser();
@@ -1416,10 +1448,15 @@ function viewPicks() {
   const matchFilter = p => !clubFilter || (p.fixture.home.toLowerCase().includes(clubFilter) || p.fixture.away.toLowerCase().includes(clubFilter));
   const filteredRound = round.filter(matchFilter);
   const filteredLater = later.filter(matchFilter);
-  const searchBar = '<div class="search-bar"><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search by club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off"></div>';
-  html += '<div class="section"><div class="section-head"><h2 class="section-title">Match by match</h2><span class="section-note">Most likely uses every market but ranks on credible chance, so a big number with little evidence behind it does not win.</span></div>' +
+  const searchBar = '<div class="search-bar"><label for="club-search" class="sr-only">Search clubs</label><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search by club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off" aria-label="Search clubs by name"></div>';
+  const legendBox = '<div class="match-list-legend">💡 <b>Quick Guide:</b> <b>Most likely</b>' + jargonTip('most likely') + ' is our highest-confidence statistical call across all 6 markets. <b>Lean</b>' + jargonTip('lean') + ' shows the pure 1X2 match winner probability.</div>';
+  
+  html += '<details class="section card match-list-collapsible" style="margin-top:28px;"' + (clubFilter ? ' open' : '') + '>' +
+    '<summary><span>⚽ Match by Match Predictions (' + filteredRound.length + ' matches)</span><span class="btn small" style="pointer-events:none;">Tap to view ▾</span></summary>' +
+    legendBox +
     searchBar +
-    (filteredRound.length ? filteredRound.map(matchRecRow).join('') : '<div class="empty">No matches found for "' + esc(clubFilter) + '".</div>') + '</div>';
+    (filteredRound.length ? filteredRound.map(matchRecRow).join('') : '<div class="empty">No matches found for "' + esc(clubFilter) + '".</div>') +
+    '</details>';
   if (filteredLater.length) html += '<details class="section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Following round (' + filteredLater.length + ' matches)</summary>' + filteredLater.map(matchRecRow).join('') + '</details>';
   const validated = list.filter(p => p.markets.result.evidence.status === 'validated').map(p => ({ p, s: signalScore(p) })).sort((a, b) => b.s.score - a.s.score).map(x => x.p);
   if (validated.length) html += '<div class="section"><div class="section-head"><h2 class="section-title">Strongest match-result signals</h2><span class="section-note">The validated match-result model only, ranked by backtest-calibrated probability.</span></div>' +
@@ -1599,20 +1636,19 @@ function viewResults() {
 
   const bands = (perf.bands || {}).result || {};
   const bandRows = Object.entries(bands).sort().map(([band, b]) => '<div class="calib-row"><span class="mono">' + esc(band) + '</span><div class="calib-bars" aria-label="Predicted ' + pct(b.mean_pick_p) + ', happened ' + pct(b.pick_hit_rate) + '"><span class="pred" style="width:' + (100 * b.mean_pick_p).toFixed(0) + '%"></span><span class="obs" style="width:' + (100 * b.pick_hit_rate).toFixed(0) + '%"></span></div><span class="mono dim">' + pct(b.pick_hit_rate) + ' · n=' + b.n + '</span></div>').join('');
-  html += '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Calibration, live</h2><p class="section-note" style="margin:4px 0 12px">Pale bar: average predicted chance. Green bar: how often it happened.</p>' + (bandRows ? '<div class="calib">' + bandRows + '</div>' : '<p class="muted">Appears once predictions settle.</p>') + '</div>' +
-    (other ? leagueBacktestCard(lv) : backtestCard(rel)) + '</div>';
-
-  html += scorecard(perf);
-  const tiers = perf.tiers || {};
-  const tierLabel = { T1: 'Validated frozen model', T2: 'Provisional: promoted clubs', T3: 'League average fallback', L1: 'League model (provisional, one-season backtest)' };
-  const teams = Object.entries(perf.teams || {}).filter(([, t]) => t.n >= 5).sort((a, b) => b[1].n - a[1].n);
-  const ch = perf.challenger;
-  html += '<div class="section grid grid-2"><div class="card"><h2 class="section-title">By prediction source</h2><table class="table" style="margin-top:8px"><tbody>' +
-    (Object.keys(tiers).length ? Object.entries(tiers).map(([t, s]) => '<tr><td>' + esc(tierLabel[t] || t) + '</td><td class="num">' + s.n + '</td><td class="num">' + pct(s.pick_hit_rate) + '</td><td class="num">' + s.brier.toFixed(3) + '</td></tr>').join('') : '<tr><td class="muted">No settled predictions yet.</td></tr>') +
-    '</tbody></table>' + (teams.length ? '<h3 class="day-label">By club (5+ settled)</h3><table class="table"><tbody>' + teams.map(([t, s]) => '<tr><td><span class="teams-line">' + crest(t, 18) + esc(t) + '</span></td><td class="num">' + s.n + '</td><td class="num">' + pct(s.pick_hit_rate) + '</td></tr>').join('') + '</tbody></table>' : '<p class="section-note" style="margin-top:10px">Club breakdowns appear once a club has 5 settled predictions.</p>') + '</div>' +
-    '<div class="card"><h2 class="section-title">Challenger watch</h2><p class="muted" style="margin-top:6px">' + (ch ? esc(ch.challenger) + ' runs in the shadow of ' + esc(ch.production) + ' on the same fixtures. It never changes what you see.' : 'No challenger data.') + '</p>' +
-    (ch ? '<p style="margin-top:10px"><b>' + esc(ch.recommendation) + '</b></p>' + (ch.delta_brier != null ? '<p class="dim mono" style="margin-top:6px">ΔBrier ' + ch.delta_brier.toFixed(4) + ' [' + ch.delta_brier_ci95.join(', ') + '], n=' + ch.n + '</p>' : '') : '') +
-    '<p class="section-note" style="margin-top:10px">Promotion needs ' + (ch ? ch.min_n_for_promotion : 150) + '+ settled matches, a 95% interval clear of zero and owner approval. The current model stays pinned for rollback.</p></div></div>';
+  html += '<details class="section card maths-section" style="margin-top:20px;">' +
+    '<summary><span>🔬 Advanced Model Accuracy &amp; Calibration</span><span class="btn small" style="pointer-events:none;">Show the maths ▾</span></summary>' +
+    '<div style="padding:16px 0 6px;">' +
+      '<div class="grid grid-2"><div class="card"><h2 class="section-title">Calibration, live</h2><p class="section-note" style="margin:4px 0 12px">Pale bar: average predicted chance. Green bar: how often it happened.</p>' + (bandRows ? '<div class="calib">' + bandRows + '</div>' : '<p class="muted">Appears once predictions settle.</p>') + '</div>' +
+      (other ? leagueBacktestCard(lv) : backtestCard(rel)) + '</div>' +
+      scorecard(perf) +
+      '<div class="grid grid-2" style="margin-top:16px;"><div class="card"><h2 class="section-title">By prediction source</h2><table class="table" style="margin-top:8px"><tbody>' +
+      (Object.keys(tiers).length ? Object.entries(tiers).map(([t, s]) => '<tr><td>' + esc(tierLabel[t] || t) + '</td><td class="num">' + s.n + '</td><td class="num">' + pct(s.pick_hit_rate) + '</td><td class="num">' + s.brier.toFixed(3) + '</td></tr>').join('') : '<tr><td class="muted">No settled predictions yet.</td></tr>') +
+      '</tbody></table>' + (teams.length ? '<h3 class="day-label">By club (5+ settled)</h3><table class="table"><tbody>' + teams.map(([t, s]) => '<tr><td><span class="teams-line">' + crest(t, 18) + esc(t) + '</span></td><td class="num">' + s.n + '</td><td class="num">' + pct(s.pick_hit_rate) + '</td></tr>').join('') + '</tbody></table>' : '<p class="section-note" style="margin-top:10px">Club breakdowns appear once a club has 5 settled predictions.</p>') + '</div>' +
+      '<div class="card"><h2 class="section-title">Challenger watch</h2><p class="muted" style="margin-top:6px">' + (ch ? esc(ch.challenger) + ' runs in the shadow of ' + esc(ch.production) + ' on the same fixtures. It never changes what you see.' : 'No challenger data.') + '</p>' +
+      (ch ? '<p style="margin-top:10px"><b>' + esc(ch.recommendation) + '</b></p>' + (ch.delta_brier != null ? '<p class="dim mono" style="margin-top:6px">ΔBrier ' + ch.delta_brier.toFixed(4) + ' [' + ch.delta_brier_ci95.join(', ') + '], n=' + ch.n + '</p>' : '') : '') +
+      '<p class="section-note" style="margin-top:10px">Promotion needs ' + (ch ? ch.min_n_for_promotion : 150) + '+ settled matches, a 95% interval clear of zero and owner approval. The current model stays pinned for rollback.</p></div></div>' +
+    '</div></details>';
 
   const shown = resultsFilter === 'settled' ? settled : resultsFilter === 'pending' ? pending : future;
   html += '<div class="section card" style="padding:0"><div class="section-head" style="padding:16px 16px 0"><h2 class="section-title">Prediction log</h2><div class="seg" role="group" aria-label="Prediction log">' +
@@ -2509,6 +2545,11 @@ function openTrophyCabinet() {
   const silvers = trophies.filter(t => t.placement === 'silver').length;
   const bronzes = trophies.filter(t => t.placement === 'bronze').length;
 
+  if (trophies.length === 0) {
+    $('trophy-cards-grid').innerHTML = '<div class="empty" style="grid-column:1/-1;padding:28px 16px;text-align:center;"><div style="font-size:42px;margin-bottom:10px;">🏆</div><h3 style="color:#fff;margin-bottom:6px;">Trophy Cabinet is Empty</h3><p style="font-size:13px;color:var(--muted);max-width:44ch;margin:0 auto;">You have 0 Silverware. Place top-3 in weekly or monthly Buddy Leagues to win trophies and medals!</p></div>';
+    $('trophy-cabinet-modal').hidden = false;
+    return;
+  }
   const cardsHtml = trophies.map(t => {
     const tierClass = 'tier-' + (t.tier || 'town');
     const rankLabel = t.placement === 'gold' ? '🥇 1st Place Gold' : t.placement === 'silver' ? '🥈 2nd Place Silver' : '🥉 3rd Place Bronze';
@@ -2797,7 +2838,7 @@ function viewLeagues() {
     '</div>' +
     '<div class="btn-row">' +
       '<button type="button" class="btn primary" data-open-league-modal>Create or Join League</button>' +
-      '<button type="button" class="trophy-summary-pill" data-open-trophy-cabinet>🏆 Trophy Cabinet (' + trophies.length + ' Silverware)</button>' +
+      '<button type="button" class="trophy-summary-pill' + (trophies.length === 0 ? ' empty' : '') + '" data-open-trophy-cabinet style="' + (trophies.length === 0 ? 'opacity:0.75;' : '') + '">🏆 Trophy Cabinet (' + trophies.length + ' Silverware)</button>' +
       (isGeo ? '' : '<button type="button" class="btn" data-share-league="' + esc(currentLeague.code) + '">Invite Friends</button>') +
     '</div></div>' +
 
@@ -4126,8 +4167,9 @@ function mapAuthError(err) {
   if (!err) return 'An unexpected error occurred. Please try again.';
   const code = err.code || '';
   if (code === 'auth/unauthorized-domain') {
-    console.error('Firebase Auth unauthorized domain:', window.location.hostname);
-    return 'This web domain is not authorised in Firebase Auth console. Check developer console for details.';
+    const host = window.location.hostname || 'current domain';
+    console.error('Firebase Auth unauthorized domain:', host);
+    return 'Domain "' + host + '" is not authorised in Firebase. To fix: Go to Firebase Console > Authentication > Settings > Authorised Domains and add ' + host + '.';
   }
   switch (code) {
     case 'auth/wrong-password':
@@ -4280,11 +4322,14 @@ function updateHeaderAuthUI() {
   const user = getAuthUser();
   if (user && user.signedIn) {
     const initials = (user.name || user.email || 'U').slice(0, 1).toUpperCase();
-    container.innerHTML = '<button type="button" class="header-user-btn" id="header-user-btn" title="Signed in as ' + esc(user.name || user.email) + '">' +
-      '<span class="header-avatar">' + esc(initials) + '</span>' +
-      '<span>@' + esc(user.handle || 'Punter') + '</span>' +
-      (!user.emailVerified ? ' <span style="color:#fbbf24;font-size:11px;" title="Unverified Email">⚠️</span>' : '') +
-      '</button>';
+    container.innerHTML = '<div style="display:flex;align-items:center;gap:6px;">' +
+      '<button type="button" class="header-user-btn" id="header-user-btn" title="Signed in as ' + esc(user.name || user.email) + '">' +
+        '<span class="header-avatar">' + esc(initials) + '</span>' +
+        '<span>@' + esc(user.handle || 'Punter') + '</span>' +
+        (!user.emailVerified ? ' <span style="color:#fbbf24;font-size:12px;" title="Unverified Email">⚠️</span>' : '') +
+      '</button>' +
+      '<button type="button" class="btn small" id="btn-quick-signout" title="Sign Out of account" style="min-height:32px;padding:2px 8px;font-size:11px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.35);color:#fca5a5;">Sign Out</button>' +
+    '</div>';
   } else {
     container.innerHTML = '<button type="button" class="google-sub-btn" id="header-auth-btn" title="Sign in or join">' +
       '<svg class="google-g" viewBox="0 0 24 24" width="13" height="13"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>' +
@@ -4872,7 +4917,7 @@ document.addEventListener('click', event => {
     if ($('player-region-input')) $('player-region-input').value = _p.region || 'Renfrewshire';
     if ($('player-country-input')) $('player-country-input').value = _p.country || 'Scotland';
     $('handle-modal').hidden = false; return; }
-  if (t.id === 'btn-signout' || t.id === 'btn-google-signout') {
+  if (t.id === 'btn-quick-signout' || t.id === 'btn-signout' || t.id === 'btn-google-signout') {
     handleSignOut();
     return;
   }
@@ -5201,7 +5246,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v60';
+const APP_VERSION = 'v61';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
