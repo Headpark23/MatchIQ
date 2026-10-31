@@ -40,7 +40,7 @@ service cloud.firestore {
     //   - creatorUid: string (required, immutable)
     //   - createdAt: timestamp or ISO string (required, immutable)
     //   - memberCount: int, >= 0 (optional)
-    // Access: Verified user get, no list. Creator create/update/delete.
+    // Access: Verified Google user (sign_in_provider == 'google.com') get, no list. Creator create/update/delete.
     //
     // Subcollection: leagues/{code}/members/{uid}
     // Document ID: Firebase Auth UID
@@ -54,7 +54,7 @@ service cloud.firestore {
     //   - settled: number, >= 0 (required)
     //   - form: list of strings, size <= 10 (required)
     //   - updatedAt: timestamp or string (required)
-    // Access: Verified user read. Member create/update. Member leave OR Creator kick on delete.
+    // Access: Verified Google user (sign_in_provider == 'google.com') read. Member create/update. Member leave OR Creator kick on delete.
     //
     // Collection: geo_leagues/{tierId}
     // Document ID: Geographic tier ID ('geo-world', etc.)
@@ -71,11 +71,9 @@ service cloud.firestore {
     }
 
     function isVerifiedUser() {
-      return isAuthenticated() && (
-        request.auth.token.get('email_verified', false) == true ||
-        ('firebase' in request.auth.token &&
-         request.auth.token.firebase.get('sign_in_provider', '') == 'google.com')
-      );
+      return isAuthenticated() &&
+        'firebase' in request.auth.token &&
+        request.auth.token.firebase.get('sign_in_provider', '') == 'google.com';
     }
 
     function isOwner(userId) {
