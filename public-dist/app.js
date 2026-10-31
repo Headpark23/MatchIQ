@@ -3109,7 +3109,8 @@ function saveStoredLeagues(leagues) {
 function viewLeagues() {
   const prof = getUserProfile();
   const authUser = getAuthUser();
-  const signedOutBanner = (!authUser || !authUser.signedIn)
+  const isUserSignedIn = Boolean(authUser && authUser.signedIn);
+  const signedOutBanner = !isUserSignedIn
     ? '<div class="signed-out-league-banner" style="margin-bottom:20px;padding:22px 16px;background:linear-gradient(135deg, rgba(2,132,199,0.18), rgba(15,23,42,0.95));border:1px solid rgba(56,189,248,0.4);border-radius:12px;text-align:center;">' +
         '<div style="font-size:32px;margin-bottom:8px;">🏆</div>' +
         '<h2 style="font-size:18px;font-weight:700;color:#fff;margin:0 0 6px;">Sign in with Google to join leagues and compete with mates</h2>' +
@@ -4919,9 +4920,14 @@ async function signInWithGoogle() {
       await firebaseAuth.signInWithRedirect(provider);
       return;
     }
-    await firebaseAuth.signInWithPopup(provider);
+    const cred = await firebaseAuth.signInWithPopup(provider);
+    if (cred && cred.user) {
+      saveAuthUser(cred.user);
+    }
     closeAuthModal();
     toast('Signed in with Google! ⚽');
+    updateHeaderAuthUI();
+    render();
   } catch (err) {
     if (err.code === 'auth/popup-blocked') {
       try {
@@ -4979,6 +4985,8 @@ function initFirebaseAuth() {
     currentAuthUser = user;
     if (user) {
       saveAuthUser(user);
+      updateHeaderAuthUI();
+      render();
       await ensureUserProfile(user);
       hasSyncedUserLeagues = false;
       await syncUserLeaguesFromCloud();
@@ -5640,7 +5648,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v72';
+const APP_VERSION = 'v73';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');

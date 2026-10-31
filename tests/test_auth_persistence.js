@@ -18,22 +18,35 @@ function createEnv(initialStorage = {}) {
   const elements = {};
   function getEl(id) {
     if (!elements[id]) {
-      elements[id] = { id, innerHTML: '', value: '', textContent: '', setAttribute: () => {}, classList: { toggle: () => {}, add: () => {}, remove: () => {} }, querySelector: () => null, appendChild: () => {}, removeChild: () => {} };
+      elements[id] = {
+        id,
+        innerHTML: '',
+        value: '',
+        textContent: '',
+        setAttribute: () => {},
+        classList: { toggle: () => {}, add: () => {}, remove: () => {} },
+        querySelector: () => null,
+        appendChild: () => {},
+        removeChild: () => {},
+        remove: () => {}
+      };
     }
     return elements[id];
   }
 
   const context = {
-    window: { addEventListener: () => {}, location: { hash: '#/', hostname: 'localhost', search: '' }, scrollTo: () => {} },
+    window: { addEventListener: () => {}, location: { hash: '#/leagues', hostname: 'localhost', search: '' }, scrollTo: () => {} },
     addEventListener: () => {},
     scrollTo: () => {},
-    location: { hash: '#/', hostname: 'localhost', search: '' },
+    location: { hash: '#/leagues', hostname: 'localhost', search: '' },
     document: {
       addEventListener: () => {},
       querySelectorAll: () => [],
       getElementById: (id) => getEl(id),
       querySelector: (sel) => getEl(sel.replace(/^[#.]/, '')),
-      title: '', createElement: () => ({ appendChild: () => {}, setAttribute: () => {}, classList: { add: () => {}, remove: () => {} }, style: {}, remove: () => {} }), body: { appendChild: () => {}, removeChild: () => {} }
+      createElement: () => ({ appendChild: () => {}, setAttribute: () => {}, classList: { add: () => {}, remove: () => {} }, style: {}, remove: () => {} }),
+      body: { appendChild: () => {}, removeChild: () => {} },
+      title: ''
     },
     localStorage: {
       getItem: (k) => (k in store ? store[k] : null),
@@ -81,6 +94,10 @@ async function run() {
   console.log('Header has header-auth-btn:', container1.includes('header-auth-btn'));
   if (!container1.includes('Sign In / Join')) throw new Error('Expected Sign In / Join in logged-out state');
 
+  const leagueHtmlLoggedOut = env1.context.viewLeagues();
+  console.log('Logged-out league view contains "Continue with Google":', leagueHtmlLoggedOut.includes('Continue with Google'));
+  if (!leagueHtmlLoggedOut.includes('Continue with Google')) throw new Error('Expected Continue with Google when logged out');
+
   // Test 2: User logs in with Google
   console.log('\n--- Test 2: User Logs In with Google ---');
   const mockUser = {
@@ -101,6 +118,11 @@ async function run() {
   console.log('LocalStorage persisted user record:', !!env1.store['betbuddy_auth_user_v1']);
   if (!container2.includes('header-user-btn')) throw new Error('Expected header-user-btn when signed in');
 
+  const leagueHtmlSignedIn = env1.context.viewLeagues();
+  console.log('Signed-in league view contains "Continue with Google":', leagueHtmlSignedIn.includes('Continue with Google'));
+  if (leagueHtmlSignedIn.includes('Continue with Google')) throw new Error('Failed to remove Continue with Google banner when user is signed in!');
+  console.log('✓ Successfully removed "Continue with Google" in league tab for signed-in user');
+
   // Test 3: Page Reload / Session persistence (simulate fresh tab / browser restart)
   console.log('\n--- Test 3: Session Persistence Across Page Reload ---');
   const savedStore = JSON.parse(JSON.stringify(env1.store));
@@ -115,6 +137,10 @@ async function run() {
   console.log('Zero flash of Sign In / Join on reload:', !container3.includes('Sign In / Join'));
   if (container3.includes('Sign In / Join')) throw new Error('Flashed Sign In / Join on reload!');
 
+  const reloadedLeagueHtml = env2.context.viewLeagues();
+  console.log('Reloaded league view contains "Continue with Google":', reloadedLeagueHtml.includes('Continue with Google'));
+  if (reloadedLeagueHtml.includes('Continue with Google')) throw new Error('Failed to remove Continue with Google on reload!');
+
   // Test 4: Explicit Sign Out
   console.log('\n--- Test 4: Explicit Sign Out ---');
   await env2.context.handleSignOut();
@@ -124,7 +150,11 @@ async function run() {
   console.log('Header returns to Sign In / Join:', container4.includes('Sign In / Join'));
   if (!container4.includes('Sign In / Join')) throw new Error('Header failed to return to Sign In / Join after signout');
 
-  console.log('\n✓ ALL AUTH PERSISTENCE AND USERNAME TESTS PASSED CLEANLY!');
+  const signedOutLeagueHtml = env2.context.viewLeagues();
+  console.log('After sign out, league view contains "Continue with Google":', signedOutLeagueHtml.includes('Continue with Google'));
+  if (!signedOutLeagueHtml.includes('Continue with Google')) throw new Error('Expected Continue with Google when signed out');
+
+  console.log('\n✓ ALL AUTH PERSISTENCE AND LEAGUE TAB TESTS PASSED CLEANLY!');
 }
 
 run().catch(err => {

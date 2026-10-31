@@ -433,3 +433,4 @@ sw = re.sub(r"const CACHE_NAME = 'betbuddy-pwa-v\d+';", "const CACHE_NAME = 'bet
 with open('sw.js', 'w', encoding='utf-8') as f:
     f.write(sw)
 print("Updated sw.js to v72.")
+
