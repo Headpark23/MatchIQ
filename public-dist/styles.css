@@ -1721,19 +1721,22 @@ textarea.ctl { min-height: 96px; resize: vertical; }
     grid-template-columns: repeat(2, 1fr);
   }
   .welcome-hero-banner {
-    flex-direction: column;
-    text-align: center;
-    padding: 20px 18px;
+    flex-direction: row;
+    text-align: left;
+    padding: 14px 16px;
   }
   .welcome-badge-tag {
-    margin: 0 auto 10px auto;
+    margin: 0 0 6px 0;
+  }
+  .portal-features-dual {
+    grid-template-columns: 1fr !important;
   }
   .portal-hero-body {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: row;
+    text-align: left;
   }
   .portal-card-action {
-    justify-content: center;
+    justify-content: flex-end;
   }
 }
 
@@ -3752,5 +3755,111 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   .butler-bookie-grid {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+}
+
+/* Enhanced Full-Width Responsive Layout for Top Feature Cards */
+.portal-features-dual {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)) !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+
+.portal-features-dual .portal-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding: 16px 20px !important;
+  border-radius: 14px !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+}
+
+.portal-features-dual .portal-card-top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 12px !important;
+  width: 100% !important;
+}
+
+.portal-features-dual .portal-hero-body {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  text-align: left !important;
+  width: 100% !important;
+  margin-bottom: 0 !important;
+}
+
+.portal-features-dual .portal-icon-large {
+  font-size: 2rem !important;
+  padding: 10px !important;
+  border-radius: 12px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.portal-features-dual .portal-hero-text {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  text-align: left !important;
+}
+
+.portal-features-dual .portal-hero-heading {
+  margin: 0 0 4px 0 !important;
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  line-height: 1.25 !important;
+  text-align: left !important;
+}
+
+.portal-features-dual .portal-hero-desc {
+  margin: 0 !important;
+  font-size: 0.82rem !important;
+  color: #cbd5e1 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+}
+
+.portal-features-dual .portal-card-action {
+  flex-shrink: 0 !important;
+  border-top: none !important;
+  padding-top: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+.portal-features-dual .portal-cta-btn {
+  padding: 9px 18px !important;
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 580px) {
+  .portal-features-dual {
+    grid-template-columns: 1fr !important;
+  }
+  .portal-features-dual .portal-hero-body {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+  .portal-features-dual .portal-hero-text {
+    flex: 1 1 calc(100% - 64px) !important;
+  }
+  .portal-features-dual .portal-card-action {
+    width: 100% !important;
+    justify-content: flex-end !important;
+    margin-top: 6px !important;
   }
 }

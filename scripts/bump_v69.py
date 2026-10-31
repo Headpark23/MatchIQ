@@ -11,3 +11,4 @@ with open('app.js', 'w', encoding='utf-8') as f:
     f.write(text2)
 
 print("Bumped version to v69 in sw.js and app.js")
+

@@ -1294,8 +1294,8 @@ function renderWelcomeHero() {
       '</div>' +
     '</div>' +
 
-    '<!-- 2. Main Feature: Pick a Bet & Build Acca -->' +
-    '<div class="portal-grid">' +
+    '<!-- 2. Main Features: Acca Builder & Today\'s Best Value -->' +
+    '<div class="portal-grid portal-features-dual">' +
       '<a href="#/picks" class="portal-card portal-card-hero" style="text-decoration:none">' +
         '<div class="portal-card-hero-glow"></div>' +
         '<div class="portal-card-content">' +
@@ -1307,7 +1307,7 @@ function renderWelcomeHero() {
             '<div class="portal-icon-large">⚽🎯</div>' +
             '<div class="portal-hero-text">' +
               '<h2 class="portal-hero-heading">Pick a Bet &amp; Build Acca</h2>' +
-              '<p class="portal-hero-desc">Target £10–£1000 return across 2–6 legs with verified mathematical edge.</p>' +
+              '<p class="portal-hero-desc">Target £10–£1,000 return across 2–6 legs with verified statistical edge, live odds &amp; 1-click accumulator builder.</p>' +
             '</div>' +
             '<div class="portal-card-action">' +
               '<span class="btn primary portal-cta-btn">' +
@@ -1324,18 +1324,18 @@ function renderWelcomeHero() {
         '<div class="portal-card-hero-glow bv-glow"></div>' +
         '<div class="portal-card-content">' +
           '<div class="portal-card-top">' +
-            '<span class="portal-pill bv-highlight">🔥 High Mathematical Edge</span>' +
-            '<span class="portal-odds-badge">Single &middot; Double &middot; Treble &middot; 4-Fold</span>' +
+            '<span class="portal-pill bv-highlight">🔥 Highest Edge Today</span>' +
+            '<span class="portal-odds-badge">Single &bull; Double &bull; Treble &bull; 4-Fold</span>' +
           '</div>' +
           '<div class="portal-hero-body">' +
             '<div class="portal-icon-large">💎📈</div>' +
             '<div class="portal-hero-text">' +
               '<h2 class="portal-hero-heading">Today\'s Best Value Bet</h2>' +
-              '<p class="portal-hero-desc">The strongest mathematical edge across today\'s live bookmaker prices. View the top Value Single, Double, Treble, or 4-Fold Acca.</p>' +
+              '<p class="portal-hero-desc">Peak mathematical value against live UK bookies. View today\'s recommended Value Single, Double, Treble, or 4-Fold Acca.</p>' +
             '</div>' +
             '<div class="portal-card-action">' +
               '<button type="button" class="btn primary portal-cta-btn bv-cta-btn" onclick="event.stopPropagation(); openBestValueModal(\'single\');">' +
-                '<span>View Value Bets</span>' +
+                '<span>View Value</span>' +
                 '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
               '</button>' +
             '</div>' +
@@ -5545,7 +5545,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v69';
+const APP_VERSION = 'v70';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
