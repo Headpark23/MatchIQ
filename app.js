@@ -1895,8 +1895,76 @@ function viewMatch(id) {
   return html + '</section>';
 }
 
+let resultsSportFilter = 'football';
 let resultsFilter = 'settled';
+
+function renderMultiSportResults(sportKey) {
+  const sportMeta = {
+    tennis: { name: 'Tennis', icon: '🎾', desc: 'ATP, WTA & Grand Slam match predictions evaluated against official tour results.' },
+    golf: { name: 'Golf', icon: '⛳', desc: 'PGA Tour, DP World Tour & Major top-finish and match-up picks.' },
+    darts: { name: 'Darts', icon: '🎯', desc: 'PDC Premier League & World Championship match-winner predictions.' },
+    rugby: { name: 'Rugby', icon: '🏉', desc: 'Six Nations, Premiership & International Test match outcomes.' }
+  };
+  const meta = sportMeta[sportKey] || { name: sportKey, icon: '🏆', desc: 'Verified prediction results.' };
+  const multiData = (DATA.multiSport && DATA.multiSport.sports && DATA.multiSport.sports[sportKey]) || {};
+  const history = multiData.history || [];
+  const settled = history.filter(h => h.result === 'won' || h.result === 'lost');
+  const won = settled.filter(h => h.result === 'won');
+  const hitRate = settled.length ? Math.round((won.length / settled.length) * 100) : 0;
+
+  let sportTabs = '<div class="comp-bar" role="group" aria-label="Sport Selection" style="margin-bottom:14px;">' +
+    [['football', '⚽ Football'], ['tennis', '🎾 Tennis'], ['golf', '⛳ Golf'], ['darts', '🎯 Darts'], ['rugby', '🏉 Rugby']].map(([k, l]) =>
+      '<button type="button" data-sport-rfilter="' + k + '" aria-pressed="' + (resultsSportFilter === k) + '">' + esc(l) + '</button>'
+    ).join('') +
+  '</div>';
+
+  let html = '<section class="view"><h1 class="page-title">Results & performance</h1>' +
+    '<p class="page-sub">Every prediction Bet Buddy publishes is sealed before start time and scored once the result is confirmed. Genuine real-world results only.</p>' +
+    sportTabs;
+
+  // Headline card
+  const statusNote = settled.length < 10 ? 'early live tracking' : 'statistically tracking';
+  html += '<div class="results-lead-card card section" style="background:linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.95));border:1px solid rgba(255,255,255,0.1);padding:18px 20px;border-radius:12px;margin:16px 0;">' +
+    '<h2 style="font-size:20px;font-weight:700;margin:0 0 6px;color:#fff;">' + meta.icon + ' ' + meta.name + ': ' + settled.length + ' predictions settled so far (' + statusNote + ')</h2>' +
+    '<p style="margin:0;font-size:14.5px;color:var(--soft);">' + won.length + ' of ' + settled.length + ' picks won (' + hitRate + '% hit rate). ' + esc(meta.desc) + '</p>' +
+  '</div>';
+
+  // Stats tiles
+  html += '<div class="tiles section" style="margin-top:16px">' +
+    '<div class="tile"><div class="k">Settled predictions</div><div class="v">' + settled.length + '</div><div class="s">' + won.length + ' won • ' + (settled.length - won.length) + ' lost</div></div>' +
+    '<div class="tile"><div class="k">Win Rate</div><div class="v">' + (settled.length ? hitRate + '%' : '–') + '</div><div class="s">' + won.length + ' of ' + settled.length + ' landed</div></div>' +
+  '</div>';
+
+  // Prediction log rows
+  const logRows = history.map(h => {
+    const isWon = h.result === 'won';
+    const badge = '<span class="badge ' + (isWon ? 'won' : 'lost') + '">' + (isWon ? 'Won' : 'Lost') + '</span>';
+    const dateStr = h.date ? h.date.slice(0, 10) : 'Recent';
+    const priceStr = h.fractional || fmtOdds(h.odds);
+    return '<div class="log-row" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);">' +
+      '<div>' +
+        '<div style="font-size:12px;color:var(--soft);font-family:var(--mono);margin-bottom:2px;">' + esc(h.tournament || meta.name) + ' &middot; ' + esc(dateStr) + '</div>' +
+        '<div style="font-weight:700;color:#fff;font-size:14.5px;">' + esc(h.title) + '</div>' +
+        '<div style="font-size:13px;color:var(--cyan);margin-top:2px;">Pick: <b>' + esc(h.selection) + '</b> @ ' + esc(priceStr) + ' (' + esc(h.bookmaker || 'Best Price') + ')' + (h.score ? ' &middot; <span style="color:var(--soft)">Score: ' + esc(h.score) + '</span>' : '') + '</div>' +
+      '</div>' +
+      '<div>' + badge + '</div>' +
+    '</div>';
+  }).join('');
+
+  html += '<div class="section card" style="padding:0;margin-top:20px;">' +
+    '<div class="section-head" style="padding:16px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.06);">' +
+      '<h2 class="section-title">' + meta.icon + ' ' + meta.name + ' Verified Prediction History</h2>' +
+    '</div>' +
+    (logRows || '<p class="muted" style="padding:16px">No settled records yet.</p>') +
+  '</div>';
+
+  return html + '</section>';
+}
 function viewResults() {
+  if (resultsSportFilter && resultsSportFilter !== 'football') {
+    return renderMultiSportResults(resultsSportFilter);
+  }
+
   const allPerf = DATA.performance || {};
   const publicModel = !!(DATA.reliability || {}).public;  // public-derived model: every league, the Premier League included, uses its own backtest card
   const separate = compFilter !== 'ALL' && compFilter !== 'PL';
@@ -1916,7 +1984,14 @@ function viewResults() {
   const headlineText = settled.length + ' prediction' + (settled.length === 1 ? '' : 's') + ' settled so far; ' + headlineStatus;
   const hitRateSummary = res && res.n ? Math.round(res.pick_hit_rate * 100) + '% of match-result picks won (' + res.hits + ' of ' + res.n + ')' : 'No settled results in this competition yet';
 
-  let html = '<section class="view"><h1 class="page-title">Results & performance</h1><p class="page-sub">Every prediction Bet Buddy publishes is sealed before kick-off and scored once the result is confirmed. Nothing here is edited after the fact.</p>' + compBar() +
+  const sportResultsBar = '<div class="comp-bar" role="group" aria-label="Sport Selection" style="margin-bottom:14px;">' +
+    [['football', '⚽ Football'], ['tennis', '🎾 Tennis'], ['golf', '⛳ Golf'], ['darts', '🎯 Darts'], ['rugby', '🏉 Rugby']].map(([k, l]) =>
+      '<button type="button" data-sport-rfilter="' + k + '" aria-pressed="' + (resultsSportFilter === k) + '">' + esc(l) + '</button>'
+    ).join('') +
+  '</div>';
+
+  let html = '<section class="view"><h1 class="page-title">Results & performance</h1><p class="page-sub">Every prediction Bet Buddy publishes is sealed before kick-off and scored once the result is confirmed. Nothing here is edited after the fact.</p>' +
+    sportResultsBar + compBar() +
     (compFilter === 'ALL' ? '<div class="notice section">Scorecards are kept per competition and never pooled. The figures below are the Premier League; choose a competition above for another.</div>' + byCompetitionCards(allPerf) : '');
   if (LOAD_ERRORS.history) return html + errorPanel('history') + '</section>';
 
@@ -5251,6 +5326,7 @@ document.addEventListener('click', event => {
   else if (t.dataset.comp) { compFilter = t.dataset.comp; try { localStorage.setItem(COMP_KEY, compFilter); } catch (e) { /* ignore */ } render(); }
   else if (t.dataset.tab) { fixturesTab = t.dataset.tab; fixturesShowAll = false; render(); }
   else if (t.dataset.showall !== undefined) { fixturesShowAll = true; render(); }
+  else if (t.dataset.sportRfilter) { resultsSportFilter = t.dataset.sportRfilter; render(); }
   else if (t.dataset.rfilter) { resultsFilter = t.dataset.rfilter; render(); }
   else if (t.dataset.export === 'csv') exportDiaryCSV();
   else if (t.dataset.export === 'json') exportDiaryJSON();
@@ -5469,7 +5545,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v68';
+const APP_VERSION = 'v69';
 
 async function forceAppSync() {
   toast('Syncing Bet Buddy with latest cloud data... 🔄');
