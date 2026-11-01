@@ -1125,6 +1125,29 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   gap: 8px;
   margin: 16px 0;
 }
+.geo-tier-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.geo-tier-box .geo-tier-btn {
+  flex: 1;
+}
+.geo-tier-join {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  background: var(--cyan);
+  color: #000;
+}
+.geo-tier-join.joined {
+  background: rgba(6, 182, 212, 0.12);
+  color: var(--cyan);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+}
 .geo-tier-btn {
   background: var(--surface);
   border: 1px solid var(--line);

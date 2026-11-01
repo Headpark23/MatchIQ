@@ -3549,10 +3549,18 @@ function viewLeagues() {
 
   // Geo Tiers Bar
   const geoNavHtml = geoTiers.map(t => {
-    return '<button type="button" class="geo-tier-btn' + (t.id === activeLeagueId ? ' active' : '') + '" data-select-league="' + t.id + '">' +
-      '<span class="geo-tier-name">' + t.icon + ' ' + esc(typeof t.name === 'function' ? t.name() : t.name) + '</span>' +
-      '<span class="geo-tier-scope">' + t.scope + ' · ' + t.trophyName + '</span>' +
-    '</button>';
+    // Ladders are automatic: a tier is joined once the player's location covers it, so Join sends them to set it.
+    const joined = Boolean(ladderTierId(t.id, prof));
+    const part = { 'geo-country': 'country', 'geo-region': 'region', 'geo-town': 'town' }[t.id];
+    return '<div class="geo-tier-box">' +
+      '<button type="button" class="geo-tier-btn' + (t.id === activeLeagueId ? ' active' : '') + '" data-select-league="' + t.id + '">' +
+        '<span class="geo-tier-name">' + t.icon + ' ' + esc(typeof t.name === 'function' ? t.name() : t.name) + '</span>' +
+        '<span class="geo-tier-scope">' + t.scope + ' · ' + t.trophyName + '</span>' +
+      '</button>' +
+      (joined
+        ? '<span class="geo-tier-join joined">✓ Joined</span>'
+        : '<a href="#/more" data-select-more-tab="account" class="geo-tier-join" title="Add your ' + part + ' to your profile to join this ladder">Join</a>') +
+    '</div>';
   }).join('');
 
   // Custom Buddy Leagues Tabs
