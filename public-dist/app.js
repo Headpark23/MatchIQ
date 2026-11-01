@@ -1531,23 +1531,32 @@ function getTodayBestValuePicks() {
   });
   if (!pool || !pool.length) return null;
 
-  // STRICT EVIDENCE GATE: Pick MUST have validated model evidence and live bookmaker price
-  const qualified = pool.filter(leg => {
-    const isValidated = leg.support === 'validated' || (leg.evidence && leg.evidence.status === 'validated');
-    const isLive = leg.priceSource === 'live';
-    const ev = (Number(leg.odds) * Number(leg.p)) - 1;
-    return isValidated && isLive && ev >= 0.05;
-  }).map(leg => {
-    const ev = (Number(leg.odds) * Number(leg.p)) - 1;
-    return { ...leg, ev };
-  });
-
+  // Tiered selection so the feature never goes blank while fixtures exist:
+  //   verified - validated evidence + live bookmaker price + at least 5% edge (strictest)
+  //   live     - live bookmaker price + at least 5% edge, evidence still provisional
+  //   model    - no fresh bookmaker prices at all: the model's most likely picks at indicative prices
+  const withEv = pool.map(leg => ({ ...leg, ev: (Number(leg.odds) * Number(leg.p)) - 1 }));
+  const isValidated = leg => leg.support === 'validated' || (leg.evidence && leg.evidence.status === 'validated');
+  let mode = 'verified';
+  let qualified = withEv.filter(leg => isValidated(leg) && leg.priceSource === 'live' && leg.ev >= 0.05);
+  if (!qualified.length) {
+    mode = 'live';
+    qualified = withEv.filter(leg => leg.priceSource === 'live' && leg.ev >= 0.05);
+  }
+  if (!qualified.length) {
+    mode = 'model';
+    qualified = withEv.filter(leg => leg.p >= 0.5);
+  }
   if (!qualified.length) return null;
 
   const todayStr = new Date().toISOString().slice(0, 10);
   const todayPool = qualified.filter(l => l.fixture && l.fixture.kickoff_utc && l.fixture.kickoff_utc.slice(0, 10) === todayStr);
   const candidatePool = todayPool.length >= 1 ? todayPool : qualified;
-  candidatePool.sort((a, b) => b.ev - a.ev);
+  if (mode === 'model') {
+    candidatePool.sort((a, b) => (isValidated(b) - isValidated(a)) || (b.p - a.p));
+  } else {
+    candidatePool.sort((a, b) => b.ev - a.ev);
+  }
 
   const unique = [];
   const seenMatches = new Set();
@@ -1568,6 +1577,7 @@ function getTodayBestValuePicks() {
   }
 
   return {
+    mode,
     single: formatType('Single', unique.slice(0, 1)),
     double: formatType('Double', unique.slice(0, 2)),
     treble: formatType('Treble', unique.slice(0, 3)),
@@ -1638,7 +1648,9 @@ function renderBestValueModalContent() {
           '<div class="bv-leg-info">' +
             '<div class="bv-leg-match">' + esc(matchText) + '</div>' +
             '<div class="bv-leg-sel">' + esc(l.label) + '</div>' +
-            '<div class="bv-leg-ev-badge">+' + evPct + '% edge vs ' + esc(l.bookmaker || 'market') + '</div>' +
+            (data.mode === 'model'
+              ? '<div class="bv-leg-ev-badge">Model pick &bull; indicative price</div>'
+              : '<div class="bv-leg-ev-badge">+' + evPct + '% edge vs ' + esc(l.bookmaker || 'market') + '</div>') +
           '</div>' +
         '</div>' +
         '<div class="bv-leg-right">' +
@@ -1651,7 +1663,7 @@ function renderBestValueModalContent() {
 
   const statsHtml = '<div class="bv-summary-card">' +
     '<div class="bv-sum-col"><span>Total Odds</span><b class="mono">' + fmtOdds(totalOdds) + '</b></div>' +
-    '<div class="bv-sum-col"><span>Est. Edge</span><b class="pos">+' + Math.round(avgEv * 100) + '% EV</b></div>' +
+    '<div class="bv-sum-col"><span>Est. Edge</span>' + (data.mode === 'model' ? '<b class="mono">n/a</b>' : '<b class="pos">+' + Math.round(avgEv * 100) + '% EV</b>') + '</div>' +
     '<div class="bv-sum-col"><span>Win Chance</span><b class="mono">' + (estProb >= 0.1 ? Math.round(estProb * 100) : (estProb * 100).toFixed(1)) + '%</b></div>' +
     '<div class="bv-sum-col"><span>Returns (£' + stake.toFixed(2) + ')</span><b class="mono emerald">£' + potRet + '</b></div>' +
   '</div>';
@@ -1665,7 +1677,16 @@ function renderBestValueModalContent() {
     '</button>' +
   '</div>';
 
-  body.innerHTML = tabsHtml + statsHtml + legsHtml + actionsHtml;
+  const noteText = data.mode === 'model'
+    ? 'Live bookmaker prices are not fresh right now, so these are the model\'s most likely picks at indicative prices. Check the real price in your bookmaker app; the edge cannot be confirmed until live prices refresh.'
+    : data.mode === 'live'
+      ? 'Live price edge found, but the backtest evidence for these markets is still provisional rather than fully validated.'
+      : '';
+  const noteHtml = noteText
+    ? '<p class="muted" style="font-size:12.5px;line-height:1.5;margin:0 0 12px;">' + esc(noteText) + '</p>'
+    : '';
+
+  body.innerHTML = tabsHtml + noteHtml + statsHtml + legsHtml + actionsHtml;
 }
 
 function openSlipCardFromBestValue(tier) {
@@ -1704,7 +1725,9 @@ function addBestValueToDiary(tier) {
       p: l.p,
       fair: calc.formatFractionalOdds(1 / l.p),
       rec: 'best_value',
-      notes: "Today\'s Best Value Bet (" + Math.round(l.ev * 100) + "% edge vs " + (l.bookmaker || 'bookmaker') + ")"
+      notes: data.mode === 'model'
+        ? "Today\'s Best Value Bet (model pick, indicative price)"
+        : "Today\'s Best Value Bet (" + Math.round(l.ev * 100) + "% edge vs " + (l.bookmaker || 'bookmaker') + ")"
     });
   } else {
     openDiary({});
