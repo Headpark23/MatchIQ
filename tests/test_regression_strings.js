@@ -28,6 +28,8 @@ const checks = [
   ['match page leads with a dynamic Top Six and keeps every market reachable', /calc\.topSix\(/.test(app) && /Every market and line/.test(app) && !/Every market<\/h2>/.test(app)],
   ['Best Value scans every selection, not only the Top Six', /calc\.bestValue\(/.test(app) && /function bestValue\(/.test(calcSrc)],
   ['Most Likely and Best Value both feed the Bet Diary', /rec: 'most_likely'/.test(app) && /rec: 'best_value'/.test(app)],
+  ['no "value bet / edge / target return" claims in user-facing copy', !/Today\'s Best Value Bet|% edge vs|Set Target Return|aim to win|Best Value &amp; Target/.test(app)],
+  ['age gate, play-safe and terms exist in the page', (() => { const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8'); return /id="age-gate"/.test(html) && /id="safe-modal"/.test(html) && /GAMSTOP/i.test(html) && /id="terms-modal"/.test(html); })()],
   ['non-validated estimates are labelled provisional', Object.values(predictions).every(p => p.markets.result.tier === 'T1' ? p.markets.result.evidence.status === 'validated' : p.markets.result.evidence.status === 'provisional')],
 ];
 

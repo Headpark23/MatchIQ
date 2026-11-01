@@ -3,7 +3,7 @@ name: MatchIQ fixture, prediction and history refresh
 # owner merges it. Run it manually on a branch with "Run workflow" to test.
 on:
   schedule:
-    - cron: '40 */2 * * *'   # every 6 hours: 4 football-data.org requests a day, far under 10/minute
+    - cron: '40 */2 * * *'   # every 2 hours: 12 runs a day, each a few football-data.org requests (limit 10/minute)
   workflow_dispatch:
 permissions:
   contents: write

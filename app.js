@@ -280,7 +280,7 @@ function wayBar(sels, pickKey, names, compact, cls = '') {
 
 // ------------------------------------------------------------ Most Likely / Best Value / No Bet
 const PRICE_STORAGE_KEY = 'matchiq_seen_prices_v1';
-const REC_LABEL = { most_likely: 'Most Likely pick', best_value: 'Best Value pick' };
+const REC_LABEL = { most_likely: 'Most Likely pick', best_value: 'Price check pick' };
 
 function readPrices() { try { const v = JSON.parse(localStorage.getItem(PRICE_STORAGE_KEY) || '{}'); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } }
 /* Automatic prices (data/odds.json) are defaults only while fresh; anything the user typed wins. */
@@ -998,7 +998,7 @@ function slipCard(slip, idx, stake) {
     : ('<div class="slip-trust-bar negative">⚠️ <b>' + chance + '% chance to win.</b> Expect to lose about ' + evPence + 'p per £1 on average.</div>');
 
   return '<article class="slip' + (primary ? ' primary' : '') + '">' + todayBadge +
-    '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? '💎 Best Value &amp; Target Match (' + slip.legs.length + '-Leg Acca)' : 'Option ' + (idx + 1) + ' Combination (' + slip.legs.length + '-Leg Acca)') + ' ' + jargonTip('acca') + '</div>' +
+    '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? '💎 Highest model estimate (' + slip.legs.length + '-Leg Acca)' : 'Option ' + (idx + 1) + ' Combination (' + slip.legs.length + '-Leg Acca)') + ' ' + jargonTip('acca') + '</div>' +
     '<div class="slip-odds mono">' + esc(mainOdds) + '</div></div>' +
     '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every bet lands</small></div></div>' +
     trustBadge +
@@ -1150,7 +1150,7 @@ function getAccaVolatility(slip, win) {
   if (!slip || !slip.odds) {
     return {
       kicker: 'Ready to Calibrate',
-      desc: 'Select your target return and legs to gauge acca volatility.',
+      desc: 'Pick your legs and stake to see how risky the accumulator is.',
       badgeClass: 'acca-volatility-calibrating',
       svg: '<circle cx="18" cy="18" r="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="4 3"/>'
     };
@@ -1372,8 +1372,8 @@ function renderWelcomeHero() {
         '<h3><span>👋</span> Welcome to Bet Buddy Sports Intelligence</h3>' +
         '<div class="onboarding-steps">' +
           '<div class="onboarding-step-item"><span class="onboarding-step-num">1</span><div><b>Pick Your Slate</b><span>Choose today\'s games or the 7-day slate.</span></div></div>' +
-          '<div class="onboarding-step-item"><span class="onboarding-step-num">2</span><div><b>Set Target Return</b><span>Enter stake & how much you aim to win.</span></div></div>' +
-          '<div class="onboarding-step-item"><span class="onboarding-step-num">3</span><div><b>Review Model Acca</b><span>Check mathematical probability & expected value.</span></div></div>' +
+          '<div class="onboarding-step-item"><span class="onboarding-step-num">2</span><div><b>Set Your Stake</b><span>Choose a stake you can afford to lose.</span></div></div>' +
+          '<div class="onboarding-step-item"><span class="onboarding-step-num">3</span><div><b>Review the Risk</b><span>Check the model probability and how often accas like this lose.</span></div></div>' +
         '</div>' +
         '<button type="button" class="btn small primary" onclick="dismissOnboarding()" style="min-height:40px;">Got It, Let\'s Go ➔</button>' +
       '</div>';
@@ -1437,12 +1437,12 @@ function renderWelcomeHero() {
           '<div class="portal-hero-body">' +
             '<div class="portal-icon-large">💎📈</div>' +
             '<div class="portal-hero-text">' +
-              '<h2 class="portal-hero-heading">Today\'s Best Value Bet</h2>' +
-              '<p class="portal-hero-desc">The biggest gap between the model&rsquo;s estimate and recent UK bookie prices. View today\'s recommended Value Single, Double, Treble, or 4-Fold Acca.</p>' +
+              '<h2 class="portal-hero-heading">Today\'s Top Model Picks</h2>' +
+              '<p class="portal-hero-desc">The biggest gap between the model&rsquo;s estimate and recent UK bookie prices. See today\'s top model picks as a single, double, treble or 4-fold. Information only, not a recommendation.</p>' +
             '</div>' +
             '<div class="portal-card-action">' +
               '<button type="button" class="btn primary portal-cta-btn bv-cta-btn" onclick="event.stopPropagation(); openBestValueModal(\'single\');">' +
-                '<span>View Value</span>' +
+                '<span>View Picks</span>' +
                 '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
               '</button>' +
             '</div>' +
@@ -1675,7 +1675,7 @@ function renderBestValueModalContent() {
             '<div class="bv-leg-sel">' + esc(l.label) + '</div>' +
             (data.mode === 'model'
               ? '<div class="bv-leg-ev-badge">Model pick &bull; indicative price</div>'
-              : '<div class="bv-leg-ev-badge">+' + evPct + '% edge vs ' + esc(l.bookmaker || 'market') + '</div>') +
+              : '<div class="bv-leg-ev-badge">+' + evPct + '% above ' + esc(l.bookmaker || 'market') + ' price (estimate)</div>') +
           '</div>' +
         '</div>' +
         '<div class="bv-leg-right">' +
@@ -1703,9 +1703,9 @@ function renderBestValueModalContent() {
   '</div>';
 
   const noteText = data.mode === 'model'
-    ? 'Live bookmaker prices are not fresh right now, so these are the model\'s most likely picks at indicative prices. Check the real price in your bookmaker app; the edge cannot be confirmed until live prices refresh.'
+    ? 'Live bookmaker prices are not fresh right now, so these are the model\'s most likely picks at indicative prices. Check the real price in your bookmaker app; nothing here can be confirmed until live prices refresh.'
     : data.mode === 'live'
-      ? 'Live price edge found, but the backtest evidence for these markets is still provisional rather than fully validated.'
+      ? 'The model estimate is above the bookmaker price here, but the backtest evidence for these markets is still provisional. A gap against a price is not proof of value, and no bet is certain.'
       : '';
   const noteHtml = noteText
     ? '<p class="muted" style="font-size:12.5px;line-height:1.5;margin:0 0 12px;">' + esc(noteText) + '</p>'
@@ -1751,8 +1751,8 @@ function addBestValueToDiary(tier) {
       fair: calc.formatFractionalOdds(1 / l.p),
       rec: 'best_value',
       notes: data.mode === 'model'
-        ? "Today\'s Best Value Bet (model pick, indicative price)"
-        : "Today\'s Best Value Bet (" + Math.round(l.ev * 100) + "% edge vs " + (l.bookmaker || 'bookmaker') + ")"
+        ? "Top model pick (indicative price, not a recommendation)"
+        : "Top model pick (model estimate " + Math.round(l.ev * 100) + "% above the " + (l.bookmaker || 'bookmaker') + " price; not a recommendation)"
     });
   } else {
     openDiary({});
@@ -1768,7 +1768,7 @@ function addBestValueToDiary(tier) {
     if ($('modal-stake-input')) $('modal-stake-input').value = Number((builderState && builderState.stake) || 10).toFixed(2);
     if ($('modal-odds-input')) $('modal-odds-input').value = fmtOdds(tierData.odds).replace(/[≈~]/g, '');
     if ($('modal-origin-select')) $('modal-origin-select').value = 'matchiq';
-    if ($('modal-notes-input')) $('modal-notes-input').value = "Today\'s Best Value " + tierData.type + " (avg +" + Math.round(tierData.avgEv * 100) + "% expected value).";
+    if ($('modal-notes-input')) $('modal-notes-input').value = "Top model picks, " + tierData.type + " (model estimate avg " + Math.round(tierData.avgEv * 100) + "% above price; not a recommendation).";
     updateModalPnlPreview();
   }
 }
@@ -2250,7 +2250,7 @@ function scorecard(perf) {
   const ml = perf.most_likely || { n: 0 };
   const byMarket = Object.entries(perf.most_likely_by_market || {});
   const dec = perf.decisions || {};
-  const labels = { most_likely: 'Most Likely picks', best_value: 'Best Value picks', other: 'Other bets' };
+  const labels = { most_likely: 'Most Likely picks', best_value: 'Price check picks', other: 'Other bets' };
   const signed = v => (v >= 0 ? '+' : '−') + '£' + Math.abs(v).toFixed(2);
   const bets = diaryByRecommendation().map(g => statCard(labels[g.key], g.n ? '' : '<span class="badge pending">none yet</span>',
     [['Bets', g.n], ['Won–lost–void', g.won + '–' + g.lost + '–' + g.void], ['Settled stake', '£' + g.staked.toFixed(2)], ['Profit', signed(g.profit), g.profit > 0 ? 'pos' : g.profit < 0 ? 'neg' : ''], ['ROI', g.settled ? g.roi.toFixed(0) + '%' : '—']])).join('');
@@ -5040,7 +5040,7 @@ function viewCommercial() {
       '<div class="card commercial-pitch-card">' +
         '<div class="portal-card-top"><span class="portal-pill">🎯 Outbound Links</span></div>' +
         '<h3 class="card-title" style="margin-top:8px">Bookmaker Deep-Linking &amp; Slip Notes</h3>' +
-        '<p class="muted" style="font-size:13px;line-height:1.5">Direct outbound links into licensed UK sportsbooks (Sky Bet, Bet365, William Hill, Paddy Power, Betfair, Coral, Ladbrokes) with tracked affiliate attribution.</p>' +
+        '<p class="muted" style="font-size:13px;line-height:1.5">Direct outbound links into licensed UK sportsbooks (Sky Bet, Bet365, William Hill, Paddy Power, Betfair, Coral, Ladbrokes).</p>' +
       '</div>' +
     '</div>' +
 
@@ -6558,7 +6558,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v103';
+const APP_VERSION = 'v104';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {

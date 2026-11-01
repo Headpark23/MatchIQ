@@ -116,7 +116,7 @@
 <footer class="site-foot">
   <div>Statistical estimates for information and entertainment. No prediction is guaranteed, and a high probability is not the same as good betting value. Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0) and openfootball (CC0). Bookmaker prices: The Odds API.</div>
   <div class="copyright-bar">
-    <span>&copy; 2026 Bet Buddy <b id="footer-app-version" style="color:var(--cyan)">v103</b> &middot; Martin White &amp; Chris Faulds</span>
+    <span>&copy; 2026 Bet Buddy <b id="footer-app-version" style="color:var(--cyan)">v104</b> &middot; Martin White &amp; Chris Faulds</span>
         <button type="button" class="btn small subtle-share-btn" id="footer-share-btn" data-share-app title="Share Bet Buddy with a friend">
       <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       <span>Share App</span>
@@ -129,8 +129,9 @@
   <div class="compliance-bar">
     <span class="compliance-seal" title="18+ Strictly Adults Only">18+</span>
     <span>Please Gamble Responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener" class="compliance-link">BeGambleAware.org</a> · <a href="https://www.gamcare.org.uk" target="_blank" rel="noopener" class="compliance-link">GamCare</a></span>
-    <span>Take Time To Think</span>
+    <span><button type="button" class="compliance-link-btn" data-open-legal="safe-modal">Play safe &amp; get help</button></span>
     <span><button type="button" class="compliance-link-btn" id="btn-open-gdpr">Privacy & GDPR</button></span>
+    <span><button type="button" class="compliance-link-btn" data-open-legal="terms-modal">Terms</button></span>
     <span style="margin-left:auto"><a href="#/commercial" class="compliance-link">Commercial &amp; Sponsorship Inquiries</a></span>
   </div>
 </footer>
@@ -240,7 +241,7 @@
 <script src="bet_builder.js?v=84"></script>
 <script src="settlement.js?v=97"></script>
 <script src="league_sync.js?v=97"></script>
-<script src="app.js?v=103"></script>
+<script src="app.js?v=104"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>
@@ -427,7 +428,7 @@
     <div class="modal-head">
       <div>
         <div class="slip-card-badge" style="color:var(--emerald);">💎 MATHEMATICAL EDGE &middot; LIVE PRICES</div>
-        <h2 id="best-value-title" class="slip-card-heading">Today's Best Value Bets</h2>
+        <h2 id="best-value-title" class="slip-card-heading">Today's Top Model Picks</h2>
       </div>
       <button type="button" class="icon-btn" onclick="closeBestValueModal()" aria-label="Close">&times;</button>
     </div>
@@ -725,7 +726,7 @@
         </a>
       </div>
       <div id="bookie-legs-drawer" hidden></div>
-      <p class="section-note" style="margin-top:14px;font-size:11.5px;color:var(--dim)">18+ GambleAware.org. Bet Buddy routes via verified bookmaker gateways. We may earn commission at zero extra cost to you.</p>
+      <p class="section-note" style="margin-top:14px;font-size:11.5px;color:var(--dim)">18+ GambleAware.org. These are links to third-party UK bookmakers. Bet Buddy does not place bets. If we ever earn commission from a link, we will say so next to it.</p>
     </div>
   </div>
 </div>
@@ -816,6 +817,89 @@
   </div>
 </div>
 
+<!-- 18+ age confirmation (blocks the app until confirmed) -->
+<div class="modal-backdrop" id="age-gate" style="z-index:3000;background:#060d19" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="age-gate-title" style="max-width:440px;padding:24px;text-align:center">
+    <div class="compliance-seal" style="margin:0 auto 12px">18+</div>
+    <h2 id="age-gate-title" style="margin:0 0 8px;font-size:1.3rem">Are you 18 or over?</h2>
+    <p id="age-gate-text" style="font-size:14px;line-height:1.6;color:var(--soft)">Bet Buddy is football information and entertainment for adults. It shows statistical estimates, not tips, and nothing is guaranteed. Gambling can be addictive; only stake what you can afford to lose.</p>
+    <div class="btn-row" id="age-gate-buttons" style="justify-content:center;margin-top:16px">
+      <button type="button" class="btn primary" id="age-yes">I am 18 or over</button>
+      <button type="button" class="btn" id="age-no">I am under 18</button>
+    </div>
+    <p style="font-size:12px;margin-top:14px;color:var(--dim)"><a href="https://www.begambleaware.org" target="_blank" rel="noopener" class="compliance-link">BeGambleAware.org</a> &middot; <a href="https://www.gamcare.org.uk" target="_blank" rel="noopener" class="compliance-link">GamCare</a> &middot; <a href="https://www.gamstop.co.uk" target="_blank" rel="noopener" class="compliance-link">GAMSTOP</a></p>
+  </div>
+</div>
+
+<!-- Play safe -->
+<div class="modal-backdrop" id="safe-modal" hidden>
+  <div class="modal gdpr-modal-box" role="dialog" aria-modal="true" aria-labelledby="safe-modal-title">
+    <div class="modal-head">
+      <h2 id="safe-modal-title" style="margin:0;font-size:1.25rem">Play safe</h2>
+      <button type="button" class="icon-btn" data-close-legal aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body gdpr-body-content">
+      <div class="gdpr-section"><h3>Bet Buddy does not place bets</h3><p>We show statistical estimates for information and entertainment. A high probability is not a safe bet, and no result is ever guaranteed. Most accumulators lose.</p></div>
+      <div class="gdpr-section"><h3>Keep it in check</h3>
+        <ul class="gdpr-list">
+          <li>Only bet what you can afford to lose. Never chase losses.</li>
+          <li>Set deposit and time limits with your bookmaker before you start.</li>
+          <li>Take regular breaks. Do not bet when tired, upset or drinking.</li>
+          <li>You must be 18 or over to gamble in the UK.</li>
+        </ul></div>
+      <div class="gdpr-section"><h3>Need help or a break?</h3>
+        <ul class="gdpr-list">
+          <li><b>National Gambling Helpline (GamCare):</b> 0808 8020 133, free, 24 hours. <a href="https://www.gamcare.org.uk" target="_blank" rel="noopener" class="compliance-link">gamcare.org.uk</a></li>
+          <li><b>BeGambleAware:</b> <a href="https://www.begambleaware.org" target="_blank" rel="noopener" class="compliance-link">begambleaware.org</a></li>
+          <li><b>GAMSTOP</b> (free self-exclusion from all UK licensed online gambling): <a href="https://www.gamstop.co.uk" target="_blank" rel="noopener" class="compliance-link">gamstop.co.uk</a></li>
+        </ul></div>
+      <button type="button" class="btn primary full-width" data-close-legal style="margin-top:16px">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Terms of use -->
+<div class="modal-backdrop" id="terms-modal" hidden>
+  <div class="modal gdpr-modal-box" role="dialog" aria-modal="true" aria-labelledby="terms-modal-title">
+    <div class="modal-head">
+      <h2 id="terms-modal-title" style="margin:0;font-size:1.25rem">Terms of use</h2>
+      <button type="button" class="icon-btn" data-close-legal aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body gdpr-body-content">
+      <div class="gdpr-section"><h3>1. Who can use Bet Buddy</h3><p>You must be 18 or over. Bet Buddy is intended for users in the United Kingdom.</p></div>
+      <div class="gdpr-section"><h3>2. Information only</h3><p>Everything shown (probabilities, fair odds, rankings, accumulator calculations) is a statistical estimate for information and entertainment. It is not betting, financial or professional advice, and it is not a tip or recommendation. Predictions can be wrong and no outcome is guaranteed. Each market is labelled with how much evidence supports it; many markets have no proven edge over the league average.</p></div>
+      <div class="gdpr-section"><h3>3. No bets are taken</h3><p>Bet Buddy is not a bookmaker and does not take or place bets. Bookmaker prices shown may be out of date or estimated; always check the price with your bookmaker. Links to bookmakers lead to third-party sites with their own terms. You are responsible for your own betting decisions.</p></div>
+      <div class="gdpr-section"><h3>4. Buddy Leagues</h3><p>Leagues are free, points-based games between friends with no cash prizes. Handles must not be offensive or impersonate others. We may remove leagues, handles or accounts that break these terms.</p></div>
+      <div class="gdpr-section"><h3>5. Liability</h3><p>Bet Buddy is provided as is. To the extent the law allows, we are not liable for any loss arising from use of the information shown. Nothing here limits liability that cannot be limited by law.</p></div>
+      <div class="gdpr-section"><h3>6. Contact</h3><p>Questions: <a href="mailto:octopigardens@gmail.com" class="compliance-link">octopigardens@gmail.com</a></p></div>
+      <button type="button" class="btn primary full-width" data-close-legal style="margin-top:16px">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY = 'betbuddy_age_ok_v1', gate = document.getElementById('age-gate'), ok = false;
+  try { ok = localStorage.getItem(KEY) === '1'; } catch (e) {}
+  if (!ok) { gate.hidden = false; }
+  document.getElementById('age-yes').addEventListener('click', function () {
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    gate.hidden = true;
+  });
+  document.getElementById('age-no').addEventListener('click', function () {
+    document.getElementById('age-gate-title').textContent = 'Sorry, you cannot use Bet Buddy';
+    document.getElementById('age-gate-text').textContent = 'You must be 18 or over. If gambling is a worry for you or someone you know, free help is available from BeGambleAware and GamCare.';
+    document.getElementById('age-gate-buttons').hidden = true;
+  });
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest ? e.target.closest('[data-open-legal],[data-close-legal]') : null;
+    if (!el) return;
+    if (el.hasAttribute('data-open-legal')) document.getElementById(el.getAttribute('data-open-legal')).hidden = false;
+    else { document.getElementById('safe-modal').hidden = true; document.getElementById('terms-modal').hidden = true; }
+  });
+})();
+</script>
+
 <!-- Privacy & UK GDPR Policy Modal -->
 <div class="modal-backdrop" id="gdpr-modal" hidden>
   <div class="modal gdpr-modal-box" role="dialog" aria-modal="true" aria-labelledby="gdpr-modal-title">
@@ -828,28 +912,28 @@
     </div>
     <div class="modal-body gdpr-body-content">
       <div class="gdpr-section">
-        <h3>1. Data Minimisation &amp; Local Storage Architecture</h3>
-        <p>Bet Buddy is built on a <b>Privacy-by-Design</b> principle. Your Bet Diary, accumulator slips, private custom odds, and settings are stored locally on your device via browser <code>localStorage</code>. We do not transmit or store your personal betting slips on remote proprietary databases without your explicit permission.</p>
+        <h3>1. What we store and where</h3>
+        <p>Your Bet Diary, accumulator slips, custom odds and settings are stored on your device in browser <code>localStorage</code>. If you sign in with Google and use Buddy Leagues or cloud sync, we also store in Google Firebase (Firestore, Europe): your gamertag and avatar, your Google account ID, optional town/county/country, league memberships, league bets and, if you turn it on, your cloud diary. Your Google email address is used to sign you in and is not shown to other players. Other signed-in players can see your gamertag, avatar and the location fields you set.</p>
       </div>
       <div class="gdpr-section">
-        <h3>2. No Third-Party Tracking Cookies</h3>
-        <p>We do not operate advertising tracking pixels or third-party behavioral analytics that track you across the internet. Essential operational state (such as fractional/decimal preferences and competition filters) is maintained client-side only.</p>
+        <h3>2. Third parties and cookies</h3>
+        <p>We do not run advertising trackers or cross-site analytics. The app loads scripts and fonts from Google (Firebase and Google Fonts), so Google receives your IP address when you use the app. If affiliate links are added in future, bookmakers may set their own cookies when you visit them, and those links will be clearly labelled.</p>
       </div>
       <div class="gdpr-section">
-        <h3>3. Optional Google Authentication</h3>
-        <p>Signing in with Google is optional. We only access your basic public profile (display name and email address) to synchronize your Buddy League gamertag. You can continue using Bet Buddy 100% anonymously at any time.</p>
+        <h3>3. Optional Google sign-in</h3>
+        <p>Signing in with Google is optional. We receive your name and email from Google to create your account, and you can use Bet Buddy without signing in. The lawful basis is your consent (sign-in) and our legitimate interest in running the service. We keep account data until you ask us to delete it.</p>
       </div>
       <div class="gdpr-section">
         <h3>4. Your Rights Under UK GDPR (Articles 15–20)</h3>
         <ul class="gdpr-list">
           <li><b>Right to Data Portability:</b> You can export your full Bet Diary at any time in open CSV or JSON format using the Export buttons in the Bet Diary.</li>
-          <li><b>Right to Erasure ("Right to be Forgotten"):</b> Tap "Clear Diary" in the Bet Diary to permanently delete every stored bet from your device instantly.</li>
+          <li><b>Right to Erasure:</b> "Clear Diary" deletes your device diary instantly. To delete your account and cloud data (profile, gamertag, league records), email octopigardens@gmail.com from your sign-in address and we will erase it. An in-app delete button is planned.</li>
           <li><b>Right of Rectification:</b> Update your username or correct any bet entries directly inside the app.</li>
         </ul>
       </div>
       <div class="gdpr-section">
         <h3>5. External Bookmaker Outbound Links</h3>
-        <p>When you choose to click "Place Bet" or visit an external licensed bookmaker (such as bet365, Sky Bet, Paddy Power, Ladbrokes, Coral, William Hill, or Betfair), you leave Bet Buddy. Any data processed on bookmaker platforms is governed by their respective UKGC licenses and privacy policies. Bet Buddy may receive affiliate commissions from qualifying bookmaker referrals at zero cost to you.</p>
+        <p>When you choose to click "Place Bet" or visit an external licensed bookmaker (such as bet365, Sky Bet, Paddy Power, Ladbrokes, Coral, William Hill, or Betfair), you leave Bet Buddy. Any data processed on bookmaker platforms is governed by their respective UKGC licenses and privacy policies. If Bet Buddy ever earns commission from a bookmaker link, that link will be labelled.</p>
       </div>
       <div class="gdpr-section">
         <h3>6. Data Controllers &amp; Contact</h3>

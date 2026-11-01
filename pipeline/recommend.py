@@ -83,7 +83,7 @@ def candidates(markets, reliability, validation=None):
         for s in btts["selections"]:
             league = btts.get("league_p")
             league = None if league is None else (league if s["key"] == "yes" else 1 - league)
-            credible = s["p"] if league is None else (blend_n(market) * s["p"] + SHRINK_WEIGHT * league) / (blend_n(market) + SHRINK_WEIGHT)
+            credible = s["p"] if league is None else (blend_n("btts") * s["p"] + SHRINK_WEIGHT * league) / (blend_n("btts") + SHRINK_WEIGHT)
             out.append({"market": "btts", "key": s["key"], "label": s["label"], "p": s["p"], "credible_p": round(credible, 4), "n": blend_n("btts"),
                         "status": btts["evidence"]["status"], "strength": btts["evidence"]["strength"],
                         "basis": basis_n("btts")})
