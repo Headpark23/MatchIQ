@@ -4,7 +4,7 @@
   "description": "Server-side league scoring and regional ladders for Bet Buddy",
   "main": "index.js",
   "engines": {
-    "node": "20"
+    "node": "22"
   },
   "scripts": {
     "test": "node test/scoring.test.js"

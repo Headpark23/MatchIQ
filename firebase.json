@@ -5,7 +5,7 @@
   },
   "functions": {
     "source": "functions",
-    "runtime": "nodejs20",
+    "runtime": "nodejs22",
     "predeploy": ["node scripts/sync_functions_shared.js"],
     "ignore": ["node_modules", "test", ".gitignore"]
   },
