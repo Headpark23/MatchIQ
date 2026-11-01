@@ -1,7 +1,7 @@
 // Bet Buddy Progressive Web App Service Worker (v70)
 // Network-first for shell code & data, cache-first for images/fonts, instant offline fallback
 
-const CACHE_NAME = 'betbuddy-pwa-v102';
+const CACHE_NAME = 'betbuddy-pwa-v103';
 
 const PRECACHE_ASSETS = [
   './',
@@ -68,7 +68,8 @@ self.addEventListener('fetch', event => {
   if (isCodeOrData) {
     // Network first: always fetch freshest live deployment, update cache, fallback to cache if offline
     event.respondWith(
-      fetch(event.request)
+      // GitHub Pages sends max-age=600, so revalidate every time or phones keep serving the old build.
+      fetch(event.request, { cache: 'no-cache' })
         .then(response => {
           if (response && response.ok) {
             const clone = response.clone();
