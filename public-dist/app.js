@@ -3473,13 +3473,14 @@ function viewLeagues() {
     const ladder = tierId ? getLadder(activeLeagueFreq + '__' + tierId) : null;
     const entries = (ladder && ladder.key === leagueDocs.currentPeriodKey(activeLeagueFreq) && ladder.entries) || [];
     allMembers = entries.map(e => Object.assign({}, e, e.uid === authUser.uid ? { isYou: true } : {}));
-    if (!allMembers.some(m => m.isYou) && uStats.settled > 0) allMembers.push(Object.assign({}, userEntry, { outsideTop: true }));
+    // Always list the player on a ladder their location puts them on, even before their first settled league bet.
+    if (tierId && !allMembers.some(m => m.isYou)) allMembers.push(Object.assign({}, userEntry, { outsideTop: true, unranked: !(uStats.settled > 0) }));
     if (!tierId) {
       ladderNotice = 'Add your ' + ({ 'geo-country': 'country', 'geo-region': 'region', 'geo-town': 'town' }[currentLeague.id]) + ' to your profile to join this ladder. <a href="#/more" data-select-more-tab="account" style="color:var(--cyan)">Edit profile &rarr;</a>';
     } else if (ladder === undefined) {
       ladderNotice = 'Loading the ladder…';
     } else if (!entries.length) {
-      ladderNotice = 'Nobody has a settled league bet on this ladder yet this ' + (activeLeagueFreq === 'weekly' ? 'week' : activeLeagueFreq === 'monthly' ? 'month' : 'season') + '. Log a league bet before kick-off to get on it.';
+      ladderNotice = 'Nobody has a settled league bet on this ladder yet this ' + (activeLeagueFreq === 'weekly' ? 'week' : activeLeagueFreq === 'monthly' ? 'month' : 'season') + '. Log a league bet before kick-off; you are ranked here once it settles.';
     } else {
       ladderNotice = 'Top ' + entries.length + ' of ' + ladder.total + ' players · updated every 30 minutes.';
     }
@@ -3505,7 +3506,7 @@ function viewLeagues() {
   const rowsHtml = allMembers.map((m, idx) => {
     const rank = idx + 1;
     const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'standard';
-    const rankIcon = m.outsideTop ? '50+' : rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const rankIcon = m.unranked ? '—' : m.outsideTop ? '50+' : rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
     const formChips = (m.form || ['—']).map(f => f === '—' ? '<span class="dim">—</span>' : '<span class="form-chip ' + f.toLowerCase() + '">' + f + '</span>').join('');
     const roiSign = m.roi > 0 ? '+' : '';
     const roiClass = m.roi > 0 ? 'pos' : m.roi < 0 ? 'neg' : '';
