@@ -23,6 +23,7 @@ ALLOWLIST_FILES = [
     "styles.css",
     "market_calculations.js",
     "bet_builder.js",
+    "settlement.js",
     "league_sync.js",
     "manifest.json",
     "sw.js",

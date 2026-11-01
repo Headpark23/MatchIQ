@@ -1,4 +1,4 @@
-name: Firestore security rules tests
+name: Firestore security rules and league server tests
 # Runs tests/rules against the Firestore emulator (needs Java, which GitHub provides),
 # so nobody has to install anything locally to check the rules.
 on:
@@ -8,6 +8,9 @@ on:
       - 'firestore.rules'
       - 'firebase.json'
       - 'league_sync.js'
+      - 'settlement.js'
+      - 'functions/**'
+      - 'scripts/sync_functions_shared.js'
       - 'tests/rules/**'
       - '.github/workflows/rules-tests.yml'
 permissions:
@@ -25,6 +28,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: League server scoring tests
+        run: node functions/test/scoring.test.js
       - name: Install rules test dependencies
         working-directory: tests/rules
         run: npm ci

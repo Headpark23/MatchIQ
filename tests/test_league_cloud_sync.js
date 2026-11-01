@@ -7,7 +7,7 @@ const fs = require('fs');
 const vm = require('vm');
 const assert = require('assert');
 
-const sources = ['market_calculations.js', 'bet_builder.js', 'league_sync.js', 'app.js'].map(f => fs.readFileSync(f, 'utf8'));
+const sources = ['market_calculations.js', 'bet_builder.js', 'settlement.js', 'league_sync.js', 'app.js'].map(f => fs.readFileSync(f, 'utf8'));
 
 // ------------------------------------------------------------ in-memory Firestore
 function fsError(code) { const e = new Error(code); e.code = code; return e; }
@@ -51,6 +51,18 @@ function createCloud() {
           throw fsError('permission-denied');
         }
       }
+      const STATS = ['points', 'winRate', 'roi', 'settled', 'form', 'periods', 'scoredAt'];
+      if (m && op.kind !== 'delete') {
+        const before = docs.get(op.path) || {};
+        if (STATS.some(k => k in op.data && JSON.stringify(op.data[k]) !== JSON.stringify(before[k]))) throw fsError('permission-denied');
+      }
+      const bm = op.path.match(/^users\/([^/]+)\/leagueBets\/([^/]+)$/);
+      if (bm) {
+        if (bm[1] !== uid) throw fsError('permission-denied');
+        if (op.kind !== 'delete' && docs.has(op.path)) throw fsError('permission-denied');  // create only
+        if (op.kind !== 'delete' && Object.keys(op.data).some(k => !['betId', 'fixtureId', 'selection', 'odds', 'createdAt'].includes(k))) throw fsError('permission-denied');
+      }
+      if (/^(leagueStats|ladders)\//.test(op.path)) throw fsError('permission-denied');
       const lm = op.path.match(/^leagues\/([^/]+)$/);
       if (lm && op.kind !== 'delete') {
         const d = after.get(op.path);
@@ -95,6 +107,7 @@ function createCloud() {
     constructor(db, path) { this.db = db; this.path = path; }
     doc(id) { return new DocRef(this.db, this.path + '/' + id); }
     async get() { return querySnap(this.db, this.path); }
+    where() { return this; }  // the app only filters league bets by date; tests use recent ones
     onSnapshot(cb) {
       const l = { path: this.path, isCollection: true, cb };
       listeners.add(l);
@@ -149,7 +162,7 @@ function makeDevice(cloud, user) {
   const firebase = {
     apps: [],
     initializeApp() { firebase.apps.push({}); },
-    firestore: Object.assign(() => db, { FieldValue: { serverTimestamp: () => new Date().toISOString() } }),
+    firestore: Object.assign(() => db, { FieldValue: { serverTimestamp: () => new Date().toISOString() }, FieldPath: { documentId: () => '__name__' } }),
     auth: Object.assign(() => ({
       setPersistence: () => Promise.resolve(),
       getRedirectResult: () => Promise.resolve(null),
@@ -317,29 +330,81 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   assert(!carol2.league(code2), 'league removed from the other device');
   console.log('  PASS: leaving a league on one device is not undone by another.');
 
-  // Scoring: only bets the app settled from the result and logged before kick-off count, and a
-  // win counts odds up to 10/1. Stats are for the current UK period.
+  // League bets: the app sends only what was backed; the server owns odds, result and points.
   const today = carol.run('leagueDocs.londonDate(new Date())');
   const iso = ms => new Date(ms).toISOString();
   const nowMs = Date.now();
-  const bets = [
-    { id: 'b1', date: today, timestamp: iso(nowMs - 7200000), kickoffAt: iso(nowMs - 3600000), settledBy: 'auto', outcome: 'won', odds: 21, stake: 1 },
-    { id: 'b2', date: '2020-01-01', timestamp: iso(nowMs - 7200000), kickoffAt: iso(nowMs - 3600000), settledBy: 'auto', outcome: 'won', odds: 3, stake: 1 }
-  ];
-  carol.run('saveStoredDiary(' + JSON.stringify(bets) + ')');
-  let st = carol.run("getUserLeagueStats('weekly')");
-  assert.strictEqual(st.points, 100, "a 20/1 winner counts as 10/1 (100 pts); last period's bet does not count");
-  for (const bad of [
-    { settledBy: 'manual', manualOverride: true },  // settled by hand
-    { timestamp: iso(nowMs - 1800000) },           // logged after kick-off
-    { settledBy: null }                            // never settled automatically
-  ]) {
-    carol.run('saveStoredDiary(' + JSON.stringify([Object.assign({}, bets[0], bad)]) + ')');
-    st = carol.run("getUserLeagueStats('weekly')");
-    assert.strictEqual(st.points, 0, 'ineligible bet must not score: ' + JSON.stringify(bad));
-  }
-  carol.run('saveStoredDiary([])');
-  console.log('  PASS: only auto-settled bets logged before kick-off score, and wins count odds up to 10/1.');
+  const kickoff = iso(nowMs + 2 * 86400000);
+  const day = kickoff.slice(0, 10);
+  const later = iso(nowMs + 3 * 86400000);
+  const past = iso(nowMs - 3600000);
+  carol.run('DATA.fixtures = ' + JSON.stringify({ fixtures: [
+    { id: 'PL-ars-tot', home: 'Arsenal', away: 'Tottenham', kickoff_utc: kickoff, status: 'SCHEDULED', score: null },
+    { id: 'PL-che-liv', home: 'Chelsea', away: 'Liverpool', kickoff_utc: later, status: 'SCHEDULED', score: null },
+    { id: 'PL-mun-new', home: 'Man United', away: 'Newcastle', kickoff_utc: past, status: 'IN_PLAY', score: null }
+  ] }) + '; DATA.odds = ' + JSON.stringify({ max_age_hours: 12, matches: {
+    'PL-ars-tot': { selections: { 'result:H': { decimal: 1.8 }, 'result:D': { decimal: 3.8 }, 'result:A': { decimal: 4.5 } } },
+    'PL-che-liv': { selections: { 'result:H': { decimal: 2.6 }, 'goals:over:2.5': { decimal: 1.6 } } },
+    'PL-mun-new': { selections: { 'result:H': { decimal: 2.0 } } }
+  } }));
+  const diaryBet = (id, matchId, selection, extra) => Object.assign({ id, type: 'single', match_id: matchId, fixture: '', marketName: 'Match result', selection, odds: 50, stake: 5, outcome: 'pending', timestamp: iso(nowMs), date: day, inLeague: false }, extra || {});
+  const enter = async bet => {
+    carol.toasts.length = 0;
+    carol.run('(() => { const d = getStoredDiary(); d.unshift(' + JSON.stringify(bet) + '); saveStoredDiary(d); })()');
+    await carol.run(`enterLeagueBet('${bet.id}')`);
+    await settle();
+    return carol.toasts.join(' | ');
+  };
+  let msg = await enter(diaryBet('lb1', 'PL-ars-tot', 'Arsenal'));
+  const sentBet = cloud.docs.get('users/carol/leagueBets/' + day);
+  assert(sentBet, 'league bet sent to the server');
+  assert.deepStrictEqual(Object.keys(sentBet).sort(), ['betId', 'createdAt', 'fixtureId', 'odds', 'selection'], 'the app sends only what was backed');
+  assert.strictEqual(sentBet.selection, 'Arsenal');
+  assert(/11\/8|4\/5|4\/5/.test(msg) || /bookmaker price/.test(msg), 'player is told the price it scores at: ' + msg);
+  assert.strictEqual(carol.run("getStoredDiary().find(e => e.id === 'lb1').inLeague"), true);
+  msg = await enter(diaryBet('lb2', 'PL-ars-tot', 'Tottenham'));
+  assert(/already have a league bet/.test(msg), 'one league bet per match day: ' + msg);
+  assert.strictEqual(cloud.docs.get('users/carol/leagueBets/' + day).betId, 'lb1', 'first bet of the day stands');
+  msg = await enter(diaryBet('lb3', 'PL-che-liv', 'Both teams to score', { marketName: 'Both teams to score', date: later.slice(0, 10) }));
+  assert(/Only match result and over\/under goals/.test(msg), 'unpriced market stays diary-only: ' + msg);
+  assert(!cloud.docs.has('users/carol/leagueBets/' + later.slice(0, 10)));
+  msg = await enter(diaryBet('lb4', 'PL-mun-new', 'Man United', { date: past.slice(0, 10) }));
+  assert(/already kicked off/.test(msg), 'after kick-off is refused: ' + msg);
+  msg = await enter(diaryBet('lb5', null, 'Arsenal + Chelsea', { type: 'accumulator', date: later.slice(0, 10) }));
+  assert(/Accumulators/.test(msg), 'accumulators are diary-only: ' + msg);
+  console.log('  PASS: league bets send only the selection; one per day, priced markets, before kick-off.');
+
+  // The diary shows what the server decided.
+  cloud.docs.set('users/carol/leagueBets/' + day, Object.assign({}, sentBet, { status: 'settled', outcome: 'won', points: 8, refOdds: 1.8 }));
+  carol.run('listenToMyLeagueData("carol")');
+  await settle();
+  assert(/League \+8 pts/.test(carol.run("betCard(getStoredDiary().find(e => e.id === 'lb1'))")), 'diary shows the points the server awarded');
+
+  // Your own row uses the server's stats, never the device's.
+  const thisWeekKey = carol.run("leagueDocs.currentPeriodKey('weekly')");
+  cloud.docs.set('leagueStats/carol', { handle: 'Carol', updatedAt: 'x', periods: { weekly: { key: thisWeekKey, points: 8, winRate: 100, roi: 80, settled: 1, form: ['W'] } } });
+  carol.run('listenToMyLeagueData("carol")');
+  await settle();
+  assert.strictEqual(carol.run("getUserLeagueStats('weekly').points"), 8, 'own points come from the server');
+  carol.run("saveStoredDiary(getStoredDiary().map(e => Object.assign(e, { outcome: 'won', settledBy: 'auto', odds: 50 })))");
+  assert.strictEqual(carol.run("getUserLeagueStats('weekly').points"), 8, 'editing the diary does not change league points');
+  console.log('  PASS: the diary shows the server result, and league points come only from the server.');
+
+  // Regional ladders: the app shows the server's top 50, adds your own row if you are further down,
+  // and asks for a location before showing town/region/country ladders.
+  const wk = carol.run("leagueDocs.currentPeriodKey('weekly')");
+  cloud.docs.set('ladders/weekly__world', { id: 'weekly__world', period: 'weekly', key: wk, tier: 'world', total: 120,
+    entries: [{ uid: 'zed', handle: 'Zed_1', points: 300, winRate: 90, roi: 50, settled: 5, form: ['W'] }, { uid: 'amy', handle: 'Amy_2', points: 120, winRate: 60, roi: 10, settled: 5, form: ['W'] }] });
+  carol.run("activeLeagueId = 'geo-world'; activeLeagueFreq = 'weekly'");
+  carol.run('viewLeagues()');
+  await settle();
+  const worldHtml = carol.run('viewLeagues()');
+  assert(/Zed_1/.test(worldHtml) && /Amy_2/.test(worldHtml), 'ladder entries shown');
+  assert(/Top 2 of 120 players/.test(worldHtml), 'ladder size shown');
+  assert(/>50\+</.test(worldHtml), 'your own row is shown below the top 50 without a made-up rank');
+  carol.run("activeLeagueId = 'geo-town'");
+  assert(/Add your town to your profile/.test(carol.run('viewLeagues()')), 'no town set: asked to add it');
+  console.log('  PASS: regional ladders show the server top 50, your own row, and ask for a location when needed.');
 
   // Periods: a member whose numbers are from last week shows zero this week; this week's show as-is.
   const code3 = alice.run('generateSecureLeagueCode()');
@@ -347,7 +412,7 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
     const list = getStoredLeagues(); list.push(l); saveStoredLeagues(list); return publishLeague(l, getAuthUser()); })()`);
   await settle();
   const thisWeek = alice.run("leagueDocs.currentPeriodKey('weekly')");
-  const memberDoc = (handle, key, points) => ({ handle, avatar: '⚽', joinedAt: 'x', updatedAt: 'x', points, winRate: 50, roi: 1, settled: 2, form: ['W'],
+  const memberDoc = (handle, key, points) => ({ handle, avatar: '⚽', joinedAt: 'x', updatedAt: 'x', scoredAt: 'x', points, winRate: 50, roi: 1, settled: 2, form: ['W'],
     periods: { weekly: { key, points, winRate: 50, roi: 1, settled: 2, form: ['W'] } } });
   cloud.docs.set('handles/dan_1', { uid: 'dan', handle: 'Dan_1' });
   cloud.docs.set('handles/eve_1', { uid: 'eve', handle: 'Eve_1' });

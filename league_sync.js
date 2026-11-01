@@ -61,19 +61,10 @@
     return periodKey(freq, londonDate(now));
   }
 
-  // ---------------------------------------------------------- league scoring eligibility
-  // Wins count at most these odds (10/1), so one lucky long shot cannot decide a league.
+  // ---------------------------------------------------------- league scoring
+  // League points are worked out on the server (functions/lib/scoring.js) from the bookmaker
+  // price it recorded when the bet was logged. Wins count at most these odds (10/1).
   const MAX_COUNTED_ODDS = 11;
-
-  // Only bets the app settled itself from the official result, logged before kick-off, count in
-  // leagues. Bets settled by hand still count in the Bet Diary.
-  function isLeagueEligible(entry, kickoffIso) {
-    if (!entry || entry.inLeague === false || entry.manualOverride || entry.settledBy !== 'auto') return false;
-    if (!['won', 'lost', 'void'].includes(entry.outcome)) return false;
-    const placed = Date.parse(entry.timestamp || '');
-    const kickoff = Date.parse(kickoffIso || entry.kickoffAt || '');
-    return Number.isFinite(placed) && Number.isFinite(kickoff) && placed < kickoff;
-  }
 
   function clampStats(stats) {
     const s = stats || {};
@@ -106,48 +97,36 @@
     return { name: cleanLeagueName(name), updatedAt: now };
   }
 
-  // Stats for every period, each tagged with its period key so a leaderboard can tell this
-  // week's numbers from last week's: { weekly: { key, points, ... }, monthly: ..., yearly: ... }.
-  function periodsDoc(periods) {
-    const out = {};
-    FREQS.forEach(f => {
-      const p = periods && periods[f];
-      if (p && typeof p.key === 'string') out[f] = Object.assign({ key: p.key.slice(0, 12) }, clampStats(p));
-    });
-    return out;
-  }
-
   // leagues/{code}/members/{uid}: created once on join; joinedAt never changes afterwards.
-  // Top-level stats are the league's own period; `periods` holds all three.
-  function newMemberDoc({ handle, avatar, stats, periods, now }) {
-    return Object.assign({
-      handle: cleanHandle(handle) || 'Player',
-      avatar: cleanIcon(avatar),
-      joinedAt: now,
-      updatedAt: now,
-      periods: periodsDoc(periods)
-    }, clampStats(stats));
+  // The app writes only who the member is; their stats are written by the server.
+  function newMemberDoc({ handle, avatar, now }) {
+    return { handle: cleanHandle(handle) || 'Player', avatar: cleanIcon(avatar), joinedAt: now, updatedAt: now };
   }
 
-  // Later stat refreshes only ever update an existing member record, so a kicked or
-  // departed player (or a deleted league) cannot be recreated by a background sync.
-  function memberStatsUpdate({ handle, avatar, stats, periods, now }) {
-    return Object.assign({
-      handle: cleanHandle(handle) || 'Player',
-      avatar: cleanIcon(avatar),
-      updatedAt: now,
-      periods: periodsDoc(periods)
-    }, clampStats(stats));
+  // Later refreshes only ever update an existing member record, so a kicked or departed player
+  // (or a deleted league) cannot be recreated by a background sync.
+  function memberProfileUpdate({ handle, avatar, now }) {
+    return { handle: cleanHandle(handle) || 'Player', avatar: cleanIcon(avatar), updatedAt: now };
   }
 
-  // The stats to show for a member in the given period: this period's numbers, or zeros when
-  // their latest numbers are from an earlier period (they have not bet since it reset).
-  function memberStatsFor(member, freq, currentKey, leagueFreq) {
+  // The stats to show for a player in the given period, from a server-scored record (a league
+  // member or leagueStats/{uid}): this period's numbers, or zeros when their latest numbers are
+  // from an earlier period. Anything not stamped by the server (scoredAt/updatedAt from leagueStats)
+  // shows as zero, so stats written by older app versions never appear.
+  function memberStatsFor(member, freq, currentKey) {
     const empty = { points: 0, winRate: 0, roi: 0, settled: 0, form: ['—'] };
-    const p = member && member.periods && member.periods[freq];
-    if (p) return p.key === currentKey ? clampStats(p) : empty;
-    // Records saved before periods existed only hold the league's own period.
-    return member && freq === (leagueFreq || 'weekly') ? clampStats(member) : empty;
+    if (!member || !(member.scoredAt || member.serverScored)) return empty;
+    const p = member.periods && member.periods[freq];
+    return p && p.key === currentKey ? clampStats(p) : empty;
+  }
+
+  // users/{uid}/leagueBets/{day}: the player's one league bet for a match day. The app sends only
+  // what was backed; the server checks it, records the bookmaker price and settles it.
+  // `now` must be serverTimestamp(): the rules require the server's clock.
+  function leagueBetDoc({ betId, fixtureId, selection, odds, now }) {
+    const doc = { betId: String(betId).slice(0, 64), fixtureId: String(fixtureId).slice(0, 80), selection: String(selection || '').slice(0, 160), createdAt: now };
+    if (Number(odds) > 1) doc.odds = Math.round(Number(odds) * 1000) / 1000;
+    return doc;
   }
 
   // users/{uid}/leagueMemberships/{code}: the player's own index of leagues.
@@ -160,10 +139,19 @@
     return { handle: cleanHandle(handle) || 'Player', bannedAt: now };
   }
 
+  function cleanPlace(s) {
+    return String(s || '').replace(/[<>"'`&\\]/g, '').replace(/\s+/g, ' ').trim().slice(0, 40);
+  }
+
   // users/{uid}: public profile. `now` must be a Firestore timestamp (serverTimestamp()).
-  function userProfileDoc({ handle, avatar, now, isNew }) {
+  // Town, region and country place the player on the regional ladders; they are only stored
+  // once the player has chosen them.
+  function userProfileDoc({ handle, avatar, now, isNew, location }) {
     const doc = { handle, avatar: cleanIcon(avatar), updatedAt: now };
     if (isNew) doc.createdAt = now;
+    if (location) {
+      ['town', 'region', 'country'].forEach(k => { const v = cleanPlace(location[k]); if (v) doc[k] = v; });
+    }
     return doc;
   }
 
@@ -249,15 +237,16 @@
     londonDate,
     periodKey,
     currentPeriodKey,
-    isLeagueEligible,
     memberStatsFor,
+    leagueBetDoc,
+    cleanPlace,
     cleanLeagueName,
     cleanIcon,
     cleanHandle,
     leagueDoc,
     leagueRename,
     newMemberDoc,
-    memberStatsUpdate,
+    memberProfileUpdate,
     membershipDoc,
     banDoc,
     userProfileDoc,

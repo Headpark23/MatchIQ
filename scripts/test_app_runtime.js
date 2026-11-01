@@ -46,7 +46,7 @@ global.window = {
   location: { hash: '#/leagues', origin: 'https://headpark23.github.io', pathname: '/MatchIQ/' },
   addEventListener: () => {},
   scrollTo: () => {},
-  MatchIQCalculations: marketCalculations, MatchIQBuilder: require('../bet_builder.js'), BetBuddyLeagues: require('../league_sync.js')
+  MatchIQCalculations: marketCalculations, MatchIQBuilder: require('../bet_builder.js'), BetBuddyLeagues: require('../league_sync.js'), BetBuddySettlement: require('../settlement.js')
 };
 let registeredSubmitHandler = null;
 global.document = {

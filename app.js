@@ -2461,9 +2461,9 @@ function generateSecureLeagueCode(length = 8) {
 }
 
 function getGeoDocId(tierId, prof) {
-  if (tierId === 'geo-country') return 'country-' + (prof.country || 'Scotland').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
-  if (tierId === 'geo-region') return 'region-' + (prof.region || 'Renfrewshire').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
-  if (tierId === 'geo-town') return 'town-' + (prof.town || 'Paisley').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+  if (tierId === 'geo-country') return 'country-' + (prof.country || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+  if (tierId === 'geo-region') return 'region-' + (prof.region || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+  if (tierId === 'geo-town') return 'town-' + (prof.town || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
   return tierId;
 }
 
@@ -2603,8 +2603,7 @@ async function publishLeague(league, user) {
     return false;
   }
   const memberSnap = existing.exists ? await memberRef.get() : null;
-  const periods = getUserLeaguePeriods();
-  const memberData = { handle: prof.handle, avatar: prof.avatar, stats: periods[league.freq] || periods.weekly, periods, now: nowIso };
+  const memberData = { handle: prof.handle, avatar: prof.avatar, now: nowIso };
   const batch = firestoreDb.batch();
   if (!existing.exists) {
     batch.set(leagueRef, leagueDocs.leagueDoc({
@@ -2612,7 +2611,7 @@ async function publishLeague(league, user) {
       creatorUid: user.uid, creatorHandle: prof.handle, now: nowIso
     }));
   }
-  if (memberSnap && memberSnap.exists) batch.update(memberRef, leagueDocs.memberStatsUpdate(memberData));
+  if (memberSnap && memberSnap.exists) batch.update(memberRef, leagueDocs.memberProfileUpdate(memberData));
   else batch.set(memberRef, leagueDocs.newMemberDoc(memberData));
   batch.set(membershipRef, leagueDocs.membershipDoc({ code: league.code, name: league.name, icon: league.icon, role: 'creator', now: nowIso }));
   await batch.commit();
@@ -2772,8 +2771,9 @@ async function deleteLeague(leagueId, leagueCode) {
   render();
 }
 
-// Refreshes this player's own stats in a league. It only ever updates an existing member record:
-// joining happens in joinCloudLeague and creating in publishLeague.
+// Refreshes this player's gamertag and avatar in a league (their stats are written by the server).
+// It only ever updates an existing member record: joining happens in joinCloudLeague and creating
+// in publishLeague.
 const leagueSyncInFlight = new Map();
 async function syncLeagueToCloud(league) {
   if (!firestoreDb || !league || !league.code) return;
@@ -2792,10 +2792,7 @@ async function syncLeagueToCloud(league) {
     } else {
       const prof = getUserProfile();
       const { memberRef } = leagueRefs(code, user.uid);
-      const periods = getUserLeaguePeriods();
-      await memberRef.update(leagueDocs.memberStatsUpdate({
-        handle: prof.handle, avatar: prof.avatar, stats: periods[league.freq] || periods.weekly, periods, now: new Date().toISOString()
-      }));
+      await memberRef.update(leagueDocs.memberProfileUpdate({ handle: prof.handle, avatar: prof.avatar, now: new Date().toISOString() }));
     }
   } catch (err) {
     if (!(err && (err.code === 'not-found' || err.code === 'permission-denied') && await confirmLeagueGone(code, user.uid))) {
@@ -2880,13 +2877,18 @@ async function syncUserLeaguesFromCloud() {
   }
 }
 
-// Live league updates redraw at most a few times a second, and only while Leagues is on screen.
+// Live league updates redraw at most a few times a second, and only while Leagues (or, for
+// league-bet updates, the Bet Diary) is on screen.
 let leaguesRenderTimer = null;
-function scheduleLeaguesRender() {
+let leaguesRenderDiary = false;
+function scheduleLeaguesRender(alsoDiary) {
+  if (alsoDiary) leaguesRenderDiary = true;
   if (leaguesRenderTimer) return;
   leaguesRenderTimer = setTimeout(() => {
     leaguesRenderTimer = null;
-    if (currentRoute()[0] === 'leagues') render();
+    const view = currentRoute()[0];
+    if (view === 'leagues' || (leaguesRenderDiary && view === 'diary')) render();
+    leaguesRenderDiary = false;
   }, 300);
 }
 
@@ -2986,11 +2988,10 @@ async function joinCloudLeague(code) {
     const isCreator = leagueData.creatorUid === user.uid;
     const prof = getUserProfile();
     const nowIso = new Date().toISOString();
-    const periods = getUserLeaguePeriods();
-    const memberData = { handle: prof.handle, avatar: prof.avatar, stats: periods[leagueData.freq] || periods.weekly, periods, now: nowIso };
+    const memberData = { handle: prof.handle, avatar: prof.avatar, now: nowIso };
 
     const batch = firestoreDb.batch();
-    if (alreadyMember) batch.update(memberRef, leagueDocs.memberStatsUpdate(memberData));
+    if (alreadyMember) batch.update(memberRef, leagueDocs.memberProfileUpdate(memberData));
     else batch.set(memberRef, leagueDocs.newMemberDoc(memberData));
     batch.set(membershipRef, leagueDocs.membershipDoc({ code, name: leagueData.name, icon: leagueData.icon, role: isCreator ? 'creator' : 'member', now: nowIso }));
     try {
@@ -3119,18 +3120,18 @@ function getUserProfile() {
           return {
             handle: h,
             avatar: p.avatar || '⚽',
-            town: p.town || 'Paisley',
-            region: p.region || 'Renfrewshire',
-            country: p.country || 'Scotland'
+            town: p.town || '',
+            region: p.region || '',
+            country: p.country || ''
           };
         }
       } catch (e) {}
       return {
         handle: h,
         avatar: '⚽',
-        town: 'Paisley',
-        region: 'Renfrewshire',
-        country: 'Scotland'
+        town: '',
+        region: '',
+        country: ''
       };
     }
   }
@@ -3142,9 +3143,9 @@ function getUserProfile() {
       return {
         handle: p.handle,
         avatar: p.avatar || '⚽',
-        town: p.town || 'Paisley',
-        region: p.region || 'Renfrewshire',
-        country: p.country || 'Scotland'
+        town: p.town || '',
+        region: p.region || '',
+        country: p.country || ''
       };
     }
   } catch (e) { /* ignore */ }
@@ -3152,9 +3153,9 @@ function getUserProfile() {
   const defaultProfile = {
     handle: 'Guest',
     avatar: '⚽',
-    town: 'Paisley',
-    region: 'Renfrewshire',
-    country: 'Scotland'
+    town: '',
+    region: '',
+    country: ''
   };
   return defaultProfile;
 }
@@ -3164,57 +3165,49 @@ function saveUserProfile(handle, town, region, country) {
   const prof = {
     ...getUserProfile(),
     handle: clean,
-    town: (town || 'Paisley').trim().slice(0, 32),
-    region: (region || 'Renfrewshire').trim().slice(0, 32),
-    country: (country || 'Scotland').trim().slice(0, 32)
+    town: leagueDocs.cleanPlace(town),
+    region: leagueDocs.cleanPlace(region),
+    country: leagueDocs.cleanPlace(country)
   };
   try { localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(prof)); } catch (e) { /* ignore */ }
   return prof;
 }
 
-// Kick-off of the match a diary bet was on, from the stored value or the fixtures feed.
-function diaryEntryKickoff(e) {
-  if (e.kickoffAt) return e.kickoffAt;
-  return kickoffIso(e.match_id && fixtureById(e.match_id));
+// ------------------------------------------------------------ Server-scored league stats & league bets
+// League points are calculated by the server (functions/) from league bets it has checked and
+// settled. The app listens to this player's stats (leagueStats/{uid}) and recent league bets.
+let myLeagueStats = null;
+const myLeagueBets = new Map();  // match day (YYYY-MM-DD) -> server record of that day's league bet
+let myLeagueUnsubs = [];
+function stopMyLeagueListeners() {
+  myLeagueUnsubs.forEach(u => { try { u(); } catch (e) { /* ignore */ } });
+  myLeagueUnsubs = [];
+  myLeagueStats = null;
+  myLeagueBets.clear();
+}
+function listenToMyLeagueData(uid) {
+  stopMyLeagueListeners();
+  if (!firestoreDb || !uid) return;
+  try {
+    myLeagueUnsubs.push(firestoreDb.collection('leagueStats').doc(uid).onSnapshot(doc => {
+      myLeagueStats = doc && doc.exists ? Object.assign({ serverScored: true }, doc.data()) : null;
+      scheduleLeaguesRender();
+    }, err => console.warn('League stats listener notice:', err)));
+    const since = new Date(Date.now() - 60 * 86400000).toISOString().slice(0, 10);
+    myLeagueUnsubs.push(firestoreDb.collection('users').doc(uid).collection('leagueBets')
+      .where(firebase.firestore.FieldPath.documentId(), '>=', since).onSnapshot(snap => {
+        myLeagueBets.clear();
+        snap.docs.forEach(d => myLeagueBets.set(d.id, Object.assign({ day: d.id }, d.data())));
+        if (['diary', 'leagues'].includes(currentRoute()[0])) scheduleLeaguesRender(true);
+      }, err => console.warn('League bets listener notice:', err)));
+  } catch (e) {
+    console.warn('listenToMyLeagueData notice:', e);
+  }
 }
 
-// League standings for one period (UK calendar). Only bets the app settled itself from the
-// official result and logged before kick-off qualify; hand-settled bets stay in the Bet Diary.
+// This player's server-scored stats for one period (zeros until the server has scored a bet).
 function getUserLeagueStats(freq = 'weekly', now = new Date()) {
-  const periodKey = leagueDocs.currentPeriodKey(freq, now);
-  const inPeriod = getStoredDiary().filter(e => leagueDocs.periodKey(freq, e.date || (e.timestamp || '').slice(0, 10)) === periodKey);
-  const leagueEligible = inPeriod.filter(e => leagueDocs.isLeagueEligible(e, diaryEntryKickoff(e)));
-
-  // FAIR PLAY RULE: Exactly 1 settled bet per calendar day counts toward league standings.
-  // Only bets explicitly entered into the league (inLeague !== false) qualify. Extra bets are Bet Diary only.
-  const dailyQualifyingMap = new Map();
-  leagueEligible.slice().reverse().forEach(e => {
-    const dayKey = (e.date || (e.timestamp ? e.timestamp.slice(0, 10) : '') || 'undated').slice(0, 10);
-    if (!dailyQualifyingMap.has(dayKey)) {
-      dailyQualifyingMap.set(dayKey, e);
-    }
-  });
-  const leagueBets = Array.from(dailyQualifyingMap.values()).reverse();
-
-  const won = leagueBets.filter(e => e.outcome === 'won');
-  const totalStaked = leagueBets.reduce((sum, e) => sum + (+e.stake || 0), 0);
-  const totalProfit = leagueBets.reduce((sum, e) => sum + (calc.calculateBetProfit(e.stake, e.odds, e.outcome) || 0), 0);
-
-  // Option A Scoring: (Decimal Odds - 1) * 10 on won, counting odds up to 10/1; -2 on lost; 0 on void
-  const points = leagueBets.reduce((sum, e) => {
-    const odds = Number(e.odds);
-    return sum + (calc.calculateLeaguePoints(Math.min(Number.isFinite(odds) ? odds : 2, leagueDocs.MAX_COUNTED_ODDS), e.outcome) || 0);
-  }, 0);
-  const winRate = leagueBets.length ? Math.round((won.length / leagueBets.length) * 100) : 0;
-  const roi = totalStaked > 0 ? +( (totalProfit / totalStaked) * 100 ).toFixed(1) : 0.0;
-  const last5 = leagueBets.slice(0, 5).map(e => e.outcome === 'won' ? 'W' : e.outcome === 'lost' ? 'L' : 'V');
-  return { key: periodKey, points, settled: leagueBets.length, won: won.length, winRate, roi, form: last5.length ? last5 : ['—'] };
-}
-
-function getUserLeaguePeriods(now = new Date()) {
-  const out = {};
-  leagueDocs.FREQS.forEach(f => { out[f] = getUserLeagueStats(f, now); });
-  return out;
+  return leagueDocs.memberStatsFor(myLeagueStats, freq, leagueDocs.currentPeriodKey(freq, now));
 }
 
 // ------------------------------------------------------------ Trophy Cabinet System
@@ -3299,7 +3292,7 @@ function getGeoTiers(profile) {
     {
       id: 'geo-country',
       tier: 'country',
-      name: (profile.country || 'Scotland') + ' Championship',
+      name: (profile.country || 'Your Country') + ' Championship',
       scope: 'National Tier 4',
       icon: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
       trophyIcon: '🦁🏴󠁧󠁢󠁳󠁣󠁴󠁿',
@@ -3310,7 +3303,7 @@ function getGeoTiers(profile) {
     {
       id: 'geo-region',
       tier: 'region',
-      name: (profile.region || 'Renfrewshire') + ' Regional',
+      name: (profile.region || 'Your Region') + ' Regional',
       scope: 'County Tier 5',
       icon: '🏛️',
       trophyIcon: '🏛️',
@@ -3321,7 +3314,7 @@ function getGeoTiers(profile) {
     {
       id: 'geo-town',
       tier: 'town',
-      name: (profile.town || 'Paisley') + ' Hometown League',
+      name: (profile.town || 'Your Hometown') + ' League',
       scope: 'Local Tier 6',
       icon: '🏘️',
       trophyIcon: '🏅',
@@ -3344,6 +3337,36 @@ function getStoredLeagues() {
 
 function saveStoredLeagues(leagues) {
   try { localStorage.setItem(LEAGUES_STORAGE_KEY, JSON.stringify(leagues)); } catch (e) { /* ignore */ }
+}
+
+// ------------------------------------------------------------ Regional ladders
+// Built by the league server every 30 minutes: ladders/{period}__{tier} holds the top 50.
+function ladderSlug(s) {
+  return String(s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+}
+// The server's ladder id for a geo tier, or null when the player has not set that part of their location.
+function ladderTierId(geoTierId, prof) {
+  if (geoTierId === 'geo-world') return 'world';
+  if (geoTierId === 'geo-europe') return 'europe';
+  if (geoTierId === 'geo-uk') return 'uk';
+  const part = { 'geo-country': 'country', 'geo-region': 'region', 'geo-town': 'town' }[geoTierId];
+  return part && ladderSlug(prof[part]) ? part + '-' + ladderSlug(prof[part]) : null;
+}
+const ladderCache = new Map();  // ladder id -> { at, data (null when nobody is on it yet), loading }
+function getLadder(id) {
+  const hit = ladderCache.get(id);
+  if (firestoreDb && (!hit || (!hit.loading && Date.now() - hit.at > 5 * 60000))) {
+    ladderCache.set(id, Object.assign({}, hit, { loading: true }));
+    firestoreDb.collection('ladders').doc(id).get().then(doc => {
+      ladderCache.set(id, { at: Date.now(), data: doc.exists ? doc.data() : null, loading: false });
+      scheduleLeaguesRender();
+    }).catch(err => {
+      console.warn('Ladder load notice:', err);
+      ladderCache.set(id, { at: Date.now(), data: hit ? hit.data : null, loading: false, failed: true });
+      scheduleLeaguesRender();
+    });
+  }
+  return hit && 'data' in hit ? hit.data : undefined;
 }
 
 function viewLeagues() {
@@ -3376,7 +3399,7 @@ function viewLeagues() {
         '</div>' +
         '<div class="grid grid-2" style="margin-top:16px;gap:12px;">' +
           '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
-            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🏆 6-Tier Geographic Ladders (coming soon)</h3>' +
+            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🏆 6-Tier Geographic Ladders</h3>' +
             '<p class="dim" style="font-size:13px;margin:0;">Automatic promotion from your Hometown to County, Region, Home Nation, UK and Global leaderboards.</p>' +
           '</div>' +
           '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
@@ -3438,10 +3461,22 @@ function viewLeagues() {
   };
 
   syncUserLeaguesFromCloud();
+  let ladderNotice = '';
   if (isGeo) {
-    // Regional ladders need a server to rank thousands of players fairly; until that exists
-    // they show a coming-soon notice rather than a table with only you in it.
-    allMembers = [userEntry];
+    const tierId = ladderTierId(currentLeague.id, prof);
+    const ladder = tierId ? getLadder(activeLeagueFreq + '__' + tierId) : null;
+    const entries = (ladder && ladder.key === leagueDocs.currentPeriodKey(activeLeagueFreq) && ladder.entries) || [];
+    allMembers = entries.map(e => Object.assign({}, e, e.uid === authUser.uid ? { isYou: true } : {}));
+    if (!allMembers.some(m => m.isYou) && uStats.settled > 0) allMembers.push(Object.assign({}, userEntry, { outsideTop: true }));
+    if (!tierId) {
+      ladderNotice = 'Add your ' + ({ 'geo-country': 'country', 'geo-region': 'region', 'geo-town': 'town' }[currentLeague.id]) + ' to your profile to join this ladder. <a href="#/more" data-select-more-tab="account" style="color:var(--cyan)">Edit profile &rarr;</a>';
+    } else if (ladder === undefined) {
+      ladderNotice = 'Loading the ladder…';
+    } else if (!entries.length) {
+      ladderNotice = 'Nobody has a settled league bet on this ladder yet this ' + (activeLeagueFreq === 'weekly' ? 'week' : activeLeagueFreq === 'monthly' ? 'month' : 'season') + '. Log a league bet before kick-off to get on it.';
+    } else {
+      ladderNotice = 'Top ' + entries.length + ' of ' + ladder.total + ' players · updated every 30 minutes.';
+    }
   } else {
     // One row per account (uid), never merged by gamertag. Each member shows their numbers for
     // the selected period, or zero if they have not refreshed since it reset.
@@ -3459,12 +3494,12 @@ function viewLeagues() {
   // Primary: Points (odds-weighted)
   // Secondary: Win Rate %
   // Tie-breaker: ROI %
-  allMembers.sort((a, b) => (b.points - a.points) || (b.winRate - a.winRate) || (b.roi - a.roi));
+  allMembers.sort((a, b) => (Number(!!a.outsideTop) - Number(!!b.outsideTop)) || (b.points - a.points) || (b.winRate - a.winRate) || (b.roi - a.roi));
 
   const rowsHtml = allMembers.map((m, idx) => {
     const rank = idx + 1;
     const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'standard';
-    const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const rankIcon = m.outsideTop ? '50+' : rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
     const formChips = (m.form || ['—']).map(f => f === '—' ? '<span class="dim">—</span>' : '<span class="form-chip ' + f.toLowerCase() + '">' + f + '</span>').join('');
     const roiSign = m.roi > 0 ? '+' : '';
     const roiClass = m.roi > 0 ? 'pos' : m.roi < 0 ? 'neg' : '';
@@ -3543,7 +3578,7 @@ function viewLeagues() {
     '</div>' +
     '<div class="section-head" style="align-items:flex-end"><div>' +
       '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
-      '<p class="page-sub">Create private mini-leagues with mates. Hometown, county, national and global ladders are coming soon. Option A: Evens winner = 10 pts, 10/1 or bigger = 100 pts (the cap), Loss = -2 pts. <b>Max 1 qualifying bet per day</b>, and only bets logged before kick-off and settled automatically from the official result count.</p>' +
+      '<p class="page-sub">Compete with mates in private leagues and on hometown, regional, national and global ladders. Points: a win scores (bookmaker price − 1) × 10, so Evens = 10 pts and 10/1 or bigger = 100 pts (the cap); a loss is −2. <b>One league bet per match day</b>, logged before kick-off: a single on match result or over/under goals. The league server records the bookmaker price when you log it and settles it from the official result.</p>' +
     '</div>' +
     '<div class="btn-row">' +
       '<button type="button" class="btn primary" data-open-league-modal>Create or Join League</button>' +
@@ -3553,7 +3588,7 @@ function viewLeagues() {
 
     '<div class="user-profile-bar">' +
       '<div class="profile-pill"><span class="profile-avatar">' + esc(prof.avatar) + '</span><span>@' + esc(prof.handle) + '</span>' +
-        '<span style="font-size:11px;color:var(--dim);margin-left:4px">(' + esc(prof.town) + ', ' + esc(prof.region) + ')</span></div>' +
+        (prof.town || prof.region ? '<span style="font-size:11px;color:var(--dim);margin-left:4px">(' + esc([prof.town, prof.region].filter(Boolean).join(', ')) + ')</span>' : '<span style="font-size:11px;color:var(--dim);margin-left:4px">(no location set)</span>') + '</div>' +
       '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">' +
         '<span class="dim" style="font-size:13px">Your Live Form: <b style="color:var(--cyan)">' + uStats.points + ' Pts</b> · Win: <b class="win-pct-pill">' + uStats.winRate + '%</b> · ROI: <b class="roi-pct-pill ' + (uStats.roi >= 0 ? 'pos' : 'neg') + '">' + (uStats.roi > 0 ? '+' : '') + uStats.roi + '%</b></span>' +
         '<a href="#/more" data-select-more-tab="account" class="btn small" style="text-decoration:none">Edit in More &rarr;</a>' +
@@ -3605,7 +3640,7 @@ function viewLeagues() {
 
     // 2. Automatic Geographical Leagues Selector
     '<div class="section" style="margin-top:' + (!isGeo ? '26px' : '16px') + '">' +
-      '<div class="section-head"><div><h2 class="section-title">Automatic Geographical Leagues</h2><span class="section-note">Coming soon: you will be entered into all 6 tiers automatically, based on your location.</span></div></div>' +
+      '<div class="section-head"><div><h2 class="section-title">Automatic Geographical Leagues</h2><span class="section-note">Every league bet counts on all 6 ladders automatically, based on the location in your profile.</span></div></div>' +
       '<div class="geo-ladder-nav">' + geoNavHtml + '</div>' +
     '</div>' +
 
@@ -3614,7 +3649,7 @@ function viewLeagues() {
       '<div class="leaderboard-card" style="margin-top:16px">' +
         '<div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">' +
           '<div>' +
-            '<h2 class="section-title">' + leagueTitle + ' <span class="bento-badge cyan text-xs">Coming soon</span></h2>' +
+            '<h2 class="section-title">' + leagueTitle + '</h2>' +
             '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze · <b style="color:var(--cyan)">Max 1 bet/day</b></span>' +
           '</div>' +
           '<div style="display:flex;gap:10px;align-items:center">' +
@@ -3625,10 +3660,16 @@ function viewLeagues() {
             '</div>' +
           '</div>' +
         '</div>' +
-        '<div style="padding:22px 20px;text-align:center">' +
-          '<p style="margin:0 0 6px;color:#fff;font-weight:600">Regional and global ladders are coming soon.</p>' +
-          '<p class="dim" style="margin:0;font-size:13.5px">Your points already count: ' + uStats.points + ' pts this ' + (activeLeagueFreq === 'weekly' ? 'week' : activeLeagueFreq === 'monthly' ? 'month' : 'season') + '. Until the ladders open, compete with mates in a private league.</p>' +
-        '</div>' +
+        '<p class="dim" style="margin:0;padding:12px 20px;font-size:13px;border-bottom:1px solid var(--line)">' + ladderNotice + '</p>' +
+        (allMembers.length ? '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
+          '<th class="lb-col-rank">#</th>' +
+          '<th class="lb-col-player">Player (Form)</th>' +
+          '<th class="lb-col-pts" style="color:var(--cyan)">Points</th>' +
+          '<th class="lb-col-win">Win %</th>' +
+          '<th class="lb-col-roi">ROI %</th>' +
+          '<th class="lb-col-bets num">Bets</th>' +
+          '<th class="lb-col-action"></th>' +
+        '</tr></thead><tbody>' + rowsHtml + '</tbody></table></div>' : '') +
       '</div>'
     ) : '') +
   '</section>';
@@ -3709,9 +3750,15 @@ function betCard(entry) {
   const priceTaken = oddsFormat === 'decimal' ? calc.formatDecimalOdds(+entry.odds) : calc.formatFractionalOdds(+entry.odds);
 
   const dayKey = (entry.date || (entry.timestamp ? entry.timestamp.slice(0, 10) : '') || '').slice(0, 10);
-  const leagueBadge = entry.inLeague
-    ? ' <span class="badge" style="background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.5);color:#34d399;font-weight:700;">🏆 League Bet</span>'
-    : ' <span class="badge" style="background:rgba(148,163,184,0.12);border:1px solid rgba(148,163,184,0.25);color:#94a3b8;">Diary only</span>';
+  const leagueRec = leagueBetRecordFor(entry);
+  const greenBadge = text => ' <span class="badge" style="background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.5);color:#34d399;font-weight:700;">' + text + '</span>';
+  const greyBadge = (text, title) => ' <span class="badge" style="background:rgba(148,163,184,0.12);border:1px solid rgba(148,163,184,0.25);color:#94a3b8;"' + (title ? ' title="' + esc(title) + '"' : '') + '>' + text + '</span>';
+  const leagueBadge = !entry.inLeague && !leagueRec ? greyBadge('Diary only')
+    : !leagueRec ? greenBadge('🏆 League Bet')
+    : leagueRec.status === 'rejected' ? greyBadge('Not in league', leagueRec.reason || '')
+    : leagueRec.status === 'settled' ? greenBadge('🏆 League ' + (leagueRec.outcome === 'void' ? 'void · 0 pts' : (leagueRec.points > 0 ? '+' : '') + leagueRec.points + ' pts'))
+    : leagueRec.status === 'pending' ? greenBadge('🏆 League Bet · scores at ' + esc(calc.formatFractionalOdds(leagueRec.refOdds)))
+    : greenBadge('🏆 League Bet · checking…');
 
   const leagueActionBtn = entry.inLeague
     ? '<button type="button" class="btn small" data-toggle-league="' + esc(entry.id) + '" title="Remove from league standings" style="padding:2px 8px;font-size:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:var(--muted)">Remove from League</button>'
@@ -3753,164 +3800,9 @@ function updateAccumulatorLegOutcome(id, index, outcome) {
 // Pending bets settle themselves once the match result is confirmed. Only markets that the final score
 // decides are settled (match result, draw, double chance, total goals, both teams to score); corners,
 // cards, shots, player and handicap bets stay pending for the user to settle.
-const fixtureFinished = f => !!(f && f.status === 'FINISHED' && Array.isArray(f.score) && f.score.length === 2 && f.score.every(n => Number.isFinite(Number(n))));
-
-// ---- Team-name resolution: "Manchester City", "Man City" and "Man. City FC" are all the same club.
-// Names are normalised (accents, punctuation, "FC"/"AC" noise) and looked up in an alias table, so free-text
-// bets match the fixture feed whatever spelling the user typed.
-const TEAM_ALIASES = {
-  'AC Milan': ['milan', 'ac milan', 'a c milan'], 'AZ Alkmaar': ['az', 'az alkmaar'], 'Alaves': ['deportivo alaves'],
-  'Athletic Club': ['athletic bilbao', 'athletic', 'bilbao'], 'Atletico Madrid': ['atletico', 'atletico de madrid', 'atl madrid', 'atletico madrid'],
-  'Bayern Munich': ['bayern', 'bayern munchen', 'fc bayern', 'fc bayern munich', 'bayern munich'], 'Birmingham': ['birmingham city'],
-  'Blackburn': ['blackburn rovers'], 'Bolton': ['bolton wanderers'], 'Bournemouth': ['afc bournemouth'],
-  'Brighton': ['brighton and hove albion', 'brighton hove albion', 'brighton & hove albion'], 'Cardiff': ['cardiff city'],
-  'Celta Vigo': ['celta', 'celta de vigo', 'rc celta'], 'Charlton': ['charlton athletic'], 'Cheltenham': ['cheltenham town'],
-  'Coventry': ['coventry city'], 'Crewe': ['crewe alexandra'], 'Derby': ['derby county'], 'Doncaster': ['doncaster rovers'],
-  'Dortmund': ['borussia dortmund', 'bvb', 'bor dortmund'], 'Eintracht Frankfurt': ['frankfurt', 'e frankfurt'],
-  'Espanyol': ['rcd espanyol'], 'Exeter': ['exeter city'], 'FC Koln': ['koln', 'cologne', '1 fc koln', 'fc cologne'],
-  'FC Porto': ['porto'], 'FC Twente': ['twente'], 'FC Utrecht': ['utrecht'], 'FC Groningen': ['groningen'],
-  'Fleetwood': ['fleetwood town'], 'Freiburg': ['sc freiburg'], 'Grimsby': ['grimsby town'], 'Hamburg': ['hamburger sv', 'hsv', 'hamburg sv'],
-  'Hearts': ['heart of midlothian'], 'Hibernian': ['hibs'], 'Hoffenheim': ['tsg hoffenheim', 'tsg 1899 hoffenheim'],
-  'Huddersfield': ['huddersfield town'], 'Hull': ['hull city'], 'Inter': ['inter milan', 'internazionale', 'inter'],
-  'Ipswich': ['ipswich town'], 'Juventus': ['juve'], 'Kilmarnock': ['killie'], 'Leeds': ['leeds united'], 'Leicester': ['leicester city'],
-  'Leverkusen': ['bayer leverkusen', 'bayer 04 leverkusen', 'bayer 04'], 'Lincoln': ['lincoln city'],
-  'Lyon': ['olympique lyonnais', 'olympique lyon', 'ol'], 'Marseille': ['olympique marseille', 'olympique de marseille'],
-  'Mainz': ['mainz 05', 'fsv mainz 05', '1 fsv mainz 05'], "M'gladbach": ['monchengladbach', 'borussia monchengladbach', 'gladbach', 'mgladbach', 'b monchengladbach'],
-  'Man City': ['manchester city', 'man city', 'man c'], 'Man United': ['manchester united', 'manchester utd', 'man utd', 'man united', 'man u'],
-  'Newcastle': ['newcastle united', 'newcastle utd'], "Nott'm Forest": ['nottingham forest', 'nottm forest', 'nott m forest', 'notts forest', 'forest'],
-  'Norwich': ['norwich city'], 'Paris SG': ['psg', 'paris saint germain', 'paris st germain', 'paris saint-germain', 'paris sg'],
-  'PSV': ['psv eindhoven'], 'QPR': ['queens park rangers'], "Queen's Park": ['queens park'], 'RB Leipzig': ['leipzig', 'rasenballsport leipzig', 'rb leipzig'],
-  'Real Betis': ['betis'], 'Real Sociedad': ['sociedad'], 'Rennes': ['stade rennais'], 'Rotherham': ['rotherham united'],
-  'Roma': ['as roma'], 'Salford City': ['salford'], 'Schalke 04': ['schalke'], 'Sheffield United': ['sheffield utd', 'sheff utd', 'sheff united'],
-  'SC Braga': ['braga', 'sporting braga'], 'Sporting CP': ['sporting lisbon', 'sporting'], 'St. Johnstone': ['st johnstone', 'saint johnstone'],
-  'St. Mirren': ['st mirren', 'saint mirren'], 'Standard Liege': ['standard'], 'Stockport': ['stockport county'], 'Stoke': ['stoke city'],
-  'Strasbourg': ['rc strasbourg'], 'Stuttgart': ['vfb stuttgart', 'stuttgart'], 'Swansea': ['swansea city'], 'Tottenham': ['tottenham hotspur', 'spurs', 'tottenham'],
-  'Union Berlin': ['1 fc union berlin', 'fc union berlin'], 'Union SG': ['union saint gilloise', 'union st gilloise', 'royale union saint gilloise'],
-  'Vitoria Guimaraes': ['vitoria sc', 'guimaraes', 'vitoria de guimaraes'], 'West Brom': ['west bromwich albion', 'west bromwich', 'wba'],
-  'West Ham': ['west ham united', 'west ham utd'], 'Wigan': ['wigan athletic'], 'Wolves': ['wolverhampton wanderers', 'wolverhampton'],
-  'Wrexham': ['wrexham afc'], 'Wycombe': ['wycombe wanderers'], 'sc Heerenveen': ['heerenveen'], 'Deportivo La Coruna': ['deportivo', 'depor', 'la coruna', 'deportivo de la coruna'],
-  'Greenock Morton': ['morton'], 'Partick Thistle': ['partick'], 'Raith Rovers': ['raith'], 'Airdrieonians': ['airdrie'],
-  'Dunfermline': ['dunfermline athletic'], 'Hamilton': ['hamilton academical'], 'Ayr United': ['ayr'], 'Dundee United': ['dundee utd'],
-  'Go Ahead Eagles': ['ga eagles'], 'Sparta Rotterdam': ['sparta'], 'RKC Waalwijk': ['rkc'], 'Racing Santander': ['racing', 'r santander'],
-  'Rayo Vallecano': ['rayo'], 'Royal Antwerp': ['antwerp'], 'KRC Genk': ['genk'], 'KAA Gent': ['gent'], 'KV Mechelen': ['mechelen'],
-  'Sint-Truiden': ['sint truiden', 'st truiden'], 'Cercle Brugge': ['cercle'], 'Club Brugge': ['brugge'], 'Dinamo Zagreb': ['gnk dinamo zagreb'],
-  'Fortuna Sittard': ['fortuna'], 'Santa Clara': ['cd santa clara'], 'Moreirense': ['moreirense fc'], 'Famalicao': ['fc famalicao'],
-  'Gil Vicente': ['gil vicente fc'], 'Rio Ave': ['rio ave fc'], 'Le Havre': ['havre', 'le havre ac'], 'Paris FC': ['paris f c']
-};
-// Different names the feed uses for the same club.
-const TEAM_SAME_CLUB = { 'Inter Milan': 'Inter', 'VfB Stuttgart': 'Stuttgart' };
-const TEAM_NOISE_EDGE = new Set(['fc', 'afc', 'cf', 'ac', 'sc', 'kaa', 'krc', 'kv', 'rkc', 'as', 'rcd', '1']);
-
-function liteText(s) {
-  return String(s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
-    .replace(/&/g, ' and ').replace(/['’`]/g, '').replace(/([a-z])\./g, '$1').replace(/([a-z])-(?=[a-z])/g, '$1 ')
-    .replace(/[:;,()|"]/g, ' ').replace(/\//g, ' / ')
-    .replace(/\s+/g, ' ').trim();
-}
-const teamGroup = name => liteText(TEAM_SAME_CLUB[name] || name);
-
-let teamIndexCache = null, teamIndexSize = -1;
-function teamIndex() {
-  const fx = fixturesList();
-  if (teamIndexCache && teamIndexSize === fx.length) return teamIndexCache;
-  const phraseToGroup = new Map();
-  const add = (phrase, group) => { const p = liteText(phrase); if (p.length >= 2 && !phraseToGroup.has(p)) phraseToGroup.set(p, group); };
-  const names = new Set();
-  fx.forEach(f => { names.add(f.home); names.add(f.away); });
-  Object.keys(TEAM_ALIASES).forEach(n => names.add(n));
-  names.forEach(n => {
-    if (!n) return;
-    const g = teamGroup(n);
-    add(n, g);
-    const toks = liteText(n).split(' ');
-    while (toks.length > 1 && TEAM_NOISE_EDGE.has(toks[0])) toks.shift();
-    while (toks.length > 1 && TEAM_NOISE_EDGE.has(toks[toks.length - 1])) toks.pop();
-    if (toks.join(' ').length >= 4) add(toks.join(' '), g);
-    (TEAM_ALIASES[n] || TEAM_ALIASES[TEAM_SAME_CLUB[n]] || []).forEach(a => add(a, g));
-  });
-  teamIndexCache = { phrases: Array.from(phraseToGroup.entries()).sort((x, y) => y[0].length - x[0].length) };
-  teamIndexSize = fx.length;
-  return teamIndexCache;
-}
-
-/* Finds every club named in a free-text bet, longest names first so "Dundee United" is never read as "Dundee".
-   Returns the mentions in the order they were written, plus the text with club names blanked out. */
-function teamMentions(text) {
-  let s = ' ' + liteText(text) + ' ';
-  const orig = s;
-  const found = [];
-  for (const [phrase, group] of teamIndex().phrases) {
-    const needle = ' ' + phrase + ' ';
-    let idx = s.indexOf(needle);
-    while (idx >= 0) {
-      found.push({ group, start: idx + 1, end: idx + 1 + phrase.length });
-      s = s.slice(0, idx + 1) + ' '.repeat(phrase.length) + s.slice(idx + 1 + phrase.length);
-      idx = s.indexOf(needle);
-    }
-  }
-  found.sort((a, b) => a.start - b.start);
-  return { found, rest: s.replace(/\s+/g, ' ').trim(), orig };
-}
-
-function settleTextAgainstScore(rawText, home, away, score) {
-  const h = Number(score[0]), a = Number(score[1]);
-  const homeG = teamGroup(home), awayG = teamGroup(away);
-  const m = teamMentions(rawText);
-  let ms = m.found.filter(x => x.group === homeG || x.group === awayG);
-  // "Home v Away: Pick" or "Pick (Home v Away)" - drop the fixture label (two clubs joined by v/vs/-) so only the picked club is left
-  for (let i = 0; i < ms.length - 1; i++) {
-    if (ms[i].group === ms[i + 1].group) continue;
-    const sep = m.orig.slice(ms[i].end, ms[i + 1].start).trim();
-    if (/^(v|vs|versus|x|-|against|@)$/.test(sep)) { ms = ms.slice(0, i).concat(ms.slice(i + 2)); break; }
-    // "Home to beat Away" / "Home to win against Away": the club written first is the pick
-    if (/^(to )?(beat|defeat|win (against|vs|v|over))$/.test(sep)) { ms = ms.slice(0, i).concat(ms[i], ms.slice(i + 2)); break; }
-    // "Home to lose to Away": the club written second is the pick
-    if (/^(to )?(lose to|lose against|lose vs)$/.test(sep)) { ms = ms.slice(0, i).concat(ms[i + 1], ms.slice(i + 2)); break; }
-  }
-  const pickHome = ms.some(x => x.group === homeG), pickAway = ms.some(x => x.group === awayG);
-  const t = m.rest;
-
-  if (/corner|card|booking|shot|offside|foul|throw|player|scorer|anytime|first goal|half|handicap|minute|penalt|clean sheet|exact|correct score/.test(t)) return null;
-  if (/(^|[\s(])[+-]\s?\d/.test(t)) return null;
-
-  if (/both teams to score|btts|\bgg\b|\bng\b/.test(t)) {
-    const no = /\bno\b|\bng\b/.test(t) && !/\byes\b|\bgg\b/.test(t);
-    const both = h > 0 && a > 0;
-    return (no ? !both : both) ? 'won' : 'lost';
-  }
-  const ou = t.match(/\b(over|under)\s*(\d+(?:\.\d+)?)/);
-  if (ou) {
-    if (pickHome || pickAway) return null;  // team goals, not match goals
-    const line = Number(ou[2]), total = h + a;
-    if (total === line) return null;
-    return ((ou[1] === 'over') === (total > line)) ? 'won' : 'lost';
-  }
-  if (/draw no bet|\bdnb\b|no draw/.test(t)) return null;
-  const dc = t.match(/\b(1x|x2|12)\b/);
-  if (dc) return ((dc[1] === '1x' && h >= a) || (dc[1] === 'x2' && a >= h) || (dc[1] === '12' && h !== a)) ? 'won' : 'lost';
-  if (/draw/.test(t)) {
-    if (pickHome && !pickAway) return h >= a ? 'won' : 'lost';
-    if (pickAway && !pickHome) return a >= h ? 'won' : 'lost';
-    if (/\bor\b|\/|&|double chance/.test(t)) return null;
-    return h === a ? 'won' : 'lost';
-  }
-  let side = null;
-  if (pickHome && !pickAway) side = 'home';
-  else if (pickAway && !pickHome) side = 'away';
-  else if (/\bhome\b/.test(t) && !/\baway\b/.test(t)) side = 'home';
-  else if (/\baway\b/.test(t) && !/\bhome\b/.test(t)) side = 'away';
-  if (!side) return null;
-  return (side === 'home' ? h > a : a > h) ? 'won' : 'lost';
-}
-
-function findDiaryFixture(text, entry) {
-  const groups = new Set(teamMentions(text).found.map(x => x.group));
-  if (groups.size < 2) return null;
-  const since = Date.parse((entry.date || (entry.timestamp || '').slice(0, 10) || '1970-01-01') + 'T00:00:00Z') - 86400000;
-  const hits = fixturesList().filter(f => groups.has(teamGroup(f.home)) && groups.has(teamGroup(f.away)) && kickoffMs(f) >= since)
-    .sort((x, y) => kickoffMs(x) - kickoffMs(y));
-  return hits[0] || null;
-}
+// Team matching and settlement live in settlement.js, shared with the server's league scoring.
+const settler = window.BetBuddySettlement.create(() => fixturesList());
+const { fixtureFinished, liteText, teamGroup, teamMentions, settleTextAgainstScore, findDiaryFixture } = settler;
 
 function autoSettleDiary() {
   const diary = getStoredDiary();
@@ -4066,13 +3958,81 @@ function diaryFixtureOptions() {
     .sort((a, b) => kickoffMs(a) - kickoffMs(b));
 }
 
+// The league bet already entered for a match day: the server's record when signed in, otherwise
+// a diary bet marked for the league on this device.
 function getLeagueBetForDay(dayKey) {
   if (!dayKey) return null;
+  const server = myLeagueBets.get(dayKey);
+  if (server) return server;
   const diary = getStoredDiary();
   return diary.find(e => {
     const d = (e.date || (e.timestamp ? e.timestamp.slice(0, 10) : '') || '').slice(0, 10);
     return d === dayKey && e.inLeague;
   }) || null;
+}
+
+// The text the settlement code reads for a diary bet (the same as Bet Diary auto-settlement).
+function diaryBetText(entry) {
+  return (entry.marketName && entry.marketName !== 'Match result' ? entry.marketName + ' ' : '') + (entry.selection || '');
+}
+
+const LEAGUE_MARKET_RE = /^(result:[HDA]|goals:(over|under):\d+(\.\d+)?)$/;
+
+// Checks a diary bet the same way the league server will, so the player hears straight away if it
+// cannot count: a single on a listed match, before kick-off, on a market with a bookmaker price.
+function leagueBetCheck(entry) {
+  if (!entry || entry.type === 'accumulator') return { ok: false, reason: 'Accumulators are Bet Diary only; league bets are singles.' };
+  const fx = (entry.match_id && fixtureById(entry.match_id)) || findDiaryFixture(diaryBetText(entry), entry);
+  if (!fx) return { ok: false, reason: 'Choose the match from the list so the league can check the result.' };
+  if (!(kickoffMs(fx) > Date.now())) return { ok: false, reason: 'This match has already kicked off.' };
+  const sels = ((((DATA.odds && DATA.odds.matches) || {})[fx.id]) || {}).selections || {};
+  const candidates = Object.keys(sels).filter(k => LEAGUE_MARKET_RE.test(k));
+  if (!candidates.length) return { ok: false, reason: 'There is no bookmaker price for this match yet, so it cannot count in leagues.' };
+  const market = settler.classifyMarket(diaryBetText(entry), fx.home, fx.away, candidates);
+  if (!market) return { ok: false, reason: 'Only match result and over/under goals bets count in leagues.' };
+  return { ok: true, fixture: fx, market, refOdds: Number(sels[market].decimal), day: fx.kickoff_utc.slice(0, 10) };
+}
+
+// Sends a diary bet to the league server as the player's league bet for its match day.
+async function submitLeagueBet(entry) {
+  const user = getAuthUser();
+  if (!firestoreDb || !currentAuthUser || !user || !user.signedIn) return { ok: false, reason: 'Sign in with Google to enter league bets.' };
+  const chk = leagueBetCheck(entry);
+  if (!chk.ok) return chk;
+  const existing = myLeagueBets.get(chk.day);
+  if (existing && existing.betId !== entry.id) return { ok: false, reason: 'You already have a league bet for ' + chk.day + '.' };
+  try {
+    await firestoreDb.collection('users').doc(currentAuthUser.uid).collection('leagueBets').doc(chk.day).set(leagueDocs.leagueBetDoc({
+      betId: entry.id, fixtureId: chk.fixture.id, selection: diaryBetText(entry), odds: entry.odds,
+      now: firebase.firestore.FieldValue.serverTimestamp()
+    }));
+    return chk;
+  } catch (e) {
+    console.warn('submitLeagueBet notice:', e);
+    return { ok: false, reason: e && e.code === 'permission-denied' ? 'You already have a league bet for ' + chk.day + '.' : 'Could not reach the league server. Please try again.' };
+  }
+}
+
+function leagueBetRecordFor(entry) {
+  for (const rec of myLeagueBets.values()) if (rec.betId === entry.id) return rec;
+  return null;
+}
+
+// Enters a just-saved diary bet into the leagues, or explains why it stays in the diary only.
+async function enterLeagueBet(id) {
+  const entry = getStoredDiary().find(e => e.id === id);
+  if (!entry) return;
+  const res = await submitLeagueBet(entry);
+  const diary = getStoredDiary();
+  const saved = diary.find(e => e.id === id);
+  if (saved) {
+    saved.inLeague = !!res.ok;
+    saveStoredDiary(diary);
+  }
+  toast(res.ok
+    ? 'Entered into your leagues 🏆 It scores at the bookmaker price of ' + calc.formatFractionalOdds(res.refOdds) + ' if it wins.'
+    : 'Saved to your Bet Diary only. ' + res.reason);
+  if (['diary', 'leagues'].includes(currentRoute()[0])) render();
 }
 
 function updateDiarySubmitBtn() {
@@ -4112,26 +4072,39 @@ function updateDiaryDestinationOptions() {
   updateDiarySubmitBtn();
 }
 
-function toggleLeagueBet(id) {
+async function toggleLeagueBet(id) {
   const diary = getStoredDiary();
   const entry = diary.find(e => e.id === id);
   if (!entry) return;
-  const dayKey = (entry.date || (entry.timestamp ? entry.timestamp.slice(0, 10) : '') || '').slice(0, 10);
   if (entry.inLeague) {
-    entry.inLeague = false;
-    saveStoredDiary(diary);
+    const rec = leagueBetRecordFor(entry);
+    const beforeKickoff = rec && rec.status === 'pending' && rec.kickoffAt && rec.kickoffAt.toMillis && rec.kickoffAt.toMillis() > Date.now();
+    if (rec && rec.status !== 'rejected' && !beforeKickoff) {
+      toast('League bets stand once the match has kicked off.', 'warn');
+      return;
+    }
+    if (rec) {
+      try {
+        await firestoreDb.collection('users').doc(currentAuthUser.uid).collection('leagueBets').doc(rec.day).delete();
+      } catch (e) {
+        toast('Could not remove the league bet. Please try again.', 'warn');
+        return;
+      }
+    }
+    const fresh = getStoredDiary();
+    const target = fresh.find(e => e.id === id);
+    if (target) { target.inLeague = false; saveStoredDiary(fresh); }
     toast('Removed from League. Bet is now Diary only.');
     render();
   } else {
-    const existing = getLeagueBetForDay(dayKey);
-    if (existing && existing.id !== entry.id) {
-      toast('You already have a league bet for ' + dayKey + ' (' + (existing.selection || 'existing bet') + '). Remove it first to swap.', 'warn');
+    const chk = leagueBetCheck(entry);
+    const existing = chk.ok ? getLeagueBetForDay(chk.day) : null;
+    if (existing && existing.betId !== entry.id && existing.id !== entry.id) {
+      toast('You already have a league bet for ' + chk.day + ' (' + (existing.selection || 'existing bet') + '). Remove it first to swap.', 'warn');
       return;
     }
-    entry.inLeague = true;
-    saveStoredDiary(diary);
-    toast('Designated as your League Bet for ' + dayKey + '! 🏆');
-    render();
+    toast('Checking with the league…');
+    enterLeagueBet(id);
   }
 }
 
@@ -4284,7 +4257,7 @@ function handleDiaryFormSubmit(event) {
     selection: acc ? legs.map(l => l.selection).join(' + ') : $('modal-selection-input').value.trim(), legs: acc ? legs : undefined,
     origin: $('modal-origin-select').value, bookmaker: $('modal-bookmaker-input').value.trim() || 'Bookmaker',
     odds, stake, potentialReturn: stake * odds, outcome: 'pending', timestamp: new Date().toISOString(),
-    inLeague: inLeague,
+    inLeague: false,  // set once the league server accepts it (enterLeagueBet)
     model_p: linked && modalPrefill.p != null ? modalPrefill.p : undefined, model_fair_odds: linked ? modalPrefill.fair : undefined,
     recommendation: linked && modalPrefill.rec && $('modal-selection-input').value.trim() === modalPrefill.selection ? modalPrefill.rec : undefined,
     notes: $('modal-notes-input').value.trim()
@@ -4293,11 +4266,8 @@ function handleDiaryFormSubmit(event) {
   catch (error) { console.error(error); toast('Could not save to this browser. Check storage space or privacy settings.', 'error'); return; }
   closeDiary();
   celebrateSave();
-  if (inLeague) {
-    toast('Saved to Bet Diary & entered into today\'s leagues! 🏆');
-  } else {
-    toast('Saved to your Bet Diary.');
-  }
+  if (inLeague) enterLeagueBet(entry.id);
+  else toast('Saved to your Bet Diary.');
   if (currentRoute()[0] === 'diary') render();
 }
 
@@ -5386,7 +5356,7 @@ class HandleTakenError extends Error {}
 
 // Claims a gamertag in the handles registry and writes the public profile in one transaction.
 // Registry entries are create-only in the rules, so an entry this player already owns is left alone.
-async function claimHandleTransaction(uid, handle, avatar = '⚽') {
+async function claimHandleTransaction(uid, handle, avatar = '⚽', location = null) {
   if (!firestoreDb) throw new Error('Firestore not initialized');
   if (!isValidHandle(handle)) throw new Error('Gamertag must be 3–20 letters, numbers, or underscores.');
 
@@ -5413,7 +5383,9 @@ async function claimHandleTransaction(uid, handle, avatar = '⚽') {
     if (!handleDoc.exists) tx.set(handleRef, leagueDocs.handleDoc({ uid, handle, now }));
     if (oldHandleDoc) tx.delete(oldHandleDoc);
 
-    const profile = leagueDocs.userProfileDoc({ handle, avatar, now, isNew: true });
+    // Keep the saved location unless a new one was chosen.
+    const place = location || (existingUserData ? { town: existingUserData.town, region: existingUserData.region, country: existingUserData.country } : null);
+    const profile = leagueDocs.userProfileDoc({ handle, avatar, now, isNew: true, location: place });
     if (existingUserData && existingUserData.createdAt) profile.createdAt = existingUserData.createdAt;
     tx.set(userRef, profile);
   });
@@ -5455,7 +5427,7 @@ async function ensureUserProfile(user) {
           currentAuthProfile = { handle, avatar: currentAuthProfile.avatar || '⚽' };
         }
         const cur = getUserProfile();
-        saveUserProfile(currentAuthProfile.handle || cur.handle, cur.town, cur.region, cur.country);
+        saveUserProfile(currentAuthProfile.handle || cur.handle, currentAuthProfile.town || cur.town, currentAuthProfile.region || cur.region, currentAuthProfile.country || cur.country);
         saveAuthUser(user);
         return;
       }
@@ -5612,6 +5584,7 @@ function initFirebaseAuth() {
       try {
         await ensureUserProfile(user);
         hasSyncedUserLeagues = false;
+        listenToMyLeagueData(user.uid);
         await syncUserLeaguesFromCloud();
         try { await syncDiaryFromCloud(); } catch (e) {}
 
@@ -5626,6 +5599,7 @@ function initFirebaseAuth() {
       }
     } else {
       currentAuthUser = null;
+      stopMyLeagueListeners();
       currentAuthProfile = null;
       // Do NOT wipe cachedAuthUser here: onAuthStateChanged fires with null on initial boot before resolving session.
       // Explicit sign-out is handled by handleSignOut().
@@ -5959,9 +5933,9 @@ document.addEventListener('click', event => {
 
   if (t.id === 'btn-switch-handle') { closeAuthModal(); const _p = getUserProfile();
     $('player-handle-input').value = _p.handle;
-    if ($('player-town-input')) $('player-town-input').value = _p.town || 'Paisley';
-    if ($('player-region-input')) $('player-region-input').value = _p.region || 'Renfrewshire';
-    if ($('player-country-input')) $('player-country-input').value = _p.country || 'Scotland';
+    if ($('player-town-input')) $('player-town-input').value = _p.town || '';
+    if ($('player-region-input')) $('player-region-input').value = _p.region || '';
+    if ($('player-country-input')) $('player-country-input').value = _p.country || '';
     $('handle-modal').hidden = false; return; }
   if (t.id === 'btn-quick-signout' || t.id === 'btn-signout' || t.id === 'btn-google-signout') {
     handleSignOut();
@@ -6003,9 +5977,9 @@ document.addEventListener('click', event => {
   else if (t.dataset.closeLeague !== undefined) { $('league-modal').hidden = true; }
   else if (t.dataset.openHandleModal !== undefined) { const _p = getUserProfile();
     $('player-handle-input').value = _p.handle;
-    if ($('player-town-input')) $('player-town-input').value = _p.town || 'Paisley';
-    if ($('player-region-input')) $('player-region-input').value = _p.region || 'Renfrewshire';
-    if ($('player-country-input')) $('player-country-input').value = _p.country || 'Scotland';
+    if ($('player-town-input')) $('player-town-input').value = _p.town || '';
+    if ($('player-region-input')) $('player-region-input').value = _p.region || '';
+    if ($('player-country-input')) $('player-country-input').value = _p.country || '';
     $('handle-modal').hidden = false; }
   else if (t.dataset.closeHandle !== undefined) { $('handle-modal').hidden = true; }
   else if (t.dataset.selectLeague !== undefined) { activeLeagueId = t.dataset.selectLeague; render(); }
@@ -6239,9 +6213,9 @@ document.addEventListener('submit', event => {
   if (event.target.id === 'handle-form') {
     event.preventDefault();
     const handle = ($('player-handle-input').value || '').trim();
-    const town = $('player-town-input') ? $('player-town-input').value.trim() : 'Paisley';
-    const region = $('player-region-input') ? $('player-region-input').value.trim() : 'Renfrewshire';
-    const country = $('player-country-input') ? $('player-country-input').value.trim() : 'Scotland';
+    const town = $('player-town-input') ? $('player-town-input').value.trim() : '';
+    const region = $('player-region-input') ? $('player-region-input').value.trim() : '';
+    const country = $('player-country-input') ? $('player-country-input').value.trim() : '';
 
     if (!isValidHandle(handle)) {
       toast('Gamertag must be 3–20 characters (letters, numbers, underscores only).');
@@ -6251,7 +6225,8 @@ document.addEventListener('submit', event => {
     const user = getAuthUser();
     if (user && user.signedIn && firestoreDb) {
       toast('Updating gamertag...');
-      claimHandleTransaction(user.uid, handle, getUserProfile().avatar || '⚽').then(() => {
+      claimHandleTransaction(user.uid, handle, getUserProfile().avatar || '⚽', { town, region, country }).then(() => {
+        currentAuthProfile = Object.assign({}, currentAuthProfile, { handle, town: leagueDocs.cleanPlace(town), region: leagueDocs.cleanPlace(region), country: leagueDocs.cleanPlace(country) });
         saveUserProfile(handle, town, region, country);
         $('handle-modal').hidden = true;
         toast('Gamertag and location updated! ⚽');
@@ -6336,7 +6311,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v95';
+const APP_VERSION = 'v96';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {

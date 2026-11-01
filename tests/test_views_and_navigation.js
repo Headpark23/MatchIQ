@@ -69,6 +69,7 @@ context.window = context;
 
 vm.runInContext(mcCode, context);
 vm.runInContext(bbCode, context);
+vm.runInContext(fs.readFileSync('settlement.js', 'utf8'), context);
 vm.runInContext(fs.readFileSync('league_sync.js', 'utf8'), context);
 vm.runInContext(appCode, context);
 vm.runInContext('Object.assign(DATA, ' + JSON.stringify(DATA) + ');', context);

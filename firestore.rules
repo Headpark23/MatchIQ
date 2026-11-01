@@ -51,19 +51,23 @@ service cloud.firestore {
     //   - avatar: string, max 10 chars (required)
     //   - joinedAt: timestamp or string (required on create, immutable)
     //   - handle must be registered to this uid in handles/{handleLower}
-    //   - points: number, -1000 to 36600 (required)
-    //   - winRate: number, 0 to 100 (required)
-    //   - roi: number, -100 to 10000 (required)
-    //   - settled: number, >= 0 (required)
-    //   - form: list of strings, size <= 10 (required)
+    //   - points, winRate, roi, settled, form, periods, scoredAt: written only by the server
     //   - updatedAt: timestamp or string (required)
-    //   - periods: map of weekly/monthly/yearly stats, each with its period key (optional)
     // Access: Verified Google user (sign_in_provider == 'google.com') read. Member create (league must exist,
     //   member not banned) and update (league must exist). Member leave OR Creator kick on delete.
     //
     // Subcollection: leagues/{code}/banned/{uid}
     // Fields: handle (optional), bannedAt (required)
     // Access: Creator create/delete/read; the banned player may read their own entry.
+    //
+    // Subcollection: users/{uid}/leagueBets/{day}   (day = match date YYYY-MM-DD)
+    // Fields from the app: betId, fixtureId, selection, odds (optional), createdAt (== request.time)
+    // Fields from the server: status, reason, market, refOdds, kickoffAt, outcome, points, ...
+    // Access: owner read; owner create once; delete only before kick-off or after a refusal.
+    //
+    // Collection: leagueStats/{uid}   (server only: the player's week/month/season stats)
+    // Collection: ladders/{period}__{tier}   (server only: top 50 per regional ladder)
+    // Access: Verified Google users read; no client writes.
     //
     // Collection: geo_leagues/{tierId}
     // Document ID: Geographic tier ID ('geo-world', etc.)
@@ -101,14 +105,17 @@ service cloud.firestore {
     // ===============================================================
 
     function isValidUser(data) {
-      return data.keys().hasOnly(['handle', 'avatar', 'createdAt', 'updatedAt']) &&
+      return data.keys().hasOnly(['handle', 'avatar', 'createdAt', 'updatedAt', 'town', 'region', 'country']) &&
         data.keys().hasAll(['handle', 'createdAt']) &&
         data.handle is string &&
         data.handle.matches('^[A-Za-z0-9_]{3,20}$') &&
         (!('avatar' in data) || (data.avatar is string && data.avatar.size() <= 10)) &&
         // Legacy profiles stored createdAt as an ISO string; new ones use a server timestamp.
         (data.createdAt is timestamp || (data.createdAt is string && data.createdAt.size() <= 40)) &&
-        (!('updatedAt' in data) || (data.updatedAt is timestamp));
+        (!('updatedAt' in data) || (data.updatedAt is timestamp)) &&
+        (!('town' in data) || isPlace(data.town)) &&
+        (!('region' in data) || isPlace(data.region)) &&
+        (!('country' in data) || isPlace(data.country));
     }
 
     function isValidHandleDoc(data) {
@@ -144,28 +151,6 @@ service cloud.firestore {
         (!('memberCount' in data) || (data.memberCount is int && data.memberCount >= 0));
     }
 
-    // One qualifying bet a day scoring at most 100 points (wins count odds up to 10/1) caps what
-    // a period can honestly hold: 7 days a week, 31 a month, 366 a season.
-    function isValidPeriodStats(p, maxDays) {
-      return p is map &&
-        p.keys().hasOnly(['key', 'points', 'winRate', 'roi', 'settled', 'form']) &&
-        p.keys().hasAll(['key', 'points', 'winRate', 'roi', 'settled', 'form']) &&
-        p.key is string && p.key.size() <= 12 &&
-        p.points is number && p.points >= -2 * maxDays && p.points <= 100 * maxDays &&
-        p.winRate is number && p.winRate >= 0 && p.winRate <= 100 &&
-        p.roi is number && p.roi >= -100 && p.roi <= 10000 &&
-        p.settled is number && p.settled >= 0 && p.settled <= maxDays &&
-        p.form is list && p.form.size() <= 10;
-    }
-
-    function isValidPeriods(ps) {
-      return ps is map &&
-        ps.keys().hasOnly(['weekly', 'monthly', 'yearly']) &&
-        (!('weekly' in ps) || isValidPeriodStats(ps.weekly, 7)) &&
-        (!('monthly' in ps) || isValidPeriodStats(ps.monthly, 31)) &&
-        (!('yearly' in ps) || isValidPeriodStats(ps.yearly, 366));
-    }
-
     // A member's gamertag must be one they hold in the handles registry, so nobody can appear
     // on a leaderboard under someone else's name.
     function ownsHandle(database, handle, uid) {
@@ -174,20 +159,39 @@ service cloud.firestore {
 
     // joinedAt is required when the record is created (see the create rule) and immutable after.
     // A legacy 'uid' field is tolerated only when it matches the document ID.
+    // League stats are calculated by the server (Cloud Functions) from checked, settled league bets.
+    // The app may never write these fields on a member record.
+    function statFields() {
+      return ['points', 'winRate', 'roi', 'settled', 'form', 'periods', 'scoredAt'];
+    }
+
+    // joinedAt is required when the record is created (see the create rule) and immutable after.
+    // A legacy 'uid' field is tolerated only when it matches the document ID.
     function isValidMember(data, uid) {
-      return data.keys().hasOnly(['uid', 'handle', 'avatar', 'joinedAt', 'points', 'winRate', 'roi', 'settled', 'form', 'updatedAt', 'periods']) &&
-        data.keys().hasAll(['handle', 'avatar', 'points', 'winRate', 'roi', 'settled', 'form', 'updatedAt']) &&
+      return data.keys().hasOnly(['uid', 'handle', 'avatar', 'joinedAt', 'updatedAt', 'points', 'winRate', 'roi', 'settled', 'form', 'periods', 'scoredAt']) &&
+        data.keys().hasAll(['handle', 'avatar', 'updatedAt']) &&
         (!('uid' in data) || data.uid == uid) &&
         data.handle is string && data.handle.matches('^[A-Za-z0-9_]{3,20}$') &&
         data.avatar is string && data.avatar.size() <= 10 && !data.avatar.matches('(?s).*[<>&"].*') &&
         (!('joinedAt' in data) || isTimeValue(data.joinedAt)) &&
-        data.points is number && data.points >= -1000 && data.points <= 36600 &&
-        data.winRate is number && data.winRate >= 0 && data.winRate <= 100 &&
-        data.roi is number && data.roi >= -100 && data.roi <= 10000 &&
-        data.settled is number && data.settled >= 0 && data.settled <= 366 &&
-        data.form is list && data.form.size() <= 10 &&
-        (!('periods' in data) || isValidPeriods(data.periods)) &&
         isTimeValue(data.updatedAt);
+    }
+
+    // users/{uid}/leagueBets/{day}: one league bet per match day, stamped with the server's clock.
+    // The server adds the checked fixture, market, bookmaker price and later the result.
+    function isValidLeagueBet(data, day) {
+      return day.matches('^20[0-9]{2}-[01][0-9]-[0-3][0-9]$') &&
+        data.keys().hasOnly(['betId', 'fixtureId', 'selection', 'odds', 'createdAt']) &&
+        data.keys().hasAll(['betId', 'fixtureId', 'selection', 'createdAt']) &&
+        data.betId is string && data.betId.size() >= 1 && data.betId.size() <= 64 &&
+        data.fixtureId is string && data.fixtureId.size() >= 1 && data.fixtureId.size() <= 80 &&
+        data.selection is string && data.selection.size() >= 1 && data.selection.size() <= 160 &&
+        (!('odds' in data) || (data.odds is number && data.odds > 1 && data.odds < 10000)) &&
+        data.createdAt == request.time;
+    }
+
+    function isPlace(v) {
+      return isSafeText(v, 40);
     }
 
     function isValidBan(data) {
@@ -226,6 +230,31 @@ service cloud.firestore {
       match /diary/{betId} {
         allow read, write: if isOwner(uid);
       }
+
+      // 3b. League bets: create only. A bet can be withdrawn before kick-off, or removed if the
+      // server refused it; after kick-off it stands, so nobody can delete a losing bet.
+      match /leagueBets/{day} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && isVerifiedUser() && isValidLeagueBet(request.resource.data, day);
+        allow update: if false;
+        allow delete: if isOwner(uid) &&
+          (resource.data.get('status', '') == 'rejected' ||
+           (resource.data.get('status', '') == 'pending' &&
+            resource.data.get('kickoffAt', null) is timestamp &&
+            request.time < resource.data.kickoffAt));
+      }
+    }
+
+    // 3c. Each player's league stats, calculated by the server. Read-only for players.
+    match /leagueStats/{uid} {
+      allow read: if isVerifiedUser();
+      allow write: if false;
+    }
+
+    // 3d. Regional ladders (top 50 per period and tier), built by the server.
+    match /ladders/{ladderId} {
+      allow read: if isVerifiedUser();
+      allow write: if false;
     }
 
     // 4. Global Handle Registry (doc ID = handleLower)
@@ -271,6 +300,7 @@ service cloud.firestore {
           existsAfter(leaguePath(database, code)) &&
           !exists(/databases/$(database)/documents/leagues/$(code)/banned/$(uid)) &&
           'joinedAt' in request.resource.data &&
+          !request.resource.data.keys().hasAny(statFields()) &&
           isValidMember(request.resource.data, uid) &&
           ownsHandle(database, request.resource.data.handle, uid);
 
@@ -278,6 +308,7 @@ service cloud.firestore {
           request.auth.uid == uid &&
           exists(leaguePath(database, code)) &&
           request.resource.data.get('joinedAt', null) == resource.data.get('joinedAt', null) &&
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(statFields()) &&
           isValidMember(request.resource.data, uid) &&
           ownsHandle(database, request.resource.data.handle, uid);
 

@@ -1,0 +1,16 @@
+{
+  "name": "betbuddy-league-functions",
+  "private": true,
+  "description": "Server-side league scoring and regional ladders for Bet Buddy",
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "test": "node test/scoring.test.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0"
+  }
+}

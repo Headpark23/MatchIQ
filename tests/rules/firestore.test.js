@@ -10,7 +10,7 @@
  *  6. Non-creator cannot rename, update or delete another creator's league
  *  7. Whole-collection list on `leagues` denied (anti-scraping)
  *  8. Handle claims: doc ID must match lowercase handle, handle format validation, uniqueness
- *  9. Out-of-bounds stats rejected on member docs (points, winRate, roi, settled, form)
+ *  9. League stats are server-only; league bets are create-once with the server clock
  * 10. Member can leave league; League creator can kick member; Non-creator cannot kick member
  * 11. Geo leagues public read allowed, client writes denied
  * 12. Root default deny on arbitrary collections
@@ -368,10 +368,10 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       return batch.commit();
     }
 
-    // syncLeagueToCloud(): a stats refresh is an update only.
-    function syncStatsAs(uid, handle, stats = sampleStats) {
+    // syncLeagueToCloud(): a gamertag/avatar refresh is an update only (stats come from the server).
+    function syncStatsAs(uid, handle) {
       const db = getGoogleUser(uid);
-      return memberRef(db, uid).update(leagueDocs.memberStatsUpdate({ handle, avatar: '🎯', stats, now: now() }));
+      return memberRef(db, uid).update(leagueDocs.memberProfileUpdate({ handle, avatar: '🎯', now: now() }));
     }
 
     it('creator can publish a new league in one batch', async function () {
@@ -381,7 +381,7 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
     it('a player can join, then refresh their stats', async function () {
       await createLeagueAsAlice();
       await assertSucceeds(joinAs('bob', 'Bob_7'));
-      await assertSucceeds(syncStatsAs('bob', 'Bob_7', { points: 42, winRate: 50, roi: -3.2, settled: 4, form: ['W', 'L'] }));
+      await assertSucceeds(syncStatsAs('bob', 'Bob_7'));
     });
 
     it('joining a league that does not exist is denied', async function () {
@@ -489,20 +489,64 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       }));
     });
 
-    it('per-period stats are accepted within one-bet-a-day limits', async function () {
+    it('players can never write league stats; only the server can', async function () {
       await createLeagueAsAlice();
-      await joinAs('bob', 'Bob_7');
       const db = getGoogleUser('bob');
-      const periods = {
-        weekly: { key: 'W2026-10-26', points: 120, winRate: 50, roi: 4, settled: 4, form: ['W', 'L'] },
-        monthly: { key: 'M2026-11', points: 300, winRate: 50, roi: 4, settled: 12, form: ['W'] },
-        yearly: { key: 'S2026', points: 900, winRate: 50, roi: 4, settled: 40, form: ['W'] }
-      };
-      await assertSucceeds(memberRef(db, 'bob').update(leagueDocs.memberStatsUpdate({ handle: 'Bob_7', avatar: '🎯', stats: periods.weekly, periods, now: now() })));
-      // More than 7 days' worth of maximum wins in one week is impossible, so it is refused.
-      const inflated = { ...periods, weekly: { ...periods.weekly, points: 701 } };
-      await assertFails(memberRef(db, 'bob').update({ ...leagueDocs.memberStatsUpdate({ handle: 'Bob_7', avatar: '🎯', stats: periods.weekly, periods, now: now() }), periods: inflated }));
-      await assertFails(memberRef(db, 'bob').update({ points: 50000 }));
+      // Joining with stats is refused ...
+      await assertFails(memberRef(db, 'bob').set({ ...leagueDocs.newMemberDoc({ handle: 'Bob_7', avatar: '🎯', now: now() }), points: 500 }));
+      await joinAs('bob', 'Bob_7');
+      // ... and so is changing them afterwards, even after the server has written some.
+      await testEnv.withSecurityRulesDisabled(async (ctx) => {
+        await ctx.firestore().collection('leagues').doc(code).collection('members').doc('bob').update({ points: 8, scoredAt: new Date(), periods: { weekly: { key: 'W2026-11-09', points: 8 } } });
+      });
+      await assertFails(memberRef(db, 'bob').update({ points: 5000 }));
+      await assertFails(memberRef(db, 'bob').update({ 'periods.weekly.points': 5000 }));
+      await assertFails(memberRef(db, 'bob').update({ scoredAt: new Date() }));
+      await assertSucceeds(syncStatsAs('bob', 'Bob_7'));
+      await assertFails(db.collection('leagueStats').doc('bob').set({ periods: {} }));
+      await assertFails(db.collection('ladders').doc('weekly__world').set({ entries: [] }));
+      await assertSucceeds(db.collection('leagueStats').doc('alice').get());
+      await assertSucceeds(db.collection('ladders').doc('weekly__world').get());
+      await assertFails(getUnauth().collection('ladders').doc('weekly__world').get());
+    });
+
+    // submitLeagueBet(): one league bet per match day, stamped with the server clock.
+    const betRef = (db, uid, day = '2026-11-08') => db.collection('users').doc(uid).collection('leagueBets').doc(day);
+    const leagueBet = (extra = {}) => ({ ...leagueDocs.leagueBetDoc({ betId: 'bet-1', fixtureId: 'PL-2627-ars-v-tot', selection: 'Arsenal', odds: 2.5, now: serverTime() }), ...extra });
+
+    it('league bets: create once per day with the server clock; no client-side odds or results', async function () {
+      const db = getGoogleUser('bob');
+      await assertSucceeds(betRef(db, 'bob').set(leagueBet()));
+      await assertFails(betRef(db, 'bob').set(leagueBet({ selection: 'Tottenham' })), 'second bet for the same day');
+      await assertFails(betRef(db, 'bob').update({ selection: 'Draw' }));
+      await assertFails(betRef(db, 'bob', '2026-11-09').set(leagueBet({ createdAt: new Date('2026-11-01') })), 'backdated');
+      await assertFails(betRef(db, 'bob', '2026-11-09').set(leagueBet({ refOdds: 15 })), 'client cannot set the scoring price');
+      await assertFails(betRef(db, 'bob', '2026-11-09').set(leagueBet({ status: 'settled', points: 100 })), 'client cannot settle');
+      await assertFails(betRef(db, 'bob', 'not-a-day').set(leagueBet()));
+      await assertFails(betRef(getGoogleUser('charlie'), 'bob', '2026-11-09').set(leagueBet()), 'someone else\'s bets');
+      await assertFails(betRef(getGoogleUser('charlie'), 'bob').get());
+      await assertFails(betRef(getEmailUser('bob'), 'bob', '2026-11-10').set(leagueBet()), 'Google sign-in only');
+    });
+
+    it('league bets: withdraw before kick-off or after a refusal, never after kick-off', async function () {
+      const db = getGoogleUser('bob');
+      const serverSets = async (day, fields) => testEnv.withSecurityRulesDisabled(async (ctx) => {
+        await ctx.firestore().collection('users').doc('bob').collection('leagueBets').doc(day).set({ betId: 'b', fixtureId: 'f', selection: 's', createdAt: new Date(), ...fields });
+      });
+      await serverSets('2026-11-08', { status: 'pending', kickoffAt: new Date(Date.now() + 3600000) });
+      await serverSets('2026-11-09', { status: 'pending', kickoffAt: new Date(Date.now() - 60000) });
+      await serverSets('2026-11-10', { status: 'rejected', reason: 'No price' });
+      await serverSets('2026-11-11', { status: 'settled', outcome: 'lost', points: -2 });
+      await assertSucceeds(betRef(db, 'bob', '2026-11-08').delete());
+      await assertFails(betRef(db, 'bob', '2026-11-09').delete(), 'kicked off: the bet stands');
+      await assertSucceeds(betRef(db, 'bob', '2026-11-10').delete());
+      await assertFails(betRef(db, 'bob', '2026-11-11').delete(), 'a settled loser cannot be deleted');
+    });
+
+    it('profiles can carry a location for the regional ladders, without markup', async function () {
+      const db = getGoogleUser('alice');
+      await assertSucceeds(db.collection('users').doc('alice').set(leagueDocs.userProfileDoc({ handle: 'Alice_99', avatar: '⚽', now: serverTime(), isNew: true, location: { town: 'Paisley', region: 'Renfrewshire', country: 'Scotland' } })));
+      await assertFails(db.collection('users').doc('alice').set({ handle: 'Alice_99', avatar: '⚽', createdAt: new Date(), town: '<img src=x>' }));
     });
 
     it('a member cannot appear under a gamertag they do not hold', async function () {
