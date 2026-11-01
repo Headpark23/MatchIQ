@@ -1397,7 +1397,7 @@ function renderWelcomeHero() {
       '<div class="welcome-text-col">' +
         '<div class="welcome-badge-tag"><span class="badge-dot"></span> Welcome, ' + esc(userName) + '! · Free &amp; Ad-Free</div>' +
         '<h1 class="welcome-hero-title">Your Honest Sports Betting Co-Pilot</h1>' +
-        '<p class="welcome-hero-narrative">Real mathematical edge, live bookie odds &amp; private leagues with mates.</p>' +
+        '<p class="welcome-hero-narrative">Honest football predictions, regularly updated bookie prices &amp; private leagues with mates.</p>' +
       '</div>' +
     '</div>' +
 
@@ -1414,7 +1414,7 @@ function renderWelcomeHero() {
             '<div class="portal-icon-large">⚽🎯</div>' +
             '<div class="portal-hero-text">' +
               '<h2 class="portal-hero-heading">Pick a Bet &amp; Build Acca</h2>' +
-              '<p class="portal-hero-desc">Target £10–£1,000 return across 2–6 legs with verified statistical edge, live odds &amp; 1-click accumulator builder.</p>' +
+              '<p class="portal-hero-desc">Target £10–£1,000 return across 2–6 legs, using the model&rsquo;s estimates and the latest bookie prices we have.</p>' +
             '</div>' +
             '<div class="portal-card-action">' +
               '<span class="btn primary portal-cta-btn">' +
@@ -1438,7 +1438,7 @@ function renderWelcomeHero() {
             '<div class="portal-icon-large">💎📈</div>' +
             '<div class="portal-hero-text">' +
               '<h2 class="portal-hero-heading">Today\'s Best Value Bet</h2>' +
-              '<p class="portal-hero-desc">Peak mathematical value against live UK bookies. View today\'s recommended Value Single, Double, Treble, or 4-Fold Acca.</p>' +
+              '<p class="portal-hero-desc">The biggest gap between the model&rsquo;s estimate and recent UK bookie prices. View today\'s recommended Value Single, Double, Treble, or 4-Fold Acca.</p>' +
             '</div>' +
             '<div class="portal-card-action">' +
               '<button type="button" class="btn primary portal-cta-btn bv-cta-btn" onclick="event.stopPropagation(); openBestValueModal(\'single\');">' +
@@ -1924,6 +1924,8 @@ function homeFixtures() {
 
 let fixturesTab = 'upcoming';
 let fixturesShowAll = false;
+let fixturesLimit = 60;
+let resultsLimit = 40;
 function viewFixtures() {
   const all = fixturesList().filter(f => inComp(f.competition)), now = Date.now();
   const tabs = { upcoming: 'Upcoming', awaiting: 'Awaiting result', results: 'Results' };
@@ -1938,6 +1940,8 @@ function viewFixtures() {
     list = all.filter(f => f.status === 'FINISHED').sort((a, b) => kickoffMs(b) - kickoffMs(a)).slice(0, fixturesShowAll ? 400 : 30);
   }
   if (clubFilter) list = list.filter(f => f.home.toLowerCase().includes(clubFilter) || f.away.toLowerCase().includes(clubFilter));
+  const fixturesTotal = list.length;
+  list = list.slice(0, fixturesLimit);
   const searchBar = '<div class="search-bar"><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off"></div>';
   let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">' + (compFilter === 'ALL' ? 'All ' + Object.keys(LEAGUES).length + ' competitions' : esc(leagueName(compFilter))) + ' 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
     compBar() + searchBar + '<div class="section" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between"><div class="seg" role="group" aria-label="Fixture list">' +
@@ -1945,6 +1949,7 @@ function viewFixtures() {
   if (LOAD_ERRORS.fixtures) return html + errorPanel('fixtures') + '</section>';
   html += list.length ? groupedRows(list) : '<div class="empty" style="margin-top:16px">' + (fixturesTab === 'awaiting' ? 'No matches are waiting for a confirmed result.' : 'Nothing to show yet.') + '</div>';
   if ((fixturesTab === 'upcoming' || fixturesTab === 'results') && !fixturesShowAll) html += '<button type="button" class="btn" data-showall style="margin-top:8px">Show ' + (fixturesTab === 'upcoming' ? 'the rest of the season' : 'all results') + '</button>';
+  if (fixturesTotal > list.length) html += '<button type="button" class="btn" data-more style="margin-top:8px">Show more matches (' + (fixturesTotal - list.length) + ' left)</button>';
   return html + '</section>';
 }
 
@@ -2208,7 +2213,7 @@ function viewResults() {
   const shown = resultsFilter === 'settled' ? settled : resultsFilter === 'pending' ? pending : future;
   html += '<div class="section card" style="padding:0"><div class="section-head" style="padding:16px 16px 0"><h2 class="section-title">Prediction log</h2><div class="seg" role="group" aria-label="Prediction log">' +
     [['settled', 'Settled'], ['pending', 'Awaiting result'], ['future', 'Upcoming']].map(([k, l]) => '<button type="button" data-rfilter="' + k + '" aria-pressed="' + (resultsFilter === k) + '">' + l + '</button>').join('') + '</div></div>' +
-    (shown.length ? shown.map(logRow).join('') : '<p class="muted" style="padding:16px">Nothing here yet.</p>') + '</div>';
+    (shown.length ? shown.slice(0, resultsLimit).map(logRow).join('') + (shown.length > resultsLimit ? '<div style="padding:12px"><button type="button" class="btn" data-rmore>Show more (' + (shown.length - resultsLimit) + ' left)</button></div>' : '') : '<p class="muted" style="padding:16px">Nothing here yet.</p>') + '</div>';
   return html + '</section>';
 }
 
@@ -3394,7 +3399,7 @@ function viewLeagues() {
         '<div class="section-head">' +
           '<div>' +
             '<h2 class="section-title">How Buddy Leagues Work</h2>' +
-            '<p class="section-note">Fair, audited competition with zero gambling.</p>' +
+            '<p class="section-note">Fair, audited competition. Leagues use pretend picks, not real money.</p>' +
           '</div>' +
         '</div>' +
         '<div class="grid grid-2" style="margin-top:16px;gap:12px;">' +
@@ -3680,7 +3685,7 @@ function viewDiary() {
   if (!all.length) {
     return '<section class="view">' +
       '<h1 class="page-title">Bet Diary</h1>' +
-      '<p class="page-sub">Your private record of bets and prices. Stored only in this browser and only for this web address.</p>' +
+      '<p class="page-sub">Your private record of bets and prices. ' + (getAuthUser() && getAuthUser().signedIn ? 'Saved on this device and synced to your account when you are signed in.' : 'Saved only in this browser. Sign in with Google to sync it between devices.') + '</p>' +
       (diaryReadFailed ? '<div class="notice error">Saved diary data could not be read. It has been left untouched, and saving is disabled to protect it.</div>' : '') +
       '<div class="empty-diary-card card section" style="text-align:center;padding:48px 24px;border:1px dashed rgba(255,255,255,0.18);border-radius:16px;max-width:540px;margin:28px auto 0;">' +
         '<div style="font-size:42px;margin-bottom:12px;">📓</div>' +
@@ -3695,7 +3700,7 @@ function viewDiary() {
   const diary = diaryProfileFilter === 'all' ? all : all.filter(e => (e.profile || 'Default') === diaryProfileFilter);
   const s = calc.summarizeBetDiary(diary);
   const profiles = Array.from(new Set(all.map(e => e.profile || 'Default'))).sort();
-  let html = '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">Bet Diary</h1><p class="page-sub">Your private record of bets and prices. Stored only in this browser and only for this web address: it does not sync between devices, a different preview address starts empty, and clearing site data removes it. Use Backup, then Import on the other address, to move it.</p></div>' +
+  let html = '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">Bet Diary</h1><p class="page-sub">Your private record of bets and prices. ' + (getAuthUser() && getAuthUser().signedIn ? 'Saved on this device and synced to your account. ' : 'Saved only in this browser and web address, so it does not sync between devices until you sign in with Google. Clearing site data removes it. ') + 'Use Backup, then Import, to move it manually.' + '</p></div>' +
     '<div class="btn-row"><button type="button" class="btn primary" data-diary="{}">Add a bet</button><button type="button" class="btn" data-export="csv">Export CSV</button><button type="button" class="btn" data-export="json">Export JSON</button><button type="button" class="btn" data-export="backup">Backup</button><button type="button" class="btn" data-import="diary">Import</button><input type="file" id="diary-import" accept="application/json,.json" hidden></div></div>';
   if (diaryReadFailed) html += '<div class="notice error">Saved diary data could not be read. It has been left untouched, and saving is disabled to protect it.</div>';
   html += '<div class="tiles section" style="margin-top:16px">' +
@@ -6061,11 +6066,13 @@ document.addEventListener('click', event => {
   else if (t.dataset.toggleLeague) toggleLeagueBet(t.dataset.toggleLeague);
   else if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));
   else if (t.dataset.close !== undefined) closeDiary();
-  else if (t.dataset.comp) { compFilter = t.dataset.comp; try { localStorage.setItem(COMP_KEY, compFilter); } catch (e) { /* ignore */ } render(); }
-  else if (t.dataset.tab) { fixturesTab = t.dataset.tab; fixturesShowAll = false; render(); }
-  else if (t.dataset.showall !== undefined) { fixturesShowAll = true; render(); }
+  else if (t.dataset.comp) { compFilter = t.dataset.comp; fixturesLimit = 60; resultsLimit = 40; try { localStorage.setItem(COMP_KEY, compFilter); } catch (e) { /* ignore */ } render(); }
+  else if (t.dataset.tab) { fixturesTab = t.dataset.tab; fixturesShowAll = false; fixturesLimit = 60; render(); }
+  else if (t.dataset.more !== undefined) { fixturesLimit += 60; render(); }
+  else if (t.dataset.rmore !== undefined) { resultsLimit += 40; render(); }
+  else if (t.dataset.showall !== undefined) { fixturesShowAll = true; fixturesLimit = 60; render(); }
   else if (t.dataset.sportRfilter) { resultsSportFilter = t.dataset.sportRfilter; render(); }
-  else if (t.dataset.rfilter) { resultsFilter = t.dataset.rfilter; render(); }
+  else if (t.dataset.rfilter) { resultsFilter = t.dataset.rfilter; resultsLimit = 40; render(); }
   else if (t.dataset.export === 'csv') exportDiaryCSV();
   else if (t.dataset.export === 'json') exportDiaryJSON();
   else if (t.dataset.export === 'backup') exportDiaryBackup();
@@ -6236,11 +6243,12 @@ document.addEventListener('submit', event => {
       'URL: ' + location.href + '\n\n' +
       'Sent via Bet Buddy Bug Reporter.'
     );
+    try { navigator.clipboard.writeText(['Bet Buddy ' + type + ' report', 'Contact: ' + (contact || 'Anonymous'), '', desc, '', 'URL: ' + location.href, 'Platform: ' + navigator.userAgent].join('\n')); } catch (e) { /* clipboard is a convenience */ }
     window.open('mailto:octopigardens@gmail.com?subject=' + subject + '&body=' + body, '_blank');
 
     $('bug-form').reset();
     $('bug-modal').hidden = true;
-    toast('Thanks! Opening email to send bug report to Martin and Chris...');
+    toast('Thanks! Your report is saved and copied. If no email app opens, paste it to octopigardens@gmail.com.');
     render();
     return;
   }
