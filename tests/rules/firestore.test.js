@@ -53,9 +53,19 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
     }
   });
 
+  // Gamertags used below, reserved to their owners (members must hold their handle).
+  const RESERVED_HANDLES = { alicepark: 'alice', bob_7: 'bob', charlie_1: 'charlie', bob_the_punter: 'bob' };
+
   beforeEach(async function () {
     if (testEnv) {
       await testEnv.clearFirestore();
+      await testEnv.withSecurityRulesDisabled(async (ctx) => {
+        const db = ctx.firestore();
+        for (const [lower, uid] of Object.entries(RESERVED_HANDLES)) {
+          const handle = { alicepark: 'AlicePark', bob_7: 'Bob_7', charlie_1: 'Charlie_1', bob_the_punter: 'Bob_The_Punter' }[lower];
+          await db.collection('handles').doc(lower).set({ uid, handle, createdAt: new Date() });
+        }
+      });
     }
   });
 
@@ -102,7 +112,7 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
   });
 
   const sampleStats = { points: 150, winRate: 65.5, roi: 18.2, settled: 12, form: ['W', 'W', 'L', 'W'] };
-  const validMemberPayload = leagueDocs.newMemberDoc({ handle: 'Alice_99', avatar: '⚽', stats: sampleStats, now: NOW });
+  const validMemberPayload = leagueDocs.newMemberDoc({ handle: 'AlicePark', avatar: '⚽', stats: sampleStats, now: NOW });
 
   // -----------------------------------------------------------------
   // 1. Unauthenticated Access Protection
@@ -344,7 +354,7 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       const db = getGoogleUser('alice');
       const batch = db.batch();
       batch.set(leagueRef(db), leagueDocs.leagueDoc({ code, name: 'Paisley Punters', icon: '⚽', freq: 'weekly', creatorUid: 'alice', creatorHandle: 'Alice_99', now: now() }));
-      batch.set(memberRef(db, 'alice'), leagueDocs.newMemberDoc({ handle: 'Alice_99', avatar: '⚽', stats: sampleStats, now: now() }));
+      batch.set(memberRef(db, 'alice'), leagueDocs.newMemberDoc({ handle: 'AlicePark', avatar: '⚽', stats: sampleStats, now: now() }));
       batch.set(membershipRef(db, 'alice'), leagueDocs.membershipDoc({ code, name: 'Paisley Punters', icon: '⚽', role: 'creator', now: now() }));
       return batch.commit();
     }
@@ -477,6 +487,31 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
         tx.delete(db.collection('handles').doc('alice_99'));
         tx.set(db.collection('users').doc('alice'), { ...leagueDocs.userProfileDoc({ handle: 'Alice_New', avatar: '⚽', now: serverTime(), isNew: true }), createdAt: existing.createdAt });
       }));
+    });
+
+    it('per-period stats are accepted within one-bet-a-day limits', async function () {
+      await createLeagueAsAlice();
+      await joinAs('bob', 'Bob_7');
+      const db = getGoogleUser('bob');
+      const periods = {
+        weekly: { key: 'W2026-10-26', points: 120, winRate: 50, roi: 4, settled: 4, form: ['W', 'L'] },
+        monthly: { key: 'M2026-11', points: 300, winRate: 50, roi: 4, settled: 12, form: ['W'] },
+        yearly: { key: 'S2026', points: 900, winRate: 50, roi: 4, settled: 40, form: ['W'] }
+      };
+      await assertSucceeds(memberRef(db, 'bob').update(leagueDocs.memberStatsUpdate({ handle: 'Bob_7', avatar: '🎯', stats: periods.weekly, periods, now: now() })));
+      // More than 7 days' worth of maximum wins in one week is impossible, so it is refused.
+      const inflated = { ...periods, weekly: { ...periods.weekly, points: 701 } };
+      await assertFails(memberRef(db, 'bob').update({ ...leagueDocs.memberStatsUpdate({ handle: 'Bob_7', avatar: '🎯', stats: periods.weekly, periods, now: now() }), periods: inflated }));
+      await assertFails(memberRef(db, 'bob').update({ points: 50000 }));
+    });
+
+    it('a member cannot appear under a gamertag they do not hold', async function () {
+      await createLeagueAsAlice();
+      const db = getGoogleUser('bob');
+      const batch = db.batch();
+      batch.set(memberRef(db, 'bob'), leagueDocs.newMemberDoc({ handle: 'AlicePark', avatar: '🎯', stats: {}, now: now() }));
+      await assertFails(batch.commit());
+      await assertFails(memberRef(db, 'bob').set(leagueDocs.newMemberDoc({ handle: 'Unclaimed_1', avatar: '🎯', stats: {}, now: now() })));
     });
 
     it('profiles may not carry email or other private fields', async function () {

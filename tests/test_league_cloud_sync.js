@@ -41,6 +41,8 @@ function createCloud() {
       if (op.kind === 'update' && !docs.has(op.path)) throw fsError('not-found');
       if (m && op.kind !== 'delete') {
         if (m[2] !== uid) throw fsError('permission-denied');
+        const owner = after.get('handles/' + String(after.get(op.path).handle).toLowerCase());
+        if (!owner || owner.uid !== uid) throw fsError('permission-denied');
         if (!after.has('leagues/' + m[1])) throw fsError('permission-denied');
         if (!docs.has(op.path)) {
           if (docs.has('leagues/' + m[1] + '/banned/' + m[2])) throw fsError('permission-denied');
@@ -314,6 +316,110 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   assert(!cloud.docs.has('leagues/' + code2 + '/members/carol'), 'leaving is not undone by the other device');
   assert(!carol2.league(code2), 'league removed from the other device');
   console.log('  PASS: leaving a league on one device is not undone by another.');
+
+  // Scoring: only bets the app settled from the result and logged before kick-off count, and a
+  // win counts odds up to 10/1. Stats are for the current UK period.
+  const today = carol.run('leagueDocs.londonDate(new Date())');
+  const iso = ms => new Date(ms).toISOString();
+  const nowMs = Date.now();
+  const bets = [
+    { id: 'b1', date: today, timestamp: iso(nowMs - 7200000), kickoffAt: iso(nowMs - 3600000), settledBy: 'auto', outcome: 'won', odds: 21, stake: 1 },
+    { id: 'b2', date: '2020-01-01', timestamp: iso(nowMs - 7200000), kickoffAt: iso(nowMs - 3600000), settledBy: 'auto', outcome: 'won', odds: 3, stake: 1 }
+  ];
+  carol.run('saveStoredDiary(' + JSON.stringify(bets) + ')');
+  let st = carol.run("getUserLeagueStats('weekly')");
+  assert.strictEqual(st.points, 100, "a 20/1 winner counts as 10/1 (100 pts); last period's bet does not count");
+  for (const bad of [
+    { settledBy: 'manual', manualOverride: true },  // settled by hand
+    { timestamp: iso(nowMs - 1800000) },           // logged after kick-off
+    { settledBy: null }                            // never settled automatically
+  ]) {
+    carol.run('saveStoredDiary(' + JSON.stringify([Object.assign({}, bets[0], bad)]) + ')');
+    st = carol.run("getUserLeagueStats('weekly')");
+    assert.strictEqual(st.points, 0, 'ineligible bet must not score: ' + JSON.stringify(bad));
+  }
+  carol.run('saveStoredDiary([])');
+  console.log('  PASS: only auto-settled bets logged before kick-off score, and wins count odds up to 10/1.');
+
+  // Periods: a member whose numbers are from last week shows zero this week; this week's show as-is.
+  const code3 = alice.run('generateSecureLeagueCode()');
+  alice.run(`(() => { const l = { id: 'league-three', name: 'Third', icon: '⚽', freq: 'weekly', code: '${code3}', creatorUid: 'alice', is_joined: false, members: [] };
+    const list = getStoredLeagues(); list.push(l); saveStoredLeagues(list); return publishLeague(l, getAuthUser()); })()`);
+  await settle();
+  const thisWeek = alice.run("leagueDocs.currentPeriodKey('weekly')");
+  const memberDoc = (handle, key, points) => ({ handle, avatar: '⚽', joinedAt: 'x', updatedAt: 'x', points, winRate: 50, roi: 1, settled: 2, form: ['W'],
+    periods: { weekly: { key, points, winRate: 50, roi: 1, settled: 2, form: ['W'] } } });
+  cloud.docs.set('handles/dan_1', { uid: 'dan', handle: 'Dan_1' });
+  cloud.docs.set('handles/eve_1', { uid: 'eve', handle: 'Eve_1' });
+  cloud.docs.set('leagues/' + code3 + '/members/dan', memberDoc('Dan_1', 'W2020-01-06', 55));
+  cloud.docs.set('leagues/' + code3 + '/members/eve', memberDoc('Eve_1', thisWeek, 55));
+  // Two different accounts showing the same gamertag each get their own row.
+  cloud.docs.set('leagues/' + code3 + '/members/eve2', memberDoc('Eve_1', thisWeek, 7));
+  alice.run("activeLeagueId = 'league-three'; activeLeagueFreq = 'weekly'");
+  alice.run('viewLeagues()');
+  await settle();
+  const lb = alice.run('viewLeagues()');
+  const pointsFor = handle => {
+    const out = [];
+    const re = /lb-handle">([^<]+)<\/b>[\s\S]*?lb-pts-val">(-?\d+)</g;
+    let m;
+    while ((m = re.exec(lb))) if (m[1] === handle) out.push(+m[2]);
+    return out.sort((a, b) => a - b);
+  };
+  assert.deepStrictEqual(pointsFor('Dan_1'), [0], "last week's points show as 0 this week");
+  assert.deepStrictEqual(pointsFor('Eve_1'), [7, 55], 'same gamertag on two accounts shows two rows');
+  console.log("  PASS: tables use this period's numbers only, with one row per account.");
+
+  // A player cannot join under a gamertag they do not hold.
+  cloud.docs.set('handles/' + bobHandle.toLowerCase(), { uid: 'someone-else', handle: bobHandle });
+  await bob.run(`joinCloudLeague('${code3}')`);
+  await settle();
+  assert(!cloud.docs.has('leagues/' + code3 + '/members/bob'), 'join with a gamertag held by someone else is refused');
+  cloud.docs.set('handles/' + bobHandle.toLowerCase(), { uid: 'bob', handle: bobHandle });
+
+  // Leagues are capped at 50 players.
+  for (let i = 0; i < 47; i++) cloud.docs.set('leagues/' + code3 + '/members/filler' + i, memberDoc('Filler' + i, thisWeek, 0));
+  bob.toasts.length = 0;
+  await bob.run(`joinCloudLeague('${code3}')`);
+  await settle();
+  assert(!cloud.docs.has('leagues/' + code3 + '/members/bob'), 'a full league cannot be joined');
+  assert(bob.toasts.some(t => t.startsWith('This league is full')), 'player is told the league is full');
+  console.log('  PASS: gamertags must be held by their owner, and leagues stop at 50 players.');
+
+  // Bet Diary: two devices for one account stay in step, including deletes and settlements,
+  // and only changed entries are written.
+  const d1 = makeDevice(cloud, { uid: 'fay', name: 'Fay' });
+  const d2 = makeDevice(cloud, { uid: 'fay', name: 'Fay' });
+  await d1.signIn();
+  await d2.signIn();
+  const entry = id => ({ id, date: today, timestamp: iso(nowMs), fixture: 'A v B', selection: 'A', odds: 2, stake: 5, outcome: 'pending' });
+  d1.run('saveStoredDiary(' + JSON.stringify([entry('x1'), entry('x2')]) + ')');
+  await d1.run('pushDiaryToCloud()');
+  assert(cloud.docs.has('users/fay/diary/x1') && cloud.docs.has('users/fay/diary/x2'), 'diary uploaded');
+  await d2.run('syncDiaryFromCloud()');
+  await settle();
+  assert.strictEqual(d2.run('JSON.stringify(getStoredDiary().map(e => e.id).sort())'), '["x1","x2"]', 'second device gets both bets');
+  // Settle x1 on device 2, delete x2 on device 1.
+  d2.run("(() => { const d = getStoredDiary(); d.find(e => e.id === 'x1').outcome = 'won'; saveStoredDiary(d); })()");
+  await d2.run('pushDiaryToCloud()');
+  d1.run("saveStoredDiary(getStoredDiary().filter(e => e.id !== 'x2'))");
+  await d1.run('pushDiaryToCloud()');
+  assert(!cloud.docs.has('users/fay/diary/x2'), 'deleted bet removed from the cloud');
+  await d1.run('syncDiaryFromCloud()');
+  await d2.run('syncDiaryFromCloud()');
+  await settle();
+  assert.strictEqual(d1.run("getStoredDiary().find(e => e.id === 'x1').outcome"), 'won', 'settlement reaches the other device');
+  assert.strictEqual(d2.run('JSON.stringify(getStoredDiary().map(e => e.id))'), '["x1"]', 'delete reaches the other device');
+  const diaryKeys = () => JSON.stringify([...cloud.docs.entries()].filter(([k]) => k.startsWith('users/fay/diary/')));
+  const before = diaryKeys();
+  let writes = 0;
+  const origSet = cloud.docs.set;
+  cloud.docs.set = function (k, v) { if (String(k).startsWith('users/fay/diary/')) writes++; return origSet.call(this, k, v); };
+  await d1.run('pushDiaryToCloud()');
+  cloud.docs.set = origSet;
+  assert.strictEqual(writes, 0, 'an unchanged diary writes nothing');
+  assert.strictEqual(diaryKeys(), before);
+  console.log('  PASS: Bet Diary syncs between devices (adds, settlements, deletes) and only writes changes.');
 
   console.log('ALL LEAGUE CLOUD SYNC TESTS PASSED!');
 })().catch(err => {

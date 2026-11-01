@@ -219,6 +219,7 @@ function crest(name, size = 32) {
 
 // ------------------------------------------------------------ time
 const kickoffMs = f => Date.parse((f && (f.kickoff_utc || (f.fixture && f.fixture.kickoff_utc))) || '');
+const kickoffIso = f => { const ms = kickoffMs(f); return Number.isFinite(ms) ? new Date(ms).toISOString() : null; };
 const london = (ms, opts) => new Date(ms).toLocaleString('en-GB', { timeZone: 'Europe/London', ...opts });
 const fmtDay = ms => london(ms, { weekday: 'short', day: 'numeric', month: 'short' });
 const fmtTime = ms => london(ms, { hour: '2-digit', minute: '2-digit' });
@@ -2602,7 +2603,8 @@ async function publishLeague(league, user) {
     return false;
   }
   const memberSnap = existing.exists ? await memberRef.get() : null;
-  const memberData = { handle: prof.handle, avatar: prof.avatar, stats: getUserLeagueStats(league.freq || 'weekly'), now: nowIso };
+  const periods = getUserLeaguePeriods();
+  const memberData = { handle: prof.handle, avatar: prof.avatar, stats: periods[league.freq] || periods.weekly, periods, now: nowIso };
   const batch = firestoreDb.batch();
   if (!existing.exists) {
     batch.set(leagueRef, leagueDocs.leagueDoc({
@@ -2790,8 +2792,9 @@ async function syncLeagueToCloud(league) {
     } else {
       const prof = getUserProfile();
       const { memberRef } = leagueRefs(code, user.uid);
+      const periods = getUserLeaguePeriods();
       await memberRef.update(leagueDocs.memberStatsUpdate({
-        handle: prof.handle, avatar: prof.avatar, stats: getUserLeagueStats(league.freq || 'weekly'), now: new Date().toISOString()
+        handle: prof.handle, avatar: prof.avatar, stats: periods[league.freq] || periods.weekly, periods, now: new Date().toISOString()
       }));
     }
   } catch (err) {
@@ -2877,6 +2880,16 @@ async function syncUserLeaguesFromCloud() {
   }
 }
 
+// Live league updates redraw at most a few times a second, and only while Leagues is on screen.
+let leaguesRenderTimer = null;
+function scheduleLeaguesRender() {
+  if (leaguesRenderTimer) return;
+  leaguesRenderTimer = setTimeout(() => {
+    leaguesRenderTimer = null;
+    if (currentRoute()[0] === 'leagues') render();
+  }, 300);
+}
+
 let currentLeagueListeningCode = null;
 function stopLeagueListeners() {
   if (activeLeagueUnsubscribe) { try { activeLeagueUnsubscribe(); } catch (e) {} }
@@ -2914,7 +2927,7 @@ function listenToActiveLeague(code) {
       if (data.icon) changes.icon = data.icon;
       if (data.creatorUid) changes.creatorUid = data.creatorUid;
       if (data.creatorHandle) changes.creatorHandle = data.creatorHandle;
-      if (updateStoredLeague(code, changes)) render();
+      if (updateStoredLeague(code, changes)) scheduleLeaguesRender();
     }, err => console.warn('League listener notice:', err));
 
     activeMembersUnsubscribe = leagueRef.collection('members').onSnapshot(snap => {
@@ -2926,7 +2939,7 @@ function listenToActiveLeague(code) {
         confirmLeagueGone(code, user.uid).then(gone => { if (gone) stopLeagueListeners(); });
       }
       updateStoredLeague(code, { members: membersList.filter(m => isRealMember(m) && m.uid !== user.uid) });
-      render();
+      scheduleLeaguesRender();
     }, err => console.warn('Members listener notice:', err));
   } catch (e) {
     console.warn('listenToActiveLeague error:', e);
@@ -2966,10 +2979,15 @@ async function joinCloudLeague(code) {
     const membersSnap = await leagueRef.collection('members').get();
     const membersList = membersSnap.docs.map(d => ({ ...d.data(), uid: d.id }));
     const alreadyMember = membersList.some(m => m.uid === user.uid);
+    if (!alreadyMember && membersList.length >= leagueDocs.MAX_LEAGUE_MEMBERS) {
+      toast('This league is full (' + leagueDocs.MAX_LEAGUE_MEMBERS + ' players). Ask the creator to make room, or start your own.');
+      return;
+    }
     const isCreator = leagueData.creatorUid === user.uid;
     const prof = getUserProfile();
     const nowIso = new Date().toISOString();
-    const memberData = { handle: prof.handle, avatar: prof.avatar, stats: getUserLeagueStats(leagueData.freq || 'weekly'), now: nowIso };
+    const periods = getUserLeaguePeriods();
+    const memberData = { handle: prof.handle, avatar: prof.avatar, stats: periods[leagueData.freq] || periods.weekly, periods, now: nowIso };
 
     const batch = firestoreDb.batch();
     if (alreadyMember) batch.update(memberRef, leagueDocs.memberStatsUpdate(memberData));
@@ -3019,45 +3037,64 @@ async function joinCloudLeague(code) {
   }
 }
 
-async function syncDiaryToCloud() {
-  if (!firestoreDb || !currentAuthUser) return;
+// Bet Diary cloud copy: users/{uid}/diary/{betId}. Only new, changed and deleted entries are
+// written (in batches under Firestore's 500-write limit), so saves stay cheap however big the diary.
+const DIARY_SYNCED_PREFIX = 'betbuddy_diary_synced_v1_';
+function getDiarySynced(uid) {
+  try { return JSON.parse(localStorage.getItem(DIARY_SYNCED_PREFIX + uid) || '{}') || {}; } catch (e) { return {}; }
+}
+function saveDiarySynced(uid, map) {
+  try { localStorage.setItem(DIARY_SYNCED_PREFIX + uid, JSON.stringify(map)); } catch (e) { /* ignore */ }
+}
+
+let diaryPushTimer = null;
+let diaryPushRunning = false;
+let diaryPushAgain = false;
+function syncDiaryToCloud() {
+  // Rapid saves (auto-settling several bets, editing) are combined into one push.
+  clearTimeout(diaryPushTimer);
+  diaryPushTimer = setTimeout(pushDiaryToCloud, 1500);
+}
+
+async function pushDiaryToCloud() {
+  if (!firestoreDb || !currentAuthUser || diaryReadFailed) return;
+  if (diaryPushRunning) { diaryPushAgain = true; return; }
+  diaryPushRunning = true;
+  const uid = currentAuthUser.uid;
   try {
-    const diary = getStoredDiary();
-    const batch = firestoreDb.batch();
-    const userDiaryRef = firestoreDb.collection('users').doc(currentAuthUser.uid).collection('diary');
-    diary.forEach(entry => {
-      if (entry && entry.id) {
-        const docRef = userDiaryRef.doc(String(entry.id));
-        batch.set(docRef, entry, { merge: true });
-      }
-    });
-    await batch.commit();
+    const synced = getDiarySynced(uid);
+    const { upserts, deletes } = leagueDocs.planDiaryPush(getStoredDiary(), synced);
+    const col = firestoreDb.collection('users').doc(uid).collection('diary');
+    const ops = upserts.map(e => ({ id: String(e.id), entry: e })).concat(deletes.map(id => ({ id, entry: null })));
+    for (let i = 0; i < ops.length; i += 400) {
+      const chunk = ops.slice(i, i + 400);
+      const batch = firestoreDb.batch();
+      chunk.forEach(op => op.entry ? batch.set(col.doc(op.id), JSON.parse(JSON.stringify(op.entry))) : batch.delete(col.doc(op.id)));
+      await batch.commit();
+      chunk.forEach(op => { if (op.entry) synced[op.id] = leagueDocs.diaryFingerprint(op.entry); else delete synced[op.id]; });
+      saveDiarySynced(uid, synced);
+    }
   } catch (e) {
     console.warn('syncDiaryToCloud notice:', e);
+  } finally {
+    diaryPushRunning = false;
+    if (diaryPushAgain) { diaryPushAgain = false; syncDiaryToCloud(); }
   }
 }
 
 async function syncDiaryFromCloud() {
-  if (!firestoreDb || !currentAuthUser) return;
+  if (!firestoreDb || !currentAuthUser || diaryReadFailed) return;
+  const uid = currentAuthUser.uid;
   try {
-    const userDiaryRef = firestoreDb.collection('users').doc(currentAuthUser.uid).collection('diary');
-    const snap = await userDiaryRef.get();
-    if (!snap.empty) {
-      const local = getStoredDiary();
-      const localMap = new Map(local.map(d => [String(d.id), d]));
-      let added = false;
-      snap.forEach(doc => {
-        const remote = doc.data();
-        if (remote && remote.id && !localMap.has(String(remote.id))) {
-          localMap.set(String(remote.id), remote);
-          added = true;
-        }
-      });
-      if (added) {
-        const merged = Array.from(localMap.values());
-        saveStoredDiary(merged);
-        render();
-      }
+    const snap = await firestoreDb.collection('users').doc(uid).collection('diary').get();
+    const remote = snap.docs.map(d => d.data()).filter(e => e && e.id != null);
+    const merged = leagueDocs.mergeDiaryFromCloud(getStoredDiary(), remote, getDiarySynced(uid));
+    saveDiarySynced(uid, merged.synced);
+    if (merged.changed) {
+      saveStoredDiary(merged.entries);  // also pushes anything only this device has
+      render();
+    } else {
+      syncDiaryToCloud();
     }
   } catch (e) {
     console.warn('syncDiaryFromCloud notice:', e);
@@ -3135,33 +3172,23 @@ function saveUserProfile(handle, town, region, country) {
   return prof;
 }
 
-function getUserLeagueStats(freq = 'weekly') {
-  const diary = getStoredDiary();
-  const now = new Date();
-  
-  let filteredDiary = diary;
-  if (freq === 'weekly') {
-    const day = now.getDay();
-    const diff = (day === 0 ? -6 : 1) - day;
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + diff);
-    monday.setHours(0, 0, 0, 0);
-    filteredDiary = diary.filter(e => new Date(e.date || 0) >= monday);
-  } else if (freq === 'monthly') {
-    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    filteredDiary = diary.filter(e => new Date(e.date || 0) >= firstOfMonth);
-  } else if (freq === 'yearly') {
-    const seasonStart = new Date(now.getFullYear(), 7, 1);
-    filteredDiary = diary.filter(e => new Date(e.date || 0) >= seasonStart);
-  }
+// Kick-off of the match a diary bet was on, from the stored value or the fixtures feed.
+function diaryEntryKickoff(e) {
+  if (e.kickoffAt) return e.kickoffAt;
+  return kickoffIso(e.match_id && fixtureById(e.match_id));
+}
 
-  const settled = filteredDiary.filter(e => e.outcome && e.outcome !== 'pending');
+// League standings for one period (UK calendar). Only bets the app settled itself from the
+// official result and logged before kick-off qualify; hand-settled bets stay in the Bet Diary.
+function getUserLeagueStats(freq = 'weekly', now = new Date()) {
+  const periodKey = leagueDocs.currentPeriodKey(freq, now);
+  const inPeriod = getStoredDiary().filter(e => leagueDocs.periodKey(freq, e.date || (e.timestamp || '').slice(0, 10)) === periodKey);
+  const leagueEligible = inPeriod.filter(e => leagueDocs.isLeagueEligible(e, diaryEntryKickoff(e)));
 
   // FAIR PLAY RULE: Exactly 1 settled bet per calendar day counts toward league standings.
   // Only bets explicitly entered into the league (inLeague !== false) qualify. Extra bets are Bet Diary only.
   const dailyQualifyingMap = new Map();
-  const candidateLeagueBets = settled.filter(e => e.inLeague !== false);
-  candidateLeagueBets.slice().reverse().forEach(e => {
+  leagueEligible.slice().reverse().forEach(e => {
     const dayKey = (e.date || (e.timestamp ? e.timestamp.slice(0, 10) : '') || 'undated').slice(0, 10);
     if (!dailyQualifyingMap.has(dayKey)) {
       dailyQualifyingMap.set(dayKey, e);
@@ -3172,16 +3199,22 @@ function getUserLeagueStats(freq = 'weekly') {
   const won = leagueBets.filter(e => e.outcome === 'won');
   const totalStaked = leagueBets.reduce((sum, e) => sum + (+e.stake || 0), 0);
   const totalProfit = leagueBets.reduce((sum, e) => sum + (calc.calculateBetProfit(e.stake, e.odds, e.outcome) || 0), 0);
-  
-  // Option A Scoring: (Decimal Odds - 1) * 10 on won; -2 on lost; 0 on void
-  // Official Bet Butler Bonus: +5 points on every settled winning qualifying bet placed through Bet Butler
+
+  // Option A Scoring: (Decimal Odds - 1) * 10 on won, counting odds up to 10/1; -2 on lost; 0 on void
   const points = leagueBets.reduce((sum, e) => {
-    return sum + (calc.calculateLeaguePoints(e.odds, e.outcome) || 0);
+    const odds = Number(e.odds);
+    return sum + (calc.calculateLeaguePoints(Math.min(Number.isFinite(odds) ? odds : 2, leagueDocs.MAX_COUNTED_ODDS), e.outcome) || 0);
   }, 0);
   const winRate = leagueBets.length ? Math.round((won.length / leagueBets.length) * 100) : 0;
   const roi = totalStaked > 0 ? +( (totalProfit / totalStaked) * 100 ).toFixed(1) : 0.0;
   const last5 = leagueBets.slice(0, 5).map(e => e.outcome === 'won' ? 'W' : e.outcome === 'lost' ? 'L' : 'V');
-  return { points, settled: leagueBets.length, won: won.length, winRate, roi, form: last5.length ? last5 : ['—'] };
+  return { key: periodKey, points, settled: leagueBets.length, won: won.length, winRate, roi, form: last5.length ? last5 : ['—'] };
+}
+
+function getUserLeaguePeriods(now = new Date()) {
+  const out = {};
+  leagueDocs.FREQS.forEach(f => { out[f] = getUserLeagueStats(f, now); });
+  return out;
 }
 
 // ------------------------------------------------------------ Trophy Cabinet System
@@ -3343,7 +3376,7 @@ function viewLeagues() {
         '</div>' +
         '<div class="grid grid-2" style="margin-top:16px;gap:12px;">' +
           '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
-            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🏆 6-Tier Geographic Ladders</h3>' +
+            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🏆 6-Tier Geographic Ladders (coming soon)</h3>' +
             '<p class="dim" style="font-size:13px;margin:0;">Automatic promotion from your Hometown to County, Region, Home Nation, UK and Global leaderboards.</p>' +
           '</div>' +
           '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
@@ -3406,19 +3439,20 @@ function viewLeagues() {
 
   syncUserLeaguesFromCloud();
   if (isGeo) {
-    const geoDocId = getGeoDocId(currentLeague.id, prof);
-    listenToActiveGeoLeague(geoDocId);
-    const realGeoMembers = getStoredGeoMembers(geoDocId).filter(m => m.handle !== prof.handle);
-    allMembers = [...realGeoMembers, userEntry];
+    // Regional ladders need a server to rank thousands of players fairly; until that exists
+    // they show a coming-soon notice rather than a table with only you in it.
+    allMembers = [userEntry];
   } else {
+    // One row per account (uid), never merged by gamertag. Each member shows their numbers for
+    // the selected period, or zero if they have not refreshed since it reset.
+    const currentKey = leagueDocs.currentPeriodKey(activeLeagueFreq);
     const memberMap = new Map();
     (currentLeague.members || []).forEach(m => {
-      if (isRealMember(m) && m.handle !== prof.handle) {
-        memberMap.set(m.handle, m);
+      if (isRealMember(m) && m.uid !== authUser.uid) {
+        memberMap.set(m.uid, Object.assign({}, leagueDocs.memberStatsFor(m, activeLeagueFreq, currentKey, currentLeague.freq), { uid: m.uid, handle: m.handle }));
       }
     });
-    memberMap.set(prof.handle, userEntry);
-    allMembers = Array.from(memberMap.values());
+    allMembers = Array.from(memberMap.values()).concat(userEntry);
   }
 
   // OPTION A SCORING RANK:
@@ -3509,7 +3543,7 @@ function viewLeagues() {
     '</div>' +
     '<div class="section-head" style="align-items:flex-end"><div>' +
       '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
-      '<p class="page-sub">Compete in your 6 automatic hometown and global leagues, or create private mini-leagues with mates. Option A: 20/1 winner = 200 pts, Evens = 10 pts, Loss = -2 pts. <b>Max 1 qualifying bet per day.</b></p>' +
+      '<p class="page-sub">Create private mini-leagues with mates. Hometown, county, national and global ladders are coming soon. Option A: Evens winner = 10 pts, 10/1 or bigger = 100 pts (the cap), Loss = -2 pts. <b>Max 1 qualifying bet per day</b>, and only bets logged before kick-off and settled automatically from the official result count.</p>' +
     '</div>' +
     '<div class="btn-row">' +
       '<button type="button" class="btn primary" data-open-league-modal>Create or Join League</button>' +
@@ -3571,7 +3605,7 @@ function viewLeagues() {
 
     // 2. Automatic Geographical Leagues Selector
     '<div class="section" style="margin-top:' + (!isGeo ? '26px' : '16px') + '">' +
-      '<div class="section-head"><div><h2 class="section-title">Automatic Geographical Leagues</h2><span class="section-note">You are automatically enrolled into all 6 tiers based on your location.</span></div></div>' +
+      '<div class="section-head"><div><h2 class="section-title">Automatic Geographical Leagues</h2><span class="section-note">Coming soon: you will be entered into all 6 tiers automatically, based on your location.</span></div></div>' +
       '<div class="geo-ladder-nav">' + geoNavHtml + '</div>' +
     '</div>' +
 
@@ -3580,7 +3614,7 @@ function viewLeagues() {
       '<div class="leaderboard-card" style="margin-top:16px">' +
         '<div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">' +
           '<div>' +
-            '<h2 class="section-title">' + leagueTitle + '</h2>' +
+            '<h2 class="section-title">' + leagueTitle + ' <span class="bento-badge cyan text-xs">Coming soon</span></h2>' +
             '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze · <b style="color:var(--cyan)">Max 1 bet/day</b></span>' +
           '</div>' +
           '<div style="display:flex;gap:10px;align-items:center">' +
@@ -3591,16 +3625,10 @@ function viewLeagues() {
             '</div>' +
           '</div>' +
         '</div>' +
-        '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
-          '<th class="lb-col-rank">#</th>' +
-          '<th class="lb-col-player">Player (Form)</th>' +
-          '<th class="lb-col-pts" style="color:var(--cyan)">Points</th>' +
-          '<th class="lb-col-win">Win %</th>' +
-          '<th class="lb-col-roi">ROI %</th>' +
-          '<th class="lb-col-bets num">Bets</th>' +
-        '</tr></thead><tbody>' +
-        rowsHtml +
-        '</tbody></table></div>' +
+        '<div style="padding:22px 20px;text-align:center">' +
+          '<p style="margin:0 0 6px;color:#fff;font-weight:600">Regional and global ladders are coming soon.</p>' +
+          '<p class="dim" style="margin:0;font-size:13.5px">Your points already count: ' + uStats.points + ' pts this ' + (activeLeagueFreq === 'weekly' ? 'week' : activeLeagueFreq === 'monthly' ? 'month' : 'season') + '. Until the ladders open, compete with mates in a private league.</p>' +
+        '</div>' +
       '</div>'
     ) : '') +
   '</section>';
@@ -3900,7 +3928,7 @@ function autoSettleDiary() {
           const fx = findDiaryFixture(leg.selection, entry);
           if (!fixtureFinished(fx)) return;
           const r = settleTextAgainstScore(leg.selection, fx.home, fx.away, fx.score);
-          if (r) { leg.outcome = r; leg.auto = true; changed = true; }
+          if (r) { leg.outcome = r; leg.auto = true; leg.kickoffAt = kickoffIso(fx); changed = true; }
         });
       }
       return;
@@ -3912,7 +3940,7 @@ function autoSettleDiary() {
         const fx = findDiaryFixture(leg.selection, entry);
         if (!fixtureFinished(fx)) return;
         const r = settleTextAgainstScore(leg.selection, fx.home, fx.away, fx.score);
-        if (r) { leg.outcome = r; leg.auto = true; legChanged = true; }
+        if (r) { leg.outcome = r; leg.auto = true; leg.kickoffAt = kickoffIso(fx); legChanged = true; }
       });
       if (legChanged) {
         changed = true;
@@ -3922,6 +3950,9 @@ function autoSettleDiary() {
           entry.odds = res.decimalOdds;
           entry.potentialReturn = res.potentialReturn;
           entry.settledBy = 'auto'; entry.settledAt = stamp;
+          // Leagues need the bet logged before the first leg kicked off.
+          const kicks = entry.legs.map(l => l && l.kickoffAt).filter(Boolean).sort();
+          if (kicks.length) entry.kickoffAt = kicks[0];
           settledCount++;
         }
       }
@@ -3931,7 +3962,7 @@ function autoSettleDiary() {
     if (!fixtureFinished(fx)) return;
     const r = settleTextAgainstScore((entry.marketName && entry.marketName !== 'Match result' ? entry.marketName + ' ' : '') + (entry.selection || ''), fx.home, fx.away, fx.score);
     if (r) {
-      entry.outcome = r; entry.settledBy = 'auto'; entry.settledAt = stamp; entry.finalScore = fx.score[0] + '-' + fx.score[1];
+      entry.outcome = r; entry.settledBy = 'auto'; entry.settledAt = stamp; entry.finalScore = fx.score[0] + '-' + fx.score[1]; entry.kickoffAt = kickoffIso(fx);
       changed = true;
       settledCount++;
     }
@@ -5209,6 +5240,8 @@ function viewMultiSport(sportKey) {
 function render() {
   let [view, arg] = currentRoute();
   if (view === 'admin' && !isAppOwner()) view = 'home';
+  // Live league listeners cost a read per member update; keep them only while Leagues is open.
+  if (view !== 'leagues' && currentLeagueListeningCode) stopLeagueListeners();
   const navKey = view === 'match' ? 'fixtures' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
@@ -5386,6 +5419,20 @@ async function claimHandleTransaction(uid, handle, avatar = '⚽') {
   });
 }
 
+// Reserves `wanted`, or a numbered variant of it if someone else already has it.
+async function claimFreeHandle(uid, wanted, avatar) {
+  let handle = wanted;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await claimHandleTransaction(uid, handle, avatar || '⚽');
+      return handle;
+    } catch (e) {
+      if (!(e instanceof HandleTakenError) || attempt >= 4) throw e;
+      handle = wanted.slice(0, 16) + String(1000 + Math.floor(Math.random() * 9000));
+    }
+  }
+}
+
 async function ensureUserProfile(user) {
   if (!user) return;
   try {
@@ -5399,22 +5446,21 @@ async function ensureUserProfile(user) {
       const userDoc = await userDocRef.get();
       if (userDoc.exists) {
         currentAuthProfile = userDoc.data();
+        // Leaderboards only accept a gamertag reserved in the registry by its owner. Older
+        // profiles may never have reserved theirs, so reserve it now (or a free variant).
+        const saved = currentAuthProfile.handle;
+        const reg = isValidHandle(saved) ? await firestoreDb.collection('handles').doc(saved.toLowerCase()).get() : null;
+        if (!reg || !reg.exists || (reg.data() || {}).uid !== user.uid) {
+          const handle = await claimFreeHandle(user.uid, isValidHandle(saved) ? saved : baseHandle, currentAuthProfile.avatar);
+          currentAuthProfile = { handle, avatar: currentAuthProfile.avatar || '⚽' };
+        }
         const cur = getUserProfile();
         saveUserProfile(currentAuthProfile.handle || cur.handle, cur.town, cur.region, cur.country);
         saveAuthUser(user);
         return;
       }
       // New player: reserve a unique gamertag, adding digits if the name is already taken.
-      let handle = baseHandle;
-      for (let attempt = 0; ; attempt++) {
-        try {
-          await claimHandleTransaction(user.uid, handle, '⚽');
-          break;
-        } catch (e) {
-          if (!(e instanceof HandleTakenError) || attempt >= 4) throw e;
-          handle = baseHandle.slice(0, 16) + String(1000 + Math.floor(Math.random() * 9000));
-        }
-      }
+      const handle = await claimFreeHandle(user.uid, baseHandle, '⚽');
       currentAuthProfile = { handle, avatar: '⚽' };
       saveUserProfile(handle);
       saveAuthUser(user);
@@ -6290,7 +6336,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v94';
+const APP_VERSION = 'v95';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {
