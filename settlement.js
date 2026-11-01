@@ -200,7 +200,21 @@
       })) || null;
     }
 
-    return { fixtureFinished, liteText, teamGroup, teamMentions, settleTextAgainstScore, findDiaryFixture, settleMarket, classifyMarket };
+    // The next match a bet refers to, kicking off after `sinceMs` (within two weeks): both clubs when
+    // the text names two ("Arsenal v Spurs: Arsenal"), or the one club's next match ("Arsenal win").
+    // Used for accumulator legs, which usually name just the club backed.
+    function findUpcomingFixture(text, sinceMs) {
+      const groups = Array.from(new Set(teamMentions(text).found.map(x => x.group)));
+      if (!groups.length || groups.length > 2) return null;
+      const plays = f => groups.includes(teamGroup(f.home)) || groups.includes(teamGroup(f.away));
+      const both = f => groups.includes(teamGroup(f.home)) && groups.includes(teamGroup(f.away));
+      const hits = getFixtures()
+        .filter(f => kickoffMs(f) > sinceMs && kickoffMs(f) - sinceMs < 14 * 86400000 && (groups.length === 2 ? both(f) : plays(f)))
+        .sort((x, y) => kickoffMs(x) - kickoffMs(y));
+      return hits[0] || null;
+    }
+
+    return { fixtureFinished, liteText, teamGroup, teamMentions, settleTextAgainstScore, findDiaryFixture, findUpcomingFixture, settleMarket, classifyMarket };
   }
 
   return { create };

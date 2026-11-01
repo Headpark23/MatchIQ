@@ -123,9 +123,11 @@
   // users/{uid}/leagueBets/{day}: the player's one league bet for a match day. The app sends only
   // what was backed; the server checks it, records the bookmaker price and settles it.
   // `now` must be serverTimestamp(): the rules require the server's clock.
-  function leagueBetDoc({ betId, fixtureId, selection, odds, now }) {
-    const doc = { betId: String(betId).slice(0, 64), fixtureId: String(fixtureId).slice(0, 80), selection: String(selection || '').slice(0, 160), createdAt: now };
+  // For an accumulator, `legs` lists each leg's match and pick: [{ fixtureId, selection }].
+  function leagueBetDoc({ betId, fixtureId, selection, odds, legs, now }) {
+    const doc = { betId: String(betId).slice(0, 64), fixtureId: String(fixtureId).slice(0, 80), selection: String(selection || '').slice(0, 400), createdAt: now };
     if (Number(odds) > 1) doc.odds = Math.round(Number(odds) * 1000) / 1000;
+    if (Array.isArray(legs)) doc.legs = legs.slice(0, 10).map(l => ({ fixtureId: String(l.fixtureId).slice(0, 80), selection: String(l.selection || '').slice(0, 160) }));
     return doc;
   }
 

@@ -3578,7 +3578,7 @@ function viewLeagues() {
     '</div>' +
     '<div class="section-head" style="align-items:flex-end"><div>' +
       '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
-      '<p class="page-sub">Compete with mates in private leagues and on hometown, regional, national and global ladders. Points: a win scores (bookmaker price − 1) × 10, so Evens = 10 pts and 10/1 or bigger = 100 pts (the cap); a loss is −2. <b>One league bet per match day</b>, logged before kick-off: a single on match result or over/under goals. The league server records the bookmaker price when you log it and settles it from the official result.</p>' +
+      '<p class="page-sub">Compete with mates in private leagues and on hometown, regional, national and global ladders. Points: a win scores (bookmaker price − 1) × 10, so Evens = 10 pts and 10/1 or bigger = 100 pts (the cap); a loss is −2. <b>One league bet per match day</b>, logged before kick-off: a single on match result or over/under goals, or an accumulator of those (leg prices multiplied, still capped at 10/1). The league server records the bookmaker price when you log it and settles it from the official result.</p>' +
     '</div>' +
     '<div class="btn-row">' +
       '<button type="button" class="btn primary" data-open-league-modal>Create or Join League</button>' +
@@ -3978,19 +3978,53 @@ function diaryBetText(entry) {
 
 const LEAGUE_MARKET_RE = /^(result:[HDA]|goals:(over|under):\d+(\.\d+)?)$/;
 
-// Checks a diary bet the same way the league server will, so the player hears straight away if it
-// cannot count: a single on a listed match, before kick-off, on a market with a bookmaker price.
-function leagueBetCheck(entry) {
-  if (!entry || entry.type === 'accumulator') return { ok: false, reason: 'Accumulators are Bet Diary only; league bets are singles.' };
-  const fx = (entry.match_id && fixtureById(entry.match_id)) || findDiaryFixture(diaryBetText(entry), entry);
-  if (!fx) return { ok: false, reason: 'Choose the match from the list so the league can check the result.' };
-  if (!(kickoffMs(fx) > Date.now())) return { ok: false, reason: 'This match has already kicked off.' };
+// Checks one pick (a single, or one accumulator leg) on its match: not kicked off, and a match
+// result or over/under goals pick with a bookmaker price.
+function checkLeaguePick(text, fx) {
+  if (!(kickoffMs(fx) > Date.now())) return { ok: false, reason: fx.home + ' v ' + fx.away + ' has already kicked off.' };
   const sels = ((((DATA.odds && DATA.odds.matches) || {})[fx.id]) || {}).selections || {};
   const candidates = Object.keys(sels).filter(k => LEAGUE_MARKET_RE.test(k));
-  if (!candidates.length) return { ok: false, reason: 'There is no bookmaker price for this match yet, so it cannot count in leagues.' };
-  const market = settler.classifyMarket(diaryBetText(entry), fx.home, fx.away, candidates);
-  if (!market) return { ok: false, reason: 'Only match result and over/under goals bets count in leagues.' };
-  return { ok: true, fixture: fx, market, refOdds: Number(sels[market].decimal), day: fx.kickoff_utc.slice(0, 10) };
+  if (!candidates.length) return { ok: false, reason: 'There is no bookmaker price for ' + fx.home + ' v ' + fx.away + ' yet, so it cannot count in leagues.' };
+  const market = settler.classifyMarket(text, fx.home, fx.away, candidates);
+  if (!market) return { ok: false, reason: 'Only match result and over/under goals picks count in leagues ("' + text + '").' };
+  return { ok: true, fixture: fx, market, refOdds: Number(sels[market].decimal) };
+}
+
+// Checks a diary bet the same way the league server will, so the player hears straight away if it
+// cannot count: a single, or an accumulator whose every leg is a priced pick on a different match,
+// logged before the first kick-off.
+function leagueBetCheck(entry) {
+  if (!entry) return { ok: false, reason: 'Bet not found.' };
+  if (entry.type === 'accumulator') {
+    const legs = entry.legs || [];
+    if (legs.length < 2 || legs.length > 10) return { ok: false, reason: 'League accumulators need 2 to 10 legs.' };
+    // Look from a few hours back, so a leg whose match has just kicked off is caught rather than
+    // matched to that club's next fixture.
+    const since = Date.now() - 6 * 3600000;
+    const picks = [];
+    for (const leg of legs) {
+      const text = String((leg && leg.selection) || '');
+      const fx = settler.findUpcomingFixture(text, since);
+      if (!fx) return { ok: false, reason: 'Could not match "' + text + '" to an upcoming listed match. Name the club, e.g. "Arsenal win".' };
+      if (picks.some(p => p.fixture.id === fx.id)) return { ok: false, reason: 'Each accumulator leg must be a different match.' };
+      const pick = checkLeaguePick(text, fx);
+      if (!pick.ok) return pick;
+      picks.push(Object.assign(pick, { selection: text }));
+    }
+    picks.sort((x, y) => kickoffMs(x.fixture) - kickoffMs(y.fixture));
+    return {
+      ok: true,
+      acca: true,
+      fixture: picks[0].fixture,
+      day: picks[0].fixture.kickoff_utc.slice(0, 10),
+      refOdds: picks.reduce((t, p) => t * p.refOdds, 1),
+      legs: picks.map(p => ({ fixtureId: p.fixture.id, selection: p.selection }))
+    };
+  }
+  const fx = (entry.match_id && fixtureById(entry.match_id)) || findDiaryFixture(diaryBetText(entry), entry);
+  if (!fx) return { ok: false, reason: 'Choose the match from the list so the league can check the result.' };
+  const pick = checkLeaguePick(diaryBetText(entry), fx);
+  return pick.ok ? Object.assign(pick, { day: fx.kickoff_utc.slice(0, 10) }) : pick;
 }
 
 // Sends a diary bet to the league server as the player's league bet for its match day.
@@ -4003,8 +4037,8 @@ async function submitLeagueBet(entry) {
   if (existing && existing.betId !== entry.id) return { ok: false, reason: 'You already have a league bet for ' + chk.day + '.' };
   try {
     await firestoreDb.collection('users').doc(currentAuthUser.uid).collection('leagueBets').doc(chk.day).set(leagueDocs.leagueBetDoc({
-      betId: entry.id, fixtureId: chk.fixture.id, selection: diaryBetText(entry), odds: entry.odds,
-      now: firebase.firestore.FieldValue.serverTimestamp()
+      betId: entry.id, fixtureId: chk.fixture.id, selection: chk.acca ? entry.selection : diaryBetText(entry), odds: entry.odds,
+      legs: chk.acca ? chk.legs : undefined, now: firebase.firestore.FieldValue.serverTimestamp()
     }));
     return chk;
   } catch (e) {
@@ -4030,7 +4064,7 @@ async function enterLeagueBet(id) {
     saveStoredDiary(diary);
   }
   toast(res.ok
-    ? 'Entered into your leagues 🏆 It scores at the bookmaker price of ' + calc.formatFractionalOdds(res.refOdds) + ' if it wins.'
+    ? 'Entered into your leagues 🏆 It scores at the bookmaker price of ' + calc.formatFractionalOdds(res.refOdds) + (res.refOdds > leagueDocs.MAX_COUNTED_ODDS ? ' (counted as 10/1, the 100-point cap)' : '') + ' if it wins.'
     : 'Saved to your Bet Diary only. ' + res.reason);
   if (['diary', 'leagues'].includes(currentRoute()[0])) render();
 }
@@ -6311,7 +6345,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v96';
+const APP_VERSION = 'v97';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {

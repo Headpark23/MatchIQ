@@ -526,6 +526,11 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       await assertFails(betRef(getGoogleUser('charlie'), 'bob', '2026-11-09').set(leagueBet()), 'someone else\'s bets');
       await assertFails(betRef(getGoogleUser('charlie'), 'bob').get());
       await assertFails(betRef(getEmailUser('bob'), 'bob', '2026-11-10').set(leagueBet()), 'Google sign-in only');
+      // Accumulators carry 2 to 10 legs; the server checks each one.
+      const legs = n => Array.from({ length: n }, (_, i) => ({ fixtureId: 'PL-' + i, selection: 'Team ' + i }));
+      await assertSucceeds(betRef(db, 'bob', '2026-11-12').set(leagueDocs.leagueBetDoc({ betId: 'acca-1', fixtureId: 'PL-0', selection: 'Team 0 + Team 1', legs: legs(2), now: serverTime() })));
+      await assertFails(betRef(db, 'bob', '2026-11-13').set({ ...leagueBet(), legs: legs(1) }), 'one leg is not an accumulator');
+      await assertFails(betRef(db, 'bob', '2026-11-14').set({ ...leagueBet(), legs: legs(11) }), 'more than 10 legs');
     });
 
     it('league bets: withdraw before kick-off or after a refusal, never after kick-off', async function () {

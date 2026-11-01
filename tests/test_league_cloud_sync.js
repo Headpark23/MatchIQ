@@ -60,7 +60,7 @@ function createCloud() {
       if (bm) {
         if (bm[1] !== uid) throw fsError('permission-denied');
         if (op.kind !== 'delete' && docs.has(op.path)) throw fsError('permission-denied');  // create only
-        if (op.kind !== 'delete' && Object.keys(op.data).some(k => !['betId', 'fixtureId', 'selection', 'odds', 'createdAt'].includes(k))) throw fsError('permission-denied');
+        if (op.kind !== 'delete' && Object.keys(op.data).some(k => !['betId', 'fixtureId', 'selection', 'odds', 'legs', 'createdAt'].includes(k))) throw fsError('permission-denied');
       }
       if (/^(leagueStats|ladders)\//.test(op.path)) throw fsError('permission-denied');
       const lm = op.path.match(/^leagues\/([^/]+)$/);
@@ -341,11 +341,13 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   carol.run('DATA.fixtures = ' + JSON.stringify({ fixtures: [
     { id: 'PL-ars-tot', home: 'Arsenal', away: 'Tottenham', kickoff_utc: kickoff, status: 'SCHEDULED', score: null },
     { id: 'PL-che-liv', home: 'Chelsea', away: 'Liverpool', kickoff_utc: later, status: 'SCHEDULED', score: null },
-    { id: 'PL-mun-new', home: 'Man United', away: 'Newcastle', kickoff_utc: past, status: 'IN_PLAY', score: null }
+    { id: 'PL-mun-new', home: 'Man United', away: 'Newcastle', kickoff_utc: past, status: 'IN_PLAY', score: null },
+    { id: 'PL-bur-avl', home: 'Burnley', away: 'Aston Villa', kickoff_utc: later, status: 'SCHEDULED', score: null }
   ] }) + '; DATA.odds = ' + JSON.stringify({ max_age_hours: 12, matches: {
     'PL-ars-tot': { selections: { 'result:H': { decimal: 1.8 }, 'result:D': { decimal: 3.8 }, 'result:A': { decimal: 4.5 } } },
     'PL-che-liv': { selections: { 'result:H': { decimal: 2.6 }, 'goals:over:2.5': { decimal: 1.6 } } },
-    'PL-mun-new': { selections: { 'result:H': { decimal: 2.0 } } }
+    'PL-mun-new': { selections: { 'result:H': { decimal: 2.0 } } },
+    'PL-bur-avl': { selections: { 'result:H': { decimal: 3.0 }, 'result:A': { decimal: 2.4 } } }
   } }));
   const diaryBet = (id, matchId, selection, extra) => Object.assign({ id, type: 'single', match_id: matchId, fixture: '', marketName: 'Match result', selection, odds: 50, stake: 5, outcome: 'pending', timestamp: iso(nowMs), date: day, inLeague: false }, extra || {});
   const enter = async bet => {
@@ -370,9 +372,20 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   assert(!cloud.docs.has('users/carol/leagueBets/' + later.slice(0, 10)));
   msg = await enter(diaryBet('lb4', 'PL-mun-new', 'Man United', { date: past.slice(0, 10) }));
   assert(/already kicked off/.test(msg), 'after kick-off is refused: ' + msg);
-  msg = await enter(diaryBet('lb5', null, 'Arsenal + Chelsea', { type: 'accumulator', date: later.slice(0, 10) }));
-  assert(/Accumulators/.test(msg), 'accumulators are diary-only: ' + msg);
-  console.log('  PASS: league bets send only the selection; one per day, priced markets, before kick-off.');
+  // Accumulators: every leg must be a priced pick on a different match, before kick-off.
+  const acca = (id, legs) => diaryBet(id, null, legs.join(' + '), { type: 'accumulator', marketName: 'Accumulator', date: today, legs: legs.map(l => ({ selection: l, odds: 2, outcome: 'pending' })) });
+  msg = await enter(acca('lb6', ['Chelsea', 'Man United']));
+  assert(/Man United v Newcastle has already kicked off/.test(msg), 'acca leg after kick-off is refused: ' + msg);
+  msg = await enter(acca('lb7', ['Chelsea', 'Both teams to score Burnley v Aston Villa']));
+  assert(/Only match result and over\/under goals/.test(msg), 'acca leg on an unpriced market is refused: ' + msg);
+  msg = await enter(acca('lb8', ['Chelsea', 'Chelsea to win']));
+  assert(/different match/.test(msg), 'two legs on one match refused: ' + msg);
+  msg = await enter(acca('lb9', ['Aston Villa', 'Chelsea']));
+  const accaDoc = cloud.docs.get('users/carol/leagueBets/' + later.slice(0, 10));
+  assert(accaDoc, 'accumulator sent as a league bet: ' + msg);
+  assert.strictEqual(JSON.stringify(accaDoc.legs.map(l => l.fixtureId).sort()), '["PL-bur-avl","PL-che-liv"]', 'each leg sent with its match');
+  assert(/6\/1|31\/5|bookmaker price/.test(msg), 'player told the combined price (2.6 x 2.4): ' + msg);
+  console.log('  PASS: league bets send only the picks; one per day, priced markets, before kick-off, accumulators included.');
 
   // The diary shows what the server decided.
   cloud.docs.set('users/carol/leagueBets/' + day, Object.assign({}, sentBet, { status: 'settled', outcome: 'won', points: 8, refOdds: 1.8 }));
