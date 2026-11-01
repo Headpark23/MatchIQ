@@ -174,7 +174,9 @@
           </div>
           <div class="field full" id="accumulator-legs-row" hidden>
             <label for="modal-legs-input">Accumulator legs, one per line: selection | fractional odds (or decimal e.g. 2.50)</label>
-            <textarea id="modal-legs-input" class="ctl" rows="4" oninput="updateModalPnlPreview()" placeholder="Arsenal win | 6/4&#10;Over 2.5 goals | 10/11"></textarea>
+            <select id="modal-leg-match-select" class="ctl" aria-label="Add a leg for a listed match" style="margin-bottom:6px"></select>
+            <textarea id="modal-legs-input" class="ctl" rows="4" oninput="updateModalPnlPreview()" placeholder="Arsenal v Chelsea: Arsenal win | 6/4&#10;Arsenal v Chelsea: Over 2.5 goals | 10/11"></textarea>
+            <span class="dim" style="font-size:12.5px">Every leg needs its match so the league can check the result. Pick a match above to start a leg with the match filled in.</span>
           </div>
           <div class="field" id="single-odds-row">
             <label for="modal-odds-input">Fractional Odds Actually Offered <span class="dim">(or Decimal)</span></label>

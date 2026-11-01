@@ -4009,11 +4009,11 @@ function leagueBetCheck(entry) {
     // matched to that club's next fixture.
     const since = Date.now() - 6 * 3600000;
     const picks = [];
-    for (const leg of legs) {
-      const text = String((leg && leg.selection) || '');
+    for (let i = 0; i < legs.length; i++) {
+      const text = String((legs[i] && legs[i].selection) || '');
       const fx = settler.findUpcomingFixture(text, since);
-      if (!fx) return { ok: false, reason: 'Could not match "' + text + '" to an upcoming listed match. Name the club, e.g. "Arsenal win".' };
-      if (picks.some(p => p.fixture.id === fx.id)) return { ok: false, reason: 'Each accumulator leg must be a different match.' };
+      if (!fx) return { ok: false, reason: 'Leg ' + (i + 1) + ' ("' + text + '") does not say which match it is for, so the league cannot check the result. Add a club name to the leg, e.g. "Arsenal v Chelsea over 2.5 goals".' };
+      if (picks.some(p => p.fixture.id === fx.id)) return { ok: false, reason: 'Leg ' + (i + 1) + ' is on the same match as an earlier leg. Each accumulator leg must be a different match.' };
       const pick = checkLeaguePick(text, fx);
       if (!pick.ok) return pick;
       picks.push(Object.assign(pick, { selection: text }));
@@ -4165,6 +4165,7 @@ function openDiary(prefill) {
   const select = $('modal-fixture-select');
   const options = diaryFixtureOptions();
   select.innerHTML = '<option value="">Not linked to a listed match</option>' + options.map(f => '<option value="' + esc(f.id) + '"' + (f.id === modalPrefill.id ? ' selected' : '') + '>' + esc(f.home + ' v ' + f.away + ' · ' + fmtDay(kickoffMs(f)) + ' ' + fmtTime(kickoffMs(f))) + '</option>').join('');
+  $('modal-leg-match-select').innerHTML = '<option value="">+ Add a leg: choose the match</option>' + options.map(f => '<option value="' + esc(f.id) + '">' + esc(f.home + ' v ' + f.away + ' · ' + fmtDay(kickoffMs(f)) + ' ' + fmtTime(kickoffMs(f))) + '</option>').join('');
   $('modal-market-select').value = modalPrefill.market || 'wins';
   $('modal-selection-input').value = modalPrefill.selection || '';
   $('modal-origin-select').value = modalPrefill.selection ? 'matchiq' : 'independent';
@@ -4188,6 +4189,29 @@ function toggleAccumulatorFields() {
   });
   updateModalPnlPreview();
   updateDiaryDestinationOptions();
+}
+
+// Starts a new accumulator leg with the match filled in, so the player only adds the pick and price.
+function addLegForMatch(fixtureId) {
+  const f = fixtureById(fixtureId);
+  const sel = $('modal-leg-match-select');
+  if (sel) sel.value = '';
+  if (!f) return;
+  const box = $('modal-legs-input');
+  const lines = (box.value || '').split('\n');
+  // Fill an unfinished last line (e.g. "Over 2.5 goals | 10/11" with no match) rather than leaving a gap.
+  const last = lines.length ? lines[lines.length - 1].trim() : '';
+  const prefix = f.home + ' v ' + f.away + ': ';
+  if (last && !teamNamed(last)) lines[lines.length - 1] = prefix + last;
+  else { if (!last) lines.pop(); lines.push(prefix); }
+  box.value = lines.join('\n');
+  box.focus();
+  box.setSelectionRange(box.value.length, box.value.length);
+  updateModalPnlPreview();
+}
+
+function teamNamed(text) {
+  return settler.teamMentions(text).found.length > 0;
 }
 
 function parseAccumulatorLegs() {
@@ -6271,6 +6295,7 @@ document.addEventListener('change', event => {
   else if (t.id === 'diary-profile-filter') { diaryProfileFilter = t.value; render(); }
   else if (t.id === 'modal-bet-type') toggleAccumulatorFields();
   else if (t.id === 'modal-fixture-select') updateDiaryDestinationOptions();
+  else if (t.id === 'modal-leg-match-select') addLegForMatch(t.value);
   else if (t.name === 'modal-destination') updateDiarySubmitBtn();
 });
 document.addEventListener('submit', event => {
