@@ -7,9 +7,9 @@ console.log('Testing Bet Butler Button & Bookmaker Checkbox List...');
 // 1. Inspect index.html
 const indexHtml = fs.readFileSync('index.html', 'utf8');
 
-// Check header button text
-assert(indexHtml.includes('Bet Butler: <b id="header-butler-name">'), 'Header button must say Bet Butler: [name]');
-console.log('✓ Header button label is long format "Bet Butler: [name]"');
+// The header Bet Butler dropdown was removed in v83; the picker lives on the homepage slip card
+assert(!indexHtml.includes('id="header-butler-btn"'), 'Header Bet Butler button must stay removed');
+console.log('✓ Header Bet Butler button is removed');
 
 // Check bookmaker checkboxes in modal
 const bookies = ['skybet', 'bet365', 'williamhill', 'paddypower', 'betfair', 'coral', 'ladbrokes'];

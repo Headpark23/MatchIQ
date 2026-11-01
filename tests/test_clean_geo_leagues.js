@@ -55,6 +55,7 @@ function createEnv(initialStorage = {}) {
     },
     navigator: {},
     setTimeout: setTimeout,
+    setInterval: () => 0,
     clearTimeout: clearTimeout,
     console: console,
     toast: () => {},

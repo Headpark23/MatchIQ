@@ -22,6 +22,7 @@ const context = {
   localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
   navigator: {},
   setTimeout: setTimeout,
+  setInterval: () => 0,
   clearTimeout: clearTimeout,
   console: console
 };

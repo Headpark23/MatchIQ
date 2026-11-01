@@ -60,6 +60,7 @@ const context = vm.createContext({
   navigator: { userAgent: 'test', clipboard: { writeText: () => Promise.resolve() } },
   console: console,
   setTimeout: setTimeout,
+  setInterval: () => 0,
   clearTimeout: clearTimeout,
   fetch: () => Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
 });
