@@ -3563,9 +3563,25 @@ function viewDiary() {
     (live.length ? '<div class="grid grid-2">' + live.map(betCard).join('') + '</div>' : '<div class="empty">No live bets. Your settled bets are archived below and counted in your stats.</div>');
   if (archived.length) {
     html += '<details class="section diary-archive"' + (live.length ? '' : ' open') + '><summary class="section-title" style="cursor:pointer">Settled &amp; archived (' + archived.length + ')</summary>' +
-      '<div class="grid grid-2" style="margin-top:12px">' + archived.map(betCard).join('') + '</div></details>';
+      '<div class="arch-table" role="table" aria-label="Settled bets"><div class="arch-row arch-head" role="row"><span>Date</span><span>Bet</span><span>Won</span><span>P/L</span></div>' +
+      archived.map(archiveRow).join('') + '</div><p class="dim" style="font-size:12px;margin:8px 0 0">Tap a row to see the full bet, correct its result or delete it.</p></details>';
   }
   return html + '</section>';
+}
+
+// One compact line per settled bet: date, bet type, legs won of total, profit/loss. The full card opens on tap.
+function archiveRow(entry) {
+  const legs = entry.type === 'accumulator' && Array.isArray(entry.legs) && entry.legs.length ? entry.legs : null;
+  const total = legs ? legs.length : 1;
+  const wonLegs = legs ? legs.filter(l => l.outcome === 'won').length : (entry.outcome === 'won' ? 1 : 0);
+  const profit = calc.calculateBetProfit(entry.stake, entry.odds, entry.outcome);
+  const d = String(entry.date || (entry.timestamp ? entry.timestamp.slice(0, 10) : '') || '').slice(0, 10);
+  const dateText = /^\d{4}-\d{2}-\d{2}$/.test(d) ? d.slice(8) + '/' + d.slice(5, 7) + '/' + d.slice(2, 4) : (d || '-');
+  const kind = legs ? total + '-team acca' : 'Single';
+  const plText = profit === null ? '-' : (profit > 0 ? '+' : profit < 0 ? '-' : '') + money(profit);
+  return '<details class="arch-item"><summary class="arch-row" role="row"><span>' + esc(dateText) + '</span><span>' + kind + '</span>' +
+    '<span>' + wonLegs + '/' + total + '</span><span class="' + (profit > 0 ? 'pos' : profit < 0 ? 'neg' : '') + '">' + plText + '</span></summary>' +
+    '<div class="arch-detail">' + betCard(entry) + '</div></details>';
 }
 
 function outcomeSelect(value, attrs, label) {
@@ -3736,6 +3752,10 @@ function settleTextAgainstScore(rawText, home, away, score) {
     if (ms[i].group === ms[i + 1].group) continue;
     const sep = m.orig.slice(ms[i].end, ms[i + 1].start).trim();
     if (/^(v|vs|versus|x|-|against|@)$/.test(sep)) { ms = ms.slice(0, i).concat(ms.slice(i + 2)); break; }
+    // "Home to beat Away" / "Home to win against Away": the club written first is the pick
+    if (/^(to )?(beat|defeat|win (against|vs|v|over))$/.test(sep)) { ms = ms.slice(0, i).concat(ms[i], ms.slice(i + 2)); break; }
+    // "Home to lose to Away": the club written second is the pick
+    if (/^(to )?(lose to|lose against|lose vs)$/.test(sep)) { ms = ms.slice(0, i).concat(ms[i + 1], ms.slice(i + 2)); break; }
   }
   const pickHome = ms.some(x => x.group === homeG), pickAway = ms.some(x => x.group === awayG);
   const t = m.rest;
@@ -3788,7 +3808,21 @@ function autoSettleDiary() {
   let changed = false;
   const stamp = new Date().toISOString();
   diary.forEach(entry => {
-    if (!entry || entry.outcome !== 'pending' || entry.manualOverride) return;
+    if (!entry || entry.manualOverride) return;
+    // A lost acca is archived with its other legs still pending; resolve those legs so the record is complete.
+    // The bet's own outcome and odds are left exactly as they are.
+    if (entry.outcome !== 'pending') {
+      if (entry.type === 'accumulator' && Array.isArray(entry.legs)) {
+        entry.legs.forEach(leg => {
+          if (!leg || ['won', 'lost', 'void'].includes(leg.outcome)) return;
+          const fx = findDiaryFixture(leg.selection, entry);
+          if (!fixtureFinished(fx)) return;
+          const r = settleTextAgainstScore(leg.selection, fx.home, fx.away, fx.score);
+          if (r) { leg.outcome = r; leg.auto = true; changed = true; }
+        });
+      }
+      return;
+    }
     if (entry.type === 'accumulator' && Array.isArray(entry.legs)) {
       let legChanged = false;
       entry.legs.forEach(leg => {
@@ -6092,7 +6126,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v89';
+const APP_VERSION = 'v90';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {
