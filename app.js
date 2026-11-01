@@ -792,9 +792,14 @@ function builderCompute() {
       if (!sp || !sp.tournaments) return;
       sp.tournaments.forEach(t => {
         (t.events || []).forEach(ev => {
+          // Fair chance from the event's own prices: when the selections cover the whole market
+          // (head-to-head or 1X2), strip the bookmaker overround. Partial markets such as golf
+          // outrights only list the favourites, so they keep the typical-margin estimate.
+          const book = (ev.selections || []).reduce((t, s) => t + (s.decimal > 1 ? 1 / s.decimal : 0), 0);
+          const fullMarket = book >= 0.9;
           (ev.selections || []).forEach(sel => {
             if (sel.decimal && sel.decimal > 1.05) {
-              const estimatedProb = 1 / (sel.decimal * 1.07);
+              const estimatedProb = fullMarket ? (1 / sel.decimal) / book : 1 / (sel.decimal * MatchIQBuilder.ESTIMATED_MARGIN);
               multiSportPool.push({
                 matchId: ev.id,
                 selId: ev.id + '-' + sel.label,
@@ -820,10 +825,26 @@ function builderCompute() {
   }
 
   const combinedPool = footballPool.concat(multiSportPool);
-  builderResult = MatchIQBuilder.buildSlips(combinedPool, { stake, win, legs: Number(legs), maxSlips: 4 });
+  // Search wider than we show, so cross-sport combinations are not cut before the value sort
+  builderResult = MatchIQBuilder.buildSlips(combinedPool, { stake, win, legs: Number(legs), maxSlips: 12 });
+  if (builderResult && builderResult.slips && multiSportPool.length) {
+    // Also search the other sports on their own, so an all-non-football slip can compete
+    const others = MatchIQBuilder.buildSlips(multiSportPool, { stake, win, legs: Number(legs), maxSlips: 4 });
+    if (others && others.slips) {
+      const key = s => s.legs.map(l => l.selId + '@' + l.matchId).join('|');
+      const seen = new Set(builderResult.slips.map(key));
+      others.slips.forEach(s => { if (s.onTarget && !seen.has(key(s))) builderResult.slips.push(s); });
+    }
+  }
   // Always sort slips by Expected Value (EV) descending so the Best Value combination is noted and at the top
   if (builderResult && builderResult.slips && builderResult.slips.length > 0) {
     builderResult.slips.sort((a, b) => (b.ev != null ? b.ev : 0) - (a.ev != null ? a.ev : 0));
+    const isCross = s => s.legs.some(l => l.sport && l.sport !== 'football');
+    const shown = builderResult.slips.slice(0, 4);
+    // With other sports switched on, always show the best slip that uses them
+    const bestCross = builderResult.slips.find(isCross);
+    if (bestCross && !shown.some(isCross)) shown[shown.length - 1] = bestCross;
+    builderResult.slips = shown;
   }
 
 
@@ -6126,7 +6147,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v90';
+const APP_VERSION = 'v91';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {
