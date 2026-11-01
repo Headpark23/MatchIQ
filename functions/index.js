@@ -17,8 +17,8 @@ admin.initializeApp();
 const db = admin.firestore();
 const { FieldValue, Timestamp, FieldPath } = admin.firestore;
 
-// Must match the Firestore database location (see deploy notes in README).
-const REGION = process.env.FUNCTIONS_REGION || 'europe-west2';
+// Must suit the Firestore database location: betbuddyuk's database is eur3 (Europe), so europe-west1.
+const REGION = process.env.FUNCTIONS_REGION || 'europe-west1';
 setGlobalOptions({ region: REGION, maxInstances: 10 });
 
 // Fixtures, results and bookmaker prices are the same files the app reads.
