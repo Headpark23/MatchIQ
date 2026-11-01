@@ -3752,7 +3752,9 @@ function betCard(entry) {
   const pl = profit === null ? '<span class="dim">Potential return ' + money(entry.stake * (entry.odds || 0)) + '</span>'
     : '<span class="' + (profit > 0 ? 'pos' : profit < 0 ? 'neg' : '') + '">' + (profit > 0 ? '+' : profit < 0 ? '-' : '') + money(profit) + '</span> <span class="dim">returned ' + money(entry.stake + profit) + '</span>';
   const legOddsText = leg => (oddsFormat === 'decimal' ? calc.formatDecimalOdds(+leg.odds) : calc.formatFractionalOdds(+leg.odds));
-  const legs = entry.type === 'accumulator' ? (entry.legs || []).map((leg, i) => '<div class="leg"><span>' + esc(leg.selection) + ' • <b class="mono">' + legOddsText(leg) + '</b></span>' +
+  // The price is editable because legs saved from the builder carry Bet Buddy's estimate, not the bookmaker's price.
+  const legs = entry.type === 'accumulator' ? (entry.legs || []).map((leg, i) => '<div class="leg"><span>' + (leg.match ? '<span class="dim" style="display:block;font-size:12px">' + esc(leg.match) + '</span>' : '') + esc(leg.selection) + ' • <b class="mono">' + legOddsText(leg) + '</b>' +
+    '<input class="ctl mono" style="width:84px;min-height:32px;margin-left:8px;padding:2px 8px;font-size:12.5px" inputmode="text" autocomplete="off" placeholder="Edit price" aria-label="Bookmaker price for ' + esc(leg.selection) + '" data-leg-odds="' + esc(entry.id) + '" data-index="' + i + '"></span>' +
     outcomeSelect(leg.outcome, 'data-leg="' + esc(entry.id) + '" data-index="' + i + '"', 'Settle ' + leg.selection) + '</div>').join('') : '';
   const priceTaken = oddsFormat === 'decimal' ? calc.formatDecimalOdds(+entry.odds) : calc.formatFractionalOdds(+entry.odds);
 
@@ -3787,6 +3789,23 @@ function betCard(entry) {
       outcomeSelect(entry.outcome, 'data-outcome="' + esc(entry.id) + '"', 'Settle bet') +
       '<button type="button" class="btn small danger" data-delete="' + esc(entry.id) + '" aria-label="Delete bet">Delete</button></span></div>' +
     (entry.notes ? '<p class="dim" style="font-size:13px">' + esc(entry.notes) + '</p>' : '') + '</article>';
+}
+
+// Replaces a leg's price with what the bookmaker actually gave, then rebuilds the combined price.
+function updateAccumulatorLegOdds(id, index, text) {
+  const raw = String(text || '').replace(/[≈~]/g, '').trim();
+  if (!raw) return;
+  const odds = /^evens?$/i.test(raw) ? 2 : ((calc.parseOdds ? calc.parseOdds(raw) : null) ?? calc.parseFractionalOdds(raw));
+  if (!Number.isFinite(odds) || odds <= 1) { toast('Enter the price as 6/5, Evens or 2.20.', 'error'); return; }
+  const diary = getStoredDiary();
+  const entry = diary.find(item => item.id === id && item.type === 'accumulator');
+  if (!entry || !entry.legs || !entry.legs[index]) return;
+  entry.legs[index].odds = odds;
+  const priced = calc.settleAccumulator(entry, entry.legs.map(leg => leg.outcome));
+  entry.odds = priced.decimalOdds;
+  entry.potentialReturn = priced.potentialReturn;
+  try { saveStoredDiary(diary); } catch (error) { toast('Could not save the price. Check browser storage.', 'error'); return; }
+  render();
 }
 
 function updateAccumulatorLegOutcome(id, index, outcome) {
@@ -6291,6 +6310,7 @@ document.addEventListener('change', event => {
     return;
   }
   if (t.dataset.outcome) updateDiaryEntryOutcome(t.dataset.outcome, t.value);
+  else if (t.dataset.legOdds) updateAccumulatorLegOdds(t.dataset.legOdds, +t.dataset.index, t.value);
   else if (t.dataset.leg) updateAccumulatorLegOutcome(t.dataset.leg, +t.dataset.index, t.value);
   else if (t.id === 'diary-profile-filter') { diaryProfileFilter = t.value; render(); }
   else if (t.id === 'modal-bet-type') toggleAccumulatorFields();
@@ -6528,7 +6548,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v99';
+const APP_VERSION = 'v100';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {
@@ -6708,7 +6728,7 @@ function confirmRealBetPlaced() {
     market: marketType,
     marketName: marketName,
     selection: isAcca ? launch.data.legs.map(l => l.label).join(' + ') : ((launch.data && launch.data.selection) || 'Selection'),
-    legs: isAcca ? launch.data.legs.map(l => ({ selection: l.label, odds: l.odds || 2.0, outcome: 'pending' })) : undefined,
+    legs: isAcca ? launch.data.legs.map(l => ({ selection: l.label, odds: l.odds || 2.0, outcome: 'pending', match: (l.fixture && l.fixture.home && l.fixture.away) ? l.fixture.home + ' v ' + l.fixture.away : undefined })) : undefined,
     origin: 'matchiq',
     bookmaker: launch.bookie,
     odds,
