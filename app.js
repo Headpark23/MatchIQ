@@ -5085,6 +5085,7 @@ function renderAdminLeaguesSection() {
     '<td>' + (l.leader ? '@' + esc(l.leader) : '<span class="dim">–</span>') + '</td>' +
     '<td class="dim">' + esc(l.freq) + '</td>' +
     '<td class="dim" style="font-size:12px;white-space:nowrap">' + (l.created && !isNaN(l.created) ? esc(l.created.toLocaleDateString()) : '–') + '</td>' +
+    '<td><button type="button" class="btn small" data-admin-action="delete-league" data-code="' + esc(l.code) + '" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Delete</button></td>' +
   '</tr>').join('');
   return '<div class="section" style="margin-top:28px">' + head +
     '<div class="admin-metric-grid">' +
@@ -5095,8 +5096,8 @@ function renderAdminLeaguesSection() {
     '</div>' +
     '<div class="admin-table-card" style="overflow-x:auto">' +
       '<table class="admin-table">' +
-        '<thead><tr><th>League</th><th>Members</th><th>Creator</th><th>Leader</th><th>Period</th><th>Created</th></tr></thead>' +
-        '<tbody>' + (rows || '<tr><td colspan="6" class="muted" style="text-align:center;padding:20px">No private leagues created yet.</td></tr>') + '</tbody>' +
+        '<thead><tr><th>League</th><th>Members</th><th>Creator</th><th>Leader</th><th>Period</th><th>Created</th><th></th></tr></thead>' +
+        '<tbody>' + (rows || '<tr><td colspan="7" class="muted" style="text-align:center;padding:20px">No private leagues created yet.</td></tr>') + '</tbody>' +
       '</table>' +
     '</div>' +
   '</div>';
@@ -6055,6 +6056,25 @@ document.addEventListener('click', event => {
       }
       toast('Affiliate outbound log cleared (0 outbounds).');
       render();
+    } else if (act === 'delete-league') {
+      const code = t.dataset.code;
+      const lg = adminLeagueStats && adminLeagueStats.leagues && adminLeagueStats.leagues.find(x => x.code === code);
+      if (!code || !isAppOwner() || !firestoreDb) return;
+      if (!confirm('Permanently delete "' + (lg ? lg.name : code) + '" (' + code + ') and its ' + (lg ? lg.members : 0) + ' member record(s)?')) return;
+      (async () => {
+        try {
+          const ref = firestoreDb.collection('leagues').doc(code);
+          const mem = await ref.collection('members').get();
+          await Promise.all(mem.docs.map(m => m.ref.delete()));
+          await ref.delete();
+          adminLeagueStats = null;
+          toast('League deleted.');
+        } catch (e) {
+          console.warn('League delete failed:', e);
+          toast('Delete failed (' + ((e && e.code) || 'error') + ').');
+        }
+        render();
+      })();
     } else if (act === 'clear-bugs') {
       localStorage.setItem(BUGS_STORAGE_KEY, '[]');
       toast('Bug reports cleared.');

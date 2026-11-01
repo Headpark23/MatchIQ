@@ -289,7 +289,7 @@ service cloud.firestore {
         isValidLeague(request.resource.data);
 
       allow delete: if isVerifiedUser() &&
-        resource.data.creatorUid == request.auth.uid;
+        (resource.data.creatorUid == request.auth.uid || isAppOwner());
 
       // 6. League Members Subcollection
       // Members can only join a league that exists (or is created in the same batch) and
@@ -316,7 +316,7 @@ service cloud.firestore {
           ownsHandle(database, request.resource.data.handle, uid);
 
         allow delete: if isVerifiedUser() &&
-          (request.auth.uid == uid || isLeagueCreator(database, code));
+          (request.auth.uid == uid || isLeagueCreator(database, code) || isAppOwner());
       }
 
       // 6b. Players the creator has thrown out; blocks them from re-joining with the code.
