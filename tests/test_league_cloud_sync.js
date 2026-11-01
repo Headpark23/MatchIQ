@@ -241,12 +241,20 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   assert.strictEqual(alice.league(code).cloudCreated, true, 'league marked as saved in the cloud');
   console.log('  PASS: creating a league saves it to the cloud.');
 
-  // Bob opens the invite link: he joins exactly once, and the link is consumed.
+  // Bob opens the invite link: the Join tab opens with the code pre-filled and the link is consumed.
   bob.location.hash = '#join-league=' + code;
   bob.run('render()');
   for (let i = 0; i < 5; i++) { bob.run('render()'); await settle(3); }
   await settle();
   assert.strictEqual(bob.location.hash, '#/leagues', 'invite link is replaced after use');
+  assert.strictEqual(bob.run(`$('league-modal').hidden`), false, 'invite link opens the league modal');
+  assert.strictEqual(bob.run(`$('join-league-form').hidden`), false, 'on the Join with Code tab');
+  assert.strictEqual(bob.run(`$('create-league-form').hidden`), true, 'not the Create tab');
+  assert.strictEqual(bob.run(`$('join-league-code').value`), code, 'with the invite code pre-filled');
+  assert(!cloud.docs.has('leagues/' + code + '/members/bob'), 'Bob has not joined until he confirms');
+  // Bob confirms with the Join League button.
+  bob.run(`joinCloudLeague($('join-league-code').value)`);
+  await settle();
   assert(cloud.docs.has('leagues/' + code + '/members/bob'), 'Bob joined');
   assert.strictEqual(cloud.stats.memberCreates, 2, 'Bob joined exactly once despite repeated renders');
   assert.strictEqual(bob.toasts.filter(t => t.startsWith('Joined')).length, 1, 'one "Joined" message');
@@ -279,6 +287,7 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   assert(!cloud.docs.has('users/bob/leagueMemberships/' + code), 'kicked player\'s membership index cleaned up');
   bob.location.hash = '#join-league=' + code;
   bob.run('render()');
+  bob.run(`joinCloudLeague($('join-league-code').value)`);
   await settle();
   assert(!cloud.docs.has('leagues/' + code + '/members/bob'), 'a kicked player cannot rejoin with the code');
   assert(bob.toasts.includes('The creator has removed you from this league.'), 'kicked player is told why');

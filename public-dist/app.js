@@ -1794,6 +1794,7 @@ function viewHome() {
   '</div>';
 
   return '<section class="view">' +
+    '<a href="#/guide" class="guide-banner"><span class="guide-banner-ico">🧭</span><span><b>New here? Read the how-to guide</b><small>Features, private leagues and regional ladders explained in two minutes.</small></span><span class="guide-banner-go">&rarr;</span></a>' +
     renderWelcomeHero() +
     beginnerGuides() +
   '</section>';
@@ -3587,6 +3588,7 @@ function viewLeagues() {
     '</div>' +
     '<div class="btn-row">' +
       '<button type="button" class="btn primary" data-open-league-modal>Create or Join League</button>' +
+      '<a href="#/guide" class="btn" style="text-decoration:none">❓ How leagues work</a>' +
       '<button type="button" class="trophy-summary-pill' + (trophies.length === 0 ? ' empty' : '') + '" data-open-trophy-cabinet style="' + (trophies.length === 0 ? 'opacity:0.75;' : '') + '">🏆 Trophy Cabinet (' + trophies.length + ' Silverware)</button>' +
       (isGeo ? '' : '<button type="button" class="btn" data-share-league="' + esc(currentLeague.code) + '">Invite Friends</button>') +
     '</div></div>' +
@@ -4310,6 +4312,109 @@ function handleDiaryFormSubmit(event) {
   if (currentRoute()[0] === 'diary') render();
 }
 
+// ------------------------------------------------------------ How To guide
+function viewGuide() {
+  const step = (n, title, body) => '<li class="guide-step"><span class="guide-step-num">' + n + '</span><div><b>' + title + '</b><span>' + body + '</span></div></li>';
+  const sec = (id, icon, title, inner, open) => '<details class="guide-sec card" id="guide-' + id + '"' + (open ? ' open' : '') + '><summary><span class="guide-ico">' + icon + '</span><span>' + title + '</span></summary><div class="guide-body">' + inner + '</div></details>';
+  const jump = [['start', 'Quick start'], ['around', 'Finding your way'], ['picks', 'Reading a pick'], ['acca', 'Build an acca'], ['diary', 'Bet Diary'], ['private', 'Private leagues'], ['regional', 'Regional leagues'], ['rules', 'League rules'], ['faq', 'FAQ']];
+  const jumpHtml = '<div class="guide-jump">' + jump.map(j => '<button type="button" data-guide-jump="' + j[0] + '">' + j[1] + '</button>').join('') + '</div>';
+
+  const start = '<ol class="guide-steps">' +
+    step(1, 'Browse the picks', 'Open <b>Picks</b> to see every upcoming match with the model&rsquo;s view. No account needed.') +
+    step(2, 'Check the price', 'Bet Buddy compares its own probability with UK bookmaker prices. A pick is only flagged as value when the price is better than the chance deserves.') +
+    step(3, 'Log your bet', 'Tap <b>Add a bet</b> in the <b>Diary</b> and record the odds and stake. Your private profit &amp; loss builds up automatically.') +
+    step(4, 'Compete', 'Sign in with Google, then create a private league with mates or just play: your league bets also climb the regional ladders.') +
+    '</ol>' +
+    '<p class="guide-tip">Bet Buddy never places bets for you. It helps you decide, then you place the bet with your own bookmaker.</p>';
+
+  const around = '<div class="guide-grid">' +
+    '<div><b>🏠 Home</b><span>The welcome hub: today&rsquo;s best-value bet, the Bet Butler slip helper and shortcuts.</span></div>' +
+    '<div><b>🎯 Picks</b><span>The Bet Builder and a card for every upcoming match with its lean and verdict.</span></div>' +
+    '<div><b>📅 Fixtures</b><span>The full schedule by competition. Tap a match for its full analysis page.</span></div>' +
+    '<div><b>📊 Results</b><span>Every prediction is sealed before kick-off and scored afterwards, so you can judge the model on its record.</span></div>' +
+    '<div><b>📖 Diary</b><span>Your private record of bets, with profit, ROI and win rate.</span></div>' +
+    '<div><b>🏆 Leagues</b><span>Private leagues with friends plus the automatic regional ladders.</span></div>' +
+    '<div><b>⋯ More</b><span>Your profile and location, data sources, feedback and app version.</span></div>' +
+    '<div><b>6/4 &#8596; 2.50</b><span>The toggle at the top switches every price between fractional and decimal.</span></div>' +
+    '</div>';
+
+  const picks = '<p>Each pick card shows a few simple things:</p><ul class="guide-list">' +
+    '<li><b>Probability</b> &ndash; the model&rsquo;s estimate of how likely the outcome is.</li>' +
+    '<li><b>Fair odds</b> &ndash; 1 &divide; probability, shown as a familiar UK price. It is not a bookmaker price.</li>' +
+    '<li><b>Value</b> &ndash; flagged only when a recent bookmaker price is longer than the fair odds. A likely outcome at a short price is <i>not</i> value.</li>' +
+    '<li><b>No bet</b> &ndash; a real answer. Bet Buddy says it when evidence is thin or the price is not good enough.</li>' +
+    '<li><b>Provisional</b> &ndash; the estimate has little track record yet, so treat it with extra caution.</li></ul>' +
+    '<p class="guide-tip">Estimates are for information and entertainment. A high probability is not a guarantee.</p>';
+
+  const acca = '<ol class="guide-steps">' +
+    step(1, 'Open the Bet Builder', 'Go to <b>Picks</b>. Choose today&rsquo;s games or the 7-day slate.') +
+    step(2, 'Set your target', 'Enter your stake and how much you would like to win.') +
+    step(3, 'Review the acca', 'Bet Buddy suggests legs and shows the combined odds, the probability of every leg landing and the expected value.') +
+    step(4, 'Use the Bet Butler', 'Pick your bookmaker, then tick legs off as you enter them in their app, or copy the selections with one tap.') +
+    step(5, 'Share it', 'Send the slip link to a mate and their Bet Builder opens pre-filled.') +
+    '</ol><p class="guide-tip">An acca only pays if <b>every</b> leg wins. More legs means bigger returns but a much lower chance.</p>';
+
+  const diary = '<ol class="guide-steps">' +
+    step(1, 'Add a bet', 'Tap <b>Add a bet</b> in the Diary, or log a pick straight from a match. Enter the selection, the odds you were offered and your stake.') +
+    step(2, 'Choose where it counts', 'Under <b>League participation</b> pick <i>Add to Bet Diary &amp; to League</i> or <i>Diary only</i>. Diary-only bets never affect league scores.') +
+    step(3, 'Let it settle', 'Results update automatically after the final whistle, and your profit, ROI and win rate update with them.') +
+    step(4, 'Keep it safe', 'Signed-in diaries sync to your account. Otherwise the diary lives only in this browser, so use <b>Backup</b> and <b>Import</b> to move it, and avoid clearing site data.') +
+    '</ol>';
+
+  const priv = '<h3>Create a league</h3><ol class="guide-steps">' +
+    step(1, 'Sign in', 'Leagues need a Google sign-in (button at the top right). Pick your username at the same time.') +
+    step(2, 'Open Leagues', 'Tap the <b>Leagues</b> tab, then <b>Create or Join League</b>.') +
+    step(3, 'Fill in the details', 'On <b>Create a League</b> choose a name (up to 32 characters), an icon and a duration: <b>Weekly</b> (resets every Monday 00:00), <b>Monthly</b> or <b>Yearly</b>.') +
+    step(4, 'Get your invite', 'Tap <b>Create League &amp; Get Invite Code</b>. Share the code or link with <b>Invite Friends</b>.') +
+    '</ol><h3>Join a league</h3><ol class="guide-steps">' +
+    step(1, 'Using a link', 'Open the invite link. Sign in if asked and the join screen opens with the code filled in.') +
+    step(2, 'Using a code', 'Go to <b>Leagues</b> &rarr; <b>Create or Join League</b> &rarr; <b>Join with Code</b>. Paste the 8-character code and tap <b>Join League</b>.') +
+    '</ol><h3>Managing it</h3><ul class="guide-list">' +
+    '<li>Switch between <b>Weekly / Monthly / Yearly</b> tables above the league table.</li>' +
+    '<li>The creator can <b>Rename</b> or <b>Delete</b> the league; everyone else can <b>Leave</b>.</li>' +
+    '<li>The top three each period win Gold, Silver and Bronze for your Trophy Cabinet.</li>' +
+    '<li>You can be in as many leagues as you like. Your one qualifying bet a day counts in all of them.</li></ul>';
+
+  const regional = '<p>You do not need to join anything. Once your location is set, every league bet you make is entered on <b>six ladders</b> automatically:</p>' +
+    '<div class="guide-tiers"><span>🏘️ Hometown</span><span>🏛️ Region / County</span><span>🏴 Country</span><span>🇬🇧 UK</span><span>🇪🇺 Europe</span><span>🌍 Worldwide</span></div>' +
+    '<ol class="guide-steps">' +
+    step(1, 'Set your location', 'Go to <b>More</b> &rarr; <b>Account</b> &rarr; <b>Edit Profile &amp; Location</b> and enter your town, region and country. Players who spell a place the same way land on the same ladder.') +
+    step(2, 'Place a league bet', 'Log a bet with <i>Add to Bet Diary &amp; to League</i> before kick-off. Once it settles it scores on all your ladders.') +
+    step(3, 'Check the ladders', 'On <b>Leagues</b>, scroll to <b>Automatic Geographical Leagues</b> and pick a ladder. Use Weekly / Monthly / Yearly to change the period.') +
+    '</ol><p class="guide-tip">Ladders show the top 50 players and refresh every 30 minutes, so a new result can take a little while to appear. If a ladder asks you to add your location, finish step 1.</p>';
+
+  const rules = '<ul class="guide-list">' +
+    '<li><b>Win:</b> (bookmaker price &minus; 1) &times; 10 points. Evens = 10 pts. Prices count up to 10/1, so 100 pts is the most one bet can score.</li>' +
+    '<li><b>Loss:</b> &minus;2 points.</li>' +
+    '<li><b>One league bet per match day</b>, logged before kick-off. Extra bets that day go to your Diary only.</li>' +
+    '<li><b>What counts:</b> a single on match result or over/under goals, or an accumulator of those picks. Leg prices are multiplied (still capped at 10/1). One losing leg loses the acca; a postponed leg drops out.</li>' +
+    '<li><b>Fair play:</b> the league server records the bookmaker price when you log the bet and settles it from the official result, so scores cannot be edited.</li>' +
+    '<li><b>Locked in:</b> once the match has kicked off a league bet stands and cannot be removed.</li></ul>';
+
+  const faq = '<details class="guide-q"><summary>Do I need an account?</summary><p>Not for picks, fixtures, results or a local diary. Google sign-in is needed for leagues, ladders and cross-device diary sync.</p></details>' +
+    '<details class="guide-q"><summary>I joined a league but cannot see anyone else.</summary><p>Members appear as they join. Check you used the right 8-character code, then share the invite link again.</p></details>' +
+    '<details class="guide-q"><summary>Why am I not on a ladder?</summary><p>You need a location in your profile and at least one settled league bet in the current period.</p></details>' +
+    '<details class="guide-q"><summary>Can I change my username or location?</summary><p>Yes, under <b>More</b> &rarr; <b>Account</b>. Ladders update at the next refresh.</p></details>' +
+    '<details class="guide-q"><summary>Something looks wrong.</summary><p>Use <b>Report a Bug</b> in the page footer, or <b>Force App Sync</b> under <b>More</b> to load the latest version.</p></details>' +
+    '<p class="guide-tip">18+ only. Bet with money you can afford to lose. Help is available at <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a> and <a href="https://www.gamcare.org.uk" target="_blank" rel="noopener">GamCare</a>.</p>';
+
+  return '<section class="view guide-view">' +
+    '<div class="section-head"><div><h1 class="page-title">How to use Bet Buddy</h1>' +
+    '<p class="page-sub">A two-minute walkthrough of every feature, plus how to start private leagues and climb the regional ladders.</p></div>' +
+    '<div class="btn-row"><a href="#/leagues" class="btn primary" style="text-decoration:none">Go to Leagues</a><a href="#/picks" class="btn" style="text-decoration:none">Go to Picks</a></div></div>' +
+    jumpHtml +
+    sec('start', '🚀', 'Quick start', start, true) +
+    sec('around', '🧭', 'Finding your way around', around) +
+    sec('picks', '🎯', 'Reading a pick', picks) +
+    sec('acca', '⚡', 'Build an acca with the Bet Builder', acca) +
+    sec('diary', '📖', 'Track bets in your Diary', diary) +
+    sec('private', '👥', 'Private leagues: create &amp; join', priv) +
+    sec('regional', '🏛️', 'Regional leagues &amp; ladders', regional) +
+    sec('rules', '📏', 'League scoring &amp; rules', rules) +
+    sec('faq', '❓', 'FAQ &amp; help', faq) +
+  '</section>';
+}
+
 // ------------------------------------------------------------ More: sources, method, feedback
 const feedbackState = { understand: 0, convincing: 0, useful: '', chips: new Set() };
 function getStoredFeedback() { try { const v = JSON.parse(localStorage.getItem(FEEDBACK_STORAGE_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
@@ -4467,6 +4572,17 @@ function toast(msg, type) {
   setTimeout(() => t.remove(), 3400);
 }
 
+// Open the league modal on the Join tab with the invite code pre-filled.
+function showJoinLeagueModal(code) {
+  const inp = $('join-league-code');
+  if (inp) inp.value = code || '';
+  $('create-league-form').hidden = true;
+  $('join-league-form').hidden = false;
+  $('tab-join-league').classList.add('active');
+  $('tab-create-league').classList.remove('active');
+  $('league-modal').hidden = false;
+}
+
 let sharedSlipNotice = false;
 function currentRoute() {
   const hash = location.hash.replace(/^#\/?/, '');
@@ -4475,9 +4591,14 @@ function currentRoute() {
       const code = decodeURIComponent(hash.slice(12)).trim().toUpperCase();
       // Consume the invite link so later re-renders do not join again (each join re-renders).
       try { history.replaceState(null, '', location.pathname + location.search + '#/leagues'); } catch (e) { /* ignore */ }
-      const inp = $('join-league-code');
-      if (inp) inp.value = code;
-      joinCloudLeague(code);
+      const u = getAuthUser();
+      if (u && u.signedIn) showJoinLeagueModal(code);
+      else {
+        // Sign in first; the modal opens with the code once sign-in completes.
+        try { sessionStorage.setItem('betbuddy_invite_code', code); } catch (e) { /* ignore */ }
+        toast('Sign in with Google to join this league');
+        openAuthModal();
+      }
     } catch (e) { /* ignore */ }
     return ['leagues'];
   }
@@ -5254,9 +5375,9 @@ function render() {
   const navKey = view === 'match' ? 'fixtures' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
-  const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
+  const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'Data & methods' };
+  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'Data & methods' };
   document.title = (titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {
@@ -5628,6 +5749,11 @@ function initFirebaseAuth() {
         try { await syncDiaryFromCloud(); } catch (e) {}
 
         // Preserve pending league invite across sign-in popup/redirect
+        const inviteCode = sessionStorage.getItem('betbuddy_invite_code');
+        if (inviteCode) {
+          sessionStorage.removeItem('betbuddy_invite_code');
+          setTimeout(() => { showJoinLeagueModal(inviteCode); }, 600);
+        }
         const pendingLeague = sessionStorage.getItem('betbuddy_pending_join_league');
         if (pendingLeague) {
           sessionStorage.removeItem('betbuddy_pending_join_league');
@@ -6023,6 +6149,10 @@ document.addEventListener('click', event => {
   else if (t.dataset.closeHandle !== undefined) { $('handle-modal').hidden = true; }
   else if (t.dataset.selectLeague !== undefined) { activeLeagueId = t.dataset.selectLeague; render(); }
   else if (t.dataset.selectMoreTab !== undefined) { activeMoreTab = t.dataset.selectMoreTab; render(); }
+  else if (t.dataset.guideJump !== undefined) {
+    const sec = document.getElementById('guide-' + t.dataset.guideJump);
+    if (sec) { sec.open = true; sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }
   else if (t.id === 'toggle-odds-format') { toggleOddsFormat(); render(); }
   else if (t.dataset.renameLeague !== undefined) {
     renameLeague(t.dataset.renameLeague);
