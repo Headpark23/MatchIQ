@@ -4229,6 +4229,7 @@ function viewMore() {
 
   const tabsHtml = '<div class="more-nav-grid">' +
     tabs.map(t => '<button type="button" class="more-nav-btn' + (activeMoreTab === t.id ? ' active' : '') + '" data-select-more-tab="' + t.id + '">' + t.label + '</button>').join('') +
+    (isAppOwner() ? '<a href="#/admin" class="more-nav-btn" style="text-decoration:none;text-align:center;border-color:var(--cyan);color:var(--cyan)">📈 Telemetry</a>' : '') +
   '</div>';
 
   let contentHtml = '';
@@ -4800,6 +4801,13 @@ function viewCommercial() {
   '</section>';
 }
 
+// Telemetry dashboard is visible only to the app owner's signed-in, verified account.
+const OWNER_EMAILS = ['headpark@gmail.com'];
+function isAppOwner() {
+  const u = getAuthUser();
+  return Boolean(u && u.emailVerified && OWNER_EMAILS.includes((u.email || '').toLowerCase()));
+}
+
 function viewAdmin() {
   const authUser = getAuthUser();
   const clicks = getAffiliateClicks();
@@ -5064,7 +5072,8 @@ function viewMultiSport(sportKey) {
 }
 
 function render() {
-  const [view, arg] = currentRoute();
+  let [view, arg] = currentRoute();
+  if (view === 'admin' && !isAppOwner()) view = 'home';
   const navKey = view === 'match' ? 'fixtures' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
@@ -5302,6 +5311,7 @@ function updateHeaderAuthUI() {
     const username = user.handle || 'Punter';
     const initials = username.slice(0, 1).toUpperCase();
     container.innerHTML = '<div style="display:flex;align-items:center;gap:6px;">' +
+      (isAppOwner() ? '<a href="#/admin" class="btn small" title="Owner telemetry dashboard" style="min-height:32px;padding:2px 8px;font-size:11px;text-decoration:none;border:1px solid var(--cyan);color:var(--cyan);">📈 Telemetry</a>' : '') +
       '<button type="button" class="header-user-btn" id="header-user-btn" title="Signed in as ' + esc(user.name || user.email) + '">' +
         '<span class="header-avatar">' + esc(initials) + '</span>' +
         '<span class="header-username">@' + esc(username) + '</span>' +
@@ -6147,7 +6157,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v91';
+const APP_VERSION = 'v92';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {
