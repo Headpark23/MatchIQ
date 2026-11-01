@@ -102,6 +102,7 @@ sandbox.window = sandbox;
 vm.createContext(sandbox);
 vm.runInContext(mcCode, sandbox);
 vm.runInContext(bbCode, sandbox);
+vm.runInContext(fs.readFileSync('league_sync.js', 'utf8'), sandbox);
 vm.runInContext(appCode, sandbox);
 
 // Set bookmaker to bet365

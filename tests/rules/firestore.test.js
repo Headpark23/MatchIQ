@@ -25,6 +25,10 @@ const {
   assertSucceeds
 } = require('@firebase/rules-unit-testing');
 
+const leagueDocs = require('../../league_sync.js');
+const firebase = require('firebase/compat/app').default;
+require('firebase/compat/firestore');
+
 const PROJECT_ID = 'betbuddyuk';
 const RULES_PATH = path.resolve(__dirname, '../../firestore.rules');
 
@@ -82,34 +86,23 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
     }).firestore();
   }
 
-  // Sample valid data fixtures
+  // Sample valid data fixtures. League and member payloads come from the app's own builders
+  // (league_sync.js), so these tests exercise exactly what the app writes.
   const validUserPayload = {
     handle: 'Alice_99',
     avatar: '⚽',
     createdAt: new Date()
   };
 
-  const validLeagueCode = 'PAISLEY8'; // 8 chars from [23456789ABCDEFGHJKLMNPQRSTUVWXYZ]
-  const validLeaguePayload = {
-    name: 'Paisley Punters Club',
-    icon: '⚽',
-    freq: 'weekly',
-    code: validLeagueCode,
-    creatorUid: 'alice',
-    createdAt: new Date().toISOString()
-  };
+  const validLeagueCode = 'PAWSLEY8'; // 8 chars from [23456789ABCDEFGHJKLMNPQRSTUVWXYZ]
+  const NOW = new Date().toISOString();
+  const validLeaguePayload = leagueDocs.leagueDoc({
+    code: validLeagueCode, name: 'Paisley Punters Club', icon: '⚽', freq: 'weekly',
+    creatorUid: 'alice', creatorHandle: 'Alice_99', now: NOW
+  });
 
-  const validMemberPayload = {
-    handle: 'Alice_99',
-    avatar: '⚽',
-    joinedAt: new Date().toISOString(),
-    points: 150,
-    winRate: 65.5,
-    roi: 18.2,
-    settled: 12,
-    form: ['W', 'W', 'L', 'W'],
-    updatedAt: new Date().toISOString()
-  };
+  const sampleStats = { points: 150, winRate: 65.5, roi: 18.2, settled: 12, form: ['W', 'W', 'L', 'W'] };
+  const validMemberPayload = leagueDocs.newMemberDoc({ handle: 'Alice_99', avatar: '⚽', stats: sampleStats, now: NOW });
 
   // -----------------------------------------------------------------
   // 1. Unauthenticated Access Protection
@@ -193,6 +186,19 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
     it('denies whole-collection list queries on leagues (anti-scraping)', async function () {
       const dbAlice = getGoogleUser('alice');
       await assertFails(dbAlice.collection('leagues').get());
+    });
+
+    it('allows only the verified app owner to list all leagues and their members', async function () {
+      const owner = (claims) => testEnv.authenticatedContext('owner_uid', {
+        email: 'headpark@gmail.com',
+        email_verified: true,
+        firebase: { sign_in_provider: 'google.com' },
+        ...claims
+      }).firestore();
+      await assertSucceeds(owner().collection('leagues').get());
+      await assertSucceeds(owner().collection('leagues').doc(validLeagueCode).collection('members').get());
+      await assertFails(owner({ email_verified: false }).collection('leagues').get());
+      await assertFails(owner({ email: 'headpark@gmail.com.evil.com' }).collection('leagues').get());
     });
   });
 
@@ -318,6 +324,164 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       await assertFails(
         dbCharlie.collection('leagues').doc(validLeagueCode).collection('members').doc('bob').delete()
       );
+    });
+  });
+
+  // -----------------------------------------------------------------
+  // App flows: the exact batches app.js sends (publishLeague, joinCloudLeague,
+  // syncLeagueToCloud, kickPlayerFromLeague, deleteLeague, claimHandleTransaction)
+  // -----------------------------------------------------------------
+  describe('App flows with real payloads', function () {
+    const code = validLeagueCode;
+    const now = () => new Date().toISOString();
+    const leagueRef = (db) => db.collection('leagues').doc(code);
+    const memberRef = (db, uid) => leagueRef(db).collection('members').doc(uid);
+    const membershipRef = (db, uid) => db.collection('users').doc(uid).collection('leagueMemberships').doc(code);
+    const serverTime = () => firebase.firestore.FieldValue.serverTimestamp();
+
+    // publishLeague(): league + creator member + creator membership, in one batch.
+    async function createLeagueAsAlice() {
+      const db = getGoogleUser('alice');
+      const batch = db.batch();
+      batch.set(leagueRef(db), leagueDocs.leagueDoc({ code, name: 'Paisley Punters', icon: '⚽', freq: 'weekly', creatorUid: 'alice', creatorHandle: 'Alice_99', now: now() }));
+      batch.set(memberRef(db, 'alice'), leagueDocs.newMemberDoc({ handle: 'Alice_99', avatar: '⚽', stats: sampleStats, now: now() }));
+      batch.set(membershipRef(db, 'alice'), leagueDocs.membershipDoc({ code, name: 'Paisley Punters', icon: '⚽', role: 'creator', now: now() }));
+      return batch.commit();
+    }
+
+    // joinCloudLeague(): new member record + own membership, in one batch.
+    function joinAs(uid, handle) {
+      const db = getGoogleUser(uid);
+      const batch = db.batch();
+      batch.set(memberRef(db, uid), leagueDocs.newMemberDoc({ handle, avatar: '🎯', stats: {}, now: now() }));
+      batch.set(membershipRef(db, uid), leagueDocs.membershipDoc({ code, name: 'Paisley Punters', icon: '⚽', role: 'member', now: now() }));
+      return batch.commit();
+    }
+
+    // syncLeagueToCloud(): a stats refresh is an update only.
+    function syncStatsAs(uid, handle, stats = sampleStats) {
+      const db = getGoogleUser(uid);
+      return memberRef(db, uid).update(leagueDocs.memberStatsUpdate({ handle, avatar: '🎯', stats, now: now() }));
+    }
+
+    it('creator can publish a new league in one batch', async function () {
+      await assertSucceeds(createLeagueAsAlice());
+    });
+
+    it('a player can join, then refresh their stats', async function () {
+      await createLeagueAsAlice();
+      await assertSucceeds(joinAs('bob', 'Bob_7'));
+      await assertSucceeds(syncStatsAs('bob', 'Bob_7', { points: 42, winRate: 50, roi: -3.2, settled: 4, form: ['W', 'L'] }));
+    });
+
+    it('joining a league that does not exist is denied', async function () {
+      await assertFails(joinAs('bob', 'Bob_7'));
+    });
+
+    it('a stats refresh cannot create a member record that does not exist', async function () {
+      await createLeagueAsAlice();
+      await assertFails(syncStatsAs('bob', 'Bob_7'));
+    });
+
+    it('joinedAt cannot be changed after joining', async function () {
+      await createLeagueAsAlice();
+      await joinAs('bob', 'Bob_7');
+      const db = getGoogleUser('bob');
+      await assertFails(memberRef(db, 'bob').update({ joinedAt: '2020-01-01T00:00:00.000Z' }));
+    });
+
+    it('a kicked player is banned: cannot refresh stats or rejoin', async function () {
+      await createLeagueAsAlice();
+      await joinAs('bob', 'Bob_7');
+      const dbAlice = getGoogleUser('alice');
+      const kick = dbAlice.batch();
+      kick.delete(memberRef(dbAlice, 'bob'));
+      kick.set(leagueRef(dbAlice).collection('banned').doc('bob'), leagueDocs.banDoc({ handle: 'Bob_7', now: now() }));
+      await assertSucceeds(kick.commit());
+
+      await assertFails(syncStatsAs('bob', 'Bob_7'));
+      await assertFails(joinAs('bob', 'Bob_7'));
+      // Bob can read his own ban (for a clear message) but cannot lift it.
+      await assertSucceeds(leagueRef(getGoogleUser('bob')).collection('banned').doc('bob').get());
+      await assertFails(leagueRef(getGoogleUser('bob')).collection('banned').doc('bob').delete());
+      // Only the creator can ban.
+      await joinAs('charlie', 'Charlie_1');
+      await assertFails(leagueRef(getGoogleUser('charlie')).collection('banned').doc('dave').set(leagueDocs.banDoc({ handle: 'Dave', now: now() })));
+    });
+
+    it('a player who left cannot be re-added by a stats refresh from another device', async function () {
+      await createLeagueAsAlice();
+      await joinAs('bob', 'Bob_7');
+      const db = getGoogleUser('bob');
+      await assertSucceeds(memberRef(db, 'bob').delete());
+      await assertSucceeds(membershipRef(db, 'bob').delete());
+      await assertFails(syncStatsAs('bob', 'Bob_7'));
+    });
+
+    it('deleteLeague(): creator clears members and bans, then the league; nobody can write to it after', async function () {
+      await createLeagueAsAlice();
+      await joinAs('bob', 'Bob_7');
+      const dbAlice = getGoogleUser('alice');
+      await leagueRef(dbAlice).collection('banned').doc('eve').set(leagueDocs.banDoc({ handle: 'Eve', now: now() }));
+
+      const [members, bans] = await Promise.all([leagueRef(dbAlice).collection('members').get(), leagueRef(dbAlice).collection('banned').get()]);
+      const clear = dbAlice.batch();
+      members.docs.concat(bans.docs).forEach(d => clear.delete(d.ref));
+      await assertSucceeds(clear.commit());
+      const final = dbAlice.batch();
+      final.delete(leagueRef(dbAlice));
+      final.delete(membershipRef(dbAlice, 'alice'));
+      await assertSucceeds(final.commit());
+
+      await assertFails(syncStatsAs('bob', 'Bob_7'));
+      await assertFails(joinAs('bob', 'Bob_7'));
+    });
+
+    it('a member record left behind by a deleted league cannot be written', async function () {
+      await createLeagueAsAlice();
+      await joinAs('bob', 'Bob_7');
+      await testEnv.withSecurityRulesDisabled(async (ctx) => {
+        await ctx.firestore().collection('leagues').doc(code).delete();
+      });
+      await assertFails(syncStatsAs('bob', 'Bob_7'));
+    });
+
+    it('rename: creator can rename, others cannot, markup is refused', async function () {
+      await createLeagueAsAlice();
+      await joinAs('bob', 'Bob_7');
+      await assertSucceeds(leagueRef(getGoogleUser('alice')).update(leagueDocs.leagueRename('Paisley Legends', now())));
+      await assertFails(leagueRef(getGoogleUser('bob')).update(leagueDocs.leagueRename('Bob Rules', now())));
+      await assertFails(leagueRef(getGoogleUser('alice')).update({ name: '<img src=x onerror=alert(1)>', updatedAt: now() }));
+    });
+
+    it('league names and icons with HTML markup are refused on create', async function () {
+      const db = getGoogleUser('alice');
+      await assertFails(leagueRef(db).set({ ...validLeaguePayload, name: '<img src=x onerror=alert(1)>' }));
+      await assertFails(leagueRef(db).set({ ...validLeaguePayload, icon: '<b>' }));
+    });
+
+    it('the name builders strip markup so the app never sends it', function () {
+      expect(leagueDocs.cleanLeagueName('<img src=x onerror=alert(1)>')).to.not.match(/[<>"&]/);
+      expect(leagueDocs.cleanIcon('<svg onload=x>')).to.not.match(/[<>"&]/);
+    });
+
+    it('claimHandleTransaction(): new profile + gamertag, then a gamertag change', async function () {
+      const db = getGoogleUser('alice');
+      await assertSucceeds(db.runTransaction(async tx => {
+        tx.set(db.collection('handles').doc('alice_99'), leagueDocs.handleDoc({ uid: 'alice', handle: 'Alice_99', now: serverTime() }));
+        tx.set(db.collection('users').doc('alice'), leagueDocs.userProfileDoc({ handle: 'Alice_99', avatar: '⚽', now: serverTime(), isNew: true }));
+      }));
+      const existing = (await db.collection('users').doc('alice').get()).data();
+      await assertSucceeds(db.runTransaction(async tx => {
+        tx.set(db.collection('handles').doc('alice_new'), leagueDocs.handleDoc({ uid: 'alice', handle: 'Alice_New', now: serverTime() }));
+        tx.delete(db.collection('handles').doc('alice_99'));
+        tx.set(db.collection('users').doc('alice'), { ...leagueDocs.userProfileDoc({ handle: 'Alice_New', avatar: '⚽', now: serverTime(), isNew: true }), createdAt: existing.createdAt });
+      }));
+    });
+
+    it('profiles may not carry email or other private fields', async function () {
+      const db = getGoogleUser('alice');
+      await assertFails(db.collection('users').doc('alice').set({ ...leagueDocs.userProfileDoc({ handle: 'Alice_99', avatar: '⚽', now: serverTime(), isNew: true }), email: 'alice@gmail.com' }));
     });
   });
 

@@ -80,6 +80,7 @@ function createEnv(initialStorage = {}) {
   vm.createContext(context);
   vm.runInContext(mc, context);
   vm.runInContext(bb, context);
+  vm.runInContext(fs.readFileSync('league_sync.js', 'utf8'), context);
   vm.runInContext(js, context);
   vm.runInContext('Object.assign(DATA, ' + JSON.stringify(DATA) + ');', context);
   return { context, store, elements };
