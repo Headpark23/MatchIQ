@@ -2286,7 +2286,8 @@ function saveStoredDiary(entries) {
     }
   } catch (e) {}
 }
-function updateDiaryCount() { const n = getStoredDiary().length; $('diary-count').textContent = n ? String(n) : ''; }
+// The nav badge counts live (pending) bets only; settled bets are archived and live in the stats.
+function updateDiaryCount() { const n = getStoredDiary().filter(e => e && e.outcome === 'pending').length; $('diary-count').textContent = n ? String(n) : ''; }
 const money = v => '£' + Math.abs(v).toFixed(2);
 
 
@@ -3556,7 +3557,15 @@ function viewDiary() {
     '<button type="button" class="btn small danger" data-clear-diary>Clear diary</button></div>';
   const chartHtml = diaryPerformanceChart(diary);
   if (!diary.length) return html + '<div class="empty section">No bets match this profile filter.</div></section>';
-  return html + chartHtml + '<div class="grid grid-2 section">' + diary.map(betCard).join('') + '</div></section>';
+  const live = diary.filter(e => e.outcome === 'pending');
+  const archived = diary.filter(e => e.outcome !== 'pending').sort((a, b) => String(b.settledAt || b.date || b.timestamp || '').localeCompare(String(a.settledAt || a.date || a.timestamp || '')));
+  html += chartHtml + '<div class="section-head section"><h2 class="section-title">Live bets (' + live.length + ')</h2></div>' +
+    (live.length ? '<div class="grid grid-2">' + live.map(betCard).join('') + '</div>' : '<div class="empty">No live bets. Your settled bets are archived below and counted in your stats.</div>');
+  if (archived.length) {
+    html += '<details class="section diary-archive"' + (live.length ? '' : ' open') + '><summary class="section-title" style="cursor:pointer">Settled &amp; archived (' + archived.length + ')</summary>' +
+      '<div class="grid grid-2" style="margin-top:12px">' + archived.map(betCard).join('') + '</div></details>';
+  }
+  return html + '</section>';
 }
 
 function outcomeSelect(value, attrs, label) {
