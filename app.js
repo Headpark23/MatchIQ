@@ -1538,10 +1538,12 @@ function getTodayBestValuePicks() {
   const withEv = pool.map(leg => ({ ...leg, ev: (Number(leg.odds) * Number(leg.p)) - 1 }));
   const isValidated = leg => leg.support === 'validated' || (leg.evidence && leg.evidence.status === 'validated');
   let mode = 'verified';
-  let qualified = withEv.filter(leg => isValidated(leg) && leg.priceSource === 'live' && leg.ev >= 0.05);
+  // Edges above 35% and longshots under 35% chance are almost always a price or model outlier, not value.
+  const saneEdge = leg => leg.ev >= 0.05 && leg.ev <= 0.35 && leg.p >= 0.35;
+  let qualified = withEv.filter(leg => isValidated(leg) && leg.priceSource === 'live' && saneEdge(leg));
   if (!qualified.length) {
     mode = 'live';
-    qualified = withEv.filter(leg => leg.priceSource === 'live' && leg.ev >= 0.05);
+    qualified = withEv.filter(leg => leg.priceSource === 'live' && saneEdge(leg));
   }
   if (!qualified.length) {
     mode = 'model';
