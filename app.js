@@ -1773,6 +1773,15 @@ function addBestValueToDiary(tier) {
   }
 }
 
+// Nudges signed-in players who have not set their full location: regional ladders are opt-in by location.
+function locationPromptBanner() {
+  const authUser = getAuthUser();
+  if (!(authUser && authUser.signedIn)) return '';
+  const prof = getUserProfile();
+  if (prof.town && prof.region && prof.country) return '';
+  return '<a href="#/more" data-select-more-tab="account" class="guide-banner"><span class="guide-banner-ico">📍</span><span><b>Join your regional leagues: add your location</b><small>Set your town, county and country in your profile to get on the Hometown, County and Country ladders.</small></span><span class="guide-banner-go">&rarr;</span></a>';
+}
+
 function viewHome() {
   
   // Commercial Inquiries Ledger
@@ -1793,7 +1802,7 @@ function viewHome() {
     '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
   '</div>';
 
-  return '<section class="view">' +
+  return '<section class="view">' + locationPromptBanner() +
     '<a href="#/guide" class="guide-banner"><span class="guide-banner-ico">🧭</span><span><b>New here? Read the how-to guide</b><small>Features, private leagues and regional ladders explained in two minutes.</small></span><span class="guide-banner-go">&rarr;</span></a>' +
     renderWelcomeHero() +
     beginnerGuides() +
@@ -3578,7 +3587,7 @@ function viewLeagues() {
     '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
   '</div>';
 
-  return '<section class="view">' + signedOutBanner +
+  return '<section class="view">' + signedOutBanner + locationPromptBanner() +
     '<div class="fair-play-banner">' +
       '<span class="fair-play-icon">🛡️</span>' +
       '<div><strong>Fair Play Rule:</strong> Exactly <strong>1 settled bet per calendar day</strong> counts toward your league score. Chronologically first qualifying bet logged each day counts, keeping the competition fair for all players.</div>' +
