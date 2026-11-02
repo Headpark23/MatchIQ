@@ -9,6 +9,7 @@
 //   ladders/{period}__{tier}       this server only: top 50 for world, Europe, UK, country, region, town
 const { onDocumentCreated, onDocumentWritten } = require('firebase-functions/v2/firestore');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
+const { onRequest } = require('firebase-functions/v2/https');
 const { setGlobalOptions, logger } = require('firebase-functions/v2');
 const admin = require('firebase-admin');
 const scoring = require('./lib/scoring');
@@ -35,7 +36,40 @@ async function loadData(name) {
 }
 const loadFixtures = async () => (await loadData('fixtures.json')).fixtures || [];
 
-const STAT_FIELDS = ['points', 'winRate', 'roi', 'settled', 'form'];
+// ---------------------------------------------------------- owner-only: signed-in user totals
+// Firebase Auth accounts can't be listed from a browser, so the founder dashboard asks here.
+// The caller's ID token must belong to a verified owner email; nobody else gets a count.
+const OWNER_EMAILS = ['headpark@gmail.com'];
+exports.ownerUserStats = onRequest({ cors: true }, async (req, res) => {
+  try {
+    const m = /^Bearer (.+)$/.exec(req.get('Authorization') || '');
+    if (!m) { res.status(401).json({ error: 'unauthenticated' }); return; }
+    const tok = await admin.auth().verifyIdToken(m[1]);
+    if (!tok.email_verified || !OWNER_EMAILS.includes((tok.email || '').toLowerCase())) {
+      res.status(403).json({ error: 'forbidden' }); return;
+    }
+    let total = 0, google = 0, last7 = 0, new7 = 0, token;
+    const now = Date.now(), week = 7 * 864e5;
+    do {
+      const page = await admin.auth().listUsers(1000, token);
+      for (const u of page.users) {
+        total++;
+        if (u.providerData.some(p => p.providerId === 'google.com')) google++;
+        const created = Date.parse(u.metadata.creationTime);
+        const seen = Date.parse(u.metadata.lastSignInTime);
+        if (now - created < week) new7++;
+        if (now - seen < week) last7++;
+      }
+      token = page.pageToken;
+    } while (token);
+    res.json({ total, google, new7, active7: last7, at: new Date().toISOString() });
+  } catch (e) {
+    logger.warn('ownerUserStats failed', e);
+    res.status(401).json({ error: 'invalid token' });
+  }
+});
+
+const STAT_FIELDS = ['points','winRate', 'roi', 'settled', 'form'];
 
 // ---------------------------------------------------------- 1. a league bet is logged
 exports.checkLeagueBet = onDocumentCreated('users/{uid}/leagueBets/{day}', async event => {

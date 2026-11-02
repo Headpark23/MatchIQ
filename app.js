@@ -5077,6 +5077,39 @@ async function loadAdminLeagueStats() {
   if (currentRoute()[0] === 'admin') render();
 }
 
+// Owner-only count of real Firebase Auth accounts (browsers can't list them, so a Cloud Function does).
+let adminUserStats = null;
+let adminUserLoading = false;
+async function loadAdminUserStats() {
+  if (adminUserLoading || !isAppOwner() || !firebaseAuth || !firebaseAuth.currentUser) return;
+  adminUserLoading = true;
+  try {
+    const token = await firebaseAuth.currentUser.getIdToken();
+    const res = await fetch('https://europe-west1-betbuddyuk.cloudfunctions.net/ownerUserStats', { headers: { Authorization: 'Bearer ' + token } });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    adminUserStats = await res.json();
+  } catch (e) {
+    console.warn('Admin user stats failed:', e);
+    adminUserStats = { error: (e && e.message) || 'unavailable' };
+  }
+  adminUserLoading = false;
+  if (currentRoute()[0] === 'admin') render();
+}
+
+function renderAdminUsersSection() {
+  const s = adminUserStats;
+  if (!s && !adminUserLoading) setTimeout(loadAdminUserStats, 0);
+  const head = '<div class="section-head"><h2 class="section-title">Registered Users</h2><span class="section-note">Real Firebase sign-ins, counted on the server.</span></div>';
+  if (!s) return '<div class="section" style="margin-top:28px">' + head + '<p class="muted">Counting sign-ins…</p></div>';
+  if (s.error) return '<div class="section" style="margin-top:28px">' + head + '<p class="muted">Could not load user counts (' + esc(s.error) + '). Tap Refresh Telemetry to retry.</p></div>';
+  return '<div class="section" style="margin-top:28px">' + head +
+    '<div class="admin-metric-grid">' +
+      '<div class="admin-metric-card"><div>Signed in with Google</div><div class="admin-metric-val cyan">' + s.google + '</div><div class="admin-metric-sub">' + s.total + ' accounts in total</div></div>' +
+      '<div class="admin-metric-card"><div>New this week</div><div class="admin-metric-val emerald">' + s.new7 + '</div><div class="admin-metric-sub">Accounts created in the last 7 days</div></div>' +
+      '<div class="admin-metric-card"><div>Active this week</div><div class="admin-metric-val amber">' + s.active7 + '</div><div class="admin-metric-sub">Signed in during the last 7 days</div></div>' +
+    '</div></div>';
+}
+
 function renderAdminLeaguesSection() {
   const head = '<div class="section-head"><h2 class="section-title">Private Buddy Leagues</h2><span class="section-note">Every private league in the cloud, biggest first.</span></div>';
   const s = adminLeagueStats;
@@ -5186,6 +5219,7 @@ function viewAdmin() {
       renderTrafficChartSvg(stats.dailyHistory) +
     '</div>' +
 
+    renderAdminUsersSection() +
     renderAdminLeaguesSection() +
 
     '<div class="section" style="margin-top:28px">' +
@@ -6048,6 +6082,7 @@ document.addEventListener('click', event => {
     if (act === 'refresh-stats') {
       getTrafficStats();
       adminLeagueStats = null;
+      adminUserStats = null;
       toast('Telemetry refreshed.');
       render();
     } else if (act === 'simulate-click') {
@@ -6517,7 +6552,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v105';
+const APP_VERSION = 'v106';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {
