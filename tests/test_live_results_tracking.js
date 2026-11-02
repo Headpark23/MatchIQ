@@ -91,7 +91,8 @@ assert.strictEqual(latestChelsea.settlement.result.pick_won, true, 'Chelsea pick
 console.log('✓ Chelsea v Man United properly settled and won');
 
 // 2. Test viewResults() output for football
-vm.runInContext("resultsSportFilter = 'football'; compFilter = 'ALL';", sandbox);
+// The view is paginated newest-first, so lift the page limit: this asserts Chelsea renders, not that it is in the latest 40 rows.
+vm.runInContext("resultsSportFilter = 'football'; compFilter = 'ALL'; resultsFilter = 'settled'; resultsLimit = 100000;", sandbox);
 const footballHtml = vm.runInContext('viewResults()', sandbox);
 assert(footballHtml.includes('Chelsea'), 'Results view must include Chelsea');
 assert(footballHtml.includes('Man United'), 'Results view must include Man United');

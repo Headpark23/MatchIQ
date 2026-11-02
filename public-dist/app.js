@@ -1351,10 +1351,10 @@ function saveSlipToDiary(i) {
 function beginnerGuides() {
   return '<div class="section"><div class="section-head"><h2 class="section-title">New to Bet Buddy? Quick intelligence guides</h2><span class="section-note">Tap any card to understand how honest football prediction works.</span></div>' +
     '<div class="bento-grid">' +
-      '<div class="bento-card"><div class="bento-icon">🎯</div><div><div class="bento-kicker">Betting Intelligence</div><h3 class="bento-title">What is Value?</h3><p class="bento-desc">A 60% chance isn’t value if the bookmaker odds are too low. Value is when the payout beats the true risk.</p></div><span class="bento-badge emerald">+5% EV threshold</span></div>' +
-      '<div class="bento-card"><div class="bento-icon">🎲</div><div><div class="bento-kicker">Odds Demystified</div><h3 class="bento-title">6/4 vs 2.50 Odds</h3><p class="bento-desc">6/4 is UK fractional: £6 profit per £4 stake. 2.50 is decimal: total return including stake. Switch anytime in the header!</p></div><span class="bento-badge">Toggle in header</span></div>' +
-      '<div class="bento-card"><div class="bento-icon">⚡</div><div><div class="bento-kicker">Accas & Builders</div><h3 class="bento-title">Acca Odds & Return Builder</h3><p class="bento-desc">Combine selections for higher returns. Bet Buddy checks upcoming matches to find the highest-chance path to your win goal.</p></div><span class="bento-badge">Real-time scan</span></div>' +
-      '<div class="bento-card"><div class="bento-icon">🛡️</div><div><div class="bento-kicker">Honest Predictions</div><h3 class="bento-title">No Bet is an Answer</h3><p class="bento-desc">When evidence is thin, odds are bad or data is missing, we say No Bet. We never invent fake confidence or forced picks.</p></div><span class="bento-badge amber">Zero hype</span></div>' +
+      '<div class="bento-card"><div class="bento-icon">' + hubIcon('scale', 22) + '</div><div><div class="bento-kicker">Betting Intelligence</div><h3 class="bento-title">What is Value?</h3><p class="bento-desc">A 60% chance isn’t value if the bookmaker odds are too low. Value is when the payout beats the true risk.</p></div><span class="bento-badge emerald">+5% EV threshold</span></div>' +
+      '<div class="bento-card"><div class="bento-icon">' + hubIcon('dice', 22) + '</div><div><div class="bento-kicker">Odds Demystified</div><h3 class="bento-title">6/4 vs 2.50 Odds</h3><p class="bento-desc">6/4 is UK fractional: £6 profit per £4 stake. 2.50 is decimal: total return including stake. Switch anytime in the header!</p></div><span class="bento-badge">Toggle in header</span></div>' +
+      '<div class="bento-card"><div class="bento-icon">' + hubIcon('layers', 22) + '</div><div><div class="bento-kicker">Accas & Builders</div><h3 class="bento-title">Acca Odds & Return Builder</h3><p class="bento-desc">Combine selections for higher returns. Bet Buddy checks upcoming matches to find the highest-chance path to your win goal.</p></div><span class="bento-badge">Real-time scan</span></div>' +
+      '<div class="bento-card"><div class="bento-icon">' + hubIcon('shield', 22) + '</div><div><div class="bento-kicker">Honest Predictions</div><h3 class="bento-title">No Bet is an Answer</h3><p class="bento-desc">When evidence is thin, odds are bad or data is missing, we say No Bet. We never invent fake confidence or forced picks.</p></div><span class="bento-badge amber">Zero hype</span></div>' +
     '</div></div>';
 }
 
@@ -1364,172 +1364,70 @@ function dismissOnboarding() {
   if (card) card.remove();
 }
 
+/* Home hub icons: one consistent 24px line set (stroke inherits colour) in place of emoji. */
+const HUB_ICONS = {
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>',
+  spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="m12 8 1.6 2.4L16 12l-2.4 1.6L12 16l-1.6-2.4L8 12l2.4-1.6z"/>',
+  slip: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="m9 9 2 2 4-4M9 15h6"/>',
+  trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a2 2 0 0 0 0 4h3M16 6h3a2 2 0 0 1 0 4h-3M12 13v4M8.5 20h7M10 17h4"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  book: '<path d="M5 3h12a2 2 0 0 1 2 2v16l-4-2-4 2-4-2-4 2V5a2 2 0 0 1 2-2z"/><path d="M9 8h6M9 12h6"/>',
+  compass: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+  scale: '<path d="M12 3v18M5 21h14M5 7h14"/><path d="m5 7-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/>',
+  dice: '<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/><circle cx="9" cy="15" r="1" fill="currentColor"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+  shield: '<path d="M12 3 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>'
+};
+function hubIcon(name, size) {
+  const s = size || 22;
+  return '<svg class="hub-ico" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + (HUB_ICONS[name] || '') + '</svg>';
+}
+
 function renderWelcomeHero() {
   let onboardHtml = '';
   try {
     if (!localStorage.getItem('betbuddy_onboarded_v1')) {
       onboardHtml = '<div class="onboarding-card" id="onboarding-card">' +
-        '<h3><span>👋</span> Welcome to Bet Buddy Sports Intelligence</h3>' +
+        '<h3>Welcome to Bet Buddy</h3>' +
         '<div class="onboarding-steps">' +
           '<div class="onboarding-step-item"><span class="onboarding-step-num">1</span><div><b>Pick Your Slate</b><span>Choose today\'s games or the 7-day slate.</span></div></div>' +
           '<div class="onboarding-step-item"><span class="onboarding-step-num">2</span><div><b>Set Your Stake</b><span>Choose a stake you can afford to lose.</span></div></div>' +
           '<div class="onboarding-step-item"><span class="onboarding-step-num">3</span><div><b>Review the Risk</b><span>Check the model probability and how often accas like this lose.</span></div></div>' +
         '</div>' +
-        '<button type="button" class="btn small primary" onclick="dismissOnboarding()" style="min-height:40px;">Got It, Let\'s Go ➔</button>' +
+        '<button type="button" class="btn small primary" onclick="dismissOnboarding()" style="min-height:40px;">Got it</button>' +
       '</div>';
     }
   } catch (e) {}
 
-  const diaryItems = getStoredDiary();
-  const diaryCount = diaryItems.length;
+  const diaryCount = getStoredDiary().length;
   const user = getAuthUser();
-  const userName = user && user.signedIn ? (user.handle || user.name || 'Punter').replace(/^@+/, '').split(' ')[0] : 'Punter';
+  const userName = user && user.signedIn ? (user.handle || user.name || '').replace(/^@+/, '').split(' ')[0] : '';
 
-  return '<div class="welcome-hero-wrap compact-home">' +
-    '<!-- 1. Introduction: Ultra-compact, low real estate -->' +
-    '<div class="welcome-hero-banner">' +
-      '<div class="welcome-mascot-col">' +
-        '<div class="welcome-brand-avatar">' +
-          '<img src="assets/icon-192.png?v=44" alt="Bet Buddy" width="40" height="40">' +
-          '<span class="mascot-online-dot" title="Live Predictions Ready"></span>' +
-        '</div>' +
-      '</div>' +
-      '<div class="welcome-text-col">' +
-        '<div class="welcome-badge-tag"><span class="badge-dot"></span> Welcome, ' + esc(userName) + '! · Free &amp; Ad-Free</div>' +
-        '<h1 class="welcome-hero-title">Your Honest Sports Betting Co-Pilot</h1>' +
-        '<p class="welcome-hero-narrative">Honest football predictions, regularly updated bookie prices &amp; private leagues with mates.</p>' +
-      '</div>' +
+  const card = (tag, cls, icon, title, desc, cta, attrs) =>
+    '<' + tag + ' class="hub-card ' + cls + '" ' + attrs + '>' +
+      '<span class="hub-card-ico">' + hubIcon(icon, 24) + '</span>' +
+      '<span class="hub-card-body"><span class="hub-card-title">' + title + '</span><span class="hub-card-desc">' + desc + '</span></span>' +
+      '<span class="hub-card-cta">' + cta + '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
+    '</' + tag + '>';
+
+  return '<div class="hub">' +
+    '<div class="hub-head">' +
+      '<h1 class="hub-title">' + (userName ? 'Hi ' + esc(userName) + ', what first?' : 'What would you like to do?') + '</h1>' +
+      '<p class="hub-sub">Honest football estimates, with a clear No bet when the evidence isn&rsquo;t there.</p>' +
     '</div>' +
-
-    '<!-- 2. Main Features: Acca Builder & Today\'s Best Value -->' +
-    '<div class="portal-grid portal-features-dual">' +
-      '<a href="#/picks" class="portal-card portal-card-hero" style="text-decoration:none">' +
-        '<div class="portal-card-hero-glow"></div>' +
-        '<div class="portal-card-content">' +
-          '<div class="portal-card-top">' +
-            '<span class="portal-pill highlight">⚡ Primary Feature</span>' +
-            '<span class="portal-odds-badge">Dixon-Coles Model</span>' +
-          '</div>' +
-          '<div class="portal-hero-body">' +
-            '<div class="portal-icon-large">⚽🎯</div>' +
-            '<div class="portal-hero-text">' +
-              '<h2 class="portal-hero-heading">Pick a Bet &amp; Build Acca</h2>' +
-              '<p class="portal-hero-desc">Target £10–£1,000 return across 2–6 legs, using the model&rsquo;s estimates and the latest bookie prices we have.</p>' +
-            '</div>' +
-            '<div class="portal-card-action">' +
-              '<span class="btn primary portal-cta-btn">' +
-                '<span>Build Acca</span>' +
-                '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
-              '</span>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-      '</a>' +
-
-      '<!-- Today\'s Best Value Bet Feature Hero Card -->' +
-      '<div class="portal-card portal-card-best-value" onclick="openBestValueModal(\'single\')" style="text-decoration:none;cursor:pointer;">' +
-        '<div class="portal-card-hero-glow bv-glow"></div>' +
-        '<div class="portal-card-content">' +
-          '<div class="portal-card-top">' +
-            '<span class="portal-pill bv-highlight">🔥 Highest Edge Today</span>' +
-            '<span class="portal-odds-badge">Single &bull; Double &bull; Treble &bull; 4-Fold</span>' +
-          '</div>' +
-          '<div class="portal-hero-body">' +
-            '<div class="portal-icon-large">💎📈</div>' +
-            '<div class="portal-hero-text">' +
-              '<h2 class="portal-hero-heading">Today\'s Top Model Picks</h2>' +
-              '<p class="portal-hero-desc">The biggest gap between the model&rsquo;s estimate and recent UK bookie prices. See today\'s top model picks as a single, double, treble or 4-fold. Information only, not a recommendation.</p>' +
-            '</div>' +
-            '<div class="portal-card-action">' +
-              '<button type="button" class="btn primary portal-cta-btn bv-cta-btn" onclick="event.stopPropagation(); openBestValueModal(\'single\');">' +
-                '<span>View Picks</span>' +
-                '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
-              '</button>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-
-      '<!-- Bet Butler Feature Hero Card -->' +
-      '<div class="butler-home-hero-card">' +
-        '<div class="butler-home-hero-content">' +
-          '<div class="butler-home-badge">' +
-            '<span class="badge-dot" style="background:#38bdf8;"></span>' +
-            '<span>🤵 Your Slip Note: The Bet Butler</span>' +
-          '</div>' +
-          '<h2 class="butler-home-title">Keep Your Slip In Front Of You With Bet Butler</h2>' +
-          '<p class="butler-home-desc">' +
-            'Keep your slip in front of you while you add the bets in your bookmaker app. Open your slip card, tick off legs as you enter them, or copy formatted selections with one tap.' +
-          '</p>' +
-          '<div class="butler-home-features">' +
-            '<div class="butler-feat-item"><span class="feat-icon">📋</span> Slip Card Checklist</div>' +
-            '<div class="butler-feat-item"><span class="feat-icon">☑️</span> Tick Off Legs in View</div>' +
-            '<div class="butler-feat-item"><span class="feat-icon">📑</span> Formatted Copy</div>' +
-            '<div class="butler-feat-item"><span class="feat-icon">📱</span> Open Bookmaker Football</div>' +
-          '</div>' +
-          '<div class="butler-home-picker" role="radiogroup" aria-label="Pick your bookmaker">' +
-            '<div class="butler-home-picker-label">Pick your bookmaker</div>' +
-            '<div class="butler-home-chips">' +
-              Object.values(BOOKMAKERS_CONFIG).map(b => '<button type="button" class="butler-home-chip' + (getButlerBookmaker().key === b.key ? ' active' : '') + '" role="radio" aria-checked="' + (getButlerBookmaker().key === b.key) + '" onclick="setButlerBookmaker(\'' + b.key + '\')">' + esc(b.name) + '</button>').join('') +
-            '</div>' +
-          '</div>' +
-          '<div class="butler-home-actions">' +
-            '<a href="#/picks" class="btn primary small" style="background:#0284c7;border:none;font-weight:700;">Build Acca in Picks ↗</a>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-
-      '<!-- 3. Smaller Boxes: 2x2 on Mobile, all visible without scrolling -->' +
-      '<div class="portal-subgrid">' +
-        '<!-- Box 1: Leagues -->' +
-        '<a href="#/leagues" class="portal-subcard bento-leagues">' +
-          '<div class="portal-subcard-head">' +
-            '<div class="portal-subcard-icon-wrap trophy-glow">🏆</div>' +
-            '<div class="portal-subcard-tag">Compete</div>' +
-          '</div>' +
-          '<div class="portal-subcard-text">' +
-            '<h3 class="portal-subcard-title">Buddy &amp; Geo Leagues</h3>' +
-            '<p class="portal-subcard-desc">Town, UK &amp; World ladders with mates.</p>' +
-          '</div>' +
-        '</a>' +
-
-        '<!-- Box 2: Upcoming Fixtures -->' +
-        '<a href="#/fixtures" class="portal-subcard bento-fixtures">' +
-          '<div class="portal-subcard-head">' +
-            '<div class="portal-subcard-icon-wrap calendar-glow">📅</div>' +
-            '<div class="portal-subcard-tag">Schedule</div>' +
-          '</div>' +
-          '<div class="portal-subcard-text">' +
-            '<h3 class="portal-subcard-title">Upcoming Fixtures</h3>' +
-            '<p class="portal-subcard-desc">Match previews, TV &amp; live prices.</p>' +
-          '</div>' +
-        '</a>' +
-
-        '<!-- Box 3: Results & Audit Ledger -->' +
-        '<a href="#/results" class="portal-subcard bento-results">' +
-          '<div class="portal-subcard-head">' +
-            '<div class="portal-subcard-icon-wrap chart-glow">📊</div>' +
-            '<div class="portal-subcard-tag">Track Record</div>' +
-          '</div>' +
-          '<div class="portal-subcard-text">' +
-            '<h3 class="portal-subcard-title">Results &amp; Proof</h3>' +
-            '<p class="portal-subcard-desc">Settled audit ledger &amp; accuracy.</p>' +
-          '</div>' +
-        '</a>' +
-
-        '<!-- Box 4: Bet Diary -->' +
-        '<a href="#/diary" class="portal-subcard bento-diary">' +
-          '<div class="portal-subcard-head">' +
-            '<div class="portal-subcard-icon-wrap diary-glow">📖</div>' +
-            '<div class="portal-subcard-tag">Ledger (' + diaryCount + ')</div>' +
-          '</div>' +
-          '<div class="portal-subcard-text">' +
-            '<h3 class="portal-subcard-title">Bet Diary</h3>' +
-            '<p class="portal-subcard-desc">Your personal PnL &amp; trophies.</p>' +
-          '</div>' +
-        '</a>' +
-      '</div>' +
+    '<div class="hub-grid">' +
+      card('a', 'hub-pick', 'target', 'Pick a bet', 'Build an acca to a target return.', 'Build', 'href="#/picks"') +
+      card('button type="button"', 'hub-models portal-card-best-value', 'spark', 'Model picks of the day', 'Biggest model-vs-price gaps. Information only.', 'View', 'onclick="openBestValueModal(\'single\')"') +
+      card('button type="button"', 'hub-butler', 'slip', 'Bet Butler', 'Keep your slip in view as you enter it.', 'Open', 'onclick="openButlerModal()"') +
+      card('a', 'hub-leagues', 'trophy', 'Leagues', 'Compete with mates and in local ladders.', 'Join', 'href="#/leagues"') +
     '</div>' +
+    '<nav class="hub-more" aria-label="More">' +
+      '<a href="#/fixtures">' + hubIcon('calendar', 16) + 'Fixtures</a>' +
+      '<a href="#/results">' + hubIcon('chart', 16) + 'Results</a>' +
+      '<a href="#/diary">' + hubIcon('book', 16) + 'Diary' + (diaryCount ? ' (' + diaryCount + ')' : '') + '</a>' +
+    '</nav>' +
+    onboardHtml +
   '</div>';
 }
 
@@ -1802,9 +1700,10 @@ function viewHome() {
     '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
   '</div>';
 
-  return '<section class="view">' + locationPromptBanner() +
-    '<a href="#/guide" class="guide-banner"><span class="guide-banner-ico">🧭</span><span><b>New here? Read the how-to guide</b><small>Features, private leagues and regional ladders explained in two minutes.</small></span><span class="guide-banner-go">&rarr;</span></a>' +
+  return '<section class="view">' +
     renderWelcomeHero() +
+    locationPromptBanner() +
+    '<a href="#/guide" class="guide-banner"><span class="guide-banner-ico">'+hubIcon('compass',22)+'</span><span><b>New here? Read the how-to guide</b><small>Features, private leagues and regional ladders explained in two minutes.</small></span><span class="guide-banner-go">&rarr;</span></a>' +
     beginnerGuides() +
   '</section>';
 }
@@ -3384,6 +3283,38 @@ function getLadder(id) {
   return hit && 'data' in hit ? hit.data : undefined;
 }
 
+/* Illustrative examples for empty states. Everything here is invented and labelled SAMPLE: no real people, matches or results. */
+function sampleBadge() { return '<span class="sample-badge">Sample</span>'; }
+function sampleLeaderboard() {
+  const rows = [['1', 'SampleSam', 'Hometown', 142, '+6'], ['2', 'ExampleEmma', 'Hometown', 131, '+2'], ['3', 'DemoDave', 'Hometown', 127, '-1'], ['4', 'You (after joining)', 'Hometown', 0, '']];
+  return '<div class="sample-box" role="group" aria-label="Sample leaderboard, not real users">' +
+    '<div class="sample-head"><h2 class="section-title">What a league looks like</h2>' + sampleBadge() + '</div>' +
+    '<p class="section-note">Example weekly table with invented names and points, to show how ranking and promotion work. Leagues use pretend picks, not real money.</p>' +
+    '<div class="sample-table" role="table" aria-label="Sample weekly league table">' +
+      '<div class="sample-row sample-row-h" role="row"><span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="num">Pts</span><span role="columnheader" class="num">Week</span></div>' +
+      rows.map(r => '<div class="sample-row' + (r[0] === '4' ? ' sample-row-you' : '') + '" role="row"><span role="cell" class="mono">' + r[0] + '</span><span role="cell">' + esc(r[1]) + '<small>' + esc(r[2]) + (r[0] === '1' ? ' &middot; promoted to County' : '') + '</small></span><span role="cell" class="num mono">' + (r[3] || '&ndash;') + '</span><span role="cell" class="num mono">' + esc(r[4] || '&ndash;') + '</span></div>').join('') +
+    '</div>' +
+    '<p class="sample-foot">Top finishers each week move up the ladder: Hometown, County, Region, Nation, UK, Global.</p>' +
+  '</div>';
+}
+function sampleDiaryBet() {
+  return '<div class="sample-box" role="group" aria-label="Sample diary entry, not a real bet">' +
+    '<div class="sample-head"><h2 class="section-title">What a settled bet looks like</h2>' + sampleBadge() + '</div>' +
+    '<p class="section-note">An invented example. Nothing here is a real match, price or result.</p>' +
+    '<div class="sample-bet">' +
+      '<div class="sample-bet-top"><b>Example FC v Sample United</b><span class="badge validated">Won</span></div>' +
+      '<div class="sample-bet-sub">Match result &middot; Example FC to win</div>' +
+      '<dl class="sample-stats">' +
+        '<div><dt>Stake</dt><dd class="mono">&pound;10.00</dd></div>' +
+        '<div><dt>Price taken</dt><dd class="mono">2.10</dd></div>' +
+        '<div><dt>Returned</dt><dd class="mono">&pound;21.00</dd></div>' +
+        '<div><dt>Profit</dt><dd class="mono pos">+&pound;11.00</dd></div>' +
+      '</dl>' +
+      '<p class="sample-foot">Recording the price you actually took lets the Diary work out true profit and show whether you beat the price the market settled on.</p>' +
+    '</div>' +
+  '</div>';
+}
+
 function viewLeagues() {
   const prof = getUserProfile();
   const authUser = getAuthUser();
@@ -3431,6 +3362,7 @@ function viewLeagues() {
           '</div>' +
         '</div>' +
       '</div>' +
+      sampleLeaderboard() +
     '</section>';
   }
 
@@ -3549,10 +3481,18 @@ function viewLeagues() {
 
   // Geo Tiers Bar
   const geoNavHtml = geoTiers.map(t => {
-    return '<button type="button" class="geo-tier-btn' + (t.id === activeLeagueId ? ' active' : '') + '" data-select-league="' + t.id + '">' +
-      '<span class="geo-tier-name">' + t.icon + ' ' + esc(typeof t.name === 'function' ? t.name() : t.name) + '</span>' +
-      '<span class="geo-tier-scope">' + t.scope + ' · ' + t.trophyName + '</span>' +
-    '</button>';
+    // Ladders are automatic: a tier is joined once the player's location covers it, so Join sends them to set it.
+    const joined = Boolean(ladderTierId(t.id, prof));
+    const part = { 'geo-country': 'country', 'geo-region': 'region', 'geo-town': 'town' }[t.id];
+    return '<div class="geo-tier-box">' +
+      '<button type="button" class="geo-tier-btn' + (t.id === activeLeagueId ? ' active' : '') + '" data-select-league="' + t.id + '">' +
+        '<span class="geo-tier-name">' + t.icon + ' ' + esc(typeof t.name === 'function' ? t.name() : t.name) + '</span>' +
+        '<span class="geo-tier-scope">' + t.scope + ' · ' + t.trophyName + '</span>' +
+      '</button>' +
+      (joined
+        ? '<span class="geo-tier-join joined">✓ Joined</span>'
+        : '<a href="#/more" data-select-more-tab="account" class="geo-tier-join" title="Add your ' + part + ' to your profile to join this ladder">Join</a>') +
+    '</div>';
   }).join('');
 
   // Custom Buddy Leagues Tabs
@@ -3706,6 +3646,7 @@ function viewDiary() {
         '<button type="button" class="btn primary" data-diary="{}" style="min-height:44px;padding:8px 24px;font-size:15px;font-weight:600;">Add your first bet</button>' +
         '<input type="file" id="diary-import" accept="application/json,.json" hidden>' +
       '</div>' +
+      sampleDiaryBet() +
     '</section>';
   }
 

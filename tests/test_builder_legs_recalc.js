@@ -38,6 +38,8 @@ vm.runInContext(js, context);
 vm.runInContext('Object.assign(DATA, ' + JSON.stringify(DATA) + ');', context);
 
 vm.runInContext(`
+  // Use the full 7-day pool so the test does not depend on how many matches are scheduled today.
+  builderState.timing = 'all';
   // 1. Test 2-Leg Acca
   setBuilderLegs(2);
   let out2 = builderOutput();
