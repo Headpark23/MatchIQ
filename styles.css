@@ -564,6 +564,11 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .svg-chart-wrap { width: 100%; height: 160px; margin-top: 10px; border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, 0.02); }
 .pnl-svg-chart { width: 100%; height: 100%; display: block; }
 .mkt-stat-row { display: grid; grid-template-columns: minmax(110px, 1.4fr) minmax(80px, 1fr) 75px 85px; gap: 12px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13px; }
+@media (max-width: 520px) {
+  .mkt-stat-row { grid-template-columns: minmax(0, 1.3fr) minmax(24px, 0.7fr) auto auto; gap: 8px; }
+  .mkt-name { min-width: 0; overflow-wrap: anywhere; }
+  .mkt-profit { text-align: right; white-space: nowrap; }
+}
 .mkt-name { font-weight: 600; color: #fff; }
 .mkt-bar-wrap { height: 6px; border-radius: 9999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
 .mkt-bar-fill { height: 100%; border-radius: 9999px; }
