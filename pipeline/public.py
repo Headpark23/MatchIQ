@@ -33,7 +33,7 @@ from pathlib import Path
 
 from . import history as hist
 from .data import uk_date
-from .leagues import LEAGUES
+from .leagues import LEAGUES, SCHEDULE_ONLY
 from .league_validation import validate_league
 from .models import Context, predict
 from .recommend import recommend
@@ -174,7 +174,7 @@ def run_public(now, fixtures, season, horizon_days, history=None, validation=Non
     horizon = now + dt.timedelta(days=horizon_days)
     for f in fixtures:
         kickoff = dt.datetime.fromisoformat(f["kickoff_utc"].replace("Z", "+00:00"))
-        if f["status"] != "SCHEDULED" or not now < kickoff <= horizon:
+        if f["status"] != "SCHEDULED" or not now < kickoff <= horizon or f["competition"] in SCHEDULE_ONLY:
             continue
         code = f["competition"]
         if code not in contexts:

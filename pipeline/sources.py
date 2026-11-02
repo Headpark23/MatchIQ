@@ -17,6 +17,7 @@ import urllib.error
 import urllib.request
 from zoneinfo import ZoneInfo
 
+from .leagues import SCHEDULE_ONLY
 from .teams import canonical, canonical_for
 
 UK = ZoneInfo("Europe/London")
@@ -111,7 +112,8 @@ def parse_openfootball(payload, competition, season, namer=None):
     for m in payload.get("matches", []):
         day = dt.date.fromisoformat(m["date"])
         hour, minute = map(int, (m.get("time") or "15:00").split(":")[:2])
-        kickoff = dt.datetime.combine(day, dt.time(hour, minute), UK if competition in ("PL", "ELC") else CET)
+        zone = ZoneInfo(SCHEDULE_ONLY[competition]["tz"]) if competition in SCHEDULE_ONLY else UK if competition == "PL" or competition == "ELC" else CET
+        kickoff = dt.datetime.combine(day, dt.time(hour, minute), zone)
         ft = (m.get("score") or {}).get("ft") if isinstance(m.get("score"), dict) else None
         score = [int(ft[0]), int(ft[1])] if ft else None
         out.append(_match(competition, season, m["team1"], m["team2"], kickoff,
@@ -120,7 +122,8 @@ def parse_openfootball(payload, competition, season, namer=None):
 
 
 def fetch_openfootball(competition, season_label, season, opener=None):
-    league = {"PL": "en.1", "ELC": "en.2", "BL1": "de.1", "PD": "es.1", "SA": "it.1", "FL1": "fr.1"}[competition]
+    league = {"PL": "en.1", "ELC": "en.2", "BL1": "de.1", "PD": "es.1", "SA": "it.1", "FL1": "fr.1",
+              **{c: m["openfootball"] for c, m in SCHEDULE_ONLY.items()}}[competition]
     try:
         payload = http_json(f"https://raw.githubusercontent.com/openfootball/football.json/master/{season_label}/{league}.json", opener=opener)
     except RuntimeError as error:

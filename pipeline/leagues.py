@@ -33,6 +33,22 @@ LEAGUES = {
 }
 EXTRA = [c for c in LEAGUES if c != "PL"]
 
+# Schedule-only competitions: fixtures and confirmed scores are shown, but there is no results
+# history, backtest or odds feed yet, so no predictions are produced (run.py and public.py skip
+# them). Promote an entry into LEAGUES once its history is loaded and validated.
+# Fixtures come from openfootball/football.json only (file name under <season>/; entries appear
+# when the repository publishes that league). A second source is deliberately not used yet:
+# without per-league team alias tables, two spellings of one club would create duplicate fixtures.
+SCHEDULE_ONLY = {
+    "E2": {"name": "League One", "short": "E2", "openfootball": "en.3", "tz": "Europe/London"},
+    "E3": {"name": "League Two", "short": "E3", "openfootball": "en.4", "tz": "Europe/London"},
+    "SC0": {"name": "Scottish Premiership", "short": "SC0", "openfootball": "sco.1", "tz": "Europe/London"},
+    "SC1": {"name": "Scottish Championship", "short": "SC1", "openfootball": "sco.2", "tz": "Europe/London"},
+    "N1": {"name": "Eredivisie", "short": "N1", "openfootball": "nl.1", "tz": "Europe/Amsterdam"},
+    "P1": {"name": "Primeira Liga", "short": "P1", "openfootball": "pt.1", "tz": "Europe/Lisbon"},
+    "B1": {"name": "Belgian Pro League", "short": "B1", "openfootball": "be.1", "tz": "Europe/Brussels"},
+}
+
 
 def parse_csv(text, competition, season):
     rows = []

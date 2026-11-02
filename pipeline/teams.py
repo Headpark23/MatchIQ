@@ -128,6 +128,20 @@ LEAGUE_ALIASES = {
             "Toulouse": ["toulouse"], "Reims": ["stade de reims", "reims"], "Montpellier": ["montpellier"], "Lorient": ["lorient"],
             "Paris FC": ["paris"], "Le Mans": ["le mans"], "Clermont": ["clermont foot 63", "clermont"], "St Etienne": ["as saint etienne", "saint etienne", "st etienne"]},
 }
+# Schedule-only leagues (leagues.SCHEDULE_ONLY): display names for the clubs in the openfootball
+# schedules, so the app shows readable names. Names match the club list in app.js where it has one.
+LEAGUE_ALIASES.update({
+    "N1": {"Ajax": ["afc ajax"], "PSV": ["psv"], "Feyenoord": ["feyenoord rotterdam"], "AZ Alkmaar": ["az"], "FC Utrecht": ["fc utrecht"],
+           "FC Twente": ["fc twente 65", "fc twente"], "ADO Den Haag": ["ado den haag"], "Groningen": ["fc groningen"], "Fortuna Sittard": ["fortuna sittard"],
+           "Go Ahead Eagles": ["go ahead eagles"], "NEC Nijmegen": ["nec"], "PEC Zwolle": ["pec zwolle"], "Excelsior": ["sbv excelsior"],
+           "Cambuur": ["sc cambuur leeuwarden"], "Heerenveen": ["sc heerenveen"], "Sparta Rotterdam": ["sparta rotterdam"],
+           "Telstar": ["telstar 1963"], "Willem II": ["willem ii tilburg"]},
+    "P1": {"Sporting CP": ["sporting clube de portugal"], "Benfica": ["sport lisboa e benfica"], "FC Porto": ["fc porto"], "SC Braga": ["sporting clube de braga"],
+           "Vitoria Guimaraes": ["vitoria guimaraes"], "Famalicao": ["fc famalicao"], "Gil Vicente": ["gil vicente fc"], "Rio Ave": ["rio ave fc"],
+           "Moreirense": ["moreirense fc"], "Casa Pia": ["casa pia ac"], "Estoril": ["gd estoril praia"], "Arouca": ["fc arouca"], "Nacional": ["cd nacional"],
+           "Santa Clara": ["cd santa clara"], "Estrela Amadora": ["cf estrela da amadora"], "Alverca": ["fc alverca"],
+           "Maritimo": ["cs maritimo"], "Academico Viseu": ["academico de viseu fc"]},
+})
 _LEAGUE_LOOKUP = {code: {_normalise(a): name for name, aliases in table.items() for a in aliases + [name]}
                   for code, table in LEAGUE_ALIASES.items()}
 
@@ -151,7 +165,8 @@ def _league_match(table, key):
 DISPLAY_NAMES = {"Paris SG": "Paris SG", "Paris FC": "Paris FC", "RB Leipzig": "RB Leipzig", "M'gladbach": "M'gladbach", "QPR": "QPR", "Ein Frankfurt": "Eintracht Frankfurt", "FC Koln": "FC Koln",
                  "Ath Bilbao": "Athletic Club", "Ath Madrid": "Atletico Madrid", "Espanol": "Espanyol", "Sociedad": "Real Sociedad",
                  "Vallecano": "Rayo Vallecano", "Betis": "Real Betis", "Celta": "Celta Vigo", "Sheffield Weds": "Sheffield Wednesday",
-                 "Milan": "AC Milan", "Verona": "Hellas Verona", "La Coruna": "Deportivo La Coruna", "Santander": "Racing Santander"}
+                 "Milan": "AC Milan", "Verona": "Hellas Verona", "La Coruna": "Deportivo La Coruna", "Santander": "Racing Santander",
+                 **{n: n for n in ("ADO Den Haag", "PSV", "AZ Alkmaar", "NEC Nijmegen", "PEC Zwolle", "Willem II", "FC Utrecht", "FC Twente", "FC Porto", "SC Braga", "Sporting CP")}}
 
 
 def _display(name):

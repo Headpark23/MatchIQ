@@ -165,3 +165,15 @@ class CoUkDownloadGateTests(unittest.TestCase):
         finally:
             if old is not None:
                 os.environ["MATCHIQ_ALLOW_COUK_DOWNLOAD"] = old
+
+
+class ScheduleOnlyTests(unittest.TestCase):
+    def test_schedule_only_leagues_never_overlap_predicted_ones(self):
+        from pipeline.leagues import LEAGUES, SCHEDULE_ONLY
+        self.assertFalse(set(LEAGUES) & set(SCHEDULE_ONLY))
+
+    def test_readable_names_for_dutch_and_portuguese_clubs(self):
+        from pipeline.teams import canonical_for
+        self.assertEqual(canonical_for("N1", "AFC Ajax"), "Ajax")
+        self.assertEqual(canonical_for("N1", "FC Twente '65"), "FC Twente")
+        self.assertEqual(canonical_for("P1", "Sporting Clube de Portugal"), "Sporting CP")

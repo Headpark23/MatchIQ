@@ -20,7 +20,7 @@ from . import odds as odds_feed
 from .data import (ROOT, championship_history, co_uk_as_matches, load_co_uk, merge_fixtures,
                    promoted_by_season, uk_date)
 from .fairodds import fair_odds
-from .leagues import EXTRA, LEAGUES, load_results as load_league_results, promoted_by_season as league_promoted, refresh_current, save_results as save_league_results
+from .leagues import EXTRA, LEAGUES, SCHEDULE_ONLY, load_results as load_league_results, promoted_by_season as league_promoted, refresh_current, save_results as save_league_results
 from .models import LEAGUE_MODEL_VERSION, SHADOW_VERSION, VERSIONS, Context, predict, shadow_result
 from .recommend import RULE_VERSION, recommend
 from .sources import SOURCE_LABELS, fetch_football_data_org, fetch_openfootball, fetch_openligadb
@@ -119,6 +119,8 @@ def default_extra_fetchers():
         if LEAGUES[code].get("openligadb"):
             f["openligadb"] = (lambda c=code: fetch_openligadb(c, SEASON_START, SEASON))
         out[code] = f
+    for code in SCHEDULE_ONLY:  # fixtures and scores only; no predictions (see leagues.SCHEDULE_ONLY)
+        out[code] = {"openfootball": (lambda c=code: fetch_openfootball(c, SEASON_LABEL, SEASON))}
     return out
 
 
@@ -164,6 +166,7 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
         league_all, league_status = refresh_current(stored_results, SEASON)
     else:
         league_all, league_status = stored_results, {}
+    names = {**{c: m["name"] for c, m in SCHEDULE_ONLY.items()}, **{c: m["name"] for c, m in LEAGUES.items()}}
     for code, fs in (extra_fetchers or {}).items():
         got = []
         for name, fetch in fs.items():
@@ -177,7 +180,7 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
         if not any(got):
             kept = [f for f in previous if f["competition"] == code and f.get("status") != "REMOVED_FROM_SCHEDULE"]
             if kept and not offline:
-                status["warnings"].append(f"{LEAGUES[code]['name']}: no fixture source responded; keeping the previous schedule.")
+                status["warnings"].append(f"{names[code]}: no fixture source responded; keeping the previous schedule.")
             lists.append([{k: f[k] for k in ("competition", "season", "home", "away", "kickoff_utc", "status", "score")} | {"source": f["sources"][0] if f.get("sources") else "openfootball", "source_updated": None}
                           for f in kept])
         lists.extend(got)
@@ -237,7 +240,7 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
     horizon = now + dt.timedelta(days=HORIZON_DAYS)
     for f in fixtures:
         kickoff = dt.datetime.fromisoformat(f["kickoff_utc"].replace("Z", "+00:00"))
-        if f["status"] != "SCHEDULED" or not now < kickoff <= horizon:
+        if f["status"] != "SCHEDULED" or not now < kickoff <= horizon or f["competition"] in SCHEDULE_ONLY:
             continue
         fixture = {**f, "date": uk_date(kickoff)}
         code = f["competition"]
