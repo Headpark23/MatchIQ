@@ -3442,12 +3442,15 @@ function viewLeagues() {
   // Primary: Points (odds-weighted)
   // Secondary: Win Rate %
   // Tie-breaker: ROI %
-  allMembers.sort((a, b) => (Number(!!a.outsideTop) - Number(!!b.outsideTop)) || (b.points - a.points) || (b.winRate - a.winRate) || (b.roi - a.roi));
+  // Anyone with no settled bet sits below everyone who has bet (even a loser on negative points) and shows dashes.
+  const hasNoBets = m => !(Number(m.settled) > 0);
+  allMembers.sort((a, b) => (Number(!!a.outsideTop) - Number(!!b.outsideTop)) || (Number(hasNoBets(a)) - Number(hasNoBets(b))) || (b.points - a.points) || (b.winRate - a.winRate) || (b.roi - a.roi));
 
   const rowsHtml = allMembers.map((m, idx) => {
     const rank = idx + 1;
     const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'standard';
-    const rankIcon = m.unranked ? '—' : m.outsideTop ? '50+' : rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const noBets = hasNoBets(m);
+    const rankIcon = (m.unranked || noBets) ? '—' : m.outsideTop ? '50+' : rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
     const formChips = (m.form || ['—']).map(f => f === '—' ? '<span class="dim">—</span>' : '<span class="form-chip ' + f.toLowerCase() + '">' + f + '</span>').join('');
     const roiSign = m.roi > 0 ? '+' : '';
     const roiClass = m.roi > 0 ? 'pos' : m.roi < 0 ? 'neg' : '';
@@ -3471,9 +3474,9 @@ function viewLeagues() {
           '<div class="lb-drawer-inner"><span class="lb-drawer-label">Form:</span><div class="form-chips">' + formChips + '</div></div>' +
         '</div>' +
       '</td>' +
-      '<td class="lb-col-pts"><b class="lb-pts-val">' + m.points + '</b></td>' +
-      '<td class="lb-col-win"><span class="win-pct-pill">' + m.winRate + '%</span></td>' +
-      '<td class="lb-col-roi"><span class="roi-pct-pill ' + roiClass + '">' + roiSign + m.roi + '%</span></td>' +
+      '<td class="lb-col-pts"><b class="lb-pts-val">' + (noBets ? '—' : m.points) + '</b></td>' +
+      '<td class="lb-col-win">' + (noBets ? '<span class="dim">—</span>' : '<span class="win-pct-pill">' + m.winRate + '%</span>') + '</td>' +
+      '<td class="lb-col-roi">' + (noBets ? '<span class="dim">—</span>' : '<span class="roi-pct-pill ' + roiClass + '">' + roiSign + m.roi + '%</span>') + '</td>' +
       '<td class="lb-col-bets num mono">' + m.settled + '</td>' +
       kickCell +
     '</tr>';

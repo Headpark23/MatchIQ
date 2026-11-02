@@ -448,12 +448,12 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   const lb = alice.run('viewLeagues()');
   const pointsFor = handle => {
     const out = [];
-    const re = /lb-handle">([^<]+)<\/b>[\s\S]*?lb-pts-val">(-?\d+)</g;
+    const re = /lb-handle">([^<]+)<\/b>[\s\S]*?lb-pts-val">(-?\d+|—)</g;
     let m;
-    while ((m = re.exec(lb))) if (m[1] === handle) out.push(+m[2]);
+    while ((m = re.exec(lb))) if (m[1] === handle) out.push(m[2] === '—' ? m[2] : +m[2]);
     return out.sort((a, b) => a - b);
   };
-  assert.deepStrictEqual(pointsFor('Dan_1'), [0], "last week's points show as 0 this week");
+  assert.deepStrictEqual(pointsFor('Dan_1'), ['—'], "no bets this week shows a dash, not 0");
   assert.deepStrictEqual(pointsFor('Eve_1'), [7, 55], 'same gamertag on two accounts shows two rows');
   console.log("  PASS: tables use this period's numbers only, with one row per account.");
 
