@@ -6752,19 +6752,52 @@ const BOOKMAKERS_CONFIG = {
   ladbrokes: { key: 'ladbrokes', name: 'Ladbrokes', tag: 'LADBROKES', color: '#dc2626', url: 'https://sports.ladbrokes.com/sport/football' }
 };
 
-function getButlerBookmaker() {
+/* Several bookmaker accounts can be ticked. The first ticked one is the "primary" used for one-tap launches;
+   the old single-value key is kept in step with it so older saved settings and code paths keep working. */
+const BUTLER_MULTI_KEY = 'betbuddy_butler_bookies_v2';
+function getButlerBookmakers() {
   try {
+    const raw = localStorage.getItem(BUTLER_MULTI_KEY);
+    if (raw) {
+      const arr = JSON.parse(raw);
+      const keys = Array.isArray(arr) ? arr.filter((k, i) => BOOKMAKERS_CONFIG[k] && arr.indexOf(k) === i) : [];
+      if (keys.length) return keys.map(k => BOOKMAKERS_CONFIG[k]);
+    }
     const saved = localStorage.getItem(BUTLER_STORAGE_KEY);
-    if (saved && BOOKMAKERS_CONFIG[saved]) return BOOKMAKERS_CONFIG[saved];
+    if (saved && BOOKMAKERS_CONFIG[saved]) return [BOOKMAKERS_CONFIG[saved]];
   } catch (e) {}
-  return BOOKMAKERS_CONFIG.skybet;
+  return [BOOKMAKERS_CONFIG.skybet];
 }
 
+function getButlerBookmaker() { return getButlerBookmakers()[0]; }
+
+function saveButlerBookmakers(keys) {
+  try {
+    localStorage.setItem(BUTLER_MULTI_KEY, JSON.stringify(keys));
+    localStorage.setItem(BUTLER_STORAGE_KEY, keys[0]);
+  } catch (e) {}
+}
+
+/* Tick or untick one bookmaker. At least one must stay ticked. */
+function toggleButlerBookmaker(key) {
+  if (!BOOKMAKERS_CONFIG[key]) return;
+  const keys = getButlerBookmakers().map(b => b.key);
+  const i = keys.indexOf(key);
+  if (i >= 0) {
+    if (keys.length === 1) { toast('Keep at least one bookmaker ticked'); return; }
+    keys.splice(i, 1);
+  } else {
+    keys.push(key);
+  }
+  saveButlerBookmakers(keys);
+  updateButlerUI();
+  render();
+}
+
+/* Choose exactly one bookmaker (used by single-choice shortcuts). */
 function setButlerBookmaker(key) {
   if (!BOOKMAKERS_CONFIG[key]) return;
-  try {
-    localStorage.setItem(BUTLER_STORAGE_KEY, key);
-  } catch (e) {}
+  saveButlerBookmakers([key]);
   updateButlerUI();
   closeButlerModal();
   toast('Slip note set to ' + BOOKMAKERS_CONFIG[key].name);
@@ -6772,11 +6805,12 @@ function setButlerBookmaker(key) {
 }
 
 function updateButlerUI() {
-  const current = getButlerBookmaker();
+  const chosen = getButlerBookmakers();
+  const keys = chosen.map(b => b.key);
   const nameEls = document.querySelectorAll('#header-butler-name, .current-butler-name');
-  nameEls.forEach(el => { el.textContent = current.name; });
+  nameEls.forEach(el => { el.textContent = chosen.map(b => b.name).join(', '); });
   document.querySelectorAll('.butler-choice-card').forEach(card => {
-    const isSelected = card.dataset.selectButler === current.key;
+    const isSelected = keys.indexOf(card.dataset.selectButler) >= 0;
     if (isSelected) {
       card.classList.add('active');
       card.setAttribute('aria-checked', 'true');
@@ -6785,6 +6819,8 @@ function updateButlerUI() {
       card.setAttribute('aria-checked', 'false');
     }
   });
+  const summary = document.getElementById('butler-selected-summary');
+  if (summary) summary.textContent = chosen.length === 1 ? '1 bookmaker selected' : chosen.length + ' bookmakers selected';
 }
 
 function openButlerModal() {
@@ -6882,6 +6918,8 @@ function launchButlerSingle(data) {
 if (typeof window !== 'undefined') {
   window.getButlerBookmaker = getButlerBookmaker;
   window.setButlerBookmaker = setButlerBookmaker;
+  window.toggleButlerBookmaker = toggleButlerBookmaker;
+  window.getButlerBookmakers = getButlerBookmakers;
   window.openButlerModal = openButlerModal;
   window.closeButlerModal = closeButlerModal;
   window.getButlerLaunchUrl = getButlerLaunchUrl;
@@ -6978,6 +7016,12 @@ function renderSlipCardModal(slip) {
   const bookie = getButlerBookmaker();
   if ($('slip-card-bookie-name')) $('slip-card-bookie-name').textContent = bookie.name;
   if ($('btn-open-bookie-tab')) $('btn-open-bookie-tab').textContent = 'Open ' + bookie.name + ' Football ↗';
+  const extraEl = $('slip-card-more-bookies');
+  if (extraEl) {
+    extraEl.innerHTML = getButlerBookmakers().slice(1).map(b =>
+      '<button type="button" class="btn full-width" onclick="openBookmakerFootball(\'' + b.key + '\')" style="width:100%;min-height:44px;font-weight:600;margin-top:8px;">Open ' + esc(b.name) + ' Football ↗</button>'
+    ).join('');
+  }
 
   const titleEl = $('slip-card-title');
   if (titleEl) {
@@ -7052,8 +7096,8 @@ function closeSlipCardModal() {
   if (modal) modal.hidden = true;
 }
 
-function openBookmakerFootball() {
-  const bookie = getButlerBookmaker();
+function openBookmakerFootball(key) {
+  const bookie = (key && BOOKMAKERS_CONFIG[key]) || getButlerBookmaker();
   const url = buildBookmakerLaunchUrl(bookie.key);
   if (activeSlipCardData) {
     trackBookieLaunch(bookie.name, activeSlipCardData);

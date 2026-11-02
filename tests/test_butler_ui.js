@@ -16,8 +16,9 @@ const bookies = ['skybet', 'bet365', 'williamhill', 'paddypower', 'betfair', 'co
 bookies.forEach(b => {
   assert(indexHtml.includes(`data-select-butler="${b}"`), `Must contain bookmaker ${b}`);
 });
-// The green tick and "Active" pill were removed: the selected row is shown by its border instead
-assert(!indexHtml.includes('class="butler-checkbox"'), 'Butler rows must not contain a tick checkbox');
+// Rows are multi-select checkboxes (several bookmaker accounts); the old "Active" pill stays removed
+assert(indexHtml.includes('class="butler-checkbox"'), 'Butler rows must contain a checkbox');
+assert(indexHtml.includes('role="checkbox"'), 'Butler rows must be checkboxes, not radios');
 assert(!indexHtml.includes('butler-active-pill'), 'Butler rows must not contain an Active pill');
 console.log(`✓ All ${bookies.length} bookmakers are present as plain left-aligned rows with no tick`);
 
@@ -130,5 +131,15 @@ const skyCard = cards.find(c => c.dataset.selectButler === 'skybet');
 assert(skyCard.classList.contains('active'), 'Sky Bet must be active');
 assert.strictEqual(skyCard['aria-checked'], 'true', 'Sky Bet aria-checked must be true');
 
+// Multi-select: tick a second and third account, the first stays the primary
+vm.runInContext("toggleButlerBookmaker('bet365'); toggleButlerBookmaker('coral');", sandbox);
+assert.deepStrictEqual(JSON.parse(mockStorage['betbuddy_butler_bookies_v2']), ['skybet', 'bet365', 'coral'], 'Three accounts stored in tick order');
+assert.strictEqual(mockStorage['betbuddy_butler_bookie_v1'], 'skybet', 'Primary stays the first ticked');
+assert.strictEqual(cards.filter(c => c.classList.contains('active')).length, 3, 'Three cards active');
+// Unticking works, but the last one cannot be unticked
+vm.runInContext("toggleButlerBookmaker('skybet');", sandbox);
+assert.strictEqual(mockStorage['betbuddy_butler_bookie_v1'], 'bet365', 'Primary moves to next ticked');
+vm.runInContext("toggleButlerBookmaker('bet365'); toggleButlerBookmaker('coral');", sandbox);
+assert.deepStrictEqual(JSON.parse(mockStorage['betbuddy_butler_bookies_v2']), ['coral'], 'Last bookmaker cannot be unticked');
 console.log('✓ UI interaction and state updates passed cleanly!');
 console.log('ALL BET BUTLER UI TESTS PASSED!');

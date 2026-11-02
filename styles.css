@@ -3977,7 +3977,11 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   .app-header-inner { height: 62px !important; }
   .brand { gap: 10px; }
   .brand-logo-img, .brand-panda-img, .brand-mark { width: 42px; height: 42px; border-radius: 10px; }
-  .brand-word { font-size: 24px !important; }
+  .brand-word { font-size: 32px !important; font-weight: 700; letter-spacing: 0.01em; }
+  .brand-logo-img, .brand-panda-img, .brand-mark { width: 46px; height: 46px; }
+}
+@media (max-width: 360px) {
+  .brand-word { font-size: 28px !important; }
 }
 
 /* Odds format caption: names the active format under the 6/4 | 2.50 toggle */
@@ -4117,4 +4121,10 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   border-color: var(--cyan);
   box-shadow: inset 3px 0 0 var(--cyan);
 }
-.butler-checkbox, .butler-active-pill { display: none !important; }
+.butler-active-pill { display: none !important; }
+/* Multi-select: a neutral (blue) checkbox on each row, several can be ticked */
+.butler-choice-card .butler-checkbox { display: inline-flex; flex: none; }
+.butler-choice-card.active .butler-checkbox { border-color: var(--cyan); background: var(--cyan); box-shadow: none; }
+.butler-choice-card.active .butler-check-svg { stroke: #04111c; }
+.butler-done-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
+.butler-selected-summary { font-size: 13px; color: var(--muted); }
