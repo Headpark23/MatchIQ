@@ -15,11 +15,11 @@ console.log('✓ Header Bet Butler button is removed');
 const bookies = ['skybet', 'bet365', 'williamhill', 'paddypower', 'betfair', 'coral', 'ladbrokes'];
 bookies.forEach(b => {
   assert(indexHtml.includes(`data-select-butler="${b}"`), `Must contain bookmaker ${b}`);
-  assert(indexHtml.includes(`id="check-box-${b}"`), `Must contain checkbox element for ${b}`);
 });
-assert(indexHtml.includes('class="butler-checkbox"'), 'Must contain butler-checkbox class');
-assert(indexHtml.includes('class="butler-check-svg"'), 'Must contain butler-check-svg checkmark icon');
-console.log(`✓ All ${bookies.length} bookmakers have explicit checkbox elements and left-aligned rows`);
+// The green tick and "Active" pill were removed: the selected row is shown by its border instead
+assert(!indexHtml.includes('class="butler-checkbox"'), 'Butler rows must not contain a tick checkbox');
+assert(!indexHtml.includes('butler-active-pill'), 'Butler rows must not contain an Active pill');
+console.log(`✓ All ${bookies.length} bookmakers are present as plain left-aligned rows with no tick`);
 
 // 2. Inspect styles.css
 const stylesCss = fs.readFileSync('styles.css', 'utf8');
@@ -31,10 +31,9 @@ console.log('✓ Bet Butler button is long and generous (min-width: 175px, 0 squ
 
 // Dropdown list must be vertical column (list) and left-aligned
 assert(stylesCss.includes('flex-direction: column;'), 'Bookie grid must be flex column list');
-assert(stylesCss.includes('.butler-checkbox {'), 'Must have .butler-checkbox styles');
-assert(stylesCss.includes('.butler-choice-card.active .butler-checkbox {'), 'Must have active checkbox styles');
+assert(stylesCss.includes('.butler-choice-card.active {'), 'Must have active row styles');
 assert(stylesCss.includes('.butler-choice-left {'), 'Must have .butler-choice-left styles');
-console.log('✓ Dropdown list is left-aligned vertical list with styled checkboxes');
+console.log('✓ Dropdown list is left-aligned vertical list');
 
 // 3. Test updateButlerUI in app.js
 const appCode = fs.readFileSync('app.js', 'utf8');
