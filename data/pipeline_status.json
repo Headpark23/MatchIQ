@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-11-01T22:24:32.241772+00:00",
+ "attempted_at": "2026-11-02T01:48:29.375157+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -151,12 +151,12 @@
    "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
    "matches": 70,
    "notes": {
-    "PL": "ok: 12 of 12 events matched, 2 credits",
+    "PL": "skipped: polled 3.4 h ago (minimum 8 h)",
     "ELC": "skipped: no Championship match in the next 36 h",
     "BL1": "skipped: no Bundesliga match in the next 36 h",
-    "PD": "ok: 11 of 11 events matched, 2 credits",
-    "SA": "ok: 12 of 12 events matched, 2 credits",
-    "FL1": "ok: 10 of 10 events matched, 2 credits"
+    "PD": "skipped: polled 3.4 h ago (minimum 8 h)",
+    "SA": "skipped: polled 3.4 h ago (minimum 8 h)",
+    "FL1": "skipped: polled 3.4 h ago (minimum 8 h)"
    },
    "credits_used_this_month": 18,
    "credits_remaining_reported": 482
@@ -167,12 +167,12 @@
  ],
  "errors": [],
  "ok": true,
- "last_success": "2026-11-01T22:24:32.241772+00:00",
+ "last_success": "2026-11-02T01:48:29.375157+00:00",
  "fixtures": 2306,
  "upcoming_predicted": 134,
- "published_revisions": 99,
+ "published_revisions": 0,
  "imported_frozen_records": 0,
- "settlement_updates": 126,
+ "settlement_updates": 54,
  "training_results": 1927,
  "results_latest": "2026-11-01",
  "model_versions": {
