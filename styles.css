@@ -4133,3 +4133,9 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .butler-choice-card.active .butler-check-svg { stroke: #04111c; }
 .butler-done-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
 .butler-selected-summary { font-size: 13px; color: var(--muted); }
+
+/* Phones: show every competition at once as wrapped chips instead of a sideways scroller */
+@media (max-width: 600px) {
+  .comp-bar { flex-wrap: wrap; overflow-x: visible; gap: 6px; -webkit-mask-image: none; mask-image: none; }
+  .comp-bar button { min-height: 36px; padding: 5px 11px; font-size: 12.5px; }
+}
