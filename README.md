@@ -1,6 +1,6 @@
 # MatchIQ
 
-Premier League predictions with honest evidence labels, a sealed prediction history and a private Bet Diary.
+Your personal sports prediction, bet builder and friends leagues app, with honest evidence labels, a sealed prediction history and a private Bet Diary.
 
 ## How it fits together
 
