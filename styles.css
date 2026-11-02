@@ -4008,7 +4008,7 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 /* ---- How To guide ---- */
 .howto-link { margin-left: 10px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--cyan); color: var(--cyan); font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; }
 .howto-link:hover { background: rgba(56, 189, 248, 0.14); color: #fff; }
-.guide-banner { display: flex; align-items: center; gap: 14px; margin: 0 0 16px; padding: 14px 18px; border-radius: 14px; border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.1); color: var(--ink); text-decoration: none; }
+.guide-banner { display: flex; align-items: center; gap: 14px; margin: 20px 0 16px; padding: 14px 18px; border-radius: 14px; border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.1); color: var(--ink); text-decoration: none; }
 .guide-banner:hover { background: rgba(56, 189, 248, 0.16); }
 .guide-banner > span:nth-child(2) { flex: 1; display: grid; gap: 2px; }
 .guide-banner small { color: var(--muted); font-size: 12.5px; }
