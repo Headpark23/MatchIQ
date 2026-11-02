@@ -1544,7 +1544,22 @@ function renderBestValueModalContent() {
   }
 
   const tierData = data[activeBestValueTier] || data.single;
+  const tierNeeds = { single: 1, double: 2, treble: 3, fourFold: 4 }[activeBestValueTier] || 1;
+  const tierName = { single: 'single', double: 'double', treble: 'treble', fourFold: '4-fold' }[activeBestValueTier] || 'single';
   const legs = tierData.legs;
+  if (legs.length < tierNeeds) {
+    const tabs = ['single', 'double', 'treble', 'fourFold'].map(function (t, i) {
+      const lbl = ['Single (1)', 'Double (2)', 'Treble (3)', '4-Fold (4)'][i];
+      return '<button type="button" class="bv-tab' + (activeBestValueTier === t ? ' active' : '') + '" onclick="setBestValueTier(\'' + t + '\')">' + lbl + '</button>';
+    }).join('');
+    body.innerHTML = '<div class="bv-tabs">' + tabs + '</div>' +
+      '<div class="empty" style="padding:32px 20px;text-align:center;">' +
+      '<div style="font-size:36px;margin-bottom:12px;">⚖️</div>' +
+      '<h3 style="font-size:18px;font-weight:700;margin-bottom:8px;color:#fff;">Not enough value bets today for a ' + tierName + '</h3>' +
+      '<p class="muted" style="font-size:14px;max-width:440px;margin:0 auto;line-height:1.5;">Only ' + legs.length + ' qualifying pick' + (legs.length === 1 ? '' : 's') + ' from different matches today, and a ' + tierName + ' needs ' + tierNeeds + '. We would rather show nothing than pad it out with weaker bets.</p>' +
+      '</div>';
+    return;
+  }
   const totalOdds = tierData.odds;
   const avgEv = tierData.avgEv;
   const estProb = tierData.estProb;
