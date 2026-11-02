@@ -7095,6 +7095,63 @@
    ],
    "origin": "shadow",
    "sha256": "4d30b23d93f7b19e1192d966e0a30f79fe1b3494382afa27bc1af8fce8c8c7b2"
+  },
+  {
+   "record_id": "PL-2627-brentford-v-everton#r1",
+   "match_id": "PL-2627-brentford-v-everton",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Brentford",
+    "away": "Everton",
+    "kickoff_utc": "2026-11-23T20:00:00Z"
+   },
+   "published_at": "2026-11-02T20:30:56.705751+00:00",
+   "inputs_fingerprint": "931cfb7ff0133292",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Brentford win",
+      "p": 0.4826,
+      "fair_odds": "≈11/10"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Brentford win",
+       "p": 0.4826,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2786,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Everton win",
+       "p": 0.2388,
+       "fair_odds": "≈100/30"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "7f35c67231b79586619a0e2262e3156993e8e74bb93ec81fb9f39db08312db94"
   }
  ]
 }
