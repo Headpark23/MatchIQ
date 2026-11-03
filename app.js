@@ -613,10 +613,17 @@ function fixtureRow(f) {
   } else {
     lean = '<span class="dim">Prediction published within 21 days of kick-off</span>';
   }
-  return '<a class="fx" href="#/match/' + encodeURIComponent(f.id) + '">' +
+  // Quick add to the own-bet slip: home win, draw, away win, with the recorded price when there is one.
+  let quick = '';
+  if (f.status === 'SCHEDULED' && ms > Date.now()) {
+    const label = { 'result:H': f.home, 'result:D': 'Draw', 'result:A': f.away };
+    quick = '<div class="fx-quick"><span class="fx-quick-lbl">+ My bet</span>' + ownBetMarketsFor(f).filter(o => label[o.key]).map(o =>
+      '<button type="button" class="fx-quick-btn own-add-btn" data-own-bet=\'' + esc(JSON.stringify({ id: f.id, market: 'wins', selection: o.label })) + '\' aria-label="Add ' + esc(o.label) + ' to my bet slip"><span>' + esc(label[o.key]) + '</span>' + (o.decimal ? '<b class="mono">' + esc(ownBetOddsText(o.decimal)) + '</b>' : '') + '</button>').join('') + '</div>';
+  }
+  return '<div class="fx-wrap' + (quick ? ' has-quick' : '') + '"><a class="fx" href="#/match/' + encodeURIComponent(f.id) + '">' +
     '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small>' + (compFilter === 'ALL' ? '<small class="lg-tag">' + esc(f.competition || 'PL') + '</small>' : '') + '</span>' +
     '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span></span>' +
-    '<span class="fx-lean">' + lean + '</span><span class="fx-chev" aria-hidden="true">›</span></a>';
+    '<span class="fx-lean">' + lean + '</span><span class="fx-chev" aria-hidden="true">›</span></a>' + quick + '</div>';
 }
 
 function groupedRows(fixtures) {
@@ -6825,7 +6832,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v109';
+const APP_VERSION = 'v110';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {
