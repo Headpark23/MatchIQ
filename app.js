@@ -4579,7 +4579,7 @@ function viewBuild() {
       if (!rows.length) return '';
       return '<h3 class="own-group">' + esc(g[1]) + '</h3><div class="own-markets">' + rows.map(o => {
         const on = legs.some(l => l.fixtureId === fx.id && l.key === o.key);
-        return '<button type="button" class="own-market' + (on ? ' on' : '') + '" onclick="addOwnBetFixtureLeg(\'' + esc(o.key) + '\')"><span>' + esc(o.label) + '</span><b class="mono">' + (o.decimal ? esc(ownBetOddsText(o.decimal)) : 'add price') + '</b></button>';
+        return '<button type="button" class="own-market' + (on ? ' on' : '') + '" onclick="addOwnBetFixtureLeg(\'' + esc(o.key) + '\')"><span>' + (o.league ? '🏆 ' : '') + esc(o.label) + '</span><b class="mono">' + (o.decimal ? esc(ownBetOddsText(o.decimal)) : 'add price') + '</b></button>';
       }).join('') + '</div>';
     }).join('');
   })() : '';
@@ -4591,7 +4591,7 @@ function viewBuild() {
     '<input id="own-fixture-search" type="search" class="ctl" placeholder="Search by club or league, e.g. Arsenal" autocomplete="off" value="' + esc(ownBetUI.q || '') + '" oninput="filterOwnBetFixtures(this.value)" style="margin-bottom:8px">' +
     '<label class="sr-only" for="own-fixture">Match</label>' +
     '<select id="own-fixture" class="ctl" onchange="setOwnBetFixture(this.value)">' + ownBetFixtureOptionsHtml(ownBetUI.q) + '</select>' +
-    (fx ? marketBtns + (noPrices ? '<p class="own-hint">No bookmaker price recorded for this match. Add the selection, then type the price you were offered on your slip.</p>' : oldPrices ? '<p class="own-hint">These prices are about ' + Math.round(feedState.ageHours) + ' hours old and may have moved. Change them on your slip to the price you were offered.</p>' : '<p class="own-hint">Recent UK bookmaker prices. Change them on your slip if your price differs.</p>') : '<p class="own-hint">Choose a match to see its result and goals markets. Add selections from several matches to build a double, treble or bigger.</p>');
+    (fx ? '<p class="own-hint">🏆 = counts in leagues. Everything else saves to your diary only.</p>' + marketBtns + (noPrices ? '<p class="own-hint">No bookmaker price recorded for this match. Add the selection, then type the price you were offered on your slip.</p>' : oldPrices ? '<p class="own-hint">These prices are about ' + Math.round(feedState.ageHours) + ' hours old and may have moved. Change them on your slip to the price you were offered.</p>' : '<p class="own-hint">Recent UK bookmaker prices. Change them on your slip if your price differs.</p>') : '<p class="own-hint">Choose a match to see its result and goals markets. Add selections from several matches to build a double, treble or bigger.</p>');
 
   const custom = '<div class="own-custom">' +
     '<div class="field"><label for="own-custom-sport">Sport</label><select id="own-custom-sport" class="ctl">' + OWN_BET_SPORTS.map(s => '<option>' + s + '</option>').join('') + '</select></div>' +
