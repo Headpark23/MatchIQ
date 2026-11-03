@@ -526,7 +526,17 @@
    ],
    "origin": "shadow",
    "sha256": "ddf78999317b7fe2e747a416993e074df6ea016c88714a9f3b0faa0d2e3bf5c8",
-   "superseded_by": "PL-2627-newcastle-v-everton#r2"
+   "superseded_by": "PL-2627-newcastle-v-everton#r2",
+   "result": {
+    "score": [
+     0,
+     1
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-11-02T20:00:00Z",
+    "confirmed_at": "2026-11-03T02:38:38.048781+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PL-2627-leeds-v-tottenham#r1",
@@ -1508,7 +1518,17 @@
    ],
    "origin": "shadow",
    "sha256": "de5d5491bd353ed2e6ae32bd7b09ae1b94537fbf20cf5cfb17e5007d6fdc4d75",
-   "superseded_by": "PL-2627-newcastle-v-everton#r3"
+   "superseded_by": "PL-2627-newcastle-v-everton#r3",
+   "result": {
+    "score": [
+     0,
+     1
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-11-02T20:00:00Z",
+    "confirmed_at": "2026-11-03T02:38:38.048781+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PL-2627-leeds-v-tottenham#r2",
@@ -2498,7 +2518,17 @@
    ],
    "origin": "shadow",
    "sha256": "69c372c4e37e3eb7d81f3644775124dd34a56df51597235b1285545f5a4c4bec",
-   "superseded_by": "PL-2627-newcastle-v-everton#r4"
+   "superseded_by": "PL-2627-newcastle-v-everton#r4",
+   "result": {
+    "score": [
+     0,
+     1
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-11-02T20:00:00Z",
+    "confirmed_at": "2026-11-03T02:38:38.048781+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PL-2627-leeds-v-tottenham#r3",
@@ -3496,7 +3526,17 @@
    ],
    "origin": "shadow",
    "sha256": "9e60767d4c13dfc6afc4cde32e2f034c3a4ad1879e6413b48e217186f2ca6fd3",
-   "superseded_by": "PL-2627-newcastle-v-everton#r5"
+   "superseded_by": "PL-2627-newcastle-v-everton#r5",
+   "result": {
+    "score": [
+     0,
+     1
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-11-02T20:00:00Z",
+    "confirmed_at": "2026-11-03T02:38:38.048781+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PL-2627-leeds-v-tottenham#r4",
@@ -4542,7 +4582,17 @@
    ],
    "origin": "shadow",
    "sha256": "df1565e4c267a5203c414afe5bd3320f02446e9d5ffb26c5c9f194c0c09ab8c1",
-   "superseded_by": "PL-2627-newcastle-v-everton#r6"
+   "superseded_by": "PL-2627-newcastle-v-everton#r6",
+   "result": {
+    "score": [
+     0,
+     1
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-11-02T20:00:00Z",
+    "confirmed_at": "2026-11-03T02:38:38.048781+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PL-2627-leeds-v-tottenham#r5",
@@ -5198,7 +5248,17 @@
    ],
    "origin": "shadow",
    "sha256": "e07d1fcf8a867a625ab0c6a0ef9aa9c4b224229a7c9251ec235444f6c0cf634c",
-   "superseded_by": "PL-2627-newcastle-v-everton#r7"
+   "superseded_by": "PL-2627-newcastle-v-everton#r7",
+   "result": {
+    "score": [
+     0,
+     1
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-11-02T20:00:00Z",
+    "confirmed_at": "2026-11-03T02:38:38.048781+00:00"
+   },
+   "evaluated": false
   },
   {
    "record_id": "PL-2627-leeds-v-tottenham#r6",
@@ -6125,7 +6185,26 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "68ab51fcbb469cc162f2cc839ba98b812a3778c1eb0a40f527024cdc83c5f768"
+   "sha256": "68ab51fcbb469cc162f2cc839ba98b812a3778c1eb0a40f527024cdc83c5f768",
+   "result": {
+    "score": [
+     0,
+     1
+    ],
+    "source": "football-data.org",
+    "kickoff_utc": "2026-11-02T20:00:00Z",
+    "confirmed_at": "2026-11-03T02:38:38.048781+00:00"
+   },
+   "settlement": {
+    "result": {
+     "outcome": "A",
+     "pick_won": false,
+     "brier": 0.8027,
+     "logloss": 1.29317,
+     "rps": 0.36151
+    }
+   },
+   "evaluated": true
   },
   {
    "record_id": "PL-2627-leeds-v-tottenham#r7",
@@ -6182,7 +6261,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "b6283e22684a59a7fd58cf6d7e001b7f6490d810540763f44bdd51a2d1b873f0"
+   "sha256": "b6283e22684a59a7fd58cf6d7e001b7f6490d810540763f44bdd51a2d1b873f0",
+   "superseded_by": "PL-2627-leeds-v-tottenham#r8"
   },
   {
    "record_id": "PL-2627-fulham-v-newcastle#r7",
@@ -6239,7 +6319,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "40e0b476f69737650f5cc687f1eced15af4a377af63de77a1f78893c21514526"
+   "sha256": "40e0b476f69737650f5cc687f1eced15af4a377af63de77a1f78893c21514526",
+   "superseded_by": "PL-2627-fulham-v-newcastle#r8"
   },
   {
    "record_id": "PL-2627-nottm-forest-v-man-city#r7",
@@ -6296,7 +6377,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "85593000fd18bd0ed8285e1bdc8ae4f08611509630b319966266c62e7844cb1a"
+   "sha256": "85593000fd18bd0ed8285e1bdc8ae4f08611509630b319966266c62e7844cb1a",
+   "superseded_by": "PL-2627-nottm-forest-v-man-city#r8"
   },
   {
    "record_id": "PL-2627-brighton-v-brentford#r7",
@@ -6353,7 +6435,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "493f29a60505d6a1dcb1b0e56999e47038742c671611a01f7a3c3816a4ded597"
+   "sha256": "493f29a60505d6a1dcb1b0e56999e47038742c671611a01f7a3c3816a4ded597",
+   "superseded_by": "PL-2627-brighton-v-brentford#r8"
   },
   {
    "record_id": "PL-2627-crystal-palace-v-liverpool#r7",
@@ -6410,7 +6493,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "7cb2be9024fb2d599cc5383c8cf3fabc9f9512bf9b474bdb308819787341c2fe"
+   "sha256": "7cb2be9024fb2d599cc5383c8cf3fabc9f9512bf9b474bdb308819787341c2fe",
+   "superseded_by": "PL-2627-crystal-palace-v-liverpool#r8"
   },
   {
    "record_id": "PL-2627-ipswich-v-bournemouth#r7",
@@ -6467,7 +6551,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "601176adee4a066e44620def9d5b50b7c696c13e6d71704e4dab5d0273a2be4c"
+   "sha256": "601176adee4a066e44620def9d5b50b7c696c13e6d71704e4dab5d0273a2be4c",
+   "superseded_by": "PL-2627-ipswich-v-bournemouth#r8"
   },
   {
    "record_id": "PL-2627-sunderland-v-chelsea#r7",
@@ -6524,7 +6609,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "3bc94eddd410ba2392131c178a4e060bee4f2e54375e0c1fd33a17d5f102c62d"
+   "sha256": "3bc94eddd410ba2392131c178a4e060bee4f2e54375e0c1fd33a17d5f102c62d",
+   "superseded_by": "PL-2627-sunderland-v-chelsea#r8"
   },
   {
    "record_id": "PL-2627-man-united-v-aston-villa#r7",
@@ -6581,7 +6667,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "6592b606f68da47a50f4313e619b33271aebb79bae2b8ed22004acf29300e159"
+   "sha256": "6592b606f68da47a50f4313e619b33271aebb79bae2b8ed22004acf29300e159",
+   "superseded_by": "PL-2627-man-united-v-aston-villa#r8"
   },
   {
    "record_id": "PL-2627-man-city-v-fulham#r3",
@@ -6638,7 +6725,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "2648c795cac7e18919e1e11412411f8897d78062a3bb1cb3b7679373d36fc1b2"
+   "sha256": "2648c795cac7e18919e1e11412411f8897d78062a3bb1cb3b7679373d36fc1b2",
+   "superseded_by": "PL-2627-man-city-v-fulham#r4"
   },
   {
    "record_id": "PL-2627-aston-villa-v-sunderland#r2",
@@ -6695,7 +6783,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "01fbf9a71f34a69ea60ff4bb2a2cae46a5ccc1a92505cc1452a88c749c07d35b"
+   "sha256": "01fbf9a71f34a69ea60ff4bb2a2cae46a5ccc1a92505cc1452a88c749c07d35b",
+   "superseded_by": "PL-2627-aston-villa-v-sunderland#r3"
   },
   {
    "record_id": "PL-2627-bournemouth-v-nottm-forest#r2",
@@ -6752,7 +6841,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "d8dec713e5b81ca5f4e494d43949879370e5417fd12abc48588e47c926fee5a1"
+   "sha256": "d8dec713e5b81ca5f4e494d43949879370e5417fd12abc48588e47c926fee5a1",
+   "superseded_by": "PL-2627-bournemouth-v-nottm-forest#r3"
   },
   {
    "record_id": "PL-2627-chelsea-v-leeds#r2",
@@ -6809,7 +6899,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "0fafe6a6db63351d613d0e413c0b61029cc30dea7d5412995bf4357903a7fc62"
+   "sha256": "0fafe6a6db63351d613d0e413c0b61029cc30dea7d5412995bf4357903a7fc62",
+   "superseded_by": "PL-2627-chelsea-v-leeds#r3"
   },
   {
    "record_id": "PL-2627-coventry-v-crystal-palace#r2",
@@ -6866,7 +6957,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "18b434bd2bdad567cdac99d8fc232de99e31bf38731f60e9b8469ccd76f23436"
+   "sha256": "18b434bd2bdad567cdac99d8fc232de99e31bf38731f60e9b8469ccd76f23436",
+   "superseded_by": "PL-2627-coventry-v-crystal-palace#r3"
   },
   {
    "record_id": "PL-2627-tottenham-v-ipswich#r2",
@@ -6923,7 +7015,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "be1f68331dfee40f98b6648cc908de2250b645d7c6d2a1304d1498edfb8117c1"
+   "sha256": "be1f68331dfee40f98b6648cc908de2250b645d7c6d2a1304d1498edfb8117c1",
+   "superseded_by": "PL-2627-tottenham-v-ipswich#r3"
   },
   {
    "record_id": "PL-2627-newcastle-v-arsenal#r2",
@@ -6980,7 +7073,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "712606110369a846bc84aae78a23a654f74dbe67da40bce9053593cf970cc388"
+   "sha256": "712606110369a846bc84aae78a23a654f74dbe67da40bce9053593cf970cc388",
+   "superseded_by": "PL-2627-newcastle-v-arsenal#r3"
   },
   {
    "record_id": "PL-2627-hull-v-brighton#r1",
@@ -7037,7 +7131,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "8ed1552d0c00ede805344ee80a20763603c2a50d3ee4191c82a7364cd117b16e"
+   "sha256": "8ed1552d0c00ede805344ee80a20763603c2a50d3ee4191c82a7364cd117b16e",
+   "superseded_by": "PL-2627-hull-v-brighton#r2"
   },
   {
    "record_id": "PL-2627-liverpool-v-man-united#r1",
@@ -7094,7 +7189,8 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "4d30b23d93f7b19e1192d966e0a30f79fe1b3494382afa27bc1af8fce8c8c7b2"
+   "sha256": "4d30b23d93f7b19e1192d966e0a30f79fe1b3494382afa27bc1af8fce8c8c7b2",
+   "superseded_by": "PL-2627-liverpool-v-man-united#r2"
   },
   {
    "record_id": "PL-2627-brentford-v-everton#r1",
@@ -7151,7 +7247,1034 @@
     "openfootball"
    ],
    "origin": "shadow",
-   "sha256": "7f35c67231b79586619a0e2262e3156993e8e74bb93ec81fb9f39db08312db94"
+   "sha256": "7f35c67231b79586619a0e2262e3156993e8e74bb93ec81fb9f39db08312db94",
+   "superseded_by": "PL-2627-brentford-v-everton#r2"
+  },
+  {
+   "record_id": "PL-2627-leeds-v-tottenham#r8",
+   "match_id": "PL-2627-leeds-v-tottenham",
+   "revision": 8,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Leeds",
+    "away": "Tottenham",
+    "kickoff_utc": "2026-11-07T12:30:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Leeds win",
+      "p": 0.4499,
+      "fair_odds": "≈6/5"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Leeds win",
+       "p": 0.4499,
+       "fair_odds": "≈6/5"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2815,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Tottenham win",
+       "p": 0.2686,
+       "fair_odds": "≈11/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "904ccaf827cc1d9b30005e4763cfe006ade8e373e48edf2586b77e7193f3cab2"
+  },
+  {
+   "record_id": "PL-2627-fulham-v-newcastle#r8",
+   "match_id": "PL-2627-fulham-v-newcastle",
+   "revision": 8,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Fulham",
+    "away": "Newcastle",
+    "kickoff_utc": "2026-11-07T15:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Fulham win",
+      "p": 0.378,
+      "fair_odds": "≈13/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Fulham win",
+       "p": 0.378,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2788,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Newcastle win",
+       "p": 0.3432,
+       "fair_odds": "≈15/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "daa890e286a32401177908d634042f89ad00821d2e5fb90cf5a4c4834f78f2e0"
+  },
+  {
+   "record_id": "PL-2627-nottm-forest-v-man-city#r8",
+   "match_id": "PL-2627-nottm-forest-v-man-city",
+   "revision": 8,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Nott'm Forest",
+    "away": "Man City",
+    "kickoff_utc": "2026-11-07T17:30:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Man City win",
+      "p": 0.5151,
+      "fair_odds": "≈10/11"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Nott'm Forest win",
+       "p": 0.22,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2649,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Man City win",
+       "p": 0.5151,
+       "fair_odds": "≈10/11"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "e5ac39d9f1727113f3fad71e1120079701155a7d768db35e1529b3722086aa51"
+  },
+  {
+   "record_id": "PL-2627-brighton-v-brentford#r8",
+   "match_id": "PL-2627-brighton-v-brentford",
+   "revision": 8,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Brighton",
+    "away": "Brentford",
+    "kickoff_utc": "2026-11-08T14:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Brighton win",
+      "p": 0.4908,
+      "fair_odds": "≈Evens"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Brighton win",
+       "p": 0.4908,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2488,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Brentford win",
+       "p": 0.2604,
+       "fair_odds": "≈11/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "73b6fe396c46af8e51a1405f88e4fb0875b345bc3874eb45c0e88e7c93299c98"
+  },
+  {
+   "record_id": "PL-2627-crystal-palace-v-liverpool#r8",
+   "match_id": "PL-2627-crystal-palace-v-liverpool",
+   "revision": 8,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Crystal Palace",
+    "away": "Liverpool",
+    "kickoff_utc": "2026-11-08T14:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Liverpool win",
+      "p": 0.5209,
+      "fair_odds": "≈10/11"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Crystal Palace win",
+       "p": 0.2271,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.252,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Liverpool win",
+       "p": 0.5209,
+       "fair_odds": "≈10/11"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "2b8560e1afcbd1010de51eda750a61bb2ee67995ce54a507459c8dae3bfe607e"
+  },
+  {
+   "record_id": "PL-2627-ipswich-v-bournemouth#r8",
+   "match_id": "PL-2627-ipswich-v-bournemouth",
+   "revision": 8,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Ipswich",
+    "away": "Bournemouth",
+    "kickoff_utc": "2026-11-08T14:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Bournemouth win",
+      "p": 0.5693,
+      "fair_odds": "≈8/11"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Ipswich win",
+       "p": 0.2114,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2193,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Bournemouth win",
+       "p": 0.5693,
+       "fair_odds": "≈8/11"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "eb05c4eafe1c56efde0e0e670b6660f89906542591c7231efbf2da3e051eefc9"
+  },
+  {
+   "record_id": "PL-2627-sunderland-v-chelsea#r8",
+   "match_id": "PL-2627-sunderland-v-chelsea",
+   "revision": 8,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Sunderland",
+    "away": "Chelsea",
+    "kickoff_utc": "2026-11-08T14:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Chelsea win",
+      "p": 0.4584,
+      "fair_odds": "≈6/5"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Sunderland win",
+       "p": 0.2682,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2734,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Chelsea win",
+       "p": 0.4584,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "a8c1390c2e1b4e105f913956aeff3f4c1c780cb7fa2fe2015f0d44b83dc0964c"
+  },
+  {
+   "record_id": "PL-2627-man-united-v-aston-villa#r8",
+   "match_id": "PL-2627-man-united-v-aston-villa",
+   "revision": 8,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Man United",
+    "away": "Aston Villa",
+    "kickoff_utc": "2026-11-08T16:30:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Man United win",
+      "p": 0.412,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Man United win",
+       "p": 0.412,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2656,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Aston Villa win",
+       "p": 0.3224,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "4a3397d3a7b3aff74ae07b9da9d42bb31d3dcbf39718e2d92beac43b6f8a0095"
+  },
+  {
+   "record_id": "PL-2627-man-city-v-fulham#r4",
+   "match_id": "PL-2627-man-city-v-fulham",
+   "revision": 4,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Man City",
+    "away": "Fulham",
+    "kickoff_utc": "2026-11-21T12:30:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Man City win",
+      "p": 0.6469,
+      "fair_odds": "≈8/15"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Man City win",
+       "p": 0.6469,
+       "fair_odds": "≈8/15"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2187,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Fulham win",
+       "p": 0.1344,
+       "fair_odds": "≈13/2"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "bc3fd464ea6bd75160f80941e90a9b98d6e3586f4d7f41d848fa8cf9ecea3331"
+  },
+  {
+   "record_id": "PL-2627-aston-villa-v-sunderland#r3",
+   "match_id": "PL-2627-aston-villa-v-sunderland",
+   "revision": 3,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Aston Villa",
+    "away": "Sunderland",
+    "kickoff_utc": "2026-11-21T15:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Aston Villa win",
+      "p": 0.5274,
+      "fair_odds": "≈10/11"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Aston Villa win",
+       "p": 0.5274,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2691,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Sunderland win",
+       "p": 0.2035,
+       "fair_odds": "≈4/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "06b9643c84c8b263c9a17f2f84f39c1f42be0d323c8a2f1ae1b98023af30e95f"
+  },
+  {
+   "record_id": "PL-2627-bournemouth-v-nottm-forest#r3",
+   "match_id": "PL-2627-bournemouth-v-nottm-forest",
+   "revision": 3,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Bournemouth",
+    "away": "Nott'm Forest",
+    "kickoff_utc": "2026-11-21T15:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Bournemouth win",
+      "p": 0.4696,
+      "fair_odds": "≈11/10"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Bournemouth win",
+       "p": 0.4696,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.275,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Nott'm Forest win",
+       "p": 0.2554,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "4ab36b7617b96f6d96c40d690428eb21fa73587eb8f7be4e65c18fbba15b8e29"
+  },
+  {
+   "record_id": "PL-2627-chelsea-v-leeds#r3",
+   "match_id": "PL-2627-chelsea-v-leeds",
+   "revision": 3,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Chelsea",
+    "away": "Leeds",
+    "kickoff_utc": "2026-11-21T15:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Chelsea win",
+      "p": 0.482,
+      "fair_odds": "≈11/10"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Chelsea win",
+       "p": 0.482,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2649,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Leeds win",
+       "p": 0.2531,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "8fa7a031ccb80bb916f0e2c80914b8e7f741a24f8a46b708454544835c5cc543"
+  },
+  {
+   "record_id": "PL-2627-coventry-v-crystal-palace#r3",
+   "match_id": "PL-2627-coventry-v-crystal-palace",
+   "revision": 3,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Coventry",
+    "away": "Crystal Palace",
+    "kickoff_utc": "2026-11-21T15:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Coventry win",
+      "p": 0.375,
+      "fair_odds": "≈13/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Coventry win",
+       "p": 0.375,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2807,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Crystal Palace win",
+       "p": 0.3443,
+       "fair_odds": "≈15/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "223407e812bf1865e84a77f4ca5e658565fc68cdd6f9ba34081ee8d1578f264a"
+  },
+  {
+   "record_id": "PL-2627-tottenham-v-ipswich#r3",
+   "match_id": "PL-2627-tottenham-v-ipswich",
+   "revision": 3,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Tottenham",
+    "away": "Ipswich",
+    "kickoff_utc": "2026-11-21T15:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Tottenham win",
+      "p": 0.5874,
+      "fair_odds": "≈8/11"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Tottenham win",
+       "p": 0.5874,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2158,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Ipswich win",
+       "p": 0.1967,
+       "fair_odds": "≈4/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "6b34bf707579e5094c6d913a61d19aec381a9fe3ca3cf7a43d7d1f8a148d41fc"
+  },
+  {
+   "record_id": "PL-2627-newcastle-v-arsenal#r3",
+   "match_id": "PL-2627-newcastle-v-arsenal",
+   "revision": 3,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Newcastle",
+    "away": "Arsenal",
+    "kickoff_utc": "2026-11-21T17:30:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Arsenal win",
+      "p": 0.5577,
+      "fair_odds": "≈4/5"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Newcastle win",
+       "p": 0.1829,
+       "fair_odds": "≈9/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2594,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Arsenal win",
+       "p": 0.5577,
+       "fair_odds": "≈4/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "f9eec09ab2612e4bad3eb6edf1273bff6f565b5fbf1f2d00aecd0ba16f0e319f"
+  },
+  {
+   "record_id": "PL-2627-hull-v-brighton#r2",
+   "match_id": "PL-2627-hull-v-brighton",
+   "revision": 2,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Hull",
+    "away": "Brighton",
+    "kickoff_utc": "2026-11-22T14:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Brighton win",
+      "p": 0.4106,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Hull win",
+       "p": 0.2932,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2963,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Brighton win",
+       "p": 0.4106,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "647bc767665bfd7182b835341b36a6a6c5af236b06b5cdf5aaa4e3fb53ec2d5c"
+  },
+  {
+   "record_id": "PL-2627-liverpool-v-man-united#r2",
+   "match_id": "PL-2627-liverpool-v-man-united",
+   "revision": 2,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Liverpool",
+    "away": "Man United",
+    "kickoff_utc": "2026-11-22T16:30:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Liverpool win",
+      "p": 0.5266,
+      "fair_odds": "≈10/11"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Liverpool win",
+       "p": 0.5266,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2397,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Man United win",
+       "p": 0.2337,
+       "fair_odds": "≈100/30"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "1d5a78ce6613bb29655544249474d51ad7f44996c6e4891c33897eb653888108"
+  },
+  {
+   "record_id": "PL-2627-brentford-v-everton#r2",
+   "match_id": "PL-2627-brentford-v-everton",
+   "revision": 2,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Brentford",
+    "away": "Everton",
+    "kickoff_utc": "2026-11-23T20:00:00Z"
+   },
+   "published_at": "2026-11-03T02:38:38.048781+00:00",
+   "inputs_fingerprint": "7d941166cad8f9d1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Brentford win",
+      "p": 0.4728,
+      "fair_odds": "≈11/10"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Brentford win",
+       "p": 0.4728,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2815,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Everton win",
+       "p": 0.2457,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "518f9155426e7b0211003a409076e926cad988da170b1f9e59fb6596195026bc"
   }
  ]
 }
