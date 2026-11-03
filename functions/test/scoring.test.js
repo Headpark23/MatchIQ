@@ -40,10 +40,27 @@ assert.strictEqual(check('Arsenal win', { createdMs: KO }).status, 'rejected', '
 assert.strictEqual(check('Arsenal win', { createdMs: KO + 60000 }).reason, 'Logged after kick-off (Arsenal v Tottenham).');
 assert.strictEqual(check('Arsenal win', { dayKey: '2026-11-07' }).status, 'rejected', 'filed under the wrong day');
 assert.strictEqual(check('Both teams to score').status, 'rejected', 'unpriced market');
-assert.strictEqual(check('Arsenal or draw').status, 'rejected', 'double chance is not priced');
+assert.strictEqual(check('Arsenal or draw').market, 'dc:1X', 'double chance is priced from the three result prices');
+assert.ok(Math.abs(check('Arsenal or draw').refOdds - 1 / (1 / 1.8 + 1 / 3.8)) < 0.001);
+assert.strictEqual(check('x', { bet: { fixtureId: 'PL-ars-tot', selection: 'Spurs (draw no bet)', market: 'dnb:A' } }).market, 'dnb:A');
+assert.strictEqual(check('x', { bet: { fixtureId: 'PL-ars-tot', selection: 'Both teams to score', market: 'btts:yes' } }).status, 'rejected', 'no model price loaded for btts');
+const preds = { predictions: { 'PL-ars-tot': { markets: { btts: { selections: [{ key: 'yes', p: 0.55 }, { key: 'no', p: 0.45 }] }, goals: { lines: [{ line: 1.5, over: { p: 0.8 }, under: { p: 0.2 } }] } } } } };
+const withModel = (selection, market) => check('x', { bet: { fixtureId: 'PL-ars-tot', selection, market }, predictions: preds });
+assert.strictEqual(withModel('Both teams to score', 'btts:yes').market, 'btts:yes');
+assert.ok(Math.abs(withModel('Both teams to score', 'btts:yes').refOdds - 1 / (0.55 * 1.07)) < 0.001, 'btts scores at the model price less a typical margin');
+assert.strictEqual(withModel('Over 1.5 goals', 'goals:over:1.5').status, 'pending');
+assert.strictEqual(withModel('Arsenal to score', 'tts:H').status, 'rejected', 'markets that cannot be settled from the score never count');
+assert.strictEqual(withModel('corners', 'corners:over:9.5').status, 'rejected');
+assert.strictEqual(withModel('Over 3.5 goals', 'goals:over:3.5').status, 'rejected', 'a line with no price still cannot count');
+assert.strictEqual(scoring.validateLeagueBet({ bet: { fixtureId: 'PL-ars-tot', selection: 'a', legs: [{ fixtureId: 'PL-ars-tot', selection: 'Arsenal or draw', market: 'dc:1X' }, { fixtureId: 'PL-che-liv', selection: 'Chelsea', market: 'result:H' }] }, dayKey: '2026-11-08', createdMs: KO - 3600000, fixtures, odds, predictions: preds }).status, 'rejected', 'second match has no prices');
 assert.strictEqual(check('Over 3.5 goals').status, 'rejected', 'line without a price');
 assert.strictEqual(scoring.validateLeagueBet({ bet: { fixtureId: 'PL-che-liv', selection: 'Chelsea' }, dayKey: '2026-11-08', createdMs: KO, fixtures, odds }).status, 'rejected', 'match with no prices');
 assert.strictEqual(scoring.validateLeagueBet({ bet: { fixtureId: 'nope', selection: 'x' }, dayKey: '2026-11-08', createdMs: KO, fixtures, odds }).status, 'rejected');
+{
+  const st = require('../shared/settlement.js').create(() => fixtures);
+  const cases = [['dc:1X', [1, 1], 'won'], ['dc:1X', [0, 1], 'lost'], ['dc:X2', [0, 0], 'won'], ['dc:12', [2, 2], 'lost'], ['dnb:H', [1, 1], 'void'], ['dnb:H', [2, 1], 'won'], ['dnb:A', [2, 1], 'lost'], ['btts:yes', [1, 1], 'won'], ['btts:yes', [1, 0], 'lost'], ['btts:no', [0, 0], 'won'], ['btts:no', [2, 3], 'lost']];
+  cases.forEach(([m, sc, out]) => assert.strictEqual(st.settleMarket(m, sc), out, m + ' ' + sc));
+}
 console.log('PASS: bets are checked against kick-off, match day and a recorded bookmaker price');
 
 // ---- points
@@ -89,7 +106,7 @@ assert.deepStrictEqual(acc.legs.map(l => [l.fixtureId, l.market]), [['PL-ars-tot
 assert.strictEqual(checkAcca([newc, ars], { dayKey: '2026-11-09' }).status, 'rejected', 'filed under the first match day');
 assert(/different match/.test(checkAcca([ars, { fixtureId: 'PL-ars-tot', selection: 'Over 2.5' }]).reason), 'same match twice');
 assert(/No bookmaker price for Chelsea v Liverpool/.test(checkAcca([ars, { fixtureId: 'PL-che-liv', selection: 'Chelsea' }]).reason), 'unpriced leg');
-assert(/Only match result/.test(checkAcca([ars, { fixtureId: 'PL-new-avl', selection: 'Both teams to score' }]).reason), 'unpriced market in a leg');
+assert(/Only markets that settle from the final score/.test(checkAcca([ars, { fixtureId: 'PL-new-avl', selection: 'Both teams to score' }]).reason), 'unpriced market in a leg');
 assert(/2 to 10 legs/.test(checkAcca([ars]).reason), 'one leg is not an accumulator');
 assert(/Logged after kick-off/.test(checkAcca([newc, ars], { createdMs: KO + 60000 }).reason), 'after the first leg kicked off');
 assert.strictEqual(scoring.validateLeagueBet({ bet: { legs: [ars, { nope: 1 }] }, dayKey: '2026-11-08', createdMs: KO - 1, fixtures: accaFixtures, odds: accaOdds }).status, 'rejected', 'malformed leg');

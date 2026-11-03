@@ -78,13 +78,14 @@ exports.checkLeagueBet = onDocumentCreated('users/{uid}/leagueBets/{day}', async
   const bet = snap.data() || {};
   let result;
   try {
-    const [fixtures, odds] = await Promise.all([loadFixtures(), loadData('odds.json')]);
+    const [fixtures, odds, predictions] = await Promise.all([loadFixtures(), loadData('odds.json'), loadData('predictions.json').catch(() => null)]);
     result = scoring.validateLeagueBet({
       bet,
       dayKey: event.params.day,
       createdMs: snap.createTime.toMillis(),  // server clock, not the phone's
       fixtures,
-      odds
+      odds,
+      predictions
     });
   } catch (e) {
     logger.error('checkLeagueBet: data unavailable', e);

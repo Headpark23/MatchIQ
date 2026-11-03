@@ -3820,9 +3820,9 @@ function autoSettleDiary() {
       if (entry.type === 'accumulator' && Array.isArray(entry.legs)) {
         entry.legs.forEach(leg => {
           if (!leg || ['won', 'lost', 'void'].includes(leg.outcome)) return;
-          const fx = findDiaryFixture(leg.selection, entry);
+          const fx = (leg.fixtureId && fixtureById(leg.fixtureId)) || findDiaryFixture(leg.selection, entry);
           if (!fixtureFinished(fx)) return;
-          const r = settleTextAgainstScore(leg.selection, fx.home, fx.away, fx.score);
+          const r = leg.market ? settler.settleMarket(leg.market, fx.score) : settleTextAgainstScore(leg.selection, fx.home, fx.away, fx.score);
           if (r) { leg.outcome = r; leg.auto = true; leg.kickoffAt = kickoffIso(fx); changed = true; }
         });
       }
@@ -3832,9 +3832,9 @@ function autoSettleDiary() {
       let legChanged = false;
       entry.legs.forEach(leg => {
         if (!leg || ['won', 'lost', 'void'].includes(leg.outcome)) return;
-        const fx = findDiaryFixture(leg.selection, entry);
+        const fx = (leg.fixtureId && fixtureById(leg.fixtureId)) || findDiaryFixture(leg.selection, entry);
         if (!fixtureFinished(fx)) return;
-        const r = settleTextAgainstScore(leg.selection, fx.home, fx.away, fx.score);
+        const r = leg.market ? settler.settleMarket(leg.market, fx.score) : settleTextAgainstScore(leg.selection, fx.home, fx.away, fx.score);
         if (r) { leg.outcome = r; leg.auto = true; leg.kickoffAt = kickoffIso(fx); legChanged = true; }
       });
       if (legChanged) {
@@ -3855,7 +3855,7 @@ function autoSettleDiary() {
     }
     const fx = (entry.match_id && fixtureById(entry.match_id)) || findDiaryFixture((entry.fixture || '') + ' ' + (entry.selection || ''), entry);
     if (!fixtureFinished(fx)) return;
-    const r = settleTextAgainstScore((entry.marketName && entry.marketName !== 'Match result' ? entry.marketName + ' ' : '') + (entry.selection || ''), fx.home, fx.away, fx.score);
+    const r = entry.leagueMarket ? settler.settleMarket(entry.leagueMarket, fx.score) : settleTextAgainstScore((entry.marketName && entry.marketName !== 'Match result' ? entry.marketName + ' ' : '') + (entry.selection || ''), fx.home, fx.away, fx.score);
     if (r) {
       entry.outcome = r; entry.settledBy = 'auto'; entry.settledAt = stamp; entry.finalScore = fx.score[0] + '-' + fx.score[1]; entry.kickoffAt = kickoffIso(fx);
       changed = true;
@@ -3981,16 +3981,25 @@ function diaryBetText(entry) {
 
 const LEAGUE_MARKET_RE = /^(result:[HDA]|goals:(over|under):\d+(\.\d+)?)$/;
 
-// Checks one pick (a single, or one accumulator leg) on its match: not kicked off, and a match
-// result or over/under goals pick with a bookmaker price.
-function checkLeaguePick(text, fx) {
+// The markets the league can score for a match, with their reference prices (the same code the server runs).
+function leaguePricedMarkets(fx) {
+  const feed = ((((DATA.odds && DATA.odds.matches) || {})[fx.id]) || {}).selections || {};
+  const pred = DATA.predictions && DATA.predictions.predictions && DATA.predictions.predictions[fx.id];
+  return window.BetBuddySettlement.pricedMarkets(feed, pred);
+}
+
+// Checks one pick (a single, or one accumulator leg) on its match: not kicked off, and a market that
+// settles from the final score with a price. `market` is the market key when the app knows it.
+function checkLeaguePick(text, fx, market) {
   if (!(kickoffMs(fx) > Date.now())) return { ok: false, reason: fx.home + ' v ' + fx.away + ' has already kicked off.' };
-  const sels = ((((DATA.odds && DATA.odds.matches) || {})[fx.id]) || {}).selections || {};
-  const candidates = Object.keys(sels).filter(k => LEAGUE_MARKET_RE.test(k));
-  if (!candidates.length) return { ok: false, reason: 'There is no bookmaker price for ' + fx.home + ' v ' + fx.away + ' yet, so it cannot count in leagues.' };
-  const market = settler.classifyMarket(text, fx.home, fx.away, candidates);
-  if (!market) return { ok: false, reason: 'Only match result and over/under goals picks count in leagues ("' + text + '").' };
-  return { ok: true, fixture: fx, market, refOdds: Number(sels[market].decimal) };
+  const priced = leaguePricedMarkets(fx);
+  const candidates = Object.keys(priced);
+  if (!candidates.length) return { ok: false, reason: 'There is no price for ' + fx.home + ' v ' + fx.away + ' yet, so it cannot count in leagues.' };
+  let key = market || settler.classifyMarket(text, fx.home, fx.away, candidates);
+  if (!key) return { ok: false, reason: 'Only markets that settle from the final score, with a price, count in leagues ("' + text + '").' };
+  if (!priced[key] && /^(corners|cards|shots|tts|other)/.test(key)) return { ok: false, reason: 'Corners, cards, shots and team-to-score bets cannot be checked against the final score, so they stay in your diary.' };
+  if (!priced[key]) return { ok: false, reason: 'There is no usable price for "' + text + '" on ' + fx.home + ' v ' + fx.away + ', so it cannot count in leagues.' };
+  return { ok: true, fixture: fx, market: key, refOdds: Number(priced[key].decimal) };
 }
 
 // Checks a diary bet the same way the league server will, so the player hears straight away if it
@@ -4007,10 +4016,10 @@ function leagueBetCheck(entry) {
     const picks = [];
     for (let i = 0; i < legs.length; i++) {
       const text = String((legs[i] && legs[i].selection) || '');
-      const fx = settler.findUpcomingFixture(text, since);
+      const fx = (legs[i] && legs[i].fixtureId && fixtureById(legs[i].fixtureId)) || settler.findUpcomingFixture(text, since);
       if (!fx) return { ok: false, reason: 'Leg ' + (i + 1) + ' ("' + text + '") does not say which match it is for, so the league cannot check the result. Add a club name to the leg, e.g. "Arsenal v Chelsea over 2.5 goals".' };
       if (picks.some(p => p.fixture.id === fx.id)) return { ok: false, reason: 'Leg ' + (i + 1) + ' is on the same match as an earlier leg. Each accumulator leg must be a different match.' };
-      const pick = checkLeaguePick(text, fx);
+      const pick = checkLeaguePick(text, fx, legs[i] && legs[i].market);
       if (!pick.ok) return pick;
       picks.push(Object.assign(pick, { selection: text }));
     }
@@ -4021,12 +4030,12 @@ function leagueBetCheck(entry) {
       fixture: picks[0].fixture,
       day: picks[0].fixture.kickoff_utc.slice(0, 10),
       refOdds: picks.reduce((t, p) => t * p.refOdds, 1),
-      legs: picks.map(p => ({ fixtureId: p.fixture.id, selection: p.selection }))
+      legs: picks.map(p => ({ fixtureId: p.fixture.id, selection: p.selection, market: p.market }))
     };
   }
   const fx = (entry.match_id && fixtureById(entry.match_id)) || findDiaryFixture(diaryBetText(entry), entry);
   if (!fx) return { ok: false, reason: 'Choose the match from the list so the league can check the result.' };
-  const pick = checkLeaguePick(diaryBetText(entry), fx);
+  const pick = checkLeaguePick(diaryBetText(entry), fx, entry.leagueMarket);
   return pick.ok ? Object.assign(pick, { day: fx.kickoff_utc.slice(0, 10) }) : pick;
 }
 
@@ -4041,7 +4050,7 @@ async function submitLeagueBet(entry) {
   try {
     await firestoreDb.collection('users').doc(currentAuthUser.uid).collection('leagueBets').doc(chk.day).set(leagueDocs.leagueBetDoc({
       betId: entry.id, fixtureId: chk.fixture.id, selection: chk.acca ? entry.selection : diaryBetText(entry), odds: entry.odds,
-      legs: chk.acca ? chk.legs : undefined, now: firebase.firestore.FieldValue.serverTimestamp()
+      legs: chk.acca ? chk.legs : undefined, market: !chk.acca && /^(dc|dnb|btts):/.test(chk.market) ? chk.market : undefined, now: firebase.firestore.FieldValue.serverTimestamp()
     }));
     return chk;
   } catch (e) {
@@ -4367,9 +4376,10 @@ function ownBetMarketsFor(fx) {
   const feed = (((DATA.odds && DATA.odds.matches) || {})[fx.id] || {}).selections || {};
   const pred = DATA.predictions && DATA.predictions.predictions && DATA.predictions.predictions[fx.id];
   const out = [];
+  const scoreable = window.BetBuddySettlement.pricedMarkets(feed, pred);
   const add = (key, group, label, src) => {
     const f = feed[key];
-    out.push({ key, group, label, src: src || label, decimal: f ? Number(f.decimal) : null, bookmaker: f ? f.bookmaker : '', league: !!f && LEAGUE_MARKET_RE.test(key) });
+    out.push({ key, group, label, src: src || label, decimal: f ? Number(f.decimal) : null, bookmaker: f ? f.bookmaker : '', league: !!scoreable[key] });
   };
   add('result:H', 'result', fx.home + ' win'); add('result:D', 'result', 'Draw'); add('result:A', 'result', fx.away + ' win');
   add('dc:1X', 'dc', fx.home + ' or draw'); add('dc:X2', 'dc', fx.away + ' or draw'); add('dc:12', 'dc', fx.home + ' or ' + fx.away);
@@ -4419,7 +4429,7 @@ function addToOwnBet(data) {
     const upcoming = kickoffMs(fx) > Date.now();
     let opt = upcoming ? markets.find(o => o.src === sel || o.src === full || o.label === sel) : null;
     if (upcoming && !opt) {
-      const key = settler.classifyMarket(text, fx.home, fx.away, markets.map(o => o.key).filter(k => LEAGUE_MARKET_RE.test(k)));
+      const key = settler.classifyMarket(text, fx.home, fx.away, markets.filter(o => o.league).map(o => o.key));
       opt = key && markets.find(o => o.key === key);
     }
     leg = opt
@@ -4526,11 +4536,11 @@ function buildOwnBetEntry() {
   };
   if (acca) {
     Object.assign(entry, { fixture: 'Accumulator', market: 'accumulator', marketName: 'Accumulator', selection: legs.map(ownBetLegText).join(' + '),
-      legs: legs.map(l => ({ selection: ownBetLegText(l), odds: l.odds, outcome: 'pending' })) });
+      legs: legs.map(l => Object.assign({ selection: ownBetLegText(l), odds: l.odds, outcome: 'pending' }, l.kind === 'football' ? { fixtureId: l.fixtureId, market: l.key } : {})) });
   } else if (legs[0].kind === 'football') {
     const l = legs[0], grp = l.key.split(':')[0];
     const names = { result: ['wins', 'Match result'], goals: ['goals', 'Total goals'], btts: ['btts', 'Both teams to score'], corners: ['corners', 'Total corners'], cards: ['cards', 'Total cards'], shots: ['shots', 'Shots on target'], dc: ['other', 'Double chance'], dnb: ['other', 'Draw no bet'], tts: ['other', 'Team to score'] }[grp] || ['other', 'Other'];
-    Object.assign(entry, { match_id: l.fixtureId, fixture: l.match, market: names[0], marketName: names[1], selection: l.pick });
+    Object.assign(entry, { match_id: l.fixtureId, fixture: l.match, market: names[0], marketName: names[1], selection: l.pick, leagueMarket: l.key });
   } else {
     Object.assign(entry, { fixture: 'Not linked to a listed match', market: 'other', marketName: 'Other', selection: ownBetLegText(legs[0]) });
   }
@@ -4591,7 +4601,7 @@ function viewBuild() {
     '<input id="own-fixture-search" type="search" class="ctl" placeholder="Search by club or league, e.g. Arsenal" autocomplete="off" value="' + esc(ownBetUI.q || '') + '" oninput="filterOwnBetFixtures(this.value)" style="margin-bottom:8px">' +
     '<label class="sr-only" for="own-fixture">Match</label>' +
     '<select id="own-fixture" class="ctl" onchange="setOwnBetFixture(this.value)">' + ownBetFixtureOptionsHtml(ownBetUI.q) + '</select>' +
-    (fx ? '<p class="own-hint">🏆 = counts in leagues. Everything else saves to your diary only.</p>' + marketBtns + (noPrices ? '<p class="own-hint">No bookmaker price recorded for this match. Add the selection, then type the price you were offered on your slip.</p>' : oldPrices ? '<p class="own-hint">These prices are about ' + Math.round(feedState.ageHours) + ' hours old and may have moved. Change them on your slip to the price you were offered.</p>' : '<p class="own-hint">Recent UK bookmaker prices. Change them on your slip if your price differs.</p>') : '<p class="own-hint">Choose a match to see its result and goals markets. Add selections from several matches to build a double, treble or bigger.</p>');
+    (fx ? '<p class="own-hint">🏆 = counts in leagues (settled from the final score). Everything else saves to your diary only.</p>' + marketBtns + (noPrices ? '<p class="own-hint">No bookmaker price recorded for this match. Add the selection, then type the price you were offered on your slip.</p>' : oldPrices ? '<p class="own-hint">These prices are about ' + Math.round(feedState.ageHours) + ' hours old and may have moved. Change them on your slip to the price you were offered.</p>' : '<p class="own-hint">Recent UK bookmaker prices. Change them on your slip if your price differs.</p>') : '<p class="own-hint">Choose a match to see its result and goals markets. Add selections from several matches to build a double, treble or bigger.</p>');
 
   const custom = '<div class="own-custom">' +
     '<div class="field"><label for="own-custom-sport">Sport</label><select id="own-custom-sport" class="ctl">' + OWN_BET_SPORTS.map(s => '<option>' + s + '</option>').join('') + '</select></div>' +
@@ -4717,7 +4727,7 @@ function viewGuide() {
     '<li><b>Win:</b> (bookmaker price &minus; 1) &times; 10 points. Evens = 10 pts. Prices count up to 10/1, so 100 pts is the most one bet can score.</li>' +
     '<li><b>Loss:</b> &minus;2 points.</li>' +
     '<li><b>One league bet per match day</b>, logged before kick-off. Extra bets that day go to your Diary only.</li>' +
-    '<li><b>What counts:</b> a single on match result or over/under goals, or an accumulator of those picks. Leg prices are multiplied (still capped at 10/1). One losing leg loses the acca; a postponed leg drops out.</li>' +
+    '<li><b>What counts:</b> a single, or an accumulator, on any football market that settles from the final score: match result, double chance, draw no bet, both teams to score and goals over/under. Corners, cards, shots and other sports stay in your Diary. Leg prices are multiplied (still capped at 10/1). One losing leg loses the acca; a postponed or void leg drops out.</li><li><b>Which price:</b> the league uses a recorded bookmaker price where there is one. Double chance and draw no bet are worked out from the three result prices; both teams to score and other goals lines use Bet Buddy&rsquo;s model price less a typical bookmaker margin. The odds you type never count.</li>' +
     '<li><b>Fair play:</b> the league server records the bookmaker price when you log the bet and settles it from the official result, so scores cannot be edited.</li>' +
     '<li><b>Locked in:</b> once the match has kicked off a league bet stands and cannot be removed.</li></ul>';
 
@@ -6876,7 +6886,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v111';
+const APP_VERSION = 'v112';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {

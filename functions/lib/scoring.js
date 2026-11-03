@@ -2,7 +2,7 @@
 
 // League scoring rules, kept free of Firebase so they can be unit tested.
 // A league bet is one bet per match day, logged in the app before kick-off: a single, or an
-// accumulator whose every leg is a priced match result or over/under goals pick. The server decides
+// accumulator whose every leg is a priced pick on a market that settles from the final score. The server decides
 // everything that counts: which fixtures and markets they are, the bookmaker prices they score at,
 // the results, and the points. Nothing the player's device sends about odds or outcomes is trusted.
 const leagues = require('../shared/league_sync.js');
@@ -13,46 +13,56 @@ const SETTLE_AFTER_MS = 105 * 60000;   // a match is over well within 105 minute
 const VOID_AFTER_MS = 3 * DAY_MS;      // no result three days after kick-off: postponed or abandoned
 const LADDER_SIZE = 50;
 const MAX_LEGS = 10;
-const PRICED_MARKET = /^(result:[HDA]|goals:(over|under):\d+(\.\d+)?)$/;
+// Markets that settle from the final score. A leg names its market (the app sends the key);
+// older bets are matched from their text instead.
+const SCORE_MARKET = /^(result:[HDA]|dc:(1X|X2|12)|dnb:[HA]|btts:(yes|no)|goals:(over|under):\d+(\.\d+)?)$/;
 
 // ---------------------------------------------------------- bet checks
 // Checks one pick (a single, or one leg of an accumulator) against its fixture and the recorded
 // bookmaker prices. Returns the checked leg, or { reason } when it cannot count.
-function checkPick(fixtureId, selection, createdMs, fixtures, odds, settler) {
+function checkPick(fixtureId, selection, createdMs, fixtures, odds, settler, market, predictions) {
   const fixture = (fixtures || []).find(f => f.id === fixtureId);
   if (!fixture) return { reason: 'Match not found in the fixture list.' };
   const kickoff = Date.parse(fixture.kickoff_utc || '');
   if (!Number.isFinite(kickoff)) return { reason: 'Match has no kick-off time yet.' };
   if (!(createdMs < kickoff)) return { reason: 'Logged after kick-off (' + fixture.home + ' v ' + fixture.away + ').' };
-  const selections = ((((odds && odds.matches) || {})[fixture.id]) || {}).selections || {};
-  const candidates = Object.keys(selections).filter(k => PRICED_MARKET.test(k));
+  const feed = ((((odds && odds.matches) || {})[fixture.id]) || {}).selections || {};
+  const pred = predictions && predictions.predictions ? predictions.predictions[fixture.id] : null;
+  const priced = settlement.pricedMarkets(feed, pred);
+  const candidates = Object.keys(priced);
   if (!candidates.length) return { reason: 'No bookmaker price for ' + fixture.home + ' v ' + fixture.away + ', so it cannot be scored.' };
-  const market = settler.classifyMarket(String(selection || ''), fixture.home, fixture.away, candidates);
-  if (!market) return { reason: 'Only match result and over/under goals picks with a bookmaker price can count ("' + String(selection || '').slice(0, 60) + '").' };
-  const refOdds = Number(selections[market].decimal);
-  if (!(refOdds > 1)) return { reason: 'No usable bookmaker price for "' + String(selection || '').slice(0, 60) + '".' };
+  let key = null;
+  if (market !== undefined && market !== null) {
+    if (typeof market !== 'string' || !SCORE_MARKET.test(market)) return { reason: 'That market cannot be settled from the final score ("' + String(selection || '').slice(0, 60) + '").' };
+    if (!priced[market]) return { reason: 'No usable price for "' + String(selection || '').slice(0, 60) + '" on ' + fixture.home + ' v ' + fixture.away + '.' };
+    key = market;
+  } else {
+    key = settler.classifyMarket(String(selection || ''), fixture.home, fixture.away, candidates);
+    if (!key) return { reason: 'Only markets that settle from the final score, with a price, can count ("' + String(selection || '').slice(0, 60) + '").' };
+  }
+  const price = priced[key];
   return {
     fixtureId: fixture.id,
     home: fixture.home,
     away: fixture.away,
     kickoffMs: kickoff,
-    market,
-    refOdds,
-    refBookmaker: String(selections[market].bookmaker || '').slice(0, 40)
+    market: key,
+    refOdds: price.decimal,
+    refBookmaker: String(price.bookmaker || '').slice(0, 40)
   };
 }
 
 // Returns the fields the server stores on a newly logged league bet.
-function validateLeagueBet({ bet, dayKey, createdMs, fixtures, odds }) {
+function validateLeagueBet({ bet, dayKey, createdMs, fixtures, odds, predictions }) {
   const reject = reason => ({ status: 'rejected', reason });
   const settler = settlement.create(() => fixtures);
   const isAcca = Array.isArray(bet.legs);
-  const picks = isAcca ? bet.legs : [{ fixtureId: bet.fixtureId, selection: bet.selection }];
+  const picks = isAcca ? bet.legs : [{ fixtureId: bet.fixtureId, selection: bet.selection, market: bet.market }];
   if (isAcca && (picks.length < 2 || picks.length > MAX_LEGS)) return reject('Accumulators need 2 to ' + MAX_LEGS + ' legs.');
   const legs = [];
   for (const p of picks) {
     if (!p || typeof p.fixtureId !== 'string' || typeof p.selection !== 'string') return reject('Accumulator leg is missing its match.');
-    const leg = checkPick(p.fixtureId, p.selection, createdMs, fixtures, odds, settler);
+    const leg = checkPick(p.fixtureId, p.selection, createdMs, fixtures, odds, settler, p.market, predictions);
     if (leg.reason) return reject(leg.reason);
     if (legs.some(l => l.fixtureId === leg.fixtureId)) return reject('Each accumulator leg must be a different match.');
     legs.push(leg);

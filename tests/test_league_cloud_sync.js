@@ -60,7 +60,7 @@ function createCloud() {
       if (bm) {
         if (bm[1] !== uid) throw fsError('permission-denied');
         if (op.kind !== 'delete' && docs.has(op.path)) throw fsError('permission-denied');  // create only
-        if (op.kind !== 'delete' && Object.keys(op.data).some(k => !['betId', 'fixtureId', 'selection', 'odds', 'legs', 'createdAt'].includes(k))) throw fsError('permission-denied');
+        if (op.kind !== 'delete' && Object.keys(op.data).some(k => !['betId', 'fixtureId', 'selection', 'odds', 'legs', 'market', 'createdAt'].includes(k))) throw fsError('permission-denied');
       }
       if (/^(leagueStats|ladders)\//.test(op.path)) throw fsError('permission-denied');
       const lm = op.path.match(/^leagues\/([^/]+)$/);
@@ -369,7 +369,7 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   let msg = await enter(diaryBet('lb1', 'PL-ars-tot', 'Arsenal'));
   const sentBet = cloud.docs.get('users/carol/leagueBets/' + day);
   assert(sentBet, 'league bet sent to the server');
-  assert.deepStrictEqual(Object.keys(sentBet).sort(), ['betId', 'createdAt', 'fixtureId', 'odds', 'selection'], 'the app sends only what was backed');
+  assert.deepStrictEqual(Object.keys(sentBet).sort(), ['betId', 'createdAt', 'fixtureId', 'market', 'odds', 'selection'], 'the app sends only what was backed, plus the market key');
   assert.strictEqual(sentBet.selection, 'Arsenal');
   assert(/11\/8|4\/5|4\/5/.test(msg) || /bookmaker price/.test(msg), 'player is told the price it scores at: ' + msg);
   assert.strictEqual(carol.run("getStoredDiary().find(e => e.id === 'lb1').inLeague"), true);
@@ -377,7 +377,7 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   assert(/already have a league bet/.test(msg), 'one league bet per match day: ' + msg);
   assert.strictEqual(cloud.docs.get('users/carol/leagueBets/' + day).betId, 'lb1', 'first bet of the day stands');
   msg = await enter(diaryBet('lb3', 'PL-che-liv', 'Both teams to score', { marketName: 'Both teams to score', date: later.slice(0, 10) }));
-  assert(/Only match result and over\/under goals/.test(msg), 'unpriced market stays diary-only: ' + msg);
+  assert(/Only markets that settle from the final score/.test(msg), 'unpriced market stays diary-only: ' + msg);
   assert(!cloud.docs.has('users/carol/leagueBets/' + later.slice(0, 10)));
   msg = await enter(diaryBet('lb4', 'PL-mun-new', 'Man United', { date: past.slice(0, 10) }));
   assert(/already kicked off/.test(msg), 'after kick-off is refused: ' + msg);
@@ -386,7 +386,7 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   msg = await enter(acca('lb6', ['Chelsea', 'Man United']));
   assert(/Man United v Newcastle has already kicked off/.test(msg), 'acca leg after kick-off is refused: ' + msg);
   msg = await enter(acca('lb7', ['Chelsea', 'Both teams to score Burnley v Aston Villa']));
-  assert(/Only match result and over\/under goals/.test(msg), 'acca leg on an unpriced market is refused: ' + msg);
+  assert(/Only markets that settle from the final score/.test(msg), 'acca leg on an unpriced market is refused: ' + msg);
   msg = await enter(acca('lb8', ['Chelsea', 'Chelsea to win']));
   assert(/different match/.test(msg), 'two legs on one match refused: ' + msg);
   msg = await enter(acca('lb9', ['Aston Villa', 'Chelsea']));

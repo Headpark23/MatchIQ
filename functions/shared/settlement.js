@@ -188,6 +188,13 @@
         if (total === line) return 'void';
         return ((m[1] === 'over') === (total > line)) ? 'won' : 'lost';
       }
+      if (market === 'dc:1X') return h >= a ? 'won' : 'lost';
+      if (market === 'dc:X2') return a >= h ? 'won' : 'lost';
+      if (market === 'dc:12') return h !== a ? 'won' : 'lost';
+      if (market === 'dnb:H') return h === a ? 'void' : h > a ? 'won' : 'lost';
+      if (market === 'dnb:A') return h === a ? 'void' : a > h ? 'won' : 'lost';
+      if (market === 'btts:yes') return h > 0 && a > 0 ? 'won' : 'lost';
+      if (market === 'btts:no') return h > 0 && a > 0 ? 'lost' : 'won';
       return null;
     }
 
@@ -217,5 +224,35 @@
     return { fixtureFinished, liteText, teamGroup, teamMentions, settleTextAgainstScore, findDiaryFixture, findUpcomingFixture, settleMarket, classifyMarket };
   }
 
-  return { create };
+  // Every market the league can score for a match, with its reference price: the recorded bookmaker
+  // price where there is one; double chance and draw no bet worked out from the three result prices;
+  // and goals lines and both teams to score from the sealed model, at its fair price less a typical
+  // bookmaker margin. Players' own odds are never used. `feed` is odds.json's selections for the
+  // match, `pred` its published prediction (either may be missing).
+  const ESTIMATED_MARGIN = 1.07;
+  function pricedMarkets(feed, pred) {
+    const out = {};
+    Object.keys(feed || {}).forEach(k => {
+      const d = Number(feed[k] && feed[k].decimal);
+      if (/^(result:[HDA]|goals:(over|under):\d+(\.\d+)?)$/.test(k) && d > 1) out[k] = { decimal: d, bookmaker: String(feed[k].bookmaker || ''), source: 'feed' };
+    });
+    const H = out['result:H'], D = out['result:D'], A = out['result:A'];
+    const derive = (key, dec) => { if (dec > 1.01 && !out[key]) out[key] = { decimal: Math.round(dec * 1000) / 1000, bookmaker: 'worked out from the result prices', source: 'derived' }; };
+    if (H && D && A) {
+      const iH = 1 / H.decimal, iD = 1 / D.decimal, iA = 1 / A.decimal;
+      derive('dc:1X', 1 / (iH + iD)); derive('dc:X2', 1 / (iD + iA)); derive('dc:12', 1 / (iH + iA));
+      derive('dnb:H', (iH + iA) / iH); derive('dnb:A', (iH + iA) / iA);
+    }
+    const model = (key, p) => { if (p > 0 && p < 1) derive(key, 1 / (p * ESTIMATED_MARGIN)); if (out[key] && out[key].source === 'derived' && !/^(dc|dnb):/.test(key)) { out[key].bookmaker = 'Bet Buddy model'; out[key].source = 'model'; } };
+    const mk = (pred && pred.markets) || {};
+    if (mk.goals && Array.isArray(mk.goals.lines)) {
+      mk.goals.lines.forEach(l => ['over', 'under'].forEach(side => { if (l[side]) model('goals:' + side + ':' + l.line, Number(l[side].p)); }));
+    }
+    if (mk.btts && Array.isArray(mk.btts.selections)) {
+      mk.btts.selections.forEach(s => { if (s.key === 'yes' || s.key === 'no') model('btts:' + s.key, Number(s.p)); });
+    }
+    return out;
+  }
+
+  return { create, pricedMarkets };
 });
