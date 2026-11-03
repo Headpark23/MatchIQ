@@ -1416,8 +1416,9 @@ function renderWelcomeHero() {
       '<h1 class="hub-title">' + (userName ? 'Hi ' + esc(userName) + ', what first?' : 'What would you like to do?') + '</h1>' +
       '<p class="hub-sub">Honest football estimates, with a clear No bet when the evidence isn&rsquo;t there.</p>' +
     '</div>' +
+    card('a', 'hub-build', 'slip', 'Build your own bet', 'Single, double, treble, 4-fold, 5-fold and bigger. Football or any sport, then save it to your Diary or League.', 'Start', 'href="#/build"') +
     '<div class="hub-grid">' +
-      card('a', 'hub-pick', 'target', 'Pick a bet', 'Build an acca to a target return.', 'Build', 'href="#/picks"') +
+      card('a', 'hub-pick', 'target', 'Model-built acca', 'We build an acca to your target return.', 'Build', 'href="#/picks"') +
       card('button type="button"', 'hub-models portal-card-best-value', 'spark', 'Model picks of the day', 'Biggest model-vs-price gaps. Information only.', 'View', 'onclick="openBestValueModal(\'single\')"') +
       card('button type="button"', 'hub-butler', 'slip', 'Bet Butler', 'Keep your slip in view as you enter it.', 'Open', 'onclick="openButlerModal()"') +
       card('a', 'hub-leagues', 'trophy', 'Leagues', 'Compete with mates and in local ladders.', 'Join', 'href="#/leagues"') +
@@ -4324,6 +4325,206 @@ function handleDiaryFormSubmit(event) {
   if (currentRoute()[0] === 'diary') render();
 }
 
+// ------------------------------------------------------------ Build your own bet (#/build)
+// One bet at a time: a single, double, treble, 4-fold and so on. Football legs picked from the
+// fixture list are checked for league eligibility; typed-in selections (any sport) are diary only.
+const OWN_BET_KEY = 'betbuddy_own_bet_v1';
+const OWN_BET_MAX_LEGS = 10;
+const OWN_BET_SPORTS = ['Football', 'Tennis', 'Golf', 'Darts', 'Rugby', 'Cricket', 'Horse racing', 'Other'];
+let ownBet = { legs: [], stake: 10, bookmaker: '', dest: 'league' };
+let ownBetUI = { fixtureId: '', tab: 'football' };
+try {
+  const savedOwn = JSON.parse(localStorage.getItem(OWN_BET_KEY) || 'null');
+  if (savedOwn && Array.isArray(savedOwn.legs)) ownBet = Object.assign(ownBet, savedOwn);
+} catch (e) { /* start with an empty slip */ }
+
+function persistOwnBet() { try { localStorage.setItem(OWN_BET_KEY, JSON.stringify(ownBet)); } catch (e) { /* ignore */ } }
+function ownBetName(n) { return n === 1 ? 'Single' : n === 2 ? 'Double' : n === 3 ? 'Treble' : n + '-fold'; }
+function parseOwnBetOdds(text) {
+  const t = String(text || '').replace(/[≈~]/g, '').trim();
+  if (!t) return null;
+  if (/^evens?$/i.test(t)) return 2;
+  const v = (calc.parseOdds ? calc.parseOdds(t) : null) ?? calc.parseFractionalOdds(t);
+  return Number.isFinite(v) && v > 1 ? v : null;
+}
+const ownBetOddsText = odds => odds > 1 ? fmtOdds(odds).replace(/[≈~]/g, '') : '';
+
+// The markets a league can score, with the latest recorded bookmaker price (the slip says how old it is).
+function ownBetMarketsFor(fx) {
+  const all = (((DATA.odds && DATA.odds.matches) || {})[fx.id] || {}).selections || {};
+  const details = all;
+  const defs = [['result:H', fx.home + ' win'], ['result:D', 'Draw'], ['result:A', fx.away + ' win'], ['goals:over:2.5', 'Over 2.5 goals'], ['goals:under:2.5', 'Under 2.5 goals']];
+  if (all['goals:over:3.5']) defs.push(['goals:over:3.5', 'Over 3.5 goals'], ['goals:under:3.5', 'Under 3.5 goals']);
+  return defs.map(d => ({ key: d[0], label: d[1], decimal: details[d[0]] ? Number(details[d[0]].decimal) : null, bookmaker: details[d[0]] ? details[d[0]].bookmaker : '' }));
+}
+
+function setOwnBetTab(tab) { ownBetUI.tab = tab; render(); }
+function setOwnBetFixture(id) { ownBetUI.fixtureId = id; render(); }
+
+function addOwnBetFixtureLeg(key) {
+  const fx = fixtureById(ownBetUI.fixtureId);
+  if (!fx) return;
+  if (ownBet.legs.length >= OWN_BET_MAX_LEGS) { toast('A bet can have up to ' + OWN_BET_MAX_LEGS + ' selections.', 'warn'); return; }
+  const opt = ownBetMarketsFor(fx).find(o => o.key === key);
+  if (!opt) return;
+  if (ownBet.legs.some(l => l.fixtureId === fx.id && l.key === key)) { toast('That selection is already on your slip.'); return; }
+  ownBet.legs.push({ id: 'ob' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), kind: 'football', fixtureId: fx.id, key, match: fx.home + ' v ' + fx.away, pick: opt.label, odds: opt.decimal, bookmaker: opt.bookmaker || '' });
+  persistOwnBet(); render();
+}
+
+function addOwnBetCustomLeg() {
+  const text = ($('own-custom-text').value || '').trim();
+  const odds = parseOwnBetOdds($('own-custom-odds').value);
+  if (!text) { toast('Enter what you backed, e.g. "Djokovic to win".', 'error'); return; }
+  if (!odds) { toast('Enter valid odds, such as 6/4, Evens or 2.50.', 'error'); return; }
+  if (ownBet.legs.length >= OWN_BET_MAX_LEGS) { toast('A bet can have up to ' + OWN_BET_MAX_LEGS + ' selections.', 'warn'); return; }
+  ownBet.legs.push({ id: 'ob' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), kind: 'custom', sport: $('own-custom-sport').value, pick: text.slice(0, 120), odds });
+  persistOwnBet(); render();
+}
+
+function removeOwnBetLeg(id) { ownBet.legs = ownBet.legs.filter(l => l.id !== id); persistOwnBet(); render(); }
+function clearOwnBet() { ownBet.legs = []; persistOwnBet(); render(); }
+function setOwnBetLegOdds(id, text) {
+  const leg = ownBet.legs.find(l => l.id === id);
+  if (!leg) return;
+  const odds = parseOwnBetOdds(text);
+  if (!odds) { toast('Enter valid odds, such as 6/4, Evens or 2.50.', 'error'); render(); return; }
+  leg.odds = odds; persistOwnBet(); render();
+}
+function setOwnBetStake(v) { ownBet.stake = Math.max(0, Number(v) || 0); persistOwnBet(); render(); }
+function setOwnBetBookmaker(v) { ownBet.bookmaker = String(v || '').slice(0, 40); persistOwnBet(); }
+function setOwnBetDest(v) { ownBet.dest = v === 'diary' ? 'diary' : 'league'; persistOwnBet(); render(); }
+
+function ownBetLegText(l) {
+  if (l.kind === 'football') return l.match + ': ' + l.pick;
+  return l.sport && l.sport !== 'Football' && l.sport !== 'Other' ? l.sport + ': ' + l.pick : l.pick;
+}
+
+// The diary entry for the slip, in the same shape the Add a bet form saves.
+function buildOwnBetEntry() {
+  const legs = ownBet.legs, acca = legs.length > 1;
+  const odds = legs.reduce((t, l) => t * (l.odds || 0), 1), stake = Number(ownBet.stake);
+  const fixtures = legs.filter(l => l.fixtureId).map(l => fixtureById(l.fixtureId)).filter(Boolean).sort((a, b) => kickoffMs(a) - kickoffMs(b));
+  const first = fixtures[0];
+  const user = getAuthUser();
+  const handle = getUserProfile().handle;
+  const entry = {
+    id: 'bet-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7), type: acca ? 'accumulator' : 'single',
+    profile: (user && user.signedIn) ? ('@' + (user.handle || (user.name || 'User').split(' ')[0])) : (handle && handle !== 'Tester A' ? handle : 'Default'),
+    date: first ? first.kickoff_utc.slice(0, 10) : new Date().toISOString().slice(0, 10),
+    origin: 'independent', bookmaker: ownBet.bookmaker.trim() || 'Bookmaker',
+    odds, stake, potentialReturn: stake * odds, outcome: 'pending', timestamp: new Date().toISOString(), inLeague: false, notes: ''
+  };
+  if (acca) {
+    Object.assign(entry, { fixture: 'Accumulator', market: 'accumulator', marketName: 'Accumulator', selection: legs.map(ownBetLegText).join(' + '),
+      legs: legs.map(l => ({ selection: ownBetLegText(l), odds: l.odds, outcome: 'pending' })) });
+  } else if (legs[0].kind === 'football') {
+    const l = legs[0], goals = l.key.startsWith('goals:');
+    Object.assign(entry, { match_id: l.fixtureId, fixture: l.match, market: goals ? 'goals' : 'wins', marketName: goals ? 'Total goals' : 'Match result', selection: l.pick });
+  } else {
+    Object.assign(entry, { fixture: 'Not linked to a listed match', market: 'other', marketName: 'Other', selection: ownBetLegText(legs[0]) });
+  }
+  return entry;
+}
+
+// Whether the slip can count in a league, and if not, why not (in plain words).
+function ownBetLeagueState(entry) {
+  if (ownBet.legs.some(l => l.kind !== 'football')) return { ok: false, reason: 'League bets are football match result or over/under goals picked from the match list. Typed-in selections stay in your diary.' };
+  const chk = leagueBetCheck(entry);
+  if (!chk.ok) return chk;
+  const existing = getLeagueBetForDay(chk.day);
+  if (existing) return { ok: false, reason: 'You already have a league bet for ' + chk.day + ' (' + (existing.selection || 'an earlier bet') + '). This one goes in your diary only.' };
+  return chk;
+}
+
+function saveOwnBetToDiary() {
+  const legs = ownBet.legs, stake = Number(ownBet.stake);
+  if (!legs.length) { toast('Add at least one selection first.', 'error'); return; }
+  if (legs.some(l => !(l.odds > 1))) { toast('Every selection needs odds. Type the price you were offered.', 'error'); return; }
+  if (!Number.isFinite(stake) || stake <= 0) { toast('Enter a stake greater than £0.', 'error'); return; }
+  const entry = buildOwnBetEntry();
+  const state = ownBet.dest === 'league' ? ownBetLeagueState(entry) : null;
+  try { const diary = getStoredDiary(); diary.unshift(entry); saveStoredDiary(diary); }
+  catch (error) { console.error(error); toast('Could not save to this browser. Check storage space or privacy settings.', 'error'); return; }
+  ownBet.legs = []; persistOwnBet();
+  celebrateSave();
+  location.hash = '#/diary';
+  if (state && state.ok) enterLeagueBet(entry.id);
+  else toast(state ? 'Saved to your Bet Diary only. ' + state.reason : 'Saved to your Bet Diary.');
+}
+
+function viewBuild() {
+  const legs = ownBet.legs, n = legs.length;
+  const priced = n > 0 && legs.every(l => l.odds > 1);
+  const odds = priced ? legs.reduce((t, l) => t * l.odds, 1) : 0;
+  const stake = Number(ownBet.stake) || 0;
+  const m = MatchIQBuilder.money;
+  const now = Date.now();
+
+  const fixtures = diaryFixtureOptions().filter(f => kickoffMs(f) > now);
+  const fx = fixtureById(ownBetUI.fixtureId);
+  const marketBtns = fx ? ownBetMarketsFor(fx).map(o => {
+    const on = legs.some(l => l.fixtureId === fx.id && l.key === o.key);
+    return '<button type="button" class="own-market' + (on ? ' on' : '') + '" onclick="addOwnBetFixtureLeg(\'' + esc(o.key) + '\')"><span>' + esc(o.label) + '</span><b class="mono">' + (o.decimal ? esc(ownBetOddsText(o.decimal)) : 'add price') + '</b></button>';
+  }).join('') : '';
+  const feedState = fx ? feedFor(fx.id) : null;
+  const noPrices = fx && !Object.keys(feedState.details || {}).length;
+  const oldPrices = fx && !noPrices && feedState.state !== 'fresh';
+
+  const football = '<label class="sr-only" for="own-fixture">Match</label>' +
+    '<select id="own-fixture" class="ctl" onchange="setOwnBetFixture(this.value)"><option value="">Choose a match…</option>' +
+    fixtures.map(f => '<option value="' + esc(f.id) + '"' + (f.id === ownBetUI.fixtureId ? ' selected' : '') + '>' + esc(f.home + ' v ' + f.away + ' · ' + fmtDay(kickoffMs(f)) + ' ' + fmtTime(kickoffMs(f))) + '</option>').join('') + '</select>' +
+    (fx ? '<div class="own-markets">' + marketBtns + '</div>' + (noPrices ? '<p class="own-hint">No bookmaker price recorded for this match. Add the selection, then type the price you were offered on your slip.</p>' : oldPrices ? '<p class="own-hint">These prices are about ' + Math.round(feedState.ageHours) + ' hours old and may have moved. Change them on your slip to the price you were offered.</p>' : '<p class="own-hint">Recent UK bookmaker prices. Change them on your slip if your price differs.</p>') : '<p class="own-hint">Choose a match to see its result and goals markets. Add selections from several matches to build a double, treble or bigger.</p>');
+
+  const custom = '<div class="own-custom">' +
+    '<div class="field"><label for="own-custom-sport">Sport</label><select id="own-custom-sport" class="ctl">' + OWN_BET_SPORTS.map(s => '<option>' + s + '</option>').join('') + '</select></div>' +
+    '<div class="field"><label for="own-custom-text">What did you back?</label><input id="own-custom-text" class="ctl" maxlength="120" placeholder="e.g. Djokovic to win, Both teams to score" autocomplete="off"></div>' +
+    '<div class="field"><label for="own-custom-odds">Odds</label><input id="own-custom-odds" class="ctl mono" inputmode="text" placeholder="e.g. 6/4 or 2.50" autocomplete="off"></div>' +
+    '<button type="button" class="btn primary" onclick="addOwnBetCustomLeg()">Add to slip</button>' +
+    '<p class="own-hint">Any sport or market. These save to your Bet Diary and you settle them yourself. Only football matches picked from the list can count in leagues.</p></div>';
+
+  const addCard = '<section class="card own-add"><h2 class="section-title">1. Add selections</h2>' +
+    '<div class="own-tabs" role="tablist"><button type="button" role="tab" aria-selected="' + (ownBetUI.tab === 'football') + '" class="' + (ownBetUI.tab === 'football' ? 'on' : '') + '" onclick="setOwnBetTab(\'football\')">⚽ Football match</button>' +
+    '<button type="button" role="tab" aria-selected="' + (ownBetUI.tab === 'custom') + '" class="' + (ownBetUI.tab === 'custom' ? 'on' : '') + '" onclick="setOwnBetTab(\'custom\')">✍️ Any sport / type it in</button></div>' +
+    (ownBetUI.tab === 'football' ? football : custom) + '</section>';
+
+  let slip;
+  if (!n) {
+    slip = '<section class="card own-slip"><h2 class="section-title">2. Your slip</h2><div class="empty">Nothing on your slip yet. Add one selection for a single, two for a double, three for a treble and so on, up to ' + OWN_BET_MAX_LEGS + '.</div></section>';
+  } else {
+    const entry = priced && stake > 0 ? buildOwnBetEntry() : null;
+    const state = entry ? ownBetLeagueState(entry) : null;
+    const signedIn = (getAuthUser() || {}).signedIn;
+    const rows = legs.map(l => '<li class="own-leg"><div class="own-leg-main"><b>' + esc(l.pick) + '</b><small>' + esc(l.kind === 'football' ? l.match : (l.sport || 'Other') + ' · typed in') + '</small></div>' +
+      '<label class="sr-only" for="odds-' + esc(l.id) + '">Odds for ' + esc(l.pick) + '</label>' +
+      '<input id="odds-' + esc(l.id) + '" class="ctl mono own-leg-odds" inputmode="text" value="' + esc(ownBetOddsText(l.odds)) + '" placeholder="odds" onchange="setOwnBetLegOdds(\'' + esc(l.id) + '\', this.value)">' +
+      '<button type="button" class="icon-btn" aria-label="Remove ' + esc(l.pick) + '" onclick="removeOwnBetLeg(\'' + esc(l.id) + '\')">&times;</button></li>').join('');
+    const leagueNote = ownBet.dest !== 'league' ? '' :
+      !state ? '<p class="own-hint">Enter your odds and stake to check league eligibility.</p>' :
+      state.ok ? '<p class="own-ok">✓ Eligible for leagues' + (signedIn ? '.' : '. Sign in with Google to enter it.') + '</p>' :
+      '<p class="own-warn">Diary only: ' + esc(state.reason) + '</p>';
+    slip = '<section class="card own-slip"><div class="own-slip-head"><h2 class="section-title">2. Your slip</h2><span class="own-kind">' + esc(ownBetName(n)) + '</span></div>' +
+      '<ul class="own-legs">' + rows + '</ul>' +
+      '<div class="own-sum"><span>Combined odds <b class="mono">' + (priced ? esc(fmtOdds(odds)) : '—') + '</b></span>' +
+      '<span>Returns <b class="mono">' + (priced && stake > 0 ? m(stake * odds) : '—') + '</b></span></div>' +
+      '<div class="own-fields"><div class="field"><label for="own-stake">Stake (£)</label><input id="own-stake" type="number" class="ctl mono" step="0.50" min="0.50" max="10000" value="' + esc(stake ? stake.toFixed(2) : '') + '" onchange="setOwnBetStake(this.value)"></div>' +
+      '<div class="field"><label for="own-bookie">Bookmaker (optional)</label><input id="own-bookie" class="ctl" maxlength="40" value="' + esc(ownBet.bookmaker) + '" placeholder="e.g. Bet365" onchange="setOwnBetBookmaker(this.value)"></div></div>' +
+      '<div class="dest-toggle-group" role="radiogroup" aria-label="Where to save">' +
+        '<label class="dest-opt"><input type="radio" name="own-dest" value="league"' + (ownBet.dest === 'league' ? ' checked' : '') + ' onchange="setOwnBetDest(\'league\')"><div class="dest-opt-content"><span class="dest-opt-title">🏆 Bet Diary &amp; League</span><span class="dest-opt-sub">Your 1 qualifying bet for the day, football only.</span></div></label>' +
+        '<label class="dest-opt diary-only"><input type="radio" name="own-dest" value="diary"' + (ownBet.dest === 'diary' ? ' checked' : '') + ' onchange="setOwnBetDest(\'diary\')"><div class="dest-opt-content"><span class="dest-opt-title">📓 Bet Diary only</span><span class="dest-opt-sub">Private. Does not affect league scores.</span></div></label></div>' +
+      leagueNote +
+      '<div class="btn-row"><button type="button" class="btn primary" onclick="saveOwnBetToDiary()">' + (ownBet.dest === 'league' ? 'Save to Diary &amp; League' : 'Save to Bet Diary') + '</button>' +
+      '<button type="button" class="btn small" onclick="clearOwnBet()">Clear slip</button></div>' +
+      '<p class="own-hint">Bet Buddy never places bets. Place yours with your bookmaker, then log it here. 18+. Play safe.</p></section>';
+  }
+
+  return '<section class="view own-build">' +
+    '<div class="picks-top-bar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><a href="#/" class="btn small" style="text-decoration:none">← Welcome Hub</a></div>' +
+    '<h1 class="page-title">Build your own bet</h1>' +
+    '<p class="page-sub">Singles, doubles, trebles, 4-folds, 5-folds and bigger. Add your selections, then save the bet to your Diary and, for football, your League.</p>' +
+    addCard + slip + '</section>';
+}
+
 // ------------------------------------------------------------ How To guide
 function viewGuide() {
   const step = (n, title, body) => '<li class="guide-step"><span class="guide-step-num">' + n + '</span><div><b>' + title + '</b><span>' + body + '</span></div></li>';
@@ -5422,9 +5623,9 @@ function render() {
   const navKey = view === 'match' ? 'fixtures' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
-  const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
+  const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild() : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'Data & methods' };
+  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'Data & methods' };
   document.title = (titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {
@@ -6552,7 +6753,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v106';
+const APP_VERSION = 'v107';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {

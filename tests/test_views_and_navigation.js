@@ -95,7 +95,7 @@ for (const v of views) {
 }
 
 // Test render() routing
-const routes = ['#/picks', '#/results', '#/fixtures', '#/leagues', '#/diary', '#/more', '#/'];
+const routes = ['#/picks', '#/build', '#/results', '#/fixtures', '#/leagues', '#/diary', '#/more', '#/'];
 for (const r of routes) {
   context.location.hash = r;
   vm.runInContext('render()', context);

@@ -4075,6 +4075,10 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .hub-card-title { font: 700 15px/1.2 var(--display); color: var(--ink); }
 .hub-card-desc { font-size: 12.5px; line-height: 1.4; color: var(--muted); }
 .hub-card-cta { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 700; color: var(--accent); }
+.hub-card.hub-build { --accent: #f472b6; flex-direction: row; align-items: center; min-height: 0; padding: 16px; gap: 14px; }
+.hub-card.hub-build .hub-card-title { font-size: 17px; }
+.hub-build .hub-card-cta { align-self: center; }
+
 .hub-more { display: flex; gap: 8px; }
 .hub-more a {
   flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; border-radius: 12px;
@@ -4139,3 +4143,30 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   .comp-bar { flex-wrap: wrap; overflow-x: visible; gap: 6px; -webkit-mask-image: none; mask-image: none; }
   .comp-bar button { min-height: 36px; padding: 5px 11px; font-size: 12.5px; }
 }
+
+/* ---- Build your own bet (#/build) ---- */
+.own-build { display: flex; flex-direction: column; gap: 14px; }
+.own-build .card { padding: 14px; border-radius: 16px; }
+.own-tabs { display: flex; gap: 6px; margin: 10px 0; }
+.own-tabs button { flex: 1; min-height: 44px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--soft); font: 600 13px var(--display); cursor: pointer; }
+.own-tabs button.on { border-color: #f472b6; color: var(--ink); background: color-mix(in srgb, #f472b6 14%, var(--surface-solid)); }
+.own-markets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.own-market { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 48px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); font: 600 13px var(--display); text-align: left; cursor: pointer; }
+.own-market b { color: var(--cyan); font-size: 13px; white-space: nowrap; }
+.own-market.on { border-color: var(--pick); background: color-mix(in srgb, var(--pick) 14%, var(--surface-solid)); }
+.own-hint { margin: 8px 0 0; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+.own-ok { margin: 8px 0 0; font-size: 13px; color: var(--pick); font-weight: 600; }
+.own-warn { margin: 8px 0 0; font-size: 13px; color: #fde68a; }
+.own-custom { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.own-slip-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.own-kind { padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, #f472b6 18%, transparent); border: 1px solid #f472b6; font: 700 13px var(--display); }
+.own-legs { list-style: none; margin: 10px 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.own-leg { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.own-leg-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.own-leg-main b { font-size: 13.5px; word-break: break-word; }
+.own-leg-main small { font-size: 11.5px; color: var(--muted); }
+.own-leg-odds { width: 84px; flex: none; text-align: center; }
+.own-sum { display: flex; justify-content: space-between; gap: 12px; margin: 8px 0 12px; font-size: 13px; color: var(--muted); }
+.own-sum b { color: var(--ink); font-size: 15px; }
+.own-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+@media (max-width: 420px) { .own-markets, .own-fields { grid-template-columns: 1fr; } }
