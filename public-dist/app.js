@@ -613,17 +613,10 @@ function fixtureRow(f) {
   } else {
     lean = '<span class="dim">Prediction published within 21 days of kick-off</span>';
   }
-  // Quick add to the own-bet slip: home win, draw, away win, with the recorded price when there is one.
-  let quick = '';
-  if (f.status === 'SCHEDULED' && ms > Date.now()) {
-    const label = { 'result:H': f.home, 'result:D': 'Draw', 'result:A': f.away };
-    quick = '<div class="fx-quick"><span class="fx-quick-lbl">+ My bet</span>' + ownBetMarketsFor(f).filter(o => label[o.key]).map(o =>
-      '<button type="button" class="fx-quick-btn own-add-btn" data-own-bet=\'' + esc(JSON.stringify({ id: f.id, market: 'wins', selection: o.label })) + '\' aria-label="Add ' + esc(o.label) + ' to my bet slip"><span>' + esc(label[o.key]) + '</span>' + (o.decimal ? '<b class="mono">' + esc(ownBetOddsText(o.decimal)) + '</b>' : '') + '</button>').join('') + '</div>';
-  }
-  return '<div class="fx-wrap' + (quick ? ' has-quick' : '') + '"><a class="fx" href="#/match/' + encodeURIComponent(f.id) + '">' +
+  return '<a class="fx" href="#/match/' + encodeURIComponent(f.id) + '">' +
     '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small>' + (compFilter === 'ALL' ? '<small class="lg-tag">' + esc(f.competition || 'PL') + '</small>' : '') + '</span>' +
     '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span></span>' +
-    '<span class="fx-lean">' + lean + '</span><span class="fx-chev" aria-hidden="true">›</span></a>' + quick + '</div>';
+    '<span class="fx-lean">' + lean + '</span><span class="fx-chev" aria-hidden="true">›</span></a>';
 }
 
 function groupedRows(fixtures) {
@@ -4363,13 +4356,51 @@ function parseOwnBetOdds(text) {
 }
 const ownBetOddsText = odds => odds > 1 ? fmtOdds(odds).replace(/[≈~]/g, '') : '';
 
-// The markets a league can score, with the latest recorded bookmaker price (the slip says how old it is).
+// Every market offered for a match: the football result and goals lines with the latest recorded
+// bookmaker price, plus the model's other markets (both teams to score, corners, cards, shots) and
+// double chance, where the player types in the price they were offered. `src` is the app's own label,
+// used to match selections added from other pages.
+const OWN_BET_GROUPS = [['result', 'Match result'], ['dc', 'Double chance'], ['dnb', 'Draw no bet'], ['goals', 'Total goals'], ['btts', 'Both teams to score'], ['tts', 'Team to score'], ['corners', 'Corners'], ['cards', 'Cards'], ['shots', 'Shots on target']];
+const MARKET_NAMES_OWN = { goals: 'Total goals', corners: 'Total corners', cards: 'Total cards', shots: 'Shots on target' };
+const OWN_BET_NOUN = { goals: 'goals', corners: 'corners', cards: 'cards', shots: 'shots on target' };
 function ownBetMarketsFor(fx) {
-  const all = (((DATA.odds && DATA.odds.matches) || {})[fx.id] || {}).selections || {};
-  const details = all;
-  const defs = [['result:H', fx.home + ' win'], ['result:D', 'Draw'], ['result:A', fx.away + ' win'], ['goals:over:2.5', 'Over 2.5 goals'], ['goals:under:2.5', 'Under 2.5 goals']];
-  if (all['goals:over:3.5']) defs.push(['goals:over:3.5', 'Over 3.5 goals'], ['goals:under:3.5', 'Under 3.5 goals']);
-  return defs.map(d => ({ key: d[0], label: d[1], decimal: details[d[0]] ? Number(details[d[0]].decimal) : null, bookmaker: details[d[0]] ? details[d[0]].bookmaker : '' }));
+  const feed = (((DATA.odds && DATA.odds.matches) || {})[fx.id] || {}).selections || {};
+  const pred = DATA.predictions && DATA.predictions.predictions && DATA.predictions.predictions[fx.id];
+  const out = [];
+  const add = (key, group, label, src) => {
+    const f = feed[key];
+    out.push({ key, group, label, src: src || label, decimal: f ? Number(f.decimal) : null, bookmaker: f ? f.bookmaker : '', league: !!f && LEAGUE_MARKET_RE.test(key) });
+  };
+  add('result:H', 'result', fx.home + ' win'); add('result:D', 'result', 'Draw'); add('result:A', 'result', fx.away + ' win');
+  add('dc:1X', 'dc', fx.home + ' or draw'); add('dc:X2', 'dc', fx.away + ' or draw'); add('dc:12', 'dc', fx.home + ' or ' + fx.away);
+  const sels = pred ? allSelections(pred).filter(x => x.market !== 'result') : [];
+  if (sels.length) {
+    sels.forEach(x => {
+      if (x.market === 'btts') add(x.id, 'btts', 'Both teams to score: ' + (x.key === 'yes' ? 'Yes' : 'No'), x.label);
+      else add(x.id, x.market, (x.key === 'over' ? 'Over ' : 'Under ') + x.line + ' ' + OWN_BET_NOUN[x.market], x.label);
+    });
+  } else {
+    add('goals:over:2.5', 'goals', 'Over 2.5 goals', 'Total goals: Over 2.5'); add('goals:under:2.5', 'goals', 'Under 2.5 goals', 'Total goals: Under 2.5');
+    add('btts:yes', 'btts', 'Both teams to score: Yes', 'Both teams to score: Yes'); add('btts:no', 'btts', 'Both teams to score: No', 'Both teams to score: No');
+  }
+  // Standard lines the model does not publish, so a bet can still be built (the player types the price).
+  const lines = { goals: [0.5, 1.5, 2.5, 3.5, 4.5], corners: [8.5, 9.5, 10.5, 11.5], cards: [2.5, 3.5, 4.5, 5.5], shots: [7.5, 8.5, 9.5] };
+  Object.keys(lines).forEach(g => lines[g].forEach(line => ['over', 'under'].forEach(side => {
+    const key = g + ':' + side + ':' + line;
+    if (out.some(o => o.key === key)) return;
+    add(key, g, (side === 'over' ? 'Over ' : 'Under ') + line + ' ' + OWN_BET_NOUN[g], MARKET_NAMES_OWN[g] + ': ' + (side === 'over' ? 'Over ' : 'Under ') + line);
+  })));
+  add('dnb:H', 'dnb', fx.home + ' (draw no bet)'); add('dnb:A', 'dnb', fx.away + ' (draw no bet)');
+  add('tts:H', 'tts', fx.home + ' to score'); add('tts:A', 'tts', fx.away + ' to score');
+  // A priced goals line the model does not publish (e.g. 3.5) still belongs on the list.
+  Object.keys(feed).filter(k => /^goals:(over|under):/.test(k) && !out.some(o => o.key === k)).forEach(k => {
+    const [, side, line] = k.split(':');
+    add(k, 'goals', (side === 'over' ? 'Over ' : 'Under ') + line + ' goals', 'Total goals: ' + (side === 'over' ? 'Over ' : 'Under ') + line);
+  });
+  const lineOf = o => { const p = o.key.split(':'); return p.length === 3 ? Number(p[2]) : -1; };
+  const rank = g => OWN_BET_GROUPS.findIndex(x => x[0] === g);
+  return out.map((o, i) => [o, i]).sort((a, b) => rank(a[0].group) - rank(b[0].group) || lineOf(a[0]) - lineOf(b[0]) ||
+    (a[0].key.includes(':over:') ? -1 : b[0].key.includes(':over:') ? 1 : 0) || a[1] - b[1]).map(x => x[0]);
 }
 
 function setOwnBetTab(tab) { ownBetUI.tab = tab; render(); }
@@ -4384,10 +4415,15 @@ function addToOwnBet(data) {
   if (fx) {
     const markets = ownBetMarketsFor(fx);
     const text = (data.marketName && data.marketName !== 'Match result' ? data.marketName + ' ' : '') + String(data.selection || '');
-    const key = kickoffMs(fx) > Date.now() ? settler.classifyMarket(text, fx.home, fx.away, markets.map(o => o.key)) : null;
-    const opt = key && markets.find(o => o.key === key);
+    const sel = String(data.selection || ''), full = data.marketName ? data.marketName + ': ' + sel : sel;
+    const upcoming = kickoffMs(fx) > Date.now();
+    let opt = upcoming ? markets.find(o => o.src === sel || o.src === full || o.label === sel) : null;
+    if (upcoming && !opt) {
+      const key = settler.classifyMarket(text, fx.home, fx.away, markets.map(o => o.key).filter(k => LEAGUE_MARKET_RE.test(k)));
+      opt = key && markets.find(o => o.key === key);
+    }
     leg = opt
-      ? { id, kind: 'football', fixtureId: fx.id, key, match: fx.home + ' v ' + fx.away, pick: opt.label, odds: opt.decimal, bookmaker: opt.bookmaker || '' }
+      ? { id, kind: 'football', fixtureId: fx.id, key: opt.key, match: fx.home + ' v ' + fx.away, pick: opt.label, odds: opt.decimal, bookmaker: opt.bookmaker || '' }
       : { id, kind: 'custom', sport: 'Football', pick: (fx.home + ' v ' + fx.away + ': ' + String(data.selection || '')).slice(0, 120), odds: null };
   } else if (data.sport) {
     const sport = String(data.sport).charAt(0).toUpperCase() + String(data.sport).slice(1);
@@ -4492,8 +4528,9 @@ function buildOwnBetEntry() {
     Object.assign(entry, { fixture: 'Accumulator', market: 'accumulator', marketName: 'Accumulator', selection: legs.map(ownBetLegText).join(' + '),
       legs: legs.map(l => ({ selection: ownBetLegText(l), odds: l.odds, outcome: 'pending' })) });
   } else if (legs[0].kind === 'football') {
-    const l = legs[0], goals = l.key.startsWith('goals:');
-    Object.assign(entry, { match_id: l.fixtureId, fixture: l.match, market: goals ? 'goals' : 'wins', marketName: goals ? 'Total goals' : 'Match result', selection: l.pick });
+    const l = legs[0], grp = l.key.split(':')[0];
+    const names = { result: ['wins', 'Match result'], goals: ['goals', 'Total goals'], btts: ['btts', 'Both teams to score'], corners: ['corners', 'Total corners'], cards: ['cards', 'Total cards'], shots: ['shots', 'Shots on target'], dc: ['other', 'Double chance'], dnb: ['other', 'Draw no bet'], tts: ['other', 'Team to score'] }[grp] || ['other', 'Other'];
+    Object.assign(entry, { match_id: l.fixtureId, fixture: l.match, market: names[0], marketName: names[1], selection: l.pick });
   } else {
     Object.assign(entry, { fixture: 'Not linked to a listed match', market: 'other', marketName: 'Other', selection: ownBetLegText(legs[0]) });
   }
@@ -4535,10 +4572,17 @@ function viewBuild() {
   const now = Date.now();
 
   const fx = fixtureById(ownBetUI.fixtureId);
-  const marketBtns = fx ? ownBetMarketsFor(fx).map(o => {
-    const on = legs.some(l => l.fixtureId === fx.id && l.key === o.key);
-    return '<button type="button" class="own-market' + (on ? ' on' : '') + '" onclick="addOwnBetFixtureLeg(\'' + esc(o.key) + '\')"><span>' + esc(o.label) + '</span><b class="mono">' + (o.decimal ? esc(ownBetOddsText(o.decimal)) : 'add price') + '</b></button>';
-  }).join('') : '';
+  const marketBtns = fx ? (() => {
+    const all = ownBetMarketsFor(fx);
+    return OWN_BET_GROUPS.map(g => {
+      const rows = all.filter(o => o.group === g[0]);
+      if (!rows.length) return '';
+      return '<h3 class="own-group">' + esc(g[1]) + '</h3><div class="own-markets">' + rows.map(o => {
+        const on = legs.some(l => l.fixtureId === fx.id && l.key === o.key);
+        return '<button type="button" class="own-market' + (on ? ' on' : '') + '" onclick="addOwnBetFixtureLeg(\'' + esc(o.key) + '\')"><span>' + esc(o.label) + '</span><b class="mono">' + (o.decimal ? esc(ownBetOddsText(o.decimal)) : 'add price') + '</b></button>';
+      }).join('') + '</div>';
+    }).join('');
+  })() : '';
   const feedState = fx ? feedFor(fx.id) : null;
   const noPrices = fx && !Object.keys(feedState.details || {}).length;
   const oldPrices = fx && !noPrices && feedState.state !== 'fresh';
@@ -4547,7 +4591,7 @@ function viewBuild() {
     '<input id="own-fixture-search" type="search" class="ctl" placeholder="Search by club or league, e.g. Arsenal" autocomplete="off" value="' + esc(ownBetUI.q || '') + '" oninput="filterOwnBetFixtures(this.value)" style="margin-bottom:8px">' +
     '<label class="sr-only" for="own-fixture">Match</label>' +
     '<select id="own-fixture" class="ctl" onchange="setOwnBetFixture(this.value)">' + ownBetFixtureOptionsHtml(ownBetUI.q) + '</select>' +
-    (fx ? '<div class="own-markets">' + marketBtns + '</div>' + (noPrices ? '<p class="own-hint">No bookmaker price recorded for this match. Add the selection, then type the price you were offered on your slip.</p>' : oldPrices ? '<p class="own-hint">These prices are about ' + Math.round(feedState.ageHours) + ' hours old and may have moved. Change them on your slip to the price you were offered.</p>' : '<p class="own-hint">Recent UK bookmaker prices. Change them on your slip if your price differs.</p>') : '<p class="own-hint">Choose a match to see its result and goals markets. Add selections from several matches to build a double, treble or bigger.</p>');
+    (fx ? marketBtns + (noPrices ? '<p class="own-hint">No bookmaker price recorded for this match. Add the selection, then type the price you were offered on your slip.</p>' : oldPrices ? '<p class="own-hint">These prices are about ' + Math.round(feedState.ageHours) + ' hours old and may have moved. Change them on your slip to the price you were offered.</p>' : '<p class="own-hint">Recent UK bookmaker prices. Change them on your slip if your price differs.</p>') : '<p class="own-hint">Choose a match to see its result and goals markets. Add selections from several matches to build a double, treble or bigger.</p>');
 
   const custom = '<div class="own-custom">' +
     '<div class="field"><label for="own-custom-sport">Sport</label><select id="own-custom-sport" class="ctl">' + OWN_BET_SPORTS.map(s => '<option>' + s + '</option>').join('') + '</select></div>' +
@@ -6832,7 +6876,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v110';
+const APP_VERSION = 'v111';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {

@@ -4175,14 +4175,5 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .own-sum b { color: var(--ink); font-size: 15px; }
 .own-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 @media (max-width: 420px) { .own-markets, .own-fields { grid-template-columns: 1fr; } }
-
-/* Fixtures list: quick add to the own-bet slip under each upcoming match */
-.fx-wrap { margin-bottom: 8px; }
-.fx-wrap .fx { margin-bottom: 0; }
-.fx-wrap.has-quick .fx { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom-color: transparent; }
-.fx-quick { display: flex; align-items: center; gap: 6px; padding: 6px 10px 8px; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 14px 14px; background: rgba(14, 23, 40, 0.7); }
-.fx-quick-lbl { flex: none; font-size: 11px; font-weight: 700; color: #f9a8d4; }
-.fx-quick-btn { flex: 1; min-width: 0; min-height: 36px; display: flex; justify-content: space-between; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 10px; font: 600 12px var(--body); cursor: pointer; }
-.fx-quick-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.fx-quick-btn b { flex: none; font-size: 12px; }
-@media (max-width: 420px) { .fx-quick-lbl { display: none; } }
+.own-group { margin: 14px 0 6px; font: 700 12px var(--display); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.own-group:first-of-type { margin-top: 10px; }
