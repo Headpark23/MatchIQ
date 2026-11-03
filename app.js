@@ -322,6 +322,7 @@ function mostLikelyBlock(pred, big) {
     '<p class="muted" style="font-size:13.5px">About ' + Math.round(m.p * 10) + ' times in 10. Chosen on credible chance (' + pct(m.lower_bound) + ' at the cautious end) from ' + esc(m.basis) + '. Likely does not mean good value.</p>' +
     '<div class="btn-row" style="margin-top:8px;">' +
       '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button>' +
+      ownBetAddBtn(diary) +
       '<button type="button" class="btn small" data-add-football-acca=\'' + esc(JSON.stringify(diary)) + '\' style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
     '</div></div>';
 }
@@ -388,6 +389,7 @@ function topSixCard(s, pred, rank, isMostLikely, prices) {
     (prices[s.id] && v.verdict !== 'awaiting_odds' ? '<p class="muted" style="font-size:12.5px">' + esc(v.why) + '</p>' : '') +
     '<div class="btn-row" style="margin-top:8px;">' +
       '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button>' +
+      ownBetAddBtn(diary) +
       '<button type="button" class="btn small" data-add-football-acca=\'' + esc(JSON.stringify(diary)) + '\' style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
     '</div></article>';
 }
@@ -642,6 +644,7 @@ function marketCard(key, m, ctx) {
     const betPayload = { id: ctx.id, fixture: fxObj, market: meta.diary, marketName: meta.name, selection: selText, p: row.p, fair: row.fair, odds: decOdds };
     const jsonStr = esc(JSON.stringify(betPayload));
     return '<button type="button" class="btn small" data-diary=\'' + jsonStr + '\' aria-label="Add ' + esc(row.label) + ' to Bet Diary">+ Diary</button>' +
+      ownBetAddBtn(betPayload) +
       '<button type="button" class="btn small acca-btn" data-add-football-acca=\'' + jsonStr + '\' title="Add to custom Acca Builder" style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
       '<button type="button" class="btn-place-bet-inline butler-btn" onclick="openSlipCardSingle(this.dataset.betData)" data-bet-data=\'' + jsonStr + '\' title="Open slip note">📋 Slip Note</button>';
   };
@@ -1814,6 +1817,7 @@ function renderMultiSportSection(sportKey) {
           '<div class="sport-sel-actions">' +
             '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Open on ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
             '<button type="button" class="btn small" data-diary=\'' + betData + '\' title="Add to Bet Diary">+ Diary</button>' +
+            '<button type="button" class="btn small own-add-btn" data-own-bet=\'' + betData + '\' title="Add to my own bet slip">+ My bet</button>' +
             '<button type="button" class="btn-add-cross-acca" data-add-cross-acca=\'' + betData + '\' title="Add to Accumulator">+ Acca</button>' +
           '</div>' +
         '</div>';
@@ -4332,7 +4336,7 @@ const OWN_BET_KEY = 'betbuddy_own_bet_v1';
 const OWN_BET_MAX_LEGS = 10;
 const OWN_BET_SPORTS = ['Football', 'Tennis', 'Golf', 'Darts', 'Rugby', 'Cricket', 'Horse racing', 'Other'];
 let ownBet = { legs: [], stake: 10, bookmaker: '', dest: 'league' };
-let ownBetUI = { fixtureId: '', tab: 'football' };
+let ownBetUI = { fixtureId: '', tab: 'football', q: '' };
 try {
   const savedOwn = JSON.parse(localStorage.getItem(OWN_BET_KEY) || 'null');
   if (savedOwn && Array.isArray(savedOwn.legs)) ownBet = Object.assign(ownBet, savedOwn);
@@ -4360,6 +4364,65 @@ function ownBetMarketsFor(fx) {
 
 function setOwnBetTab(tab) { ownBetUI.tab = tab; render(); }
 function setOwnBetFixture(id) { ownBetUI.fixtureId = id; render(); }
+
+// Adds a selection from anywhere in the app (match page, picks, other sports) to the own-bet slip.
+function addToOwnBet(data) {
+  if (ownBet.legs.length >= OWN_BET_MAX_LEGS) { toast('A bet can have up to ' + OWN_BET_MAX_LEGS + ' selections.', 'warn'); return; }
+  const id = 'ob' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  const fx = data.id ? fixtureById(data.id) : null;
+  let leg = null;
+  if (fx) {
+    const markets = ownBetMarketsFor(fx);
+    const text = (data.marketName && data.marketName !== 'Match result' ? data.marketName + ' ' : '') + String(data.selection || '');
+    const key = kickoffMs(fx) > Date.now() ? settler.classifyMarket(text, fx.home, fx.away, markets.map(o => o.key)) : null;
+    const opt = key && markets.find(o => o.key === key);
+    leg = opt
+      ? { id, kind: 'football', fixtureId: fx.id, key, match: fx.home + ' v ' + fx.away, pick: opt.label, odds: opt.decimal, bookmaker: opt.bookmaker || '' }
+      : { id, kind: 'custom', sport: 'Football', pick: (fx.home + ' v ' + fx.away + ': ' + String(data.selection || '')).slice(0, 120), odds: null };
+  } else if (data.sport) {
+    const sport = String(data.sport).charAt(0).toUpperCase() + String(data.sport).slice(1);
+    leg = { id, kind: 'custom', sport, pick: String(data.selection || '').slice(0, 120), odds: Number(data.odds) > 1 ? Number(data.odds) : null };
+  }
+  if (!leg) return;
+  if (ownBet.legs.some(l => (leg.kind === 'football' ? l.fixtureId === leg.fixtureId && l.key === leg.key : l.pick === leg.pick))) { toast('Already on your bet slip.'); return; }
+  ownBet.legs.push(leg);
+  persistOwnBet();
+  updateOwnBetBar();
+  toast('Added to your bet slip (' + ownBetName(ownBet.legs.length) + '). Keep browsing, or tap the slip bar to finish.');
+}
+
+// A slim bar on every page except the builder, so the slip is one tap away while browsing.
+function updateOwnBetBar() {
+  let bar = $('own-bet-bar');
+  const legs = ownBet.legs, n = legs.length;
+  if (!n || currentRoute()[0] === 'build') { if (bar) bar.hidden = true; return; }
+  if (!bar) {
+    bar = document.createElement('a');
+    bar.id = 'own-bet-bar'; bar.className = 'own-bar'; bar.href = '#/build';
+    document.body.appendChild(bar);
+  }
+  const priced = legs.every(l => l.odds > 1);
+  bar.hidden = false;
+  bar.innerHTML = '<span>🧾 <b>My bet slip</b> · ' + esc(ownBetName(n)) + ' · ' + n + (n === 1 ? ' selection' : ' selections') +
+    (priced ? ' · ' + esc(fmtOdds(legs.reduce((t, l) => t * l.odds, 1))) : '') + '</span><span class="own-bar-go">View ›</span>';
+}
+
+function ownBetAddBtn(payload) {
+  return '<button type="button" class="btn small own-add-btn" data-own-bet=\'' + esc(JSON.stringify(payload)) + '\' title="Add to my own bet slip">+ My bet</button>';
+}
+
+function ownBetFixtureOptionsHtml(q) {
+  const term = String(q || '').trim().toLowerCase();
+  const list = diaryFixtureOptions().filter(f => kickoffMs(f) > Date.now())
+    .filter(f => !term || (f.home + ' ' + f.away + ' ' + (f.competition || '') + ' ' + leagueName(f.competition)).toLowerCase().includes(term));
+  return '<option value="">' + (term ? (list.length ? list.length + ' matches found, choose one…' : 'No matches found') : 'Choose a match…') + '</option>' +
+    list.map(f => '<option value="' + esc(f.id) + '"' + (f.id === ownBetUI.fixtureId ? ' selected' : '') + '>' + esc(f.home + ' v ' + f.away + ' · ' + fmtDay(kickoffMs(f)) + ' ' + fmtTime(kickoffMs(f))) + '</option>').join('');
+}
+function filterOwnBetFixtures(q) {
+  ownBetUI.q = q;
+  const sel = $('own-fixture');
+  if (sel) sel.innerHTML = ownBetFixtureOptionsHtml(q);
+}
 
 function addOwnBetFixtureLeg(key) {
   const fx = fixtureById(ownBetUI.fixtureId);
@@ -4461,7 +4524,6 @@ function viewBuild() {
   const m = MatchIQBuilder.money;
   const now = Date.now();
 
-  const fixtures = diaryFixtureOptions().filter(f => kickoffMs(f) > now);
   const fx = fixtureById(ownBetUI.fixtureId);
   const marketBtns = fx ? ownBetMarketsFor(fx).map(o => {
     const on = legs.some(l => l.fixtureId === fx.id && l.key === o.key);
@@ -4471,9 +4533,10 @@ function viewBuild() {
   const noPrices = fx && !Object.keys(feedState.details || {}).length;
   const oldPrices = fx && !noPrices && feedState.state !== 'fresh';
 
-  const football = '<label class="sr-only" for="own-fixture">Match</label>' +
-    '<select id="own-fixture" class="ctl" onchange="setOwnBetFixture(this.value)"><option value="">Choose a match…</option>' +
-    fixtures.map(f => '<option value="' + esc(f.id) + '"' + (f.id === ownBetUI.fixtureId ? ' selected' : '') + '>' + esc(f.home + ' v ' + f.away + ' · ' + fmtDay(kickoffMs(f)) + ' ' + fmtTime(kickoffMs(f))) + '</option>').join('') + '</select>' +
+  const football = '<label class="sr-only" for="own-fixture-search">Search matches</label>' +
+    '<input id="own-fixture-search" type="search" class="ctl" placeholder="Search by club or league, e.g. Arsenal" autocomplete="off" value="' + esc(ownBetUI.q || '') + '" oninput="filterOwnBetFixtures(this.value)" style="margin-bottom:8px">' +
+    '<label class="sr-only" for="own-fixture">Match</label>' +
+    '<select id="own-fixture" class="ctl" onchange="setOwnBetFixture(this.value)">' + ownBetFixtureOptionsHtml(ownBetUI.q) + '</select>' +
     (fx ? '<div class="own-markets">' + marketBtns + '</div>' + (noPrices ? '<p class="own-hint">No bookmaker price recorded for this match. Add the selection, then type the price you were offered on your slip.</p>' : oldPrices ? '<p class="own-hint">These prices are about ' + Math.round(feedState.ageHours) + ' hours old and may have moved. Change them on your slip to the price you were offered.</p>' : '<p class="own-hint">Recent UK bookmaker prices. Change them on your slip if your price differs.</p>') : '<p class="own-hint">Choose a match to see its result and goals markets. Add selections from several matches to build a double, treble or bigger.</p>');
 
   const custom = '<div class="own-custom">' +
@@ -5560,6 +5623,7 @@ function viewMultiSport(sportKey) {
           '<div class="sport-sel-actions">' +
             '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Open on ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
             '<button type="button" class="btn small" data-diary=\'' + betData + '\' title="Add to Bet Diary">+ Diary</button>' +
+            '<button type="button" class="btn small own-add-btn" data-own-bet=\'' + betData + '\' title="Add to my own bet slip">+ My bet</button>' +
             '<button type="button" class="btn-add-cross-acca" data-add-cross-acca=\'' + betData + '\' title="Add to Accumulator">+ Acca</button>' +
           '</div>' +
         '</div>';
@@ -5635,6 +5699,7 @@ function render() {
     window.scrollTo({ top: 0 });
     lastRoute = key;
   }
+  updateOwnBetBar();
 }
 
 
@@ -6162,6 +6227,10 @@ document.addEventListener('click', event => {
   }
 
   // Football acca addition
+  if (t.dataset.ownBet !== undefined) {
+    try { addToOwnBet(JSON.parse(t.dataset.ownBet)); } catch (e) { console.error(e); }
+    return;
+  }
   if (t.dataset.addFootballAcca !== undefined || (t.closest && t.closest('[data-add-football-acca]'))) {
     const btn = t.dataset.addFootballAcca !== undefined ? t : t.closest('[data-add-football-acca]');
     try {
@@ -6753,7 +6822,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v107';
+const APP_VERSION = 'v108';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {

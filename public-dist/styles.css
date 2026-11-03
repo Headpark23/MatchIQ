@@ -4144,6 +4144,11 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   .comp-bar button { min-height: 36px; padding: 5px 11px; font-size: 12.5px; }
 }
 
+.own-add-btn { background: rgba(244, 114, 182, 0.15); border: 1px solid rgba(244, 114, 182, 0.45); color: #f9a8d4; }
+.own-bar { position: fixed; left: 12px; right: 12px; bottom: 14px; z-index: 40; display: flex; justify-content: space-between; align-items: center; gap: 10px; max-width: 560px; margin: 0 auto; min-height: 48px; padding: 8px 16px; border-radius: 14px; border: 1px solid #f472b6; background: color-mix(in srgb, #f472b6 22%, var(--surface-solid)); color: var(--ink); font-size: 13px; text-decoration: none; box-shadow: 0 10px 28px -10px rgba(0,0,0,.8); }
+.own-bar[hidden] { display: none; }
+.own-bar-go { font-weight: 700; color: #f9a8d4; white-space: nowrap; }
+
 /* ---- Build your own bet (#/build) ---- */
 .own-build { display: flex; flex-direction: column; gap: 14px; }
 .own-build .card { padding: 14px; border-radius: 16px; }
