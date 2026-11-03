@@ -369,7 +369,7 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   let msg = await enter(diaryBet('lb1', 'PL-ars-tot', 'Arsenal'));
   const sentBet = cloud.docs.get('users/carol/leagueBets/' + day);
   assert(sentBet, 'league bet sent to the server');
-  assert.deepStrictEqual(Object.keys(sentBet).sort(), ['betId', 'createdAt', 'fixtureId', 'market', 'odds', 'selection'], 'the app sends only what was backed, plus the market key');
+  assert.deepStrictEqual(Object.keys(sentBet).sort(), ['betId', 'createdAt', 'fixtureId', 'odds', 'selection'], 'the app sends only what was backed');
   assert.strictEqual(sentBet.selection, 'Arsenal');
   assert(/11\/8|4\/5|4\/5/.test(msg) || /bookmaker price/.test(msg), 'player is told the price it scores at: ' + msg);
   assert.strictEqual(carol.run("getStoredDiary().find(e => e.id === 'lb1').inLeague"), true);
