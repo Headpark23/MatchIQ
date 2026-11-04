@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-03T23:40:10.297588+00:00",
+ "generated_at": "2026-11-04T22:11:36.817623+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -16592,9 +16592,12 @@
    "home": "Cardiff",
    "away": "West Ham",
    "kickoff_utc": "2026-11-04T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    3,
+    3
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -16609,9 +16612,12 @@
    "home": "Wrexham",
    "away": "Middlesbrough",
    "kickoff_utc": "2026-11-04T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -16626,9 +16632,12 @@
    "home": "Bristol City",
    "away": "Wolves",
    "kickoff_utc": "2026-11-04T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    2
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -17204,23 +17213,6 @@
    "kickoff_history": []
   },
   {
-   "id": "FL1-2627-auxerre-v-paris",
-   "competition": "FL1",
-   "season": "2627",
-   "home": "Auxerre",
-   "away": "Paris FC",
-   "kickoff_utc": "2026-11-07T16:15:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "SA-2627-parma-v-bologna",
    "competition": "SA",
    "season": "2627",
@@ -17329,12 +17321,12 @@
    "kickoff_history": []
   },
   {
-   "id": "FL1-2627-paris-sg-v-troyes",
+   "id": "FL1-2627-auxerre-v-paris",
    "competition": "FL1",
    "season": "2627",
-   "home": "Paris SG",
-   "away": "Troyes",
-   "kickoff_utc": "2026-11-07T19:45:00Z",
+   "home": "Auxerre",
+   "away": "Paris FC",
+   "kickoff_utc": "2026-11-07T18:00:00Z",
    "status": "SCHEDULED",
    "score": null,
    "result_source": null,
@@ -17343,7 +17335,13 @@
     "openfootball"
    ],
    "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": []
+   "kickoff_history": [
+    {
+     "from": "2026-11-07T16:15:00Z",
+     "to": "2026-11-07T18:00:00Z",
+     "seen_at": "2026-11-04T22:11:36.817623+00:00"
+    }
+   ]
   },
   {
    "id": "SA-2627-roma-v-sassuolo",
@@ -17398,6 +17396,29 @@
      "from": "2026-11-08T14:00:00Z",
      "to": "2026-11-07T20:00:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "FL1-2627-paris-sg-v-troyes",
+   "competition": "FL1",
+   "season": "2627",
+   "home": "Paris SG",
+   "away": "Troyes",
+   "kickoff_utc": "2026-11-07T20:05:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-11-07T19:45:00Z",
+     "to": "2026-11-07T20:05:00Z",
+     "seen_at": "2026-11-04T22:11:36.817623+00:00"
     }
    ]
   },
@@ -24968,24 +24989,6 @@
    "kickoff_history": []
   },
   {
-   "id": "PL-2627-nottm-forest-v-everton",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Nott'm Forest",
-   "away": "Everton",
-   "kickoff_utc": "2026-12-19T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "ELC-2627-southampton-v-blackburn",
    "competition": "ELC",
    "season": "2627",
@@ -25449,6 +25452,30 @@
    ],
    "first_seen": "2026-10-26T13:11:24.741152+00:00",
    "kickoff_history": []
+  },
+  {
+   "id": "PL-2627-nottm-forest-v-everton",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Nott'm Forest",
+   "away": "Everton",
+   "kickoff_utc": "2026-12-20T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-19T15:00:00Z",
+     "to": "2026-12-20T14:00:00Z",
+     "seen_at": "2026-11-04T22:11:36.817623+00:00"
+    }
+   ]
   },
   {
    "id": "PL-2627-sunderland-v-crystal-palace",
