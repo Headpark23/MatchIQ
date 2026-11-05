@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-11-05T02:45:35.145494+00:00",
+ "attempted_at": "2026-11-05T12:44:00.426980+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -13,7 +13,7 @@
    "ok": true,
    "label": "OpenLigaDB (ODbL 1.0, © OpenLigaDB contributors)",
    "matches": 380,
-   "results": 61,
+   "results": 68,
    "note": null
   },
   "openfootball": {
@@ -198,17 +198,17 @@
   "the-odds-api": {
    "ok": true,
    "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
-   "matches": 61,
+   "matches": 108,
    "notes": {
-    "PL": "skipped: no Premier League match in the next 36 h",
-    "ELC": "skipped: no Championship match in the next 36 h",
-    "BL1": "skipped: no Bundesliga match in the next 36 h",
-    "PD": "skipped: no La Liga match in the next 36 h",
-    "SA": "skipped: no Serie A match in the next 36 h",
-    "FL1": "skipped: no Ligue 1 match in the next 36 h"
+    "PL": "ok: 20 of 20 events matched, 2 credits",
+    "ELC": "ok: 12 of 12 events matched, 2 credits",
+    "BL1": "ok: 18 of 18 events matched, 2 credits",
+    "PD": "ok: 20 of 20 events matched, 2 credits",
+    "SA": "ok: 20 of 20 events matched, 2 credits",
+    "FL1": "ok: 18 of 18 events matched, 2 credits"
    },
-   "credits_used_this_month": 34,
-   "credits_remaining_reported": 466
+   "credits_used_this_month": 46,
+   "credits_remaining_reported": 454
   }
  },
  "warnings": [
@@ -216,7 +216,7 @@
  ],
  "errors": [],
  "ok": true,
- "last_success": "2026-11-05T02:45:35.145494+00:00",
+ "last_success": "2026-11-05T12:44:00.426980+00:00",
  "fixtures": 2918,
  "upcoming_predicted": 132,
  "published_revisions": 0,
