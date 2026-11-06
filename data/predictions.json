@@ -1,539 +1,7 @@
 {
- "generated_at": "2026-11-06T12:27:23.534232+00:00",
+ "generated_at": "2026-11-06T19:41:18.443207+00:00",
  "horizon_days": 21,
  "predictions": {
-  "BL1-2627-hamburg-v-mgladbach": {
-   "match_id": "BL1-2627-hamburg-v-mgladbach",
-   "record_id": "BL1-2627-hamburg-v-mgladbach#r4",
-   "published_at": "2026-11-01T22:24:32.241772+00:00",
-   "fixture": {
-    "competition": "BL1",
-    "season": "2627",
-    "home": "Hamburg",
-    "away": "M'gladbach",
-    "kickoff_utc": "2026-11-06T19:30:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": []
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 287 Bundesliga matches (2025-26): Brier 0.571 against 0.649 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "H",
-      "label": "Hamburg win",
-      "p": 0.3823,
-      "fair_odds": "≈13/8"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "Hamburg win",
-       "p": 0.3823,
-       "fair_odds": "≈13/8"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2671,
-       "fair_odds": "≈11/4"
-      },
-      {
-       "key": "A",
-       "label": "M'gladbach win",
-       "p": 0.3506,
-       "fair_odds": "≈15/8"
-      }
-     ],
-     "method": "Bundesliga Dixon-Coles fitted on Bundesliga results only",
-     "training_matches": 990,
-     "form": {
-      "home": [
-       {
-        "date": "2026-04-25",
-        "opponent": "Hoffenheim",
-        "gf": 1,
-        "ga": 2,
-        "res": "L"
-       },
-       {
-        "date": "2026-05-10",
-        "opponent": "Freiburg",
-        "gf": 3,
-        "ga": 2,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-06",
-        "opponent": "Mainz",
-        "gf": 0,
-        "ga": 5,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-19",
-        "opponent": "FC Koln",
-        "gf": 2,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-17",
-        "opponent": "Stuttgart",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-05-09",
-        "opponent": "Augsburg",
-        "gf": 1,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-08-29",
-        "opponent": "RB Leipzig",
-        "gf": 0,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-12",
-        "opponent": "Freiburg",
-        "gf": 0,
-        "ga": 5,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-11",
-        "opponent": "FC Koln",
-        "gf": 1,
-        "ga": 2,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-23",
-        "opponent": "Stuttgart",
-        "gf": 3,
-        "ga": 2,
-        "res": "W"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 20,
-      "away": 55
-     },
-     "league_p": [
-      0.4253,
-      0.2515,
-      0.3232
-     ],
-     "pooled_matches": {
-      "home": 37,
-      "away": 37
-     }
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.230 against 0.232 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 2.5",
-      "p": 0.5959,
-      "fair_odds": "≈4/6",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.8133,
-        "fair_odds": "≈2/9"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.1867,
-        "fair_odds": "≈9/2"
-       },
-       "model_p": 0.7735,
-       "league_p": 0.8303
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.5959,
-        "fair_odds": "≈4/6"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.4041,
-        "fair_odds": "≈6/4"
-       },
-       "model_p": 0.5273,
-       "league_p": 0.6253
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.3927,
-        "fair_odds": "≈6/4"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.6073,
-        "fair_odds": "≈4/6"
-       },
-       "model_p": 0.3051,
-       "league_p": 0.4303
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 3.22,
-      "expected_goals": [
-       1.43,
-       1.36
-      ]
-     },
-     "explanation": [
-      "The score model expects about 1.4 goals for Hamburg and 1.4 for M'gladbach.",
-      "Bundesliga matches average 3.22 goals; 63% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% Bundesliga rate for each line"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "none",
-      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.239 against 0.237 for the league average. No better than the league average, so this is shown as the league rate."
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5915,
-      "fair_odds": "≈4/6"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5915,
-       "fair_odds": "≈4/6"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4085,
-       "fair_odds": "≈6/4"
-      }
-     ],
-     "model_p": 0.5717,
-     "league_p": 0.6,
-     "explanation": [
-      "Both teams scored in 60% of Bundesliga matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% Bundesliga rate"
-    },
-    "corners": {
-     "market": "corners",
-     "name": "Total corners",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.250 against 0.250 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 9.5",
-      "p": 0.5222,
-      "fair_odds": "≈10/11",
-      "line": 9.5
-     },
-     "lines": [
-      {
-       "line": 8.5,
-       "over": {
-        "key": "over",
-        "label": "Over 8.5",
-        "p": 0.6343,
-        "fair_odds": "≈4/7"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 8.5",
-        "p": 0.3657,
-        "fair_odds": "≈7/4"
-       },
-       "model_p": 0.6558,
-       "league_p": 0.6251
-      },
-      {
-       "line": 9.5,
-       "over": {
-        "key": "over",
-        "label": "Over 9.5",
-        "p": 0.5222,
-        "fair_odds": "≈10/11"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 9.5",
-        "p": 0.4778,
-        "fair_odds": "≈11/10"
-       },
-       "model_p": 0.5295,
-       "league_p": 0.5191
-      },
-      {
-       "line": 10.5,
-       "over": {
-        "key": "over",
-        "label": "Over 10.5",
-        "p": 0.4003,
-        "fair_odds": "≈6/4"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 10.5",
-        "p": 0.5997,
-        "fair_odds": "≈4/6"
-       },
-       "model_p": 0.4045,
-       "league_p": 0.3986
-      }
-     ],
-     "inputs": {
-      "venue_expected": 9.9,
-      "league_mean": 9.82,
-      "home_games": 10,
-      "away_games": 10
-     },
-     "explanation": [
-      "Recent venue form points to about 9.9 (last 10 Hamburg home games, last 10 M'gladbach away games).",
-      "Bundesliga average: 9.8 per match; 52% go over 9.5."
-     ],
-     "method": "30% venue-average Poisson + 70% Bundesliga rate",
-     "frozen_reference": {
-      "model_version": "v0.9-frozen-poisson",
-      "over_9_5": 0.5295,
-      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
-     }
-    },
-    "cards": {
-     "market": "cards",
-     "name": "Total cards (yellow)",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 3.5",
-      "p": 0.5649,
-      "fair_odds": "≈4/5",
-      "line": 3.5
-     },
-     "lines": [
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.7473,
-        "fair_odds": "≈1/3"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.2527,
-        "fair_odds": "≈3/1"
-       },
-       "model_p": 0.7898,
-       "league_p": 0.7291
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.5649,
-        "fair_odds": "≈4/5"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.4351,
-        "fair_odds": "≈5/4"
-       },
-       "model_p": 0.6046,
-       "league_p": 0.5479
-      },
-      {
-       "line": 4.5,
-       "over": {
-        "key": "over",
-        "label": "Over 4.5",
-        "p": 0.371,
-        "fair_odds": "≈7/4"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 4.5",
-        "p": 0.629,
-        "fair_odds": "≈4/7"
-       },
-       "model_p": 0.4102,
-       "league_p": 0.3543
-      }
-     ],
-     "inputs": {
-      "venue_expected": 4.2,
-      "league_mean": 3.91,
-      "home_games": 10,
-      "away_games": 10
-     },
-     "explanation": [
-      "Recent venue form points to about 4.2 (last 10 Hamburg home games, last 10 M'gladbach away games).",
-      "Bundesliga average: 3.9 per match; 55% go over 3.5."
-     ],
-     "method": "30% venue-average Poisson + 70% Bundesliga rate"
-    },
-    "shots": {
-     "market": "shots",
-     "name": "Shots on target",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.242 against 0.244 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 8.5",
-      "p": 0.6168,
-      "fair_odds": "≈8/13",
-      "line": 8.5
-     },
-     "lines": [
-      {
-       "line": 7.5,
-       "over": {
-        "key": "over",
-        "label": "Over 7.5",
-        "p": 0.7344,
-        "fair_odds": "≈4/11"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 7.5",
-        "p": 0.2656,
-        "fair_odds": "≈11/4"
-       },
-       "model_p": 0.7564,
-       "league_p": 0.725
-      },
-      {
-       "line": 8.5,
-       "over": {
-        "key": "over",
-        "label": "Over 8.5",
-        "p": 0.6168,
-        "fair_odds": "≈8/13"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 8.5",
-        "p": 0.3832,
-        "fair_odds": "≈13/8"
-       },
-       "model_p": 0.6383,
-       "league_p": 0.6076
-      },
-      {
-       "line": 9.5,
-       "over": {
-        "key": "over",
-        "label": "Over 9.5",
-        "p": 0.4963,
-        "fair_odds": "≈Evens"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 9.5",
-        "p": 0.5037,
-        "fair_odds": "≈Evens"
-       },
-       "model_p": 0.5104,
-       "league_p": 0.4902
-      }
-     ],
-     "inputs": {
-      "venue_expected": 9.75,
-      "league_mean": 9.64,
-      "home_games": 10,
-      "away_games": 10
-     },
-     "explanation": [
-      "Recent venue form points to about 9.8 (last 10 Hamburg home games, last 10 M'gladbach away games).",
-      "Bundesliga average: 9.6 per match; 61% go over 8.5."
-     ],
-     "method": "30% venue-average Poisson + 70% Bundesliga rate"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "shots",
-     "key": "over",
-     "line": 8.5,
-     "label": "Over 8.5",
-     "p": 0.6168,
-     "credible_p": 0.6162,
-     "n": 306,
-     "status": "provisional",
-     "strength": "weak",
-     "basis": "league-anchored blend, 306 Bundesliga backtest matches",
-     "lower_bound": 0.5705
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
   "FL1-2627-toulouse-v-strasbourg": {
    "match_id": "FL1-2627-toulouse-v-strasbourg",
    "record_id": "FL1-2627-toulouse-v-strasbourg#r7",
@@ -70148,6 +69616,538 @@
      "strength": "weak",
      "basis": "league-anchored blend, 552 Championship backtest matches",
      "lower_bound": 0.5737
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "BL1-2627-werder-bremen-v-mgladbach": {
+   "match_id": "BL1-2627-werder-bremen-v-mgladbach",
+   "record_id": "BL1-2627-werder-bremen-v-mgladbach#r1",
+   "published_at": "2026-11-06T19:41:18.443207+00:00",
+   "fixture": {
+    "competition": "BL1",
+    "season": "2627",
+    "home": "Werder Bremen",
+    "away": "M'gladbach",
+    "kickoff_utc": "2026-11-27T19:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 287 Bundesliga matches (2025-26): Brier 0.571 against 0.649 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Werder Bremen win",
+      "p": 0.4759,
+      "fair_odds": "≈11/10"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Werder Bremen win",
+       "p": 0.4759,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2453,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "M'gladbach win",
+       "p": 0.2789,
+       "fair_odds": "≈5/2"
+      }
+     ],
+     "method": "Bundesliga Dixon-Coles fitted on Bundesliga results only",
+     "training_matches": 990,
+     "form": {
+      "home": [
+       {
+        "date": "2026-05-16",
+        "opponent": "Dortmund",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "RB Leipzig",
+        "gf": 3,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Augsburg",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Paderborn",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Hoffenheim",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-05-09",
+        "opponent": "Augsburg",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-08-29",
+        "opponent": "RB Leipzig",
+        "gf": 0,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Freiburg",
+        "gf": 0,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "FC Koln",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-23",
+        "opponent": "Stuttgart",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 55,
+      "away": 55
+     },
+     "league_p": [
+      0.4253,
+      0.2515,
+      0.3232
+     ],
+     "pooled_matches": {
+      "home": 37,
+      "away": 37
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.230 against 0.232 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6158,
+      "fair_odds": "≈8/13",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8267,
+        "fair_odds": "≈1/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1733,
+        "fair_odds": "≈5/1"
+       },
+       "model_p": 0.8182,
+       "league_p": 0.8303
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.6158,
+        "fair_odds": "≈8/13"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.3842,
+        "fair_odds": "≈13/8"
+       },
+       "model_p": 0.5938,
+       "league_p": 0.6253
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.4122,
+        "fair_odds": "≈11/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.5878,
+        "fair_odds": "≈8/11"
+       },
+       "model_p": 0.3699,
+       "league_p": 0.4303
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 3.22,
+      "expected_goals": [
+       1.77,
+       1.31
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.8 goals for Werder Bremen and 1.3 for M'gladbach.",
+      "Bundesliga matches average 3.22 goals; 63% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Bundesliga rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.239 against 0.237 for the league average. No better than the league average, so this is shown as the league rate."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.6035,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.6035,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.3965,
+       "fair_odds": "≈6/4"
+      }
+     ],
+     "model_p": 0.6115,
+     "league_p": 0.6,
+     "explanation": [
+      "Both teams scored in 60% of Bundesliga matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Bundesliga rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.250 against 0.250 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5286,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.5848,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.4152,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": 0.4906,
+       "league_p": 0.6251
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.4714,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.5286,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.36,
+       "league_p": 0.5191
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.3533,
+        "fair_odds": "≈15/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.6467,
+        "fair_odds": "≈8/15"
+       },
+       "model_p": 0.2478,
+       "league_p": 0.3986
+      }
+     ],
+     "inputs": {
+      "venue_expected": 8.6,
+      "league_mean": 9.82,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 8.6 (last 10 Werder Bremen home games, last 10 M'gladbach away games).",
+      "Bundesliga average: 9.8 per match; 52% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Bundesliga rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.36,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5193,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.7113,
+        "fair_odds": "≈2/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.2887,
+        "fair_odds": "≈5/2"
+       },
+       "model_p": 0.6698,
+       "league_p": 0.7291
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.5193,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.4807,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.4525,
+       "league_p": 0.5479
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.3275,
+        "fair_odds": "≈2/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.6725,
+        "fair_odds": "≈1/2"
+       },
+       "model_p": 0.2651,
+       "league_p": 0.3543
+      }
+     ],
+     "inputs": {
+      "venue_expected": 3.45,
+      "league_mean": 3.91,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 3.5 (last 10 Werder Bremen home games, last 10 M'gladbach away games).",
+      "Bundesliga average: 3.9 per match; 55% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Bundesliga rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.242 against 0.244 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.6571,
+      "fair_odds": "≈8/15",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.7655,
+        "fair_odds": "≈3/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.2345,
+        "fair_odds": "≈100/30"
+       },
+       "model_p": 0.86,
+       "league_p": 0.725
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6571,
+        "fair_odds": "≈8/15"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3429,
+        "fair_odds": "≈15/8"
+       },
+       "model_p": 0.7724,
+       "league_p": 0.6076
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5426,
+        "fair_odds": "≈5/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4574,
+        "fair_odds": "≈6/5"
+       },
+       "model_p": 0.6649,
+       "league_p": 0.4902
+      }
+     ],
+     "inputs": {
+      "venue_expected": 11.05,
+      "league_mean": 9.64,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 11.0 (last 10 Werder Bremen home games, last 10 M'gladbach away games).",
+      "Bundesliga average: 9.6 per match; 61% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Bundesliga rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "shots",
+     "key": "over",
+     "line": 8.5,
+     "label": "Over 8.5",
+     "p": 0.6571,
+     "credible_p": 0.6541,
+     "n": 306,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 306 Bundesliga backtest matches",
+     "lower_bound": 0.6094
     },
     "best_value": {
      "decision": "no_bet",
