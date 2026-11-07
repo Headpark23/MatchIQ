@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-07T00:18:44.269509+00:00",
+ "generated_at": "2026-11-07T06:34:54.341956+00:00",
  "horizon_days": 21,
  "predictions": {
   "ELC-2627-bristol-city-v-norwich": {
@@ -31326,20 +31326,28 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
-  "ELC-2627-sheffield-united-v-watford": {
-   "match_id": "ELC-2627-sheffield-united-v-watford",
-   "record_id": "ELC-2627-sheffield-united-v-watford#r5",
-   "published_at": "2026-11-07T00:18:44.269509+00:00",
+  "ELC-2627-norwich-v-cardiff": {
+   "match_id": "ELC-2627-norwich-v-cardiff",
+   "record_id": "ELC-2627-norwich-v-cardiff#r5",
+   "published_at": "2026-11-07T06:34:54.341956+00:00",
    "fixture": {
     "competition": "ELC",
     "season": "2627",
-    "home": "Sheffield United",
-    "away": "Watford",
+    "home": "Norwich",
+    "away": "Cardiff",
     "kickoff_utc": "2026-11-21T12:30:00Z",
     "status": "SCHEDULED",
-    "kickoff_history": []
+    "kickoff_history": [
+     {
+      "from": "2026-11-21T15:00:00Z",
+      "to": "2026-11-21T12:30:00Z",
+      "seen_at": "2026-11-07T06:34:54.341956+00:00"
+     }
+    ]
    },
-   "promoted": [],
+   "promoted": [
+    "Cardiff"
+   ],
    "markets": {
     "result": {
      "market": "result",
@@ -31353,27 +31361,27 @@
      },
      "pick": {
       "key": "H",
-      "label": "Sheffield United win",
-      "p": 0.5588,
-      "fair_odds": "≈4/5"
+      "label": "Norwich win",
+      "p": 0.5847,
+      "fair_odds": "≈8/11"
      },
      "selections": [
       {
        "key": "H",
-       "label": "Sheffield United win",
-       "p": 0.5588,
-       "fair_odds": "≈4/5"
+       "label": "Norwich win",
+       "p": 0.5847,
+       "fair_odds": "≈8/11"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2437,
-       "fair_odds": "≈3/1"
+       "p": 0.2096,
+       "fair_odds": "≈4/1"
       },
       {
        "key": "A",
-       "label": "Watford win",
-       "p": 0.1974,
+       "label": "Cardiff win",
+       "p": 0.2056,
        "fair_odds": "≈4/1"
       }
      ],
@@ -31382,82 +31390,82 @@
      "form": {
       "home": [
        {
-        "date": "2026-09-05",
-        "opponent": "Norwich",
-        "gf": 1,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-13",
-        "opponent": "Wolves",
-        "gf": 0,
+        "date": "2026-09-09",
+        "opponent": "Birmingham",
+        "gf": 2,
         "ga": 1,
-        "res": "L"
+        "res": "W"
        },
        {
-        "date": "2026-10-10",
-        "opponent": "Lincoln",
+        "date": "2026-09-20",
+        "opponent": "Bolton",
         "gf": 3,
-        "ga": 0,
-        "res": "W"
+        "ga": 4,
+        "res": "L"
        },
        {
-        "date": "2026-10-24",
-        "opponent": "Derby",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-30",
-        "opponent": "Wrexham",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-09-05",
-        "opponent": "West Brom",
+        "date": "2026-10-14",
+        "opponent": "Southampton",
         "gf": 0,
         "ga": 1,
         "res": "L"
        },
        {
-        "date": "2026-09-18",
-        "opponent": "Bristol City",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-13",
-        "opponent": "Cardiff",
-        "gf": 1,
-        "ga": 5,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-24",
-        "opponent": "Wolves",
+        "date": "2026-10-17",
+        "opponent": "Portsmouth",
         "gf": 0,
         "ga": 1,
         "res": "L"
        },
        {
         "date": "2026-10-31",
-        "opponent": "Norwich",
+        "opponent": "Watford",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-05",
+        "opponent": "Portsmouth",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Bolton",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Blackburn",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Middlesbrough",
         "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Wolves",
+        "gf": 0,
         "ga": 3,
         "res": "L"
        }
       ]
      },
      "venue_games": {
-      "home": 53,
-      "away": 76
+      "home": 76,
+      "away": 53
      },
      "league_p": [
       0.4384,
@@ -31466,7 +31474,7 @@
      ],
      "pooled_matches": {
       "home": 52,
-      "away": 52
+      "away": 14
      }
     },
     "goals": {
@@ -31479,10 +31487,10 @@
       "summary": "Championship backtest (552 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
      },
      "pick": {
-      "key": "under",
-      "label": "Under 2.5",
-      "p": 0.5018,
-      "fair_odds": "≈Evens",
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5453,
+      "fair_odds": "≈5/6",
       "line": 2.5
      },
      "lines": [
@@ -31491,16 +31499,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7426,
-        "fair_odds": "≈1/3"
+        "p": 0.7744,
+        "fair_odds": "≈2/7"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2574,
-        "fair_odds": "≈3/1"
+        "p": 0.2256,
+        "fair_odds": "≈7/2"
        },
-       "model_p": 0.7404,
+       "model_p": 0.8464,
        "league_p": 0.7436
       },
       {
@@ -31508,16 +31516,16 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.4982,
-        "fair_odds": "≈Evens"
+        "p": 0.5453,
+        "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.5018,
-        "fair_odds": "≈Evens"
+        "p": 0.4547,
+        "fair_odds": "≈6/5"
        },
-       "model_p": 0.4884,
+       "model_p": 0.6454,
        "league_p": 0.5025
       },
       {
@@ -31525,28 +31533,28 @@
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.2651,
-        "fair_odds": "≈11/4"
+        "p": 0.3116,
+        "fair_odds": "≈9/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.7349,
-        "fair_odds": "≈4/11"
+        "p": 0.6884,
+        "fair_odds": "≈4/9"
        },
-       "model_p": 0.2699,
+       "model_p": 0.4249,
        "league_p": 0.263
       }
      ],
      "inputs": {
       "league_mean_goals": 2.61,
       "expected_goals": [
-       1.71,
-       0.92
+       2.13,
+       1.2
       ]
      },
      "explanation": [
-      "The score model expects about 1.7 goals for Sheffield United and 0.9 for Watford.",
+      "The score model expects about 2.1 goals for Norwich and 1.2 for Cardiff.",
       "Championship matches average 2.61 goals; 50% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Championship rate for each line"
@@ -31563,24 +31571,24 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.526,
-      "fair_odds": "≈10/11"
+      "p": 0.5628,
+      "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.526,
-       "fair_odds": "≈10/11"
+       "p": 0.5628,
+       "fair_odds": "≈4/5"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.474,
-       "fair_odds": "≈11/10"
+       "p": 0.4372,
+       "fair_odds": "≈5/4"
       }
      ],
-     "model_p": 0.4941,
+     "model_p": 0.6167,
      "league_p": 0.5397,
      "explanation": [
       "Both teams scored in 54% of Championship matches in the training data."
@@ -31599,8 +31607,8 @@
      "pick": {
       "key": "over",
       "label": "Over 9.5",
-      "p": 0.5497,
-      "fair_odds": "≈5/6",
+      "p": 0.5701,
+      "fair_odds": "≈8/11",
       "line": 9.5
      },
      "lines": [
@@ -31609,16 +31617,16 @@
        "over": {
         "key": "over",
         "label": "Over 8.5",
-        "p": 0.6713,
-        "fair_odds": "≈1/2"
+        "p": 0.6896,
+        "fair_odds": "≈4/9"
        },
        "under": {
         "key": "under",
         "label": "Under 8.5",
-        "p": 0.3287,
-        "fair_odds": "≈2/1"
+        "p": 0.3104,
+        "fair_odds": "≈9/4"
        },
-       "model_p": 0.6442,
+       "model_p": 0.7052,
        "league_p": 0.6829
       },
       {
@@ -31626,16 +31634,16 @@
        "over": {
         "key": "over",
         "label": "Over 9.5",
-        "p": 0.5497,
-        "fair_odds": "≈5/6"
+        "p": 0.5701,
+        "fair_odds": "≈8/11"
        },
        "under": {
         "key": "under",
         "label": "Under 9.5",
-        "p": 0.4503,
-        "fair_odds": "≈6/5"
+        "p": 0.4299,
+        "fair_odds": "≈11/8"
        },
-       "model_p": 0.5168,
+       "model_p": 0.585,
        "league_p": 0.5638
       },
       {
@@ -31643,33 +31651,33 @@
        "over": {
         "key": "over",
         "label": "Over 10.5",
-        "p": 0.4351,
-        "fair_odds": "≈5/4"
+        "p": 0.4557,
+        "fair_odds": "≈6/5"
        },
        "under": {
         "key": "under",
         "label": "Under 10.5",
-        "p": 0.5649,
-        "fair_odds": "≈4/5"
+        "p": 0.5443,
+        "fair_odds": "≈5/6"
        },
-       "model_p": 0.392,
+       "model_p": 0.4607,
        "league_p": 0.4536
       }
      ],
      "inputs": {
-      "venue_expected": 9.8,
+      "venue_expected": 10.35,
       "league_mean": 10.39,
       "home_games": 10,
       "away_games": 10
      },
      "explanation": [
-      "Recent venue form points to about 9.8 (last 10 Sheffield United home games, last 10 Watford away games).",
+      "Recent venue form points to about 10.3 (last 10 Norwich home games, last 10 Cardiff away games).",
       "Championship average: 10.4 per match; 56% go over 9.5."
      ],
      "method": "30% venue-average Poisson + 70% Championship rate",
      "frozen_reference": {
       "model_version": "v0.9-frozen-poisson",
-      "over_9_5": 0.5168,
+      "over_9_5": 0.585,
       "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
      }
     },
@@ -31685,7 +31693,7 @@
      "pick": {
       "key": "over",
       "label": "Over 3.5",
-      "p": 0.5786,
+      "p": 0.5688,
       "fair_odds": "≈8/11",
       "line": 3.5
      },
@@ -31695,16 +31703,16 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.7668,
+        "p": 0.7604,
         "fair_odds": "≈3/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.2332,
+        "p": 0.2396,
         "fair_odds": "≈100/30"
        },
-       "model_p": 0.8477,
+       "model_p": 0.8264,
        "league_p": 0.7321
       },
       {
@@ -31712,16 +31720,16 @@
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.5786,
+        "p": 0.5688,
         "fair_odds": "≈8/11"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.4214,
+        "p": 0.4312,
         "fair_odds": "≈11/8"
        },
-       "model_p": 0.6903,
+       "model_p": 0.6577,
        "league_p": 0.5308
       },
       {
@@ -31729,27 +31737,27 @@
        "over": {
         "key": "over",
         "label": "Over 4.5",
-        "p": 0.3873,
+        "p": 0.3761,
         "fair_odds": "≈13/8"
        },
        "under": {
         "key": "under",
         "label": "Under 4.5",
-        "p": 0.6127,
+        "p": 0.6239,
         "fair_odds": "≈8/13"
        },
-       "model_p": 0.5054,
+       "model_p": 0.4679,
        "league_p": 0.3367
       }
      ],
      "inputs": {
-      "venue_expected": 4.7,
+      "venue_expected": 4.5,
       "league_mean": 3.79,
       "home_games": 10,
       "away_games": 10
      },
      "explanation": [
-      "Recent venue form points to about 4.7 (last 10 Sheffield United home games, last 10 Watford away games).",
+      "Recent venue form points to about 4.5 (last 10 Norwich home games, last 10 Cardiff away games).",
       "Championship average: 3.8 per match; 53% go over 3.5."
      ],
      "method": "30% venue-average Poisson + 70% Championship rate"
@@ -31830,7 +31838,7 @@
       "away_games": 10
      },
      "explanation": [
-      "Recent venue form points to about 9.7 (last 10 Sheffield United home games, last 10 Watford away games).",
+      "Recent venue form points to about 9.7 (last 10 Norwich home games, last 10 Cardiff away games).",
       "Championship average: 8.1 per match; 42% go over 8.5."
      ],
      "method": "30% venue-average Poisson + 70% Championship rate"
@@ -31841,14 +31849,14 @@
      "decision": "most_likely",
      "market": "result",
      "key": "H",
-     "label": "Sheffield United win",
-     "p": 0.5588,
-     "credible_p": 0.5542,
+     "label": "Norwich win",
+     "p": 0.5847,
+     "credible_p": 0.5791,
      "n": 498,
      "status": "provisional",
      "strength": "moderate",
      "basis": "Championship model, 498 backtest matches (2025-26)",
-     "lower_bound": 0.5176
+     "lower_bound": 0.5427
     },
     "best_value": {
      "decision": "no_bet",
@@ -40321,22 +40329,26 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
-  "ELC-2627-norwich-v-cardiff": {
-   "match_id": "ELC-2627-norwich-v-cardiff",
-   "record_id": "ELC-2627-norwich-v-cardiff#r4",
-   "published_at": "2026-11-07T00:18:44.269509+00:00",
+  "ELC-2627-sheffield-united-v-watford": {
+   "match_id": "ELC-2627-sheffield-united-v-watford",
+   "record_id": "ELC-2627-sheffield-united-v-watford#r6",
+   "published_at": "2026-11-07T06:34:54.341956+00:00",
    "fixture": {
     "competition": "ELC",
     "season": "2627",
-    "home": "Norwich",
-    "away": "Cardiff",
+    "home": "Sheffield United",
+    "away": "Watford",
     "kickoff_utc": "2026-11-21T15:00:00Z",
     "status": "SCHEDULED",
-    "kickoff_history": []
+    "kickoff_history": [
+     {
+      "from": "2026-11-21T12:30:00Z",
+      "to": "2026-11-21T15:00:00Z",
+      "seen_at": "2026-11-07T06:34:54.341956+00:00"
+     }
+    ]
    },
-   "promoted": [
-    "Cardiff"
-   ],
+   "promoted": [],
    "markets": {
     "result": {
      "market": "result",
@@ -40350,27 +40362,27 @@
      },
      "pick": {
       "key": "H",
-      "label": "Norwich win",
-      "p": 0.5847,
-      "fair_odds": "≈8/11"
+      "label": "Sheffield United win",
+      "p": 0.5588,
+      "fair_odds": "≈4/5"
      },
      "selections": [
       {
        "key": "H",
-       "label": "Norwich win",
-       "p": 0.5847,
-       "fair_odds": "≈8/11"
+       "label": "Sheffield United win",
+       "p": 0.5588,
+       "fair_odds": "≈4/5"
       },
       {
        "key": "D",
        "label": "Draw",
-       "p": 0.2096,
-       "fair_odds": "≈4/1"
+       "p": 0.2437,
+       "fair_odds": "≈3/1"
       },
       {
        "key": "A",
-       "label": "Cardiff win",
-       "p": 0.2056,
+       "label": "Watford win",
+       "p": 0.1974,
        "fair_odds": "≈4/1"
       }
      ],
@@ -40379,82 +40391,82 @@
      "form": {
       "home": [
        {
-        "date": "2026-09-09",
-        "opponent": "Birmingham",
-        "gf": 2,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-20",
-        "opponent": "Bolton",
-        "gf": 3,
-        "ga": 4,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-14",
-        "opponent": "Southampton",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-17",
-        "opponent": "Portsmouth",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "Watford",
-        "gf": 3,
-        "ga": 2,
-        "res": "W"
-       }
-      ],
-      "away": [
-       {
         "date": "2026-09-05",
-        "opponent": "Portsmouth",
-        "gf": 0,
-        "ga": 2,
+        "opponent": "Norwich",
+        "gf": 1,
+        "ga": 3,
         "res": "L"
        },
        {
-        "date": "2026-09-12",
-        "opponent": "Bolton",
+        "date": "2026-09-13",
+        "opponent": "Wolves",
         "gf": 0,
         "ga": 1,
         "res": "L"
        },
        {
         "date": "2026-10-10",
-        "opponent": "Blackburn",
-        "gf": 1,
-        "ga": 2,
-        "res": "L"
+        "opponent": "Lincoln",
+        "gf": 3,
+        "ga": 0,
+        "res": "W"
        },
        {
-        "date": "2026-10-17",
-        "opponent": "Middlesbrough",
-        "gf": 2,
-        "ga": 2,
+        "date": "2026-10-24",
+        "opponent": "Derby",
+        "gf": 1,
+        "ga": 1,
         "res": "D"
        },
        {
-        "date": "2026-10-31",
+        "date": "2026-10-30",
+        "opponent": "Wrexham",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-05",
+        "opponent": "West Brom",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-18",
+        "opponent": "Bristol City",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-13",
+        "opponent": "Cardiff",
+        "gf": 1,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-24",
         "opponent": "Wolves",
         "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Norwich",
+        "gf": 2,
         "ga": 3,
         "res": "L"
        }
       ]
      },
      "venue_games": {
-      "home": 76,
-      "away": 53
+      "home": 53,
+      "away": 76
      },
      "league_p": [
       0.4384,
@@ -40463,7 +40475,7 @@
      ],
      "pooled_matches": {
       "home": 52,
-      "away": 14
+      "away": 52
      }
     },
     "goals": {
@@ -40476,10 +40488,10 @@
       "summary": "Championship backtest (552 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
      },
      "pick": {
-      "key": "over",
-      "label": "Over 2.5",
-      "p": 0.5453,
-      "fair_odds": "≈5/6",
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5018,
+      "fair_odds": "≈Evens",
       "line": 2.5
      },
      "lines": [
@@ -40488,16 +40500,16 @@
        "over": {
         "key": "over",
         "label": "Over 1.5",
-        "p": 0.7744,
-        "fair_odds": "≈2/7"
+        "p": 0.7426,
+        "fair_odds": "≈1/3"
        },
        "under": {
         "key": "under",
         "label": "Under 1.5",
-        "p": 0.2256,
-        "fair_odds": "≈7/2"
+        "p": 0.2574,
+        "fair_odds": "≈3/1"
        },
-       "model_p": 0.8464,
+       "model_p": 0.7404,
        "league_p": 0.7436
       },
       {
@@ -40505,16 +40517,16 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.5453,
-        "fair_odds": "≈5/6"
+        "p": 0.4982,
+        "fair_odds": "≈Evens"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.4547,
-        "fair_odds": "≈6/5"
+        "p": 0.5018,
+        "fair_odds": "≈Evens"
        },
-       "model_p": 0.6454,
+       "model_p": 0.4884,
        "league_p": 0.5025
       },
       {
@@ -40522,28 +40534,28 @@
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.3116,
-        "fair_odds": "≈9/4"
+        "p": 0.2651,
+        "fair_odds": "≈11/4"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.6884,
-        "fair_odds": "≈4/9"
+        "p": 0.7349,
+        "fair_odds": "≈4/11"
        },
-       "model_p": 0.4249,
+       "model_p": 0.2699,
        "league_p": 0.263
       }
      ],
      "inputs": {
       "league_mean_goals": 2.61,
       "expected_goals": [
-       2.13,
-       1.2
+       1.71,
+       0.92
       ]
      },
      "explanation": [
-      "The score model expects about 2.1 goals for Norwich and 1.2 for Cardiff.",
+      "The score model expects about 1.7 goals for Sheffield United and 0.9 for Watford.",
       "Championship matches average 2.61 goals; 50% go over 2.5."
      ],
      "method": "30% score-model probability + 70% Championship rate for each line"
@@ -40560,24 +40572,24 @@
      "pick": {
       "key": "yes",
       "label": "Yes",
-      "p": 0.5628,
-      "fair_odds": "≈4/5"
+      "p": 0.526,
+      "fair_odds": "≈10/11"
      },
      "selections": [
       {
        "key": "yes",
        "label": "Yes",
-       "p": 0.5628,
-       "fair_odds": "≈4/5"
+       "p": 0.526,
+       "fair_odds": "≈10/11"
       },
       {
        "key": "no",
        "label": "No",
-       "p": 0.4372,
-       "fair_odds": "≈5/4"
+       "p": 0.474,
+       "fair_odds": "≈11/10"
       }
      ],
-     "model_p": 0.6167,
+     "model_p": 0.4941,
      "league_p": 0.5397,
      "explanation": [
       "Both teams scored in 54% of Championship matches in the training data."
@@ -40596,8 +40608,8 @@
      "pick": {
       "key": "over",
       "label": "Over 9.5",
-      "p": 0.5701,
-      "fair_odds": "≈8/11",
+      "p": 0.5497,
+      "fair_odds": "≈5/6",
       "line": 9.5
      },
      "lines": [
@@ -40606,16 +40618,16 @@
        "over": {
         "key": "over",
         "label": "Over 8.5",
-        "p": 0.6896,
-        "fair_odds": "≈4/9"
+        "p": 0.6713,
+        "fair_odds": "≈1/2"
        },
        "under": {
         "key": "under",
         "label": "Under 8.5",
-        "p": 0.3104,
-        "fair_odds": "≈9/4"
+        "p": 0.3287,
+        "fair_odds": "≈2/1"
        },
-       "model_p": 0.7052,
+       "model_p": 0.6442,
        "league_p": 0.6829
       },
       {
@@ -40623,16 +40635,16 @@
        "over": {
         "key": "over",
         "label": "Over 9.5",
-        "p": 0.5701,
-        "fair_odds": "≈8/11"
+        "p": 0.5497,
+        "fair_odds": "≈5/6"
        },
        "under": {
         "key": "under",
         "label": "Under 9.5",
-        "p": 0.4299,
-        "fair_odds": "≈11/8"
+        "p": 0.4503,
+        "fair_odds": "≈6/5"
        },
-       "model_p": 0.585,
+       "model_p": 0.5168,
        "league_p": 0.5638
       },
       {
@@ -40640,33 +40652,33 @@
        "over": {
         "key": "over",
         "label": "Over 10.5",
-        "p": 0.4557,
-        "fair_odds": "≈6/5"
+        "p": 0.4351,
+        "fair_odds": "≈5/4"
        },
        "under": {
         "key": "under",
         "label": "Under 10.5",
-        "p": 0.5443,
-        "fair_odds": "≈5/6"
+        "p": 0.5649,
+        "fair_odds": "≈4/5"
        },
-       "model_p": 0.4607,
+       "model_p": 0.392,
        "league_p": 0.4536
       }
      ],
      "inputs": {
-      "venue_expected": 10.35,
+      "venue_expected": 9.8,
       "league_mean": 10.39,
       "home_games": 10,
       "away_games": 10
      },
      "explanation": [
-      "Recent venue form points to about 10.3 (last 10 Norwich home games, last 10 Cardiff away games).",
+      "Recent venue form points to about 9.8 (last 10 Sheffield United home games, last 10 Watford away games).",
       "Championship average: 10.4 per match; 56% go over 9.5."
      ],
      "method": "30% venue-average Poisson + 70% Championship rate",
      "frozen_reference": {
       "model_version": "v0.9-frozen-poisson",
-      "over_9_5": 0.585,
+      "over_9_5": 0.5168,
       "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
      }
     },
@@ -40682,7 +40694,7 @@
      "pick": {
       "key": "over",
       "label": "Over 3.5",
-      "p": 0.5688,
+      "p": 0.5786,
       "fair_odds": "≈8/11",
       "line": 3.5
      },
@@ -40692,16 +40704,16 @@
        "over": {
         "key": "over",
         "label": "Over 2.5",
-        "p": 0.7604,
+        "p": 0.7668,
         "fair_odds": "≈3/10"
        },
        "under": {
         "key": "under",
         "label": "Under 2.5",
-        "p": 0.2396,
+        "p": 0.2332,
         "fair_odds": "≈100/30"
        },
-       "model_p": 0.8264,
+       "model_p": 0.8477,
        "league_p": 0.7321
       },
       {
@@ -40709,16 +40721,16 @@
        "over": {
         "key": "over",
         "label": "Over 3.5",
-        "p": 0.5688,
+        "p": 0.5786,
         "fair_odds": "≈8/11"
        },
        "under": {
         "key": "under",
         "label": "Under 3.5",
-        "p": 0.4312,
+        "p": 0.4214,
         "fair_odds": "≈11/8"
        },
-       "model_p": 0.6577,
+       "model_p": 0.6903,
        "league_p": 0.5308
       },
       {
@@ -40726,27 +40738,27 @@
        "over": {
         "key": "over",
         "label": "Over 4.5",
-        "p": 0.3761,
+        "p": 0.3873,
         "fair_odds": "≈13/8"
        },
        "under": {
         "key": "under",
         "label": "Under 4.5",
-        "p": 0.6239,
+        "p": 0.6127,
         "fair_odds": "≈8/13"
        },
-       "model_p": 0.4679,
+       "model_p": 0.5054,
        "league_p": 0.3367
       }
      ],
      "inputs": {
-      "venue_expected": 4.5,
+      "venue_expected": 4.7,
       "league_mean": 3.79,
       "home_games": 10,
       "away_games": 10
      },
      "explanation": [
-      "Recent venue form points to about 4.5 (last 10 Norwich home games, last 10 Cardiff away games).",
+      "Recent venue form points to about 4.7 (last 10 Sheffield United home games, last 10 Watford away games).",
       "Championship average: 3.8 per match; 53% go over 3.5."
      ],
      "method": "30% venue-average Poisson + 70% Championship rate"
@@ -40827,7 +40839,7 @@
       "away_games": 10
      },
      "explanation": [
-      "Recent venue form points to about 9.7 (last 10 Norwich home games, last 10 Cardiff away games).",
+      "Recent venue form points to about 9.7 (last 10 Sheffield United home games, last 10 Watford away games).",
       "Championship average: 8.1 per match; 42% go over 8.5."
      ],
      "method": "30% venue-average Poisson + 70% Championship rate"
@@ -40838,14 +40850,14 @@
      "decision": "most_likely",
      "market": "result",
      "key": "H",
-     "label": "Norwich win",
-     "p": 0.5847,
-     "credible_p": 0.5791,
+     "label": "Sheffield United win",
+     "p": 0.5588,
+     "credible_p": 0.5542,
      "n": 498,
      "status": "provisional",
      "strength": "moderate",
      "basis": "Championship model, 498 backtest matches (2025-26)",
-     "lower_bound": 0.5427
+     "lower_bound": 0.5176
     },
     "best_value": {
      "decision": "no_bet",
