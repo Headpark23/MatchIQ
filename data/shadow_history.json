@@ -9376,6 +9376,177 @@
    ],
    "origin": "shadow",
    "sha256": "dbe17e522d46e84980497527ccc4b6b3dfff38e62ea71ee60dba78c249a0a56f"
+  },
+  {
+   "record_id": "PL-2627-leeds-v-coventry#r1",
+   "match_id": "PL-2627-leeds-v-coventry",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Leeds",
+    "away": "Coventry",
+    "kickoff_utc": "2026-11-28T15:00:00Z"
+   },
+   "published_at": "2026-11-07T23:56:30.561705+00:00",
+   "inputs_fingerprint": "d0feb77ff357064a",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Leeds win",
+      "p": 0.5704,
+      "fair_odds": "≈8/11"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Leeds win",
+       "p": 0.5704,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2457,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Coventry win",
+       "p": 0.1839,
+       "fair_odds": "≈9/2"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "a2f6bc5f876c8ddecb12ce308ac4f07da7f9284195bba1ce30a7354e1b01ea8c"
+  },
+  {
+   "record_id": "PL-2627-man-united-v-brentford#r1",
+   "match_id": "PL-2627-man-united-v-brentford",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Man United",
+    "away": "Brentford",
+    "kickoff_utc": "2026-11-28T15:00:00Z"
+   },
+   "published_at": "2026-11-07T23:56:30.561705+00:00",
+   "inputs_fingerprint": "d0feb77ff357064a",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Man United win",
+      "p": 0.3904,
+      "fair_odds": "≈13/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Man United win",
+       "p": 0.3904,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2599,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Brentford win",
+       "p": 0.3496,
+       "fair_odds": "≈15/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "1d7e334de86cd2cc5804fc866a0259b372d8f1aaf52b3812082123934c9f2409"
+  },
+  {
+   "record_id": "PL-2627-ipswich-v-aston-villa#r1",
+   "match_id": "PL-2627-ipswich-v-aston-villa",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Ipswich",
+    "away": "Aston Villa",
+    "kickoff_utc": "2026-11-28T17:30:00Z"
+   },
+   "published_at": "2026-11-07T23:56:30.561705+00:00",
+   "inputs_fingerprint": "d0feb77ff357064a",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Aston Villa win",
+      "p": 0.5462,
+      "fair_odds": "≈5/6"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Ipswich win",
+       "p": 0.226,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2279,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Aston Villa win",
+       "p": 0.5462,
+       "fair_odds": "≈5/6"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "6d80dedd90e5c6143a0737ba67749d323327c4cd51a5be65611b82d03b977f7e"
   }
  ]
 }
