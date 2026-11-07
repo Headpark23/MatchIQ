@@ -1,945 +1,7 @@
 {
- "fetched_at": "2026-11-06T19:41:18.443207+00:00",
+ "fetched_at": "2026-11-07T00:18:44.269509+00:00",
  "source": "The Odds API (UK bookmakers; one bookmaker per market group, lowest margin)",
  "matches": {
-  "BL1-2627-rb-leipzig-v-augsburg": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-07T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 6.4,
-     "fractional": "11/2",
-     "bookmaker": "Matchbook",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:H": {
-     "decimal": 1.49,
-     "fractional": "1/2",
-     "bookmaker": "Matchbook",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:D": {
-     "decimal": 5.5,
-     "fractional": "9/2",
-     "bookmaker": "Matchbook",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 1.73,
-     "fractional": "8/11",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 2.22,
-     "fractional": "6/5",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.25,
-     "fractional": "1/4",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 3.8,
-     "fractional": "11/4",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-mainz-v-bayern-munich": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-07T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 1.35,
-     "fractional": "4/11",
-     "bookmaker": "Smarkets",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:21Z"
-    },
-    "result:H": {
-     "decimal": 8.2,
-     "fractional": "7/1",
-     "bookmaker": "Smarkets",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:21Z"
-    },
-    "result:D": {
-     "decimal": 7.0,
-     "fractional": "6/1",
-     "bookmaker": "Smarkets",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:21Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.22,
-     "fractional": "2/9",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 4.2,
-     "fractional": "100/30",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 1.63,
-     "fractional": "8/13",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 2.34,
-     "fractional": "11/8",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    }
-   }
-  },
-  "BL1-2627-dortmund-v-elversberg": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-07T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:H": {
-     "decimal": 1.35,
-     "fractional": "4/11",
-     "bookmaker": "Smarkets",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:21Z"
-    },
-    "result:A": {
-     "decimal": 9.4,
-     "fractional": "8/1",
-     "bookmaker": "Smarkets",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:21Z"
-    },
-    "result:D": {
-     "decimal": 6.4,
-     "fractional": "11/2",
-     "bookmaker": "Smarkets",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:21Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 1.94,
-     "fractional": "10/11",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.93,
-     "fractional": "10/11",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.33,
-     "fractional": "1/3",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 3.25,
-     "fractional": "9/4",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-paderborn-v-eintracht-frankfurt": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-07T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 2.26,
-     "fractional": "5/4",
-     "bookmaker": "Smarkets",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:21Z"
-    },
-    "result:H": {
-     "decimal": 3.15,
-     "fractional": "9/4",
-     "bookmaker": "Smarkets",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:21Z"
-    },
-    "result:D": {
-     "decimal": 4.0,
-     "fractional": "3/1",
-     "bookmaker": "Smarkets",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:21Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 2.12,
-     "fractional": "11/10",
-     "bookmaker": "Grosvenor",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:26:58Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.7,
-     "fractional": "8/11",
-     "bookmaker": "Grosvenor",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:26:58Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.44,
-     "fractional": "4/9",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.62,
-     "fractional": "13/8",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-stuttgart-v-werder-bremen": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-07T17:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:H": {
-     "decimal": 1.73,
-     "fractional": "8/11",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:A": {
-     "decimal": 4.6,
-     "fractional": "7/2",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:D": {
-     "decimal": 4.8,
-     "fractional": "4/1",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 1.89,
-     "fractional": "10/11",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 2.02,
-     "fractional": "Evens",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.3,
-     "fractional": "3/10",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 3.4,
-     "fractional": "5/2",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-koln-v-leverkusen": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-08T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:H": {
-     "decimal": 4.0,
-     "fractional": "3/1",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:A": {
-     "decimal": 1.94,
-     "fractional": "10/11",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:D": {
-     "decimal": 4.1,
-     "fractional": "3/1",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 2.08,
-     "fractional": "11/10",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.8,
-     "fractional": "4/5",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.4,
-     "fractional": "2/5",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.9,
-     "fractional": "15/8",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-freiburg-v-union-berlin": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-08T16:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:H": {
-     "decimal": 1.51,
-     "fractional": "1/2",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:A": {
-     "decimal": 7.2,
-     "fractional": "6/1",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:D": {
-     "decimal": 4.9,
-     "fractional": "4/1",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.65,
-     "fractional": "4/6",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.38,
-     "fractional": "11/8",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    }
-   }
-  },
-  "BL1-2627-hoffenheim-v-schalke-04": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-08T18:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 5.2,
-     "fractional": "4/1",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:H": {
-     "decimal": 1.67,
-     "fractional": "4/6",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:D": {
-     "decimal": 4.6,
-     "fractional": "7/2",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 2.26,
-     "fractional": "5/4",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.73,
-     "fractional": "8/11",
-     "bookmaker": "Matchbook",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.44,
-     "fractional": "4/9",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.62,
-     "fractional": "13/8",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-bayern-munich-v-koln": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-20T19:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 21.0,
-     "fractional": "20/1",
-     "bookmaker": "Ladbrokes",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:H": {
-     "decimal": 1.09,
-     "fractional": "1/12",
-     "bookmaker": "Ladbrokes",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "result:D": {
-     "decimal": 12.0,
-     "fractional": "11/1",
-     "bookmaker": "Ladbrokes",
-     "group": "result",
-     "last_update": "2026-11-06T12:27:20Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.17,
-     "fractional": "1/6",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 4.8,
-     "fractional": "4/1",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-leverkusen-v-paderborn": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-21T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:H": {
-     "decimal": 1.28,
-     "fractional": "2/7",
-     "bookmaker": "Coral",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:A": {
-     "decimal": 9.0,
-     "fractional": "8/1",
-     "bookmaker": "Coral",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:D": {
-     "decimal": 6.5,
-     "fractional": "11/2",
-     "bookmaker": "Coral",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 1.73,
-     "fractional": "8/11",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.95,
-     "fractional": "10/11",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.29,
-     "fractional": "2/7",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 3.5,
-     "fractional": "5/2",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-mgladbach-v-dortmund": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-21T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 1.67,
-     "fractional": "4/6",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:H": {
-     "decimal": 4.6,
-     "fractional": "7/2",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:D": {
-     "decimal": 4.33,
-     "fractional": "100/30",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 2.08,
-     "fractional": "11/10",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.64,
-     "fractional": "8/13",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.44,
-     "fractional": "4/9",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.62,
-     "fractional": "13/8",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-eintracht-frankfurt-v-hoffenheim": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-21T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:H": {
-     "decimal": 2.38,
-     "fractional": "11/8",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:A": {
-     "decimal": 2.6,
-     "fractional": "13/8",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:D": {
-     "decimal": 4.0,
-     "fractional": "3/1",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 1.83,
-     "fractional": "5/6",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.83,
-     "fractional": "5/6",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.36,
-     "fractional": "4/11",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.9,
-     "fractional": "15/8",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-elversberg-v-freiburg": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-21T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:H": {
-     "decimal": 3.2,
-     "fractional": "9/4",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:A": {
-     "decimal": 2.05,
-     "fractional": "Evens",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:D": {
-     "decimal": 4.0,
-     "fractional": "3/1",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 2.15,
-     "fractional": "11/10",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.6,
-     "fractional": "8/13",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.44,
-     "fractional": "4/9",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.5,
-     "fractional": "6/4",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-union-berlin-v-rb-leipzig": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-21T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 1.67,
-     "fractional": "4/6",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:H": {
-     "decimal": 4.5,
-     "fractional": "7/2",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:D": {
-     "decimal": 4.33,
-     "fractional": "100/30",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 1.98,
-     "fractional": "Evens",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.7,
-     "fractional": "8/11",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.4,
-     "fractional": "2/5",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.75,
-     "fractional": "7/4",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-schalke-04-v-stuttgart": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-21T17:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:H": {
-     "decimal": 3.75,
-     "fractional": "11/4",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:A": {
-     "decimal": 1.8,
-     "fractional": "4/5",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:D": {
-     "decimal": 4.33,
-     "fractional": "100/30",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 2.0,
-     "fractional": "Evens",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.68,
-     "fractional": "4/6",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.4,
-     "fractional": "2/5",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.75,
-     "fractional": "7/4",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T12:26:30Z"
-    }
-   }
-  },
-  "BL1-2627-augsburg-v-mainz": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-22T14:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:H": {
-     "decimal": 2.62,
-     "fractional": "13/8",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:A": {
-     "decimal": 2.38,
-     "fractional": "11/8",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:D": {
-     "decimal": 4.0,
-     "fractional": "3/1",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 2.0,
-     "fractional": "Evens",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.7,
-     "fractional": "8/11",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    }
-   }
-  },
-  "BL1-2627-werder-bremen-v-hamburg": {
-   "competition": "BL1",
-   "kickoff_utc": "2026-11-22T16:30:00Z",
-   "retrieved_at": "2026-11-06T12:27:23.534232+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 4.6,
-     "fractional": "7/2",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:H": {
-     "decimal": 1.67,
-     "fractional": "4/6",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "result:D": {
-     "decimal": 4.2,
-     "fractional": "100/30",
-     "bookmaker": "Betfred (UK)",
-     "group": "result",
-     "last_update": "2026-11-06T12:26:30Z"
-    },
-    "goals:over:3.5": {
-     "decimal": 2.2,
-     "fractional": "6/5",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    },
-    "goals:under:3.5": {
-     "decimal": 1.57,
-     "fractional": "4/7",
-     "bookmaker": "LeoVegas",
-     "group": "goals:3.5",
-     "last_update": "2026-11-06T12:27:23Z"
-    }
-   }
-  },
-  "PL-2627-everton-v-coventry": {
-   "competition": "PL",
-   "kickoff_utc": "2026-11-06T20:00:00Z",
-   "retrieved_at": "2026-11-06T19:41:18.443207+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 5.5,
-     "fractional": "9/2",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:14Z"
-    },
-    "result:H": {
-     "decimal": 1.7,
-     "fractional": "8/11",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:14Z"
-    },
-    "result:D": {
-     "decimal": 4.2,
-     "fractional": "100/30",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:14Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.74,
-     "fractional": "8/11",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:16Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.3,
-     "fractional": "5/4",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:16Z"
-    }
-   }
-  },
   "PL-2627-leeds-v-tottenham": {
    "competition": "PL",
    "kickoff_utc": "2026-11-07T12:30:00Z",
@@ -1808,48 +870,6 @@
     }
    }
   },
-  "ELC-2627-derby-v-bolton": {
-   "competition": "ELC",
-   "kickoff_utc": "2026-11-06T20:00:00Z",
-   "retrieved_at": "2026-11-06T19:41:18.443207+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 2.96,
-     "fractional": "2/1",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:18Z"
-    },
-    "result:H": {
-     "decimal": 2.56,
-     "fractional": "6/4",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:18Z"
-    },
-    "result:D": {
-     "decimal": 3.65,
-     "fractional": "11/4",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:18Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.88,
-     "fractional": "10/11",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:18Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.08,
-     "fractional": "11/10",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:18Z"
-    }
-   }
-  },
   "ELC-2627-bristol-city-v-norwich": {
    "competition": "ELC",
    "kickoff_utc": "2026-11-07T12:30:00Z",
@@ -2351,48 +1371,6 @@
      "bookmaker": "Matchbook",
      "group": "goals:2.5",
      "last_update": "2026-11-06T19:41:18Z"
-    }
-   }
-  },
-  "PD-2627-sevilla-v-alaves": {
-   "competition": "PD",
-   "kickoff_utc": "2026-11-06T20:00:00Z",
-   "retrieved_at": "2026-11-06T19:41:18.443207+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 4.6,
-     "fractional": "7/2",
-     "bookmaker": "Matchbook",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:19Z"
-    },
-    "result:H": {
-     "decimal": 2.06,
-     "fractional": "11/10",
-     "bookmaker": "Matchbook",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:19Z"
-    },
-    "result:D": {
-     "decimal": 3.3,
-     "fractional": "9/4",
-     "bookmaker": "Matchbook",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:19Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 2.4,
-     "fractional": "11/8",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:19Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 1.68,
-     "fractional": "4/6",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:19Z"
     }
    }
   },
@@ -3233,48 +2211,6 @@
      "bookmaker": "LeoVegas",
      "group": "goals:2.5",
      "last_update": "2026-11-06T19:40:53Z"
-    }
-   }
-  },
-  "SA-2627-venezia-v-udinese": {
-   "competition": "SA",
-   "kickoff_utc": "2026-11-06T19:45:00Z",
-   "retrieved_at": "2026-11-06T19:41:18.443207+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 3.2,
-     "fractional": "9/4",
-     "bookmaker": "Matchbook",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:21Z"
-    },
-    "result:H": {
-     "decimal": 2.54,
-     "fractional": "6/4",
-     "bookmaker": "Matchbook",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:21Z"
-    },
-    "result:D": {
-     "decimal": 3.35,
-     "fractional": "9/4",
-     "bookmaker": "Matchbook",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:21Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.93,
-     "fractional": "10/11",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:21Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 1.95,
-     "fractional": "10/11",
-     "bookmaker": "Matchbook",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:21Z"
     }
    }
   },
@@ -4132,48 +3068,6 @@
     }
    }
   },
-  "FL1-2627-toulouse-v-strasbourg": {
-   "competition": "FL1",
-   "kickoff_utc": "2026-11-06T19:45:00Z",
-   "retrieved_at": "2026-11-06T19:41:18.443207+00:00",
-   "selections": {
-    "result:A": {
-     "decimal": 3.3,
-     "fractional": "9/4",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:21Z"
-    },
-    "result:H": {
-     "decimal": 2.3,
-     "fractional": "5/4",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:21Z"
-    },
-    "result:D": {
-     "decimal": 3.7,
-     "fractional": "11/4",
-     "bookmaker": "Betfair",
-     "group": "result",
-     "last_update": "2026-11-06T19:41:21Z"
-    },
-    "goals:over:2.5": {
-     "decimal": 1.67,
-     "fractional": "4/6",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:20Z"
-    },
-    "goals:under:2.5": {
-     "decimal": 2.15,
-     "fractional": "11/10",
-     "bookmaker": "William Hill",
-     "group": "goals:2.5",
-     "last_update": "2026-11-06T19:41:20Z"
-    }
-   }
-  },
   "FL1-2627-auxerre-v-paris": {
    "competition": "FL1",
    "kickoff_utc": "2026-11-07T18:00:00Z",
@@ -4943,6 +3837,902 @@
      "last_update": "2026-11-06T19:40:52Z"
     }
    }
+  },
+  "BL1-2627-rb-leipzig-v-augsburg": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-07T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:A": {
+     "decimal": 6.4,
+     "fractional": "11/2",
+     "bookmaker": "Matchbook",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:H": {
+     "decimal": 1.48,
+     "fractional": "1/2",
+     "bookmaker": "Matchbook",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:D": {
+     "decimal": 5.7,
+     "fractional": "9/2",
+     "bookmaker": "Matchbook",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 1.72,
+     "fractional": "8/11",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 2.24,
+     "fractional": "5/4",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.25,
+     "fractional": "1/4",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 3.8,
+     "fractional": "11/4",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-mainz-v-bayern-munich": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-07T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:A": {
+     "decimal": 1.34,
+     "fractional": "1/3",
+     "bookmaker": "Matchbook",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:H": {
+     "decimal": 8.6,
+     "fractional": "15/2",
+     "bookmaker": "Matchbook",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:D": {
+     "decimal": 7.0,
+     "fractional": "6/1",
+     "bookmaker": "Matchbook",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 1.71,
+     "fractional": "8/11",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 2.26,
+     "fractional": "5/4",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.25,
+     "fractional": "1/4",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 3.8,
+     "fractional": "11/4",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-dortmund-v-elversberg": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-07T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:H": {
+     "decimal": 1.33,
+     "fractional": "1/3",
+     "bookmaker": "Smarkets",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:15Z"
+    },
+    "result:A": {
+     "decimal": 9.8,
+     "fractional": "9/1",
+     "bookmaker": "Smarkets",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:15Z"
+    },
+    "result:D": {
+     "decimal": 6.6,
+     "fractional": "11/2",
+     "bookmaker": "Smarkets",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:15Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 2.04,
+     "fractional": "Evens",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.89,
+     "fractional": "10/11",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.36,
+     "fractional": "4/11",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 3.0,
+     "fractional": "2/1",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-paderborn-v-eintracht-frankfurt": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-07T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:A": {
+     "decimal": 2.28,
+     "fractional": "5/4",
+     "bookmaker": "Betfair",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:H": {
+     "decimal": 3.2,
+     "fractional": "9/4",
+     "bookmaker": "Betfair",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:D": {
+     "decimal": 4.0,
+     "fractional": "3/1",
+     "bookmaker": "Betfair",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 2.18,
+     "fractional": "6/5",
+     "bookmaker": "Grosvenor",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.65,
+     "fractional": "4/6",
+     "bookmaker": "Grosvenor",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.53,
+     "fractional": "8/15",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 2.45,
+     "fractional": "6/4",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-stuttgart-v-werder-bremen": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-07T17:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:H": {
+     "decimal": 1.72,
+     "fractional": "8/11",
+     "bookmaker": "Betfair",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:A": {
+     "decimal": 4.6,
+     "fractional": "7/2",
+     "bookmaker": "Betfair",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:D": {
+     "decimal": 4.7,
+     "fractional": "7/2",
+     "bookmaker": "Betfair",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 1.9,
+     "fractional": "10/11",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 2.02,
+     "fractional": "Evens",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.3,
+     "fractional": "3/10",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 3.4,
+     "fractional": "5/2",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-koln-v-leverkusen": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-08T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:H": {
+     "decimal": 4.1,
+     "fractional": "3/1",
+     "bookmaker": "Smarkets",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:16Z"
+    },
+    "result:A": {
+     "decimal": 1.93,
+     "fractional": "10/11",
+     "bookmaker": "Smarkets",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:16Z"
+    },
+    "result:D": {
+     "decimal": 4.2,
+     "fractional": "100/30",
+     "bookmaker": "Smarkets",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:16Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 2.12,
+     "fractional": "11/10",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.81,
+     "fractional": "4/5",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.4,
+     "fractional": "2/5",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 2.9,
+     "fractional": "15/8",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-freiburg-v-union-berlin": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-08T16:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:H": {
+     "decimal": 1.52,
+     "fractional": "8/15",
+     "bookmaker": "Smarkets",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:16Z"
+    },
+    "result:A": {
+     "decimal": 7.0,
+     "fractional": "6/1",
+     "bookmaker": "Smarkets",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:16Z"
+    },
+    "result:D": {
+     "decimal": 4.9,
+     "fractional": "4/1",
+     "bookmaker": "Smarkets",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:16Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.66,
+     "fractional": "4/6",
+     "bookmaker": "Matchbook",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 2.38,
+     "fractional": "11/8",
+     "bookmaker": "Matchbook",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-hoffenheim-v-schalke-04": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-08T18:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:A": {
+     "decimal": 5.2,
+     "fractional": "4/1",
+     "bookmaker": "Betfair",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:H": {
+     "decimal": 1.68,
+     "fractional": "4/6",
+     "bookmaker": "Betfair",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "result:D": {
+     "decimal": 4.6,
+     "fractional": "7/2",
+     "bookmaker": "Betfair",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 2.32,
+     "fractional": "11/8",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.7,
+     "fractional": "8/11",
+     "bookmaker": "Matchbook",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.44,
+     "fractional": "4/9",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 2.62,
+     "fractional": "13/8",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-bayern-munich-v-koln": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-20T19:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:A": {
+     "decimal": 21.0,
+     "fractional": "20/1",
+     "bookmaker": "Ladbrokes",
+     "group": "result",
+     "last_update": "2026-11-07T00:17:49Z"
+    },
+    "result:H": {
+     "decimal": 1.09,
+     "fractional": "1/12",
+     "bookmaker": "Ladbrokes",
+     "group": "result",
+     "last_update": "2026-11-07T00:17:49Z"
+    },
+    "result:D": {
+     "decimal": 12.0,
+     "fractional": "11/1",
+     "bookmaker": "Ladbrokes",
+     "group": "result",
+     "last_update": "2026-11-07T00:17:49Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.17,
+     "fractional": "1/6",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 4.8,
+     "fractional": "4/1",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-leverkusen-v-paderborn": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-21T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:H": {
+     "decimal": 1.28,
+     "fractional": "2/7",
+     "bookmaker": "Coral",
+     "group": "result",
+     "last_update": "2026-11-07T00:17:28Z"
+    },
+    "result:A": {
+     "decimal": 9.0,
+     "fractional": "8/1",
+     "bookmaker": "Coral",
+     "group": "result",
+     "last_update": "2026-11-07T00:17:28Z"
+    },
+    "result:D": {
+     "decimal": 6.5,
+     "fractional": "11/2",
+     "bookmaker": "Coral",
+     "group": "result",
+     "last_update": "2026-11-07T00:17:28Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 1.73,
+     "fractional": "8/11",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.95,
+     "fractional": "10/11",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.29,
+     "fractional": "2/7",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 3.5,
+     "fractional": "5/2",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-mgladbach-v-dortmund": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-21T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:A": {
+     "decimal": 1.67,
+     "fractional": "4/6",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:H": {
+     "decimal": 4.6,
+     "fractional": "7/2",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:D": {
+     "decimal": 4.33,
+     "fractional": "100/30",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 2.02,
+     "fractional": "Evens",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.67,
+     "fractional": "4/6",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.44,
+     "fractional": "4/9",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 2.62,
+     "fractional": "13/8",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-eintracht-frankfurt-v-hoffenheim": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-21T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:H": {
+     "decimal": 2.38,
+     "fractional": "11/8",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:A": {
+     "decimal": 2.6,
+     "fractional": "13/8",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:D": {
+     "decimal": 4.0,
+     "fractional": "3/1",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 1.83,
+     "fractional": "5/6",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.83,
+     "fractional": "5/6",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.36,
+     "fractional": "4/11",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 2.9,
+     "fractional": "15/8",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-elversberg-v-freiburg": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-21T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:H": {
+     "decimal": 3.2,
+     "fractional": "9/4",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:A": {
+     "decimal": 2.05,
+     "fractional": "Evens",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:D": {
+     "decimal": 4.0,
+     "fractional": "3/1",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 2.15,
+     "fractional": "11/10",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.6,
+     "fractional": "8/13",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.44,
+     "fractional": "4/9",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 2.5,
+     "fractional": "6/4",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-union-berlin-v-rb-leipzig": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-21T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:A": {
+     "decimal": 1.67,
+     "fractional": "4/6",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:H": {
+     "decimal": 4.5,
+     "fractional": "7/2",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:D": {
+     "decimal": 4.33,
+     "fractional": "100/30",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 1.98,
+     "fractional": "Evens",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.7,
+     "fractional": "8/11",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.4,
+     "fractional": "2/5",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 2.75,
+     "fractional": "7/4",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-schalke-04-v-stuttgart": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-21T17:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:H": {
+     "decimal": 3.75,
+     "fractional": "11/4",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:A": {
+     "decimal": 1.8,
+     "fractional": "4/5",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:D": {
+     "decimal": 4.33,
+     "fractional": "100/30",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 2.0,
+     "fractional": "Evens",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.68,
+     "fractional": "4/6",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:over:2.5": {
+     "decimal": 1.4,
+     "fractional": "2/5",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    },
+    "goals:under:2.5": {
+     "decimal": 2.75,
+     "fractional": "7/4",
+     "bookmaker": "William Hill",
+     "group": "goals:2.5",
+     "last_update": "2026-11-07T00:18:35Z"
+    }
+   }
+  },
+  "BL1-2627-augsburg-v-mainz": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-22T14:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:H": {
+     "decimal": 2.62,
+     "fractional": "13/8",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:A": {
+     "decimal": 2.38,
+     "fractional": "11/8",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "result:D": {
+     "decimal": 4.0,
+     "fractional": "3/1",
+     "bookmaker": "Betfred (UK)",
+     "group": "result",
+     "last_update": "2026-11-07T00:18:37Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 2.0,
+     "fractional": "Evens",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.7,
+     "fractional": "8/11",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    }
+   }
+  },
+  "BL1-2627-werder-bremen-v-hamburg": {
+   "competition": "BL1",
+   "kickoff_utc": "2026-11-22T16:30:00Z",
+   "retrieved_at": "2026-11-07T00:18:44.269509+00:00",
+   "selections": {
+    "result:A": {
+     "decimal": 4.4,
+     "fractional": "100/30",
+     "bookmaker": "Coral",
+     "group": "result",
+     "last_update": "2026-11-07T00:17:28Z"
+    },
+    "result:H": {
+     "decimal": 1.73,
+     "fractional": "8/11",
+     "bookmaker": "Coral",
+     "group": "result",
+     "last_update": "2026-11-07T00:17:28Z"
+    },
+    "result:D": {
+     "decimal": 4.0,
+     "fractional": "3/1",
+     "bookmaker": "Coral",
+     "group": "result",
+     "last_update": "2026-11-07T00:17:28Z"
+    },
+    "goals:over:3.5": {
+     "decimal": 2.2,
+     "fractional": "6/5",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    },
+    "goals:under:3.5": {
+     "decimal": 1.57,
+     "fractional": "4/7",
+     "bookmaker": "LeoVegas",
+     "group": "goals:3.5",
+     "last_update": "2026-11-07T00:18:38Z"
+    }
+   }
   }
  },
  "leagues": {
@@ -4991,13 +4781,13 @@
    "totals": true
   },
   "BL1": {
-   "fetched_at": "2026-11-06T12:27:23.534232+00:00",
+   "fetched_at": "2026-11-07T00:18:44.269509+00:00",
    "markets_requested": [
     "h2h",
     "totals"
    ],
-   "events": 18,
-   "matched": 18,
+   "events": 17,
+   "matched": 17,
    "unmatched": [],
    "totals": true
   },
@@ -5016,10 +4806,10 @@
  "credits": {
   "spent_by_month": {
    "2026-10": 38,
-   "2026-11": 80
+   "2026-11": 82
   },
   "monthly_cap": 400,
-  "provider_remaining": 420
+  "provider_remaining": 418
  },
  "markets_covered": [
   "Match Result",
