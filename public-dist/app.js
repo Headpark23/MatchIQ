@@ -7277,13 +7277,14 @@ function renderBetAIResult(r) {
   let html = '';
   if (r.notice) html += '<p class="betai-notice">' + esc(r.notice) + '</p>';
   if (r.picks && r.picks.length) {
-    html += '<ul class="betai-picks">' + r.picks.map(p =>
+    html += '<ul class="betai-picks">' + r.picks.map((p, i) =>
       '<li class="betai-pick"><div class="betai-pick-top"><span class="betai-match">' + esc(p.match) + '</span><span class="betai-conf" title="Confidence">' + esc(p.confidence) + '%</span></div>' +
       '<div class="betai-angle"><b>' + esc(p.selection) + '</b> <span>' + esc(p.market) + '</span></div>' +
       (p.scoreline ? '<div class="betai-sub">Scoreline: ' + esc(p.scoreline) + '</div>' : '') +
-      (p.pivot ? '<div class="betai-sub">If it turns: ' + esc(p.pivot) + '</div>' : '') + '</li>').join('') + '</ul>';
+      (p.pivot ? '<div class="betai-sub">If it turns: ' + esc(p.pivot) + '</div>' : '') +
+      (r.kind === 'acca' ? '' : betaiSaveButtons('single', i)) + '</li>').join('') + '</ul>';
     if (r.kind === 'acca' && r.combinedP != null) {
-      html += '<p class="betai-acca">Accumulator: all ' + r.picks.length + ' legs landing is about <b>' + (r.combinedP < 0.01 ? '<1' : Math.round(r.combinedP * 100)) + '%</b> on the model. Most accas lose.</p>';
+      html += '<p class="betai-acca">Accumulator: all ' + r.picks.length + ' legs landing is about <b>' + (r.combinedP < 0.01 ? '<1' : Math.round(r.combinedP * 100)) + '%</b> on the model. Most accas lose.</p>' + betaiSaveButtons('acca');
     }
   }
   const why = r.reasoning || {};
@@ -7295,6 +7296,42 @@ function renderBetAIResult(r) {
     }
   }
   return html;
+}
+
+function betaiSaveButtons(kind, i) {
+  const a = ' data-betai-save="' + kind + '"' + (i != null ? ' data-i="' + i + '"' : '');
+  return '<div class="betai-save">' +
+    '<button type="button" class="btn small"' + a + ' data-dest="diary">Add to diary</button>' +
+    '<button type="button" class="btn small primary"' + a + ' data-dest="league">Add to diary &amp; league</button></div>';
+}
+
+// Hands a BetAI pick (or the whole accumulator) to the normal Bet Diary form, which asks for the stake and the
+// price actually offered and applies the league rules. dest 'diary' = diary only; 'league' = diary and league.
+function betaiSaveToDiary(kind, idx, dest) {
+  const r = betai.result;
+  if (!r || !r.picks) return;
+  const pick = kind === 'single' ? r.picks[idx] : null;
+  if (kind === 'single' && !pick) return;
+  closeBetAI();
+  if (kind === 'single') {
+    openDiary({
+      id: pick.matchId, selection: pick.selection, market: MARKETS[pick.marketKey] ? MARKETS[pick.marketKey].diary : 'wins',
+      odds: '', p: pick.p, fair: pick.fair, rec: 'betai', notes: 'BetAI pick (model estimate ' + Math.round(pick.p * 100) + '%; not a recommendation)'
+    });
+  } else {
+    openDiary({});
+    $('modal-bet-type').value = 'accumulator';
+    toggleAccumulatorFields();
+    $('modal-legs-input').value = r.picks.map(p => p.match + ': ' + (p.marketKey === 'result' || p.marketKey === 'btts' ? '' : p.market + ' ') + p.selection + ' | ').join('\n');
+    $('modal-origin-select').value = 'matchiq';
+    $('modal-notes-input').value = 'BetAI accumulator, ' + r.picks.length + ' legs (model estimate ' + Math.round(r.combinedP * 100) + '% for all to land; not a recommendation).';
+    updateModalPnlPreview();
+    toast('Add the price your bookmaker offered after each |, then your stake.');
+  }
+  const diaryRadio = $('dest-diary-radio'), bothRadio = $('dest-both-radio');
+  if (dest === 'diary' && diaryRadio) { diaryRadio.checked = true; if (bothRadio) bothRadio.checked = false; }
+  else if (dest === 'league' && bothRadio && bothRadio.offsetParent !== null) { bothRadio.checked = true; if (diaryRadio) diaryRadio.checked = false; }
+  updateDiarySubmitBtn();
 }
 
 function betaiErrorText(e) {
@@ -7309,6 +7346,7 @@ async function openBetAI() {
   const modal = $('betai-modal');
   if (!modal) return;
   modal.hidden = false;
+  if (!betai.loading) { betai.result = null; betai.error = ''; betai.showWhy = false; betai.question = ''; }
   renderBetAI();
   if (betaiSignedIn() && betai.remaining == null) {
     try {
@@ -7344,6 +7382,8 @@ document.addEventListener('click', e => {
   if (!t || !t.closest) return;
   const chip = t.closest('[data-betai-q]');
   if (chip) { betai.question = chip.dataset.betaiQ; renderBetAI(); const i = $('betai-input'); if (i) i.focus(); return; }
+  const save = t.closest('[data-betai-save]');
+  if (save) { betaiSaveToDiary(save.dataset.betaiSave, save.dataset.i != null ? Number(save.dataset.i) : null, save.dataset.dest); return; }
   if (t.closest('[data-betai-why]')) { betai.showWhy = !betai.showWhy; renderBetAI(); return; }
   if (t.id === 'betai-modal') closeBetAI();
 });

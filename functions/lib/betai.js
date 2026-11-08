@@ -46,7 +46,7 @@ function fixtureLine(rec) {
   if (mk.cards) bits.push(lineText(mk.cards, 'Cards(yellow)'));
   if (mk.shots) bits.push(lineText(mk.shots, 'ShotsOnTarget'));
   const weak = mk.result && mk.result.evidence && mk.result.evidence.strength;
-  return [f.home + ' v ' + f.away, f.competition, String(f.kickoff_utc || '').slice(0, 16).replace('T', ' '),
+  return ['id=' + rec.match_id, f.home + ' v ' + f.away, f.competition, String(f.kickoff_utc || '').slice(0, 16).replace('T', ' '),
     bits.filter(Boolean).join(' | '), weak ? 'evidence:' + weak : ''].filter(Boolean).join(' | ');
 }
 
@@ -65,7 +65,8 @@ function buildContext(predictions, question, nowMs) {
   const matched = list.filter(hit);
   const rest = list.filter(r => !hit(r));
   const chosen = matched.concat(rest).slice(0, MAX_FIXTURES);
-  return { count: list.length, matchedCount: matched.length, lines: chosen.map(fixtureLine) };
+  const index = new Map(chosen.map(r => [r.match_id, r]));
+  return { count: list.length, matchedCount: matched.length, lines: chosen.map(fixtureLine), index };
 }
 
 const SYSTEM_PROMPT = [
@@ -76,10 +77,14 @@ const SYSTEM_PROMPT = [
   '',
   'DATA RULES (strict):',
   '- The FIXTURE DATA block is the only factual source. Percentages are the app\'s model probabilities.',
-  '- Only pick from fixtures in that block. Never invent lineups, injuries, xG, referee stats, odds, prices or news.',
+  '- Only pick from fixtures in that block, identified by their id=... value (copy it exactly into matchId).',
+  '- Never invent lineups, injuries, xG, referee stats, odds, prices or news.',
+  '- Describe each pick with marketKey (result, goals, btts, corners, cards or shots), outcome and line:',
+  '  result: outcome H, D or A. btts: outcome yes or no. goals/corners/cards/shots: outcome over or under and the line',
+  '  number, using only a line shown in the data. The app fills in the labels and probabilities from the data.',
   '- If lineups or injuries matter, say they are unconfirmed in the reasoning and lower confidence.',
-  '- "p" must be copied from the data for the selection you pick (0 to 1). "confidence" is 0-100, anchored on p and',
-  '  never more than 5 points above p*100. Weak-evidence fixtures should get lower confidence.',
+  '- "confidence" is 0-100, anchored on the data probability of your pick and never more than 5 points above it.',
+  '  Weak-evidence fixtures should get lower confidence.',
   '- Give a betting ANGLE only (market + selection, e.g. "Over 2.5 goals"). Never state odds or bookmakers.',
   '- If the question asks for an accumulator, set kind to "acca" and choose legs that are sensible together.',
   '  Otherwise set kind to "single".',
@@ -96,6 +101,7 @@ function buildPrompt(question, ctx, nowMs) {
 }
 
 const S = 'STRING', N = 'NUMBER';
+const MARKET_KEYS = ['result', 'goals', 'btts', 'corners', 'cards', 'shots'];
 const RESPONSE_SCHEMA = {
   type: 'OBJECT',
   properties: {
@@ -106,15 +112,15 @@ const RESPONSE_SCHEMA = {
       items: {
         type: 'OBJECT',
         properties: {
-          match: { type: S },
-          market: { type: S },
-          selection: { type: S },
-          p: { type: N },
+          matchId: { type: S },
+          marketKey: { type: S, enum: MARKET_KEYS },
+          outcome: { type: S },
+          line: { type: N },
           confidence: { type: N },
           scoreline: { type: S },
           pivot: { type: S }
         },
-        required: ['match', 'market', 'selection', 'p', 'confidence']
+        required: ['matchId', 'marketKey', 'outcome', 'confidence']
       }
     },
     reasoning: {
@@ -132,22 +138,49 @@ const RESPONSE_SCHEMA = {
 const str = (v, n) => (typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().slice(0, n) : '');
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, Number.isFinite(+v) ? +v : lo));
 
-// Keep only what the screen needs and recompute the accumulator maths ourselves.
-function normalise(raw) {
+// Finds the pick the model named inside the app's own data, so label, probability and fair odds are the
+// app's numbers, never the AI's. Returns null when the match, market, outcome or line is not in the data.
+function resolvePick(rec, marketKey, outcome, line) {
+  const m = rec && rec.markets && rec.markets[marketKey];
+  if (!m) return null;
+  let sel = null;
+  if (marketKey === 'result' || marketKey === 'btts') {
+    const want = marketKey === 'result' ? String(outcome).toUpperCase() : String(outcome).toLowerCase();
+    sel = (m.selections || []).find(x => x.key === want);
+  } else {
+    const l = (m.lines || []).find(x => Number(x.line) === Number(line));
+    sel = l && l[String(outcome).toLowerCase()];
+  }
+  return sel && typeof sel.p === 'number' ? { market: m.name || marketKey, label: sel.label, p: sel.p, fair: sel.fair_odds || '' } : null;
+}
+
+// Keep only what the screen needs, drop picks that are not in the data, and do the accumulator maths here.
+function normalise(raw, index) {
   const o = raw && typeof raw === 'object' ? raw : {};
-  const picks = (Array.isArray(o.picks) ? o.picks : []).slice(0, MAX_PICKS).map(p => {
-    const prob = clamp(p && p.p, 0, 1);
-    return {
-      match: str(p && p.match, 80), market: str(p && p.market, 40), selection: str(p && p.selection, 60),
-      p: prob, confidence: Math.round(Math.min(clamp(p && p.confidence, 0, 100), prob * 100 + 5)),
-      scoreline: str(p && p.scoreline, 12), pivot: str(p && p.pivot, 140)
-    };
-  }).filter(p => p.match && p.selection);
-  const kind = o.kind === 'acca' && picks.length > 1 ? 'acca' : 'single';
+  const seen = new Set();
+  const picks = [];
+  for (const p of (Array.isArray(o.picks) ? o.picks : [])) {
+    const rec = index && index.get(p && p.matchId);
+    const hit = rec && resolvePick(rec, p.marketKey, p.outcome, p.line);
+    if (!hit) continue;
+    const key = [p.matchId, p.marketKey, p.outcome, p.line].join('|');
+    if (seen.has(key)) continue;
+    seen.add(key);
+    picks.push({
+      matchId: p.matchId, marketKey: p.marketKey,
+      match: rec.fixture.home + ' v ' + rec.fixture.away, market: hit.market, selection: hit.label, fair: hit.fair, p: hit.p,
+      confidence: Math.round(Math.min(clamp(p.confidence, 0, 100), hit.p * 100 + 5)),
+      scoreline: str(p.scoreline, 12), pivot: str(p.pivot, 140)
+    });
+    if (picks.length >= MAX_PICKS) break;
+  }
+  const accaOk = o.kind === 'acca' && picks.length > 1 && new Set(picks.map(p => p.matchId)).size === picks.length;
+  const kind = accaOk ? 'acca' : 'single';
   const reasoning = o.reasoning && typeof o.reasoning === 'object' ? o.reasoning : {};
+  const dropped = Array.isArray(o.picks) && o.picks.length > picks.length;
   return {
     kind,
-    notice: str(o.notice, 240),
+    notice: str(o.notice, 240) || (!picks.length && dropped ? 'BetAI could not match that to upcoming fixtures in the data. Try naming a team or a market.' : ''),
     picks,
     combinedP: kind === 'acca' ? picks.reduce((a, p) => a * p.p, 1) : null,
     reasoning: {
@@ -158,4 +191,4 @@ function normalise(raw) {
   };
 }
 
-module.exports = { DAILY_LIMIT, MAX_QUESTION, ukDay, cleanQuestion, buildContext, buildPrompt, SYSTEM_PROMPT, RESPONSE_SCHEMA, normalise };
+module.exports = { DAILY_LIMIT, MAX_QUESTION, ukDay, cleanQuestion, buildContext, buildPrompt, SYSTEM_PROMPT, RESPONSE_SCHEMA, normalise, resolvePick };

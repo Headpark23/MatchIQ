@@ -143,7 +143,7 @@ exports.betAI = onRequest({ cors: true, secrets: [GEMINI_API_KEY], timeoutSecond
     if (!slot.ok) { res.status(429).json({ error: 'daily-limit', remaining: 0, limit: betai.DAILY_LIMIT }); return; }
     try {
       const ctx = betai.buildContext(await loadData('predictions.json'), question, now);
-      const out = betai.normalise(await callGemini(GEMINI_API_KEY.value().trim(), question, ctx, now));
+      const out = betai.normalise(await callGemini(GEMINI_API_KEY.value().trim(), question, ctx, now), ctx.index);
       res.json(Object.assign(out, { remaining: slot.remaining, limit: betai.DAILY_LIMIT }));
     } catch (e) {
       logger.warn('betAI failed', e);

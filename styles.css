@@ -4215,3 +4215,6 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .betai-why b { color: var(--soft); }
 .betai-gate { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 8px 0; color: var(--muted); }
 .betai-gate p { margin: 0; font-size: 14px; }
+
+.betai-save { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.betai-save .btn { min-height: 40px; flex: 1 1 140px; }

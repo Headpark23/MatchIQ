@@ -21,10 +21,10 @@ const preds = { predictions: {
 // context: only scheduled fixtures inside the horizon, named teams first
 let ctx = b.buildContext(preds, 'what about arsenal?', now);
 assert.strictEqual(ctx.count, 2);
-assert.ok(ctx.lines[0].startsWith('Arsenal v Chelsea'), 'named team first');
+assert.ok(ctx.lines[0].includes('Arsenal v Chelsea'), 'named team first');
 assert.ok(ctx.lines[0].includes('BTTS 55%') && ctx.lines[0].includes('O2.5 60%') && !ctx.lines[0].includes('O4.5'));
 ctx = b.buildContext(preds, 'any goals tips', now);
-assert.ok(ctx.lines[0].startsWith('Everton v Fulham'), 'soonest first when nothing named');
+assert.ok(ctx.lines[0].includes('Everton v Fulham'), 'soonest first when nothing named');
 
 // question cleaning
 assert.strictEqual(b.cleanQuestion('  hi\n\nthere\u0000 '), 'hi there');
@@ -35,21 +35,40 @@ assert.strictEqual(b.cleanQuestion('x'.repeat(999)).length, b.MAX_QUESTION);
 assert.strictEqual(b.ukDay(Date.parse('2026-07-01T23:30:00Z')), '2026-07-02');
 assert.strictEqual(b.ukDay(Date.parse('2026-12-01T23:30:00Z')), '2026-12-01');
 
-// normalise: confidence capped near p, acca maths done here, junk dropped
+// normalise: picks are resolved against the data, so labels and p are the app's, not the AI's
+const withIds = { predictions: { a: rec('Arsenal', 'Chelsea', '2026-11-09T15:00:00Z'), b: rec('Everton', 'Fulham', '2026-11-08T15:00:00Z') } };
+withIds.predictions.a.match_id = 'A1'; withIds.predictions.b.match_id = 'B1';
+withIds.predictions.a.markets.goals.lines.forEach(l => { l.over.label = 'Over ' + l.line; l.over.fair_odds = '~4/6'; });
+withIds.predictions.a.markets.goals.name = 'Total goals';
+withIds.predictions.a.markets.result.selections[0].label = 'Arsenal win';
+withIds.predictions.b.markets.btts.selections[0].label = 'Yes';
+const idx = b.buildContext(withIds, 'x', now).index;
+assert.ok(b.buildContext(withIds, 'x', now).lines[0].startsWith('id='), 'lines carry the match id');
+assert.strictEqual(b.resolvePick(withIds.predictions.a, 'goals', 'over', 2.5).label, 'Over 2.5');
+assert.strictEqual(b.resolvePick(withIds.predictions.a, 'goals', 'over', 9.5), null, 'unknown line');
+assert.strictEqual(b.resolvePick(withIds.predictions.a, 'result', 'h').label, 'Arsenal win');
 const out = b.normalise({
   kind: 'acca',
   picks: [
-    { match: 'A v B', market: 'Goals', selection: 'Over 2.5', p: 0.6, confidence: 95 },
-    { match: 'C v D', market: 'BTTS', selection: 'Yes', p: 0.5, confidence: 40 },
-    { match: '', selection: '', p: 1, confidence: 1 }
+    { matchId: 'A1', marketKey: 'goals', outcome: 'over', line: 2.5, confidence: 95, p: 0.99 },
+    { matchId: 'B1', marketKey: 'btts', outcome: 'yes', confidence: 40 },
+    { matchId: 'GHOST', marketKey: 'result', outcome: 'H', confidence: 90 },
+    { matchId: 'A1', marketKey: 'goals', outcome: 'over', line: 2.5, confidence: 50 }
   ],
   reasoning: { scenario: 'cagey', experts: [{ role: 'Quant', brief: 'x' }, { role: '', brief: 'y' }] }
-});
-assert.strictEqual(out.picks.length, 2);
-assert.strictEqual(out.picks[0].confidence, 65);
+}, idx);
+assert.strictEqual(out.picks.length, 2, 'invented fixture and duplicate dropped');
+assert.strictEqual(out.picks[0].matchId, 'A1');
+assert.strictEqual(out.picks[0].match, 'Arsenal v Chelsea');
+assert.strictEqual(out.picks[0].selection, 'Over 2.5');
+assert.strictEqual(out.picks[0].p, 0.6, 'p comes from the data');
+assert.strictEqual(out.picks[0].confidence, 65, 'confidence capped near data p');
 assert.strictEqual(out.kind, 'acca');
-assert.ok(Math.abs(out.combinedP - 0.3) < 1e-9);
+assert.ok(Math.abs(out.combinedP - 0.6 * 0.55) < 1e-9);
 assert.strictEqual(out.reasoning.experts.length, 1);
-assert.strictEqual(b.normalise({ kind: 'acca', picks: [{ match: 'a', selection: 'b', p: 0.5, confidence: 50 }] }).kind, 'single');
-assert.deepStrictEqual(b.normalise(null).picks, []);
+assert.strictEqual(b.normalise({ kind: 'acca', picks: [
+  { matchId: 'A1', marketKey: 'goals', outcome: 'over', line: 2.5, confidence: 50 },
+  { matchId: 'A1', marketKey: 'result', outcome: 'H', confidence: 50 }] }, idx).kind, 'single');
+assert.ok(b.normalise({ picks: [{ matchId: 'GHOST', marketKey: 'result', outcome: 'H', confidence: 50 }] }, idx).notice.length > 0);
+assert.deepStrictEqual(b.normalise(null, idx).picks, []);
 console.log('betai tests passed');
