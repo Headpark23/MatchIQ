@@ -75,7 +75,14 @@ def build():
             if fname in {"CNAME", "gag0p29escioankmdh.html"}:
                 continue
             raise FileNotFoundError(f"Missing required public file: {fname}")
-        shutil.copy2(src, DIST / fname)
+        if fname == "vercel.json":
+            # The repository-root vercel.json tells Git deployments to serve public-dist/; the copy
+            # inside public-dist/ (used by `vercel deploy` from that folder) must not point at itself.
+            config = {k: v for k, v in json.loads(src.read_text(encoding="utf-8")).items()
+                      if k not in ("$schema", "buildCommand", "installCommand", "outputDirectory")}
+            (DIST / fname).write_text(json.dumps(config, indent=2) + chr(10), encoding="utf-8")
+        else:
+            shutil.copy2(src, DIST / fname)
         copied.append(fname)
 
     # 2. Assets

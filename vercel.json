@@ -1,4 +1,8 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "echo 'public-dist/ is built and committed by the data refresh workflow'",
+  "installCommand": "echo 'no install needed'",
+  "outputDirectory": "public-dist",
   "cleanUrls": true,
   "headers": [
     {

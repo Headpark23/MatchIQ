@@ -1,0 +1,50 @@
+name: Live site watchdog
+# Once a day, checks the live site from the outside: the published data must be less than
+# 26 hours old, and research-only files must not be served. A failure opens (or comments on)
+# the "Data refresh failing" issue, so a stalled schedule or a broken deploy is noticed even
+# when the refresh workflow itself reports success.
+on:
+  schedule:
+    - cron: '15 7 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SITE: ${{ vars.MATCHIQ_SITE_URL || 'https://matchiq-brown.vercel.app' }}
+    steps:
+      - name: Published data is fresh
+        run: |
+          python3 - <<'EOF'
+          import datetime as dt, json, os, urllib.request
+          site = os.environ["SITE"].rstrip("/")
+          with urllib.request.urlopen(site + "/data/pipeline_status.json", timeout=30) as r:
+              status = json.load(r)
+          last = dt.datetime.fromisoformat(status["last_success"])
+          age = (dt.datetime.now(dt.timezone.utc) - last).total_seconds() / 3600
+          print(f"last successful refresh {last.isoformat()} ({age:.1f} h ago); upcoming predicted {status.get('upcoming_predicted')}")
+          if age > 26:
+              raise SystemExit(f"live data is {age:.1f} hours old")
+          EOF
+      - name: Research-only files are not served
+        run: |
+          for path in data/matches.json data/league_results.json data/quarantine/fabricated_records.json data/shadow_history.json; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$SITE/$path")
+            echo "$path -> $code"
+            if [ "$code" = "200" ]; then echo "::error::$path is publicly served"; exit 1; fi
+          done
+      - name: Open or update the "Data refresh failing" issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Data refresh failing"
+          body="Live site check failed at $(date -u +'%Y-%m-%d %H:%M UTC') ($SITE): $RUN_URL"
+          number=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          if [ -n "$number" ]; then gh issue comment "$number" --body "$body"; else gh issue create --title "$title" --body "$body"; fi

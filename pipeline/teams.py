@@ -137,7 +137,7 @@ LEAGUE_ALIASES.update({
            "Cambuur": ["sc cambuur leeuwarden"], "Heerenveen": ["sc heerenveen"], "Sparta Rotterdam": ["sparta rotterdam"],
            "Telstar": ["telstar 1963"], "Willem II": ["willem ii tilburg"]},
     "P1": {"Sporting CP": ["sporting clube de portugal"], "Benfica": ["sport lisboa e benfica"], "FC Porto": ["fc porto"], "SC Braga": ["sporting clube de braga"],
-           "Vitoria Guimaraes": ["vitoria guimaraes"], "Famalicao": ["fc famalicao"], "Gil Vicente": ["gil vicente fc"], "Rio Ave": ["rio ave fc"],
+           "Vitoria Guimaraes": ["vitoria guimaraes", "vitoria sc", "vitoria de guimaraes"], "Famalicao": ["fc famalicao"], "Gil Vicente": ["gil vicente fc"], "Rio Ave": ["rio ave fc"],
            "Moreirense": ["moreirense fc"], "Casa Pia": ["casa pia ac"], "Estoril": ["gd estoril praia"], "Arouca": ["fc arouca"], "Nacional": ["cd nacional"],
            "Santa Clara": ["cd santa clara"], "Estrela Amadora": ["cf estrela da amadora"], "Alverca": ["fc alverca"],
            "Maritimo": ["cs maritimo"], "Academico Viseu": ["academico de viseu fc"]},
@@ -171,6 +171,12 @@ DISPLAY_NAMES = {"Paris SG": "Paris SG", "Paris FC": "Paris FC", "RB Leipzig": "
 
 def _display(name):
     return DISPLAY_NAMES.get(name) or canonical(name)
+
+
+def known_club(competition, raw):
+    """True when `raw` resolves through the league's alias table (not just the cleaned fallback)."""
+    table = _LEAGUE_LOOKUP.get(competition)
+    return bool(table) and _league_match(table, _normalise(raw)) is not None
 
 
 def canonical_for(competition, raw):

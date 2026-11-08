@@ -44,10 +44,22 @@ SCHEDULE_ONLY = {
     "E3": {"name": "League Two", "short": "E3", "openfootball": "en.4", "tz": "Europe/London"},
     "SC0": {"name": "Scottish Premiership", "short": "SC0", "openfootball": "sco.1", "tz": "Europe/London"},
     "SC1": {"name": "Scottish Championship", "short": "SC1", "openfootball": "sco.2", "tz": "Europe/London"},
-    "N1": {"name": "Eredivisie", "short": "N1", "openfootball": "nl.1", "tz": "Europe/Amsterdam"},
-    "P1": {"name": "Primeira Liga", "short": "P1", "openfootball": "pt.1", "tz": "Europe/Lisbon"},
     "B1": {"name": "Belgian Pro League", "short": "B1", "openfootball": "be.1", "tz": "Europe/Brussels"},
 }
+
+# Public-only leagues: predicted ONLY by the rights-compliant public path (pipeline/public.py),
+# never by the private research models, because no football-data.co.uk history is held for
+# them. Training history: final scores from openfootball (CC0) for past seasons, plus confirmed
+# current-season results from permitted sources. Fixtures and timely results: football-data.org
+# (free tier covers DED and PPL) and openfootball.
+PUBLIC_ONLY = {
+    "N1": {"name": "Eredivisie", "short": "N1", "openfootball": "nl.1", "fdo": "DED", "tz": "Europe/Amsterdam"},
+    "P1": {"name": "Primeira Liga", "short": "P1", "openfootball": "pt.1", "fdo": "PPL", "tz": "Europe/Lisbon"},
+}
+# Every competition that gets a public prediction for each scheduled match.
+PREDICTED = {**LEAGUES, **PUBLIC_ONLY}
+# Local-time zone of openfootball kick-off times for leagues outside the original six.
+LOCAL_TZ = {code: meta["tz"] for code, meta in {**SCHEDULE_ONLY, **PUBLIC_ONLY}.items()}
 
 
 def parse_csv(text, competition, season):

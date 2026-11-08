@@ -37,16 +37,21 @@ const predsData = JSON.parse(fs.readFileSync('data/predictions.json', 'utf8'));
 const oddsData = JSON.parse(fs.readFileSync('data/odds.json', 'utf8'));
 const relData = JSON.parse(fs.readFileSync('data/model_reliability.json', 'utf8'));
 const preds = Object.values(predsData.predictions);
+// Evaluate the data as of its own publication time, not the wall clock: the scheduled refresh
+// runs these tests before it refreshes the data, so a wall-clock "now" made this test fail
+// whenever the committed prices were over 12 hours old or the day's matches had kicked off.
+const DATA_NOW = Date.parse(predsData.generated_at);
+assert(Number.isFinite(DATA_NOW), 'predictions.json has a generated_at timestamp');
 
 function feedFor(id) {
-  return calc.feedPrices((oddsData.matches || {})[id], Date.now(), 12);
+  return calc.feedPrices((oddsData.matches || {})[id], DATA_NOW, 12);
 }
 
 const pool = builder.legPool(preds, {
   calc,
   reliability: relData,
   feedFor,
-  nowMs: Date.now(),
+  nowMs: DATA_NOW,
   timing: 'all'
 });
 
@@ -57,7 +62,7 @@ const withEv = pool.map(leg => {
   return { ...leg, ev };
 });
 
-const todayStr = new Date().toISOString().slice(0, 10);
+const todayStr = new Date(DATA_NOW).toISOString().slice(0, 10);
 const todayPool = withEv.filter(l => l.fixture && l.fixture.kickoff_utc && l.fixture.kickoff_utc.slice(0, 10) === todayStr);
 const candidatePool = todayPool.length >= 4 ? todayPool : withEv;
 candidatePool.sort((a, b) => b.ev - a.ev);

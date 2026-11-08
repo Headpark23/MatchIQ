@@ -16,7 +16,8 @@ public-derived pipeline from permitted sources only:
     ids start with "PUB-" and whose origin is "public-derived". These are NOT the originally
     sealed predictions and are never presented as such.
 
-    python -m pipeline.public --history      # needs FOOTBALL_DATA_ORG_TOKEN; 18 free requests
+    python -m pipeline.public --history      # football-data.org part needs FOOTBALL_DATA_ORG_TOKEN (18 free
+                                             # requests); the openfootball (CC0) part for leagues.PUBLIC_ONLY needs none
     python -m pipeline.public --validate     # walk-forward backtest (slow)
 
 pipeline.run then calls run_public() with the files above.
@@ -33,16 +34,22 @@ from pathlib import Path
 
 from . import history as hist
 from .data import uk_date
-from .leagues import LEAGUES, SCHEDULE_ONLY
+from .leagues import LEAGUES, PREDICTED, PUBLIC_ONLY
 from .league_validation import validate_league
 from .models import Context, predict
 from .recommend import recommend
 from .rights import RESTRICTED_MARKETS
-from .sources import fetch_football_data_org
+from .sources import fetch_football_data_org, fetch_openfootball
 from .teams import match_id
 
 ROOT = Path(__file__).resolve().parents[1]
 HISTORY_PATH = ROOT / "data" / "public_results.json"
+# Past-season final scores for leagues.PUBLIC_ONLY, from openfootball (CC0 public domain).
+OPENFOOTBALL_HISTORY_PATH = ROOT / "data" / "public_results_openfootball.json"
+OPENFOOTBALL_SEASONS = (2023, 2024, 2025)
+# A fixture whose kick-off time comes only from openfootball may carry a default time, so its
+# prediction is sealed by the start of the UK match day: no revision is published on the day.
+TIMED_SOURCES = {"football-data.org", "openligadb"}
 PUBLIC_DIR = ROOT / "data" / "public"
 PUBLIC_MODEL_VERSION = "dc-public-v1"
 RECORD_PREFIX = "PUB-"
@@ -77,13 +84,35 @@ def build_history(fetch=fetch_football_data_org, sleep=7, path=HISTORY_PATH):
     return notes
 
 
-def load_history(path=HISTORY_PATH):
+def build_openfootball_history(fetch=fetch_openfootball, path=OPENFOOTBALL_HISTORY_PATH):
+    """Final scores of past seasons for leagues.PUBLIC_ONLY from openfootball (CC0, no key)."""
+    rows, notes = [], {}
+    for code in PUBLIC_ONLY:
+        for start in OPENFOOTBALL_SEASONS:
+            label = season_label(start)
+            matches, error = fetch(code, f"{start}-{(start + 1) % 100:02d}", label)
+            got = [_row(code, label, m) for m in matches if m["score"] and m["status"] == "FINISHED"]
+            notes[f"{code}:{label}"] = {"rows": len(got), "error": error}
+            rows += got
+    if not rows:
+        raise RuntimeError("no openfootball history could be fetched: " + json.dumps(notes))
+    path.write_text(json.dumps({"source": "openfootball/football.json (CC0 public domain; final scores only)", "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+                                "notes": notes, "results": rows}, separators=(",", ":")) + "\n", encoding="utf-8")
+    return notes
+
+
+def load_history(path=HISTORY_PATH, source="football-data.org"):
     try:
         items = json.loads(Path(path).read_text(encoding="utf-8"))["results"]
     except (FileNotFoundError, json.JSONDecodeError, KeyError):
         return []
     return [{"competition": i["c"], "season": i["s"], "date": dt.date.fromisoformat(i["d"]), "home": i["h"], "away": i["a"],
-             "hg": i["hg"], "ag": i["ag"], "stats": {}, "source": "football-data.org"} for i in items]
+             "hg": i["hg"], "ag": i["ag"], "stats": {}, "source": source} for i in items]
+
+
+def load_all_history():
+    """football-data.org history for LEAGUES plus openfootball history for PUBLIC_ONLY."""
+    return load_history() + [r for r in load_history(OPENFOOTBALL_HISTORY_PATH, "openfootball") if r["competition"] in PUBLIC_ONLY]
 
 
 def permitted_result(f):
@@ -114,7 +143,7 @@ def training_rows(history, fixtures, season):
 def validate(rows, path=PUBLIC_DIR / "league_validation.json"):
     report = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "model_version": PUBLIC_MODEL_VERSION,
               "method": "weekly refit walk-forward on football-data.org scores, Brier vs league average", "leagues": {}}
-    for code in LEAGUES:
+    for code in PREDICTED:
         v = validate_league(code, rows, lambda c, w: print(c, w, file=sys.stderr), public=True)
         v["markets"] = {k: m for k, m in v["markets"].items() if k not in RESTRICTED_MARKETS}
         report["leagues"][code] = v
@@ -155,9 +184,10 @@ def empty_ledger():
     return ledger
 
 
-def run_public(now, fixtures, season, horizon_days, history=None, validation=None, ledger=None):
-    """Returns (predictions_payload, ledger, performance). Writes nothing: the caller does."""
-    history = load_history() if history is None else history
+def run_public(now, fixtures, season, horizon_days, history=None, validation=None, ledger=None, previous=None):
+    """Returns (predictions_payload, ledger, performance). Writes nothing: the caller does.
+    `previous` is the last published predictions mapping (match id -> entry)."""
+    history = load_all_history() if history is None else history
     if validation is None:
         try:
             validation = json.loads((PUBLIC_DIR / "league_validation.json").read_text(encoding="utf-8"))
@@ -174,12 +204,19 @@ def run_public(now, fixtures, season, horizon_days, history=None, validation=Non
     horizon = now + dt.timedelta(days=horizon_days)
     for f in fixtures:
         kickoff = dt.datetime.fromisoformat(f["kickoff_utc"].replace("Z", "+00:00"))
-        if f["status"] != "SCHEDULED" or not now < kickoff <= horizon or f["competition"] in SCHEDULE_ONLY:
+        if f["status"] != "SCHEDULED" or not now < kickoff <= horizon or f["competition"] not in PREDICTED:
             continue
         code = f["competition"]
+        existing = [r for r in ledger["records"] if r["match_id"] == f["id"]]
+        if not set(f["sources"]) & TIMED_SOURCES and now >= seal_cutoff(kickoff):
+            # Kick-off time unconfirmed: keep showing the prediction sealed before the match day.
+            shown = (previous or {}).get(f["id"])
+            if existing and shown and shown.get("record_id") == existing[-1]["record_id"]:
+                predictions[f["id"]] = {**shown, "fixture": {k: f[k] for k in ("competition", "season", "home", "away", "kickoff_utc", "status", "kickoff_history")}}
+            continue
         if code not in contexts:
             contexts[code] = Context([r for r in rows if r["competition"] == code], uk_date(now), competition=code,
-                                     league_name=LEAGUES[code]["name"], validation=lv.get(code), public=True)
+                                     league_name=PREDICTED[code]["name"], validation=lv.get(code), public=True)
         markets = _public_markets(predict({**f, "date": uk_date(kickoff)}, contexts[code], evidence_tiers(lv.get(code))))
         recs = recommend(markets, None, lv.get(code))
         hist.publish(ledger, f, markets, fp, list(f["sources"]), now, origin="public-derived", recommendations=recs, record_prefix=RECORD_PREFIX)
@@ -192,6 +229,23 @@ def run_public(now, fixtures, season, horizon_days, history=None, validation=Non
     perf = {"generated_at": now.isoformat(), **hist.performance(ledger), "settlement_updates": settled}
     payload = {"generated_at": now.isoformat(), "horizon_days": horizon_days, "model_version": PUBLIC_MODEL_VERSION, "predictions": predictions}
     return payload, ledger, perf
+
+
+def seal_cutoff(kickoff):
+    """Start of the UK calendar day of the kick-off, as a UTC datetime."""
+    from zoneinfo import ZoneInfo
+    uk = ZoneInfo("Europe/London")
+    day = kickoff.astimezone(uk).date()
+    return dt.datetime.combine(day, dt.time(0, 0), uk).astimezone(dt.timezone.utc)
+
+
+def missing_validation(path=PUBLIC_DIR / "league_validation.json"):
+    """True when a predicted league has no entry in the public validation report."""
+    try:
+        have = json.loads(Path(path).read_text(encoding="utf-8")).get("leagues", {})
+    except (FileNotFoundError, json.JSONDecodeError):
+        return True
+    return bool(set(PREDICTED) - set(have))
 
 
 def stale(path):
@@ -215,8 +269,10 @@ def main(argv=None):
             print("skipped: FOOTBALL_DATA_ORG_TOKEN not set")
         else:
             print(json.dumps(build_history()))
-    if args.validate and (not args.if_stale or stale(PUBLIC_DIR / "league_validation.json")):
-        rows = load_history()
+    if args.history and (not args.if_stale or stale(OPENFOOTBALL_HISTORY_PATH)):
+        print(json.dumps(build_openfootball_history()))
+    if args.validate and (not args.if_stale or stale(PUBLIC_DIR / "league_validation.json") or missing_validation()):
+        rows = load_all_history()
         if not rows:
             print("skipped: no public history yet")
         else:

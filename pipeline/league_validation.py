@@ -14,7 +14,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-from .leagues import EXTRA, LEAGUES, load_results
+from .leagues import EXTRA, LEAGUES, PREDICTED, load_results
 from .models import Context, predict
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,7 +46,7 @@ def validate_league(code, results, progress=None, public=False):
     scores = defaultdict(lambda: [0, 0.0, 0.0])  # n, model brier sum, league brier sum
     tiers = defaultdict(int)
     for week in sorted(by_week):
-        ctx = Context(rows, week, competition=code, league_name=LEAGUES[code]["name"], public=public)
+        ctx = Context(rows, week, competition=code, league_name=PREDICTED[code]["name"], public=public)
         if not ctx.epl or ctx.base["btts"] is None:
             continue
         for r in by_week[week]:
@@ -77,7 +77,7 @@ def validate_league(code, results, progress=None, public=False):
                 s[2] += (base - float(won)) ** 2
         if progress:
             progress(code, week)
-    out = {"competition": code, "name": LEAGUES[code]["name"], "test_season": TEST_SEASON, "test_season_label": TEST_LABEL,
+    out = {"competition": code, "name": PREDICTED[code]["name"], "test_season": TEST_SEASON, "test_season_label": TEST_LABEL,
            "test_matches": len(test), "result_tiers": dict(tiers), "markets": {}}
     for market, (n, model, league) in scores.items():
         if n:

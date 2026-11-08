@@ -17,8 +17,8 @@ import urllib.error
 import urllib.request
 from zoneinfo import ZoneInfo
 
-from .leagues import SCHEDULE_ONLY
-from .teams import canonical, canonical_for
+from .leagues import LOCAL_TZ, PUBLIC_ONLY, SCHEDULE_ONLY
+from .teams import canonical, canonical_for, known_club
 
 UK = ZoneInfo("Europe/London")
 UTC = dt.timezone.utc
@@ -72,21 +72,30 @@ def fetch_football_data_org(competition, season_start, season, token=None, opene
     token = token or os.environ.get("FOOTBALL_DATA_ORG_TOKEN")
     if not token:
         return [], "skipped: FOOTBALL_DATA_ORG_TOKEN not configured"
-    code = {"PL": "PL", "ELC": "ELC", "BL1": "BL1", "PD": "PD", "SA": "SA", "FL1": "FL1"}[competition]
+    code = {"PL": "PL", "ELC": "ELC", "BL1": "BL1", "PD": "PD", "SA": "SA", "FL1": "FL1",
+            **{c: m["fdo"] for c, m in PUBLIC_ONLY.items()}}[competition]
     try:
         payload = http_json(f"https://api.football-data.org/v4/competitions/{code}/matches?season={season_start}",
                             headers={"X-Auth-Token": token}, opener=opener)
     except RuntimeError as error:
         return [], str(error)
-    out = []
+    out, unknown = [], set()
     for m in payload.get("matches", []):
+        if competition in PUBLIC_ONLY:
+            # These leagues have hand-made alias tables only; an unrecognised spelling would
+            # create a duplicate fixture under a second id, so such matches are left out.
+            names = (m["homeTeam"]["name"], m["awayTeam"]["name"])
+            missing = {n for n in names if not known_club(competition, n)}
+            if missing:
+                unknown |= missing
+                continue
         status = FDO_STATUS.get(m.get("status"), "SCHEDULED")
         full = (m.get("score") or {}).get("fullTime") or {}
         score = [full["home"], full["away"]] if status == "FINISHED" and full.get("home") is not None else None
         kickoff = dt.datetime.fromisoformat(m["utcDate"].replace("Z", "+00:00"))
         out.append(_match(competition, season, m["homeTeam"]["name"], m["awayTeam"]["name"], kickoff,
                           status, score, "football-data.org", m.get("lastUpdated")))
-    return out, None
+    return out, (f"skipped {len(unknown)} unrecognised club name(s): {', '.join(sorted(unknown))}" if unknown else None)
 
 
 def fetch_openligadb(competition, season_start, season, opener=None):
@@ -112,7 +121,7 @@ def parse_openfootball(payload, competition, season, namer=None):
     for m in payload.get("matches", []):
         day = dt.date.fromisoformat(m["date"])
         hour, minute = map(int, (m.get("time") or "15:00").split(":")[:2])
-        zone = ZoneInfo(SCHEDULE_ONLY[competition]["tz"]) if competition in SCHEDULE_ONLY else UK if competition == "PL" or competition == "ELC" else CET
+        zone = ZoneInfo(LOCAL_TZ[competition]) if competition in LOCAL_TZ else UK if competition == "PL" or competition == "ELC" else CET
         kickoff = dt.datetime.combine(day, dt.time(hour, minute), zone)
         ft = (m.get("score") or {}).get("ft") if isinstance(m.get("score"), dict) else None
         score = [int(ft[0]), int(ft[1])] if ft else None
@@ -123,7 +132,7 @@ def parse_openfootball(payload, competition, season, namer=None):
 
 def fetch_openfootball(competition, season_label, season, opener=None):
     league = {"PL": "en.1", "ELC": "en.2", "BL1": "de.1", "PD": "es.1", "SA": "it.1", "FL1": "fr.1",
-              **{c: m["openfootball"] for c, m in SCHEDULE_ONLY.items()}}[competition]
+              **{c: m["openfootball"] for c, m in {**SCHEDULE_ONLY, **PUBLIC_ONLY}.items()}}[competition]
     try:
         payload = http_json(f"https://raw.githubusercontent.com/openfootball/football.json/master/{season_label}/{league}.json", opener=opener)
     except RuntimeError as error:

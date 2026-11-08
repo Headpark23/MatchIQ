@@ -20,7 +20,7 @@ from . import odds as odds_feed
 from .data import (ROOT, championship_history, co_uk_as_matches, load_co_uk, merge_fixtures,
                    promoted_by_season, uk_date)
 from .fairodds import fair_odds
-from .leagues import EXTRA, LEAGUES, SCHEDULE_ONLY, load_results as load_league_results, promoted_by_season as league_promoted, refresh_current, save_results as save_league_results
+from .leagues import EXTRA, LEAGUES, PUBLIC_ONLY, SCHEDULE_ONLY, load_results as load_league_results, promoted_by_season as league_promoted, refresh_current, save_results as save_league_results
 from .models import LEAGUE_MODEL_VERSION, SHADOW_VERSION, VERSIONS, Context, predict, shadow_result
 from .recommend import RULE_VERSION, recommend
 from .sources import SOURCE_LABELS, fetch_football_data_org, fetch_openfootball, fetch_openligadb
@@ -119,6 +119,9 @@ def default_extra_fetchers():
         if LEAGUES[code].get("openligadb"):
             f["openligadb"] = (lambda c=code: fetch_openligadb(c, SEASON_START, SEASON))
         out[code] = f
+    for code in PUBLIC_ONLY:  # predicted by the public path only (see leagues.PUBLIC_ONLY)
+        out[code] = {"football-data.org": (lambda c=code: fetch_football_data_org(c, SEASON_START, SEASON)),
+                     "openfootball": (lambda c=code: fetch_openfootball(c, SEASON_LABEL, SEASON))}
     for code in SCHEDULE_ONLY:  # fixtures and scores only; no predictions (see leagues.SCHEDULE_ONLY)
         out[code] = {"openfootball": (lambda c=code: fetch_openfootball(c, SEASON_LABEL, SEASON))}
     return out
@@ -166,7 +169,7 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
         league_all, league_status = refresh_current(stored_results, SEASON)
     else:
         league_all, league_status = stored_results, {}
-    names = {**{c: m["name"] for c, m in SCHEDULE_ONLY.items()}, **{c: m["name"] for c, m in LEAGUES.items()}}
+    names = {c: m["name"] for c, m in {**SCHEDULE_ONLY, **PUBLIC_ONLY, **LEAGUES}.items()}
     for code, fs in (extra_fetchers or {}).items():
         got = []
         for name, fetch in fs.items():
@@ -240,7 +243,8 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
     horizon = now + dt.timedelta(days=HORIZON_DAYS)
     for f in fixtures:
         kickoff = dt.datetime.fromisoformat(f["kickoff_utc"].replace("Z", "+00:00"))
-        if f["status"] != "SCHEDULED" or not now < kickoff <= horizon or f["competition"] in SCHEDULE_ONLY:
+        # Private research models exist only for LEAGUES; PUBLIC_ONLY leagues are predicted by pipeline/public.py.
+        if f["status"] != "SCHEDULED" or not now < kickoff <= horizon or f["competition"] not in LEAGUES:
             continue
         fixture = {**f, "date": uk_date(kickoff)}
         code = f["competition"]
@@ -311,7 +315,8 @@ def run_public_path(out_dir, now, fixtures, status):
     try:
         pub_dir.mkdir(exist_ok=True)
         ledger = read_json(pub_dir / "prediction_history.json", None)
-        payload, ledger, perf = public.run_public(now, fixtures, SEASON, HORIZON_DAYS, ledger=ledger)
+        shown = read_json(pub_dir / "predictions.json", {}).get("predictions", {})
+        payload, ledger, perf = public.run_public(now, fixtures, SEASON, HORIZON_DAYS, ledger=ledger, previous=shown)
         write_json(pub_dir / "predictions.json", payload)
         write_json(pub_dir / "prediction_history.json", ledger)
         write_json(pub_dir / "performance.json", perf)

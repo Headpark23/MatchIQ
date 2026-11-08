@@ -113,6 +113,22 @@ def merge_fixtures(source_lists, previous=None, now=None):
                   "away": lead["away"], "kickoff_utc": lead["kickoff_utc"], "status": lead["status"], "score": None,
                   "result_source": None, "sources": sorted({m["source"] for m in entries}, key=SOURCE_PRIORITY.index),
                   "first_seen": old.get("first_seen") or now.isoformat(), "kickoff_history": list(old.get("kickoff_history") or [])}
+        # A higher-priority source that listed this match before is silent in this run (outage,
+        # rate limit or missing token): keep what it said instead of regressing to a
+        # lower-priority source's schedule (openfootball often carries placeholder dates).
+        old_best = min((SOURCE_PRIORITY.index(s) for s in old.get("sources") or [] if s in SOURCE_PRIORITY), default=len(SOURCE_PRIORITY))
+        if old and old_best < SOURCE_PRIORITY.index(lead["source"]):
+            record["kickoff_utc"] = old["kickoff_utc"]
+            # Keep the silent source on the record so the carry-over survives later runs.
+            record["sources"] = sorted(set(record["sources"]) | {s for s in old["sources"] if s in SOURCE_PRIORITY}, key=SOURCE_PRIORITY.index)
+            if old.get("status") in ("POSTPONED", "CANCELLED"):
+                record["status"] = old["status"]
+            if old.get("status") == "FINISHED" and old.get("score") and not finished:
+                record.update({"status": "FINISHED", "score": list(old["score"]), "result_source": old.get("result_source")})
+                if old.get("result_note"):
+                    record["result_note"] = old["result_note"]
+                merged.append(record)
+                continue
         if old.get("kickoff_utc") and old["kickoff_utc"] != record["kickoff_utc"]:
             record["kickoff_history"].append({"from": old["kickoff_utc"], "to": record["kickoff_utc"], "seen_at": now.isoformat()})
         if finished:

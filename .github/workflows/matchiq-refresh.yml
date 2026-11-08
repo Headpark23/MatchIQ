@@ -1,12 +1,18 @@
 name: MatchIQ fixture, prediction and history refresh
-# Scheduled runs only fire from the default branch, so this stays inactive until the
-# owner merges it. Run it manually on a branch with "Run workflow" to test.
+# Runs on its own every 2 hours (GitHub may delay or skip scheduled runs under load, so the
+# real cadence is roughly 4-12 runs a day). Each run: tests -> refresh fixtures, publish sealed
+# pre-kick-off predictions, settle finished matches -> rebuild public-dist/ -> tests again on
+# the new data -> commit. The commit to main is what goes live: Vercel deploys main from Git
+# (vercel.json serves public-dist/) and pages.yml republishes GitHub Pages after this workflow.
+# Failures are made visible by an open GitHub issue titled "Data refresh failing", which this
+# workflow opens or comments on, and closes again after the next fully healthy run.
 on:
   schedule:
-    - cron: '40 */2 * * *'   # every 2 hours: 12 runs a day, each a few football-data.org requests (limit 10/minute)
+    - cron: '40 */2 * * *'   # every 2 hours: each run makes ~8 football-data.org requests (limit 10/minute)
   workflow_dispatch:
 permissions:
   contents: write
+  issues: write
 concurrency:
   group: matchiq-data-writes   # never overlaps another data commit from this workflow
   cancel-in-progress: false
@@ -21,42 +27,61 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Install pinned dependencies
         run: python -m pip install -r pipeline/requirements.txt
       - name: Run tests before touching data
         run: |
           python -m unittest discover -s tests -p "test_*.py"
-          for t in tests/*.js; do node "$t"; done
-      - name: Public model inputs (football-data.org history and chronological validation, refreshed monthly)
+          for t in tests/*.js; do node "$t" || exit 1; done
+      - name: Public model inputs (score history and chronological validation, refreshed monthly or when a league is missing)
         env:
           FOOTBALL_DATA_ORG_TOKEN: ${{ secrets.FOOTBALL_DATA_ORG_TOKEN }}
         run: python -m pipeline.public --history --validate --if-stale
       - name: Refresh fixtures, publish predictions, settle results
+        id: refresh
         env:
-          # Optional free token from football-data.org. Without it the run uses
-          # OpenLigaDB and openfootball only. The token is never written to any file.
+          # Free token from football-data.org: exact kick-off times, timely results and
+          # postponements for all eight predicted leagues. Never written to any file.
           FOOTBALL_DATA_ORG_TOKEN: ${{ secrets.FOOTBALL_DATA_ORG_TOKEN }}
           # Optional free key (500 credits/month; MatchIQ self-caps at 400). Never written to files.
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python -m pipeline.run
+      - name: Prediction coverage report
+        run: python -m pipeline.coverage --summary "$GITHUB_STEP_SUMMARY"
       - name: Rebuild public bundle
         run: python build_public_dist.py
-      - name: Commit data (pipeline_status is committed even when the refresh failed)
-        if: always()
+      - name: Run tests on the refreshed data
+        id: after
+        run: |
+          python -m unittest discover -s tests -p "test_*.py"
+          for t in tests/*.js; do node "$t" || exit 1; done
+      - name: Commit data
+        # Fresh data is committed only when every test passed on it. When the refresh itself
+        # failed, pipeline_status.json is still committed so the app can show the last attempt.
+        if: always() && steps.refresh.outcome != 'skipped'
+        env:
+          DATA_OK: ${{ steps.after.outcome == 'success' }}
         run: |
           git config user.name 'matchiq-data-bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/fixtures.json data/predictions.json data/prediction_history.json data/shadow_history.json data/performance.json data/pipeline_status.json data/odds.json data/league_results.json data/public data/public_results.json public-dist
+          if [ "$DATA_OK" = "true" ]; then
+            git add data/fixtures.json data/predictions.json data/prediction_history.json data/shadow_history.json data/performance.json data/pipeline_status.json data/odds.json data/league_results.json data/public data/public_results.json data/public_results_openfootball.json data/coverage.json public-dist
+          else
+            git add data/pipeline_status.json
+          fi
           if ! git diff --cached --quiet; then
             git commit -m 'Refresh fixtures, predictions and prediction history'
             git pull --rebase
             git push
           fi
       - name: Deploy the public bundle to Vercel
-        # Needs repository secrets VERCEL_TOKEN, VERCEL_ORG_ID and VERCEL_PROJECT_ID.
-        # Only public-dist/ is uploaded, never the repository root. Runs from any
-        # branch other than main deploy a preview; production needs main AND the
-        # repository variable MATCHIQ_DEPLOY_PRODUCTION set to 'true' by the owner.
+        # Optional: Vercel's Git integration already deploys every push to main. This step is for
+        # a token-based deploy (repository secrets VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID).
+        # Only public-dist/ is uploaded. Production needs main AND the repository variable
+        # MATCHIQ_DEPLOY_PRODUCTION set to 'true' by the owner.
         if: success() && env.HAS_VERCEL_TOKEN == 'true'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -72,3 +97,31 @@ jobs:
             url=$(vercel deploy --yes --token "$VERCEL_TOKEN")
           fi
           echo "Deployed: $url" >> "$GITHUB_STEP_SUMMARY"
+      - name: Coverage check (every match in the next 48 h predicted, every result settled)
+        # Runs after the commit, so a gap never holds back fresh data; it fails the run instead.
+        run: python -m pipeline.coverage --strict > /dev/null
+      - name: Open or update the "Data refresh failing" issue
+        if: failure() && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Data refresh failing"
+          body="The scheduled data refresh failed at $(date -u +'%Y-%m-%d %H:%M UTC'): $RUN_URL
+          Predictions and results on the live site stop updating until this is fixed. See the run's summary for the coverage table."
+          number=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi
+      - name: Close the "Data refresh failing" issue after a healthy run
+        if: success() && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          number=$(gh issue list --state open --search 'in:title "Data refresh failing"' --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue close "$number" --comment "Refresh healthy again: $RUN_URL"
+          fi
