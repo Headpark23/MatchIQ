@@ -95,9 +95,13 @@ const COMP_KEY = 'matchiq_competition_v1';
 let compFilter = 'ALL';
 try { const v = localStorage.getItem(COMP_KEY); if (v && LEAGUES[v]) compFilter = v; } catch (e) { /* the filter is a convenience */ }
 const inComp = code => compFilter === 'ALL' || (code || 'PL') === compFilter;
-function compBar() {
-  const items = [['ALL', 'All competitions']].concat(Object.entries(LEAGUES));
-  return '<div class="comp-bar" role="group" aria-label="Competition">' + items.map(([k, l]) => '<button type="button" data-comp="' + k + '" aria-pressed="' + (compFilter === k) + '">' + esc(l) + '</button>').join('') + '</div>';
+function compBar(counts) {
+  let items = [['ALL', 'All competitions']].concat(Object.entries(LEAGUES));
+  if (counts) {
+    const total = Object.values(counts).reduce((t, n) => t + n, 0);
+    items = [['ALL', 'All (' + total + ')']].concat(Object.entries(LEAGUES).filter(([k]) => counts[k] || compFilter === k).map(([k, l]) => [k, l + ' (' + (counts[k] || 0) + ')']));
+  }
+  return '<div class="comp-bar' + (counts ? ' scroll' : '') + '" role="group" aria-label="Competition">' + items.map(([k, l]) => '<button type="button" data-comp="' + k + '" aria-pressed="' + (compFilter === k) + '">' + esc(l) + '</button>').join('') + '</div>';
 }
 const LOAD_ERRORS = {};
 const SIGNAL_RULES = Object.freeze({ trivialAbove: 0.85, shrinkWeight: 20, fullSample: 10 });
@@ -559,19 +563,47 @@ function fixtureRow(f) {
     lean = '<span class="dim">Prediction published within 21 days of kick-off</span>';
   }
   return '<a class="fx" href="#/match/' + encodeURIComponent(f.id) + '">' +
-    '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small>' + (compFilter === 'ALL' ? '<small class="lg-tag">' + esc(f.competition || 'PL') + '</small>' : '') + '</span>' +
+    '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small></span>' +
     '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span></span>' +
     '<span class="fx-lean">' + lean + '</span><span class="fx-chev" aria-hidden="true">›</span></a>';
 }
 
-function groupedRows(fixtures) {
-  let html = '', last = '';
+function fixtureCouponRow(f) {
+  const pred = DATA.predictions && DATA.predictions.predictions[f.id];
+  const all = ownBetMarketsFor(f), byKey = k => all.find(o => o.key === k);
+  let lean = '<span class="dim">Prediction due nearer kick-off</span>';
+  if (pred) {
+    const r = pred.markets.result, provisional = r.evidence.status !== 'validated';
+    lean = 'Leans <b>' + esc(String(r.pick.label).replace(/ win$/, '')) + '</b> ' + pct(r.pick.p) + (provisional ? ' · provisional' : '');
+  }
+  return '<div class="cp-row fx-cp">' +
+    '<a class="cp-match" href="#/match/' + encodeURIComponent(f.id) + '">' +
+      '<span class="cp-time mono">' + esc(fmtTime(kickoffMs(f))) + '</span>' +
+      '<span class="cp-teams"><b>' + esc(f.home) + '</b><b>' + esc(f.away) + '</b></span></a>' +
+    '<div class="cp-1x2">' + ownBetPriceBtn(f, byKey('result:H')) + ownBetPriceBtn(f, byKey('result:D')) + ownBetPriceBtn(f, byKey('result:A')) + '</div>' +
+    '<a class="fx-lean-line" href="#/match/' + encodeURIComponent(f.id) + '">' + lean + ' <span class="fx-go">Analysis ›</span></a></div>';
+}
+
+function groupedRows(fixtures, coupon) {
+  const days = [];
   for (const f of fixtures) {
     const key = dayKey(kickoffMs(f));
-    if (key !== last) { html += '<h3 class="day-label">' + esc(london(kickoffMs(f), { weekday: 'long', day: 'numeric', month: 'long' })) + '</h3>'; last = key; }
-    html += fixtureRow(f);
+    let d = days.find(x => x.key === key);
+    if (!d) days.push(d = { key, ms: kickoffMs(f), list: [] });
+    d.list.push(f);
   }
-  return html;
+  const order = Object.keys(LEAGUES);
+  const rank = c => { const i = order.indexOf(c || 'PL'); return i < 0 ? 99 : i; };
+  return days.map(d => {
+    const comps = [...new Set(d.list.map(f => f.competition || 'PL'))].sort((a, b) => rank(a) - rank(b));
+    return '<h3 class="day-label">' + esc(london(d.ms, { weekday: 'long', day: 'numeric', month: 'long' })) + '</h3>' +
+      comps.map(c => {
+        const rows = d.list.filter(f => (f.competition || 'PL') === c);
+        return coupon
+          ? '<div class="cp-group"><div class="cp-ghead"><span>' + esc(leagueName(c)) + '</span><span class="cp-cols"><span>Home</span><span>Draw</span><span>Away</span></span></div>' + rows.map(fixtureCouponRow).join('') + '</div>'
+          : '<div class="fx-group"><div class="fx-ghead">' + esc(leagueName(c)) + '</div>' + rows.map(fixtureRow).join('') + '</div>';
+      }).join('');
+  }).join('');
 }
 
 function marketCard(key, m, ctx) {
@@ -1230,7 +1262,7 @@ function renderWelcomeHero() {
     '</div>' +
     '<nav class="hub-more" aria-label="More">' +
       '<a href="#/fixtures">' + hubIcon('calendar', 16) + 'Fixtures</a>' +
-      '<a href="#/results">' + hubIcon('chart', 16) + 'Results</a>' +
+      '<a href="#/results">' + hubIcon('chart', 16) + 'Our record</a>' +
       '<a href="#/diary">' + hubIcon('book', 16) + 'Diary' + (diaryCount ? ' (' + diaryCount + ')' : '') + '</a>' +
     '</nav>' +
     '<button type="button" class="hub-quiet-link" onclick="openButlerModal()">' + hubIcon('slip', 14) + 'My bookmakers &amp; slip note settings</button>' +
@@ -1646,27 +1678,32 @@ let fixturesShowAll = false;
 let fixturesLimit = 60;
 let resultsLimit = 40;
 function viewFixtures() {
-  const all = fixturesList().filter(f => inComp(f.competition)), now = Date.now();
+  const now = Date.now();
   const tabs = { upcoming: 'Upcoming', awaiting: 'Awaiting result', results: 'Results' };
-  let list;
+  let base;
   if (fixturesTab === 'upcoming') {
     // Strictly upcoming scheduled future matches: exclude cancelled, removed, or past fixtures
-    list = all.filter(f => f.status === 'SCHEDULED' && kickoffMs(f) > now).sort((a, b) => kickoffMs(a) - kickoffMs(b));
-    if (!fixturesShowAll) list = list.filter(f => kickoffMs(f) - now < 35 * 86400000);
+    base = fixturesList().filter(f => f.status === 'SCHEDULED' && kickoffMs(f) > now).sort((a, b) => kickoffMs(a) - kickoffMs(b));
+    if (!fixturesShowAll) base = base.filter(f => kickoffMs(f) - now < 35 * 86400000);
   } else if (fixturesTab === 'awaiting') {
-    list = all.filter(f => f.status === 'AWAITING_RESULT' || f.status === 'RESULT_CONFLICT').sort((a, b) => kickoffMs(b) - kickoffMs(a));
+    base = fixturesList().filter(f => f.status === 'AWAITING_RESULT' || f.status === 'RESULT_CONFLICT').sort((a, b) => kickoffMs(b) - kickoffMs(a));
   } else {
-    list = all.filter(f => f.status === 'FINISHED').sort((a, b) => kickoffMs(b) - kickoffMs(a)).slice(0, fixturesShowAll ? 400 : 30);
+    base = fixturesList().filter(f => f.status === 'FINISHED').sort((a, b) => kickoffMs(b) - kickoffMs(a));
   }
-  if (clubFilter) list = list.filter(f => f.home.toLowerCase().includes(clubFilter) || f.away.toLowerCase().includes(clubFilter));
+  if (clubFilter) base = base.filter(f => f.home.toLowerCase().includes(clubFilter) || f.away.toLowerCase().includes(clubFilter));
+  const counts = {};
+  base.forEach(f => { const c = f.competition || 'PL'; counts[c] = (counts[c] || 0) + 1; });
+  let list = base.filter(f => inComp(f.competition));
+  if (fixturesTab === 'results') list = list.slice(0, fixturesShowAll ? 400 : 30);
   const fixturesTotal = list.length;
   list = list.slice(0, fixturesLimit);
   const searchBar = '<div class="search-bar"><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off"></div>';
   let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">' + (compFilter === 'ALL' ? 'All ' + Object.keys(LEAGUES).length + ' competitions' : esc(leagueName(compFilter))) + ' 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
-    compBar() + searchBar + '<div class="section" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between"><div class="seg" role="group" aria-label="Fixture list">' +
-    Object.entries(tabs).map(([k, label]) => '<button type="button" data-tab="' + k + '" aria-pressed="' + (fixturesTab === k) + '">' + label + '</button>').join('') + '</div><div class="chips">' + freshnessChips() + '</div></div>';
+    searchBar + '<div class="section" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between"><div class="seg" role="group" aria-label="Fixture list">' +
+    Object.entries(tabs).map(([k, label]) => '<button type="button" data-tab="' + k + '" aria-pressed="' + (fixturesTab === k) + '">' + label + '</button>').join('') + '</div><div class="chips">' + freshnessChips() + '</div></div>' + compBar(counts) +
+    (fixturesTab === 'upcoming' ? '<p class="own-hint cp-how">Tap a match for the full analysis, or tap a price to put it on your bet slip.</p>' : '');
   if (LOAD_ERRORS.fixtures) return html + errorPanel('fixtures') + '</section>';
-  html += list.length ? groupedRows(list) : '<div class="empty" style="margin-top:16px">' + (fixturesTab === 'awaiting' ? 'No matches are waiting for a confirmed result.' : 'Nothing to show yet.') + '</div>';
+  html += list.length ? groupedRows(list, fixturesTab === 'upcoming') : '<div class="empty" style="margin-top:16px">' + (fixturesTab === 'awaiting' ? 'No matches are waiting for a confirmed result.' : 'Nothing to show yet.') + '</div>';
   if ((fixturesTab === 'upcoming' || fixturesTab === 'results') && !fixturesShowAll) html += '<button type="button" class="btn" data-showall style="margin-top:8px">Show ' + (fixturesTab === 'upcoming' ? 'the rest of the season' : 'all results') + '</button>';
   if (fixturesTotal > list.length) html += '<button type="button" class="btn" data-more style="margin-top:8px">Show more matches (' + (fixturesTotal - list.length) + ' left)</button>';
   return html + '</section>';
@@ -1777,73 +1814,118 @@ function viewMatch(id) {
 let resultsSportFilter = 'football';
 let resultsFilter = 'settled';
 
-function renderMultiSportResults(sportKey) {
-  const sportMeta = {
-    tennis: { name: 'Tennis', icon: '🎾', desc: 'ATP, WTA & Grand Slam match predictions evaluated against official tour results.' },
-    golf: { name: 'Golf', icon: '⛳', desc: 'PGA Tour, DP World Tour & Major top-finish and match-up picks.' },
-    darts: { name: 'Darts', icon: '🎯', desc: 'PDC Premier League & World Championship match-winner predictions.' },
-    rugby: { name: 'Rugby', icon: '🏉', desc: 'Six Nations, Premiership & International Test match outcomes.' }
-  };
-  const meta = sportMeta[sportKey] || { name: sportKey, icon: '🏆', desc: 'Verified prediction results.' };
-  const multiData = (DATA.multiSport && DATA.multiSport.sports && DATA.multiSport.sports[sportKey]) || {};
-  const history = multiData.history || [];
-  const settled = history.filter(h => h.result === 'won' || h.result === 'lost');
-  const won = settled.filter(h => h.result === 'won');
-  const hitRate = settled.length ? Math.round((won.length / settled.length) * 100) : 0;
+// ---- Prediction record tiles: one per league, flipping over to a small infographic ----
+function recordLeagueName(c) { return c === 'CL' ? 'Champions League' : leagueName(c); }
 
-  let sportTabs = '<div class="comp-bar" role="group" aria-label="Sport Selection" style="margin-bottom:14px;">' +
-    [['football', '⚽ Football'], ['tennis', '🎾 Tennis'], ['golf', '⛳ Golf'], ['darts', '🎯 Darts'], ['rugby', '🏉 Rugby']].map(([k, l]) =>
-      '<button type="button" data-sport-rfilter="' + k + '" aria-pressed="' + (resultsSportFilter === k) + '">' + esc(l) + '</button>'
-    ).join('') +
-  '</div>';
-
-  let html = '<section class="view"><h1 class="page-title">Results & performance</h1>' +
-    '<p class="page-sub">Every prediction Bet Buddy publishes is sealed before start time and scored once the result is confirmed. Genuine real-world results only.</p>' +
-    sportTabs;
-
-  // Headline card
-  const statusNote = settled.length < 10 ? 'early live tracking' : 'statistically tracking';
-  html += '<div class="results-lead-card card section" style="background:linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.95));border:1px solid rgba(255,255,255,0.1);padding:18px 20px;border-radius:12px;margin:16px 0;">' +
-    '<h2 style="font-size:20px;font-weight:700;margin:0 0 6px;color:#fff;">' + meta.icon + ' ' + meta.name + ': ' + settled.length + ' predictions settled so far (' + statusNote + ')</h2>' +
-    '<p style="margin:0;font-size:14.5px;color:var(--soft);">' + won.length + ' of ' + settled.length + ' picks won (' + hitRate + '% hit rate). ' + esc(meta.desc) + '</p>' +
-  '</div>';
-
-  // Stats tiles
-  html += '<div class="tiles section" style="margin-top:16px">' +
-    '<div class="tile"><div class="k">Settled predictions</div><div class="v">' + settled.length + '</div><div class="s">' + won.length + ' won • ' + (settled.length - won.length) + ' lost</div></div>' +
-    '<div class="tile"><div class="k">Win Rate</div><div class="v">' + (settled.length ? hitRate + '%' : '–') + '</div><div class="s">' + won.length + ' of ' + settled.length + ' landed</div></div>' +
-  '</div>';
-
-  // Prediction log rows
-  const logRows = history.map(h => {
-    const isWon = h.result === 'won';
-    const badge = '<span class="badge ' + (isWon ? 'won' : 'lost') + '">' + (isWon ? 'Won' : 'Lost') + '</span>';
-    const dateStr = h.date ? h.date.slice(0, 10) : 'Recent';
-    const priceStr = h.fractional || fmtOdds(h.odds);
-    return '<div class="log-row" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);">' +
-      '<div>' +
-        '<div style="font-size:12px;color:var(--soft);font-family:var(--mono);margin-bottom:2px;">' + esc(h.tournament || meta.name) + ' &middot; ' + esc(dateStr) + '</div>' +
-        '<div style="font-weight:700;color:#fff;font-size:14.5px;">' + esc(h.title) + '</div>' +
-        '<div style="font-size:13px;color:var(--cyan);margin-top:2px;">Pick: <b>' + esc(h.selection) + '</b> @ ' + esc(priceStr) + ' (' + esc(h.bookmaker || 'Best Price') + ')' + (h.score ? ' &middot; <span style="color:var(--soft)">Score: ' + esc(h.score) + '</span>' : '') + '</div>' +
-      '</div>' +
-      '<div>' + badge + '</div>' +
-    '</div>';
-  }).join('');
-
-  html += '<div class="section card" style="padding:0;margin-top:20px;">' +
-    '<div class="section-head" style="padding:16px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.06);">' +
-      '<h2 class="section-title">' + meta.icon + ' ' + meta.name + ' Verified Prediction History</h2>' +
-    '</div>' +
-    (logRows || '<p class="muted" style="padding:16px">No settled records yet.</p>') +
-  '</div>';
-
-  return html + '</section>';
+function recordStats(perf) {
+  const r = (perf && perf.markets && perf.markets.result) || null;
+  if (!r || !r.n) return null;
+  const hits = r.hits != null ? r.hits : Math.round((r.pick_hit_rate || 0) * r.n);
+  const timeline = (perf.result_timeline || []).slice().sort((a, b) => Date.parse(a.kickoff_utc) - Date.parse(b.kickoff_utc));
+  return { n: r.n, hits, rate: hits / r.n, said: r.mean_pick_p, small: !r.sufficient_sample, timeline };
 }
-function viewResults() {
-  if (resultsSportFilter && resultsSportFilter !== 'football') {
-    return renderMultiSportResults(resultsSportFilter);
-  }
 
+function recordAll(allPerf) {
+  const parts = [allPerf].concat(Object.values(allPerf.by_competition || {})).map(recordStats).filter(Boolean);
+  if (!parts.length) return null;
+  const n = parts.reduce((t, x) => t + x.n, 0), hits = parts.reduce((t, x) => t + x.hits, 0);
+  const said = parts.reduce((t, x) => t + (x.said || 0) * x.n, 0) / n;
+  const timeline = [].concat(...parts.map(x => x.timeline)).sort((a, b) => Date.parse(a.kickoff_utc) - Date.parse(b.kickoff_utc));
+  return { n, hits, rate: hits / n, said, small: n < 20, timeline };
+}
+
+function recordDonut(st, size) {
+  const r = size / 2 - 6, c = 2 * Math.PI * r, won = c * st.rate;
+  return '<svg class="rt-donut" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" role="img" aria-label="' + st.hits + ' right, ' + (st.n - st.hits) + ' wrong">' +
+    '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" class="rt-donut-bg"/>' +
+    '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" class="rt-donut-fg" style="--off:' + won.toFixed(1) + '" stroke-dasharray="' + won.toFixed(1) + ' ' + c.toFixed(1) + '" transform="rotate(-90 ' + size / 2 + ' ' + size / 2 + ')"/>' +
+    '<text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" class="rt-donut-t">' + Math.round(st.rate * 100) + '%</text></svg>';
+}
+
+function recordForm(st, count) {
+  const last = st.timeline.slice(-count);
+  if (!last.length) return '';
+  return '<div class="rt-form" aria-label="Last ' + last.length + ' picks: ' + last.filter(x => x.won).length + ' right">' +
+    last.map(x => '<span class="' + (x.won ? 'w' : 'l') + '" title="' + (x.won ? 'Right' : 'Wrong') + '"></span>').join('') + '</div>';
+}
+
+function recordSaidBars(st) {
+  const said = Math.round((st.said || 0) * 100), did = Math.round(st.rate * 100), gap = did - said;
+  const verdict = Math.abs(gap) <= 5 ? 'About as often as we said' : gap > 0 ? 'Right more often than we said' : 'Right less often than we said';
+  return '<div class="rt-said"><div><span>We said</span><b>' + said + '%</b><i style="--w:' + said + '%"></i></div>' +
+    '<div><span>Happened</span><b>' + did + '%</b><i class="did" style="--w:' + did + '%"></i></div><p>' + esc(verdict) + '</p></div>';
+}
+
+// Running share of picks that were right, pick by pick.
+function recordSpark(st, w, h) {
+  if (st.timeline.length < 5) return '';
+  let hits = 0;
+  const skip = Math.min(10, Math.floor(st.timeline.length / 4)), span = Math.max(1, st.timeline.length - 1 - skip);
+  const rates = [];
+  st.timeline.forEach((x, i) => { if (x.won) hits++; if (i >= skip) rates.push(hits / (i + 1)); });
+  // Zoom to the range the line and the "we said" level cover, so the movement is visible.
+  const lo = Math.max(0, Math.min(...rates, st.said || 0) - 0.05), hi = Math.min(1, Math.max(...rates, st.said || 0) + 0.05);
+  const y = v => h - (v - lo) / (hi - lo) * h;
+  const line = rates.map((v, i) => (i / span * w).toFixed(1) + ',' + y(v).toFixed(1)).join(' ');
+  const said = y(st.said || 0);
+  return '<svg class="rt-spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" role="img" aria-label="Share of picks right over time">' +
+    '<line x1="0" x2="' + w + '" y1="' + said.toFixed(1) + '" y2="' + said.toFixed(1) + '" class="rt-spark-said"/>' +
+    '<polyline points="' + line + '" class="rt-spark-line" pathLength="1"/></svg>' +
+    '<div class="rt-spark-key"><span><i class="ln"></i>Right so far</span><span><i class="dash"></i>What we said</span></div>';
+}
+
+function recordTile(code, name, st, wide) {
+  const sub = st.hits + ' of ' + st.n + ' right';
+  const front = '<div class="rt-face rt-front"><div class="rt-name">' + esc(name) + '</div>' +
+    '<div class="rt-big">' + Math.round(st.rate * 100) + '<small>%</small></div><div class="rt-sub">' + esc(sub) + '</div>' +
+    recordForm(st, wide ? 16 : 8) + (st.small ? '<span class="rt-small">Small sample</span>' : '') +
+    '<span class="rt-hint">Tap to flip ↻</span></div>';
+  const back = '<div class="rt-face rt-back"><div class="rt-name">' + esc(name) + '</div>' +
+    '<div class="rt-back-top">' + recordDonut(st, wide ? 92 : 68) + '<div class="rt-legend"><span class="w">' + st.hits + ' right</span><span class="l">' + (st.n - st.hits) + ' wrong</span></div></div>' +
+    recordSaidBars(st) + (wide ? recordSpark(st, 300, 60) : '') +
+    (st.small ? '<p class="rt-note">Too few matches to judge yet.</p>' : '') +
+    (code ? '<button type="button" class="rt-see" data-record-see="' + esc(code) + '">See predictions ↓</button>' : '') + '</div>';
+  return '<div class="rt' + (wide ? ' wide' : '') + '" role="button" tabindex="0" aria-pressed="false" aria-label="' + esc(name + ': ' + sub + '. Tap for details') + '" data-record-tile>' +
+    '<div class="rt-inner">' + front + back + '</div></div>';
+}
+
+function recordTiles(allPerf) {
+  const all = recordAll(allPerf);
+  if (!all) return '<div class="empty section">No settled predictions yet. The record fills in as matches finish.</div>';
+  const order = Object.keys(LEAGUES);
+  const rank = c => { const i = order.indexOf(c); return i < 0 ? 99 : i; };
+  const leagues = [['PL', allPerf]].concat(Object.entries(allPerf.by_competition || {}))
+    .map(([c, perf]) => [c, recordStats(perf)]).filter(x => x[1]).sort((a, b) => rank(a[0]) - rank(b[0]));
+  return '<div class="rt-grid">' + recordTile('', 'All leagues', all, true) +
+    leagues.map(([c, st]) => recordTile(c, recordLeagueName(c), st, false)).join('') + '</div>' +
+    '<p class="own-hint">Each tile counts the match-result pick only: the result we rated most likely. Leagues are scored separately and never pooled, except in the All leagues total.</p>';
+}
+
+function flipRecordTile(tile) {
+  const on = !tile.classList.contains('flipped');
+  tile.classList.toggle('flipped', on);
+  tile.setAttribute('aria-pressed', String(on));
+}
+if (typeof document !== 'undefined' && document.addEventListener) {
+  document.addEventListener('click', e => {
+    const see = e.target.closest && e.target.closest('[data-record-see]');
+    if (see) {
+      compFilter = see.dataset.recordSee; resultsFilter = 'settled';
+      try { localStorage.setItem(COMP_KEY, compFilter); } catch (err) { /* the filter is a convenience */ }
+      render();
+      const log = $('rt-log');
+      if (log) log.scrollIntoView({ block: 'start' });
+      return;
+    }
+    const tile = e.target.closest && e.target.closest('[data-record-tile]');
+    if (tile) flipRecordTile(tile);
+  });
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.matches && e.target.matches('[data-record-tile]')) { e.preventDefault(); flipRecordTile(e.target); }
+  });
+}
+
+function viewResults() {
   const allPerf = DATA.performance || {};
   const publicModel = !!(DATA.reliability || {}).public;  // public-derived model: every league, the Premier League included, uses its own backtest card
   const separate = compFilter !== 'ALL' && compFilter !== 'PL';
@@ -1857,43 +1939,12 @@ function viewResults() {
   const recs = Object.values(latest).filter(r => inComp(r.fixture.competition)).sort((a, b) => kickoffMs(b.fixture) - kickoffMs(a.fixture));
   const settled = recs.filter(r => r.evaluated), pending = recs.filter(r => !r.evaluated && kickoffMs(r.fixture) <= Date.now() && !r.result), future = recs.filter(r => kickoffMs(r.fixture) > Date.now());
 
-  const minReportN = perf.min_report_n || 20;
-  const isEarly = settled.length < minReportN;
-  const headlineStatus = isEarly ? 'too early to judge' : 'tracking live';
-  const headlineText = settled.length + ' prediction' + (settled.length === 1 ? '' : 's') + ' settled so far; ' + headlineStatus;
-  const hits = res ? (res.hits != null ? res.hits : Math.round((res.pick_hit_rate || 0) * (res.n || 0))) : 0;
-  const hitRateSummary = res && res.n ? Math.round(res.pick_hit_rate * 100) + '% of match-result picks won (' + hits + ' of ' + res.n + ')' : 'No settled results in this competition yet';
 
-  const sportResultsBar = '<div class="comp-bar" role="group" aria-label="Sport Selection" style="margin-bottom:14px;">' +
-    [['football', '⚽ Football'], ['tennis', '🎾 Tennis'], ['golf', '⛳ Golf'], ['darts', '🎯 Darts'], ['rugby', '🏉 Rugby']].map(([k, l]) =>
-      '<button type="button" data-sport-rfilter="' + k + '" aria-pressed="' + (resultsSportFilter === k) + '">' + esc(l) + '</button>'
-    ).join('') +
-  '</div>';
-
-  const liveSyncBar = '<div class="results-live-tracker" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:8px;margin-bottom:12px;font-size:13px;">' +
-    '<span style="display:inline-flex;align-items:center;gap:7px;color:#10b981;font-weight:600;">' +
-      '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;animation:pulse 2s infinite;"></span>' +
-      'All Leagues & Sports Auto-Tracking Active' +
-    '</span>' +
-    '<button type="button" class="btn small" onclick="checkAutoUpdateResults(true)" style="padding:4px 10px;font-size:12px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:6px;cursor:pointer;">Check Latest Scores 🔄</button>' +
-  '</div>';
-
-  let html = '<section class="view"><h1 class="page-title">Results & performance</h1><p class="page-sub">Every prediction Bet Buddy publishes is sealed before kick-off and scored once the result is confirmed. Nothing here is edited after the fact.</p>' +
-    liveSyncBar + sportResultsBar + compBar() +
-    (compFilter === 'ALL' ? '<div class="notice section">Scorecards are kept per competition and never pooled. The figures below are the Premier League; choose a competition above for another.</div>' + byCompetitionCards(allPerf) : '');
+  let html = '<section class="view rt-view"><h1 class="page-title">Our prediction record</h1>' +
+    '<p class="page-sub">Every football prediction Bet Buddy makes is sealed before kick-off, then marked right or wrong once the result is confirmed. Nothing is edited afterwards. Tap a league to see how it is going.</p>' +
+    '<p class="rt-scores">Looking for scores? <a href="#/fixtures" onclick="fixturesTab=\'results\'">Fixtures → Results</a></p>' +
+    recordTiles(allPerf);
   if (LOAD_ERRORS.history) return html + errorPanel('history') + '</section>';
-
-  // Plain headline first
-  html += '<div class="results-lead-card card section" style="background:linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.95));border:1px solid rgba(255,255,255,0.1);padding:18px 20px;border-radius:12px;margin:16px 0;">' +
-    '<h2 style="font-size:20px;font-weight:700;margin:0 0 6px;color:#fff;">' + esc(headlineText) + '</h2>' +
-    '<p style="margin:0;font-size:14.5px;color:var(--soft);">' + esc(hitRateSummary) + '. Live sample needs at least ' + minReportN + ' settled matches before accuracy figures are statistically meaningful.</p>' +
-  '</div>';
-
-  // Lead with simple "How often were we right?" tiles
-  html += '<div class="tiles section" style="margin-top:16px">' +
-    '<div class="tile"><div class="k">Settled predictions</div><div class="v">' + settled.length + '</div><div class="s">' + pending.length + ' awaiting a result • ' + future.length + ' upcoming</div></div>' +
-    '<div class="tile"><div class="k">Match-result picks won</div><div class="v">' + (res ? pct(res.pick_hit_rate) : '–') + '</div><div class="s">' + (res ? res.n + ' matches • average pick ' + pct(res.mean_pick_p) : 'none settled yet') + '</div></div>' +
-  '</div>';
 
   // Move technical stats (Brier score, calibration, live record by market, challenger) under "Show the maths"
   const marketCards = MARKET_ORDER.filter(k => (perf.markets || {})[k]).map(k => { const m = perf.markets[k];
@@ -1907,9 +1958,15 @@ function viewResults() {
   const teams = Object.entries(perf.teams || {}).filter(([, t]) => t.n >= 5).sort((a, b) => b[1].n - a[1].n);
   const ch = perf.challenger;
 
+
+  const shown = resultsFilter === 'settled' ? settled : resultsFilter === 'pending' ? pending : future;
+  html += '<div class="section card" id="rt-log" style="padding:0"><div class="section-head" style="padding:16px 16px 0"><h2 class="section-title">Prediction log' +
+    (compFilter !== 'ALL' ? ' <button type="button" class="rt-filter" data-comp="ALL" title="Show every league">' + esc(recordLeagueName(compFilter)) + ' ✕</button>' : '') + '</h2><div class="seg" role="group" aria-label="Prediction log">' +
+    [['settled', 'Settled'], ['pending', 'Awaiting result'], ['future', 'Upcoming']].map(([k, l]) => '<button type="button" data-rfilter="' + k + '" aria-pressed="' + (resultsFilter === k) + '">' + l + '</button>').join('') + '</div></div>' +
+    (shown.length ? shown.slice(0, resultsLimit).map(logRow).join('') + (shown.length > resultsLimit ? '<div style="padding:12px"><button type="button" class="btn" data-rmore>Show more (' + (shown.length - resultsLimit) + ' left)</button></div>' : '') : '<p class="muted" style="padding:16px">Nothing here yet.</p>') + '</div>';
   html += '<details class="section card maths-section" style="margin-top:20px;">' +
     '<summary style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;min-height:44px;font-weight:600;font-size:15px;color:var(--cyan);">' +
-      '<span>🔬 Show the maths (Brier score, calibration & model details)</span>' +
+      '<span>🔬 Show the maths: ' + esc(compFilter === 'ALL' ? 'Premier League' : recordLeagueName(compFilter)) + ' (Brier score, calibration &amp; model details)</span>' +
       '<span class="btn small" style="pointer-events:none;">Toggle ▾</span>' +
     '</summary>' +
     '<div style="padding:16px 0 6px;">' +
@@ -1930,11 +1987,6 @@ function viewResults() {
       (ch ? '<p style="margin-top:10px"><b>' + esc(ch.recommendation) + '</b></p>' + (ch.delta_brier != null ? '<p class="dim mono" style="margin-top:6px">ΔBrier ' + ch.delta_brier.toFixed(4) + ' [' + ch.delta_brier_ci95.join(', ') + '], n=' + ch.n + '</p>' : '') : '') +
       '<p class="section-note" style="margin-top:10px">Promotion needs ' + (ch ? ch.min_n_for_promotion : 150) + '+ settled matches, a 95% interval clear of zero and owner approval. The current model stays pinned for rollback.</p></div></div>' +
     '</div></details>';
-
-  const shown = resultsFilter === 'settled' ? settled : resultsFilter === 'pending' ? pending : future;
-  html += '<div class="section card" style="padding:0"><div class="section-head" style="padding:16px 16px 0"><h2 class="section-title">Prediction log</h2><div class="seg" role="group" aria-label="Prediction log">' +
-    [['settled', 'Settled'], ['pending', 'Awaiting result'], ['future', 'Upcoming']].map(([k, l]) => '<button type="button" data-rfilter="' + k + '" aria-pressed="' + (resultsFilter === k) + '">' + l + '</button>').join('') + '</div></div>' +
-    (shown.length ? shown.slice(0, resultsLimit).map(logRow).join('') + (shown.length > resultsLimit ? '<div style="padding:12px"><button type="button" class="btn" data-rmore>Show more (' + (shown.length - resultsLimit) + ' left)</button></div>' : '') : '<p class="muted" style="padding:16px">Nothing here yet.</p>') + '</div>';
   return html + '</section>';
 }
 
@@ -1975,15 +2027,6 @@ function scorecard(perf) {
     '<div class="stat-cards">' + bets + '</div></div>';
 }
 
-function byCompetitionCards(allPerf) {
-  const rows = [['PL', allPerf]].concat(Object.entries(allPerf.by_competition || {}));
-  return '<div class="section"><div class="stat-cards">' + rows.map(([code, p]) => {
-    const r = (p.markets || {}).result;
-    const hits = r ? (r.hits != null ? r.hits : Math.round((r.pick_hit_rate || 0) * (r.n || 0))) : 0;
-    return statCard(esc(leagueName(code)), r && r.sufficient_sample ? '' : '<span class="badge pending">' + (r ? 'small sample' : 'none settled yet') + '</span>',
-      [['Settled', r ? r.n : 0], ['Picks won', r ? hits + ' of ' + r.n : '0 of 0'], ['Win rate', r ? pct(r.pick_hit_rate) : '—']], r ? { claimed: r.mean_pick_p, actual: r.pick_hit_rate } : null);
-  }).join('') + '</div></div>';
-}
 
 function leagueBacktestCard(lv) {
   if (!lv) return '<div class="card"><h2 class="section-title">Backtest reference</h2><p class="muted">This league has not been backtested yet, so every estimate is provisional.</p></div>';
@@ -4595,7 +4638,7 @@ function viewGuide() {
     '<div><b>🏠 Home</b><span>The welcome hub: today&rsquo;s best-value bet, BetAI and shortcuts.</span></div>' +
     '<div><b>🎯 Picks</b><span>The Bet Builder and a card for every upcoming match with its lean and verdict.</span></div>' +
     '<div><b>📅 Fixtures</b><span>The full schedule by competition. Tap a match for its full analysis page.</span></div>' +
-    '<div><b>📊 Results</b><span>Every prediction is sealed before kick-off and scored afterwards, so you can judge the model on its record.</span></div>' +
+    '<div><b>📊 Record</b><span>Every football prediction is sealed before kick-off and marked right or wrong afterwards, league by league. For scores, see Fixtures → Results.</span></div>' +
     '<div><b>📖 Diary</b><span>Your private record of bets, with profit, ROI and win rate.</span></div>' +
     '<div><b>🏆 Leagues</b><span>Private leagues with friends plus the automatic regional ladders.</span></div>' +
     '<div><b>⋯ More</b><span>Your profile and location, data sources, feedback and app version.</span></div>' +
@@ -5676,7 +5719,7 @@ function render() {
   updateOddsToggleLabel(); updateHeaderAuthUI();
   const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild(arg) : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Results & performance', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'Data & methods' };
+  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Our prediction record', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'Data & methods' };
   document.title = (view === 'build' && arg === 'log' ? 'Log a bet' : titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {

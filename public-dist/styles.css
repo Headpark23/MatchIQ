@@ -4328,3 +4328,91 @@ span.cp-price.nop { cursor: default; opacity: .5; }
 .acca-next { display: block; width: 100%; min-height: 44px; margin-top: 10px; border: 1px dashed var(--line-strong); border-radius: 12px; background: none; color: var(--cyan); font: 600 13.5px var(--display); cursor: pointer; }
 .acca-next span { color: var(--muted); font-weight: 500; }
 @media (max-width: 600px) { .builder { padding: 18px 14px 16px; } .bq-row { grid-template-columns: 1fr; gap: 4px; } }
+
+/* Fixtures: league chips with counts scroll sideways; upcoming rows reuse the coupon */
+.comp-bar.scroll { flex-wrap: nowrap; overflow-x: auto; }
+@media (max-width: 600px) {
+  .comp-bar.scroll { flex-wrap: nowrap; overflow-x: auto; -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%); mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%); }
+}
+a.cp-match { text-decoration: none; }
+a.cp-match:hover .cp-teams b, a.cp-match:focus-visible .cp-teams b { color: var(--cyan); }
+.fx-lean-line { grid-column: 1 / -1; display: flex; gap: 6px; align-items: baseline; margin-top: -2px; font-size: 12px; color: var(--muted); text-decoration: none; }
+.fx-lean-line .fx-go { margin-left: auto; white-space: nowrap; }
+.fx-lean-line b { color: var(--soft); font-weight: 600; }
+.fx-go { color: var(--cyan); font-weight: 700; }
+.fx-group { margin-top: 10px; }
+.fx-ghead { padding: 6px 2px; font: 700 12px var(--display); letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+
+/* Prediction record: league tiles that flip over to an infographic */
+.rt-scores { margin: 6px 0 0; font-size: 13.5px; color: var(--muted); }
+.rt-scores a { color: var(--cyan); font-weight: 600; }
+.rt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-top: 16px; }
+.rt { height: 236px; perspective: 1000px; cursor: pointer; border-radius: 16px; outline: none; }
+.rt.wide { grid-column: span 2; }
+.rt:focus-visible .rt-face { box-shadow: 0 0 0 2px var(--cyan); }
+.rt-inner { position: relative; height: 100%; transform-style: preserve-3d; transition: transform .65s cubic-bezier(.2, .75, .25, 1); }
+.rt.flipped .rt-inner { transform: rotateY(180deg); }
+.rt-face { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 14px; border-radius: 16px; border: 1px solid var(--line-strong); background: var(--surface-solid); -webkit-backface-visibility: hidden; backface-visibility: hidden; overflow: hidden; }
+.rt-back { transform: rotateY(180deg); background: linear-gradient(160deg, color-mix(in srgb, var(--pick) 10%, var(--surface-solid)), var(--surface-solid)); border-color: color-mix(in srgb, var(--pick) 40%, var(--line-strong)); gap: 8px; }
+.rt-name { font: 700 12px var(--display); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rt-big { margin-top: auto; font: 800 46px/1 var(--display); color: var(--ink); font-variant-numeric: tabular-nums; }
+.rt-big small { font-size: 22px; color: var(--muted); margin-left: 2px; }
+.rt.wide .rt-big { font-size: 58px; }
+.rt-sub { margin-top: 4px; font-size: 13px; color: var(--soft); }
+.rt-form { display: flex; gap: 4px; margin-top: 10px; }
+.rt-form span { width: 10px; height: 10px; border-radius: 50%; background: #f87171; opacity: .85; }
+.rt-form span.w { background: var(--pick); opacity: 1; }
+.rt-small { position: absolute; top: 12px; right: 12px; font-size: 10.5px; padding: 2px 7px; border-radius: 999px; color: #fcd34d; background: color-mix(in srgb, #fbbf24 14%, transparent); }
+.rt-hint { margin-top: 10px; font-size: 11.5px; color: var(--cyan); }
+.rt-back-top { display: flex; align-items: center; gap: 10px; }
+.rt-donut-bg { fill: none; stroke: color-mix(in srgb, #f87171 55%, transparent); stroke-width: 9; }
+.rt-donut-fg { fill: none; stroke: var(--pick); stroke-width: 9; stroke-linecap: round; stroke-dashoffset: var(--off); transition: stroke-dashoffset .9s .25s ease-out; }
+.rt.flipped .rt-donut-fg { stroke-dashoffset: 0; }
+.rt-donut-t { fill: var(--ink); font: 800 16px var(--display); }
+.rt.wide .rt-donut-t { font-size: 21px; }
+.rt-legend { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; }
+.rt-legend .w { color: var(--pick); font-weight: 700; }
+.rt-legend .l { color: #fca5a5; font-weight: 600; }
+.rt-said > div { display: grid; grid-template-columns: 62px 1fr 34px; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+.rt-said i { display: block; height: 7px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 30%, transparent); width: 0; transition: width .8s .35s ease-out; }
+.rt-said i.did { background: var(--pick); }
+.rt.flipped .rt-said i { width: var(--w); }
+.rt-said b { color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+.rt-said p { margin: 4px 0 0; font-size: 12px; color: var(--soft); font-weight: 600; }
+.rt-spark { width: 100%; height: 42px; overflow: visible; }
+.rt-spark-said { stroke: color-mix(in srgb, var(--ink) 40%, transparent); stroke-dasharray: 4 4; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.rt-spark-line { fill: none; stroke: var(--cyan); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.1s .4s ease-out; }
+.rt.flipped .rt-spark-line { stroke-dashoffset: 0; }
+.rt-spark-key { display: flex; gap: 12px; font-size: 11px; color: var(--muted); }
+.rt-spark-key i { display: inline-block; width: 14px; height: 0; margin-right: 4px; vertical-align: middle; border-top: 2px solid var(--cyan); }
+.rt-spark-key i.dash { border-top: 2px dashed color-mix(in srgb, var(--ink) 40%, transparent); }
+.rt-note { margin: 0; font-size: 11.5px; color: #fcd34d; }
+.rt-see { margin-top: auto; min-height: 36px; border: 0; border-radius: 10px; background: color-mix(in srgb, var(--cyan) 14%, transparent); color: var(--cyan); font: 600 12.5px var(--display); cursor: pointer; }
+.rt.wide .rt-back { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto 1fr auto; column-gap: 16px; }
+.rt.wide .rt-back .rt-name { grid-column: 1 / -1; }
+.rt.wide .rt-back .rt-back-top { grid-row: 2 / 4; flex-direction: column; align-items: flex-start; }
+.rt.wide .rt-back .rt-said, .rt.wide .rt-back .rt-spark, .rt.wide .rt-back .rt-spark-key, .rt.wide .rt-back .rt-note { grid-column: 2; }
+.rt-filter { margin-left: 8px; min-height: 30px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--pick); background: color-mix(in srgb, var(--pick) 14%, transparent); color: var(--ink); font: 600 12px var(--display); cursor: pointer; vertical-align: middle; }
+@media (prefers-reduced-motion: reduce) {
+  .rt-inner, .rt-donut-fg, .rt-said i, .rt-spark-line { transition: none; }
+  .rt-inner { transform: none !important; }
+  .rt-face { transition: opacity .2s; }
+  .rt-back { transform: none; opacity: 0; }
+  .rt.flipped .rt-back { opacity: 1; }
+  .rt.flipped .rt-front { opacity: 0; }
+}
+.rt.wide .rt-back .rt-see { grid-column: 1 / -1; }
+.rt { height: 248px; }
+/* Size each tile to its taller face instead of a fixed height */
+.rt { height: auto; }
+.rt-inner { display: grid; }
+.rt-face { position: relative; inset: auto; grid-area: 1 / 1; min-height: 196px; }
+.rt-big { margin-top: 18px; }
+.rt-small { position: static; align-self: flex-start; margin-top: 8px; }
+.rt-hint { margin-top: auto; padding-top: 10px; }
+/* Said vs happened: label and value on one line, full-width track with the fill growing in */
+.rt-said > div { grid-template-columns: 1fr auto; row-gap: 3px; margin-top: 5px; }
+.rt-said i { grid-column: 1 / -1; width: 100%; height: 7px; background: color-mix(in srgb, var(--ink) 10%, transparent) linear-gradient(color-mix(in srgb, var(--ink) 38%, transparent), color-mix(in srgb, var(--ink) 38%, transparent)) no-repeat; background-size: 0 100%; transition: background-size .8s .35s ease-out; }
+.rt-said i.did { background: color-mix(in srgb, var(--ink) 10%, transparent) linear-gradient(var(--pick), var(--pick)) no-repeat; background-size: 0 100%; }
+.rt.flipped .rt-said i { width: 100%; background-size: var(--w) 100%; }
+@media (prefers-reduced-motion: reduce) { .rt-said i { transition: none; } }

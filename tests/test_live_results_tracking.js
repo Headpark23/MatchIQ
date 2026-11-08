@@ -96,7 +96,7 @@ vm.runInContext("resultsSportFilter = 'football'; compFilter = 'ALL'; resultsFil
 const footballHtml = vm.runInContext('viewResults()', sandbox);
 assert(footballHtml.includes('Chelsea'), 'Results view must include Chelsea');
 assert(footballHtml.includes('Man United'), 'Results view must include Man United');
-assert(footballHtml.includes('All competitions') || footballHtml.includes('competitions'), 'Competitions bar must include competitions');
+assert(footballHtml.includes('data-record-tile') && footballHtml.includes('All leagues'), 'Record must show league tiles with an All leagues total');
 console.log('✓ Football results view renders settled Chelsea fixture');
 
 // 3. Test that each of the 13 leagues is present in LEAGUES
@@ -107,15 +107,14 @@ expectedLeagues.forEach(code => {
 });
 console.log(`✓ All ${expectedLeagues.length} leagues present in LEAGUES`);
 
-// 4. Test multi-sport results rendering
-const sports = ['tennis', 'golf', 'darts', 'rugby'];
-sports.forEach(sport => {
+// 4. Other sports have no sealed Bet Buddy predictions, so the record stays football-only whatever was chosen before.
+['tennis', 'golf', 'darts', 'rugby'].forEach(sport => {
   vm.runInContext(`resultsSportFilter = '${sport}';`, sandbox);
-  const sportHtml = vm.runInContext('viewResults()', sandbox);
-  assert(sportHtml.includes('predictions settled so far'), `${sport} must render settled predictions headline`);
-  assert(sportHtml.includes('hit rate'), `${sport} must render hit rate`);
+  const html = vm.runInContext('viewResults()', sandbox);
+  assert(html.includes('Our prediction record'), `${sport} filter must still show the football prediction record`);
+  assert(!html.includes('predictions settled so far'), `${sport} must not render an unsealed prediction record`);
 });
-console.log('✓ All 4 other sports (tennis, golf, darts, rugby) render verified predictions and results');
+console.log('✓ Record is football-only: other sports have no sealed predictions to score');
 
 // 5. Verify checkAutoUpdateResults function exists
 const checkFnType = vm.runInContext('typeof checkAutoUpdateResults', sandbox);
