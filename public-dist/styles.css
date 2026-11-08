@@ -4155,10 +4155,6 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .own-tabs { display: flex; gap: 6px; margin: 10px 0; }
 .own-tabs button { flex: 1; min-height: 44px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--soft); font: 600 13px var(--display); cursor: pointer; }
 .own-tabs button.on { border-color: #f472b6; color: var(--ink); background: color-mix(in srgb, #f472b6 14%, var(--surface-solid)); }
-.own-markets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-.own-market { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 48px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); font: 600 13px var(--display); text-align: left; cursor: pointer; }
-.own-market b { color: var(--cyan); font-size: 13px; white-space: nowrap; }
-.own-market.on { border-color: var(--pick); background: color-mix(in srgb, var(--pick) 14%, var(--surface-solid)); }
 .own-hint { margin: 8px 0 0; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
 .own-ok { margin: 8px 0 0; font-size: 13px; color: var(--pick); font-weight: 600; }
 .own-warn { margin: 8px 0 0; font-size: 13px; color: #fde68a; }
@@ -4174,9 +4170,72 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .own-sum { display: flex; justify-content: space-between; gap: 12px; margin: 8px 0 12px; font-size: 13px; color: var(--muted); }
 .own-sum b { color: var(--ink); font-size: 15px; }
 .own-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-@media (max-width: 420px) { .own-markets, .own-fields { grid-template-columns: 1fr; } }
-.own-group { margin: 14px 0 6px; font: 700 12px var(--display); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
-.own-group:first-of-type { margin-top: 10px; }
+@media (max-width: 420px) { .own-fields { grid-template-columns: 1fr; } }
+.own-est { color: #fbbf24 !important; }
+.own-cols { display: flex; flex-direction: column; gap: 14px; }
+@media (min-width: 960px) {
+  .own-cols { display: grid; grid-template-columns: minmax(0, 1fr) 360px; align-items: start; }
+  .own-cols .own-slip { position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow-y: auto; }
+  .own-bar.on-build { display: none; }
+}
+.own-build { padding-bottom: 72px; }
+
+/* Coupon: bookmaker-style match list with Home / Draw / Away prices */
+.cp-how { margin: 8px 0 4px; }
+.cp-chips { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 2px; scrollbar-width: none; }
+.cp-chips::-webkit-scrollbar { display: none; }
+.cp-chips button { flex: none; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--soft); font: 600 13px var(--display); cursor: pointer; white-space: nowrap; }
+.cp-chips.small button { min-height: 34px; padding: 0 12px; font-size: 12px; }
+.cp-chips button[aria-pressed="true"] { border-color: var(--pick); color: var(--ink); background: color-mix(in srgb, var(--pick) 18%, var(--surface-solid)); }
+.cp-group { margin-top: 12px; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--surface); }
+.cp-ghead, .cp-row { display: grid; grid-template-columns: minmax(0, 1fr) 174px; gap: 8px; align-items: center; }
+.cp-ghead { padding: 8px 10px; background: color-mix(in srgb, var(--ink) 5%, var(--surface-solid)); font: 700 12px var(--display); letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+.cp-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center; font-size: 10.5px; }
+.cp-row { padding: 8px 10px; border-top: 1px solid var(--line); }
+.cp-row.open { background: color-mix(in srgb, var(--pick) 4%, transparent); }
+.cp-match { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 2px; align-items: center; min-height: 48px; padding: 2px 0; background: none; border: 0; color: var(--ink); text-align: left; cursor: pointer; font: inherit; }
+.cp-time { grid-row: 1 / 3; font-size: 12px; color: var(--muted); }
+.cp-teams { display: flex; flex-direction: column; min-width: 0; }
+.cp-teams b { font: 600 14px var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-more { grid-column: 2; font-size: 11.5px; color: var(--cyan); }
+.cp-more i { font-style: normal; color: var(--pick); font-weight: 700; margin-left: 4px; }
+.cp-1x2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.cp-price { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 44px; min-width: 0; padding: 4px 6px; border-radius: 10px; border: 1px solid var(--line-strong); background: var(--surface-solid); color: var(--ink); font: inherit; cursor: pointer; transition: background .12s, border-color .12s; }
+.cp-price b { font-size: 14px; color: var(--cyan); white-space: nowrap; }
+.cp-price span { font-size: 12px; color: var(--soft); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cp-price:hover { border-color: var(--cyan); }
+.cp-price.est { border-style: dashed; }
+.cp-price.nop b { font-size: 11.5px; color: var(--muted); }
+span.cp-price.nop { cursor: default; opacity: .5; }
+.cp-price.on { background: var(--pick); border-color: var(--pick); border-style: solid; }
+.cp-price.on b, .cp-price.on span { color: #04140d; }
+.cp-panel { grid-column: 1 / -1; padding: 6px 0 4px; }
+.cp-mtabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.cp-mtabs::-webkit-scrollbar { display: none; }
+.cp-mtabs button { flex: none; min-height: 40px; padding: 0 12px; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 600 13px var(--display); cursor: pointer; }
+.cp-mtabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--pick); }
+.cp-mk { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.cp-mk:last-of-type { border-bottom: 0; }
+.cp-mk-head { display: flex; align-items: center; gap: 8px; }
+.cp-mk-head h4 { margin: 0; font: 700 14px var(--display); color: var(--ink); }
+.cp-lg { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, #fbbf24 16%, transparent); color: #fcd34d; }
+.cp-help { margin: 2px 0 8px; font-size: 12px; color: var(--muted); }
+.cp-sels { display: grid; gap: 6px; }
+.cp-sels.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.cp-sels.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.cp-sels .cp-price { min-height: 52px; }
+.cp-ou { display: grid; grid-template-columns: 56px 1fr 1fr; gap: 6px; align-items: center; }
+.cp-col { text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.cp-line { font: 700 14px var(--display); color: var(--soft); text-align: center; }
+@media (max-width: 380px) {
+  .cp-ghead, .cp-row { grid-template-columns: minmax(0, 1fr) 162px; }
+  .cp-1x2 { gap: 4px; }
+  .cp-1x2 .cp-price { padding: 4px 2px; }
+  .cp-1x2 .cp-price b { font-size: 12.5px; letter-spacing: -.02em; }
+  .cp-time { display: none; }
+  .cp-match { grid-template-columns: minmax(0, 1fr); }
+  .cp-more { grid-column: 1; }
+}
 
 /* ---- BetAI: replaces the old Bet Butler home card; bookmaker settings are now a quiet link ---- */
 .hub-betai { --accent: #a78bfa; }
