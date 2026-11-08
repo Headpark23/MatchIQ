@@ -19,7 +19,7 @@ assert.doesNotMatch(html, /JSON\.stringify\(\(e\.legs/, 'CSV legs are quoted tex
 assert.match(html, /const cell = value => '"' \+ String\(value \?\? ''\)\.replace\(\/"\/g, '""'\)/, 'CSV cells use RFC 4180 quoting');
 
 // Model fair odds and bookmaker odds are kept apart, and no bookmaker price is invented.
-assert.match(html, /Model fair odds/);
+assert.match(html, /Our fair price/, 'our fair price is labelled apart from bookmaker prices');
 assert.match(html, /Bookmaker odds: not available/);
 assert.match(html, /model_fair_odds/, 'diary keeps the model fair odds separate from the price taken');
 assert.match(html, /That is not a bookmaker price/);

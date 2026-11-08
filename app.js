@@ -252,11 +252,11 @@ const MARKETS = {
 };
 const MARKET_ORDER = ['result', 'goals', 'btts', 'corners', 'cards', 'shots'];
 const STATUS = {
-  validated: ['validated', 'Validated model'], provisional: ['provisional', 'Provisional estimate'], market: ['market', 'Bookmaker-derived'],
-  unavailable: ['unavailable', 'Not available'], frozen: ['frozen', 'Frozen model'], shadow: ['shadow', 'Shadow challenger'],
-  league: ['unavailable', 'League-average fallback']
+  validated: ['validated', 'Proven model'], provisional: ['provisional', 'Early estimate'], market: ['market', 'From bookmaker prices'],
+  unavailable: ['unavailable', 'Not available'], frozen: ['frozen', 'Locked model'], shadow: ['shadow', 'Test model'],
+  league: ['unavailable', 'League average']
 };
-const STRENGTH = { strong: [3, 'Strong evidence'], moderate: [2, 'Moderate evidence'], weak: [1, 'Weak evidence'], none: [0, 'No proven edge'] };
+const STRENGTH = { strong: [3, 'Lots of data'], moderate: [2, 'Some data'], weak: [1, 'Little data'], none: [0, 'Not proven yet'] };
 
 const statusBadge = s => { const [cls, label] = STATUS[s] || STATUS.unavailable; return '<span class="badge ' + cls + '">' + label + '</span>'; };
 function meter(strength) {
@@ -321,9 +321,9 @@ function mostLikelyBlock(pred, big) {
   return '<div class="rec-card' + (big ? ' big' : '') + '"><div class="rec-kicker">Most likely to win</div>' +
     '<div class="rec-main">' + ring(m.p, big ? 112 : 72, status === 'validated' ? '' : 'provisional') +
     '<div><div class="rec-market">' + esc(MARKETS[m.market].name) + '</div><div class="rec-pick">' + esc(m.label) + '</div>' +
-    '<div class="market-odds">Model fair odds <b>' + esc(fmtFairOdds(diary.fair, m.p)) + '</b> · not a bookmaker price</div></div></div>' +
+    '<div class="market-odds">Our fair price <b>' + esc(fmtFairOdds(diary.fair, m.p)) + '</b> · not a bookmaker price</div></div></div>' +
     '<div class="evidence-row">' + statusBadge(status) + meter(m.strength) + '</div>' +
-    '<p class="muted" style="font-size:13.5px">About ' + Math.round(m.p * 10) + ' times in 10. Chosen on credible chance (' + pct(m.lower_bound) + ' at the cautious end) from ' + esc(m.basis) + '. Likely does not mean good value.</p>' +
+    '<p class="muted" style="font-size:13.5px">About ' + Math.round(m.p * 10) + ' times in 10. Even on a cautious reading it is ' + pct(m.lower_bound) + '. Likely does not mean good value.</p>' +
     '<div class="btn-row" style="margin-top:8px;">' +
       '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button>' +
       ownBetAddBtn(diary) +
@@ -343,7 +343,7 @@ function bestValueBlock(pred) {
   const pricedCount = sels.filter(s => prices[s.id]).length;
   let detail = '';
   if (best) {
-    detail += '<p class="muted" style="font-size:13.5px"><b>' + (v === 'value' ? 'Best value found: ' : 'Closest to value: ') + esc(best.sel.label) + '</b> at ' + esc(best.v.priceText) + ' (' + (best.v.ev >= 0 ? '+' : '') + Math.round(100 * best.v.ev) + '% estimated expected value). Checked ' + pricedCount + ' priced selection' + (pricedCount === 1 ? '' : 's') + ' across every market.</p>';
+    detail += '<p class="muted" style="font-size:13.5px"><b>' + (v === 'value' ? 'Best value found: ' : 'Closest to value: ') + esc(best.sel.label) + '</b> at ' + esc(best.v.priceText) + ' (' + (best.v.ev >= 0 ? '+' : '') + Math.round(100 * best.v.ev) + '% better than the price, on our numbers). Checked ' + pricedCount + ' priced selection' + (pricedCount === 1 ? '' : 's') + ' across every market.</p>';
   } else {
     detail += '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded for this match (the automatic feed covers Match Result and Total Goals only, when it is enabled). Type a fractional price you have seen on any selection below and Bet Buddy will check every priced selection for value.</p>';
   }
@@ -557,7 +557,7 @@ function fixtureRow(f) {
     lean = '<span class="badge provisional">' + esc({ POSTPONED: 'Postponed', CANCELLED: 'Cancelled', REMOVED_FROM_SCHEDULE: 'Removed from schedule' }[f.status]) + '</span>';
   } else if (pred) {
     const r = pred.markets.result, provisional = r.evidence.status !== 'validated';
-    lean = '<span>Leans <b>' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (provisional ? ' <span class="badge provisional">Provisional</span>' : '') + '</span>' +
+    lean = '<span>Leans <b>' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (provisional ? ' <span class="badge provisional">Early estimate</span>' : '') + '</span>' +
       wayBar(r.selections, r.pick.key, [f.home, f.away], true, provisional ? 'provisional' : '');
   } else {
     lean = '<span class="dim">Prediction published within 21 days of kick-off</span>';
@@ -574,7 +574,7 @@ function fixtureCouponRow(f) {
   let lean = '<span class="dim">Prediction due nearer kick-off</span>';
   if (pred) {
     const r = pred.markets.result, provisional = r.evidence.status !== 'validated';
-    lean = 'Leans <b>' + esc(String(r.pick.label).replace(/ win$/, '')) + '</b> ' + pct(r.pick.p) + (provisional ? ' · provisional' : '');
+    lean = 'Leans <b>' + esc(String(r.pick.label).replace(/ win$/, '')) + '</b> ' + pct(r.pick.p) + (provisional ? ' · early estimate' : '');
   }
   return '<div class="cp-row fx-cp">' +
     '<a class="cp-match" href="#/match/' + encodeURIComponent(f.id) + '">' +
@@ -632,7 +632,7 @@ function marketCard(key, m, ctx) {
     '<td class="act">' + diaryBtn(row) + '</td></tr>').join('');
   return '<article class="card market">' + head +
     '<div class="market-main">' + ring(m.pick.p, 76, provisional ? (m.strength === 'none' ? 'limited' : 'provisional') : '') +
-      '<div><div class="market-pick">' + esc(m.pick.label) + '</div><div class="market-odds">Model fair odds <b>' + esc(m.pick.fair) + '</b> · Bookmaker odds: not available</div></div></div>' +
+      '<div><div class="market-pick">' + esc(m.pick.label) + '</div><div class="market-odds">Our fair price <b>' + esc(m.pick.fair) + '</b> · Bookmaker odds: not available</div></div></div>' +
     '<div>' + meter(m.strength) + '</div>' +
     (m.summary ? '<p class="muted" style="font-size:13.5px">' + esc(m.summary) + '</p>' : '') +
     (m.explanation.length ? '<ul class="explain">' + m.explanation.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '') +
@@ -679,7 +679,7 @@ function matchRecRow(pred) {
     '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small>' + (compFilter === 'ALL' ? '<small class="lg-tag">' + esc(f.competition || 'PL') + '</small>' : '') + '</span>' +
     '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span>' + distBar + '</span>' +
     '<span class="rec-row-main">' + pick + '</span>' +
-    '<span class="rec-row-side"><span class="dim">Lean: <b style="color:#fff">' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (r.evidence.status !== 'validated' ? ' <span class="badge provisional">Provisional</span>' : '') + '</span>' + valueStatus(pred) + '</span>' +
+    '<span class="rec-row-side"><span class="dim">Lean: <b style="color:#fff">' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (r.evidence.status !== 'validated' ? ' <span class="badge provisional">Early estimate</span>' : '') + '</span>' + valueStatus(pred) + '</span>' +
     '<span class="fx-chev" aria-hidden="true">›</span></a>';
 }
 
@@ -830,7 +830,7 @@ function slipLegRow(l) {
 
   return '<li class="slip-leg"><span class="slip-teams">' + crestOrIcon + '<span class="slip-match">' + teamDisplay +
     '<small>' + esc(fmtDay(ms)) + ' ' + esc(fmtTime(ms)) + ' · ' + esc(leagueName(f.competition)) + '</small></span></span>' +
-    '<span class="slip-pick"><b>' + esc(l.label) + '</b><small>' + pct(l.p) + ' chance' + (l.support === 'provisional' ? ' · provisional' : '') + '</small></span>' + price + '</li>';
+    '<span class="slip-pick"><b>' + esc(l.label) + '</b><small>' + pct(l.p) + ' chance' + (l.support === 'provisional' ? ' · early estimate' : '') + '</small></span>' + price + '</li>';
 }
 
 function canonicalUrl(url) {
@@ -1282,7 +1282,7 @@ function renderWelcomeHero() {
   const record = rec ? '<a href="#/results" class="hm-record">' + recordDonut(rec, 64) +
     '<span><b>Our record, in the open</b><small>' + rec.hits + ' of ' + rec.n + ' match-result picks right. Every one sealed before kick-off and never edited.</small></span><em>›</em></a>' : '';
 
-  return '<div class="hm">' + hero + teaser + upNext + tiles + record +
+  return '<div class="hm">' + hero + teaser + tiles + upNext + record +
     '<p class="hm-trust">🛡️ We say <b>No bet</b> when the evidence is thin · Bet Buddy never places bets · 18+ · <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware</a></p>' +
     '<button type="button" class="hub-quiet-link" onclick="openButlerModal()">' + hubIcon('slip', 14) + 'My bookmakers &amp; slip note settings</button>' +
   '</div>';
@@ -1542,11 +1542,11 @@ function viewPicks() {
   const validated = list.filter(p => p.markets.result.evidence.status === 'validated').map(p => ({ p, s: signalScore(p) })).sort((a, b) => b.s.score - a.s.score).map(x => x.p);
   if (validated.length) html += '<div class="section"><div class="section-head"><h2 class="section-title">Strongest match-result signals</h2><span class="section-note">The validated match-result model only, ranked by backtest-calibrated probability.</span></div>' +
     '<div class="grid grid-2">' + validated.slice(0, 4).map(signalCard).join('') + '</div></div>';
-  html += '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">How Most Likely, Best Value and No Bet work</summary><ol class="explain" style="margin-top:8px">' +
-    '<li><b>Most likely</b> looks at every backtested selection in every market, including heavy favourites. Each chance is pulled toward how often similar picks landed in the backtest, then ranked by the cautious end of a 90% range. Thin evidence therefore counts for less than a well-tested estimate, even with a bigger number.</li>' +
-    '<li><b>Best value</b> needs a real bookmaker price. Prices come from The Odds API for Match Result and Total Goals; for anything else enter a price you have seen. Add every outcome’s price to remove the bookmaker’s margin. Only the validated match-result model, at a well-backtested probability, can call value, and only at +5% estimated expected value or more.</li>' +
-    '<li><b>No bet</b> is a real answer: when evidence is thin, the price is short or no price exists. The predictions stay visible underneath.</li>' +
-    '<li>Model fair odds are 1 ÷ probability with no margin, rounded to a familiar UK price. They are never bookmaker prices.</li></ol></details>';
+  html += '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">What Most likely, Best value and No bet mean</summary><ol class="explain" style="margin-top:8px">' +
+    '<li><b>Most likely</b> is the pick we think is most likely to happen, across every market. We rate each one on a cautious reading, so a big number from thin data does not win over a well-tested one.</li>' +
+    '<li><b>Best value</b> needs a real bookmaker price. We get prices for match results and total goals; for anything else, type in the price you were offered. We only call something value when our proven match-result model says the price is at least 5% better than it should be.</li>' +
+    '<li><b>No bet</b> is a real answer: when the data is thin, the price is too short or there is no price. You can still see every prediction.</li>' +
+    '<li><b>Fair price</b> is what our chance works out to with no bookmaker profit added. It is never a price you can bet at.</li></ol></details>';
     // Append any active other sports below football
   const otherActive = activeSports.filter(s => s !== 'football');
   if (otherActive.length > 0) {
@@ -2328,7 +2328,7 @@ async function kickPlayerFromLeague(leagueCode, memberUid, handle) {
     return;
   }
   if (!memberUid || memberUid === user.uid) return;
-  if (!confirm('Are you sure you want to throw @' + (handle || 'this punter') + ' out of this league?\nThey will not be able to rejoin with the code.')) return;
+  if (!confirm('Are you sure you want to throw @' + (handle || 'this player') + ' out of this league?\nThey will not be able to rejoin with the code.')) return;
   if (!firestoreDb) return;
   toast('Removing @' + (handle || 'punter') + '...');
   try {
@@ -2338,7 +2338,7 @@ async function kickPlayerFromLeague(leagueCode, memberUid, handle) {
     batch.set(leagueRef.collection('banned').doc(memberUid), leagueDocs.banDoc({ handle, now: new Date().toISOString() }));
     await batch.commit();
     updateStoredLeague(leagueCode, { members: (target.members || []).filter(m => m.uid !== memberUid) });
-    toast('@' + (handle || 'punter') + ' thrown out of league.');
+    toast('@' + (handle || 'punter') + ' removed from the league.');
   } catch (e) {
     console.warn('Kick error:', e);
     toast('Could not remove @' + (handle || 'punter') + '. Check your connection and try again.');
@@ -3224,7 +3224,7 @@ function viewLeagues() {
     [['weekly', 'Week'], ['monthly', 'Month'], ['yearly', 'Season']].map(([k, l]) => '<button type="button" class="freq-btn' + (activeLeagueFreq === k ? ' active' : '') + '" aria-pressed="' + (activeLeagueFreq === k) + '" data-league-freq="' + k + '">' + l + '</button>').join('') + '</div>';
 
   const table = allMembers.length ? '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
-      '<th class="lb-col-rank">#</th><th class="lb-col-player">Player</th><th class="lb-col-pts">Pts</th><th class="lb-col-win">Win %</th><th class="lb-col-roi">ROI</th><th class="lb-col-bets num">Bets</th><th class="lb-col-action"></th>' +
+      '<th class="lb-col-rank">#</th><th class="lb-col-player">Player</th><th class="lb-col-pts">Pts</th><th class="lb-col-win">Win %</th><th class="lb-col-roi">Return</th><th class="lb-col-bets num">Bets</th><th class="lb-col-action"></th>' +
     '</tr></thead><tbody>' + rowsHtml + '</tbody></table></div>' : '';
 
   const board = '<section class="lg-board">' +
@@ -3294,7 +3294,7 @@ function diaryHero(settled, live) {
   return '<section class="dy-hero ' + (pl > 0 ? 'up' : pl < 0 ? 'down' : '') + '">' +
     '<div class="dy-hero-top"><div><div class="dy-kicker">Profit / loss</div><div class="dy-big">' + diarySigned(pl) + '</div>' +
       '<div class="dy-sub">from ' + settled.length + ' settled bet' + (settled.length === 1 ? '' : 's') + ' · ' + money(staked) + ' staked' + (live.length ? ' · ' + live.length + ' waiting' : '') + '</div></div>' +
-      '<span class="dy-roi ' + (roi > 0 ? 'pos' : roi < 0 ? 'neg' : '') + '">' + (roi > 0 ? '+' : '') + roi.toFixed(1) + '% ROI</span></div>' +
+      '<span class="dy-roi ' + (roi > 0 ? 'pos' : roi < 0 ? 'neg' : '') + '">' + (roi > 0 ? '+' : '') + roi.toFixed(1) + '% return</span></div>' +
     '<div class="dy-ranges" role="group" aria-label="Period">' + ranges.map(r => '<button type="button" aria-pressed="' + (diaryRange === r[0]) + '" onclick="setDiaryRange(\'' + r[0] + '\')">' + r[1] + '</button>').join('') + '</div>' +
     chart + '</section>';
 }
@@ -3499,7 +3499,7 @@ function betCard(entry) {
       (entry.realBetVerified ? ' <span class="badge" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:700;">🎖️ Real Bet (2x Pts)</span>' : '') +
       (entry.recommendation ? '<span class="badge provisional">' + esc(REC_LABEL[entry.recommendation] || entry.recommendation) + '</span>' : '') + '</span></div>' + legs +
     '<div class="bet-facts"><div><span>Price taken</span><b>' + priceTaken + '</b></div>' +
-      (entry.model_fair_odds ? '<div><span>Model fair odds</span><b>' + esc(fmtFairOdds(entry.model_fair_odds, entry.model_p)) + '</b></div>' : '') +
+      (entry.model_fair_odds ? '<div><span>Our fair price</span><b>' + esc(fmtFairOdds(entry.model_fair_odds, entry.model_p)) + '</b></div>' : '') +
       '<div><span>Stake</span><b>' + money(+entry.stake) + '</b></div><div><span>Bookmaker</span><b style="font-family:var(--body)">' + esc(entry.bookmaker || '-') + '</b></div>' +
       '<div><span>Profile</span><b style="font-family:var(--body)">' + esc(entry.profile || 'Default') + (entry.type === 'accumulator' ? ' • ' + (entry.legs || []).length + '-pick combined bet' : '') + '</b></div></div>' +
     (entry.settledBy === 'auto' ? '<p class="dim" style="font-size:12.5px;margin:0 0 6px">✅ Settled automatically' + (entry.finalScore ? ' · final score ' + esc(entry.finalScore) : '') + '</p>' : '') +
@@ -3918,7 +3918,7 @@ function openDiary(prefill) {
   $('modal-origin-select').value = modalPrefill.selection ? 'matchiq' : 'independent';
   $('modal-odds-input').value = modalPrefill.odds || '';
   $('modal-bet-type').value = 'single';
-  $('modal-fair-hint').textContent = modalPrefill.fair ? 'Bet Buddy model fair odds ' + modalPrefill.fair + '. That is not a bookmaker price: enter the price you were actually offered.' : '';
+  $('modal-fair-hint').textContent = modalPrefill.fair ? 'Our fair price is ' + modalPrefill.fair + '. That is not a bookmaker price: enter the price you were actually offered.' : '';
   toggleAccumulatorFields();
   updateModalPnlPreview();
   updateDiaryDestinationOptions();
@@ -4537,55 +4537,55 @@ function viewGuide() {
   const jumpHtml = '<div class="guide-jump">' + jump.map(j => '<button type="button" data-guide-jump="' + j[0] + '">' + j[1] + '</button>').join('') + '</div>';
 
   const start = '<ol class="guide-steps">' +
-    step(1, 'Browse the picks', 'Open <b>Picks</b> to see every upcoming match with the model&rsquo;s view. No account needed.') +
+    step(1, 'Browse the matches', 'Open <b>Matches</b> to see every upcoming game with prices and our lean. Tap one for the full analysis. No account needed.') +
     step(2, 'Check the price', 'Bet Buddy compares its own probability with UK bookmaker prices. A pick is only flagged as value when the price is better than the chance deserves.') +
-    step(3, 'Log your bet', 'Tap <b>Add a bet</b> in the <b>Diary</b> and record the odds and stake. Your private profit &amp; loss builds up automatically.') +
+    step(3, 'Log your bet', 'Tap a price to put it on your bet slip, add your stake and save it. Your <b>Diary</b> tracks your profit and loss automatically.') +
     step(4, 'Compete', 'Sign in with Google, then create a private league with mates or just play: your league bets also climb the regional ladders.') +
     '</ol>' +
     '<p class="guide-tip">Bet Buddy never places bets for you. It helps you decide, then you place the bet with your own bookmaker.</p>';
 
   const around = '<div class="guide-grid">' +
     '<div><b>🏠 Home</b><span>The welcome hub: today&rsquo;s best-value bet, BetAI and shortcuts.</span></div>' +
-    '<div><b>🎯 Picks</b><span>The Bet Builder and a card for every upcoming match with its lean and verdict.</span></div>' +
-    '<div><b>📅 Fixtures</b><span>The full schedule by competition. Tap a match for its full analysis page.</span></div>' +
-    '<div><b>📊 Record</b><span>Every football prediction is sealed before kick-off and marked right or wrong afterwards, league by league. For scores, see Fixtures → Results.</span></div>' +
+    '<div><b>🎯 Picks</b><span>Our model-built acca and a card for every upcoming match with our view.</span></div>' +
+    '<div><b>📅 Matches</b><span>Every game by day and league, with prices to tap onto your slip. Tap a match for its full analysis.</span></div>' +
+    '<div><b>📊 Record</b><span>Every football prediction is sealed before kick-off and marked right or wrong afterwards, league by league. Find it from Home or Picks. For scores, see Matches → Results.</span></div>' +
     '<div><b>📖 Diary</b><span>Your private record of bets, with profit, ROI and win rate.</span></div>' +
     '<div><b>🏆 Leagues</b><span>Private leagues with friends plus the automatic regional ladders.</span></div>' +
-    '<div><b>⋯ More</b><span>Your profile and location, data sources, feedback and app version.</span></div>' +
+    '<div><b>⋯ More</b><span>Your username and location, odds format, bookmakers, feedback and help.</span></div>' +
     '<div><b>6/4 &#8596; 2.50</b><span>The toggle at the top switches every price between fractional and decimal.</span></div>' +
     '</div>';
 
   const picks = '<p>Each pick card shows a few simple things:</p><ul class="guide-list">' +
     '<li><b>Probability</b> &ndash; the model&rsquo;s estimate of how likely the outcome is.</li>' +
-    '<li><b>Fair odds</b> &ndash; 1 &divide; probability, shown as a familiar UK price. It is not a bookmaker price.</li>' +
+    '<li><b>Fair price</b> &ndash; the price our chance works out to, with no bookmaker profit added. It is not a price you can bet at.</li>' +
     '<li><b>Value</b> &ndash; flagged only when a recent bookmaker price is longer than the fair odds. A likely outcome at a short price is <i>not</i> value.</li>' +
     '<li><b>No bet</b> &ndash; a real answer. Bet Buddy says it when evidence is thin or the price is not good enough.</li>' +
     '<li><b>Provisional</b> &ndash; the estimate has little track record yet, so treat it with extra caution.</li></ul>' +
     '<p class="guide-tip">Estimates are for information and entertainment. A high probability is not a guarantee.</p>';
 
   const acca = '<ol class="guide-steps">' +
-    step(1, 'Open the Bet Builder', 'Go to <b>Picks</b>. Choose today&rsquo;s games or the 7-day slate.') +
+    step(1, 'Open Picks', 'Go to <b>Picks</b> and tap <b>Change</b> to pick today or the next 7 days.') +
     step(2, 'Set your target', 'Enter your stake and how much you would like to win.') +
-    step(3, 'Review the acca', 'Bet Buddy suggests legs and shows the combined odds, the probability of every leg landing and the expected value.') +
+    step(3, 'Review the acca', 'Bet Buddy suggests the legs and shows the combined odds and the chance every leg wins.') +
     step(4, 'Use the slip note','Pick your bookmaker, then tick legs off as you enter them in their app, or copy the selections with one tap.') +
-    step(5, 'Share it', 'Send the slip link to a mate and their Bet Builder opens pre-filled.') +
+    step(5, 'Share it', 'Send the slip to a mate with one tap.') +
     '</ol><p class="guide-tip">An acca only pays if <b>every</b> leg wins. More legs means bigger returns but a much lower chance.</p>';
 
   const diary = '<ol class="guide-steps">' +
-    step(1, 'Add a bet', 'Tap <b>Add a bet</b> in the Diary, or log a pick straight from a match. Enter the selection, the odds you were offered and your stake.') +
+    step(1, 'Log a bet', 'Tap <b>+ Log a bet</b> in the Diary, find the match and tap the prices you backed, then add your stake.') +
     step(2, 'Choose where it counts', 'Under <b>League participation</b> pick <i>Add to Bet Diary &amp; to League</i> or <i>Diary only</i>. Diary-only bets never affect league scores.') +
-    step(3, 'Let it settle', 'Results update automatically after the final whistle, and your profit, ROI and win rate update with them.') +
+    step(3, 'Let it settle', 'Results come in automatically after the final whistle, and your profit and win rate update with them.') +
     step(4, 'Keep it safe', 'Signed-in diaries sync to your account. Otherwise the diary lives only in this browser, so use <b>Backup</b> and <b>Import</b> to move it, and avoid clearing site data.') +
     '</ol>';
 
   const priv = '<h3>Create a league</h3><ol class="guide-steps">' +
     step(1, 'Sign in', 'Leagues need a Google sign-in (button at the top right). Pick your username at the same time.') +
-    step(2, 'Open Leagues', 'Tap the <b>Leagues</b> tab, then <b>Create or Join League</b>.') +
+    step(2, 'Open Leagues', 'Tap the <b>Leagues</b> tab, then the <b>＋ New league</b> card.') +
     step(3, 'Fill in the details', 'On <b>Create a League</b> choose a name (up to 32 characters), an icon and a duration: <b>Weekly</b> (resets every Monday 00:00), <b>Monthly</b> or <b>Yearly</b>.') +
     step(4, 'Get your invite', 'Tap <b>Create League &amp; Get Invite Code</b>. Share the code or link with <b>Invite Friends</b>.') +
     '</ol><h3>Join a league</h3><ol class="guide-steps">' +
     step(1, 'Using a link', 'Open the invite link. Sign in if asked and the join screen opens with the code filled in.') +
-    step(2, 'Using a code', 'Go to <b>Leagues</b> &rarr; <b>Create or Join League</b> &rarr; <b>Join with Code</b>. Paste the 8-character code and tap <b>Join League</b>.') +
+    step(2, 'Using a code', 'Go to <b>Leagues</b> and tap the <b>🔑 Join with code</b> card. Paste the 8-character code and tap <b>Join League</b>.') +
     '</ol><h3>Managing it</h3><ul class="guide-list">' +
     '<li>Switch between <b>Weekly / Monthly / Yearly</b> tables above the league table.</li>' +
     '<li>The creator can <b>Rename</b> or <b>Delete</b> the league; everyone else can <b>Leave</b>.</li>' +
@@ -4595,9 +4595,9 @@ function viewGuide() {
   const regional = '<p>You do not need to join anything. Once your location is set, every league bet you make is entered on <b>six ladders</b> automatically:</p>' +
     '<div class="guide-tiers"><span>🏘️ Hometown</span><span>🏛️ Region / County</span><span>🏴 Country</span><span>🇬🇧 UK</span><span>🇪🇺 Europe</span><span>🌍 Worldwide</span></div>' +
     '<ol class="guide-steps">' +
-    step(1, 'Set your location', 'Go to <b>More</b> &rarr; <b>Account</b> &rarr; <b>Edit Profile &amp; Location</b> and enter your town, region and country. Players who spell a place the same way land on the same ladder.') +
+    step(1, 'Set your location', 'Go to <b>More</b> &rarr; <b>Username and location</b> and enter your town, region and country. Players who spell a place the same way land on the same ladder.') +
     step(2, 'Place a league bet', 'Log a bet with <i>Add to Bet Diary &amp; to League</i> before kick-off. Once it settles it scores on all your ladders.') +
-    step(3, 'Check the ladders', 'On <b>Leagues</b>, scroll to <b>Automatic Geographical Leagues</b> and pick a ladder. Use Weekly / Monthly / Yearly to change the period.') +
+    step(3, 'Check the ladders', 'On <b>Leagues</b>, tap a ladder under <b>Local ladders</b>. Use Week / Month / Season to change the period.') +
     '</ol><p class="guide-tip">Ladders show the top 50 players and refresh every 30 minutes, so a new result can take a little while to appear. If a ladder asks you to add your location, finish step 1.</p>';
 
   const rules = '<ul class="guide-list">' +
@@ -4611,8 +4611,8 @@ function viewGuide() {
   const faq = '<details class="guide-q"><summary>Do I need an account?</summary><p>Not for picks, fixtures, results or a local diary. Google sign-in is needed for leagues, ladders and cross-device diary sync.</p></details>' +
     '<details class="guide-q"><summary>I joined a league but cannot see anyone else.</summary><p>Members appear as they join. Check you used the right 8-character code, then share the invite link again.</p></details>' +
     '<details class="guide-q"><summary>Why am I not on a ladder?</summary><p>You need a location in your profile and at least one settled league bet in the current period.</p></details>' +
-    '<details class="guide-q"><summary>Can I change my username or location?</summary><p>Yes, under <b>More</b> &rarr; <b>Account</b>. Ladders update at the next refresh.</p></details>' +
-    '<details class="guide-q"><summary>Something looks wrong.</summary><p>Use <b>Report a Bug</b> in the page footer, or <b>Force App Sync</b> under <b>More</b> to load the latest version.</p></details>' +
+    '<details class="guide-q"><summary>Can I change my username or location?</summary><p>Yes, under <b>More</b> &rarr; <b>Username and location</b>. Ladders update at the next refresh.</p></details>' +
+    '<details class="guide-q"><summary>Something looks wrong.</summary><p>Use <b>Report a problem</b> under <b>More</b>, or <b>Check for updates</b> there to load the latest version.</p></details>' +
     '<p class="guide-tip">18+ only. Bet with money you can afford to lose. Help is available at <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a> and <a href="https://www.gamcare.org.uk" target="_blank" rel="noopener">GamCare</a>.</p>';
 
   return '<section class="view guide-view">' +
@@ -4623,7 +4623,7 @@ function viewGuide() {
     sec('start', '🚀', 'Quick start', start, true) +
     sec('around', '🧭', 'Finding your way around', around) +
     sec('picks', '🎯', 'Reading a pick', picks) +
-    sec('acca', '⚡', 'Build an acca with the Bet Builder', acca) +
+    sec('acca', '⚡', 'Let us build an acca', acca) +
     sec('diary', '📖', 'Track bets in your Diary', diary) +
     sec('private', '👥', 'Private leagues: create &amp; join', priv) +
     sec('regional', '🏛️', 'Regional leagues &amp; ladders', regional) +
@@ -4643,125 +4643,62 @@ function viewMore() {
   const fb = getStoredFeedback();
   const stars = (q, label) => '<div class="field"><span class="lbl">' + label + '</span><div class="stars">' + [1, 2, 3, 4, 5].map(n => '<button type="button" data-star="' + q + '" data-value="' + n + '" aria-pressed="' + (feedbackState[q] === n) + '">' + n + '</button>').join('') + '</div></div>';
 
-  const tabs = [
-    { id: 'account', label: '👤 Account' },
-    { id: 'data', label: '📊 Data & Methods' },
-    { id: 'feedback', label: '💬 Feedback' },
-    { id: 'commercial', label: '💼 Commercial' }
-  ];
-
-  const tabsHtml = '<div class="more-nav-grid">' +
-    tabs.map(t => '<button type="button" class="more-nav-btn' + (activeMoreTab === t.id ? ' active' : '') + '" data-select-more-tab="' + t.id + '">' + t.label + '</button>').join('') +
-    (isAppOwner() ? '<a href="#/admin" class="more-nav-btn" style="text-decoration:none;text-align:center;border-color:var(--cyan);color:var(--cyan)">📈 Telemetry</a>' : '') +
-  '</div>';
-
-  let contentHtml = '';
-
-  if (activeMoreTab === 'account') {
-    contentHtml = '<div class="section card">' +
-      '<div class="section-head">' +
-        '<div>' +
-          '<h2 class="section-title">Player Profile &amp; Account</h2>' +
-          '<p class="section-note">Your custom gamertag, location for 6-tier regional leagues, and display preferences.</p>' +
-        '</div>' +
-        '<button type="button" class="btn primary small" data-open-handle-modal>Edit Profile &amp; Location</button>' +
-      '</div>' +
-      '<div class="tiles" style="margin-top:16px">' +
-        '<div class="tile">' +
-          '<div class="k">Gamertag / Username</div>' +
-          '<div class="v" style="font-size:18px;color:var(--cyan)">' + esc(prof.avatar) + ' @' + esc(prof.handle) + '</div>' +
-          '<div class="s">Displayed on Buddy Leagues &amp; Silverware leaderboards</div>' +
-        '</div>' +
-        '<div class="tile">' +
-          '<div class="k">Hometown / City</div>' +
-          '<div class="v" style="font-size:18px">' + esc(prof.town) + '</div>' +
-          '<div class="s">Hometown League &amp; Civic Plaque</div>' +
-        '</div>' +
-        '<div class="tile">' +
-          '<div class="k">County / Region</div>' +
-          '<div class="v" style="font-size:18px">' + esc(prof.region) + '</div>' +
-          '<div class="s">County League &amp; Chalice</div>' +
-        '</div>' +
-        '<div class="tile">' +
-          '<div class="k">Country</div>' +
-          '<div class="v" style="font-size:18px">' + esc(prof.country) + '</div>' +
-          '<div class="s">National Trophy &amp; Shield</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="btn-row" style="margin-top:16px">' +
-        '<button type="button" class="btn primary" data-open-handle-modal>Change Username / Location</button>' +
-        '<button type="button" class="btn" data-share-app>👥 Share App with Friend</button>' +
-        '<button type="button" class="btn" data-open-auth>Switch / Connect Google Account</button>' +
-      '</div>' +
-    '</div>' +
-
-    '<div class="section card" style="margin-top:16px">' +
-      '<div class="section-head">' +
-        '<div>' +
-          '<h2 class="section-title">App Preferences &amp; Sync</h2>' +
-          '<p class="section-note">Live Firebase cloud sync, odds pricing format, and cache controls.</p>' +
-        '</div>' +
-      '</div>' +
-      '<div class="tiles" style="margin-top:16px">' +
-        '<div class="tile">' +
-          '<div class="k">Odds Display Format</div>' +
-          '<div class="v" style="font-size:18px">' + (oddsFormat === 'decimal' ? 'Decimal (e.g. 3.50)' : 'Fractional (e.g. 5/2)') + '</div>' +
-          '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" id="toggle-odds-format">Switch to ' + (oddsFormat === 'decimal' ? 'Fractional' : 'Decimal') + '</button></div>' +
-        '</div>' +
-        '<div class="tile">' +
-          '<div class="k">Cloud League Sync</div>' +
-          '<div class="v" style="font-size:16px;color:var(--emerald)">⚡ Firebase Live</div>' +
-          '<div class="s">Connected to betbuddyuk project</div>' +
-        '</div>' +
-        '<div class="tile">' +
-          '<div class="k">App Version &amp; Engine</div>' +
-          '<div class="v mono" style="font-size:16px">' + APP_VERSION + ' (Live)</div>' +
-          '<div class="s"><button type="button" class="btn small" style="margin-top:6px;padding:3px 10px" onclick="forceAppSync()">Force App Sync 🔄</button></div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="btn-row" style="margin-top:16px">' +
-        '<button type="button" class="btn" id="btn-more-gdpr">Privacy Notice &amp; UK GDPR</button>' +
-        '<button type="button" class="btn danger small" data-clear-diary>Reset Local Diary Data</button>' +
-      '</div>' +
-    '</div>';
-  } else if (activeMoreTab === 'data') {
-    contentHtml = '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Update status</h2><div class="chips" style="margin:10px 0">' + freshnessChips() + '</div>' +
+  const dataHtml = '<div class="section grid grid-2"><div class="card"><h2 class="section-title">Update status</h2><div class="chips" style="margin:10px 0">' + freshnessChips() + '</div>' +
       '<p class="muted" style="font-size:13.5px">Last attempt ' + esc(s.attempted_at ? ago(s.attempted_at) : 'unknown') + '. Last success ' + esc(s.last_success ? ago(s.last_success) : 'never') + '. ' + (s.errors && s.errors.length ? 'Errors: ' + esc(s.errors.join(' ')) : 'No errors.') + '</p>' +
       '<div style="overflow-x:auto"><table class="table" style="margin-top:8px"><thead><tr><th>Source</th><th>Status</th><th style="text-align:right">Fixtures</th><th style="text-align:right">Results</th></tr></thead><tbody>' + sourceRows + '</tbody></table></div>' +
-      '<p class="section-note" style="margin-top:10px">' + esc(s.attribution || '') + ' Bookmaker prices come from The Odds API (UK bookmakers; Match Result and Total Goals only) and are ignored once older than 12 hours; for any other market, enter a price you have seen. Corners, cards and shots are not shown: their statistics come from a source whose terms exclude public use.</p></div>' +
+      '<p class="section-note" style="margin-top:10px">' + esc(s.attribution || '') + ' Bookmaker prices come from UK bookmakers via The Odds API, for match results and total goals. We stop using a price once it is 12 hours old. For anything else, type in the price you were offered.</p></div>' +
       '<div class="card"><h2 class="section-title">Where each number comes from</h2><table class="table" style="margin-top:8px"><tbody>' +
-        '<tr><td><b>Match result</b></td><td>Dixon-Coles model with time decay, fitted for each league on football-data.org final scores only (model dc-public-v1) and backtested chronologically on 2025-26. A club with too little recent history, such as a newly promoted side, gets the league average (limited evidence). All estimates are provisional until a forward record builds up.</td></tr>' +
-        '<tr><td><b>Goals, both teams to score</b></td><td>Provisional: 30% score model, 70% league rate. Backtests show no proven edge.</td></tr>' +
-        '<tr><td><b>Corners, cards, shots</b></td><td>Not shown. The only available match statistics come from a source that does not permit public use. Earlier research predictions for these markets are private.</td></tr>' +
-        '<tr><td><b>Records</b></td><td>Public records (ids starting PUB-) are produced by the public model and sealed before kick-off from the day it went live. They are not the earlier research predictions, which are kept privately and are not shown or recreated here.</td></tr>' +
-        '<tr><td><b>Fair odds</b></td><td>1 ÷ probability, rounded to a familiar UK price. Not a bookmaker price.</td></tr></tbody></table></div></div>';
-  } else if (activeMoreTab === 'feedback') {
-    contentHtml = '<div class="section card"><h2 class="section-title">Tell us what you think</h2><form id="fb-form" class="grid" style="margin-top:12px">' +
+        '<tr><td><b>Who wins</b></td><td>Worked out from every team’s recent scores in its own league, with recent games counting most. We tested it on last season’s matches before using it. A newly promoted club with little history gets the league average. Treat every estimate as early until our live record builds up.</td></tr>' +
+        '<tr><td><b>Goals and both teams to score</b></td><td>Mostly the league’s usual rate, nudged a little by the teams’ scoring. Testing has not shown it beats the bookmakers, so treat it as a rough guide.</td></tr>' +
+        '<tr><td><b>Corners, cards and shots</b></td><td>No predictions from us: the only stats available are not licensed for public use. You can still add these bets yourself.</td></tr>' +
+        '<tr><td><b>Our record</b></td><td>Every prediction is saved and locked before kick-off, then marked right or wrong. Nothing is changed afterwards.</td></tr>' +
+        '<tr><td><b>Fair odds</b></td><td>The price our chance works out to, with no bookmaker profit added. A 50% chance is Evens. It is not a price you can bet at.</td></tr></tbody></table></div></div>';
+  const feedbackHtml = '<div class="section card"><h2 class="section-title">Tell us what you think</h2><form id="fb-form" class="grid" style="margin-top:12px">' +
       stars('understand', 'How clear were the predictions? (1 confusing, 5 crystal clear)') + stars('convincing', 'How convincing was the evidence?') +
       '<div class="field"><span class="lbl">Was it useful?</span><div class="stars">' + [['useful', 'Very useful'], ['neutral', 'Somewhat'], ['not_useful', 'Not useful']].map(([v, l]) => '<button type="button" class="opt" data-useful="' + v + '" aria-pressed="' + (feedbackState.useful === v) + '">' + l + '</button>').join('') + '</div></div>' +
       '<div class="field"><span class="lbl">Anything confusing?</span><div class="stars">' + ['Evidence labels', 'Odds vs probabilities', 'Provisional estimates', 'Navigation', 'Diary returns', 'All clear'].map(c => '<button type="button" class="opt" data-chip="' + esc(c) + '" aria-pressed="' + feedbackState.chips.has(c) + '">' + esc(c) + '</button>').join('') + '</div></div>' +
       '<div class="field"><label for="fb-improvements">What would make Bet Buddy better?</label><textarea id="fb-improvements" class="ctl"></textarea></div>' +
       '<div class="btn-row"><button type="submit" class="btn primary">Send feedback</button>' + (fb.length ? '<button type="button" class="btn" data-export="feedback">Export ' + fb.length + ' responses</button>' : '') + '</div>' +
       '<p class="section-note">Feedback is stored in this browser only.</p></form></div>';
-  } else if (activeMoreTab === 'commercial') {
-    contentHtml = '<div class="section card commercial-card">' +
-      '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries</h2><p class="section-note">Partner with Bet Buddy: bookmaker odds feeds, accumulator deep-links, silverware league title sponsors, and commercial affiliate placements.</p></div><span class="badge validated">Partnerships Open</span></div>' +
-      '<div class="btn-row" style="margin-top:14px">' +
-        '<a href="#/commercial" class="btn primary">Open Commercial &amp; Sponsorship Form</a>' +
-        '<button type="button" class="btn" id="btn-more-gdpr">Privacy Notice &amp; UK GDPR</button>' +
-      '</div>' +
-    '</div>';
-  }
 
-  return '<section class="view">' +
-    '<div class="section-head" style="align-items:flex-end">' +
-      '<div>' +
-        '<h1 class="page-title">Settings &amp; Information</h1>' +
-        '<p class="page-sub">Account profile, preferences, model intelligence methods, feedback, and commercial partnerships.</p>' +
-      '</div>' +
-    '</div>' +
-    tabsHtml +
-    contentHtml +
+  const user = getAuthUser(), signedIn = !!(user && user.signedIn);
+  const row = (attrs, icon, title, sub, tail) => '<' + (attrs.startsWith('href') ? 'a ' : 'button type="button" ') + 'class="st-row" ' + attrs + '>' +
+    '<span class="st-ico">' + icon + '</span><span class="st-txt"><b>' + title + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</span>' +
+    (tail || '<span class="st-go">›</span>') + '</' + (attrs.startsWith('href') ? 'a' : 'button') + '>';
+  const fold = (id, icon, title, sub, body) => '<details class="st-fold" id="st-' + id + '"' + (activeMoreTab === id ? ' open' : '') + '><summary class="st-row"><span class="st-ico">' + icon + '</span><span class="st-txt"><b>' + title + '</b><small>' + sub + '</small></span><span class="st-go st-chev">›</span></summary><div class="st-fold-body">' + body + '</div></details>';
+  const oddsSeg = '<span class="st-seg" role="group" aria-label="Odds format"><span class="' + (oddsFormat !== 'decimal' ? 'on' : '') + '">6/4</span><span class="' + (oddsFormat === 'decimal' ? 'on' : '') + '">2.50</span></span>';
+
+  const profile = '<section class="st-profile">' +
+    '<span class="st-avatar">' + esc(prof.avatar || '⚽') + '</span>' +
+    '<div class="st-id"><b>' + (signedIn ? '@' + esc(prof.handle) : 'Not signed in') + '</b><small>' +
+      (signedIn ? ([prof.town, prof.region, prof.country].filter(Boolean).map(esc).join(', ') || 'No location yet: add it to join your local ladders') : 'Sign in with Google to join leagues and sync your diary') + '</small></div>' +
+    (signedIn ? '<button type="button" class="btn small" data-open-handle-modal>Edit</button>' : '<button type="button" class="btn primary small" data-open-auth>Sign in</button>') +
+  '</section>';
+
+  const group = (title, rows) => '<section class="st-group"><h2>' + title + '</h2><div class="st-list">' + rows + '</div></section>';
+
+  return '<section class="view st-view"><h1 class="page-title">More</h1>' + profile +
+    group('Your app',
+      row('id="toggle-odds-format"', '🔢', 'Odds format', oddsFormat === 'decimal' ? 'Showing decimal odds, like 2.50' : 'Showing fractional odds, like 6/4', oddsSeg) +
+      row('onclick="openButlerModal()"', '📋', 'My bookmakers', 'Which bookmakers you use, for slip notes') +
+      (signedIn ? row('data-open-handle-modal', '📍', 'Username and location', 'Your name on leagues and your local ladders') : '') +
+      row('data-open-auth', '🔑', signedIn ? 'Google account' : 'Sign in with Google', signedIn ? 'Switch account or sign out' : 'Join leagues and sync your diary across devices') +
+      row('data-share-app', '💬', 'Share Bet Buddy', 'Send it to a mate')) +
+    group('Learn',
+      row('href="#/guide"', '🧭', 'How Bet Buddy works', 'A two-minute tour of every feature') +
+      row('href="#/results"', '📊', 'Our prediction record', 'Every pick, sealed before kick-off') +
+      fold('data', '🔎', 'Where our numbers come from', 'Data sources, update times and how each number is made', dataHtml)) +
+    group('Help',
+      fold('feedback', '⭐', 'Give feedback', 'Tell us what is clear and what is not', feedbackHtml) +
+      row('id="btn-report-bug"', '🐞', 'Report a problem', 'Something broken or wrong? Tell us') +
+      row('href="https://www.begambleaware.org" target="_blank" rel="noopener"', '🛟', 'Gambling support', 'BeGambleAware: free, confidential help') +
+      row('id="btn-more-gdpr"', '🔒', 'Privacy', 'What we store and your rights')) +
+    group('About',
+      row('onclick="forceAppSync()"', '🔄', 'Check for updates', 'You are on version ' + esc(APP_VERSION), '<span class="st-go">↻</span>') +
+      row('href="#/commercial"', '🤝', 'Work with us', 'Partnerships and sponsorship') +
+      (isAppOwner() ? row('href="#/admin"', '📈', 'Owner dashboard', 'Usage numbers, only you can see this') : '')) +
+    '<section class="st-group st-danger"><div class="st-list">' + row('data-clear-diary', '🗑️', 'Delete my diary on this device', 'Removes every bet saved in this browser', '<span class="st-go">!</span>') + '</div></section>' +
+    '<p class="st-foot">Bet Buddy never takes bets. 18+ only. Please gamble responsibly.</p>' +
   '</section>';
 }
 
@@ -5624,12 +5561,12 @@ function render() {
   if (view === 'admin' && !isAppOwner()) view = 'home';
   // Live league listeners cost a read per member update; keep them only while Leagues is open.
   if (view !== 'leagues' && currentLeagueListeningCode) stopLeagueListeners();
-  const navKey = view === 'match' ? 'fixtures' : (view === 'results' || view === 'build') ? 'picks' : view;
+  const navKey = view === 'match' ? 'fixtures' : (view === 'results' || view === 'build') ? 'picks' : (view === 'guide' || view === 'commercial') ? 'more' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
   const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild(arg) : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Our prediction record', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'Data & methods' };
+  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Our prediction record', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'More' };
   document.title = (view === 'build' && arg === 'log' ? 'Log a bet' : titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {
@@ -5771,7 +5708,7 @@ class HandleTakenError extends Error {}
 // Registry entries are create-only in the rules, so an entry this player already owns is left alone.
 async function claimHandleTransaction(uid, handle, avatar = '⚽', location = null) {
   if (!firestoreDb) throw new Error('Firestore not initialized');
-  if (!isValidHandle(handle)) throw new Error('Gamertag must be 3–20 letters, numbers, or underscores.');
+  if (!isValidHandle(handle)) throw new Error('Usernames are 3 to 20 letters, numbers or underscores.');
 
   const handleLower = handle.toLowerCase();
   const handlesCol = firestoreDb.collection('handles');
@@ -5782,7 +5719,7 @@ async function claimHandleTransaction(uid, handle, avatar = '⚽', location = nu
   return firestoreDb.runTransaction(async tx => {
     const handleDoc = await tx.get(handleRef);
     if (handleDoc.exists && (handleDoc.data() || {}).uid !== uid) {
-      throw new HandleTakenError('This gamertag is already taken. Please choose another.');
+      throw new HandleTakenError('That username is taken. Please choose another.');
     }
     const userDoc = await tx.get(userRef);
     const existingUserData = userDoc.exists ? userDoc.data() : null;
@@ -6613,22 +6550,22 @@ document.addEventListener('submit', event => {
     const country = $('player-country-input') ? $('player-country-input').value.trim() : '';
 
     if (!isValidHandle(handle)) {
-      toast('Gamertag must be 3–20 characters (letters, numbers, underscores only).');
+      toast('Usernames are 3 to 20 letters, numbers or underscores.');
       return;
     }
 
     const user = getAuthUser();
     if (user && user.signedIn && firestoreDb) {
-      toast('Updating gamertag...');
+      toast('Saving…');
       claimHandleTransaction(user.uid, handle, getUserProfile().avatar || '⚽', { town, region, country }).then(() => {
         currentAuthProfile = Object.assign({}, currentAuthProfile, { handle, town: leagueDocs.cleanPlace(town), region: leagueDocs.cleanPlace(region), country: leagueDocs.cleanPlace(country) });
         saveUserProfile(handle, town, region, country);
         $('handle-modal').hidden = true;
-        toast('Gamertag and location updated! ⚽');
+        toast('Username and location saved ⚽');
         getStoredLeagues().forEach(l => syncLeagueToCloud(l));
         render();
       }).catch(err => {
-        toast(err.message || 'Error updating gamertag.');
+        toast(err.message || 'Could not save your username. Try again.');
       });
       return;
     }
