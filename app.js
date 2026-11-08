@@ -312,23 +312,6 @@ function selectionFor(pred, m) {
   return allSelections(pred).find(s => s.id === id);
 }
 
-function mostLikelyBlock(pred, big) {
-  const m = (pred.recommendations || {}).most_likely;
-  if (!m || m.decision !== 'most_likely') return '<div class="rec-card nobet"><div class="rec-kicker">Most likely to win</div><div class="rec-pick">No bet</div><p class="muted">' + esc((m && m.reason) || 'No selection has enough evidence.') + '</p></div>';
-  const sel = selectionFor(pred, m);
-  const status = m.status === 'provisional' && m.strength === 'none' ? 'league' : m.status;
-  const diary = { id: pred.match_id, market: MARKETS[m.market].diary, selection: sel ? sel.label : m.label, p: m.p, fair: sel ? sel.fair : '', rec: 'most_likely' };
-  return '<div class="rec-card' + (big ? ' big' : '') + '"><div class="rec-kicker">Most likely to win</div>' +
-    '<div class="rec-main">' + ring(m.p, big ? 112 : 72, status === 'validated' ? '' : 'provisional') +
-    '<div><div class="rec-market">' + esc(MARKETS[m.market].name) + '</div><div class="rec-pick">' + esc(m.label) + '</div>' +
-    '<div class="market-odds">Our fair price <b>' + esc(fmtFairOdds(diary.fair, m.p)) + '</b> · not a bookmaker price</div></div></div>' +
-    '<div class="evidence-row">' + statusBadge(status) + meter(m.strength) + '</div>' +
-    '<p class="muted" style="font-size:13.5px">About ' + Math.round(m.p * 10) + ' times in 10. Even on a cautious reading it is ' + pct(m.lower_bound) + '. Likely does not mean good value.</p>' +
-    '<div class="btn-row" style="margin-top:8px;">' +
-      '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button>' +
-      ownBetAddBtn(diary) +
-    '</div></div>';
-}
 
 const VALUE_HEAD = { value: ['value', 'Potential Value'], no_value: ['nobet', 'No Bet'], no_bet: ['nobet', 'No Bet'], awaiting_odds: ['awaiting', 'Awaiting Odds'] };
 
@@ -480,13 +463,6 @@ function reliabilityBand(p) {
   return m ? (m.bands || []).find(b => p >= b.lo && p < b.hi) || null : null;
 }
 
-function signalScore(pred) {
-  const r = pred.markets.result, p = r.pick.p, band = reliabilityBand(p);
-  const calibrated = band ? (band.n * band.observed_rate + SIGNAL_RULES.shrinkWeight * p) / (band.n + SIGNAL_RULES.shrinkWeight) : p;
-  const v = r.venue_games || { home: 0, away: 0 };
-  const completeness = Math.min(1, Math.min(v.home, v.away) / SIGNAL_RULES.fullSample);
-  return { score: calibrated * (0.85 + 0.15 * completeness), band, completeness };
-}
 
 function plainResult(p) {
   const inTen = Math.round(p * 10);
@@ -533,17 +509,6 @@ function freshnessChips() {
 }
 
 
-function signalCard(pred) {
-  const f = pred.fixture, r = pred.markets.result, ms = kickoffMs(f), provisional = r.evidence.status !== 'validated';
-  const band = reliabilityBand(r.pick.p);
-  return '<a class="sig-card" href="#/match/' + encodeURIComponent(pred.match_id) + '">' +
-    ring(r.pick.p, 64, provisional ? 'provisional' : '') +
-    '<span><span class="fixture">' + crest(f.home, 18) + crest(f.away, 18) + '<span>' + esc(f.home) + ' v ' + esc(f.away) + '</span></span>' +
-      '<span class="pick" style="display:block">' + esc(r.pick.label) + '</span>' +
-      '<span class="meta" style="display:block">' + esc(fmtDay(ms)) + ' ' + esc(fmtTime(ms)) + ' · fair ' + esc(fmtFairOdds(r.pick.fair_odds, r.pick.p)) + '</span>' +
-      '<span class="meta" style="display:block;color:' + (provisional || !(band && band.established) ? 'var(--amber)' : 'var(--dim)') + '">' +
-        (provisional ? 'Provisional: ' + (pred.promoted.length ? 'promoted club, little top-flight data' : 'limited data') : band && band.established ? 'Backtest: picks at ' + band.band + ' landed ' + pct(band.observed_rate) : 'Limited evidence') + '</span></span></a>';
-}
 
 function fixtureRow(f) {
   const ms = kickoffMs(f), pred = DATA.predictions && DATA.predictions.predictions[f.id], rec = finalRecord(f.id);
@@ -623,8 +588,7 @@ function marketCard(key, m, ctx) {
     const selText = (key === 'btts' ? 'Both teams to score: ' : key === 'result' ? '' : meta.name + ': ') + row.label;
     const betPayload = { id: ctx.id, fixture: fxObj, market: meta.diary, marketName: meta.name, selection: selText, p: row.p, fair: row.fair, odds: decOdds };
     const jsonStr = esc(JSON.stringify(betPayload));
-    return '<button type="button" class="btn small" data-diary=\'' + jsonStr + '\' aria-label="Add ' + esc(row.label) + ' to Bet Diary">+ Diary</button>' +
-      ownBetAddBtn(betPayload) +
+    return ownBetAddBtn(betPayload) +
       '<button type="button" class="btn-place-bet-inline butler-btn" onclick="openSlipCardSingle(this.dataset.betData)" data-bet-data=\'' + jsonStr + '\' title="Open slip note">📋 Slip Note</button>';
   };
   const rows = m.rows.map(row => '<tr' + (row.picked ? ' style="color:#fff;font-weight:600"' : '') + '><td>' + esc(row.label) + (row.picked ? ' <span class="badge validated" style="font-size:10px">Pick</span>' : '') + '</td>' +
@@ -659,37 +623,7 @@ function valueStatus(pred) {
   return '<span class="badge awaiting">Awaiting Odds</span>';
 }
 
-function matchRecRow(pred) {
-  const f = pred.fixture, ms = kickoffMs(f), m = (pred.recommendations || {}).most_likely || {}, r = pred.markets.result;
-  const status = m.status === 'provisional' && m.strength === 'none' ? 'league' : m.status;
-  const pick = m.decision === 'most_likely'
-    ? ring(m.p, 54, status === 'validated' ? '' : 'provisional') + '<span><span class="dim" style="display:block;font-size:11.5px">Most likely · ' + esc(MARKETS[m.market].name) + '</span><b class="rec-row-pick">' + esc(m.label) + '</b></span>'
-    : '<span><b class="rec-row-pick">No bet</b><span class="dim" style="display:block;font-size:11.5px">Not enough evidence</span></span>';
 
-  // Horizontal match result distribution bar
-  const sels = (r && r.selections) || [];
-  const hP = Math.round(((sels.find(s => s.outcome === 'home') || {}).p || 0) * 100);
-  const dP = Math.round(((sels.find(s => s.outcome === 'draw') || {}).p || 0) * 100);
-  const aP = Math.max(0, 100 - hP - dP);
-  const distBar = sels.length >= 3
-    ? '<div class="match-dist-bar" title="Model probabilities: Home ' + hP + '%, Draw ' + dP + '%, Away ' + aP + '%"><span class="bar-seg home" style="width:' + hP + '%"></span><span class="bar-seg draw" style="width:' + dP + '%"></span><span class="bar-seg away" style="width:' + aP + '%"></span></div>'
-    : '';
-
-  return '<a class="rec-row" href="#/match/' + encodeURIComponent(pred.match_id) + '">' +
-    '<span class="fx-time">' + esc(fmtTime(ms)) + '<small>' + esc(fmtDay(ms)) + '</small>' + (compFilter === 'ALL' ? '<small class="lg-tag">' + esc(f.competition || 'PL') + '</small>' : '') + '</span>' +
-    '<span class="fx-teams"><span class="teams-line">' + crest(f.home, 22) + '<span>' + esc(f.home) + '</span></span><span class="teams-line">' + crest(f.away, 22) + '<span>' + esc(f.away) + '</span></span>' + distBar + '</span>' +
-    '<span class="rec-row-main">' + pick + '</span>' +
-    '<span class="rec-row-side"><span class="dim">Lean: <b style="color:#fff">' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (r.evidence.status !== 'validated' ? ' <span class="badge provisional">Early estimate</span>' : '') + '</span>' + valueStatus(pred) + '</span>' +
-    '<span class="fx-chev" aria-hidden="true">›</span></a>';
-}
-
-function homeHero(pred) {
-  const f = pred.fixture, ms = kickoffMs(f);
-  return '<article class="hero"><div><div class="hero-meta"><strong>Most likely this round</strong><span>' + esc(leagueName(f.competition)) + '</span><span>' + esc(fmtDay(ms)) + ', ' + esc(fmtTime(ms)) + ' UK</span></div>' +
-    '<div class="hero-teams"><span class="hero-team">' + crest(f.home, 40) + esc(f.home) + '</span><span class="hero-v">v</span><span class="hero-team">' + crest(f.away, 40) + esc(f.away) + '</span></div>' +
-    mostLikelyBlock(pred, true) +
-    '<div class="btn-row" style="margin-top:14px"><a class="btn primary" href="#/match/' + encodeURIComponent(pred.match_id) + '">See every market and check value</a></div></div></article>';
-}
 
 // ------------------------------------------------------------ Bet Builder (home hero)
 const BUILDER_KEY = 'matchiq_builder_v1';
@@ -1230,18 +1164,17 @@ function renderWelcomeHero() {
   const leaguesN = Object.keys(LEAGUES).length;
 
   const proof = '<div class="hm-proof">' +
-    (rec ? '<a href="#/results" class="hm-chip"><b>' + Math.round(rec.rate * 100) + '%</b> of picks right<small>' + rec.n + ' sealed before kick-off</small></a>' : '') +
-    '<a href="#/fixtures" class="hm-chip"><b>' + weekN + '</b> matches this week<small>with our predictions</small></a>' +
-    '<span class="hm-chip"><b>' + leaguesN + '</b> leagues<small>England to Portugal</small></span></div>';
+    (rec ? '<a href="#/results"><b>' + Math.round(rec.rate * 100) + '%</b> right</a><i></i>' : '') +
+    '<a href="#/fixtures"><b>' + weekN + '</b> games this week</a><i></i>' +
+    '<span><b>' + leaguesN + '</b> leagues</span></div>';
 
   const hero = '<header class="hm-hero">' +
-    '<div class="hm-ball" aria-hidden="true">⚽</div>' +
-    '<p class="hm-hello">' + (userName ? 'Welcome back, ' + esc(userName) + ' 👋' : 'Welcome to Bet Buddy 👋') + '</p>' +
-    '<h1 class="hm-title">Smarter football bets.<br><span>Honest numbers.</span></h1>' +
-    '<p class="hm-lead">Build bets like your bookmaker, see what our model really thinks, track every penny and beat your mates. Free.</p>' +
+    '<div class="hm-top"><p class="hm-hello">' + (userName ? 'Welcome back, ' + esc(userName) + ' 👋' : 'Welcome to Bet Buddy 👋') + '</p>' +
+      '<span class="hm-sports" aria-label="Football, tennis, golf, darts and rugby">⚽🎾⛳🎯🏉</span></div>' +
+    '<h1 class="hm-title">Smarter bets. <span>Honest numbers.</span></h1>' +
+    '<p class="hm-lead">Football first, plus tennis, golf, darts and rugby. Free.</p>' +
     '<div class="hm-ctas"><a href="#/build" class="btn primary hm-cta">Build a bet</a><button type="button" class="btn hm-cta ghost" onclick="openBestValueModal(\'single\')">Today’s top pick</button></div>' +
     proof +
-    (userName ? '' : '<a href="#/guide" class="hm-guide">New here? The 2-minute tour ›</a>') +
   '</header>';
 
   // Today's top pick, as a teaser.
@@ -1506,6 +1439,31 @@ function viewHome() {
   return '<section class="view home">' + renderWelcomeHero() + locationPromptBanner() + '</section>';
 }
 
+// This round's most likely picks, one compact card per match, most confident first.
+function roundStrip(list) {
+  if (!list.length) return '<div class="empty section">No predictions published yet for the coming days. They appear once the schedule lists the matches.</div>';
+  const first = kickoffMs(list[0].fixture);
+  const round = list.filter(p => kickoffMs(p.fixture) - first < 5 * 86400000)
+    .filter(p => p.recommendations && p.recommendations.most_likely && p.recommendations.most_likely.decision === 'most_likely')
+    .sort((a, b) => lowerBoundOf(b) - lowerBoundOf(a)).slice(0, 12);
+  if (!round.length) return '';
+  const cards = round.map(pred => {
+    const m = pred.recommendations.most_likely, f = pred.fixture, sel = selectionFor(pred, m), ms = kickoffMs(f);
+    const payload = { id: pred.match_id, market: MARKETS[m.market].diary, selection: sel ? sel.label : m.label, p: m.p, fair: sel ? sel.fair : '', rec: 'most_likely' };
+    const chance = Math.round(m.p * 100), early = m.status !== 'validated';
+    return '<div class="rd-card"><a class="rd-main" href="#/match/' + encodeURIComponent(pred.match_id) + '">' +
+      '<span class="rd-when">' + esc(fmtDay(ms) + ' ' + fmtTime(ms) + ' · ' + leagueName(f.competition)) + '</span>' +
+      '<span class="rd-match">' + esc(f.home + ' v ' + f.away) + '</span>' +
+      '<span class="rd-pick"><small>' + esc(MARKETS[m.market].name) + '</small><b>' + esc(m.label) + '</b></span>' +
+      '<span class="rd-meter"><i style="--w:' + chance + '%"></i></span>' +
+      '<span class="rd-foot"><b>' + chance + '%</b> chance' + (early ? ' · early estimate' : '') + '</span></a>' +
+      ownBetAddBtn(payload) + '</div>';
+  }).join('');
+  return '<section class="rd-section"><div class="hm-block-head"><h2>This round’s most likely</h2><a href="#/fixtures">All matches ›</a></div>' +
+    '<p class="rd-sub">Our likeliest picks for the next few days, most confident first. Likely does not mean good value.</p>' +
+    '<div class="rd-strip">' + cards + '</div></section>';
+}
+
 function viewPicks() {
   const topHubNav = '';
   const list = upcoming();
@@ -1516,32 +1474,9 @@ function viewPicks() {
   let html = '<section class="view">' +
     topHubNav +
     sharedBanner +
-    viewBuilder() + '<div class="section-head" style="align-items:flex-end;margin-top:36px"><div><h2 class="page-title">This round</h2>' +
-    '<p class="page-sub">For every upcoming match: the most likely supported outcome, the match-result lean and whether a price you have seen offers value. Bet Buddy will say No bet when the evidence or the price is not good enough.</p></div>' +
-    '<div class="chips">' + freshnessChips() + '</div></div>' + compBar();
+    viewBuilder();
   if (LOAD_ERRORS.predictions) return html + errorPanel('predictions') + '</section>';
-  if (!list.length) return html + '<div class="empty">No fixtures with published predictions in the next 21 days. Predictions appear automatically once the schedule lists them.</div>' + homeFixtures() + '</section>';
-  const first = kickoffMs(list[0].fixture);
-  const round = list.filter(p => kickoffMs(p.fixture) - first < 5 * 86400000);
-  const later = list.filter(p => kickoffMs(p.fixture) - first >= 5 * 86400000);
-  const best = round.slice().sort((a, b) => lowerBoundOf(b) - lowerBoundOf(a))[0];
-  if (best && lowerBoundOf(best) >= 0) html += '<div class="section" style="margin-top:18px">' + homeHero(best) + '</div>';
-  const matchFilter = p => !clubFilter || (p.fixture.home.toLowerCase().includes(clubFilter) || p.fixture.away.toLowerCase().includes(clubFilter));
-  const filteredRound = round.filter(matchFilter);
-  const filteredLater = later.filter(matchFilter);
-  const searchBar = '<div class="search-bar"><label for="club-search" class="sr-only">Search clubs</label><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search by club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off" aria-label="Search clubs by name"></div>';
-  const legendBox = '<div class="match-list-legend">💡 <b>Quick Guide:</b> <b>Most likely</b>' + jargonTip('most likely') + ' is our highest-confidence statistical call across all 6 markets. <b>Lean</b>' + jargonTip('lean') + ' shows the pure 1X2 match winner probability.</div>';
-  
-  html += '<details class="section card match-list-collapsible" style="margin-top:28px;"' + (clubFilter ? ' open' : '') + '>' +
-    '<summary><span>⚽ Match by Match Predictions (' + filteredRound.length + ' matches)</span><span class="btn small" style="pointer-events:none;">Tap to view ▾</span></summary>' +
-    legendBox +
-    searchBar +
-    (filteredRound.length ? filteredRound.map(matchRecRow).join('') : '<div class="empty">No matches found for "' + esc(clubFilter) + '".</div>') +
-    '</details>';
-  if (filteredLater.length) html += '<details class="section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Following round (' + filteredLater.length + ' matches)</summary>' + filteredLater.map(matchRecRow).join('') + '</details>';
-  const validated = list.filter(p => p.markets.result.evidence.status === 'validated').map(p => ({ p, s: signalScore(p) })).sort((a, b) => b.s.score - a.s.score).map(x => x.p);
-  if (validated.length) html += '<div class="section"><div class="section-head"><h2 class="section-title">Strongest match-result signals</h2><span class="section-note">The validated match-result model only, ranked by backtest-calibrated probability.</span></div>' +
-    '<div class="grid grid-2">' + validated.slice(0, 4).map(signalCard).join('') + '</div></div>';
+  html += roundStrip(list);
   html += '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">What Most likely, Best value and No bet mean</summary><ol class="explain" style="margin-top:8px">' +
     '<li><b>Most likely</b> is the pick we think is most likely to happen, across every market. We rate each one on a cautious reading, so a big number from thin data does not win over a well-tested one.</li>' +
     '<li><b>Best value</b> needs a real bookmaker price. We get prices for match results and total goals; for anything else, type in the price you were offered. We only call something value when our proven match-result model says the price is at least 5% better than it should be.</li>' +
@@ -1557,7 +1492,7 @@ function viewPicks() {
     '</div>';
   }
 
-  return html + homeFixtures() + '</section>';
+  return html + '</section>';
 }
 
 function renderMultiSportSection(sportKey) {
@@ -1581,7 +1516,6 @@ function renderMultiSportSection(sportKey) {
           '</div>' +
           '<div class="sport-sel-actions">' +
             '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Open on ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
-            '<button type="button" class="btn small" data-diary=\'' + betData + '\' title="Add to Bet Diary">+ Diary</button>' +
             '<button type="button" class="btn small own-add-btn" data-own-bet=\'' + betData + '\' title="Add to my own bet slip">+ My bet</button>' +
           '</div>' +
         '</div>';
@@ -1608,12 +1542,6 @@ function renderMultiSportSection(sportKey) {
   }).join('');
 }
 
-function homeFixtures() {
-  const matchFilter = f => !clubFilter || f.home.toLowerCase().includes(clubFilter) || f.away.toLowerCase().includes(clubFilter);
-  const next = fixturesList().filter(f => inComp(f.competition) && f.status === 'SCHEDULED' && kickoffMs(f) > Date.now()).filter(matchFilter).sort((a, b) => kickoffMs(a) - kickoffMs(b)).slice(0, 10);
-  if (!next.length) return '';
-  return '<div class="section"><div class="section-head"><h2 class="section-title">Next fixtures</h2><a class="link-btn" href="#/fixtures">All fixtures ›</a></div>' + groupedRows(next) + '</div>';
-}
 
 let fixturesTab = 'upcoming';
 let fixturesShowAll = false;
@@ -3024,23 +2952,6 @@ function sampleLeaderboard() {
     '<p class="sample-foot">Top finishers each week move up the ladder: Hometown, County, Region, Nation, UK, Global.</p>' +
   '</div>';
 }
-function sampleDiaryBet() {
-  return '<div class="sample-box" role="group" aria-label="Sample diary entry, not a real bet">' +
-    '<div class="sample-head"><h2 class="section-title">What a settled bet looks like</h2>' + sampleBadge() + '</div>' +
-    '<p class="section-note">An invented example. Nothing here is a real match, price or result.</p>' +
-    '<div class="sample-bet">' +
-      '<div class="sample-bet-top"><b>Example FC v Sample United</b><span class="badge validated">Won</span></div>' +
-      '<div class="sample-bet-sub">Match result &middot; Example FC to win</div>' +
-      '<dl class="sample-stats">' +
-        '<div><dt>Stake</dt><dd class="mono">&pound;10.00</dd></div>' +
-        '<div><dt>Price taken</dt><dd class="mono">2.10</dd></div>' +
-        '<div><dt>Returned</dt><dd class="mono">&pound;21.00</dd></div>' +
-        '<div><dt>Profit</dt><dd class="mono pos">+&pound;11.00</dd></div>' +
-      '</dl>' +
-      '<p class="sample-foot">Recording the price you actually took lets the Diary work out true profit and show whether you beat the price the market settled on.</p>' +
-    '</div>' +
-  '</div>';
-}
 
 function viewLeagues() {
   const prof = getUserProfile();
@@ -3278,7 +3189,7 @@ function diaryHero(settled, live) {
   if (settled.length >= 2) {
     let cum = 0;
     const pts = [{ y: 0 }].concat(settled.map(e => { const p = diaryProfit(e) || 0; cum += p; return { y: cum, p, e }; }));
-    const W = 640, H = 190, PX = 8, PY = 14;
+    const W = 640, H = 110, PX = 8, PY = 10;
     const lo = Math.min(0, ...pts.map(x => x.y)), hi = Math.max(0, ...pts.map(x => x.y)), span = (hi - lo) || 1;
     const X = i => PX + i / (pts.length - 1) * (W - 2 * PX), Y = v => PY + (hi - v) / span * (H - 2 * PY);
     const line = pts.map((x, i) => X(i).toFixed(1) + ',' + Y(x.y).toFixed(1)).join(' ');
@@ -3321,6 +3232,36 @@ function diaryTiles(settled, live) {
     '<div class="dy-tile"><span>Biggest win</span><b class="pos">' + (best ? '+' + money(best.p) : '—') + '</b><small>' + (best ? esc(String(best.e.selection || '').slice(0, 40)) : 'No winners yet') + '</small></div>' +
     '<div class="dy-tile"><span>Streak</span><b>' + (cur ? cur + (curType === 'won' ? ' 🔥' : ' ❄️') : '—') + '</b><small>' + (cur ? (curType === 'won' ? 'wins in a row' : 'losses in a row') + ' · best run ' + bestRun : 'Settle a bet to start one') + '</small></div>' +
   '</div>';
+}
+
+// Profit month by month: one bar per month, up in green, down in red.
+function diaryMonths(settledAll) {
+  if (!settledAll.length) return '';
+  const byMonth = {};
+  settledAll.forEach(e => { const k = diarySettleKey(e).slice(0, 7); if (/^\d{4}-\d{2}$/.test(k)) byMonth[k] = (byMonth[k] || 0) + (diaryProfit(e) || 0); });
+  const keys = Object.keys(byMonth).sort().slice(-6);
+  if (!keys.length) return '';
+  const max = Math.max(1, ...keys.map(k => Math.abs(byMonth[k])));
+  return '<section class="dy-card dy-mini"><h2 class="dy-h">Month by month</h2><div class="dy-months">' + keys.map(k => {
+    const v = byMonth[k], h = Math.max(4, Math.round(Math.abs(v) / max * 100));
+    const label = new Date(k + '-01T12:00:00Z').toLocaleDateString('en-GB', { month: 'short' });
+    return '<div class="dy-month-col" title="' + esc(label + ': ' + diarySigned(v)) + '"><span class="dy-month-val ' + (v >= 0 ? 'pos' : 'neg') + '">' + diarySigned(Math.round(v)).replace('.00', '') + '</span>' +
+      '<div class="dy-month-track"><i class="' + (v >= 0 ? 'up' : 'down') + '" style="--h:' + h + '%"></i></div><small>' + esc(label) + '</small></div>';
+  }).join('') + '</div></section>';
+}
+
+// How your wins and losses split by the size of the price.
+function diaryOddsMix(settled) {
+  const decided = settled.filter(e => e.outcome === 'won' || e.outcome === 'lost');
+  if (!decided.length) return '';
+  const bands = [['Short', o => o < 2], ['Mid', o => o >= 2 && o < 5], ['Long', o => o >= 5]];
+  const rows = bands.map(([name, f]) => { const list = decided.filter(e => f(Number(e.odds) || 0)); return { name, n: list.length, won: list.filter(e => e.outcome === 'won').length }; }).filter(r => r.n);
+  const avgOdds = decided.reduce((t, e) => t + (Number(e.odds) || 0), 0) / decided.length;
+  const avgStake = decided.reduce((t, e) => t + (Number(e.stake) || 0), 0) / decided.length;
+  return '<section class="dy-card dy-mini"><h2 class="dy-h">Your prices</h2>' +
+    '<div class="dy-odds-rows">' + rows.map(r => '<div class="dy-odds-row"><span>' + r.name + '</span><div class="dy-stack"><i class="w" style="--w:' + (r.won / r.n * 100).toFixed(0) + '%"></i></div><b>' + r.won + '/' + r.n + '</b></div>').join('') + '</div>' +
+    '<div class="dy-odds-avg"><span>Avg price <b>' + esc(fmtOdds(avgOdds)) + '</b></span><span>Avg stake <b>' + money(avgStake) + '</b></span></div>' +
+    '<p class="dy-hint">Short = shorter than Evens · Long = 4/1 or bigger</p></section>';
 }
 
 function diaryGroupKey(e, by) {
@@ -3387,18 +3328,24 @@ function diaryHeatmap(settledAll) {
 function viewDiary() {
   const all = getStoredDiary();
   if (!all.length) {
-    return '<section class="view">' +
-      '<h1 class="page-title">Bet Diary</h1>' +
-      '<p class="page-sub">Your private record of bets and prices. ' + (getAuthUser() && getAuthUser().signedIn ? 'Saved on this device and synced to your account when you are signed in.' : 'Saved only in this browser. Sign in with Google to sync it between devices.') + '</p>' +
+    // A preview of the dashboard with invented numbers, so a new player sees what logging bets gives them.
+    const pts = [0, 6, 2, 11, 8, 19, 15, 27, 24, 36], W = 300, H = 90;
+    const line = pts.map((v, i) => (i / (pts.length - 1) * W).toFixed(1) + ',' + (H - 6 - v / 40 * (H - 12)).toFixed(1)).join(' ');
+    return '<section class="view dy-view">' +
+      '<div class="dy-head"><h1 class="page-title">Bet Diary</h1><span class="dy-head-actions"><button type="button" class="btn small" data-import="diary">Import a backup</button><input type="file" id="diary-import" accept="application/json,.json" hidden></span></div>' +
       (diaryReadFailed ? '<div class="notice error">Saved diary data could not be read. It has been left untouched, and saving is disabled to protect it.</div>' : '') +
-      '<div class="empty-diary-card card section" style="text-align:center;padding:48px 24px;border:1px dashed rgba(255,255,255,0.18);border-radius:16px;max-width:540px;margin:28px auto 0;">' +
-        '<div style="font-size:42px;margin-bottom:12px;">📓</div>' +
-        '<h2 style="font-size:20px;font-weight:700;color:#fff;margin:0 0 8px;">Your Bet Diary is empty</h2>' +
-        '<p style="color:var(--soft);font-size:14px;line-height:1.5;margin:0 0 20px;">Keep track of your bets, monitor your returns over time, and see whether following Bet Buddy or your own picks works best.</p>' +
-        '<a href="#/build/log" class="btn primary" style="min-height:44px;padding:8px 24px;font-size:15px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center">Add your first bet</a>' +
-        '<input type="file" id="diary-import" accept="application/json,.json" hidden>' +
-      '</div>' +
-      sampleDiaryBet() +
+      '<section class="dy-hero up dy-welcome">' +
+        '<div class="dy-kicker">Where your money goes</div>' +
+        '<h2 class="dy-welcome-title">See every win, loss and pound, at a glance.</h2>' +
+        '<div class="dy-preview" aria-label="Example of what your diary will show, with invented numbers">' + sampleBadge() +
+          '<div class="dy-preview-big">+£36.00</div>' +
+          '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" class="dy-preview-line" aria-hidden="true"><polyline points="' + line + '"/></svg>' +
+          '<div class="dy-preview-tiles"><span><b>60%</b>win rate</span><span><b>3 🔥</b>win streak</span><span><b>+£12</b>biggest win</span></div>' +
+        '</div>' +
+        '<a href="#/build/log" class="btn primary dy-welcome-cta">+ Log your first bet</a>' +
+        '<p class="dy-welcome-fine">' + (getAuthUser() && getAuthUser().signedIn ? 'Saved to your account.' : 'Saved in this browser. Sign in to keep it on every device.') + '</p>' +
+      '</section>' +
+      '<ol class="dy-steps"><li><span>👆</span><b>Tap the prices you backed</b><small>Singles to big accas</small></li><li><span>⏱️</span><b>It settles itself</b><small>After the final whistle</small></li><li><span>📈</span><b>Watch the numbers</b><small>Profit, streaks, best markets</small></li></ol>' +
     '</section>';
   }
 
@@ -3421,7 +3368,7 @@ function viewDiary() {
   const live = diary.filter(e => e.outcome === 'pending');
   const settledAll = diary.filter(e => e.outcome && e.outcome !== 'pending');
   const settled = diaryInRange(settledAll).sort((a, b) => diarySettleKey(a).localeCompare(diarySettleKey(b)));
-  html += diaryHero(settled, live) + diaryTiles(settled, live) + diaryBreakdownCard(settled) + diaryHeatmap(settledAll);
+  html += diaryHero(settled, live) + diaryTiles(settled, live) + '<div class="dy-duo">' + diaryMonths(settledAll) + diaryOddsMix(settled) + '</div>' + diaryBreakdownCard(settled) + diaryHeatmap(settledAll);
 
   html += '<section class="dy-section"><h2 class="dy-h">Waiting on results <span>' + live.length + '</span></h2>' +
     (live.length ? '<div class="grid grid-2 dy-live">' + live.map(betCard).join('') + '</div>' : '<div class="dy-empty">Nothing waiting. Log a bet and it shows here until it settles.</div>') + '</section>';
@@ -5500,7 +5447,6 @@ function viewMultiSport(sportKey) {
           '</div>' +
           '<div class="sport-sel-actions">' +
             '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Open on ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
-            '<button type="button" class="btn small" data-diary=\'' + betData + '\' title="Add to Bet Diary">+ Diary</button>' +
             '<button type="button" class="btn small own-add-btn" data-own-bet=\'' + betData + '\' title="Add to my own bet slip">+ My bet</button>' +
           '</div>' +
         '</div>';
@@ -6352,7 +6298,12 @@ document.addEventListener('click', event => {
   }
   else if (t.dataset.legs) setBuilderLegs(+t.dataset.legs);
   else if (t.dataset.toggleLeague) toggleLeagueBet(t.dataset.toggleLeague);
-  else if (t.dataset.diary !== undefined) openDiary(JSON.parse(t.dataset.diary || '{}'));
+  else if (t.dataset.diary !== undefined) {
+    let d = {};
+    try { d = JSON.parse(t.dataset.diary || '{}'); } catch (e) { /* fall through to an empty log */ }
+    if (d.id || d.sport) addToOwnBet(d);
+    location.hash = '#/build/log';
+  }
   else if (t.dataset.close !== undefined) closeDiary();
   else if (t.dataset.comp) { compFilter = t.dataset.comp; fixturesLimit = 60; resultsLimit = 40; try { localStorage.setItem(COMP_KEY, compFilter); } catch (e) { /* ignore */ } render(); }
   else if (t.dataset.tab) { fixturesTab = t.dataset.tab; fixturesShowAll = false; fixturesLimit = 60; render(); }
@@ -7078,31 +7029,18 @@ function betaiEstimatedOdds(pick) {
 function betaiSaveToDiary(kind, idx, dest) {
   const r = betai.result;
   if (!r || !r.picks) return;
-  const pick = kind === 'single' ? r.picks[idx] : null;
-  if (kind === 'single' && !pick) return;
+  const picks = kind === 'single' ? [r.picks[idx]].filter(Boolean) : r.picks;
+  if (!picks.length) return;
+  const legs = picks.map(pk => {
+    const est = betaiEstimatedOdds(pk);
+    return { matchId: pk.matchId, selId: pk.key, label: pk.selection, odds: parseOwnBetOdds(est.text), priceSource: /bookmaker/.test(est.source) ? 'live' : 'estimated', sport: 'football' };
+  });
+  if (!addLegsToOwnBet(legs, true)) return;
+  ownBet.dest = dest === 'diary' ? 'diary' : 'league';
+  persistOwnBet();
   closeBetAI();
-  if (kind === 'single') {
-    const est = betaiEstimatedOdds(pick);
-    openDiary({
-      id: pick.matchId, selection: pick.selection, market: MARKETS[pick.marketKey] ? MARKETS[pick.marketKey].diary : 'wins',
-      odds: est.text, p: pick.p, fair: pick.fair, rec: 'betai',
-      notes: 'BetAI pick (model estimate ' + Math.round(pick.p * 100) + '%; not a recommendation). Price ' + est.text + ' is ' + est.source + ': change it if you were offered something different.'
-    });
-    if ($('modal-notes-input')) $('modal-notes-input').value = modalPrefill.notes || '';
-  } else {
-    openDiary({});
-    $('modal-bet-type').value = 'accumulator';
-    toggleAccumulatorFields();
-    $('modal-legs-input').value = r.picks.map(p => p.match + ': ' + (p.marketKey === 'result' || p.marketKey === 'btts' ? '' : p.market + ' ') + p.selection + ' | ' + betaiEstimatedOdds(p).text).join('\n');
-    $('modal-origin-select').value = 'matchiq';
-    $('modal-notes-input').value = 'BetAI accumulator, ' + r.picks.length + ' legs (model estimate ' + Math.round(r.combinedP * 100) + '% for all to land; not a recommendation).';
-    updateModalPnlPreview();
-    toast('Prices are estimates (bookmaker price where we have one, otherwise the model). Change any leg to the price you were offered, then add your stake.');
-  }
-  const diaryRadio = $('dest-diary-radio'), bothRadio = $('dest-both-radio');
-  if (dest === 'diary' && diaryRadio) { diaryRadio.checked = true; if (bothRadio) bothRadio.checked = false; }
-  else if (dest === 'league' && bothRadio && bothRadio.offsetParent !== null) { bothRadio.checked = true; if (diaryRadio) diaryRadio.checked = false; }
-  updateDiarySubmitBtn();
+  location.hash = '#/build/log';
+  toast('BetAI ' + (picks.length > 1 ? 'picks are' : 'pick is') + ' on your bet slip. Check the price, add your stake and save.');
 }
 
 function betaiErrorText(e) {

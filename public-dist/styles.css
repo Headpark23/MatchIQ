@@ -4896,3 +4896,143 @@ a.hm-chip:hover { border-color: var(--pick); }
 .sub-header-left { min-width: 0; flex: 1 1 auto; overflow: hidden; }
 .sub-header-auth-wrap { flex: none; }
 .howto-link { flex: none; white-space: nowrap; }
+
+/* Homepage hero: compact, so the top pick and features show on the first screen */
+.hm-hero { padding: 16px 16px 14px; border-radius: 22px; }
+.hm-hero::after { display: none; }
+.hm-ball { display: none; }
+.hm-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.hm-sports { font-size: 15px; letter-spacing: 3px; white-space: nowrap; }
+.hm-title { margin: 6px 0 4px; font-size: clamp(26px, 7.4vw, 40px); line-height: 1.08; }
+.hm-title span { white-space: nowrap; }
+.hm-lead { margin: 0 0 12px; font-size: 14px; }
+.hm-ctas { flex-wrap: nowrap; }
+.hm-cta { flex: 1 1 0; min-width: 0; min-height: 46px !important; font-size: 14.5px !important; padding: 0 10px !important; white-space: nowrap; }
+.hm-proof { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin-top: 12px; padding: 8px 12px; border-radius: 12px; background: color-mix(in srgb, var(--surface-solid) 70%, transparent); border: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.hm-proof a, .hm-proof span { color: var(--muted); text-decoration: none; white-space: nowrap; }
+.hm-proof b { font: 800 14px var(--display); color: var(--ink); margin-right: 3px; }
+.hm-proof i { width: 1px; height: 14px; background: var(--line-strong); }
+
+/* Picks: this round's most likely, as a swipeable strip */
+.rd-section { margin-top: 18px; }
+.rd-sub { margin: -2px 0 10px; font-size: 12.5px; color: var(--muted); }
+.rd-strip { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 8px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.rd-strip::-webkit-scrollbar { display: none; }
+.rd-card { flex: 0 0 210px; scroll-snap-align: start; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 18px; background: linear-gradient(170deg, color-mix(in srgb, var(--pick) 8%, var(--surface-solid)), var(--surface-solid)); border: 1px solid var(--line-strong); }
+.rd-main { display: flex; flex-direction: column; gap: 3px; color: var(--ink); text-decoration: none; }
+.rd-when { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rd-match { font: 600 13.5px var(--display); color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rd-pick { display: flex; flex-direction: column; margin-top: 4px; }
+.rd-pick small { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.rd-pick b { font: 800 18px/1.2 var(--display); }
+.rd-meter { height: 6px; margin-top: 6px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 9%, transparent); overflow: hidden; }
+.rd-meter i { display: block; height: 100%; width: var(--w); border-radius: 999px; background: linear-gradient(90deg, var(--pick), #34d399); }
+.rd-foot { font-size: 12px; color: var(--muted); }
+.rd-foot b { color: var(--ink); font-size: 14px; }
+.rd-card .own-add-btn { width: 100%; min-height: 38px; margin-top: auto; }
+
+/* Empty diary: a preview of what logging bets gives you */
+.dy-welcome { text-align: center; padding-bottom: 16px; }
+.dy-welcome-title { margin: 6px auto 12px; max-width: 24ch; font: 800 22px/1.2 var(--display); color: var(--ink); }
+.dy-preview { position: relative; margin: 0 auto 14px; max-width: 360px; padding: 14px 14px 10px; border-radius: 16px; background: var(--surface); border: 1px dashed var(--line-strong); text-align: left; }
+.dy-preview .sample-badge, .dy-preview > span:first-child { position: absolute; top: 10px; right: 10px; }
+.dy-preview-big { font: 800 30px var(--display); color: var(--pick); }
+.dy-preview-line { display: block; width: 100%; height: 70px; margin: 4px 0 8px; }
+.dy-preview-line polyline { fill: none; stroke: var(--pick); stroke-width: 2.5; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.dy-preview-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.dy-preview-tiles span { display: flex; flex-direction: column; align-items: center; padding: 6px 2px; border-radius: 10px; background: var(--surface-solid); font-size: 11px; color: var(--muted); }
+.dy-preview-tiles b { font: 800 15px var(--display); color: var(--ink); }
+.dy-welcome-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 28px; font-size: 16px; font-weight: 700; text-decoration: none; border-radius: 14px; }
+.dy-welcome-fine { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
+.dy-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.dy-steps li { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3px; padding: 12px 6px; border-radius: 16px; background: var(--surface-solid); border: 1px solid var(--line); }
+.dy-steps span { font-size: 22px; }
+.dy-steps b { font: 700 13px/1.25 var(--display); color: var(--ink); }
+.dy-steps small { font-size: 11px; color: var(--muted); }
+
+/* Leagues: tighter, so more of the page fits on screen */
+.lg-view { gap: 10px; }
+.lg-view > .page-title { margin: 0; }
+.lg-me { padding: 10px 12px; gap: 8px 10px; border-radius: 16px; }
+.lg-me-avatar { width: 38px; height: 38px; font-size: 20px; }
+.lg-me-id b { font-size: 15px; }
+.lg-me-stats { gap: 6px; }
+.lg-me-stats span { flex-direction: row; justify-content: center; align-items: baseline; gap: 4px; padding: 6px 4px; border-radius: 10px; }
+.lg-me-stats b { font-size: 16px; }
+.lg-cabinet { min-height: 38px; padding: 0 10px; font-size: 16px; }
+.lg-h { margin: 2px 0 -4px; font-size: 11.5px; }
+.lg-cards { gap: 6px; }
+.lg-card { flex-basis: 118px; min-height: 0; padding: 10px; gap: 0; border-radius: 14px; }
+.lg-card-ico { font-size: 20px; margin-bottom: 6px; }
+.lg-card b { font-size: 13px; }
+.lg-card small { font-size: 11px; }
+.lg-ladder { min-height: 36px; padding: 0 12px; font-size: 12.5px; }
+.lg-board { padding: 12px; border-radius: 18px; }
+.lg-board-ico { font-size: 24px; }
+.lg-board-title h2 { font-size: 16px; }
+.lg-board-title small { font-size: 11.5px; }
+.lg-board .lg-podium { margin: 10px 0 4px; gap: 6px; }
+.pod-medal { font-size: 20px; }
+.pod-name { font-size: 12px; }
+.pod-pts { font-size: 11px; }
+.pod.p1 .pod-block { height: 56px; }
+.pod.p2 .pod-block { height: 42px; }
+.pod.p3 .pod-block { height: 32px; }
+.lg-board .lb-table th, .lg-board .lb-table td { padding: 8px 6px; }
+.lg-board-foot { margin-top: 8px; }
+.lg-board-foot .btn.primary { min-height: 40px; }
+.lg-rules { padding: 9px 12px; font-size: 12px; }
+.lg-empty { margin: 10px 0 4px; padding: 12px; font-size: 12.5px; }
+/* Signed out */
+.lg-welcome { padding: 20px 16px 16px; border-radius: 20px; }
+.lg-cup { font-size: 40px; }
+.lg-title { margin: 8px 0 6px; font-size: clamp(24px, 6.6vw, 34px); }
+.lg-lead { margin-bottom: 12px; font-size: 14px; }
+.lg-google { min-height: 46px !important; }
+.lg-fine { margin-top: 8px; font-size: 12px; }
+.lg-steps li { padding: 10px 6px; gap: 2px; }
+.lg-steps span { font-size: 20px; }
+.lg-preview { padding: 12px; }
+.lg-preview .lg-podium { margin: 10px 0 4px; }
+
+/* Diary: tighter, with more graphical stats */
+.dy-view { gap: 10px; }
+.dy-hero { padding: 14px 14px 10px; border-radius: 18px; }
+.dy-big { font-size: clamp(30px, 8.6vw, 44px); }
+.dy-sub { font-size: 12.5px; }
+.dy-ranges { margin: 10px 0 4px; }
+.dy-ranges button { min-height: 32px; padding: 0 12px; font-size: 12px; }
+.dy-chart { height: 110px; }
+.dy-chart-empty { padding: 16px 12px; }
+.dy-tiles { gap: 6px; }
+.dy-tile { padding: 10px 12px; border-radius: 14px; }
+.dy-tile b { font-size: 18px; }
+.dy-ring { width: 50px; height: 50px; }
+.dy-card { padding: 12px 14px; border-radius: 16px; }
+.dy-h { font-size: 15px; }
+.dy-bars { gap: 9px; }
+.dy-bar { height: 8px; margin: 4px 0 2px; }
+.dy-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+@media (max-width: 420px) { .dy-duo { grid-template-columns: 1fr; } }
+.dy-mini .dy-h { font-size: 13.5px; }
+.dy-months { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; align-items: end; margin-top: 8px; height: 112px; }
+.dy-month-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; min-width: 0; }
+.dy-month-val { font: 700 10.5px var(--display); white-space: nowrap; }
+.dy-month-val.pos { color: var(--pick); }
+.dy-month-val.neg { color: #fb7185; }
+.dy-month-track { flex: 1; width: 100%; max-width: 28px; display: flex; align-items: flex-end; }
+.dy-month-track i { display: block; width: 100%; height: var(--h); border-radius: 6px 6px 3px 3px; animation: dy-rise .7s cubic-bezier(.2, .8, .2, 1) both; transform-origin: bottom; }
+.dy-month-track i.up { background: linear-gradient(180deg, #34d399, var(--pick)); }
+.dy-month-track i.down { background: linear-gradient(180deg, #fda4af, #fb7185); }
+@keyframes dy-rise { from { transform: scaleY(0); } }
+.dy-month-col small { font-size: 10.5px; color: var(--muted); }
+.dy-odds-rows { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.dy-odds-row { display: grid; grid-template-columns: 40px 1fr 34px; align-items: center; gap: 8px; font-size: 12px; color: var(--soft); }
+.dy-odds-row b { text-align: right; font-size: 12px; color: var(--ink); }
+.dy-stack { height: 10px; border-radius: 999px; background: color-mix(in srgb, #fb7185 65%, transparent); overflow: hidden; }
+.dy-stack i { display: block; height: 100%; width: var(--w); background: linear-gradient(90deg, var(--pick), #34d399); animation: dy-grow .8s ease-out both; }
+.dy-odds-avg { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; font-size: 11.5px; color: var(--muted); }
+.dy-odds-avg b { display: block; font: 800 15px var(--display); color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .dy-month-track i, .dy-stack i { animation: none; } }
+.hm-proof { flex-wrap: nowrap; justify-content: space-around; }
+.view > details.card.section > summary.section-title { font-size: 15px !important; min-height: 48px !important; }
