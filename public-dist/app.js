@@ -1196,21 +1196,7 @@ function onBuilderInput(t) {
 
 
 
-function beginnerGuides() {
-  return '<div class="section"><div class="section-head"><h2 class="section-title">New to Bet Buddy? Quick intelligence guides</h2><span class="section-note">Tap any card to understand how honest football prediction works.</span></div>' +
-    '<div class="bento-grid">' +
-      '<div class="bento-card"><div class="bento-icon">' + hubIcon('scale', 22) + '</div><div><div class="bento-kicker">Betting Intelligence</div><h3 class="bento-title">What is Value?</h3><p class="bento-desc">A 60% chance isn’t value if the bookmaker odds are too low. Value is when the payout beats the true risk.</p></div><span class="bento-badge emerald">+5% EV threshold</span></div>' +
-      '<div class="bento-card"><div class="bento-icon">' + hubIcon('dice', 22) + '</div><div><div class="bento-kicker">Odds Demystified</div><h3 class="bento-title">6/4 vs 2.50 Odds</h3><p class="bento-desc">6/4 is UK fractional: £6 profit per £4 stake. 2.50 is decimal: total return including stake. Switch anytime in the header!</p></div><span class="bento-badge">Toggle in header</span></div>' +
-      '<div class="bento-card"><div class="bento-icon">' + hubIcon('layers', 22) + '</div><div><div class="bento-kicker">Accas & Builders</div><h3 class="bento-title">Acca Odds & Return Builder</h3><p class="bento-desc">Combine selections for higher returns. Bet Buddy checks upcoming matches to find the highest-chance path to your win goal.</p></div><span class="bento-badge">Real-time scan</span></div>' +
-      '<div class="bento-card"><div class="bento-icon">' + hubIcon('shield', 22) + '</div><div><div class="bento-kicker">Honest Predictions</div><h3 class="bento-title">No Bet is an Answer</h3><p class="bento-desc">When evidence is thin, odds are bad or data is missing, we say No Bet. We never invent fake confidence or forced picks.</p></div><span class="bento-badge amber">Zero hype</span></div>' +
-    '</div></div>';
-}
 
-function dismissOnboarding() {
-  try { localStorage.setItem('betbuddy_onboarded_v1', 'true'); } catch (e) {}
-  const card = $('onboarding-card');
-  if (card) card.remove();
-}
 
 /* Home hub icons: one consistent 24px line set (stroke inherits colour) in place of emoji. */
 const HUB_ICONS = {
@@ -1232,52 +1218,71 @@ function hubIcon(name, size) {
   return '<svg class="hub-ico" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + (HUB_ICONS[name] || '') + '</svg>';
 }
 
+// The homepage: welcome, proof, today's best pick, the next matches and everything the app does.
 function renderWelcomeHero() {
-  let onboardHtml = '';
-  try {
-    if (!localStorage.getItem('betbuddy_onboarded_v1')) {
-      onboardHtml = '<div class="onboarding-card" id="onboarding-card">' +
-        '<h3>Welcome to Bet Buddy</h3>' +
-        '<div class="onboarding-steps">' +
-          '<div class="onboarding-step-item"><span class="onboarding-step-num">1</span><div><b>Pick Your Slate</b><span>Choose today\'s games or the 7-day slate.</span></div></div>' +
-          '<div class="onboarding-step-item"><span class="onboarding-step-num">2</span><div><b>Set Your Stake</b><span>Choose a stake you can afford to lose.</span></div></div>' +
-          '<div class="onboarding-step-item"><span class="onboarding-step-num">3</span><div><b>Review the Risk</b><span>Check the model probability and how often accas like this lose.</span></div></div>' +
-        '</div>' +
-        '<button type="button" class="btn small primary" onclick="dismissOnboarding()" style="min-height:40px;">Got it</button>' +
-      '</div>';
-    }
-  } catch (e) {}
-
-  const diaryCount = getStoredDiary().length;
   const user = getAuthUser();
   const userName = user && user.signedIn ? (user.handle || user.name || '').replace(/^@+/, '').split(' ')[0] : '';
+  const rec = DATA.performance ? recordAll(DATA.performance) : null;
+  const now = Date.now();
+  const weekN = fixturesList().filter(f => f.status === 'SCHEDULED' && kickoffMs(f) > now && kickoffMs(f) - now < 7 * 86400000).length;
+  const leaguesN = Object.keys(LEAGUES).length;
 
-  const card = (tag, cls, icon, title, desc, cta, attrs) =>
-    '<' + tag + ' class="hub-card ' + cls + '" ' + attrs + '>' +
-      '<span class="hub-card-ico">' + hubIcon(icon, 24) + '</span>' +
-      '<span class="hub-card-body"><span class="hub-card-title">' + title + '</span><span class="hub-card-desc">' + desc + '</span></span>' +
-      '<span class="hub-card-cta">' + cta + '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
-    '</' + tag + '>';
+  const proof = '<div class="hm-proof">' +
+    (rec ? '<a href="#/results" class="hm-chip"><b>' + Math.round(rec.rate * 100) + '%</b> of picks right<small>' + rec.n + ' sealed before kick-off</small></a>' : '') +
+    '<a href="#/fixtures" class="hm-chip"><b>' + weekN + '</b> matches this week<small>with our predictions</small></a>' +
+    '<span class="hm-chip"><b>' + leaguesN + '</b> leagues<small>England to Portugal</small></span></div>';
 
-  return '<div class="hub">' +
-    '<div class="hub-head">' +
-      '<h1 class="hub-title">' + (userName ? 'Hi ' + esc(userName) + ', what first?' : 'What would you like to do?') + '</h1>' +
-      '<p class="hub-sub">Honest football estimates, with a clear No bet when the evidence isn&rsquo;t there.</p>' +
-    '</div>' +
-    card('a', 'hub-build', 'slip', 'Build your own bet', 'Single, double, treble, 4-fold, 5-fold and bigger. Football or any sport, then save it to your Diary or League.', 'Start', 'href="#/build"') +
-    '<div class="hub-grid">' +
-      card('a', 'hub-pick', 'target', 'Model-built acca', 'We build an acca to your target return.', 'Build', 'href="#/picks"') +
-      card('button type="button"', 'hub-models portal-card-best-value', 'spark', 'Model picks of the day', 'Biggest model-vs-price gaps. Information only.', 'View', 'onclick="openBestValueModal(\'single\')"') +
-      card('button type="button"', 'hub-betai', 'compass', 'BetAI', 'Ask anything: a team, an acca, goals, cards, corners. Picks only.', 'Ask', 'onclick="openBetAI()"') +
-      card('a', 'hub-leagues', 'trophy', 'Leagues', 'Compete with mates and in local ladders.', 'Join', 'href="#/leagues"') +
-    '</div>' +
-    '<nav class="hub-more" aria-label="More">' +
-      '<a href="#/fixtures">' + hubIcon('calendar', 16) + 'Fixtures</a>' +
-      '<a href="#/results">' + hubIcon('chart', 16) + 'Our record</a>' +
-      '<a href="#/diary">' + hubIcon('book', 16) + 'Diary' + (diaryCount ? ' (' + diaryCount + ')' : '') + '</a>' +
-    '</nav>' +
+  const hero = '<header class="hm-hero">' +
+    '<div class="hm-ball" aria-hidden="true">⚽</div>' +
+    '<p class="hm-hello">' + (userName ? 'Welcome back, ' + esc(userName) + ' 👋' : 'Welcome to Bet Buddy 👋') + '</p>' +
+    '<h1 class="hm-title">Smarter football bets.<br><span>Honest numbers.</span></h1>' +
+    '<p class="hm-lead">Build bets like your bookmaker, see what our model really thinks, track every penny and beat your mates. Free.</p>' +
+    '<div class="hm-ctas"><a href="#/build" class="btn primary hm-cta">Build a bet</a><button type="button" class="btn hm-cta ghost" onclick="openBestValueModal(\'single\')">Today’s top pick</button></div>' +
+    proof +
+    (userName ? '' : '<a href="#/guide" class="hm-guide">New here? The 2-minute tour ›</a>') +
+  '</header>';
+
+  // Today's top pick, as a teaser.
+  let teaser = '';
+  try {
+    const data = getTodayBestValuePicks();
+    const l = data && data.topLeg;
+    if (l) {
+      const f = l.fixture || {}, ours = Math.round(l.p * 100), implied = Math.round(100 / Number(l.odds || 1));
+      teaser = '<button type="button" class="hm-pick" onclick="openBestValueModal(\'single\')" aria-label="Open today’s top picks">' +
+        '<span class="hm-pick-kicker">⭐ Pick of the day</span>' +
+        '<span class="hm-pick-match">' + esc((f.home || '') + (f.away ? ' v ' + f.away : '')) + '</span>' +
+        '<span class="hm-pick-row"><b>' + esc(l.label) + '</b><span class="hm-pick-price mono">' + esc(oddsFormat === 'decimal' ? calc.formatDecimalOdds(l.odds) : (l.fractional || fmtOdds(l.odds))) + '</span></span>' +
+        '<span class="hm-pick-gap"><i style="--w:' + ours + '%"></i></span>' +
+        '<span class="hm-pick-foot">' + (data.mode === 'model' ? 'Our chance ' + ours + '% · estimated price' : 'Our chance ' + ours + '% · price says ' + implied + '%') + '<em>See all picks ›</em></span>' +
+      '</button>';
+    }
+  } catch (e) { /* the teaser is optional */ }
+
+  // The next few matches as a mini coupon.
+  const soon = ownBetUpcoming().slice(0, 40);
+  const priced = soon.filter(f => { const h = ownBetMarketsFor(f).find(o => o.key === 'result:H'); return h && h.decimal; });
+  const next = (priced.length >= 3 ? priced : soon).slice(0, 3);
+  const upNext = next.length ? '<section class="hm-block"><div class="hm-block-head"><h2>Up next</h2><a href="#/fixtures">All matches ›</a></div>' +
+    '<div class="cp-group"><div class="cp-ghead"><span>' + esc(fmtDay(kickoffMs(next[0]))) + '</span><span class="cp-cols"><span>Home</span><span>Draw</span><span>Away</span></span></div>' + next.map(fixtureCouponRow).join('') + '</div></section>' : '';
+
+  const tile = (tag, attrs, cls, icon, title, desc) => '<' + tag + ' class="hm-tile ' + cls + '" ' + attrs + '><span class="hm-tile-ico">' + hubIcon(icon, 22) + '</span><b>' + title + '</b><small>' + desc + '</small></' + tag + '>';
+  const diaryCount = getStoredDiary().length;
+  const tiles = '<section class="hm-block"><div class="hm-block-head"><h2>Everything in one place</h2></div><div class="hm-tiles">' +
+    tile('a', 'href="#/build"', 't-build', 'slip', 'Build your own bet', 'Singles to 10-folds, tap the prices') +
+    tile('a', 'href="#/picks"', 't-acca', 'target', 'Model-built acca', 'Tell us the win, we find the bet') +
+    tile('button type="button"', 'onclick="openBestValueModal(\'single\')"', 't-picks', 'spark', 'Model picks of the day', 'Where we beat the price') +
+    tile('button type="button"', 'onclick="openBetAI()"', 't-ai', 'compass', 'BetAI', 'Ask anything about a match') +
+    tile('a', 'href="#/leagues"', 't-leagues', 'trophy', 'Leagues', 'Beat your mates, climb ladders') +
+    tile('a', 'href="#/diary"', 't-diary', 'book', 'Bet Diary', diaryCount ? diaryCount + ' bets tracked' : 'See where your money goes') +
+  '</div></section>';
+
+  const record = rec ? '<a href="#/results" class="hm-record">' + recordDonut(rec, 64) +
+    '<span><b>Our record, in the open</b><small>' + rec.hits + ' of ' + rec.n + ' match-result picks right. Every one sealed before kick-off and never edited.</small></span><em>›</em></a>' : '';
+
+  return '<div class="hm">' + hero + teaser + upNext + tiles + record +
+    '<p class="hm-trust">🛡️ We say <b>No bet</b> when the evidence is thin · Bet Buddy never places bets · 18+ · <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware</a></p>' +
     '<button type="button" class="hub-quiet-link" onclick="openButlerModal()">' + hubIcon('slip', 14) + 'My bookmakers &amp; slip note settings</button>' +
-    onboardHtml +
   '</div>';
 }
 
@@ -1497,31 +1502,7 @@ function locationPromptBanner() {
 }
 
 function viewHome() {
-  
-  // Commercial Inquiries Ledger
-  const enquiries = getStoredEnquiries();
-  const enquiryRows = enquiries.length ? enquiries.map(e =>
-    '<tr>' +
-      '<td><b>' + esc(e.company || e.name) + '</b><br><small class="muted">' + esc(e.name) + ' &middot; <a href="mailto:' + esc(e.email) + '" style="color:var(--cyan)">' + esc(e.email) + '</a></small></td>' +
-      '<td><span class="badge validated">' + esc(e.interest) + '</span></td>' +
-      '<td style="max-width:280px;font-size:12px;color:var(--muted);">' + esc(e.message) + '</td>' +
-      '<td style="font-size:11px;font-family:var(--mono);color:var(--dim);white-space:nowrap;">' + esc(e.submitted_at ? e.submitted_at.slice(0, 16).replace('T', ' ') : 'Just now') + '</td>' +
-    '</tr>'
-  ).join('') : '<tr><td colspan="4" class="muted" style="text-align:center;padding:20px;">No commercial enquiries submitted yet.</td></tr>';
-
-  const enquiryCard = '<div class="section card" style="margin-top:24px;">' +
-    '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries (' + enquiries.length + ')</h2><p class="section-note">Incoming bookmaker, brand, and affiliate proposals submitted via #/commercial.</p></div>' +
-    (enquiries.length ? '<button type="button" class="btn small" data-admin-action="clear-enquiries" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Enquiries</button>' : '') +
-    '</div>' +
-    '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
-  '</div>';
-
-  return '<section class="view">' +
-    renderWelcomeHero() +
-    locationPromptBanner() +
-    '<a href="#/guide" class="guide-banner"><span class="guide-banner-ico">'+hubIcon('compass',22)+'</span><span><b>New here? Read the how-to guide</b><small>Features, private leagues and regional ladders explained in two minutes.</small></span><span class="guide-banner-go">&rarr;</span></a>' +
-    beginnerGuides() +
-  '</section>';
+  return '<section class="view home">' + renderWelcomeHero() + locationPromptBanner() + '</section>';
 }
 
 function viewPicks() {
@@ -1836,18 +1817,24 @@ function recordSpark(st, w, h) {
     '<div class="rt-spark-key"><span><i class="ln"></i>Right so far</span><span><i class="dash"></i>What we said</span></div>';
 }
 
+const RECORD_FLAGS = { PL: 'ENG', ELC: 'ENG', E2: 'ENG', E3: 'ENG', SC0: 'SCO', SC1: 'SCO', BL1: 'GER', PD: 'ESP', SA: 'ITA', FL1: 'FRA', N1: 'NED', P1: 'POR', B1: 'BEL', CL: 'EUR' };
 function recordTile(code, name, st, wide) {
-  const sub = st.hits + ' of ' + st.n + ' right';
-  const front = '<div class="rt-face rt-front"><div class="rt-name">' + esc(name) + '</div>' +
-    '<div class="rt-big">' + Math.round(st.rate * 100) + '<small>%</small></div><div class="rt-sub">' + esc(sub) + '</div>' +
-    recordForm(st, wide ? 16 : 8) + (st.small ? '<span class="rt-small">Small sample</span>' : '') +
-    '<span class="rt-hint">Tap to flip ↻</span></div>';
-  const back = '<div class="rt-face rt-back"><div class="rt-name">' + esc(name) + '</div>' +
-    '<div class="rt-back-top">' + recordDonut(st, wide ? 92 : 68) + '<div class="rt-legend"><span class="w">' + st.hits + ' right</span><span class="l">' + (st.n - st.hits) + ' wrong</span></div></div>' +
-    recordSaidBars(st) + (wide ? recordSpark(st, 300, 60) : '') +
-    (st.small ? '<p class="rt-note">Too few matches to judge yet.</p>' : '') +
-    (code ? '<button type="button" class="rt-see" data-record-see="' + esc(code) + '">See predictions ↓</button>' : '') + '</div>';
-  return '<div class="rt' + (wide ? ' wide' : '') + '" role="button" tabindex="0" aria-pressed="false" aria-label="' + esc(name + ': ' + sub + '. Tap for details') + '" data-record-tile>' +
+  const pctNum = Math.round(st.rate * 100), tone = st.rate >= 0.6 ? 'hot' : st.rate >= 0.5 ? 'ok' : 'cold';
+  const said = Math.round((st.said || 0) * 100), gap = pctNum - said;
+  const verdict = Math.abs(gap) <= 5 ? 'Spot on' : gap > 0 ? 'Beat our estimate' : 'Below our estimate';
+  const top = '<div class="rt-top"><span class="rt-flag" aria-hidden="true">' + (code ? (RECORD_FLAGS[code] || 'FTB') : 'ALL') + '</span><span class="rt-name">' + esc(name) + '</span></div>';
+  const front = '<div class="rt-face rt-front">' + top + '<span class="rt-flip" aria-hidden="true">↻</span>' +
+    '<div class="rt-big ' + tone + '">' + pctNum + '<small>%</small></div>' +
+    '<div class="rt-sub">' + st.hits + ' / ' + st.n + ' right' + (st.small ? ' · <em>small sample</em>' : '') + '</div>' +
+    '<div class="rt-meter ' + tone + '"><i style="--w:' + pctNum + '%"></i></div>' +
+    recordForm(st, wide ? 20 : 10) + (wide ? recordSpark(st, 300, 50) : '') + '</div>';
+  const back = '<div class="rt-face rt-back">' + top +
+    (wide ? '<div class="rt-back-top">' + recordDonut(st, 76) + '<div class="rt-legend"><span class="w">✓ ' + st.hits + ' right</span><span class="l">✗ ' + (st.n - st.hits) + ' wrong</span></div></div>'
+      : '<div class="rt-split"><div class="rt-split-bar"><i style="--w:' + pctNum + '%"></i></div><div class="rt-split-key"><span class="w">✓ ' + st.hits + '</span><span class="l">✗ ' + (st.n - st.hits) + '</span></div></div>') +
+    '<div class="rt-vs">Said <b>' + said + '%</b> <i>→</i> got <b class="' + tone + '">' + pctNum + '%</b></div>' +
+    '<p class="rt-verdict">' + esc(st.small ? 'Too few to judge yet' : verdict) + '</p>' +
+    (code ? '<button type="button" class="rt-see" data-record-see="' + esc(code) + '">See picks ↓</button>' : '') + '</div>';
+  return '<div class="rt' + (wide ? ' wide' : '') + '" role="button" tabindex="0" aria-pressed="false" aria-label="' + esc(name + ': ' + st.hits + ' of ' + st.n + ' right. Tap for details') + '" data-record-tile>' +
     '<div class="rt-inner">' + front + back + '</div></div>';
 }
 
@@ -5638,7 +5625,7 @@ function render() {
   if (view === 'admin' && !isAppOwner()) view = 'home';
   // Live league listeners cost a read per member update; keep them only while Leagues is open.
   if (view !== 'leagues' && currentLeagueListeningCode) stopLeagueListeners();
-  const navKey = view === 'match' ? 'fixtures' : view;
+  const navKey = view === 'match' ? 'fixtures' : (view === 'results' || view === 'build') ? 'picks' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
   const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild(arg) : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
