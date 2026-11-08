@@ -4284,3 +4284,26 @@ span.cp-price.nop { cursor: default; opacity: .5; }
 .own-who button { flex: 1 1 0; min-height: 40px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--soft); font: 600 13px var(--display); cursor: pointer; }
 .own-who button[aria-checked="true"] { border-color: var(--pick); color: var(--ink); background: color-mix(in srgb, var(--pick) 18%, var(--surface-solid)); }
 .own-fields .own-note { grid-column: 1 / -1; }
+
+/* Match page: one plain-English view, then the shared market panel */
+.mv-card { padding: 16px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--cyan) 30%, var(--line)); }
+.mv-kicker { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; font: 700 11px var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--cyan); }
+.mv-kicker .evidence-row { margin: 0; letter-spacing: 0; text-transform: none; }
+.mv-head { margin: 8px 0 10px; font: 700 20px/1.25 var(--display); color: var(--ink); }
+.mv-bar { display: flex; gap: 3px; height: 10px; border-radius: 999px; overflow: hidden; }
+.mv-seg.mv-H { background: var(--pick); }
+.mv-seg.mv-D { background: color-mix(in srgb, var(--ink) 35%, transparent); }
+.mv-seg.mv-A { background: var(--cyan); }
+.mv-legend { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+.mv-legend span:nth-child(2) { text-align: center; }
+.mv-legend span:last-child { text-align: right; }
+.mv-legend b { color: var(--ink); font-size: 14px; }
+.mv-line { margin: 12px 0 0; font-size: 14px; color: var(--soft); line-height: 1.45; }
+.mv-verdict { display: flex; flex-direction: column; gap: 2px; margin-top: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); font-size: 13.5px; line-height: 1.45; color: var(--soft); }
+.mv-verdict b { font: 700 15px var(--display); color: var(--ink); }
+.mv-verdict.value { border-color: var(--pick); background: color-mix(in srgb, var(--pick) 10%, var(--surface-solid)); }
+.mv-why { margin-top: 10px; }
+.mv-why > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--cyan); }
+.mv-markets .cp-panel { padding-top: 0; }
+.cp-price small.cp-p { font-size: 11px; color: var(--muted); font-weight: 600; }
+.cp-price.on small.cp-p { color: #04140d; }

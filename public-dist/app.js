@@ -340,9 +340,9 @@ function bestValueBlock(pred) {
   const pricedCount = sels.filter(s => prices[s.id]).length;
   let detail = '';
   if (best) {
-    detail += '<p class="muted" style="font-size:13.5px"><b>' + (v === 'value' ? 'Best value found: ' : 'Closest to value: ') + esc(best.sel.label) + '</b> at ' + esc(best.v.priceText) + ' (' + (best.v.ev >= 0 ? '+' : '') + Math.round(100 * best.v.ev) + '% estimated expected value). Checked ' + pricedCount + ' priced selection' + (pricedCount === 1 ? '' : 's') + ' across every market, not only the top six.</p>';
+    detail += '<p class="muted" style="font-size:13.5px"><b>' + (v === 'value' ? 'Best value found: ' : 'Closest to value: ') + esc(best.sel.label) + '</b> at ' + esc(best.v.priceText) + ' (' + (best.v.ev >= 0 ? '+' : '') + Math.round(100 * best.v.ev) + '% estimated expected value). Checked ' + pricedCount + ' priced selection' + (pricedCount === 1 ? '' : 's') + ' across every market.</p>';
   } else {
-    detail += '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded for this match (the automatic feed covers Match Result and Total Goals only, when it is enabled). Type a fractional price you have seen on any selection, here or in the top six, and Bet Buddy will check every priced selection for value.</p>';
+    detail += '<p class="muted" style="font-size:13.5px">No bookmaker price is loaded for this match (the automatic feed covers Match Result and Total Goals only, when it is enabled). Type a fractional price you have seen on any selection below and Bet Buddy will check every priced selection for value.</p>';
   }
   if (verdict.verdict !== 'awaiting_odds') {
     if (verdict.ev > 0.30) {
@@ -361,55 +361,22 @@ function bestValueBlock(pred) {
   detail += feedNote(pred.match_id);
   const opts = sels.map(s => '<option value="' + esc(s.id) + '"' + (s.id === sel.id ? ' selected' : '') + '>' + esc(s.label) + ' · ' + pct(s.p) + '</option>').join('');
   const priceInput = (s, main) => '<label class="field"><span class="lbl">' + esc(main ? 'Bookmaker price you were offered' : s.label) + '</span><input class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or Evens" data-price="' + esc(s.id) + '" data-match="' + esc(pred.match_id) + '" value="' + esc(prices[s.id] || '') + '"></label>';
-  const diary = verdict.verdict !== 'awaiting_odds' ? { id: pred.match_id, market: MARKETS[sel.market].diary, selection: sel.label, p: sel.p, fair: sel.fair, odds: verdict.priceText, rec: 'best_value' } : null;
   return '<div class="rec-card ' + head[0] + '"><div class="rec-kicker">Best value</div><div class="rec-pick">' + esc(head[1]) + '</div>' + detail +
     '<label class="field"><span class="lbl">Selection to test (any market or line)</span><select class="ctl" data-value-select="' + esc(pred.match_id) + '">' + opts + '</select></label>' +
     priceInput(sel, true) +
     (siblings.length ? '<details class="compare"' + (siblings.some(s => prices[s.id]) ? ' open' : '') + '><summary>Other outcomes’ prices (removes the margin)</summary><div class="grid" style="margin-top:8px">' + siblings.map(s => priceInput(s, false)).join('') + '</div></details>' : '') +
-    '<div class="btn-row" style="margin-top:8px">' +
-    (diary ? '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary at ' + esc(verdict.priceText) + '</button>' : '') +
-    ownBetAddBtn({ id: pred.match_id, market: MARKETS[sel.market].diary, selection: sel.label, p: sel.p, fair: sel.fair }) + '</div></div>';
+    '</div>';
 }
 
 /* The six strongest selections across every market and line, with a price box on each. */
 const SUPPORT = { validated: ['validated', 'Validated model'], provisional: ['provisional', 'Provisional estimate'], unsupported: ['unsupported', 'Unsupported estimate'] };
-function topSixCard(s, pred, rank, isMostLikely, prices) {
-  const [cls, label] = SUPPORT[s.support];
-  const sels = allSelections(pred);
-  const v = valueVerdict(s, prices[s.id], sels.filter(x => x.group === s.group && x.id !== s.id), prices);
-  const chip = { value: '<span class="badge validated">Potential Value</span>', no_value: '<span class="badge unavailable">No Bet</span>', no_bet: '<span class="badge unavailable">No Bet</span>', awaiting_odds: '<span class="badge awaiting">Awaiting Odds</span>' }[v.verdict];
-  const note = s.support === 'unsupported' ? 'This line was never backtested. It is the league rate lightly nudged by the model, not a read on this match, and no price can be called value.'
-    : s.support === 'provisional' ? (s.market === 'result' ? 'Promoted-club model, thin evidence. No price can be called value.' : 'No proven edge over the league average. Treat it as a base rate.') : 'About ' + Math.round(s.credible * 10) + ' times in 10 once calibrated against the backtest.';
-  const diary = { id: pred.match_id, market: MARKETS[s.market].diary, selection: s.label, p: s.p, fair: s.fair, rec: isMostLikely ? 'most_likely' : '' };
-  return '<article class="card top-card ' + cls + '"><div class="top-head"><span class="top-rank">' + rank + '</span><span class="market-name"><svg viewBox="0 0 24 24">' + ICONS[s.market] + '</svg>' + esc(MARKETS[s.market].name) + '</span>' +
-    (isMostLikely ? '<span class="badge validated">Most Likely</span>' : '') + '</div>' +
-    '<div class="market-main">' + ring(s.p, 64, s.support === 'validated' ? '' : s.support === 'unsupported' ? 'limited' : 'provisional') +
-    '<div><div class="market-pick">' + esc(s.label.replace(/^[^:]+: /, '')) + '</div><div class="market-odds">Model fair odds <b>' + esc(fmtFairOdds(s.fair, s.p)) + '</b> · not a bookmaker price</div></div></div>' +
-    '<div class="evidence-row"><span class="badge ' + cls + '">' + label + '</span>' + (s.support === 'unsupported' ? '' : meter(s.strength)) + '</div>' +
-    '<p class="muted" style="font-size:13px">' + esc(note) + '</p>' +
-    '<label class="field"><span class="lbl">Price you saw ' + chip + '</span><input class="ctl mono" inputmode="text" autocomplete="off" placeholder="e.g. 6/4 or 2.50" aria-label="Bookmaker price for ' + esc(s.label) + '" data-price="' + esc(s.id) + '" data-match="' + esc(pred.match_id) + '" value="' + esc(prices[s.id] || '') + '"></label>' +
-    (prices[s.id] && v.verdict !== 'awaiting_odds' ? '<p class="muted" style="font-size:12.5px">' + esc(v.why) + '</p>' : '') +
-    '<div class="btn-row" style="margin-top:8px;">' +
-      '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button>' +
-      ownBetAddBtn(diary) +
-      '<button type="button" class="btn small" data-add-football-acca=\'' + esc(JSON.stringify(diary)) + '\' style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
-    '</div></article>';
-}
 
-function topSixBlock(pred) {
-  const six = calc.topSix(pred, DATA.reliability), prices = pricesFor(pred.match_id);
-  const ml = (pred.recommendations || {}).most_likely || {};
-  const isML = s => ml.decision === 'most_likely' && s.market === ml.market && s.key === ml.key && (ml.line == null || s.line === ml.line);
-  if (!six.length) return '<div class="empty">No selection has enough evidence to rank for this match. Every prediction is still listed below.</div>';
-  return '<div class="grid grid-2 top-six">' + six.map((s, i) => topSixCard(s, pred, i + 1, isML(s), prices)).join('') + '</div>' +
-    (six.length < 6 ? '<p class="dim" style="font-size:12.5px;margin-top:8px">Fewer than six selections have enough evidence. Every other prediction stays available below.</p>' : '');
-}
 
 function refreshValue(matchId) {
   const pred = DATA.predictions && DATA.predictions.predictions[matchId];
   if (!pred) return;
   const active = document.activeElement, focused = active && active.dataset ? active.dataset.price : null;
-  const boxes = { ['value-' + matchId]: bestValueBlock, ['top-' + matchId]: topSixBlock };
+  const boxes = { ['value-' + matchId]: bestValueBlock };
   for (const [boxId, build] of Object.entries(boxes)) {
     const box = $(boxId);
     if (!box) continue;
@@ -419,9 +386,6 @@ function refreshValue(matchId) {
   }
 }
 
-function recommendationPair(pred) {
-  return '<div class="rec-pair">' + mostLikelyBlock(pred, true) + '<div id="value-' + esc(pred.match_id) + '">' + bestValueBlock(pred) + '</div></div>';
-}
 
 
 /* Turn a full (predictions.json) or compact (history) market into one display shape. */
@@ -565,24 +529,6 @@ function freshnessChips() {
     (s.warnings || []).map(w => '<span class="chip warn"><span class="dot"></span>' + esc(w) + '</span>').join('');
 }
 
-function heroCard(pred, rankNote) {
-  const f = pred.fixture, r = pred.markets.result, ms = kickoffMs(f), provisional = r.evidence.status !== 'validated';
-  return '<article class="hero' + (provisional ? ' provisional' : '') + '">' +
-    '<div>' +
-      '<div class="hero-meta"><strong>' + esc(rankNote) + '</strong><span>' + esc(leagueName(f.competition)) + '</span><span>' + esc(fmtDay(ms)) + ', ' + esc(fmtTime(ms)) + ' UK</span></div>' +
-      '<div class="hero-teams"><span class="hero-team">' + crest(f.home, 40) + esc(f.home) + '</span><span class="hero-v">v</span><span class="hero-team">' + crest(f.away, 40) + esc(f.away) + '</span></div>' +
-      '<h3 class="hero-pick">' + esc(r.pick.label) + '</h3>' +
-      '<p class="hero-plain">' + esc(plainResult(r.pick.p)) + '</p>' +
-      wayBar(r.selections, r.pick.key, [f.home, f.away], false, provisional ? 'provisional' : '') +
-      '<div class="evidence-row">' + statusBadge(r.evidence.status) + meter(r.evidence.strength) + '</div>' +
-      '<div class="btn-row" style="margin-top:16px"><a class="btn primary" href="#/match/' + encodeURIComponent(pred.match_id) + '">See every market</a>' +
-        '<button type="button" class="btn" data-diary=\'' + esc(JSON.stringify({ id: pred.match_id, market: 'wins', selection: r.pick.label, p: r.pick.p, fair: r.pick.fair_odds })) + '\'>Add to Bet Diary</button>' +
-        ownBetAddBtn({ id: pred.match_id, market: 'wins', selection: r.pick.label, p: r.pick.p, fair: r.pick.fair_odds }).replace('btn small', 'btn') + '</div>' +
-    '</div>' +
-    '<div class="hero-side">' + ring(r.pick.p, 180, 'big' + (provisional ? ' provisional' : ''), 'model estimate') +
-      '<div class="odds-pair"><span>Model fair odds <strong>' + esc(fmtFairOdds(r.pick.fair_odds, r.pick.p)) + '</strong></span><span>Bookmaker odds: not available</span></div></div>' +
-  '</article>';
-}
 
 function signalCard(pred) {
   const f = pred.fixture, r = pred.markets.result, ms = kickoffMs(f), provisional = r.evidence.status !== 'validated';
@@ -1886,59 +1832,64 @@ function viewFixtures() {
   return html + '</section>';
 }
 
-function matchVerdictCard(pred) {
-  if (!pred) return '';
-  const sels = allSelections(pred), prices = pricesFor(pred.match_id);
-  const best = calc.bestValue(pred, prices, matchIQBands());
-  const sel = sels.find(s => s.id === prices._selected) || (best && best.sel) || sels.find(s => s.id === 'result:' + pred.markets.result.pick.key) || sels[0];
-  if (!sel) return '';
-  const siblings = sels.filter(s => s.group === sel.group && s.id !== sel.id);
-  const verdict = valueVerdict(sel, prices[sel.id], siblings, prices);
-  const v = best ? best.v.verdict : verdict.verdict;
 
-  // Line 1: our estimate
-  const estLine = 'Our estimate: <b>' + esc(sel.label) + '</b> ' + pct(sel.p) + ' (fair odds <span class="mono">' + esc(fmtFairOdds(sel.fair, sel.p)) + '</span>)';
-
-  // Line 2: smallest price worth taking or evidence status
-  const minWorthTakingDec = (1 + (calc.VALUE_MIN_EV || 0.05)) / sel.p;
-  const minOddsText = fmtOdds(minWorthTakingDec);
-  let minLine = 'Smallest price worth taking: <b class="mono">' + esc(minOddsText) + '</b> (' + minWorthTakingDec.toFixed(2) + ')';
-  if (v === 'no_bet') {
-    minLine = 'Evidence status: <span class="badge provisional" style="font-size:11px;">Unvalidated market</span> <span class="dim" style="font-size:13px;">(no backtested edge)</span>';
+// Model chance for every market the coupon shows, so the match page can print it under each price.
+// Double chance and draw no bet come straight from the three result chances.
+function modelProbsFor(pred) {
+  const p = {};
+  if (!pred) return p;
+  allSelections(pred).forEach(x => { p[x.id] = Number(x.p); });
+  const H = p['result:H'], D = p['result:D'], A = p['result:A'];
+  if (H >= 0 && D >= 0 && A >= 0) {
+    p['dc:1X'] = H + D; p['dc:X2'] = D + A; p['dc:12'] = H + A;
+    if (H + A > 0) { p['dnb:H'] = H / (H + A); p['dnb:A'] = A / (H + A); }
   }
+  return p;
+}
 
-  // Line 3: verdict in words
-  let verdictWords = 'Awaiting Odds – no live bookmaker price entered yet';
-  let verdictBadge = 'awaiting';
-  if (v === 'value') {
-    verdictWords = 'Potential Value – bookmaker price exceeds minimum worth taking';
-    verdictBadge = 'value';
-  } else if (v === 'no_value') {
-    verdictWords = 'No Bet – price too short for estimated win chance';
-    verdictBadge = 'nobet';
-  } else if (v === 'no_bet') {
-    verdictWords = 'No Bet – The price looks high, but our model isn’t reliable enough on this market to trust it.';
-    verdictBadge = 'nobet';
-  }
-  const verdictLine = 'Verdict: <b class="badge ' + verdictBadge + '" style="font-size:12px;vertical-align:middle;margin:0 4px;">' + (VALUE_HEAD[v] ? VALUE_HEAD[v][1] : 'No Bet') + '</b> ' + esc(verdictWords);
+// One card that says, in plain words, how the match looks and whether any price is worth a bet.
+// It replaces the old verdict, Most likely / Best value pair, result card and Top six, which could
+// appear to disagree with each other.
+function matchViewCard(pred, fx) {
+  const r = pred.markets.result;
+  const res = ['H', 'D', 'A'].map(k => r.selections.find(x => x.key === k) || { key: k, p: 0 });
+  const name = k => k === 'H' ? fx.home : k === 'A' ? fx.away : 'Draw';
+  const ranked = res.slice().sort((a, b) => b.p - a.p);
+  const top = ranked[0], gap = ranked[0].p - ranked[1].p;
+  const headline = top.key === 'D' ? 'Looks tight: a draw is the single most likely result'
+    : gap < 0.06 ? 'Too close to call'
+    : top.p >= 0.55 ? name(top.key) + ' are clear favourites'
+    : name(top.key) + ' are slight favourites';
+  const bar = '<div class="mv-bar" role="img" aria-label="' + esc(res.map(x => name(x.key) + ' ' + pct(x.p)).join(', ')) + '">' +
+    res.map(x => '<span class="mv-seg mv-' + x.key + '" style="flex:' + Math.max(0.04, x.p).toFixed(3) + '"></span>').join('') + '</div>' +
+    '<div class="mv-legend">' + res.map(x => '<span class="mv-' + x.key + '"><b>' + pct(x.p) + '</b> ' + esc(name(x.key)) + '</span>').join('') + '</div>';
 
-  // High EV warning flag (> 30%) - shown ONLY when verdict is value
-  let flagHtml = '';
-  if (v === 'value' && verdict.ev != null && verdict.ev > 0.30) {
-    flagHtml = '<div class="ev-high-flag" style="margin-top:10px;padding:8px 12px;background:rgba(234,179,8,0.15);border:1px solid rgba(234,179,8,0.4);border-radius:8px;color:#fef08a;font-size:13px;display:flex;align-items:center;gap:8px;">' +
-      '<span style="font-size:16px;">⚠️</span><span><b>Unusually high (+' + Math.round(verdict.ev * 100) + '% EV):</b> check the price with the bookmaker — market odds may have shifted or been misquoted.</span>' +
-    '</div>';
-  }
+  const m = (pred.recommendations || {}).most_likely;
+  const likely = m && m.decision === 'most_likely'
+    ? 'Most likely to land: <b>' + esc(MARKETS[m.market].name) + ', ' + esc(m.label) + '</b>, about ' + Math.round(m.p * 10) + ' times in 10.'
+    : 'No single selection stands out for this match.';
 
-  return '<div class="match-top-verdict card section" style="background:linear-gradient(145deg, rgba(15,23,42,0.95), rgba(30,41,59,0.85));border:1px solid rgba(56,189,248,0.3);box-shadow:0 8px 24px rgba(0,0,0,0.3);padding:16px 18px;border-radius:14px;margin-bottom:16px;">' +
-    '<div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px;">Match Verdict</div>' +
-    '<div class="verdict-three-lines" style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45;color:#e2e8f0;">' +
-      '<div>' + estLine + '</div>' +
-      '<div>' + minLine + '</div>' +
-      '<div>' + verdictLine + '</div>' +
-    '</div>' +
-    flagHtml +
-  '</div>';
+  const best = calc.bestValue(pred, pricesFor(pred.match_id), matchIQBands());
+  const v = best ? best.v.verdict : 'awaiting_odds';
+  const verdict = {
+    value: ['value', '✅ Worth a look', esc(best && best.sel.label) + ' at ' + esc(best && best.v.priceText) + ' is a longer price than our estimate says it should be. That is not a guarantee: it still loses often.'],
+    no_value: ['nobet', '✋ No bet', 'The prices on offer are shorter than our estimates, so none of them looks good value.'],
+    no_bet: ['nobet', '✋ No bet', 'Our model has no proven edge on the markets with prices here, so we will not call any of them value.'],
+    awaiting_odds: ['awaiting', '🕐 No prices yet', 'There are no bookmaker prices for this match yet, so we cannot say whether any bet is good value.']
+  }[v] || ['awaiting', 'No prices yet', ''];
+  const sel = res.find(x => x.key === r.pick.key) || top;
+  const selFull = allSelections(pred).find(x => x.id === 'result:' + sel.key) || {};
+
+  return '<section class="card section mv-card">' +
+    '<div class="mv-kicker"><span>Bet Buddy’s view</span><span class="evidence-row">' + statusBadge(selFull.status) + meter(selFull.strength) + '</span></div>' +
+    '<h2 class="mv-head">' + esc(headline) + '</h2>' + bar +
+    '<p class="mv-line">' + likely + '</p>' +
+    '<div class="mv-verdict ' + verdict[0] + '"><b>' + verdict[1] + '</b><span>' + verdict[2] + '</span></div>' +
+    '<details class="mv-why"><summary>Why, and check a price you were offered</summary>' +
+      '<ul class="explain" style="margin-top:6px">' + resultExplanation(pred) + '</ul>' +
+      '<p class="dim" style="font-size:13px;margin-top:10px">' + esc(r.evidence.summary) + ' The models use results and match statistics only. They know nothing about injuries, team news, line-ups or motivation.</p>' +
+      '<div id="value-' + esc(pred.match_id) + '" style="margin-top:10px">' + bestValueBlock(pred) + '</div>' +
+    '</details></section>';
 }
 
 function viewMatch(id) {
@@ -1962,16 +1913,13 @@ function viewMatch(id) {
 
   if (pred && ms > Date.now()) {
     const r = pred.markets.result;
-    html += matchVerdictCard(pred) +
-      '<div class="section">' + recommendationPair(pred) + '</div>' +
-      '<div class="section">' + heroCard(pred, 'Match result') + '</div>' +
-      '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Why this match-result prediction</summary><ul class="explain" style="margin-top:6px">' + resultExplanation(pred) + '</ul>' +
-      '<p class="dim" style="font-size:13px;margin-top:10px">' + esc(r.evidence.summary) + ' The models use results and match statistics only. They know nothing about injuries, team news, line-ups or motivation.</p></details>';
-    html += '<div class="section"><div class="section-head"><h2 class="section-title">Top six selections</h2><span class="section-note">The six strongest individual selections from every market and Over/Under line, ranked on the cautious end of their chance so thin evidence cannot win on a big number. Lines Bet Buddy never backtested rank last and are labelled unsupported.</span></div>' +
-      '<div id="top-' + esc(id) + '">' + topSixBlock(pred) + '</div></div>' +
-      '<details class="card section all-markets"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Every market and line (' + allSelections(pred).length + ' selections)</summary>' +
+    html += matchViewCard(pred, fx) +
+      '<section class="card section mv-markets"><div class="section-head"><h2 class="section-title">Markets</h2></div>' +
+      '<p class="own-hint" style="margin-top:0">Each button shows the price, and underneath it how often we think it happens. Tap a price to put it on your bet slip, then save it to your Diary or League from there.</p>' +
+      ownBetMatchPanel(fx, modelProbsFor(pred)) + '</section>';
+    html += '<details class="card section all-markets"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">Every market and line: full model figures (' + allSelections(pred).length + ' selections)</summary>' +
       '<p class="dim" style="font-size:13px;margin:6px 0 12px">Published ' + esc(ago(pred.published_at)) + ' · record ' + esc(pred.record_id) + '. Probability and evidence strength are shown separately: a 60% estimate with weak evidence is still weak.</p>' +
-      '<div class="grid grid-2">' + MARKET_ORDER.filter(k => pred.markets[k]).map(k => marketCard(k, normaliseMarket(k, pred.markets[k]), { id, canLog: true })).join('') + '</div></details>';
+      '<div class="grid grid-2">' + MARKET_ORDER.filter(k => pred.markets[k]).map(k => marketCard(k, normaliseMarket(k, pred.markets[k]), { id, canLog: false })).join('') + '</div></details>';
   } else if (rec) {
     const ml = (rec.recommendations || {}).most_likely, mls = (rec.settlement || {}).most_likely;
     if (ml) html += '<div class="section card"><h2 class="section-title">Sealed recommendations</h2><p style="margin-top:8px">' +
@@ -4533,16 +4481,17 @@ function filterOwnBetFixtures(q) {
   if (box) box.innerHTML = ownBetCouponHtml();
 }
 
-function ownBetPriceBtn(fx, o, label) {
+function ownBetPriceBtn(fx, o, label, model) {
   if (!o) return '<span class="cp-price nop" aria-hidden="true"><b>–</b></span>';
   const on = ownBet.legs.some(l => l.fixtureId === fx.id && l.key === o.key);
   const price = o.decimal ? ownBetOddsText(o.decimal).replace(' (1/1)', '') : '+ Add';
   const aria = (on ? 'Remove ' : 'Add ') + o.label + (o.decimal ? ' at ' + price : '') + ', ' + fx.home + ' v ' + fx.away;
   return '<button type="button" class="cp-price' + (on ? ' on' : '') + (o.est ? ' est' : '') + (o.decimal ? '' : ' nop') + '" aria-pressed="' + on + '" aria-label="' + esc(aria) + '"' +
-    ' onclick="toggleOwnBetLeg(\'' + esc(fx.id) + '\',\'' + esc(o.key) + '\')">' + (label ? '<span>' + esc(label) + '</span>' : '') + '<b class="mono">' + esc(price) + '</b></button>';
+    ' onclick="toggleOwnBetLeg(\'' + esc(fx.id) + '\',\'' + esc(o.key) + '\')">' + (label ? '<span>' + esc(label) + '</span>' : '') + '<b class="mono">' + esc(price) + '</b>' +
+    (model && model[o.key] > 0 ? '<small class="cp-p">' + pct(model[o.key]) + '</small>' : '') + '</button>';
 }
 
-function ownBetMarketBlock(fx, group, rows, title) {
+function ownBetMarketBlock(fx, group, rows, title, model) {
   if (!rows.length) return '';
   const league = rows.some(o => o.league);
   const head = '<div class="cp-mk-head"><h4>' + esc(title || OWN_BET_GROUP_NAME[group]) + '</h4>' + (league ? '<span class="cp-lg" title="Can count in your leagues">🏆 League</span>' : '') + '</div>' +
@@ -4551,25 +4500,25 @@ function ownBetMarketBlock(fx, group, rows, title) {
     const lines = [...new Set(rows.map(o => Number(o.key.split(':')[2])))].sort((a, b) => a - b);
     const find = (side, line) => rows.find(o => o.key === group + ':' + side + ':' + line);
     return '<div class="cp-mk">' + head + '<div class="cp-ou"><span></span><span class="cp-col">Over</span><span class="cp-col">Under</span>' +
-      lines.map(line => '<span class="cp-line">' + line + '</span>' + ownBetPriceBtn(fx, find('over', line)) + ownBetPriceBtn(fx, find('under', line))).join('') + '</div></div>';
+      lines.map(line => '<span class="cp-line">' + line + '</span>' + ownBetPriceBtn(fx, find('over', line), '', model) + ownBetPriceBtn(fx, find('under', line), '', model)).join('') + '</div></div>';
   }
   const short = o => group === 'result' ? (o.key === 'result:D' ? 'Draw' : o.key === 'result:H' ? fx.home : fx.away)
     : group === 'btts' ? (o.key === 'btts:yes' ? 'Yes' : 'No')
     : group === 'dnb' ? (o.key === 'dnb:H' ? fx.home : fx.away)
     : group === 'tts' ? (o.key === 'tts:H' ? fx.home : fx.away) : o.label;
-  return '<div class="cp-mk">' + head + '<div class="cp-sels cols-' + rows.length + '">' + rows.map(o => ownBetPriceBtn(fx, o, short(o))).join('') + '</div></div>';
+  return '<div class="cp-mk">' + head + '<div class="cp-sels cols-' + rows.length + '">' + rows.map(o => ownBetPriceBtn(fx, o, short(o), model)).join('') + '</div></div>';
 }
 
-function ownBetMatchPanel(fx) {
+function ownBetMatchPanel(fx, model) {
   const all = ownBetMarketsFor(fx), tab = ownBetUI.mtab || 'popular';
   const g = k => all.filter(o => o.group === k);
   let body;
   if (tab === 'popular') {
-    body = ownBetMarketBlock(fx, 'result', g('result')) + ownBetMarketBlock(fx, 'btts', g('btts')) +
-      ownBetMarketBlock(fx, 'goals', g('goals').filter(o => /:2\.5$/.test(o.key)), 'Total goals 2.5') + ownBetMarketBlock(fx, 'dc', g('dc'));
-  } else if (tab === 'result') body = ['result', 'dc', 'dnb'].map(k => ownBetMarketBlock(fx, k, g(k))).join('');
-  else if (tab === 'goals') body = ['goals', 'btts', 'tts'].map(k => ownBetMarketBlock(fx, k, g(k))).join('');
-  else body = ownBetMarketBlock(fx, tab, g(tab));
+    body = ownBetMarketBlock(fx, 'result', g('result'), '', model) + ownBetMarketBlock(fx, 'btts', g('btts'), '', model) +
+      ownBetMarketBlock(fx, 'goals', g('goals').filter(o => /:2\.5$/.test(o.key)), 'Total goals 2.5', model) + ownBetMarketBlock(fx, 'dc', g('dc'), '', model);
+  } else if (tab === 'result') body = ['result', 'dc', 'dnb'].map(k => ownBetMarketBlock(fx, k, g(k), '', model)).join('');
+  else if (tab === 'goals') body = ['goals', 'btts', 'tts'].map(k => ownBetMarketBlock(fx, k, g(k), '', model)).join('');
+  else body = ownBetMarketBlock(fx, tab, g(tab), '', model);
   const fs = feedFor(fx.id), anyFeed = Object.keys(fs.details || {}).length;
   const note = all.some(o => o.est)
     ? 'Prices with a dotted outline are estimates (worked out from the bookmaker result prices or our model). Change any price on your slip to the one you were offered.'

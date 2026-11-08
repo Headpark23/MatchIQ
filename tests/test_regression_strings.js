@@ -25,7 +25,7 @@ const checks = [
   ['every upcoming match has a sealed Most Likely or No Bet decision', Object.values(predictions).every(p => p.recommendations && ['most_likely', 'no_bet'].includes(p.recommendations.most_likely.decision) && p.recommendations.best_value.decision === 'no_bet')],
   ['value calls need a real price and the validated model', /sel\.status !== 'validated'/.test(calcSrc) && /VALUE_MIN_EV = 0\.05/.test(calcSrc) && /parseFractionalOdds\(text\)/.test(calcSrc)],
   ['bookmaker margin is removed when every outcome is priced', /fairImplied: complete \? implied \/ book : null/.test(calcSrc)],
-  ['match page leads with a dynamic Top Six and keeps every market reachable', /calc\.topSix\(/.test(app) && /Every market and line/.test(app) && !/Every market<\/h2>/.test(app)],
+  ['match page leads with one plain verdict, then every market in the shared panel', /function matchViewCard\(/.test(app) && /ownBetMatchPanel\(fx, modelProbsFor\(pred\)\)/.test(app) && /Every market and line/.test(app)],
   ['Best Value scans every selection, not only the Top Six', /calc\.bestValue\(/.test(app) && /function bestValue\(/.test(calcSrc)],
   ['Most Likely and Best Value both feed the Bet Diary', /rec: 'most_likely'/.test(app) && /rec: 'best_value'/.test(app)],
   ['no "value bet / edge / target return" claims in user-facing copy', !/Today\'s Best Value Bet|% edge vs|Set Target Return|aim to win|Best Value &amp; Target/.test(app)],
