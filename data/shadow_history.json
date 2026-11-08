@@ -10946,6 +10946,63 @@
    ],
    "origin": "shadow",
    "sha256": "05ad599ac04598926ea02ca64d7272c65b1df27896dee1127c5d851502ae1578"
+  },
+  {
+   "record_id": "PL-2627-everton-v-liverpool#r1",
+   "match_id": "PL-2627-everton-v-liverpool",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Everton",
+    "away": "Liverpool",
+    "kickoff_utc": "2026-11-29T12:00:00Z"
+   },
+   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "inputs_fingerprint": "76de231aae7e82c1",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Liverpool win",
+      "p": 0.4092,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Everton win",
+       "p": 0.3045,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2863,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Liverpool win",
+       "p": 0.4092,
+       "fair_odds": "≈6/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "7a4692c8fb174c3ae6406e60ed243cf76024ae1b1fe8a721c0c4875c61025709"
   }
  ]
 }

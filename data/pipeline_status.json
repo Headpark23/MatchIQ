@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-11-08T06:40:44.055440+00:00",
+ "attempted_at": "2026-11-08T12:27:20.059394+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -100,6 +100,13 @@
    "results": 41,
    "note": null
   },
+  "N1:openfootball": {
+   "ok": true,
+   "label": "openfootball/football.json (CC0 public domain)",
+   "matches": 306,
+   "results": 62,
+   "note": null
+  },
   "N1:football-data.org": {
    "ok": true,
    "label": "football-data.org (free tier)",
@@ -107,11 +114,11 @@
    "results": 103,
    "note": null
   },
-  "N1:openfootball": {
+  "P1:openfootball": {
    "ok": true,
    "label": "openfootball/football.json (CC0 public domain)",
    "matches": 306,
-   "results": 62,
+   "results": 58,
    "note": null
   },
   "P1:football-data.org": {
@@ -121,11 +128,11 @@
    "results": 93,
    "note": null
   },
-  "P1:openfootball": {
+  "SC0:openfootball": {
    "ok": true,
    "label": "openfootball/football.json (CC0 public domain)",
-   "matches": 306,
-   "results": 58,
+   "matches": 198,
+   "results": 42,
    "note": null
   },
   "E2:openfootball": {
@@ -141,13 +148,6 @@
    "matches": 0,
    "results": 0,
    "note": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/en.4.json: HTTP Error 404: Not Found"
-  },
-  "SC0:openfootball": {
-   "ok": false,
-   "label": "openfootball/football.json (CC0 public domain)",
-   "matches": 0,
-   "results": 0,
-   "note": "https://raw.githubusercontent.com/openfootball/football.json/master/2026-27/sco.1.json: HTTP Error 404: Not Found"
   },
   "SC1:openfootball": {
    "ok": false,
@@ -212,17 +212,17 @@
   "the-odds-api": {
    "ok": true,
    "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
-   "matches": 72,
+   "matches": 71,
    "notes": {
-    "PL": "skipped: polled 6.7 h ago (minimum 8 h)",
+    "PL": "ok: 15 of 15 events matched, 2 credits",
     "ELC": "skipped: no Championship match in the next 36 h",
-    "BL1": "skipped: polled 6.7 h ago (minimum 8 h)",
-    "PD": "skipped: polled 6.7 h ago (minimum 8 h)",
-    "SA": "ok: 15 of 15 events matched, 2 credits",
-    "FL1": "skipped: polled 6.7 h ago (minimum 8 h)"
+    "BL1": "ok: 12 of 12 events matched, 2 credits",
+    "PD": "ok: 15 of 15 events matched, 2 credits",
+    "SA": "ok: 14 of 15 events matched, 2 credits",
+    "FL1": "ok: 15 of 15 events matched, 2 credits"
    },
-   "credits_used_this_month": 116,
-   "credits_remaining_reported": 384
+   "credits_used_this_month": 126,
+   "credits_remaining_reported": 374
   }
  },
  "warnings": [
@@ -230,12 +230,12 @@
  ],
  "errors": [],
  "ok": true,
- "last_success": "2026-11-08T06:40:44.055440+00:00",
- "fixtures": 2916,
- "upcoming_predicted": 132,
- "published_revisions": 19,
+ "last_success": "2026-11-08T12:27:20.059394+00:00",
+ "fixtures": 3114,
+ "upcoming_predicted": 134,
+ "published_revisions": 3,
  "imported_frozen_records": 0,
- "settlement_updates": 163,
+ "settlement_updates": 127,
  "training_results": 1933,
  "results_latest": "2026-11-07",
  "model_versions": {
@@ -248,8 +248,8 @@
  "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk.",
  "public": {
   "model_version": "dc-public-v1",
-  "predictions": 160,
-  "records": 1787,
+  "predictions": 175,
+  "records": 1962,
   "validated": true
  }
 }
