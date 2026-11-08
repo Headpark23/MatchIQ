@@ -2974,6 +2974,25 @@ function sampleLeaderboard() {
   '</div>';
 }
 
+const ordinalOf = n => n + ((n % 100 >= 11 && n % 100 <= 13) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th'));
+// A round avatar for a player: their emoji if we have it, else their initial on a colour from their name.
+function leagueAvatar(handle, emoji, size) {
+  const h = String(handle || '?');
+  let hue = 0;
+  for (let i = 0; i < h.length; i++) hue = (hue * 31 + h.charCodeAt(i)) % 360;
+  return '<span class="lg-av' + (size ? ' ' + size : '') + '" style="--hue:' + hue + '" aria-hidden="true">' + esc(emoji || h.replace(/^@/, '').charAt(0).toUpperCase()) + '</span>';
+}
+// Time left in the current week (to Monday), month or season (to 1 August), in days and hours.
+function leagueCountdown(freq, nowMs) {
+  const now = new Date(nowMs || Date.now());
+  let end;
+  if (freq === 'monthly') end = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1);
+  else if (freq === 'yearly') end = Date.UTC(now.getUTCMonth() >= 7 ? now.getUTCFullYear() + 1 : now.getUTCFullYear(), 7, 1);
+  else { const d = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()); end = d + (7 - ((now.getUTCDay() + 6) % 7)) * 86400000; }
+  const left = Math.max(0, end - now.getTime()), days = Math.floor(left / 86400000), hours = Math.floor(left % 86400000 / 3600000);
+  return days > 0 ? days + 'd ' + hours + 'h' : hours + 'h ' + Math.floor(left % 3600000 / 60000) + 'm';
+}
+
 function viewLeagues() {
   const prof = getUserProfile();
   const authUser = getAuthUser();
@@ -2999,7 +3018,9 @@ function viewLeagues() {
       '</ol>' +
       '<div class="lg-preview" role="group" aria-label="Sample league, invented names">' +
         '<div class="lg-preview-head"><span>This week’s podium</span>' + sampleBadge() + '</div>' +
-        '<div class="lg-podium">' + pod.map(x => '<div class="pod ' + x[3] + '"><span class="pod-medal">' + x[0] + '</span><span class="pod-name">' + x[1] + '</span><span class="pod-pts">' + x[2] + ' pts</span><span class="pod-block"></span></div>').join('') + '</div>' +
+        '<div class="lg-podium">' + pod.map(x => '<div class="pod ' + x[3] + '">' + leagueAvatar(x[1], '', 'big') + '<span class="pod-name">' + x[1] + '</span><span class="pod-pts">' + x[2] + ' pts</span><span class="pod-block"><em>' + x[0] + '</em></span></div>').join('') + '</div>' +
+        '<div class="lg-rows">' + [['4', 'You', 118, ['w', 'w', 'l', 'w'], true], ['5', 'PubQuizPete', 96, ['l', 'w', 'l'], false]].map(r => '<div class="lg-row' + (r[4] ? ' you' : '') + '"><span class="lg-rank">' + r[0] + '</span>' + leagueAvatar(r[1], r[4] ? '⚽' : '') +
+          '<div class="lg-who"><b>' + r[1] + '</b><span class="lg-form">' + r[3].map(f => '<i class="' + f + '"></i>').join('') + '</span></div><div class="lg-score"><b>' + r[2] + '</b><small>pts</small><span class="lg-bar"><i style="--w:' + Math.round(r[2] / 142 * 100) + '%"></i></span></div></div>').join('') + '</div>' +
         '<div class="lg-ladder-line" aria-label="Six automatic ladders"><span>🏘️ Town</span><i>›</i><span>🏛️ County</span><i>›</i><span>🏴 Country</span><i>›</i><span>🇬🇧 UK</span><i>›</i><span>🇪🇺 Europe</span><i>›</i><span>🌍 World</span></div>' +
         '<p class="lg-fine">Your league picks count on all six local ladders automatically, plus any private leagues with mates.</p>' +
       '</div>' +
@@ -3086,104 +3107,115 @@ function viewLeagues() {
   const hasNoBets = m => !(Number(m.settled) > 0);
   allMembers.sort((a, b) => (Number(!!a.outsideTop) - Number(!!b.outsideTop)) || (Number(hasNoBets(a)) - Number(hasNoBets(b))) || (b.points - a.points) || (b.winRate - a.winRate) || (b.roi - a.roi));
 
+  const isRanked = m => !hasNoBets(m) && !m.outsideTop && !m.unranked;
+  const ranked = allMembers.filter(isRanked);
+  const leaderPts = Math.max(1, ...ranked.map(m => Number(m.points) || 0));
+  const periodWord = activeLeagueFreq === 'weekly' ? 'this week' : activeLeagueFreq === 'monthly' ? 'this month' : 'this season';
+  const periodName = activeLeagueFreq === 'weekly' ? 'Week' : activeLeagueFreq === 'monthly' ? 'Month' : 'Season';
+
+  // Standings: one row per player with avatar, form and a bar showing how close they are to the leader.
   const rowsHtml = allMembers.map((m, idx) => {
     const rank = idx + 1;
-    const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'standard';
     const noBets = hasNoBets(m);
-    const rankIcon = (m.unranked || noBets) ? '—' : m.outsideTop ? '50+' : rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
-    const formChips = (m.form || ['—']).map(f => f === '—' ? '<span class="dim">—</span>' : '<span class="form-chip ' + f.toLowerCase() + '">' + f + '</span>').join('');
-    const roiSign = m.roi > 0 ? '+' : '';
-    const roiClass = m.roi > 0 ? 'pos' : m.roi < 0 ? 'neg' : '';
-    const formStr = (m.form || []).join(' · ');
-    const memberId = 'mem-form-' + idx;
-    const kickCell = m.isYou
-      ? '<td class="lb-col-action"></td>'
-      : !isLeagueCreator || !m.uid
-      ? '<td class="lb-col-action"></td>'
-      : '<td class="lb-col-action"><button type="button" class="kick-player-btn" data-kick-player="' + esc(m.handle) + '" data-kick-uid="' + esc(m.uid || '') + '" data-league-code="' + esc(currentLeague.code) + '" title="Throw @' + esc(m.handle) + ' out of this league" aria-label="Remove @' + esc(m.handle) + ' from this league">✕</button></td>';
-
-    return '<tr class="lb-row' + (m.isYou ? ' user-row' : '') + '">' +
-      '<td class="lb-col-rank"><span class="rank-badge ' + rankClass + '">' + rankIcon + '</span></td>' +
-      '<td class="lb-col-player">' +
-        '<button type="button" class="lb-player-btn" onclick="toggleMemberForm(\'' + memberId + '\')" title="Click to view recent form">' +
-          '<b class="lb-handle">' + esc(m.handle) + '</b>' +
-          (m.isYou ? ' <span class="bento-badge emerald lb-you-tag">YOU</span>' : '') +
-          '<span class="lb-form-indicator" title="Form: ' + esc(formStr) + '">📊</span>' +
-        '</button>' +
-        '<div id="' + memberId + '" class="lb-member-form-drawer" hidden>' +
-          '<div class="lb-drawer-inner"><span class="lb-drawer-label">Form:</span><div class="form-chips">' + formChips + '</div></div>' +
-        '</div>' +
-      '</td>' +
-      '<td class="lb-col-pts"><b class="lb-pts-val">' + (noBets ? '—' : m.points) + '</b></td>' +
-      '<td class="lb-col-win">' + (noBets ? '<span class="dim">—</span>' : '<span class="win-pct-pill">' + m.winRate + '%</span>') + '</td>' +
-      '<td class="lb-col-roi">' + (noBets ? '<span class="dim">—</span>' : '<span class="roi-pct-pill ' + roiClass + '">' + roiSign + m.roi + '%</span>') + '</td>' +
-      '<td class="lb-col-bets num mono">' + m.settled + '</td>' +
-      kickCell +
-    '</tr>';
+    const rankClass = noBets || m.unranked ? 'none' : rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'standard';
+    const rankIcon = (m.unranked || noBets) ? '—' : m.outsideTop ? '50+' : rank;
+    const form = (m.form || []).filter(f => f && f !== '—').slice(-5).map(f => '<i class="' + String(f).toLowerCase() + '"></i>').join('');
+    const kick = !m.isYou && isLeagueCreator && m.uid
+      ? '<button type="button" class="kick-player-btn" data-kick-player="' + esc(m.handle) + '" data-kick-uid="' + esc(m.uid || '') + '" data-league-code="' + esc(currentLeague.code) + '" title="Remove @' + esc(m.handle) + ' from this league" aria-label="Remove @' + esc(m.handle) + ' from this league">✕</button>'
+      : '';
+    const w = noBets ? 0 : Math.max(0, Math.round((Number(m.points) || 0) / leaderPts * 100));
+    return '<div class="lg-row' + (m.isYou ? ' you' : '') + (rank <= 3 && !noBets && !m.outsideTop ? ' top' : '') + '">' +
+      '<span class="lg-rank ' + rankClass + '">' + rankIcon + '</span>' +
+      leagueAvatar(m.handle, m.isYou ? prof.avatar : '') +
+      '<div class="lg-who"><b class="lb-handle">' + esc(m.handle) + '</b>' + (m.isYou ? '<span class="lg-you">You</span>' : '') +
+        '<span class="lg-form">' + (form || '<small>No bets ' + periodWord + '</small>') + '</span></div>' +
+      '<div class="lg-score"><b class="lb-pts-val">' + (noBets ? '—' : m.points) + '</b><small>' + (noBets ? 'pts' : m.winRate + '% · ' + m.settled + (m.settled === 1 ? ' bet' : ' bets')) + '</small>' +
+        '<span class="lg-bar"><i style="--w:' + w + '%"></i></span></div>' + kick +
+    '</div>';
   }).join('');
 
   const leagueTitle = esc(typeof currentLeague.name === 'function' ? currentLeague.name() : currentLeague.name);
   const trophyTitle = esc(currentLeague.trophyName || (currentLeague.name + ' Silverware'));
   const trophyIcon = esc(currentLeague.trophyIcon || currentLeague.icon || '🏆');
-  const periodWord = activeLeagueFreq === 'weekly' ? 'this week' : activeLeagueFreq === 'monthly' ? 'this month' : 'this season';
 
-  // Your private leagues as cards, then the create / join cards.
-  const leagueCards = customLeagues.map(l => {
-    const memCount = (l.members ? l.members.length : 0) + 1;
-    return '<button type="button" class="lg-card' + (l.id === activeLeagueId ? ' on' : '') + '" data-select-league="' + esc(l.id) + '">' +
-      '<span class="lg-card-ico">' + esc(l.icon || '👥') + '</span><b>' + esc(l.name) + '</b><small>' + memCount + (memCount === 1 ? ' player' : ' players') + '</small></button>';
-  }).join('') +
-    '<button type="button" class="lg-card lg-card-add" data-open-league-modal="create"><span class="lg-card-ico">＋</span><b>New league</b><small>Invite your mates</small></button>' +
-    '<button type="button" class="lg-card lg-card-add" data-open-league-modal="join"><span class="lg-card-ico">🔑</span><b>Join with code</b><small>Got an invite?</small></button>';
-
-  // The six automatic ladders, closest to home first.
+  // Your rank in each private league, for the switcher cards.
+  const rankIn = l => {
+    const key = leagueDocs.currentPeriodKey(activeLeagueFreq);
+    const list = (l.members || []).filter(m => isRealMember(m) && m.uid !== authUser.uid)
+      .map(m => leagueDocs.memberStatsFor(m, activeLeagueFreq, key, l.freq)).concat([Object.assign({ isYou: true }, uStats)])
+      .sort((a, b) => (Number(hasNoBets(a)) - Number(hasNoBets(b))) || (b.points - a.points) || (b.winRate - a.winRate) || (b.roi - a.roi));
+    const i = list.findIndex(m => m.isYou);
+    return { rank: hasNoBets(list[i]) ? 0 : i + 1, of: list.length };
+  };
   const shortTier = { 'geo-town': 'Town', 'geo-region': 'County', 'geo-country': 'Country', 'geo-uk': 'UK', 'geo-europe': 'Europe', 'geo-world': 'World' };
-  const ladderChips = geoTiers.slice().reverse().map(t => {
-    const joined = Boolean(ladderTierId(t.id, prof));
-    return '<button type="button" class="lg-ladder' + (t.id === activeLeagueId ? ' on' : '') + (joined ? '' : ' off') + '" data-select-league="' + t.id + '" title="' + esc(typeof t.name === 'function' ? t.name() : t.name) + '">' +
-      '<span>' + t.icon + '</span>' + esc(shortTier[t.id] || t.name) + (joined ? '' : ' <small>add location</small>') + '</button>';
-  }).join('');
+  const switcher = '<div class="lg-switch" role="group" aria-label="Choose a league">' +
+    customLeagues.map(l => {
+      const r = rankIn(l);
+      return '<button type="button" class="lg-sw' + (l.id === activeLeagueId ? ' on' : '') + '" data-select-league="' + esc(l.id) + '">' +
+        '<span class="lg-sw-ico">' + esc(l.icon || '👥') + '</span><b>' + esc(l.name) + '</b><small>' + (r.rank ? ordinalOf(r.rank) + ' of ' + r.of : r.of + (r.of === 1 ? ' player' : ' players')) + '</small></button>';
+    }).join('') +
+    geoTiers.slice().reverse().map(t => {
+      const joined = Boolean(ladderTierId(t.id, prof));
+      return '<button type="button" class="lg-sw ladder' + (t.id === activeLeagueId ? ' on' : '') + (joined ? '' : ' off') + '" data-select-league="' + t.id + '" title="' + esc(typeof t.name === 'function' ? t.name() : t.name) + '">' +
+        '<span class="lg-sw-ico">' + t.icon + '</span><b>' + esc(shortTier[t.id] || t.name) + '</b><small>' + (joined ? 'Ladder' : 'Add location') + '</small></button>';
+    }).join('') +
+    '<button type="button" class="lg-sw add" data-open-league-modal="create"><span class="lg-sw-ico">＋</span><b>New league</b><small>Invite mates</small></button>' +
+    '<button type="button" class="lg-sw add" data-open-league-modal="join"><span class="lg-sw-ico">🔑</span><b>Join</b><small>With a code</small></button>' +
+  '</div>';
 
-  // Podium: the top three who have a settled bet this period.
-  const podSrc = allMembers.filter(m => !hasNoBets(m) && !m.outsideTop).slice(0, 3);
+  // Spotlight: where you stand in the league you are looking at, and what to do next.
+  const youIdx = allMembers.findIndex(m => m.isYou), you = allMembers[youIdx];
+  const youRanked = you && isRanked(you);
+  let big, race;
+  if (youRanked) {
+    big = (youIdx < 3 ? '<span class="lg-medal">' + ['🥇', '🥈', '🥉'][youIdx] + '</span>' : '') + '<span class="lg-pos">' + ordinalOf(youIdx + 1) + '</span><small>of ' + (isGeo ? ranked.length : allMembers.length) + '</small>';
+    if (youIdx === 0) {
+      const next = ranked[1];
+      race = next ? 'Top of the table, <b>' + (you.points - next.points) + ' pts</b> clear of ' + esc(next.handle) : 'Top of the table. Invite mates to give you a race.';
+    } else {
+      const above = allMembers[youIdx - 1];
+      race = '<b>' + Math.max(0, above.points - you.points) + ' pts</b> behind ' + esc(above.handle) + (youIdx > 1 ? ' · leader on ' + ranked[0].points : '');
+    }
+  } else {
+    big = '<span class="lg-pos small">' + (you && you.outsideTop ? 'Outside the top 50' : 'Not on the board yet') + '</span>';
+    race = 'Log a league bet before kick-off and you are in the race.';
+  }
+  const today = new Date().toISOString().slice(0, 10);
+  const todayBet = getLeagueBetForDay(today);
+  const spotlight = '<section class="lg-spot">' +
+    '<div class="lg-spot-top"><span class="lg-spot-league">' + esc(isGeo ? currentLeague.icon : (currentLeague.icon || '👥')) + ' ' + leagueTitle +
+      (!isGeo && isLeagueCreator ? ' <button type="button" class="lg-mini" data-rename-league="' + esc(currentLeague.code) + '" title="Rename this league" aria-label="Rename this league">✏️</button>' : '') + '</span>' +
+      '<div class="seg lg-period" role="group" aria-label="Table period">' + [['weekly', 'Week'], ['monthly', 'Month'], ['yearly', 'Season']].map(([k, l]) => '<button type="button" class="freq-btn' + (activeLeagueFreq === k ? ' active' : '') + '" aria-pressed="' + (activeLeagueFreq === k) + '" data-league-freq="' + k + '">' + l + '</button>').join('') + '</div></div>' +
+    '<div class="lg-spot-main"><div class="lg-spot-pos">' + big + '</div>' +
+      '<div class="lg-spot-stats"><span><b>' + uStats.points + '</b>pts</span><span><b>' + uStats.winRate + '%</b>wins</span><span><b>' + uStats.settled + '</b>bets</span></div></div>' +
+    '<p class="lg-race">' + race + '</p>' +
+    '<div class="lg-spot-foot"><span class="lg-clock">⏱ ' + periodName + ' ends in <b>' + leagueCountdown(activeLeagueFreq) + '</b></span>' +
+      (todayBet ? '<span class="lg-today ok">✓ Today’s bet is in</span>' : '<a href="#/build/log" class="lg-today">+ Log today’s league bet</a>') + '</div>' +
+  '</section>';
+
+  // Podium with avatars for the top three.
+  const podSrc = ranked.slice(0, 3);
   const podOrder = [[1, '🥈', 'p2'], [0, '🥇', 'p1'], [2, '🥉', 'p3']].filter(x => podSrc[x[0]]);
   const podium = podSrc.length ? '<div class="lg-podium">' + podOrder.map(([i, medal, cls]) => {
     const m = podSrc[i];
-    return '<div class="pod ' + cls + (m.isYou ? ' you' : '') + '"><span class="pod-medal">' + medal + '</span><span class="pod-name">' + esc(m.handle) + (m.isYou ? ' (you)' : '') + '</span><span class="pod-pts">' + m.points + ' pts</span><span class="pod-block"></span></div>';
-  }).join('') + '</div>' : '<div class="lg-empty">No settled league bets ' + periodWord + ' yet. Log one before kick-off and you are on the board.</div>';
-
-  const periodSeg = '<div class="seg lg-period" role="group" aria-label="Table period">' +
-    [['weekly', 'Week'], ['monthly', 'Month'], ['yearly', 'Season']].map(([k, l]) => '<button type="button" class="freq-btn' + (activeLeagueFreq === k ? ' active' : '') + '" aria-pressed="' + (activeLeagueFreq === k) + '" data-league-freq="' + k + '">' + l + '</button>').join('') + '</div>';
-
-  const table = allMembers.length ? '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
-      '<th class="lb-col-rank">#</th><th class="lb-col-player">Player</th><th class="lb-col-pts">Pts</th><th class="lb-col-win">Win %</th><th class="lb-col-roi">Return</th><th class="lb-col-bets num">Bets</th><th class="lb-col-action"></th>' +
-    '</tr></thead><tbody>' + rowsHtml + '</tbody></table></div>' : '';
+    return '<div class="pod ' + cls + (m.isYou ? ' you' : '') + '">' + leagueAvatar(m.handle, m.isYou ? prof.avatar : '', 'big') + '<span class="pod-name">' + esc(m.handle) + '</span><span class="pod-pts">' + m.points + ' pts</span><span class="pod-block"><em>' + medal + '</em></span></div>';
+  }).join('') + '</div>' : '<div class="lg-empty">🏁 Nobody has scored ' + periodWord + ' yet. First winner takes the top spot.</div>';
 
   const board = '<section class="lg-board">' +
-    '<div class="lg-board-head"><div class="lg-board-title"><span class="lg-board-ico">' + esc(isGeo ? currentLeague.icon : (currentLeague.icon || '👥')) + '</span><div><h2>' + leagueTitle +
-      (!isGeo && isLeagueCreator ? ' <button type="button" class="lg-mini" data-rename-league="' + esc(currentLeague.code) + '" title="Rename this league">✏️</button>' : '') + '</h2>' +
-      '<small>' + trophyIcon + ' ' + trophyTitle + ' · top 3 win medals</small></div></div>' + periodSeg + '</div>' +
+    '<div class="lg-board-head"><h2>Table</h2><small>' + trophyIcon + ' ' + trophyTitle + '</small></div>' +
     (isGeo ? '<p class="lg-notice">' + ladderNotice + '</p>' : '') +
-    podium + table +
+    podium + (allMembers.length ? '<div class="lg-rows">' + rowsHtml + '</div>' : '') +
     (!isGeo ? '<div class="lg-board-foot"><button type="button" class="btn primary" data-share-league="' + esc(currentLeague.code) + '">Invite friends</button>' +
-      (isLeagueCreator
+      '<span class="lg-code" title="Invite code">Code <b class="mono">' + esc(currentLeague.code || '') + '</b></span></div>' +
+      '<div class="lg-board-quiet">' + (isLeagueCreator
         ? '<button type="button" class="lg-quiet danger" data-delete-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '">Delete league</button>'
         : '<button type="button" class="lg-quiet" data-leave-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '">Leave league</button>') + '</div>' : '') +
   '</section>';
 
-  const me = '<div class="lg-me">' +
-    '<span class="lg-me-avatar">' + esc(prof.avatar) + '</span>' +
-    '<div class="lg-me-id"><b>@' + esc(prof.handle) + '</b><small>' + (prof.town || prof.region ? esc([prof.town, prof.region].filter(Boolean).join(', ')) : 'No location set') + ' · <a href="#/more" data-select-more-tab="account">Edit</a></small></div>' +
-    '<div class="lg-me-stats"><span><b>' + uStats.points + '</b>pts</span><span><b>' + uStats.winRate + '%</b>wins</span><span><b>' + uStats.settled + '</b>bets</span></div>' +
-    '<button type="button" class="lg-cabinet" data-open-trophy-cabinet title="Trophy cabinet">🏆<b>' + trophies.length + '</b></button>' +
-  '</div>';
-
   return '<section class="view lg-view">' + locationPromptBanner() +
-    '<h1 class="page-title">Leagues</h1>' + me +
-    '<h2 class="lg-h">Your leagues</h2><div class="lg-cards">' + leagueCards + '</div>' +
-    '<h2 class="lg-h">Local ladders <small>automatic, from your location</small></h2><div class="lg-ladders">' + ladderChips + '</div>' +
-    board +
-    '<p class="lg-rules">🛡️ <b>1 league bet a day</b>, logged before kick-off · a winner scores (price − 1) × 10, so Evens = 10 pts, capped at 100 · a loser −2 · <a href="#/guide">Full rules ›</a></p>' +
+    '<div class="lg-topbar"><h1 class="page-title">Leagues</h1><button type="button" class="lg-cabinet" data-open-trophy-cabinet title="Trophy cabinet">🏆<b>' + trophies.length + '</b><span>trophies</span></button></div>' +
+    switcher + spotlight + board +
+    '<p class="lg-rules">🛡️ <b>1 league bet a day</b>, before kick-off · winner scores (price − 1) × 10, so Evens = 10 pts, max 100 · loser −2 · <a href="#/guide">Full rules ›</a></p>' +
   '</section>';
 }
 
