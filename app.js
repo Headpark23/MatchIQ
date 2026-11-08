@@ -1155,6 +1155,23 @@ function hubIcon(name, size) {
 }
 
 // The homepage: welcome, proof, today's best pick, the next matches and everything the app does.
+// Prediction results at a glance: the overall hit rate and a swipe of league tiles, each opening the results page.
+function resultsScoreboard(rec) {
+  const allPerf = DATA.performance || {};
+  const order = Object.keys(LEAGUES);
+  const leagues = [['PL', allPerf]].concat(Object.entries(allPerf.by_competition || {}))
+    .map(([c, perf]) => [c, recordStats(perf)]).filter(x => x[1] && !x[1].small)
+    .sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0])).slice(0, 8);
+  const tone = r => r >= 0.6 ? 'hot' : r >= 0.5 ? 'ok' : 'cold';
+  const form = rec.timeline.slice(-12).map(x => '<i class="' + (x.won ? 'w' : 'l') + '"></i>').join('');
+  return '<a href="#/results" class="hm-results">' +
+    '<div class="hm-results-top"><span class="hm-results-kicker">📊 Prediction results</span><span class="hm-results-go">See all ›</span></div>' +
+    '<div class="hm-results-main"><div class="hm-results-big ' + tone(rec.rate) + '">' + Math.round(rec.rate * 100) + '<small>%</small></div>' +
+      '<div class="hm-results-txt"><b>of our picks were right</b><small>' + rec.hits + ' of ' + rec.n + ', every one sealed before kick-off</small><span class="hm-results-form">' + form + '</span></div></div>' +
+    (leagues.length ? '<div class="hm-results-leagues">' + leagues.map(([c, st]) => '<span class="hm-lg ' + tone(st.rate) + '"><em>' + (RECORD_FLAGS[c] || '') + '</em><b>' + Math.round(st.rate * 100) + '%</b><small>' + esc(recordLeagueName(c)) + '</small></span>').join('') + '</div>' : '') +
+  '</a>';
+}
+
 function renderWelcomeHero() {
   const user = getAuthUser();
   const userName = user && user.signedIn ? (user.handle || user.name || '').replace(/^@+/, '').split(' ')[0] : '';
@@ -1210,12 +1227,13 @@ function renderWelcomeHero() {
     tile('button type="button"', 'onclick="openBetAI()"', 't-ai', 'compass', 'BetAI', 'Ask anything about a match') +
     tile('a', 'href="#/leagues"', 't-leagues', 'trophy', 'Leagues', 'Beat your mates, climb ladders') +
     tile('a', 'href="#/diary"', 't-diary', 'book', 'Bet Diary', diaryCount ? diaryCount + ' bets tracked' : 'See where your money goes') +
+    tile('a', 'href="#/results"', 't-results', 'chart', 'Prediction results', rec ? Math.round(rec.rate * 100) + '% of our picks right' : 'How our picks did') +
+    tile('a', 'href="#/fixtures"', 't-matches', 'calendar', 'Matches', 'Every game, with prices to tap') +
   '</div></section>';
 
-  const record = rec ? '<a href="#/results" class="hm-record">' + recordDonut(rec, 64) +
-    '<span><b>Our record, in the open</b><small>' + rec.hits + ' of ' + rec.n + ' match-result picks right. Every one sealed before kick-off and never edited.</small></span><em>›</em></a>' : '';
+  const record = rec ? resultsScoreboard(rec) : '';
 
-  return '<div class="hm">' + hero + teaser + tiles + upNext + record +
+  return '<div class="hm">' + hero + record + teaser + tiles + upNext +
     '<p class="hm-trust">🛡️ We say <b>No bet</b> when the evidence is thin · Bet Buddy never places bets · 18+ · <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware</a></p>' +
     '<button type="button" class="hub-quiet-link" onclick="openButlerModal()">' + hubIcon('slip', 14) + 'My bookmakers &amp; slip note settings</button>' +
   '</div>';
@@ -1478,6 +1496,8 @@ function viewPicks() {
     viewBuilder();
   if (LOAD_ERRORS.predictions) return html + errorPanel('predictions') + '</section>';
   html += roundStrip(list);
+  const recAll = DATA.performance ? recordAll(DATA.performance) : null;
+  if (recAll) html += '<a href="#/results" class="pk-results"><span class="pk-results-ico">📊</span><span><b>How did our picks do?</b><small>' + Math.round(recAll.rate * 100) + '% right so far, ' + recAll.hits + ' of ' + recAll.n + '. See every league.</small></span><em>›</em></a>';
   html += '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">What Most likely, Best value and No bet mean</summary><ol class="explain" style="margin-top:8px">' +
     '<li><b>Most likely</b> is the pick we think is most likely to happen, across every market. We rate each one on a cautious reading, so a big number from thin data does not win over a well-tested one.</li>' +
     '<li><b>Best value</b> needs a real bookmaker price. We get prices for match results and total goals; for anything else, type in the price you were offered. We only call something value when our proven match-result model says the price is at least 5% better than it should be.</li>' +
@@ -1817,7 +1837,7 @@ function viewResults() {
   const settled = recs.filter(r => r.evaluated), pending = recs.filter(r => !r.evaluated && kickoffMs(r.fixture) <= Date.now() && !r.result), future = recs.filter(r => kickoffMs(r.fixture) > Date.now());
 
 
-  let html = '<section class="view rt-view"><h1 class="page-title">Our prediction record</h1>' +
+  let html = '<section class="view rt-view"><h1 class="page-title">Prediction results</h1>' +
     '<p class="page-sub">Every football prediction Bet Buddy makes is sealed before kick-off, then marked right or wrong once the result is confirmed. Nothing is edited afterwards. Tap a league to see how it is going.</p>' +
     '<p class="rt-scores">Looking for scores? <a href="#/fixtures" onclick="fixturesTab=\'results\'">Fixtures → Results</a></p>' +
     recordTiles(allPerf);
@@ -4496,7 +4516,7 @@ function viewGuide() {
     '<div><b>🏠 Home</b><span>The welcome hub: today&rsquo;s best-value bet, BetAI and shortcuts.</span></div>' +
     '<div><b>🎯 Picks</b><span>Our model-built acca and a card for every upcoming match with our view.</span></div>' +
     '<div><b>📅 Matches</b><span>Every game by day and league, with prices to tap onto your slip. Tap a match for its full analysis.</span></div>' +
-    '<div><b>📊 Record</b><span>Every football prediction is sealed before kick-off and marked right or wrong afterwards, league by league. Find it from Home or Picks. For scores, see Matches → Results.</span></div>' +
+    '<div><b>📊 Prediction results</b><span>Every football prediction is sealed before kick-off and marked right or wrong afterwards, league by league. Find it on Home and Picks. For scores, see Matches → Results.</span></div>' +
     '<div><b>📖 Diary</b><span>Your private record of bets, with profit, ROI and win rate.</span></div>' +
     '<div><b>🏆 Leagues</b><span>Private leagues with friends plus the automatic regional ladders.</span></div>' +
     '<div><b>⋯ More</b><span>Your username and location, odds format, bookmakers, feedback and help.</span></div>' +
@@ -4634,7 +4654,7 @@ function viewMore() {
       row('data-share-app', '💬', 'Share Bet Buddy', 'Send it to a mate')) +
     group('Learn',
       row('href="#/guide"', '🧭', 'How Bet Buddy works', 'A two-minute tour of every feature') +
-      row('href="#/results"', '📊', 'Our prediction record', 'Every pick, sealed before kick-off') +
+      row('href="#/results"', '📊', 'Prediction results', 'How our picks did, league by league') +
       fold('data', '🔎', 'Where our numbers come from', 'Data sources, update times and how each number is made', dataHtml)) +
     group('Help',
       fold('feedback', '⭐', 'Give feedback', 'Tell us what is clear and what is not', feedbackHtml) +
@@ -5513,7 +5533,7 @@ function render() {
   updateOddsToggleLabel(); updateHeaderAuthUI();
   const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild(arg) : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Our prediction record', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'More' };
+  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Prediction results', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'More' };
   document.title = (view === 'build' && arg === 'log' ? 'Log a bet' : titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {

@@ -111,7 +111,7 @@ console.log(`✓ All ${expectedLeagues.length} leagues present in LEAGUES`);
 ['tennis', 'golf', 'darts', 'rugby'].forEach(sport => {
   vm.runInContext(`resultsSportFilter = '${sport}';`, sandbox);
   const html = vm.runInContext('viewResults()', sandbox);
-  assert(html.includes('Our prediction record'), `${sport} filter must still show the football prediction record`);
+  assert(html.includes('Prediction results'), `${sport} filter must still show the football prediction record`);
   assert(!html.includes('predictions settled so far'), `${sport} must not render an unsealed prediction record`);
 });
 console.log('✓ Record is football-only: other sports have no sealed predictions to score');
