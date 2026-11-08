@@ -1371,13 +1371,19 @@ function renderBestValueModalContent() {
       '<a href="#/picks" class="btn primary" onclick="closeBestValueModal()">Build an acca instead</a></div>';
     return;
   }
-  const all = data.fourFold.legs, top = all[0], rest = all.slice(1);
+  const all = data.fourFold.legs, top = all[0];
+  const tiers = [['single', 'Single', 1], ['double', 'Double', 2], ['treble', 'Treble', 3], ['fourFold', '4-fold', 4]].filter(t => all.length >= t[2]);
+  if (!tiers.some(t => t[0] === activeBestValueTier)) activeBestValueTier = tiers[tiers.length - 1][0];
+  const tierData = data[activeBestValueTier];
+  const multi = tierData.legs.length > 1;
+  // Only the legs in the chosen bet show, so switching Single/Double/Treble/4-fold changes the picks on screen.
+  const rest = tierData.legs.slice(1);
   const onSlip = l => ownBet.legs.some(x => x.fixtureId === l.matchId && x.key === l.selId);
   const addBtn = (l, i, big) => '<button type="button" class="' + (big ? 'btn primary bv-add' : 'bv-plus') + (onSlip(l) ? ' on' : '') + '" onclick="addBestValueLeg(' + i + ')" aria-label="Add ' + esc(l.label) + ' to my bet slip">' +
     (onSlip(l) ? (big ? '✓ On your slip' : '✓') : big ? '+ Add to bet slip' : '+') + '</button>';
 
   const hero = '<article class="bv-hero">' +
-    '<div class="bv-hero-kicker">⭐ Pick of the day</div>' +
+    '<div class="bv-hero-kicker">⭐ Pick of the day' + (multi ? ' · leg 1' : '') + '</div>' +
     '<div class="bv-hero-match">' + esc(bvMatch(top)) + ' <span>' + esc(bvWhen(top)) + '</span></div>' +
     '<div class="bv-hero-pick"><b>' + esc(top.label) + '</b><span class="bv-price mono">' + esc(bvPrice(top)) + '<small>' + esc(data.mode === 'model' ? 'estimate' : (top.bookmaker || 'bookmaker')) + '</small></span></div>' +
     bvGap(top, data.mode, true) +
@@ -1385,18 +1391,14 @@ function renderBestValueModalContent() {
   '</article>';
 
   const vs = l => '<span class="bv-vs"><b>' + Math.round(l.p * 100) + '%</b>' + (data.mode === 'model' ? ' our chance' : ' vs ' + Math.round(100 / Number(l.odds || 1)) + '%') + '</span>';
-  const more = rest.length ? '<h3 class="bv-h">More picks today</h3><div class="bv-legs-list">' + rest.map((l, i) =>
+  const more = rest.length ? '<h3 class="bv-h">Also in your ' + esc(tierData.type.toLowerCase().replace(' acca', '')) + '</h3><div class="bv-legs-list">' + rest.map((l, i) =>
     '<div class="bv-leg-item bv-row"><div class="bv-leg-info"><div class="bv-leg-sel">' + esc(l.label) + ' <span class="mono">' + esc(bvPrice(l)) + '</span></div>' +
       '<div class="bv-leg-sub">' + esc(bvMatch(l)) + ' · ' + vs(l) + '</div></div>' + addBtn(l, i + 1, false) + '</div>').join('') + '</div>' : '';
 
-  const tiers = [['single', 'Single', 1], ['double', 'Double', 2], ['treble', 'Treble', 3], ['fourFold', '4-fold', 4]].filter(t => all.length >= t[2]);
-  if (!tiers.some(t => t[0] === activeBestValueTier)) activeBestValueTier = tiers[tiers.length - 1][0];
-  const tierData = data[activeBestValueTier];
   const stake = Number((builderState && builderState.stake) || 10) || 10;
   const chance = tierData.estProb >= 0.1 ? Math.round(tierData.estProb * 100) : (tierData.estProb * 100).toFixed(1);
-  const combine = all.length > 1 ? '<h3 class="bv-h">Combine them</h3>' +
-    '<div class="bv-tabs" role="group" aria-label="How many picks">' + tiers.map(t => '<button type="button" class="bv-tab' + (activeBestValueTier === t[0] ? ' active' : '') + '" aria-pressed="' + (activeBestValueTier === t[0]) + '" onclick="setBestValueTier(\'' + t[0] + '\')">' + t[1] + '</button>').join('') + '</div>' +
-    '<div class="bv-summary-card bv-sum-line"><span><b class="mono">' + esc(fmtOdds(tierData.odds)) + '</b> odds</span><span><b class="mono">' + chance + '%</b> all land</span><span>£' + stake.toFixed(0) + ' → <b class="mono pos">£' + (stake * tierData.odds).toFixed(2) + '</b></span></div>' +
+  const tabs = all.length > 1 ? '<div class="bv-tabs" role="group" aria-label="How many picks">' + tiers.map(t => '<button type="button" class="bv-tab' + (activeBestValueTier === t[0] ? ' active' : '') + '" aria-pressed="' + (activeBestValueTier === t[0]) + '" onclick="setBestValueTier(\'' + t[0] + '\')">' + t[1] + '</button>').join('') + '</div>' : '';
+  const combine = all.length > 1 ? '<div class="bv-summary-card bv-sum-line"><span><b class="mono">' + esc(fmtOdds(tierData.odds)) + '</b> odds</span><span><b class="mono">' + chance + '%</b> all land</span><span>£' + stake.toFixed(0) + ' → <b class="mono pos">£' + (stake * tierData.odds).toFixed(2) + '</b></span></div>' +
     '<div class="bv-modal-actions"><button type="button" class="btn primary" onclick="addBestValueToDiary(\'' + activeBestValueTier + '\')">Add ' + esc(tierData.type.toLowerCase()) + ' to slip</button>' +
       '<button type="button" class="btn" onclick="openSlipCardFromBestValue(\'' + activeBestValueTier + '\')" aria-label="Open slip card">📋 Slip card</button></div>' : '';
 
@@ -1405,7 +1407,7 @@ function renderBestValueModalContent() {
     : data.mode === 'live'
       ? 'Early evidence: a gap is a lead, not proof.'
       : 'A gap against the price is not a promise.';
-  body.innerHTML = hero + more + combine + '<p class="bv-note">' + esc(note) + ' 18+. Stake only what you can afford to lose.</p>';
+  body.innerHTML = tabs + hero + more + combine + '<p class="bv-note">' + esc(note) + ' 18+. Stake only what you can afford to lose.</p>';
 }
 
 // One pick onto the bet slip (added alongside anything already there).
