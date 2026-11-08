@@ -323,7 +323,6 @@ function mostLikelyBlock(pred, big) {
     '<div class="btn-row" style="margin-top:8px;">' +
       '<button type="button" class="btn small" data-diary=\'' + esc(JSON.stringify(diary)) + '\'>+ Diary</button>' +
       ownBetAddBtn(diary) +
-      '<button type="button" class="btn small" data-add-football-acca=\'' + esc(JSON.stringify(diary)) + '\' style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
     '</div></div>';
 }
 
@@ -594,7 +593,6 @@ function marketCard(key, m, ctx) {
     const jsonStr = esc(JSON.stringify(betPayload));
     return '<button type="button" class="btn small" data-diary=\'' + jsonStr + '\' aria-label="Add ' + esc(row.label) + ' to Bet Diary">+ Diary</button>' +
       ownBetAddBtn(betPayload) +
-      '<button type="button" class="btn small acca-btn" data-add-football-acca=\'' + jsonStr + '\' title="Add to custom Acca Builder" style="background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">+ Acca</button>' +
       '<button type="button" class="btn-place-bet-inline butler-btn" onclick="openSlipCardSingle(this.dataset.betData)" data-bet-data=\'' + jsonStr + '\' title="Open slip note">📋 Slip Note</button>';
   };
   const rows = m.rows.map(row => '<tr' + (row.picked ? ' style="color:#fff;font-weight:600"' : '') + '><td>' + esc(row.label) + (row.picked ? ' <span class="badge validated" style="font-size:10px">Pick</span>' : '') + '</td>' +
@@ -686,33 +684,8 @@ try {
   }
 } catch (e) {}
 
-function addCrossSportAccaLeg(leg) {
-  if (!customAccaLegs.some(l => l.id === leg.id || (l.label === leg.label && l.matchId === leg.matchId))) {
-    customAccaLegs.push(leg);
-    try { localStorage.setItem('betbuddy_custom_acca_v1', JSON.stringify(customAccaLegs)); } catch (e) {}
-    toast('Added ' + leg.label + ' to Custom Acca! 🎯');
-    updateBuilder();
-    render();
-  } else {
-    toast(leg.label + ' already in Acca!');
-  }
-}
 
-function removeCrossSportAccaLeg(legId) {
-  customAccaLegs = customAccaLegs.filter(l => l.id !== legId);
-  try { localStorage.setItem('betbuddy_custom_acca_v1', JSON.stringify(customAccaLegs)); } catch (e) {}
-  toast('Selection removed from Acca.');
-  updateBuilder();
-  render();
-}
 
-function clearCustomAcca() {
-  customAccaLegs = [];
-  try { localStorage.removeItem('betbuddy_custom_acca_v1'); } catch (e) {}
-  toast('Custom Acca cleared.');
-  updateBuilder();
-  render();
-}
 
 
 function builderCompute() {
@@ -930,170 +903,96 @@ function shareAccaSlip(idx) {
   });
 }
 
-function slipCard(slip, idx, stake) {
-  const m = MatchIQBuilder.money, primary = idx === 0;
+// One acca at a time, in plain words: the chance it lands, how often it loses, the legs and what it pays.
+// "Show another option" steps through the other combinations instead of stacking four near-copies.
+function slipCard(slip, idx, stake, total) {
+  const m = MatchIQBuilder.money;
   const safeStake = Number(stake || (slip && slip.stake) || (builderState && builderState.stake) || 10) || 10;
   const odds = Number(slip.odds) || 1;
   const ret = Number.isFinite(Number(slip.ret)) ? Number(slip.ret) : (safeStake * odds);
   const profit = Number.isFinite(Number(slip.profit)) ? Number(slip.profit) : (ret - safeStake);
   const chance = slip.chance >= 0.1 ? Math.round(slip.chance * 100) : (slip.chance * 100).toFixed(1);
-  const mainOdds = fmtOdds(odds);
-  const isTodayAcca = builderState.timing === 'today';
-  const todayBadge = isTodayAcca ? '<div class="today-slip-pill">⚡ TODAY\'S GAMES ONLY &bull; ALL LEGS SETTLE TONIGHT</div>' : '';
-  
-  // Honest Trust & Expected Value transparency
-  const evVal = slip.ev != null ? slip.ev : (ret * slip.chance - safeStake);
-  const evPerPound = evVal / safeStake;
-  const evPence = Math.round(Math.abs(evPerPound) * 100);
-  const trustBadge = evPerPound >= 0
-    ? ('<div class="slip-trust-bar positive">📈 <b>' + chance + '% chance to win.</b> Expect to gain about ' + evPence + 'p per £1 staked.</div>')
-    : ('<div class="slip-trust-bar negative">⚠️ <b>' + chance + '% chance to win.</b> Expect to lose about ' + evPence + 'p per £1 on average.</div>');
-
-  return '<article class="slip' + (primary ? ' primary' : '') + '">' + todayBadge +
-    '<div class="slip-head"><div><div class="slip-kicker">' + (primary ? '💎 Highest model estimate (' + slip.legs.length + '-Leg Acca)' : 'Option ' + (idx + 1) + ' Combination (' + slip.legs.length + '-Leg Acca)') + ' ' + jargonTip('acca') + '</div>' +
-    '<div class="slip-odds mono">' + esc(mainOdds) + '</div></div>' +
-    '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every bet lands</small></div></div>' +
-    trustBadge +
+  const loses = slip.chance >= 0.5 ? 'It still loses about ' + Math.round((1 - slip.chance) * 10) + ' times in 10.'
+    : slip.chance >= 0.1 ? 'It loses about ' + Math.round((1 - slip.chance) * 10) + ' times in 10.'
+    : 'Roughly a 1 in ' + Math.round(1 / Math.max(slip.chance, 0.001)) + ' shot: most slips like this lose.';
+  const kicker = (idx === 0 ? 'Our best ' : 'Option ' + (idx + 1) + ': ') + slip.legs.length + '-leg acca' + (builderState.timing === 'today' ? ' · all games today' : '');
+  return '<article class="slip primary acca-one">' +
+    '<div class="slip-head"><div><div class="slip-kicker">' + esc(kicker) + ' ' + jargonTip('acca') + '</div>' +
+    '<div class="slip-odds mono">' + esc(fmtOdds(odds)) + '</div></div>' +
+    '<div class="slip-chance"><b class="mono">' + chance + '%</b><small>chance every leg wins</small></div></div>' +
+    '<p class="acca-loses">' + esc(loses) + '</p>' +
     '<ol class="slip-legs">' + slip.legs.map(slipLegRow).join('') + '</ol>' +
     '<div class="slip-sum"><span>Stake <b class="mono">' + m(safeStake) + '</b></span><span>Returns <b class="mono">' + m(ret) + '</b></span><span>Profit <b class="mono">' + m(profit) + '</b></span></div>' +
-    (slip.chance < 0.05 ? '<p class="slip-warn">Long shot: roughly 1 in ' + Math.round(1 / slip.chance) + '. Most slips like this lose.</p>' : '') +
-    (slip.estimated ? '<p class="slip-note">Some prices are estimates, not live bookmaker prices. The price you are actually offered will differ, so the profit will too.</p>' : '') +
-    '<div style="margin: 12px 0 10px;">' +
-      '<button type="button" class="btn primary" onclick="openSlipCard(' + idx + ')" style="width:100%;min-height:48px;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;">' +
-        '<span>📋</span> Open Slip Card' +
-      '</button>' +
-      '<div style="font-size:12px;color:var(--soft);text-align:center;margin-top:5px;">Tick off legs as you place them in your bookmaker app</div>' +
+    (slip.estimated ? '<p class="slip-note">Some prices are estimates, not live bookmaker prices. Your bookmaker’s price will differ, so the return will too.</p>' : '') +
+    '<div class="acca-actions">' +
+      '<button type="button" class="btn primary" onclick="addAccaToOwnBet(' + idx + ')">Add to my bet slip</button>' +
+      '<button type="button" class="btn" onclick="openSlipCard(' + idx + ')" title="Tick off legs as you place them in your bookmaker app">📋 Open Slip Card</button>' +
+      '<button type="button" class="btn" data-share-slip="' + idx + '">Share</button>' +
     '</div>' +
-    '<div class="btn-row">' +
-      '<button type="button" class="btn' + (primary ? ' primary' : '') + '" data-slip="' + idx + '">Save slip to Bet Diary</button>' +
-      '<button type="button" class="btn small" data-share-slip="' + idx + '" title="Copy formatted slip to clipboard or share with friends"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share / Copy</button>' +
-    '</div></article>';
+    (total > 1 ? '<button type="button" class="acca-next" onclick="nextAccaOption()">↻ Show another option <span>(' + (idx + 1) + ' of ' + total + ')</span></button>' : '') +
+    '</article>';
 }
 
-function customAccaCard(stake) {
-  const m = MatchIQBuilder.money;
-  const safeStake = Number(stake || (builderState && builderState.stake) || 10) || 10;
-  const legs = customAccaLegs;
-  const odds = legs.reduce((t, l) => t * (Number(l.odds) || 2.0), 1);
-  const ret = safeStake * odds;
-  const profit = ret - safeStake;
-  const chance = legs.reduce((t, l) => t * (l.p || 0.5), 1);
-  const chancePct = chance >= 0.1 ? Math.round(chance * 100) : (chance * 100).toFixed(1);
-  const mainOdds = fmtOdds(odds);
-
-  return '<article class="slip custom-acca-slip" style="border: 2px solid #38bdf8; background: linear-gradient(160deg, rgba(56, 189, 248, 0.16), rgba(15, 23, 42, 0.95)); margin-bottom: 20px;">' +
-    '<div class="slip-head">' +
-      '<div>' +
-        '<div class="slip-kicker" style="color: #38bdf8;">🎯 Your Custom Mixed Acca (' + legs.length + ' selections)</div>' +
-        '<div class="slip-odds mono" style="color: #fff;">' + esc(mainOdds) + '</div>' +
-      '</div>' +
-      '<div class="slip-chance"><b class="mono">' + chancePct + '%</b><small>estimated chance</small></div>' +
-    '</div>' +
-    '<ul class="slip-legs">' +
-      legs.map(l => {
-        const sportIcons = { TENNIS: '🎾', GOLF: '⛳', DARTS: '🎯', RUGBY: '🏉', FOOTBALL: '⚽' };
-        const icon = sportIcons[(l.sport || '').toUpperCase()] || '🎯';
-        return '<li class="slip-leg" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);min-width:0;width:100%;box-sizing:border-box;">' +
-          '<div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1 1 auto;overflow:hidden;">' +
-            '<span style="font-size:16px;flex-shrink:0;">' + icon + '</span>' +
-            '<div style="min-width:0;overflow:hidden;"><b style="word-break:break-word;display:block;font-size:13px;">' + esc(l.label) + '</b><small style="display:block;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;">' + esc(l.bookmaker || 'UK Odds') + '</small></div>' +
-          '</div>' +
-          '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:8px;">' +
-            '<span class="slip-price live" style="padding:3px 8px;font-size:12.5px;">' + esc(l.fractional || fmtOdds(l.odds)) + '</span>' +
-            '<button type="button" class="btn small" data-remove-cross-leg="' + esc(l.id) + '" title="Remove from Acca" style="padding:2px 8px;font-size:11px;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;">✕</button>' +
-          '</div>' +
-        '</li>';
-      }).join('') +
-    '</ul>' +
-    '<div class="slip-sum">' +
-      '<span>Stake <b class="mono">' + m(safeStake) + '</b></span>' +
-      '<span>Returns <b class="mono">' + m(ret) + '</b></span>' +
-      '<span>Profit <b class="mono">' + m(profit) + '</b></span>' +
-    '</div>' +
-    '<div style="margin: 14px 0 10px;">' +
-      '<button type="button" class="btn primary butler-acca-launch-btn" onclick="openSlipCard(\'custom\')" style="width:100%;min-height:48px;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;">' +
-        '<span>📋</span> Open Slip Card' +
-      '</button>' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:0 4px;">' +
-        '<span class="dim text-xs" style="color:#94a3b8">Tick off legs in slip note while placing in your bookmaker app</span>' +
-        '<a href="javascript:void(0)" onclick="openButlerModal()" class="text-xs" style="color:var(--cyan);text-decoration:none;font-weight:600;">Change Bookmaker ▾</a>' +
-      '</div>' +
-    '</div>' +
-    '<div class="btn-row" style="margin-top:12px;">' +
-      '<button type="button" class="btn primary" onclick="saveCustomAccaToDiary()">Save Custom Acca to Bet Diary</button>' +
-      '<button type="button" class="btn small" onclick="shareCustomAcca()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Share / Copy</button>' +
-      '<button type="button" class="btn small" data-clear-custom-acca style="background:rgba(255,255,255,0.05);color:#94a3b8;">Clear Acca</button>' +
-    '</div>' +
-  '</article>';
+let accaOption = 0;
+function nextAccaOption() {
+  const n = builderResult && builderResult.slips ? builderResult.slips.length : 0;
+  if (!n) return;
+  accaOption = (accaOption + 1) % n;
+  const out = $('builder-out');
+  if (out) out.innerHTML = builderOutput();
 }
 
-function saveCustomAccaToDiary() {
-  const legs = customAccaLegs;
-  if (!legs.length) return;
-  const stake = (builderState && builderState.stake) || 10;
-  const odds = legs.reduce((t, l) => t * (l.odds || 2.0), 1);
-  openDiary({});
-  $('modal-bet-type').value = 'accumulator';
-  toggleAccumulatorFields();
-  if ($('modal-stake-input')) $('modal-stake-input').value = Number(stake).toFixed(2);
-  if ($('modal-odds-input')) $('modal-odds-input').value = fmtOdds(odds).replace(/[≈~]/g, '');
-  if ($('modal-origin-select')) $('modal-origin-select').value = 'matchiq';
-  if ($('modal-notes-input')) $('modal-notes-input').value = 'Custom Accumulator (' + legs.length + ' legs) built in Bet Buddy.';
-  if ($('modal-legs-input')) {
-    $('modal-legs-input').value = legs.map(l => {
-      const matchLabel = l.fixture && l.fixture.home ? (l.fixture.home + (l.fixture.away ? ' v ' + l.fixture.away : '') + ': ') : '';
-      const frac = String(l.fractional || fmtOdds(l.odds)).replace(/[≈~]/g, '').trim();
-      return (matchLabel + l.label).replace(/^([^:]+:\s*)\1/, '$1') + ' | ' + (frac || 'Evens');
-    }).join('\n');
-  }
-  updateModalPnlPreview();
-  toast('Custom Acca loaded into Bet Diary modal!');
-}
-
-function shareCustomAcca() {
-  const legs = customAccaLegs;
-  if (!legs.length) return;
-  const stake = (builderState && builderState.stake) || 10;
-  const odds = legs.reduce((t, l) => t * (l.odds || 2.0), 1);
-  const ret = stake * odds;
-  const text = [
-    '🎯 Bet Buddy Custom Mixed Acca (' + legs.length + ' legs)',
-    'Odds: ' + fmtOdds(odds) + ' · Potential Return: £' + ret.toFixed(2),
-    ...legs.map(l => '• ' + l.label + ' (' + (l.fractional || fmtOdds(l.odds)) + ' via ' + (l.bookmaker || 'UK Bookie') + ')')
-  ].join('\n');
-  navigator.clipboard.writeText(text).then(() => {
-    toast('Custom Acca copied to clipboard!');
-  }).catch(() => {
-    openUniversalShare({ title: 'Bet Buddy Acca', text, url: location.href });
+// Puts the model's acca on the player's bet slip, where it is saved to the Diary or League like any bet.
+function addAccaToOwnBet(idx) {
+  const slip = builderResult && builderResult.slips && builderResult.slips[idx];
+  if (!slip) return;
+  if (ownBet.legs.length && !confirm('Your bet slip already has ' + ownBet.legs.length + ' selection' + (ownBet.legs.length === 1 ? '' : 's') + '. Replace them with this acca?')) return;
+  const legs = [];
+  slip.legs.forEach(l => {
+    const id = 'ob' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    const fx = l.sport && l.sport !== 'football' ? null : fixtureById(l.matchId);
+    const opt = fx && ownBetMarketsFor(fx).find(o => o.key === l.selId || o.src === l.label || o.label === l.label);
+    if (fx && opt) {
+      const leg = ownBetFootballLeg(fx, opt, id);
+      if (l.odds > 1) { leg.odds = Number(l.odds); leg.est = l.priceSource !== 'live'; }
+      leg.origin = 'matchiq';
+      legs.push(leg);
+    } else {
+      const sport = String(l.sport || 'Football');
+      legs.push({ id, kind: 'custom', sport: sport.charAt(0).toUpperCase() + sport.slice(1), pick: String(l.label || '').slice(0, 120), odds: Number(l.odds) > 1 ? Number(l.odds) : null, origin: 'matchiq' });
+    }
   });
+  ownBet.legs = legs.slice(0, OWN_BET_MAX_LEGS);
+  ownBet.stake = Number(builderState.stake) || ownBet.stake;
+  ownBet.origin = '';
+  persistOwnBet();
+  location.hash = '#/build';
+  toast('Acca added to your bet slip. Add your stake and save it.');
 }
+
+
+
 
 function builderOutput() {
   const r = builderResult, { stake, win, legs } = builderState, m = MatchIQBuilder.money;
-  let customHtml = customAccaLegs.length > 0 ? customAccaCard(stake) : '';
-  if (!r) return customHtml;
+  if (!r) return '';
   const numLegs = Number(legs) || 4;
-  const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from a <b>' + m(stake) + '</b> stake across <b>' + numLegs + ' bets</b> you need a total return of <b>' + m(stake + win) + '</b>: combined odds of about <b class="mono">' + fmtOdds((stake + win) / stake) + '</b>.</p>';
+  const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from <b>' + m(stake) + '</b> with ' + numLegs + ' legs you need combined odds of about <b class="mono">' + fmtOdds((stake + win) / stake) + '</b>.</p>';
   if (r.error) {
     let helper = '';
     const todayStr = new Date().toISOString().slice(0, 10);
     const todayCount = predictionsList().filter(p => p.fixture && p.fixture.kickoff_utc && p.fixture.kickoff_utc.slice(0, 10) === todayStr).length;
     if (builderState.timing === 'today' && todayCount > 0 && todayCount < numLegs) {
-      helper = '<div class="notice" style="margin-top:14px;border-color:var(--emerald);background:rgba(16,185,129,0.12);color:#fff;">' +
-        '<b>⚡ ' + todayCount + ' matches playing today.</b><br>' +
-        'Target is ' + numLegs + ' bets. Adjust legs to match today\'s available matches, or switch to the 7-day schedule:' +
-        '<div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">' +
-          '<button type="button" class="btn small" onclick="setBuilderLegs(' + todayCount + ')" style="background:var(--emerald);color:#03140d;font-weight:700;">Build ' + todayCount + '-Leg Acca for Today</button>' +
-          '<button type="button" class="btn small" onclick="setBuilderTiming(\'all\')">Switch to Next 7 Days</button>' +
-        '</div>' +
-      '</div>';
+      helper = '<div class="acca-actions" style="margin-top:10px">' +
+        '<button type="button" class="btn" onclick="setBuilderLegs(' + todayCount + ')">Build a ' + todayCount + '-leg acca for today</button>' +
+        '<button type="button" class="btn" onclick="setBuilderTiming(\'all\')">Use the next 7 days</button></div>';
     }
-    return need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>' + helper + customHtml;
+    return need + '<div class="empty" style="margin-top:12px">' + esc(r.error) + '</div>' + helper;
   }
-  const first = r.slips[0];
-  const miss = r.exact ? '' : '<p class="slip-warn">No combination lands on that target. This is the closest available: it returns ' + m(first.ret) + ' (profit ' + m(first.profit) + ').</p>';
-  const fine = '<p class="builder-fine">Chances are Bet Buddy model estimates, not promises. On average this slip is expected to ' + (first.ev >= 0 ? 'make ' : 'lose ') + '<b>' + m(Math.abs(first.ev)) + '</b> per ' + m(stake) + ' staked; bookmaker margins usually push that below zero. Never stake more than you can afford to lose.</p>';
-  return need + miss + r.slips.map((s, i) => slipCard(s, i, stake)).join('') + fine + customHtml;
+  const n = r.slips.length, idx = accaOption % n, slip = r.slips[idx];
+  const miss = r.exact ? '' : '<p class="slip-warn">Nothing lands exactly on that target. This is the closest: it returns ' + m(slip.ret) + ' (profit ' + m(slip.profit) + ').</p>';
+  const fine = '<p class="builder-fine">Chances are Bet Buddy estimates, not promises. Bookmakers build a margin into every price, so over time most accas lose money. Only stake what you are happy to lose.</p>';
+  return need + miss + slipCard(slip, idx, stake, n) + fine;
 }
 
 
@@ -1156,70 +1055,44 @@ function viewBuilder() {
   builderCompute();
   const { stake, legs, win, timing } = builderState;
   const curTiming = timing || 'today';
-  const legChips = [2, 3, 4, 5, 6, 8].map(n => '<button type="button" class="legpick" data-legs="' + n + '" aria-pressed="' + (legs === n) + '">' + n + '</button>').join('');
-  const winPresets = [10, 25, 50, 100, 250].map(w => '<button type="button" class="win-chip" data-win="' + w + '" aria-pressed="' + (win === w) + '">£' + w + '</button>').join('');
-
-  const now = Date.now();
-  const todayStr = new Date(now).toISOString().slice(0, 10);
+  const now = Date.now(), todayStr = new Date(now).toISOString().slice(0, 10);
   const allPreds = predictionsList();
-  const todayUpcomingCount = allPreds.filter(p => kickoffMs(p.fixture) > now && p.fixture && p.fixture.kickoff_utc && p.fixture.kickoff_utc.slice(0, 10) === todayStr).length;
-  const upcomingMatchesCount = allPreds.filter(p => kickoffMs(p.fixture) > now).length;
-
-  const todayCountLabel = todayUpcomingCount > 0 ? (todayUpcomingCount + ' matches remaining') : '0 remaining (in-play)';
-  const todayDesc = todayUpcomingCount >= legs ? 'Only picks games playing today (settles tonight)' : (todayUpcomingCount > 0 ? ('Only ' + todayUpcomingCount + ' games left today') : 'All today\'s games kicked off. Auto-showing weekend slate.');
-
-  const scopeToggle = '<div class="builder-scope-bar">' +
-    '<div class="scope-header">' +
-      '<span class="scope-icon">⚡</span>' +
-      '<span class="scope-title">Match Schedule (Obvious Choice)</span>' +
-      '<span class="scope-hint">Tap to switch when your acca settles</span>' +
+  const todayN = allPreds.filter(p => kickoffMs(p.fixture) > now && p.fixture && p.fixture.kickoff_utc && p.fixture.kickoff_utc.slice(0, 10) === todayStr).length;
+  const weekN = allPreds.filter(p => kickoffMs(p.fixture) > now).length;
+  const chip = (attrs, on, label) => '<button type="button" ' + attrs + ' aria-pressed="' + on + '">' + label + '</button>';
+  const row = (label, body) => '<div class="bq-row"><span class="bq-label">' + label + '</span><div class="bq-chips">' + body + '</div></div>';
+  const sports = [['football', '⚽ Football'], ['tennis', '🎾 Tennis'], ['golf', '⛳ Golf'], ['darts', '🎯 Darts'], ['rugby', '🏉 Rugby']];
+  const stakeChips = [2, 5, 10, 20].map(v => chip('onclick="setBuilderStake(' + v + ')"', Number(stake) === v, '£' + v)).join('') +
+    '<label class="bq-own"><span class="sr-only">Other stake in pounds</span>£<input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake"></label>';
+  const winChips = [10, 25, 50, 100, 250].map(w => chip('class="win-chip" data-win="' + w + '"', win === w, '£' + w)).join('') +
+    '<label class="bq-own"><span class="sr-only">Other win amount in pounds</span>£<input id="b-win" class="ctl mono" type="number" inputmode="decimal" min="1" max="10000" step="1" value="' + win + '" data-b="win"></label>';
+  return '<section class="builder card" aria-labelledby="builder-title">' +
+    '<div class="builder-kicker">Model-built acca</div>' +
+    '<h1 class="page-title" id="builder-title">Tell us the win. We’ll build the acca.</h1>' +
+    '<p class="page-sub">Pick when, how many legs and what you’d like to win. Bet Buddy finds the combination most likely to land.</p>' +
+    '<div class="bq">' +
+      row('When', chip('data-timing="today"', curTiming === 'today', 'Today <small>' + todayN + ' games</small>') + chip('data-timing="all"', curTiming === 'all', 'Next 7 days <small>' + weekN + ' games</small>')) +
+      row('Legs', [2, 3, 4, 5, 6, 8].map(n => chip('class="legpick" data-legs="' + n + '"', legs === n, String(n))).join('')) +
+      row('Stake', stakeChips) +
+      row('To win', winChips) +
+      row('Sports', sports.map(sp => chip('data-toggle-sport="' + sp[0] + '"', activeSports.includes(sp[0]), sp[1])).join('')) +
     '</div>' +
-    '<div class="scope-pills" role="radiogroup" aria-label="Acca Match Schedule">' +
-      '<button type="button" class="scope-pill' + (curTiming === 'today' ? ' active' : '') + '" data-timing="today" role="radio" aria-checked="' + (curTiming === 'today') + '">' +
-        '<div class="scope-pill-top">' +
-          '<span class="scope-badge today">⚡ SETTLE TONIGHT</span>' +
-          '<span class="scope-count">' + todayCountLabel + '</span>' +
-        '</div>' +
-        '<div class="scope-pill-name">Today\'s Games Only</div>' +
-        '<div class="scope-pill-desc">' + todayDesc + '</div>' +
-      '</button>' +
-      '<button type="button" class="scope-pill' + (curTiming === 'all' ? ' active' : '') + '" data-timing="all" role="radio" aria-checked="' + (curTiming === 'all') + '">' +
-        '<div class="scope-pill-top">' +
-          '<span class="scope-badge all">📅 FULL SLATE</span>' +
-          '<span class="scope-count">' + upcomingMatchesCount + ' upcoming matches</span>' +
-        '</div>' +
-        '<div class="scope-pill-name">Next 7 Days (Weekend Slips)</div>' +
-        '<div class="scope-pill-desc">Searches upcoming rounds kicking off tomorrow & across week</div>' +
-      '</button>' +
-    '</div>' +
-  '</div>';
-
-  return '<section class="builder" aria-labelledby="builder-title">' +
-    '<div class="builder-top-bar">' +
-      '<div><div class="builder-kicker">Bet Builder</div><h1 class="page-title" id="builder-title">Tell us the win. We’ll build the bet.</h1></div>' +
-      '<div id="builder-panda-mood">' + accaVolatilityMarkup(builderResult && builderResult.slips && builderResult.slips[0], builderState.win) + '</div>' +
-    '</div>' +
-    '<p class="page-sub">Pick a stake, how many bets and how much you want to win. Bet Buddy searches every upcoming match for the combined bet (accumulator) that hits your target with the best chance of landing.</p>' +
-    scopeToggle +
-    '<div class="builder-form"><div class="field"><label for="b-stake">Stake (£)</label><input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake" aria-label="Stake amount in pounds">' +
-    '<div class="stake-safety-note" style="font-size:12px;color:#fbbf24;margin-top:4px;display:flex;align-items:center;gap:4px;"><span>⚠️</span><span>Recreational limit: only stake what you are happy to lose (£5–£10).</span></div></div>' +
-    '<div class="field"><span class="lbl" id="b-legs-l">Number of bets in accumulator <small style="color:var(--soft);font-weight:normal;">(2 = 2-team acca, 3 = 3 teams, 4 = 4 teams...)</small></span><div class="legpicks" role="group" aria-labelledby="b-legs-l">' + legChips +
-    '<div style="display:inline-flex;align-items:center;gap:6px;margin-left:4px;"><span style="font-size:12px;color:var(--soft);">Other:</span><input id="b-legs" class="ctl mono legs-input" type="number" inputmode="numeric" min="1" max="' + MatchIQBuilder.MAX_LEGS + '" step="1" value="' + legs + '" data-b="legs" aria-label="Custom number of bets" title="Enter custom number of bets"></div></div></div>' +
-    '<div class="field full"><label for="b-win">Target return (£): <b class="mono" id="b-win-out">' + MatchIQBuilder.money(win) + '</b></label>' +
-    '<div class="win-input-wrap"><div class="currency-input-wrap"><span class="currency-symbol">£</span><input id="b-win" class="ctl mono win-input" type="number" inputmode="decimal" min="1" max="10000" step="1" value="' + win + '" data-b="win" placeholder="50"></div>' +
-    '<div class="win-chips" role="group" aria-label="Preset return targets">' + winPresets + '</div></div></div></div>' +
+    '<p class="stake-safety-note">Only stake what you are happy to lose. Most people keep it to £5–£10.</p>' +
     '<div id="builder-out" class="builder-out" aria-live="polite">' + builderOutput() + '</div>' +
     '<p class="builder-foot">18+ only. Gambling can be addictive; play responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a>. Bet Buddy does not take bets, and nothing here is a guarantee.</p></section>';
 }
 
+function setBuilderStake(v) {
+  builderState.stake = Math.max(0.5, Math.min(10000, Number(v) || 10));
+  try { localStorage.setItem(BUILDER_KEY, JSON.stringify(builderState)); } catch (e) { /* ignore */ }
+  render();
+}
+
 function updateBuilder() {
+  accaOption = 0;
   builderCompute();
   const out = $('builder-out');
   if (out) out.innerHTML = builderOutput();
-  const moodWrap = $('builder-panda-mood');
-  if (moodWrap) {
-    moodWrap.innerHTML = accaVolatilityMarkup(builderResult && builderResult.slips && builderResult.slips[0], builderState.win);
-  }
 }
 
 function markLegChips() {
@@ -1263,7 +1136,6 @@ function onBuilderInput(t) {
   const v = Number(t.value);
   if (t.dataset.b === 'win') {
     builderState.win = Math.max(1, v);
-    $('b-win-out').textContent = MatchIQBuilder.money(builderState.win);
     markWinChips();
   } else if (!Number.isFinite(v) || v <= 0) return;
   else if (t.dataset.b === 'stake') builderState.stake = Math.min(10000, v);
@@ -1279,25 +1151,6 @@ function onBuilderInput(t) {
   builderTimer = setTimeout(updateBuilder, 120);
 }
 
-function saveSlipToDiary(i) {
-  const slip = builderResult && builderResult.slips && builderResult.slips[i];
-  if (!slip) return;
-  openDiary({});
-  $('modal-bet-type').value = 'accumulator';
-  toggleAccumulatorFields();
-  if ($('modal-legs-input')) {
-    $('modal-legs-input').value = slip.legs.map(l => {
-      const matchLabel = l.fixture && l.fixture.home ? (l.fixture.home + (l.fixture.away ? ' v ' + l.fixture.away : '') + ': ') : '';
-      const frac = String(l.fractional || fmtOdds(l.odds)).replace(/[≈~]/g, '').trim();
-      return (matchLabel + l.label).replace(/^([^:]+:\s*)\1/, '$1') + ' | ' + (frac || 'Evens');
-    }).join('\n');
-  }
-  if ($('modal-stake-input')) $('modal-stake-input').value = Number((builderState && builderState.stake) || 10).toFixed(2);
-  if ($('modal-odds-input')) $('modal-odds-input').value = fmtOdds(slip.odds).replace(/[≈~]/g, '');
-  if ($('modal-origin-select')) $('modal-origin-select').value = 'matchiq';
-  if ($('modal-notes-input')) $('modal-notes-input').value = 'Built by Bet Buddy Bet Builder for a £' + ((builderState && builderState.win) || 50) + ' win. Check any price marked estimate with your bookmaker.';
-  updateModalPnlPreview();
-}
 
 
 function beginnerGuides() {
@@ -1680,26 +1533,14 @@ function viewHome() {
 function viewPicks() {
   const topHubNav = '<div class="picks-top-bar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:4px 0;">' +
     '<a href="#/" class="btn small" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;background:rgba(56,189,248,0.14);border:1px solid var(--cyan);color:#fff;">← Welcome Hub</a>' +
-    '<span class="badge validated" style="font-size:11.5px;">🎯 Multi-Sport Acca Engine</span>' +
   '</div>';
   const list = upcoming();
   const sharedBanner = sharedSlipNotice
     ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🎯</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' return across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
     : '';
-  const beginnerGlossary = '<details class="section card guide-collapsible" style="margin:16px 0 20px;padding:12px 16px;background:rgba(15,23,42,0.6);border:1px solid rgba(56,189,248,0.25);border-radius:12px;">' +
-    '<summary style="font-weight:700;font-size:13.5px;color:#38bdf8;cursor:pointer;display:flex;align-items:center;gap:6px;">' +
-      '<span>💡 New to Accas &amp; Betting Intelligence? Tap for 30-Second Guide</span>' +
-    '</summary>' +
-    '<div class="grid grid-2" style="margin-top:12px;gap:10px;">' +
-      '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.45;"><strong style="color:#fff;">What is an Acca?</strong> An Accumulator combines multiple match predictions into 1 bet. All picks must land to win, multiplying your return.</div>' +
-      '<div style="font-size:12.5px;color:#cbd5e1;line-height:1.45;"><strong style="color:#fff;">What is Mathematical Edge?</strong> Bet Buddy compares statistical probability against UK bookmaker odds. We only flag picks where the true chance is higher than the bookmaker price implies.</div>' +
-    '</div>' +
-  '</details>';
 
   let html = '<section class="view">' +
     topHubNav +
-    beginnerGlossary +
-    renderSportFilterBar() +
     sharedBanner +
     viewBuilder() + '<div class="section-head" style="align-items:flex-end;margin-top:36px"><div><h2 class="page-title">This round</h2>' +
     '<p class="page-sub">For every upcoming match: the most likely supported outcome, the match-result lean and whether a price you have seen offers value. Bet Buddy will say No bet when the evidence or the price is not good enough.</p></div>' +
@@ -1727,7 +1568,7 @@ function viewPicks() {
   const validated = list.filter(p => p.markets.result.evidence.status === 'validated').map(p => ({ p, s: signalScore(p) })).sort((a, b) => b.s.score - a.s.score).map(x => x.p);
   if (validated.length) html += '<div class="section"><div class="section-head"><h2 class="section-title">Strongest match-result signals</h2><span class="section-note">The validated match-result model only, ranked by backtest-calibrated probability.</span></div>' +
     '<div class="grid grid-2">' + validated.slice(0, 4).map(signalCard).join('') + '</div></div>';
-  html += beginnerGuides() + '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">How Most Likely, Best Value and No Bet work</summary><ol class="explain" style="margin-top:8px">' +
+  html += '<details class="card section"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center">How Most Likely, Best Value and No Bet work</summary><ol class="explain" style="margin-top:8px">' +
     '<li><b>Most likely</b> looks at every backtested selection in every market, including heavy favourites. Each chance is pulled toward how often similar picks landed in the backtest, then ranked by the cautious end of a 90% range. Thin evidence therefore counts for less than a well-tested estimate, even with a bigger number.</li>' +
     '<li><b>Best value</b> needs a real bookmaker price. Prices come from The Odds API for Match Result and Total Goals; for anything else enter a price you have seen. Add every outcome’s price to remove the bookmaker’s margin. Only the validated match-result model, at a well-backtested probability, can call value, and only at +5% estimated expected value or more.</li>' +
     '<li><b>No bet</b> is a real answer: when evidence is thin, the price is short or no price exists. The predictions stay visible underneath.</li>' +
@@ -1768,7 +1609,6 @@ function renderMultiSportSection(sportKey) {
             '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Open on ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
             '<button type="button" class="btn small" data-diary=\'' + betData + '\' title="Add to Bet Diary">+ Diary</button>' +
             '<button type="button" class="btn small own-add-btn" data-own-bet=\'' + betData + '\' title="Add to my own bet slip">+ My bet</button>' +
-            '<button type="button" class="btn-add-cross-acca" data-add-cross-acca=\'' + betData + '\' title="Add to Accumulator">+ Acca</button>' +
           '</div>' +
         '</div>';
       }).join('');
@@ -5772,7 +5612,6 @@ function viewMultiSport(sportKey) {
             '<button type="button" class="sport-odds-btn" data-open-bookie=\'' + betData + '\' title="Open on ' + esc(sel.bookmaker) + '">' + esc(sel.fractional) + '</button>' +
             '<button type="button" class="btn small" data-diary=\'' + betData + '\' title="Add to Bet Diary">+ Diary</button>' +
             '<button type="button" class="btn small own-add-btn" data-own-bet=\'' + betData + '\' title="Add to my own bet slip">+ My bet</button>' +
-            '<button type="button" class="btn-add-cross-acca" data-add-cross-acca=\'' + betData + '\' title="Add to Accumulator">+ Acca</button>' +
           '</div>' +
         '</div>';
       }).join('');
@@ -6380,66 +6219,8 @@ document.addEventListener('click', event => {
     try { addToOwnBet(JSON.parse(t.dataset.ownBet)); } catch (e) { console.error(e); }
     return;
   }
-  if (t.dataset.addFootballAcca !== undefined || (t.closest && t.closest('[data-add-football-acca]'))) {
-    const btn = t.dataset.addFootballAcca !== undefined ? t : t.closest('[data-add-football-acca]');
-    try {
-      const data = JSON.parse(btn.dataset.addFootballAcca);
-      const f = fixtureById(data.id);
-      const cleanOddsStr = String(data.fair || 'Evens').replace(/[≈~]/g, '').trim();
-      const decOdds = (calc.parseOdds ? calc.parseOdds(cleanOddsStr) : null) ?? (calc.parseFractionalOdds ? calc.parseFractionalOdds(cleanOddsStr) : 2.0) ?? 2.0;
-      addCrossSportAccaLeg({
-        id: 'fb-' + data.id + '-' + (data.selection || '').replace(/[^a-zA-Z0-9]/g, '_'),
-        matchId: data.id,
-        fixture: f ? { home: f.home, away: f.away, competition: (f.competition || 'FOOTBALL').toUpperCase() } : { home: data.selection, away: '', competition: 'FOOTBALL' },
-        kickoff: f ? kickoffMs(f) : (Date.now() + 86400000),
-        selId: 'sel-' + data.id + '-' + data.selection,
-        label: (f ? (f.home + ' v ' + f.away + ': ') : '') + data.selection,
-        market: data.market || 'wins',
-        p: data.p || 0.5,
-        odds: decOdds,
-        fractional: data.fair || 'Evens',
-        bookmaker: 'Bet Buddy Fair',
-        priceSource: 'model',
-        support: 'validated',
-        basis: 'Bet Buddy Football Model',
-        sport: 'football'
-      });
-      scrollToBuilder();
-    } catch (e) { console.error(e); }
-    return;
-  }
-
-  // Cross-sport acca addition
-  if (t.dataset.addCrossAcca !== undefined) {
-    try {
-      const data = JSON.parse(t.dataset.addCrossAcca);
-      addCrossSportAccaLeg({
-        id: 'cross-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
-        matchId: data.eventId || ('ev-' + Date.now()),
-        fixture: { home: data.selection.split(' · ')[0] || data.selection, away: '', competition: (data.sport || 'SPORT').toUpperCase() },
-        kickoff: Date.now() + 86400000,
-        selId: 'sel-' + data.selection,
-        label: data.selection,
-        market: 'match',
-        p: data.odds ? 1 / (data.odds * 1.07) : 0.5,
-        odds: Number(data.odds) || 2.0,
-        fractional: data.fair || 'Evs',
-        bookmaker: data.bookmaker || 'UK Bookmaker',
-        priceSource: 'live',
-        support: 'validated',
-        basis: (data.sport || 'Sport') + ' Bookmaker Price',
-        sport: data.sport || 'sport'
-      });
-      scrollToBuilder();
-    } catch (e) { console.error(e); }
-    return;
-  }
-  if (t.dataset.removeCrossLeg !== undefined) {
-    removeCrossSportAccaLeg(t.dataset.removeCrossLeg);
-    return;
-  }
-  if (t.dataset.clearCustomAcca !== undefined) {
-    clearCustomAcca();
+  if (t.dataset.addFootballAcca !== undefined || t.dataset.addCrossAcca !== undefined) {
+    try { addToOwnBet(JSON.parse(t.dataset.addFootballAcca !== undefined ? t.dataset.addFootballAcca : t.dataset.addCrossAcca)); } catch (e) { console.error(e); }
     return;
   }
 
@@ -6664,7 +6445,6 @@ document.addEventListener('click', event => {
   }
   else if (t.id === 'tab-create-league') { $('create-league-form').hidden = false; $('join-league-form').hidden = true; t.classList.add('active'); $('tab-join-league').classList.remove('active'); }
   else if (t.id === 'tab-join-league') { $('create-league-form').hidden = true; $('join-league-form').hidden = false; t.classList.add('active'); $('tab-create-league').classList.remove('active'); }
-  else if (t.dataset.slip !== undefined) saveSlipToDiary(+t.dataset.slip);
   else if (t.dataset.shareSlip !== undefined) shareAccaSlip(+t.dataset.shareSlip);
   else if (t.dataset.partnerSlip !== undefined) {
     shareAccaSlip(+t.dataset.partnerSlip);

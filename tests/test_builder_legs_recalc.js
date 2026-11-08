@@ -73,13 +73,14 @@ vm.runInContext(`
   console.log('Output has (3-Leg Acca):', out3.includes('(3-Leg Acca)'));
   if (!r3.slips.every(s => s.legs.length === 3)) throw new Error('Legs 3 mismatch');
 
-  // 4. Test ordering with custom items
-  customAccaLegs = [{ id: 1, label: 'Test Custom', p: 0.5, odds: 2 }];
-  let outCustom = builderOutput();
-  let bestValIdx = outCustom.indexOf('Best Value &amp; Target Match');
-  let customIdx = outCustom.indexOf('Your Custom Mixed Acca');
-  console.log('Best Value comes BEFORE Custom Acca in output:', bestValIdx < customIdx);
-  if (bestValIdx >= customIdx) throw new Error('Custom acca is overriding Best Value top position');
+  // 4. One acca is shown at a time, with a way to step through the other options.
+  setBuilderLegs(3);
+  let one = builderOutput();
+  const cards = (one.match(/<article class="slip/g) || []).length;
+  console.log('Acca cards shown:', cards);
+  if (cards !== 1) throw new Error('Expected exactly one acca card, got ' + cards);
+  if (builderResult.slips.length > 1 && !one.includes('Show another option')) throw new Error('Missing "Show another option"');
+  if (/Expect to gain/.test(one)) throw new Error('Acca must not promise an expected gain');
 
   console.log('ALL BUILDER RECALCULATION TESTS PASSED SUCCESFULLY!');
 `, context);

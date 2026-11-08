@@ -4307,3 +4307,24 @@ span.cp-price.nop { cursor: default; opacity: .5; }
 .mv-markets .cp-panel { padding-top: 0; }
 .cp-price small.cp-p { font-size: 11px; color: var(--muted); font-weight: 600; }
 .cp-price.on small.cp-p { color: #04140d; }
+
+/* Model-built acca: settings as chip rows, one result card */
+.bq { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.bq-row { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; gap: 8px; }
+.bq-label { font: 700 12px var(--display); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.bq-chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px 0; }
+.bq-chips::-webkit-scrollbar { display: none; }
+.bq-chips > button { flex: none; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--soft); font: 600 13px var(--display); cursor: pointer; white-space: nowrap; }
+.bq-chips > button small { font-weight: 500; color: var(--muted); margin-left: 4px; }
+.bq-chips > button[aria-pressed="true"] { border-color: var(--pick); color: var(--ink); background: color-mix(in srgb, var(--pick) 18%, var(--surface-solid)); }
+.bq-chips > button[aria-pressed="true"] small { color: var(--soft); }
+.bq-own { flex: none; display: inline-flex; align-items: center; gap: 4px; padding-left: 4px; color: var(--muted); font-size: 13px; }
+.bq-own input { width: 74px; min-height: 40px; padding: 0 8px; }
+.builder .stake-safety-note { margin: 10px 0 0; font-size: 12.5px; color: #fbbf24; }
+.acca-one .slip-head { align-items: flex-start; }
+.acca-loses { margin: 6px 0 10px; font-size: 13.5px; color: var(--soft); }
+.acca-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.acca-actions .btn { flex: 1 1 140px; min-height: 44px; }
+.acca-next { display: block; width: 100%; min-height: 44px; margin-top: 10px; border: 1px dashed var(--line-strong); border-radius: 12px; background: none; color: var(--cyan); font: 600 13.5px var(--display); cursor: pointer; }
+.acca-next span { color: var(--muted); font-weight: 500; }
+@media (max-width: 600px) { .builder { padding: 18px 14px 16px; } .bq-row { grid-template-columns: 1fr; gap: 4px; } }
