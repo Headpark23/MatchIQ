@@ -4817,3 +4817,41 @@ a.hm-chip:hover { border-color: var(--pick); }
 .rt-back { gap: 5px; }
 .rt-top .rt-name { white-space: nowrap; }
 .rt-front .rt-spark-line { stroke-dasharray: none; animation: none; }
+
+/* Model-built acca: settings fold into one summary line so the acca shows on the first screen */
+.builder { padding: 16px 14px 14px; }
+.builder-h { font-size: clamp(20px, 5.6vw, 28px) !important; line-height: 1.15; margin: 2px 0 10px; }
+.bq-wrap { border-radius: 14px; border: 1px solid var(--line-strong); background: var(--surface); }
+.bq-wrap > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 48px; padding: 6px 12px; cursor: pointer; }
+.bq-wrap > summary::-webkit-details-marker { display: none; }
+.bq-sum { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; min-width: 0; font-size: 13px; color: var(--soft); }
+.bq-sum b { color: var(--ink); font-family: var(--display); }
+.bq-sum i { font-style: normal; color: var(--muted); }
+.bq-edit-btn { flex: none; padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--pick) 16%, transparent); color: var(--pick); font: 700 12.5px var(--display); }
+.bq-wrap[open] .bq-edit-btn { background: var(--pick); color: #04140d; }
+.bq-wrap[open] .bq-edit-btn::after { content: ' ✓'; }
+.bq-wrap .bq { margin: 0; padding: 4px 12px 12px; gap: 8px; }
+.bq-row { grid-template-columns: 58px minmax(0, 1fr) !important; gap: 6px !important; }
+.bq-chips > button { min-height: 36px; padding: 0 12px; }
+.builder-need { margin: 10px 0 8px; font-size: 13px; color: var(--muted); }
+.builder .stake-safety-note { margin-top: 12px; }
+
+/* Model picks: tighter hero */
+.bv-hero { padding: 14px 14px 12px; border-radius: 18px; }
+.bv-hero-match { margin-top: 8px; font-size: 13px; }
+.bv-hero-match span { color: var(--muted); font-weight: 400; font-size: 12px; }
+.bv-hero-pick { margin: 2px 0 8px; }
+.bv-hero-pick b { font-size: 22px; }
+.bv-price { padding: 6px 12px; font-size: 19px; border-radius: 12px; }
+.bv-gap.big .bv-gap-row { font-size: 12px; }
+.bv-gap.big .bv-gap-row i { height: 8px; }
+.bv-gap-say { margin-top: 4px; font-size: 12px; }
+.bv-hero-actions { margin-top: 10px; }
+.bv-hero-actions .btn { min-height: 42px; }
+.best-value-modal-body { gap: 10px; }
+
+.acca-one .slip-head { flex-wrap: nowrap; align-items: flex-end; gap: 10px; }
+.acca-one .slip-head > div:first-child { min-width: 0; flex: 1; }
+.acca-one .slip-chance { flex: none; }
+.acca-one .slip-chance small { display: block; max-width: 92px; line-height: 1.25; }
+.acca-one .acca-loses { margin: 4px 0 6px; }

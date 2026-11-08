@@ -965,7 +965,7 @@ function slipCard(slip, idx, stake, total) {
     '</article>';
 }
 
-let accaOption = 0;
+let accaOption = 0, builderSettingsOpen = false;
 function nextAccaOption() {
   const n = builderResult && builderResult.slips ? builderResult.slips.length : 0;
   if (!n) return;
@@ -1020,7 +1020,7 @@ function builderOutput() {
   const r = builderResult, { stake, win, legs } = builderState, m = MatchIQBuilder.money;
   if (!r) return '';
   const numLegs = Number(legs) || 4;
-  const need = '<p class="builder-need">To win <b>' + m(win) + '</b> from <b>' + m(stake) + '</b> with ' + numLegs + ' legs you need combined odds of about <b class="mono">' + fmtOdds((stake + win) / stake) + '</b>.</p>';
+  const need = '<p class="builder-need">Needs combined odds of about <b class="mono">' + fmtOdds((stake + win) / stake) + '</b> to win ' + m(win) + ' from ' + m(stake) + '.</p>';
   if (r.error) {
     let helper = '';
     const todayStr = new Date().toISOString().slice(0, 10);
@@ -1109,19 +1109,21 @@ function viewBuilder() {
     '<label class="bq-own"><span class="sr-only">Other stake in pounds</span>£<input id="b-stake" class="ctl mono" type="number" inputmode="decimal" min="0.5" max="10000" step="0.5" value="' + stake + '" data-b="stake"></label>';
   const winChips = [10, 25, 50, 100, 250].map(w => chip('class="win-chip" data-win="' + w + '"', win === w, '£' + w)).join('') +
     '<label class="bq-own"><span class="sr-only">Other win amount in pounds</span>£<input id="b-win" class="ctl mono" type="number" inputmode="decimal" min="1" max="10000" step="1" value="' + win + '" data-b="win"></label>';
+  const sportIcons = sports.filter(sp => activeSports.includes(sp[0])).map(sp => sp[1].split(' ')[0]).join('');
+  const summary = '<span class="bq-sum"><b>' + (curTiming === 'today' ? 'Today' : 'Next 7 days') + '</b><i>·</i><b>' + legs + ' legs</b><i>·</i><b>£' + stake + ' → win £' + win + '</b><i>·</i><span>' + sportIcons + '</span></span><span class="bq-edit-btn">Change</span>';
   return '<section class="builder card" aria-labelledby="builder-title">' +
     '<div class="builder-kicker">Model-built acca</div>' +
-    '<h1 class="page-title" id="builder-title">Tell us the win. We’ll build the acca.</h1>' +
-    '<p class="page-sub">Pick when, how many legs and what you’d like to win. Bet Buddy finds the combination most likely to land.</p>' +
+    '<h1 class="page-title builder-h" id="builder-title">Tell us the win. We’ll build the acca.</h1>' +
+    '<details class="bq-wrap"' + (builderSettingsOpen ? ' open' : '') + ' ontoggle="builderSettingsOpen = this.open"><summary>' + summary + '</summary>' +
     '<div class="bq">' +
       row('When', chip('data-timing="today"', curTiming === 'today', 'Today <small>' + todayN + ' games</small>') + chip('data-timing="all"', curTiming === 'all', 'Next 7 days <small>' + weekN + ' games</small>')) +
       row('Legs', [2, 3, 4, 5, 6, 8].map(n => chip('class="legpick" data-legs="' + n + '"', legs === n, String(n))).join('')) +
       row('Stake', stakeChips) +
       row('To win', winChips) +
       row('Sports', sports.map(sp => chip('data-toggle-sport="' + sp[0] + '"', activeSports.includes(sp[0]), sp[1])).join('')) +
-    '</div>' +
-    '<p class="stake-safety-note">Only stake what you are happy to lose. Most people keep it to £5–£10.</p>' +
+    '</div></details>' +
     '<div id="builder-out" class="builder-out" aria-live="polite">' + builderOutput() + '</div>' +
+    '<p class="stake-safety-note">Only stake what you are happy to lose. Most people keep it to £5–£10.</p>' +
     '<p class="builder-foot">18+ only. Gambling can be addictive; play responsibly. <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a>. Bet Buddy does not take bets, and nothing here is a guarantee.</p></section>';
 }
 
@@ -1394,7 +1396,7 @@ function bvGap(l, mode, big) {
   return '<div class="bv-gap' + (big ? ' big' : '') + '">' +
     '<div class="bv-gap-row"><span>Our chance</span><i><em class="ours" style="--w:' + ours + '%"></em></i><b>' + ours + '%</b></div>' +
     '<div class="bv-gap-row"><span>Price says</span><i><em style="--w:' + implied + '%"></em></i><b>' + implied + '%</b></div>' +
-    (big ? '<p class="bv-gap-say">We rate it <b>' + (ours - implied) + ' points</b> likelier than the ' + esc(l.bookmaker || 'bookmaker') + ' price suggests.</p>' : '') +
+    (big ? '<p class="bv-gap-say">We rate it <b>' + (ours - implied) + ' points</b> likelier than the price.</p>' : '') +
   '</div>';
 }
 
@@ -1424,8 +1426,7 @@ function renderBestValueModalContent() {
 
   const hero = '<article class="bv-hero">' +
     '<div class="bv-hero-kicker">⭐ Pick of the day</div>' +
-    '<div class="bv-hero-when">' + esc(bvWhen(top)) + '</div>' +
-    '<div class="bv-hero-match">' + esc(bvMatch(top)) + '</div>' +
+    '<div class="bv-hero-match">' + esc(bvMatch(top)) + ' <span>' + esc(bvWhen(top)) + '</span></div>' +
     '<div class="bv-hero-pick"><b>' + esc(top.label) + '</b><span class="bv-price mono">' + esc(bvPrice(top)) + '<small>' + esc(data.mode === 'model' ? 'estimate' : (top.bookmaker || 'bookmaker')) + '</small></span></div>' +
     bvGap(top, data.mode, true) +
     '<div class="bv-hero-actions">' + addBtn(top, 0, true) + '<a class="btn" href="#/match/' + encodeURIComponent(top.matchId) + '" onclick="closeBestValueModal()">Analysis ›</a></div>' +
@@ -1506,9 +1507,7 @@ function viewHome() {
 }
 
 function viewPicks() {
-  const topHubNav = '<div class="picks-top-bar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:4px 0;">' +
-    '<a href="#/" class="btn small" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;background:rgba(56,189,248,0.14);border:1px solid var(--cyan);color:#fff;">← Welcome Hub</a>' +
-  '</div>';
+  const topHubNav = '';
   const list = upcoming();
   const sharedBanner = sharedSlipNotice
     ? '<div class="notice section shared-slip-notice" style="border-color:var(--cyan);background:rgba(56,189,248,0.12);color:#fff;margin-bottom:18px"><span style="font-size:20px">🎯</span><div><b>Acca shared by a mate!</b> Bet Builder is pre-filled to target £' + builderState.win + ' return across ' + builderState.legs + ' bets.</div><button type="button" class="icon-btn" onclick="sharedSlipNotice=false;render()" style="margin-left:auto">&times;</button></div>'
