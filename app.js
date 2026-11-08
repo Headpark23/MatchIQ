@@ -4197,17 +4197,74 @@ function addToOwnBet(data) {
 
 // A small see-through slip floating bottom right while a bet is being built, showing what is on it,
 // with a button to the full slip. On the builder it hides while the full slip itself is on screen.
+// It can be dragged anywhere (position remembered) and closed with ×; closing only hides it, the
+// selections stay on the full slip, and it comes back as soon as the slip changes.
 let ownMiniSlipObserver = null, ownMiniSlipFullInView = false;
+const OWN_MINI_POS_KEY = 'betbuddy_mini_slip_pos', OWN_MINI_CLOSED_KEY = 'betbuddy_mini_slip_closed';
+const ownMiniSignature = () => ownBet.legs.map(l => l.id).join(',');
+function ownMiniStore(key, value) { try { if (value == null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch (err) {} }
+function ownMiniRead(key) { try { return localStorage.getItem(key); } catch (err) { return null; } }
+// Keeps a dragged slip fully on screen (also after rotating the phone or resizing the window).
+function placeOwnMini(bar, x, y) {
+  const w = bar.offsetWidth, h = bar.offsetHeight, m = 8;
+  const left = Math.max(m, Math.min(window.innerWidth - w - m, x));
+  const top = Math.max(m, Math.min(window.innerHeight - h - m, y));
+  bar.style.left = left + 'px'; bar.style.top = top + 'px'; bar.style.right = 'auto'; bar.style.bottom = 'auto';
+  return { left, top };
+}
+function restoreOwnMiniPos(bar) {
+  let pos = null;
+  try { pos = JSON.parse(ownMiniRead(OWN_MINI_POS_KEY) || 'null'); } catch (err) {}
+  if (pos && Number.isFinite(pos.left) && Number.isFinite(pos.top)) placeOwnMini(bar, pos.left, pos.top);
+}
+function makeOwnMiniDraggable(bar) {
+  let drag = null;
+  bar.addEventListener('pointerdown', e => {
+    if (e.button !== 0 || e.target.closest('button, a')) return;
+    const r = bar.getBoundingClientRect();
+    drag = { id: e.pointerId, dx: e.clientX - r.left, dy: e.clientY - r.top, sx: e.clientX, sy: e.clientY, moved: false };
+  });
+  bar.addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (!drag.moved) {
+      if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 4) return;
+      drag.moved = true; bar.classList.add('dragging');
+      try { bar.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    e.preventDefault();
+    placeOwnMini(bar, e.clientX - drag.dx, e.clientY - drag.dy);
+  });
+  const end = e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (drag.moved) {
+      bar.classList.remove('dragging');
+      const r = bar.getBoundingClientRect();
+      ownMiniStore(OWN_MINI_POS_KEY, JSON.stringify({ left: Math.round(r.left), top: Math.round(r.top) }));
+    }
+    drag = null;
+  };
+  bar.addEventListener('pointerup', end);
+  bar.addEventListener('pointercancel', end);
+  window.addEventListener('resize', () => { if (bar.style.left) placeOwnMini(bar, parseFloat(bar.style.left), parseFloat(bar.style.top)); });
+}
 function updateOwnBetBar() {
   let bar = $('own-bet-bar');
   const legs = ownBet.legs, n = legs.length;
   const onBuild = currentRoute()[0] === 'build';
-  if (!n) { if (bar) bar.hidden = true; return; }
+  const closed = ownMiniRead(OWN_MINI_CLOSED_KEY);
+  if (closed && closed !== ownMiniSignature()) ownMiniStore(OWN_MINI_CLOSED_KEY, null); // slip changed: show it again
+  if (!n || (closed && closed === ownMiniSignature())) { if (bar) bar.hidden = true; return; }
   if (!bar) {
     bar = document.createElement('aside');
     bar.id = 'own-bet-bar'; bar.className = 'own-mini'; bar.setAttribute('aria-label', 'Your bet slip');
     // On the builder the button jumps down to the full slip instead of navigating.
     bar.addEventListener('click', e => {
+      if (e.target.closest('.own-mini-close')) {
+        ownMiniStore(OWN_MINI_CLOSED_KEY, ownMiniSignature());
+        bar.hidden = true;
+        toast('Slip closed. Your selections are kept in Build a bet, and it pops back up when you add another.');
+        return;
+      }
       if (e.target.closest('.own-mini-toggle')) {
         const min = bar.classList.toggle('min');
         try { localStorage.setItem('betbuddy_mini_slip_min', min ? '1' : '0'); } catch (err) {}
@@ -4223,6 +4280,7 @@ function updateOwnBetBar() {
     let min = false;
     try { min = localStorage.getItem('betbuddy_mini_slip_min') === '1'; } catch (err) {}
     bar.classList.toggle('min', min);
+    makeOwnMiniDraggable(bar);
     document.body.appendChild(bar);
   }
   const isMin = bar.classList.contains('min');
@@ -4243,14 +4301,16 @@ function updateOwnBetBar() {
   bar.classList.toggle('on-build', onBuild);
   bar.classList.toggle('tucked', ownMiniSlipFullInView);
   bar.innerHTML =
-    '<div class="own-mini-head"><b>🧾 Bet slip</b><span>' + esc(ownBetName(n)) + (priced ? ' · <b class="mono">' + esc(fmtOdds(legs.reduce((t, l) => t * l.odds, 1))) + '</b>' : '') + '</span>' +
-      '<button type="button" class="own-mini-toggle" aria-expanded="' + !isMin + '" aria-label="' + (isMin ? 'Show selections' : 'Hide selections') + '">' + (isMin ? '▴' : '▾') + '</button></div>' +
+    '<div class="own-mini-head"><b><span class="own-mini-ico">🧾 </span>Bet slip</b><span>' + esc(ownBetName(n)) + (priced ? ' · <b class="mono">' + esc(fmtOdds(legs.reduce((t, l) => t * l.odds, 1))) + '</b>' : '') + '</span>' +
+      '<button type="button" class="own-mini-toggle" aria-expanded="' + !isMin + '" aria-label="' + (isMin ? 'Show selections' : 'Hide selections') + '">' + (isMin ? '▴' : '▾') + '</button>' +
+      '<button type="button" class="own-mini-close" aria-label="Close the bet slip" title="Close">×</button></div>' +
     '<ul class="own-mini-legs">' +
       (more ? '<li class="own-mini-more">+ ' + more + ' more</li>' : '') +
-      shown.map(l => '<li><span class="own-mini-pick">' + esc(l.pick) + (l.match ? '<small>' + esc(l.match) + '</small>' : '') + '</span>' +
+      shown.map(l => '<li><span class="own-mini-pick">' + (l.match ? '<small>' + esc(l.match) + '</small>' : '') + esc(l.pick) + '</span>' +
         '<span class="mono">' + (l.odds > 1 ? esc(fmtOdds(l.odds)) : '—') + '</span></li>').join('') +
     '</ul>' +
     '<a class="btn primary small own-mini-go" href="#/build">Go to bet slip ›</a>';
+  restoreOwnMiniPos(bar);
 }
 
 function ownBetAddBtn(payload) {
