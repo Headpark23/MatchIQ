@@ -44,7 +44,8 @@ const OWNER_EMAILS = ['headpark@gmail.com'];
 async function requireOwner(req, res) {
   const m = /^Bearer (.+)$/.exec(req.get('Authorization') || '');
   if (!m) { res.status(401).json({ error: 'unauthenticated' }); return false; }
-  const tok = await admin.auth().verifyIdToken(m[1]);
+  let tok;
+  try { tok = await admin.auth().verifyIdToken(m[1]); } catch (e) { res.status(401).json({ error: 'invalid token' }); return false; }
   if (!tok.email_verified || !OWNER_EMAILS.includes((tok.email || '').toLowerCase())) {
     res.status(403).json({ error: 'forbidden' }); return false;
   }
