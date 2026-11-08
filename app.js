@@ -1164,12 +1164,12 @@ function resultsScoreboard(rec) {
     .map(([c, perf]) => [c, recordStats(perf)]).filter(x => x[1] && !x[1].small)
     .sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0])).slice(0, 8);
   const tone = r => r >= 0.6 ? 'hot' : r >= 0.5 ? 'ok' : 'cold';
-  const form = rec.timeline.slice(-12).map(x => '<i class="' + (x.won ? 'w' : 'l') + '"></i>').join('');
+  // Compact: one line for the overall rate, one swipeable line of league pills.
   return '<a href="#/results" class="hm-results">' +
-    '<div class="hm-results-top"><span class="hm-results-kicker">📊 Prediction results</span><span class="hm-results-go">See all ›</span></div>' +
     '<div class="hm-results-main"><div class="hm-results-big ' + tone(rec.rate) + '">' + Math.round(rec.rate * 100) + '<small>%</small></div>' +
-      '<div class="hm-results-txt"><b>of our picks were right</b><small>' + rec.hits + ' of ' + rec.n + ', every one sealed before kick-off</small><span class="hm-results-form">' + form + '</span></div></div>' +
-    (leagues.length ? '<div class="hm-results-leagues">' + leagues.map(([c, st]) => '<span class="hm-lg ' + tone(st.rate) + '"><em>' + (RECORD_FLAGS[c] || '') + '</em><b>' + Math.round(st.rate * 100) + '%</b><small>' + esc(recordLeagueName(c)) + '</small></span>').join('') + '</div>' : '') +
+      '<div class="hm-results-txt"><b>of our picks were right</b><small>' + rec.hits + ' of ' + rec.n + ', all sealed before kick-off</small></div>' +
+      '<span class="hm-results-go">See all ›</span></div>' +
+    (leagues.length ? '<div class="hm-results-leagues">' + leagues.map(([c, st]) => '<span class="hm-lg ' + tone(st.rate) + '"><em>' + esc(recordLeagueName(c)) + '</em><b>' + Math.round(st.rate * 100) + '%</b></span>').join('') + '</div>' : '') +
   '</a>';
 }
 
@@ -1181,18 +1181,13 @@ function renderWelcomeHero() {
   const weekN = fixturesList().filter(f => f.status === 'SCHEDULED' && kickoffMs(f) > now && kickoffMs(f) - now < 7 * 86400000).length;
   const leaguesN = Object.keys(LEAGUES).length;
 
-  const proof = '<div class="hm-proof">' +
-    (rec ? '<a href="#/results"><b>' + Math.round(rec.rate * 100) + '%</b> right</a><i></i>' : '') +
-    '<a href="#/fixtures"><b>' + weekN + '</b> games this week</a><i></i>' +
-    '<span><b>' + leaguesN + '</b> leagues</span></div>';
-
+  // Slim header: the hit rate, top pick and builder each have their own block just below, so they are not repeated here.
   const hero = '<header class="hm-hero">' +
     '<div class="hm-top"><p class="hm-hello">' + (userName ? 'Welcome back, ' + esc(userName) + ' 👋' : 'Welcome to Bet Buddy 👋') + '</p>' +
       '<span class="hm-sports" aria-label="Football, tennis, golf, darts and rugby">⚽🎾⛳🎯🏉</span></div>' +
-    '<h1 class="hm-title">Smarter bets. <span>Honest numbers.</span></h1>' +
-    '<p class="hm-lead">Football first, plus tennis, golf, darts and rugby. Free.</p>' +
-    '<div class="hm-ctas"><a href="#/build" class="btn primary hm-cta">Build a bet</a><button type="button" class="btn hm-cta ghost" onclick="openBestValueModal(\'single\')">Today’s top pick</button></div>' +
-    proof +
+    '<div class="hm-hero-row"><h1 class="hm-title">Smarter bets. <span>Honest numbers.</span></h1>' +
+      '<a href="#/build" class="btn primary hm-cta">Build a bet</a></div>' +
+    '<p class="hm-meta"><a href="#/fixtures"><b>' + weekN + '</b> games this week</a> · <b>' + leaguesN + '</b> leagues · free</p>' +
   '</header>';
 
   // Today's top pick, as a teaser.
@@ -1203,11 +1198,10 @@ function renderWelcomeHero() {
     if (l) {
       const f = l.fixture || {}, ours = Math.round(l.p * 100), implied = Math.round(100 / Number(l.odds || 1));
       teaser = '<button type="button" class="hm-pick" onclick="openBestValueModal(\'single\')" aria-label="Open today’s top picks">' +
-        '<span class="hm-pick-kicker">⭐ Pick of the day</span>' +
-        '<span class="hm-pick-match">' + esc((f.home || '') + (f.away ? ' v ' + f.away : '')) + '</span>' +
+        '<span class="hm-pick-top"><span class="hm-pick-kicker">⭐ Pick of the day</span><span class="hm-pick-match">' + esc((f.home || '') + (f.away ? ' v ' + f.away : '')) + '</span></span>' +
         '<span class="hm-pick-row"><b>' + esc(l.label) + '</b><span class="hm-pick-price mono">' + esc(oddsFormat === 'decimal' ? calc.formatDecimalOdds(l.odds) : (l.fractional || fmtOdds(l.odds))) + '</span></span>' +
         '<span class="hm-pick-gap"><i style="--w:' + ours + '%"></i></span>' +
-        '<span class="hm-pick-foot">' + (data.mode === 'model' ? 'Our chance ' + ours + '% · estimated price' : 'Our chance ' + ours + '% · price says ' + implied + '%') + '<em>See all picks ›</em></span>' +
+        '<span class="hm-pick-foot">' + (data.mode === 'model' ? 'Our chance ' + ours + '% · estimated price' : 'Our chance ' + ours + '% · price says ' + implied + '%') + '<em>All picks ›</em></span>' +
       '</button>';
     }
   } catch (e) { /* the teaser is optional */ }
@@ -1219,16 +1213,17 @@ function renderWelcomeHero() {
   const upNext = next.length ? '<section class="hm-block"><div class="hm-block-head"><h2>Up next</h2><a href="#/fixtures">All matches ›</a></div>' +
     '<div class="cp-group"><div class="cp-ghead"><span>' + esc(fmtDay(kickoffMs(next[0]))) + '</span><span class="cp-cols"><span>Home</span><span>Draw</span><span>Away</span></span></div>' + next.map(fixtureCouponRow).join('') + '</div></section>' : '';
 
-  const tile = (tag, attrs, cls, icon, title, desc) => '<' + tag + ' class="hm-tile ' + cls + '" ' + attrs + '><span class="hm-tile-ico">' + hubIcon(icon, 22) + '</span><b>' + title + '</b><small>' + desc + '</small></' + tag + '>';
+  // A 4×2 launcher grid: short labels on phones, the one-line description returns on wider screens.
+  const tile = (tag, attrs, cls, icon, title, desc) => '<' + tag + ' class="hm-tile ' + cls + '" ' + attrs + ' aria-label="' + title + ': ' + desc + '"><span class="hm-tile-ico">' + hubIcon(icon, 22) + '</span><b>' + title + '</b><small>' + desc + '</small></' + tag + '>';
   const diaryCount = getStoredDiary().length;
   const tiles = '<section class="hm-block"><div class="hm-block-head"><h2>Everything in one place</h2></div><div class="hm-tiles">' +
-    tile('a', 'href="#/build"', 't-build', 'slip', 'Build your own bet', 'Singles to 10-folds, tap the prices') +
-    tile('a', 'href="#/picks"', 't-acca', 'target', 'Model-built acca', 'Tell us the win, we find the bet') +
-    tile('button type="button"', 'onclick="openBestValueModal(\'single\')"', 't-picks', 'spark', 'Model picks of the day', 'Where we beat the price') +
+    tile('a', 'href="#/build"', 't-build', 'slip', 'Build a bet', 'Singles to 10-folds, tap the prices') +
+    tile('a', 'href="#/picks"', 't-acca', 'target', 'Model acca', 'Tell us the win, we find the bet') +
+    tile('button type="button"', 'onclick="openBestValueModal(\'single\')"', 't-picks', 'spark', 'Top picks', 'Where we beat the price') +
     tile('button type="button"', 'onclick="openBetAI()"', 't-ai', 'compass', 'BetAI', 'Ask anything about a match') +
     tile('a', 'href="#/leagues"', 't-leagues', 'trophy', 'Leagues', 'Beat your mates, climb ladders') +
-    tile('a', 'href="#/diary"', 't-diary', 'book', 'Bet Diary', diaryCount ? diaryCount + ' bets tracked' : 'See where your money goes') +
-    tile('a', 'href="#/results"', 't-results', 'chart', 'Prediction results', rec ? Math.round(rec.rate * 100) + '% of our picks right' : 'How our picks did') +
+    tile('a', 'href="#/diary"', 't-diary', 'book', 'Diary', diaryCount ? diaryCount + ' bets tracked' : 'See where your money goes') +
+    tile('a', 'href="#/results"', 't-results', 'chart', 'Results', rec ? Math.round(rec.rate * 100) + '% of our picks right' : 'How our picks did') +
     tile('a', 'href="#/fixtures"', 't-matches', 'calendar', 'Matches', 'Every game, with prices to tap') +
   '</div></section>';
 
