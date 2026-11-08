@@ -7307,6 +7307,19 @@ function betaiSaveButtons(kind, i) {
 
 // Hands a BetAI pick (or the whole accumulator) to the normal Bet Diary form, which asks for the stake and the
 // price actually offered and applies the league rules. dest 'diary' = diary only; 'league' = diary and league.
+// The price to prefill: the latest bookmaker price on record for the selection, else the model's probability
+// with a typical 7% bookmaker margin. Always labelled as an estimate; the player can overwrite it.
+function betaiEstimatedOdds(pick) {
+  let dec = 0, source = 'estimated from the model';
+  try {
+    const fx = fixtureById(pick.matchId);
+    const priced = fx ? leaguePricedMarkets(fx) : {};
+    if (pick.key && priced[pick.key] && priced[pick.key].source === 'feed') { dec = Number(priced[pick.key].decimal); source = 'latest bookmaker price on record'; }
+  } catch (e) { /* fall through to the model estimate */ }
+  if (!(dec > 1)) dec = 1 / (Math.min(Math.max(pick.p, 0.02), 0.97) * 1.07);
+  return { text: calc.formatFractionalOdds(dec).replace(/[≈~]/g, ''), source };
+}
+
 function betaiSaveToDiary(kind, idx, dest) {
   const r = betai.result;
   if (!r || !r.picks) return;
@@ -7314,19 +7327,22 @@ function betaiSaveToDiary(kind, idx, dest) {
   if (kind === 'single' && !pick) return;
   closeBetAI();
   if (kind === 'single') {
+    const est = betaiEstimatedOdds(pick);
     openDiary({
       id: pick.matchId, selection: pick.selection, market: MARKETS[pick.marketKey] ? MARKETS[pick.marketKey].diary : 'wins',
-      odds: '', p: pick.p, fair: pick.fair, rec: 'betai', notes: 'BetAI pick (model estimate ' + Math.round(pick.p * 100) + '%; not a recommendation)'
+      odds: est.text, p: pick.p, fair: pick.fair, rec: 'betai',
+      notes: 'BetAI pick (model estimate ' + Math.round(pick.p * 100) + '%; not a recommendation). Price ' + est.text + ' is ' + est.source + ': change it if you were offered something different.'
     });
+    if ($('modal-notes-input')) $('modal-notes-input').value = modalPrefill.notes || '';
   } else {
     openDiary({});
     $('modal-bet-type').value = 'accumulator';
     toggleAccumulatorFields();
-    $('modal-legs-input').value = r.picks.map(p => p.match + ': ' + (p.marketKey === 'result' || p.marketKey === 'btts' ? '' : p.market + ' ') + p.selection + ' | ').join('\n');
+    $('modal-legs-input').value = r.picks.map(p => p.match + ': ' + (p.marketKey === 'result' || p.marketKey === 'btts' ? '' : p.market + ' ') + p.selection + ' | ' + betaiEstimatedOdds(p).text).join('\n');
     $('modal-origin-select').value = 'matchiq';
     $('modal-notes-input').value = 'BetAI accumulator, ' + r.picks.length + ' legs (model estimate ' + Math.round(r.combinedP * 100) + '% for all to land; not a recommendation).';
     updateModalPnlPreview();
-    toast('Add the price your bookmaker offered after each |, then your stake.');
+    toast('Prices are estimates (bookmaker price where we have one, otherwise the model). Change any leg to the price you were offered, then add your stake.');
   }
   const diaryRadio = $('dest-diary-radio'), bothRadio = $('dest-both-radio');
   if (dest === 'diary' && diaryRadio) { diaryRadio.checked = true; if (bothRadio) bothRadio.checked = false; }

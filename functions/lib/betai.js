@@ -154,6 +154,13 @@ function resolvePick(rec, marketKey, outcome, line) {
   return sel && typeof sel.p === 'number' ? { market: m.name || marketKey, label: sel.label, p: sel.p, fair: sel.fair_odds || '' } : null;
 }
 
+// The app's id for a selection: result:H, btts:yes, goals:over:2.5 (same style the bet builder and league use).
+function selectionKey(marketKey, outcome, line) {
+  if (marketKey === 'result') return 'result:' + String(outcome).toUpperCase();
+  if (marketKey === 'btts') return 'btts:' + String(outcome).toLowerCase();
+  return marketKey + ':' + String(outcome).toLowerCase() + ':' + Number(line);
+}
+
 // Keep only what the screen needs, drop picks that are not in the data, and do the accumulator maths here.
 function normalise(raw, index) {
   const o = raw && typeof raw === 'object' ? raw : {};
@@ -167,7 +174,7 @@ function normalise(raw, index) {
     if (seen.has(key)) continue;
     seen.add(key);
     picks.push({
-      matchId: p.matchId, marketKey: p.marketKey,
+      matchId: p.matchId, marketKey: p.marketKey, key: selectionKey(p.marketKey, p.outcome, p.line),
       match: rec.fixture.home + ' v ' + rec.fixture.away, market: hit.market, selection: hit.label, fair: hit.fair, p: hit.p,
       confidence: Math.round(Math.min(clamp(p.confidence, 0, 100), hit.p * 100 + 5)),
       scoreline: str(p.scoreline, 12), pivot: str(p.pivot, 140)

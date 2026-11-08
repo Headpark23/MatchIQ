@@ -245,6 +245,9 @@
     }
     const model = (key, p) => { if (p > 0 && p < 1) derive(key, 1 / (p * ESTIMATED_MARGIN)); if (out[key] && out[key].source === 'derived' && !/^(dc|dnb):/.test(key)) { out[key].bookmaker = 'Bet Buddy model'; out[key].source = 'model'; } };
     const mk = (pred && pred.markets) || {};
+    if (mk.result && Array.isArray(mk.result.selections)) {
+      mk.result.selections.forEach(s => { if (s.key === 'H' || s.key === 'D' || s.key === 'A') model('result:' + s.key, Number(s.p)); });
+    }
     if (mk.goals && Array.isArray(mk.goals.lines)) {
       mk.goals.lines.forEach(l => ['over', 'under'].forEach(side => { if (l[side]) model('goals:' + side + ':' + l.line, Number(l[side].p)); }));
     }

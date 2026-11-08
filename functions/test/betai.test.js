@@ -59,6 +59,8 @@ const out = b.normalise({
 }, idx);
 assert.strictEqual(out.picks.length, 2, 'invented fixture and duplicate dropped');
 assert.strictEqual(out.picks[0].matchId, 'A1');
+assert.strictEqual(out.picks[0].key, 'goals:over:2.5');
+assert.strictEqual(out.picks[1].key, 'btts:yes');
 assert.strictEqual(out.picks[0].match, 'Arsenal v Chelsea');
 assert.strictEqual(out.picks[0].selection, 'Over 2.5');
 assert.strictEqual(out.picks[0].p, 0.6, 'p comes from the data');
