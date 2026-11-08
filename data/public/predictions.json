@@ -1,593 +1,12 @@
 {
- "generated_at": "2026-11-08T12:27:20.059394+00:00",
+ "generated_at": "2026-11-08T13:52:41.676879+00:00",
  "horizon_days": 21,
  "model_version": "dc-public-v1",
  "predictions": {
-  "PD-2627-elche-v-real-betis": {
-   "match_id": "PD-2627-elche-v-real-betis",
-   "record_id": "PUB-PD-2627-elche-v-real-betis#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
-   "derivation": "public-derived",
-   "fixture": {
-    "competition": "PD",
-    "season": "2627",
-    "home": "Elche",
-    "away": "Real Betis",
-    "kickoff_utc": "2026-11-08T13:00:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": [
-     {
-      "from": "2026-11-08T14:00:00Z",
-      "to": "2026-11-08T13:00:00Z",
-      "seen_at": "2026-10-26T17:03:38.162299+00:00"
-     }
-    ]
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 353 La Liga matches (2025-26): Brier 0.580 against 0.628 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "A",
-      "label": "Real Betis win",
-      "p": 0.3737,
-      "fair_odds": "≈13/8"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "Elche win",
-       "p": 0.368,
-       "fair_odds": "≈7/4"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2583,
-       "fair_odds": "≈3/1"
-      },
-      {
-       "key": "A",
-       "label": "Real Betis win",
-       "p": 0.3737,
-       "fair_odds": "≈13/8"
-      }
-     ],
-     "method": "La Liga Dixon-Coles fitted on La Liga results only",
-     "training_matches": 1254,
-     "form": {
-      "home": [
-       {
-        "date": "2026-08-23",
-        "opponent": "Barcelona",
-        "gf": 0,
-        "ga": 5,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-07",
-        "opponent": "Real Sociedad",
-        "gf": 2,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-15",
-        "opponent": "Real Madrid",
-        "gf": 2,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-11",
-        "opponent": "Celta Vigo",
-        "gf": 0,
-        "ga": 0,
-        "res": "D"
-       },
-       {
-        "date": "2026-11-01",
-        "opponent": "Valencia",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-08-25",
-        "opponent": "Valencia",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-08-29",
-        "opponent": "Levante",
-        "gf": 2,
-        "ga": 5,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-14",
-        "opponent": "Villarreal",
-        "gf": 2,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-20",
-        "opponent": "Deportivo La Coruna",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Celta Vigo",
-        "gf": 0,
-        "ga": 0,
-        "res": "D"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 24,
-      "away": 62
-     },
-     "league_p": [
-      0.4561,
-      0.2608,
-      0.2831
-     ],
-     "pooled_matches": {
-      "home": 42,
-      "away": 42
-     },
-     "derivation": "public-derived"
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.247 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 2.5",
-      "p": 0.5086,
-      "fair_odds": "≈Evens",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.7562,
-        "fair_odds": "≈1/3"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.2438,
-        "fair_odds": "≈3/1"
-       },
-       "model_p": 0.7883,
-       "league_p": 0.7424
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.5086,
-        "fair_odds": "≈Evens"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.4914,
-        "fair_odds": "≈Evens"
-       },
-       "model_p": 0.551,
-       "league_p": 0.4904
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.2819,
-        "fair_odds": "≈5/2"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.7181,
-        "fair_odds": "≈2/5"
-       },
-       "model_p": 0.3274,
-       "league_p": 0.2624
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 2.68,
-      "expected_goals": [
-       1.44,
-       1.45
-      ]
-     },
-     "explanation": [
-      "The score model expects about 1.4 goals for Elche and 1.4 for Real Betis.",
-      "La Liga matches average 2.68 goals; 49% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% La Liga rate for each line",
-     "derivation": "public-derived"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5528,
-      "fair_odds": "≈4/5"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5528,
-       "fair_odds": "≈4/5"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4472,
-       "fair_odds": "≈5/4"
-      }
-     ],
-     "model_p": 0.5885,
-     "league_p": 0.5375,
-     "explanation": [
-      "Both teams scored in 54% of La Liga matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% La Liga rate",
-     "derivation": "public-derived"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "btts",
-     "key": "yes",
-     "label": "Yes",
-     "p": 0.5528,
-     "credible_p": 0.552,
-     "n": 380,
-     "status": "provisional",
-     "strength": "weak",
-     "basis": "league-anchored blend, 380 La Liga backtest matches",
-     "lower_bound": 0.51
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
-  "N1-2627-twente-v-ajax": {
-   "match_id": "N1-2627-twente-v-ajax",
-   "record_id": "PUB-N1-2627-twente-v-ajax#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
-   "derivation": "public-derived",
-   "fixture": {
-    "competition": "N1",
-    "season": "2627",
-    "home": "FC Twente",
-    "away": "Ajax",
-    "kickoff_utc": "2026-11-08T13:30:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": []
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 267 Eredivisie matches (2025-26): Brier 0.572 against 0.647 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "H",
-      "label": "FC Twente win",
-      "p": 0.4415,
-      "fair_odds": "≈5/4"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "FC Twente win",
-       "p": 0.4415,
-       "fair_odds": "≈5/4"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2374,
-       "fair_odds": "≈100/30"
-      },
-      {
-       "key": "A",
-       "label": "Ajax win",
-       "p": 0.3211,
-       "fair_odds": "≈2/1"
-      }
-     ],
-     "method": "Eredivisie Dixon-Coles fitted on Eredivisie results only",
-     "training_matches": 1010,
-     "form": {
-      "home": [
-       {
-        "date": "2026-08-16",
-        "opponent": "PEC Zwolle",
-        "gf": 3,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-09",
-        "opponent": "Telstar",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-12",
-        "opponent": "ADO Den Haag",
-        "gf": 2,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-20",
-        "opponent": "PSV",
-        "gf": 3,
-        "ga": 2,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-18",
-        "opponent": "FC Utrecht",
-        "gf": 1,
-        "ga": 2,
-        "res": "L"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-08-09",
-        "opponent": "PEC Zwolle",
-        "gf": 2,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-08-30",
-        "opponent": "Telstar",
-        "gf": 4,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-12",
-        "opponent": "Fortuna Sittard",
-        "gf": 5,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-18",
-        "opponent": "Groningen",
-        "gf": 5,
-        "ga": 2,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Sparta Rotterdam",
-        "gf": 2,
-        "ga": 1,
-        "res": "W"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 54,
-      "away": 54
-     },
-     "league_p": [
-      0.4366,
-      0.2495,
-      0.3139
-     ],
-     "pooled_matches": {
-      "home": 36,
-      "away": 36
-     },
-     "derivation": "public-derived"
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.229 against 0.232 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 2.5",
-      "p": 0.6132,
-      "fair_odds": "≈8/13",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.8434,
-        "fair_odds": "≈1/5"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.1566,
-        "fair_odds": "≈11/2"
-       },
-       "model_p": 0.8151,
-       "league_p": 0.8554
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.6132,
-        "fair_odds": "≈8/13"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.3868,
-        "fair_odds": "≈13/8"
-       },
-       "model_p": 0.5977,
-       "league_p": 0.6198
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.3998,
-        "fair_odds": "≈6/4"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.6002,
-        "fair_odds": "≈4/6"
-       },
-       "model_p": 0.374,
-       "league_p": 0.4109
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 3.23,
-      "expected_goals": [
-       1.69,
-       1.41
-      ]
-     },
-     "explanation": [
-      "The score model expects about 1.7 goals for FC Twente and 1.4 for Ajax.",
-      "Eredivisie matches average 3.23 goals; 62% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% Eredivisie rate for each line",
-     "derivation": "public-derived"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.232 against 0.233 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.6048,
-      "fair_odds": "≈4/6"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.6048,
-       "fair_odds": "≈4/6"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.3952,
-       "fair_odds": "≈6/4"
-      }
-     ],
-     "model_p": 0.6161,
-     "league_p": 0.6,
-     "explanation": [
-      "Both teams scored in 60% of Eredivisie matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% Eredivisie rate",
-     "derivation": "public-derived"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "goals",
-     "key": "over",
-     "line": 2.5,
-     "label": "Over 2.5",
-     "p": 0.6132,
-     "credible_p": 0.6136,
-     "n": 295,
-     "status": "provisional",
-     "strength": "weak",
-     "basis": "league-anchored blend, 295 Eredivisie backtest matches",
-     "lower_bound": 0.567
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
   "PL-2627-brighton-v-brentford": {
    "match_id": "PL-2627-brighton-v-brentford",
-   "record_id": "PUB-PL-2627-brighton-v-brentford#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-brighton-v-brentford#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -873,8 +292,8 @@
   },
   "PL-2627-crystal-palace-v-liverpool": {
    "match_id": "PL-2627-crystal-palace-v-liverpool",
-   "record_id": "PUB-PL-2627-crystal-palace-v-liverpool#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-crystal-palace-v-liverpool#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -1160,8 +579,8 @@
   },
   "SA-2627-genoa-v-ac-milan": {
    "match_id": "SA-2627-genoa-v-ac-milan",
-   "record_id": "PUB-SA-2627-genoa-v-ac-milan#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-genoa-v-ac-milan#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -1447,8 +866,8 @@
   },
   "PL-2627-ipswich-v-bournemouth": {
    "match_id": "PL-2627-ipswich-v-bournemouth",
-   "record_id": "PUB-PL-2627-ipswich-v-bournemouth#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-ipswich-v-bournemouth#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -1721,8 +1140,8 @@
   },
   "SA-2627-monza-v-atalanta": {
    "match_id": "SA-2627-monza-v-atalanta",
-   "record_id": "PUB-SA-2627-monza-v-atalanta#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-monza-v-atalanta#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -2008,8 +1427,8 @@
   },
   "FL1-2627-rennes-v-lille": {
    "match_id": "FL1-2627-rennes-v-lille",
-   "record_id": "PUB-FL1-2627-rennes-v-lille#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-rennes-v-lille#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -2295,8 +1714,8 @@
   },
   "PL-2627-sunderland-v-chelsea": {
    "match_id": "PL-2627-sunderland-v-chelsea",
-   "record_id": "PUB-PL-2627-sunderland-v-chelsea#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-sunderland-v-chelsea#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -2582,8 +2001,8 @@
   },
   "BL1-2627-koln-v-leverkusen": {
    "match_id": "BL1-2627-koln-v-leverkusen",
-   "record_id": "PUB-BL1-2627-koln-v-leverkusen#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-koln-v-leverkusen#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -2870,8 +2289,8 @@
   },
   "PD-2627-real-sociedad-v-rayo-vallecano": {
    "match_id": "PD-2627-real-sociedad-v-rayo-vallecano",
-   "record_id": "PUB-PD-2627-real-sociedad-v-rayo-vallecano#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-real-sociedad-v-rayo-vallecano#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -3163,8 +2582,8 @@
   },
   "P1-2627-nacional-v-academico-viseu": {
    "match_id": "P1-2627-nacional-v-academico-viseu",
-   "record_id": "PUB-P1-2627-nacional-v-academico-viseu#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-nacional-v-academico-viseu#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -3456,8 +2875,8 @@
   },
   "P1-2627-santa-clara-v-gil-vicente": {
    "match_id": "P1-2627-santa-clara-v-gil-vicente",
-   "record_id": "PUB-P1-2627-santa-clara-v-gil-vicente#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-santa-clara-v-gil-vicente#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -3743,8 +3162,8 @@
   },
   "N1-2627-az-alkmaar-v-groningen": {
    "match_id": "N1-2627-az-alkmaar-v-groningen",
-   "record_id": "PUB-N1-2627-az-alkmaar-v-groningen#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-az-alkmaar-v-groningen#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -4031,8 +3450,8 @@
   },
   "N1-2627-cambuur-v-psv": {
    "match_id": "N1-2627-cambuur-v-psv",
-   "record_id": "PUB-N1-2627-cambuur-v-psv#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-cambuur-v-psv#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -4319,8 +3738,8 @@
   },
   "FL1-2627-angers-v-nice": {
    "match_id": "FL1-2627-angers-v-nice",
-   "record_id": "PUB-FL1-2627-angers-v-nice#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-angers-v-nice#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -4606,8 +4025,8 @@
   },
   "FL1-2627-brest-v-lyon": {
    "match_id": "FL1-2627-brest-v-lyon",
-   "record_id": "PUB-FL1-2627-brest-v-lyon#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-brest-v-lyon#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -4893,8 +4312,8 @@
   },
   "FL1-2627-le-havre-v-lorient": {
    "match_id": "FL1-2627-le-havre-v-lorient",
-   "record_id": "PUB-FL1-2627-le-havre-v-lorient#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-le-havre-v-lorient#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -5180,8 +4599,8 @@
   },
   "FL1-2627-le-mans-v-monaco": {
    "match_id": "FL1-2627-le-mans-v-monaco",
-   "record_id": "PUB-FL1-2627-le-mans-v-monaco#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-le-mans-v-monaco#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -5447,8 +4866,8 @@
   },
   "BL1-2627-freiburg-v-union-berlin": {
    "match_id": "BL1-2627-freiburg-v-union-berlin",
-   "record_id": "PUB-BL1-2627-freiburg-v-union-berlin#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-freiburg-v-union-berlin#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -5735,8 +5154,8 @@
   },
   "PL-2627-man-united-v-aston-villa": {
    "match_id": "PL-2627-man-united-v-aston-villa",
-   "record_id": "PUB-PL-2627-man-united-v-aston-villa#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-man-united-v-aston-villa#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -6022,8 +5441,8 @@
   },
   "SA-2627-inter-v-como": {
    "match_id": "SA-2627-inter-v-como",
-   "record_id": "PUB-SA-2627-inter-v-como#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-inter-v-como#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -6309,8 +5728,8 @@
   },
   "PD-2627-celta-vigo-v-levante": {
    "match_id": "PD-2627-celta-vigo-v-levante",
-   "record_id": "PUB-PD-2627-celta-vigo-v-levante#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-celta-vigo-v-levante#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -6602,8 +6021,8 @@
   },
   "PD-2627-villarreal-v-getafe": {
    "match_id": "PD-2627-villarreal-v-getafe",
-   "record_id": "PUB-PD-2627-villarreal-v-getafe#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-villarreal-v-getafe#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -6895,8 +6314,8 @@
   },
   "P1-2627-vitoria-guimaraes-v-porto": {
    "match_id": "P1-2627-vitoria-guimaraes-v-porto",
-   "record_id": "PUB-P1-2627-vitoria-guimaraes-v-porto#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-vitoria-guimaraes-v-porto#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -7182,8 +6601,8 @@
   },
   "BL1-2627-hoffenheim-v-schalke-04": {
    "match_id": "BL1-2627-hoffenheim-v-schalke-04",
-   "record_id": "PUB-BL1-2627-hoffenheim-v-schalke-04#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-hoffenheim-v-schalke-04#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -7449,8 +6868,8 @@
   },
   "N1-2627-utrecht-v-nec-nijmegen": {
    "match_id": "N1-2627-utrecht-v-nec-nijmegen",
-   "record_id": "PUB-N1-2627-utrecht-v-nec-nijmegen#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-utrecht-v-nec-nijmegen#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -7737,8 +7156,8 @@
   },
   "SA-2627-fiorentina-v-juventus": {
    "match_id": "SA-2627-fiorentina-v-juventus",
-   "record_id": "PUB-SA-2627-fiorentina-v-juventus#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-fiorentina-v-juventus#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -8024,8 +7443,8 @@
   },
   "FL1-2627-lens-v-marseille": {
    "match_id": "FL1-2627-lens-v-marseille",
-   "record_id": "PUB-FL1-2627-lens-v-marseille#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-lens-v-marseille#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -8311,8 +7730,8 @@
   },
   "PD-2627-atletico-madrid-v-barcelona": {
    "match_id": "PD-2627-atletico-madrid-v-barcelona",
-   "record_id": "PUB-PD-2627-atletico-madrid-v-barcelona#r14",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-atletico-madrid-v-barcelona#r15",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -8604,8 +8023,8 @@
   },
   "P1-2627-estrela-amadora-v-benfica": {
    "match_id": "P1-2627-estrela-amadora-v-benfica",
-   "record_id": "PUB-P1-2627-estrela-amadora-v-benfica#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-estrela-amadora-v-benfica#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -8891,8 +8310,8 @@
   },
   "P1-2627-rio-ave-v-sc-braga": {
    "match_id": "P1-2627-rio-ave-v-sc-braga",
-   "record_id": "PUB-P1-2627-rio-ave-v-sc-braga#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-rio-ave-v-sc-braga#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -9178,8 +8597,8 @@
   },
   "BL1-2627-bayern-munich-v-koln": {
    "match_id": "BL1-2627-bayern-munich-v-koln",
-   "record_id": "PUB-BL1-2627-bayern-munich-v-koln#r11",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-bayern-munich-v-koln#r12",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -9465,8 +8884,8 @@
   },
   "FL1-2627-troyes-v-le-havre": {
    "match_id": "FL1-2627-troyes-v-le-havre",
-   "record_id": "PUB-FL1-2627-troyes-v-le-havre#r11",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-troyes-v-le-havre#r12",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -9753,8 +9172,8 @@
   },
   "PD-2627-athletic-club-v-espanyol": {
    "match_id": "PD-2627-athletic-club-v-espanyol",
-   "record_id": "PUB-PD-2627-athletic-club-v-espanyol#r11",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-athletic-club-v-espanyol#r12",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -10047,8 +9466,8 @@
   },
   "PL-2627-man-city-v-fulham": {
    "match_id": "PL-2627-man-city-v-fulham",
-   "record_id": "PUB-PL-2627-man-city-v-fulham#r11",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-man-city-v-fulham#r12",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -10334,8 +9753,8 @@
   },
   "ELC-2627-millwall-v-qpr": {
    "match_id": "ELC-2627-millwall-v-qpr",
-   "record_id": "PUB-ELC-2627-millwall-v-qpr#r11",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-millwall-v-qpr#r12",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -10621,8 +10040,8 @@
   },
   "ELC-2627-norwich-v-cardiff": {
    "match_id": "ELC-2627-norwich-v-cardiff",
-   "record_id": "PUB-ELC-2627-norwich-v-cardiff#r11",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-norwich-v-cardiff#r12",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -10914,8 +10333,8 @@
   },
   "ELC-2627-southampton-v-derby": {
    "match_id": "ELC-2627-southampton-v-derby",
-   "record_id": "PUB-ELC-2627-southampton-v-derby#r11",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-southampton-v-derby#r12",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -11201,8 +10620,8 @@
   },
   "PD-2627-alaves-v-deportivo-la-coruna": {
    "match_id": "PD-2627-alaves-v-deportivo-la-coruna",
-   "record_id": "PUB-PD-2627-alaves-v-deportivo-la-coruna#r11",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-alaves-v-deportivo-la-coruna#r12",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -11495,8 +10914,8 @@
   },
   "SA-2627-como-v-cagliari": {
    "match_id": "SA-2627-como-v-cagliari",
-   "record_id": "PUB-SA-2627-como-v-cagliari#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-como-v-cagliari#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -11782,8 +11201,8 @@
   },
   "SA-2627-lazio-v-lecce": {
    "match_id": "SA-2627-lazio-v-lecce",
-   "record_id": "PUB-SA-2627-lazio-v-lecce#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-lazio-v-lecce#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -12069,8 +11488,8 @@
   },
   "BL1-2627-eintracht-frankfurt-v-hoffenheim": {
    "match_id": "BL1-2627-eintracht-frankfurt-v-hoffenheim",
-   "record_id": "PUB-BL1-2627-eintracht-frankfurt-v-hoffenheim#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-eintracht-frankfurt-v-hoffenheim#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -12357,8 +11776,8 @@
   },
   "BL1-2627-elversberg-v-freiburg": {
    "match_id": "BL1-2627-elversberg-v-freiburg",
-   "record_id": "PUB-BL1-2627-elversberg-v-freiburg#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-elversberg-v-freiburg#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -12624,8 +12043,8 @@
   },
   "BL1-2627-leverkusen-v-paderborn": {
    "match_id": "BL1-2627-leverkusen-v-paderborn",
-   "record_id": "PUB-BL1-2627-leverkusen-v-paderborn#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-leverkusen-v-paderborn#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -12891,8 +12310,8 @@
   },
   "BL1-2627-mgladbach-v-dortmund": {
    "match_id": "BL1-2627-mgladbach-v-dortmund",
-   "record_id": "PUB-BL1-2627-mgladbach-v-dortmund#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-mgladbach-v-dortmund#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -13179,8 +12598,8 @@
   },
   "BL1-2627-union-berlin-v-rb-leipzig": {
    "match_id": "BL1-2627-union-berlin-v-rb-leipzig",
-   "record_id": "PUB-BL1-2627-union-berlin-v-rb-leipzig#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-union-berlin-v-rb-leipzig#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -13467,8 +12886,8 @@
   },
   "PL-2627-aston-villa-v-sunderland": {
    "match_id": "PL-2627-aston-villa-v-sunderland",
-   "record_id": "PUB-PL-2627-aston-villa-v-sunderland#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-aston-villa-v-sunderland#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -13754,8 +13173,8 @@
   },
   "ELC-2627-bolton-v-portsmouth": {
    "match_id": "ELC-2627-bolton-v-portsmouth",
-   "record_id": "PUB-ELC-2627-bolton-v-portsmouth#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-bolton-v-portsmouth#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -14041,8 +13460,8 @@
   },
   "PL-2627-bournemouth-v-nottm-forest": {
    "match_id": "PL-2627-bournemouth-v-nottm-forest",
-   "record_id": "PUB-PL-2627-bournemouth-v-nottm-forest#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-bournemouth-v-nottm-forest#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -14328,8 +13747,8 @@
   },
   "SC0-2627-celtic-v-st-mirren": {
    "match_id": "SC0-2627-celtic-v-st-mirren",
-   "record_id": "PUB-SC0-2627-celtic-v-st-mirren#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-celtic-v-st-mirren#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -14615,8 +14034,8 @@
   },
   "PL-2627-chelsea-v-leeds": {
    "match_id": "PL-2627-chelsea-v-leeds",
-   "record_id": "PUB-PL-2627-chelsea-v-leeds#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-chelsea-v-leeds#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -14902,8 +14321,8 @@
   },
   "PL-2627-coventry-v-crystal-palace": {
    "match_id": "PL-2627-coventry-v-crystal-palace",
-   "record_id": "PUB-PL-2627-coventry-v-crystal-palace#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-coventry-v-crystal-palace#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -15189,8 +14608,8 @@
   },
   "SC0-2627-falkirk-v-st-johnstone": {
    "match_id": "SC0-2627-falkirk-v-st-johnstone",
-   "record_id": "PUB-SC0-2627-falkirk-v-st-johnstone#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-falkirk-v-st-johnstone#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -15463,8 +14882,8 @@
   },
   "SC0-2627-hibernian-v-dundee-united": {
    "match_id": "SC0-2627-hibernian-v-dundee-united",
-   "record_id": "PUB-SC0-2627-hibernian-v-dundee-united#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-hibernian-v-dundee-united#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -15750,8 +15169,8 @@
   },
   "SC0-2627-kilmarnock-v-aberdeen": {
    "match_id": "SC0-2627-kilmarnock-v-aberdeen",
-   "record_id": "PUB-SC0-2627-kilmarnock-v-aberdeen#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-kilmarnock-v-aberdeen#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -16037,8 +15456,8 @@
   },
   "ELC-2627-lincoln-v-wrexham": {
    "match_id": "ELC-2627-lincoln-v-wrexham",
-   "record_id": "PUB-ELC-2627-lincoln-v-wrexham#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-lincoln-v-wrexham#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -16324,8 +15743,8 @@
   },
   "ELC-2627-middlesbrough-v-bristol-city": {
    "match_id": "ELC-2627-middlesbrough-v-bristol-city",
-   "record_id": "PUB-ELC-2627-middlesbrough-v-bristol-city#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-middlesbrough-v-bristol-city#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -16611,8 +16030,8 @@
   },
   "ELC-2627-sheffield-united-v-watford": {
    "match_id": "ELC-2627-sheffield-united-v-watford",
-   "record_id": "PUB-ELC-2627-sheffield-united-v-watford#r12",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-sheffield-united-v-watford#r13",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -16904,8 +16323,8 @@
   },
   "ELC-2627-stoke-v-birmingham": {
    "match_id": "ELC-2627-stoke-v-birmingham",
-   "record_id": "PUB-ELC-2627-stoke-v-birmingham#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-stoke-v-birmingham#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -17192,8 +16611,8 @@
   },
   "ELC-2627-swansea-v-west-brom": {
    "match_id": "ELC-2627-swansea-v-west-brom",
-   "record_id": "PUB-ELC-2627-swansea-v-west-brom#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-swansea-v-west-brom#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -17480,8 +16899,8 @@
   },
   "PL-2627-tottenham-v-ipswich": {
    "match_id": "PL-2627-tottenham-v-ipswich",
-   "record_id": "PUB-PL-2627-tottenham-v-ipswich#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-tottenham-v-ipswich#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -17754,8 +17173,8 @@
   },
   "ELC-2627-west-ham-v-preston": {
    "match_id": "ELC-2627-west-ham-v-preston",
-   "record_id": "PUB-ELC-2627-west-ham-v-preston#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-west-ham-v-preston#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -18041,8 +17460,8 @@
   },
   "ELC-2627-wolves-v-charlton": {
    "match_id": "ELC-2627-wolves-v-charlton",
-   "record_id": "PUB-ELC-2627-wolves-v-charlton#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-wolves-v-charlton#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -18328,8 +17747,8 @@
   },
   "PD-2627-rayo-vallecano-v-valencia": {
    "match_id": "PD-2627-rayo-vallecano-v-valencia",
-   "record_id": "PUB-PD-2627-rayo-vallecano-v-valencia#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-rayo-vallecano-v-valencia#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -18622,8 +18041,8 @@
   },
   "N1-2627-nec-nijmegen-v-psv": {
    "match_id": "N1-2627-nec-nijmegen-v-psv",
-   "record_id": "PUB-N1-2627-nec-nijmegen-v-psv#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-nec-nijmegen-v-psv#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -18910,8 +18329,8 @@
   },
   "FL1-2627-nice-v-paris-sg": {
    "match_id": "FL1-2627-nice-v-paris-sg",
-   "record_id": "PUB-FL1-2627-nice-v-paris-sg#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-nice-v-paris-sg#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -19197,8 +18616,8 @@
   },
   "SA-2627-parma-v-roma": {
    "match_id": "SA-2627-parma-v-roma",
-   "record_id": "PUB-SA-2627-parma-v-roma#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-parma-v-roma#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -19484,8 +18903,8 @@
   },
   "PL-2627-newcastle-v-arsenal": {
    "match_id": "PL-2627-newcastle-v-arsenal",
-   "record_id": "PUB-PL-2627-newcastle-v-arsenal#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-newcastle-v-arsenal#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -19771,8 +19190,8 @@
   },
   "BL1-2627-schalke-04-v-stuttgart": {
    "match_id": "BL1-2627-schalke-04-v-stuttgart",
-   "record_id": "PUB-BL1-2627-schalke-04-v-stuttgart#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-schalke-04-v-stuttgart#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -20038,8 +19457,8 @@
   },
   "PD-2627-sevilla-v-real-betis": {
    "match_id": "PD-2627-sevilla-v-real-betis",
-   "record_id": "PUB-PD-2627-sevilla-v-real-betis#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-sevilla-v-real-betis#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -20331,8 +19750,8 @@
   },
   "SC0-2627-dundee-v-hearts": {
    "match_id": "SC0-2627-dundee-v-hearts",
-   "record_id": "PUB-SC0-2627-dundee-v-hearts#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-dundee-v-hearts#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -20618,8 +20037,8 @@
   },
   "N1-2627-utrecht-v-cambuur": {
    "match_id": "N1-2627-utrecht-v-cambuur",
-   "record_id": "PUB-N1-2627-utrecht-v-cambuur#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-utrecht-v-cambuur#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -20906,8 +20325,8 @@
   },
   "N1-2627-feyenoord-v-excelsior": {
    "match_id": "N1-2627-feyenoord-v-excelsior",
-   "record_id": "PUB-N1-2627-feyenoord-v-excelsior#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-feyenoord-v-excelsior#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -21193,8 +20612,8 @@
   },
   "FL1-2627-lens-v-toulouse": {
    "match_id": "FL1-2627-lens-v-toulouse",
-   "record_id": "PUB-FL1-2627-lens-v-toulouse#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-lens-v-toulouse#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -21480,8 +20899,8 @@
   },
   "FL1-2627-lille-v-lyon": {
    "match_id": "FL1-2627-lille-v-lyon",
-   "record_id": "PUB-FL1-2627-lille-v-lyon#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-lille-v-lyon#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -21767,8 +21186,8 @@
   },
   "FL1-2627-monaco-v-auxerre": {
    "match_id": "FL1-2627-monaco-v-auxerre",
-   "record_id": "PUB-FL1-2627-monaco-v-auxerre#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-monaco-v-auxerre#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -22054,8 +21473,8 @@
   },
   "SA-2627-napoli-v-torino": {
    "match_id": "SA-2627-napoli-v-torino",
-   "record_id": "PUB-SA-2627-napoli-v-torino#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-napoli-v-torino#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -22341,8 +21760,8 @@
   },
   "FL1-2627-strasbourg-v-brest": {
    "match_id": "FL1-2627-strasbourg-v-brest",
-   "record_id": "PUB-FL1-2627-strasbourg-v-brest#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-strasbourg-v-brest#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -22628,8 +22047,8 @@
   },
   "N1-2627-groningen-v-heerenveen": {
    "match_id": "N1-2627-groningen-v-heerenveen",
-   "record_id": "PUB-N1-2627-groningen-v-heerenveen#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-groningen-v-heerenveen#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -22916,8 +22335,8 @@
   },
   "SC0-2627-motherwell-v-rangers": {
    "match_id": "SC0-2627-motherwell-v-rangers",
-   "record_id": "PUB-SC0-2627-motherwell-v-rangers#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-motherwell-v-rangers#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -23203,8 +22622,8 @@
   },
   "PD-2627-real-madrid-v-celta-vigo": {
    "match_id": "PD-2627-real-madrid-v-celta-vigo",
-   "record_id": "PUB-PD-2627-real-madrid-v-celta-vigo#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-real-madrid-v-celta-vigo#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -23496,8 +22915,8 @@
   },
   "N1-2627-telstar-v-pec-zwolle": {
    "match_id": "N1-2627-telstar-v-pec-zwolle",
-   "record_id": "PUB-N1-2627-telstar-v-pec-zwolle#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-telstar-v-pec-zwolle#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -23784,8 +23203,8 @@
   },
   "N1-2627-twente-v-willem-ii": {
    "match_id": "N1-2627-twente-v-willem-ii",
-   "record_id": "PUB-N1-2627-twente-v-willem-ii#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-twente-v-willem-ii#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -24071,8 +23490,8 @@
   },
   "SA-2627-juventus-v-venezia": {
    "match_id": "SA-2627-juventus-v-venezia",
-   "record_id": "PUB-SA-2627-juventus-v-venezia#r10",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-juventus-v-venezia#r11",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -24364,8 +23783,8 @@
   },
   "ELC-2627-burnley-v-blackburn": {
    "match_id": "ELC-2627-burnley-v-blackburn",
-   "record_id": "PUB-ELC-2627-burnley-v-blackburn#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-burnley-v-blackburn#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -24651,8 +24070,8 @@
   },
   "PD-2627-barcelona-v-villarreal": {
    "match_id": "PD-2627-barcelona-v-villarreal",
-   "record_id": "PUB-PD-2627-barcelona-v-villarreal#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-barcelona-v-villarreal#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -24944,8 +24363,8 @@
   },
   "N1-2627-ajax-v-ado-den-haag": {
    "match_id": "N1-2627-ajax-v-ado-den-haag",
-   "record_id": "PUB-N1-2627-ajax-v-ado-den-haag#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-ajax-v-ado-den-haag#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -25231,8 +24650,8 @@
   },
   "N1-2627-sparta-rotterdam-v-az-alkmaar": {
    "match_id": "N1-2627-sparta-rotterdam-v-az-alkmaar",
-   "record_id": "PUB-N1-2627-sparta-rotterdam-v-az-alkmaar#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-sparta-rotterdam-v-az-alkmaar#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -25519,8 +24938,8 @@
   },
   "SA-2627-bologna-v-udinese": {
    "match_id": "SA-2627-bologna-v-udinese",
-   "record_id": "PUB-SA-2627-bologna-v-udinese#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-bologna-v-udinese#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -25812,8 +25231,8 @@
   },
   "PL-2627-hull-v-brighton": {
    "match_id": "PL-2627-hull-v-brighton",
-   "record_id": "PUB-PL-2627-hull-v-brighton#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-hull-v-brighton#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -26099,8 +25518,8 @@
   },
   "FL1-2627-paris-v-angers": {
    "match_id": "FL1-2627-paris-v-angers",
-   "record_id": "PUB-FL1-2627-paris-v-angers#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-paris-v-angers#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -26386,8 +25805,8 @@
   },
   "SA-2627-sassuolo-v-genoa": {
    "match_id": "SA-2627-sassuolo-v-genoa",
-   "record_id": "PUB-SA-2627-sassuolo-v-genoa#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-sassuolo-v-genoa#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -26679,8 +26098,8 @@
   },
   "BL1-2627-augsburg-v-mainz": {
    "match_id": "BL1-2627-augsburg-v-mainz",
-   "record_id": "PUB-BL1-2627-augsburg-v-mainz#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-augsburg-v-mainz#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -26967,8 +26386,8 @@
   },
   "PD-2627-racing-santander-v-real-sociedad": {
    "match_id": "PD-2627-racing-santander-v-real-sociedad",
-   "record_id": "PUB-PD-2627-racing-santander-v-real-sociedad#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-racing-santander-v-real-sociedad#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -27260,8 +26679,8 @@
   },
   "N1-2627-go-ahead-eagles-v-fortuna-sittard": {
    "match_id": "N1-2627-go-ahead-eagles-v-fortuna-sittard",
-   "record_id": "PUB-N1-2627-go-ahead-eagles-v-fortuna-sittard#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-go-ahead-eagles-v-fortuna-sittard#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -27548,8 +26967,8 @@
   },
   "FL1-2627-lorient-v-rennes": {
    "match_id": "FL1-2627-lorient-v-rennes",
-   "record_id": "PUB-FL1-2627-lorient-v-rennes#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-lorient-v-rennes#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -27835,8 +27254,8 @@
   },
   "PL-2627-liverpool-v-man-united": {
    "match_id": "PL-2627-liverpool-v-man-united",
-   "record_id": "PUB-PL-2627-liverpool-v-man-united#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-liverpool-v-man-united#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -28123,8 +27542,8 @@
   },
   "BL1-2627-werder-bremen-v-hamburg": {
    "match_id": "BL1-2627-werder-bremen-v-hamburg",
-   "record_id": "PUB-BL1-2627-werder-bremen-v-hamburg#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-werder-bremen-v-hamburg#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -28411,8 +27830,8 @@
   },
   "SA-2627-ac-milan-v-frosinone": {
    "match_id": "SA-2627-ac-milan-v-frosinone",
-   "record_id": "PUB-SA-2627-ac-milan-v-frosinone#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-ac-milan-v-frosinone#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -28704,8 +28123,8 @@
   },
   "PD-2627-osasuna-v-malaga": {
    "match_id": "PD-2627-osasuna-v-malaga",
-   "record_id": "PUB-PD-2627-osasuna-v-malaga#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-osasuna-v-malaga#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -28997,8 +28416,8 @@
   },
   "SA-2627-atalanta-v-inter": {
    "match_id": "SA-2627-atalanta-v-inter",
-   "record_id": "PUB-SA-2627-atalanta-v-inter#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-atalanta-v-inter#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -29284,8 +28703,8 @@
   },
   "FL1-2627-marseille-v-le-mans": {
    "match_id": "FL1-2627-marseille-v-le-mans",
-   "record_id": "PUB-FL1-2627-marseille-v-le-mans#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-marseille-v-le-mans#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -29558,8 +28977,8 @@
   },
   "PD-2627-getafe-v-atletico-madrid": {
    "match_id": "PD-2627-getafe-v-atletico-madrid",
-   "record_id": "PUB-PD-2627-getafe-v-atletico-madrid#r9",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-getafe-v-atletico-madrid#r10",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -29852,8 +29271,8 @@
   },
   "SA-2627-monza-v-fiorentina": {
    "match_id": "SA-2627-monza-v-fiorentina",
-   "record_id": "PUB-SA-2627-monza-v-fiorentina#r8",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-monza-v-fiorentina#r9",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -30145,8 +29564,8 @@
   },
   "PL-2627-brentford-v-everton": {
    "match_id": "PL-2627-brentford-v-everton",
-   "record_id": "PUB-PL-2627-brentford-v-everton#r8",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-brentford-v-everton#r9",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -30432,8 +29851,8 @@
   },
   "PD-2627-levante-v-elche": {
    "match_id": "PD-2627-levante-v-elche",
-   "record_id": "PUB-PD-2627-levante-v-elche#r8",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-levante-v-elche#r9",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -30725,8 +30144,8 @@
   },
   "ELC-2627-bristol-city-v-wrexham": {
    "match_id": "ELC-2627-bristol-city-v-wrexham",
-   "record_id": "PUB-ELC-2627-bristol-city-v-wrexham#r6",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-bristol-city-v-wrexham#r7",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -31012,8 +30431,8 @@
   },
   "ELC-2627-cardiff-v-preston": {
    "match_id": "ELC-2627-cardiff-v-preston",
-   "record_id": "PUB-ELC-2627-cardiff-v-preston#r6",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-cardiff-v-preston#r7",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -31299,8 +30718,8 @@
   },
   "ELC-2627-charlton-v-lincoln": {
    "match_id": "ELC-2627-charlton-v-lincoln",
-   "record_id": "PUB-ELC-2627-charlton-v-lincoln#r6",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-charlton-v-lincoln#r7",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -31587,8 +31006,8 @@
   },
   "SC0-2627-hibernian-v-dundee": {
    "match_id": "SC0-2627-hibernian-v-dundee",
-   "record_id": "PUB-SC0-2627-hibernian-v-dundee#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-hibernian-v-dundee#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -31874,8 +31293,8 @@
   },
   "ELC-2627-middlesbrough-v-swansea": {
    "match_id": "ELC-2627-middlesbrough-v-swansea",
-   "record_id": "PUB-ELC-2627-middlesbrough-v-swansea#r6",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-middlesbrough-v-swansea#r7",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -32161,8 +31580,8 @@
   },
   "ELC-2627-norwich-v-qpr": {
    "match_id": "ELC-2627-norwich-v-qpr",
-   "record_id": "PUB-ELC-2627-norwich-v-qpr#r6",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-norwich-v-qpr#r7",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -32448,8 +31867,8 @@
   },
   "ELC-2627-portsmouth-v-west-ham": {
    "match_id": "ELC-2627-portsmouth-v-west-ham",
-   "record_id": "PUB-ELC-2627-portsmouth-v-west-ham#r6",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-portsmouth-v-west-ham#r7",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -32735,8 +32154,8 @@
   },
   "ELC-2627-sheffield-united-v-southampton": {
    "match_id": "ELC-2627-sheffield-united-v-southampton",
-   "record_id": "PUB-ELC-2627-sheffield-united-v-southampton#r6",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-sheffield-united-v-southampton#r7",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -33022,8 +32441,8 @@
   },
   "SC0-2627-rangers-v-aberdeen": {
    "match_id": "SC0-2627-rangers-v-aberdeen",
-   "record_id": "PUB-SC0-2627-rangers-v-aberdeen#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-rangers-v-aberdeen#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -33309,8 +32728,8 @@
   },
   "ELC-2627-wolves-v-derby": {
    "match_id": "ELC-2627-wolves-v-derby",
-   "record_id": "PUB-ELC-2627-wolves-v-derby#r6",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-wolves-v-derby#r7",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -33596,8 +33015,8 @@
   },
   "ELC-2627-bolton-v-west-brom": {
    "match_id": "ELC-2627-bolton-v-west-brom",
-   "record_id": "PUB-ELC-2627-bolton-v-west-brom#r5",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-bolton-v-west-brom#r6",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -33883,8 +33302,8 @@
   },
   "ELC-2627-burnley-v-birmingham": {
    "match_id": "ELC-2627-burnley-v-birmingham",
-   "record_id": "PUB-ELC-2627-burnley-v-birmingham#r5",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-burnley-v-birmingham#r6",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -34170,8 +33589,8 @@
   },
   "ELC-2627-watford-v-blackburn": {
    "match_id": "ELC-2627-watford-v-blackburn",
-   "record_id": "PUB-ELC-2627-watford-v-blackburn#r5",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-watford-v-blackburn#r6",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -34458,8 +33877,8 @@
   },
   "ELC-2627-stoke-v-millwall": {
    "match_id": "ELC-2627-stoke-v-millwall",
-   "record_id": "PUB-ELC-2627-stoke-v-millwall#r5",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-stoke-v-millwall#r6",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -34746,8 +34165,8 @@
   },
   "N1-2627-groningen-v-willem-ii": {
    "match_id": "N1-2627-groningen-v-willem-ii",
-   "record_id": "PUB-N1-2627-groningen-v-willem-ii#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-groningen-v-willem-ii#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -35033,8 +34452,8 @@
   },
   "BL1-2627-werder-bremen-v-mgladbach": {
    "match_id": "BL1-2627-werder-bremen-v-mgladbach",
-   "record_id": "PUB-BL1-2627-werder-bremen-v-mgladbach#r5",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-werder-bremen-v-mgladbach#r6",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -35321,8 +34740,8 @@
   },
   "FL1-2627-brest-v-paris": {
    "match_id": "FL1-2627-brest-v-paris",
-   "record_id": "PUB-FL1-2627-brest-v-paris#r4",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-brest-v-paris#r5",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -35608,8 +35027,8 @@
   },
   "SA-2627-venezia-v-bologna": {
    "match_id": "SA-2627-venezia-v-bologna",
-   "record_id": "PUB-SA-2627-venezia-v-bologna#r4",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-venezia-v-bologna#r5",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -35901,8 +35320,8 @@
   },
   "PD-2627-levante-v-racing-santander": {
    "match_id": "PD-2627-levante-v-racing-santander",
-   "record_id": "PUB-PD-2627-levante-v-racing-santander#r4",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-levante-v-racing-santander#r5",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -36199,8 +35618,8 @@
   },
   "PL-2627-nottm-forest-v-chelsea": {
    "match_id": "PL-2627-nottm-forest-v-chelsea",
-   "record_id": "PUB-PL-2627-nottm-forest-v-chelsea#r4",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-nottm-forest-v-chelsea#r5",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -36486,8 +35905,8 @@
   },
   "ELC-2627-southampton-v-middlesbrough": {
    "match_id": "ELC-2627-southampton-v-middlesbrough",
-   "record_id": "PUB-ELC-2627-southampton-v-middlesbrough#r4",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-southampton-v-middlesbrough#r5",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -36773,8 +36192,8 @@
   },
   "P1-2627-maritimo-v-nacional": {
    "match_id": "P1-2627-maritimo-v-nacional",
-   "record_id": "PUB-P1-2627-maritimo-v-nacional#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-maritimo-v-nacional#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -37061,8 +36480,8 @@
   },
   "ELC-2627-blackburn-v-charlton": {
    "match_id": "ELC-2627-blackburn-v-charlton",
-   "record_id": "PUB-ELC-2627-blackburn-v-charlton#r4",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-blackburn-v-charlton#r5",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -37349,8 +36768,8 @@
   },
   "ELC-2627-lincoln-v-wolves": {
    "match_id": "ELC-2627-lincoln-v-wolves",
-   "record_id": "PUB-ELC-2627-lincoln-v-wolves#r4",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-lincoln-v-wolves#r5",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -37636,8 +37055,8 @@
   },
   "ELC-2627-preston-v-norwich": {
    "match_id": "ELC-2627-preston-v-norwich",
-   "record_id": "PUB-ELC-2627-preston-v-norwich#r4",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-preston-v-norwich#r5",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -37923,8 +37342,8 @@
   },
   "PD-2627-real-betis-v-rayo-vallecano": {
    "match_id": "PD-2627-real-betis-v-rayo-vallecano",
-   "record_id": "PUB-PD-2627-real-betis-v-rayo-vallecano#r4",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-real-betis-v-rayo-vallecano#r5",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -38221,8 +37640,8 @@
   },
   "SA-2627-frosinone-v-parma": {
    "match_id": "SA-2627-frosinone-v-parma",
-   "record_id": "PUB-SA-2627-frosinone-v-parma#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-frosinone-v-parma#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -38514,8 +37933,8 @@
   },
   "BL1-2627-koln-v-elversberg": {
    "match_id": "BL1-2627-koln-v-elversberg",
-   "record_id": "PUB-BL1-2627-koln-v-elversberg#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-koln-v-elversberg#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -38788,8 +38207,8 @@
   },
   "BL1-2627-hamburg-v-bayern-munich": {
    "match_id": "BL1-2627-hamburg-v-bayern-munich",
-   "record_id": "PUB-BL1-2627-hamburg-v-bayern-munich#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-hamburg-v-bayern-munich#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -39075,8 +38494,8 @@
   },
   "BL1-2627-mainz-v-union-berlin": {
    "match_id": "BL1-2627-mainz-v-union-berlin",
-   "record_id": "PUB-BL1-2627-mainz-v-union-berlin#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-mainz-v-union-berlin#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -39363,8 +38782,8 @@
   },
   "BL1-2627-paderborn-v-schalke-04": {
    "match_id": "BL1-2627-paderborn-v-schalke-04",
-   "record_id": "PUB-BL1-2627-paderborn-v-schalke-04#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-paderborn-v-schalke-04#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -39630,8 +39049,8 @@
   },
   "SC0-2627-aberdeen-v-dundee": {
    "match_id": "SC0-2627-aberdeen-v-dundee",
-   "record_id": "PUB-SC0-2627-aberdeen-v-dundee#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-aberdeen-v-dundee#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -39917,8 +39336,8 @@
   },
   "ELC-2627-birmingham-v-bolton": {
    "match_id": "ELC-2627-birmingham-v-bolton",
-   "record_id": "PUB-ELC-2627-birmingham-v-bolton#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-birmingham-v-bolton#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -40204,8 +39623,8 @@
   },
   "ELC-2627-derby-v-watford": {
    "match_id": "ELC-2627-derby-v-watford",
-   "record_id": "PUB-ELC-2627-derby-v-watford#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-derby-v-watford#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -40491,8 +39910,8 @@
   },
   "SC0-2627-dundee-united-v-st-johnstone": {
    "match_id": "SC0-2627-dundee-united-v-st-johnstone",
-   "record_id": "PUB-SC0-2627-dundee-united-v-st-johnstone#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-dundee-united-v-st-johnstone#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -40765,8 +40184,8 @@
   },
   "PL-2627-leeds-v-coventry": {
    "match_id": "PL-2627-leeds-v-coventry",
-   "record_id": "PUB-PL-2627-leeds-v-coventry#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-leeds-v-coventry#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -41052,8 +40471,8 @@
   },
   "PL-2627-man-united-v-brentford": {
    "match_id": "PL-2627-man-united-v-brentford",
-   "record_id": "PUB-PL-2627-man-united-v-brentford#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-man-united-v-brentford#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -41339,8 +40758,8 @@
   },
   "ELC-2627-millwall-v-burnley": {
    "match_id": "ELC-2627-millwall-v-burnley",
-   "record_id": "PUB-ELC-2627-millwall-v-burnley#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-millwall-v-burnley#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -41626,8 +41045,8 @@
   },
   "ELC-2627-qpr-v-sheffield-united": {
    "match_id": "ELC-2627-qpr-v-sheffield-united",
-   "record_id": "PUB-ELC-2627-qpr-v-sheffield-united#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-qpr-v-sheffield-united#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -41913,8 +41332,8 @@
   },
   "SC0-2627-rangers-v-falkirk": {
    "match_id": "SC0-2627-rangers-v-falkirk",
-   "record_id": "PUB-SC0-2627-rangers-v-falkirk#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-rangers-v-falkirk#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -42200,8 +41619,8 @@
   },
   "SC0-2627-st-mirren-v-kilmarnock": {
    "match_id": "SC0-2627-st-mirren-v-kilmarnock",
-   "record_id": "PUB-SC0-2627-st-mirren-v-kilmarnock#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-st-mirren-v-kilmarnock#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -42487,8 +41906,8 @@
   },
   "ELC-2627-west-brom-v-bristol-city": {
    "match_id": "ELC-2627-west-brom-v-bristol-city",
-   "record_id": "PUB-ELC-2627-west-brom-v-bristol-city#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-west-brom-v-bristol-city#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -42775,8 +42194,8 @@
   },
   "ELC-2627-west-ham-v-stoke": {
    "match_id": "ELC-2627-west-ham-v-stoke",
-   "record_id": "PUB-ELC-2627-west-ham-v-stoke#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-west-ham-v-stoke#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -43062,8 +42481,8 @@
   },
   "ELC-2627-wrexham-v-portsmouth": {
    "match_id": "ELC-2627-wrexham-v-portsmouth",
-   "record_id": "PUB-ELC-2627-wrexham-v-portsmouth#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-wrexham-v-portsmouth#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -43349,8 +42768,8 @@
   },
   "PD-2627-malaga-v-athletic-club": {
    "match_id": "PD-2627-malaga-v-athletic-club",
-   "record_id": "PUB-PD-2627-malaga-v-athletic-club#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-malaga-v-athletic-club#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -43647,8 +43066,8 @@
   },
   "P1-2627-arouca-v-rio-ave": {
    "match_id": "P1-2627-arouca-v-rio-ave",
-   "record_id": "PUB-P1-2627-arouca-v-rio-ave#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-arouca-v-rio-ave#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -43934,8 +43353,8 @@
   },
   "N1-2627-excelsior-v-telstar": {
    "match_id": "N1-2627-excelsior-v-telstar",
-   "record_id": "PUB-N1-2627-excelsior-v-telstar#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-excelsior-v-telstar#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -44222,8 +43641,8 @@
   },
   "P1-2627-moreirense-v-santa-clara": {
    "match_id": "P1-2627-moreirense-v-santa-clara",
-   "record_id": "PUB-P1-2627-moreirense-v-santa-clara#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-moreirense-v-santa-clara#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -44509,8 +43928,8 @@
   },
   "FL1-2627-angers-v-lens": {
    "match_id": "FL1-2627-angers-v-lens",
-   "record_id": "PUB-FL1-2627-angers-v-lens#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-angers-v-lens#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -44796,8 +44215,8 @@
   },
   "SA-2627-torino-v-lazio": {
    "match_id": "SA-2627-torino-v-lazio",
-   "record_id": "PUB-SA-2627-torino-v-lazio#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-torino-v-lazio#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -45089,8 +44508,8 @@
   },
   "PD-2627-elche-v-atletico-madrid": {
    "match_id": "PD-2627-elche-v-atletico-madrid",
-   "record_id": "PUB-PD-2627-elche-v-atletico-madrid#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-elche-v-atletico-madrid#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -45387,8 +44806,8 @@
   },
   "PL-2627-ipswich-v-aston-villa": {
    "match_id": "PL-2627-ipswich-v-aston-villa",
-   "record_id": "PUB-PL-2627-ipswich-v-aston-villa#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-ipswich-v-aston-villa#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -45661,8 +45080,8 @@
   },
   "BL1-2627-stuttgart-v-eintracht-frankfurt": {
    "match_id": "BL1-2627-stuttgart-v-eintracht-frankfurt",
-   "record_id": "PUB-BL1-2627-stuttgart-v-eintracht-frankfurt#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-BL1-2627-stuttgart-v-eintracht-frankfurt#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "BL1",
@@ -45949,8 +45368,8 @@
   },
   "SC0-2627-motherwell-v-hibernian": {
    "match_id": "SC0-2627-motherwell-v-hibernian",
-   "record_id": "PUB-SC0-2627-motherwell-v-hibernian#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SC0-2627-motherwell-v-hibernian#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SC0",
@@ -46236,8 +45655,8 @@
   },
   "N1-2627-psv-v-go-ahead-eagles": {
    "match_id": "N1-2627-psv-v-go-ahead-eagles",
-   "record_id": "PUB-N1-2627-psv-v-go-ahead-eagles#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-psv-v-go-ahead-eagles#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -46523,8 +45942,8 @@
   },
   "P1-2627-academico-viseu-v-alverca": {
    "match_id": "P1-2627-academico-viseu-v-alverca",
-   "record_id": "PUB-P1-2627-academico-viseu-v-alverca#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-academico-viseu-v-alverca#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -46810,8 +46229,8 @@
   },
   "SA-2627-inter-v-genoa": {
    "match_id": "SA-2627-inter-v-genoa",
-   "record_id": "PUB-SA-2627-inter-v-genoa#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-inter-v-genoa#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -47103,8 +46522,8 @@
   },
   "FL1-2627-le-havre-v-strasbourg": {
    "match_id": "FL1-2627-le-havre-v-strasbourg",
-   "record_id": "PUB-FL1-2627-le-havre-v-strasbourg#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-le-havre-v-strasbourg#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -47390,8 +46809,8 @@
   },
   "FL1-2627-le-mans-v-lille": {
    "match_id": "FL1-2627-le-mans-v-lille",
-   "record_id": "PUB-FL1-2627-le-mans-v-lille#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-le-mans-v-lille#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -47657,8 +47076,8 @@
   },
   "FL1-2627-nice-v-troyes": {
    "match_id": "FL1-2627-nice-v-troyes",
-   "record_id": "PUB-FL1-2627-nice-v-troyes#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-nice-v-troyes#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -47944,8 +47363,8 @@
   },
   "FL1-2627-paris-sg-v-lorient": {
    "match_id": "FL1-2627-paris-sg-v-lorient",
-   "record_id": "PUB-FL1-2627-paris-sg-v-lorient#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-FL1-2627-paris-sg-v-lorient#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "FL1",
@@ -48231,8 +47650,8 @@
   },
   "N1-2627-cambuur-v-sparta-rotterdam": {
    "match_id": "N1-2627-cambuur-v-sparta-rotterdam",
-   "record_id": "PUB-N1-2627-cambuur-v-sparta-rotterdam#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-cambuur-v-sparta-rotterdam#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -48519,8 +47938,8 @@
   },
   "PD-2627-real-madrid-v-alaves": {
    "match_id": "PD-2627-real-madrid-v-alaves",
-   "record_id": "PUB-PD-2627-real-madrid-v-alaves#r3",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PD-2627-real-madrid-v-alaves#r4",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PD",
@@ -48817,8 +48236,8 @@
   },
   "P1-2627-vitoria-guimaraes-v-estrela-amadora": {
    "match_id": "P1-2627-vitoria-guimaraes-v-estrela-amadora",
-   "record_id": "PUB-P1-2627-vitoria-guimaraes-v-estrela-amadora#r2",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-P1-2627-vitoria-guimaraes-v-estrela-amadora#r3",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "P1",
@@ -49104,8 +48523,8 @@
   },
   "N1-2627-ado-den-haag-v-utrecht": {
    "match_id": "N1-2627-ado-den-haag-v-utrecht",
-   "record_id": "PUB-N1-2627-ado-den-haag-v-utrecht#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-N1-2627-ado-den-haag-v-utrecht#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "N1",
@@ -49392,8 +48811,8 @@
   },
   "SA-2627-udinese-v-fiorentina": {
    "match_id": "SA-2627-udinese-v-fiorentina",
-   "record_id": "PUB-SA-2627-udinese-v-fiorentina#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-SA-2627-udinese-v-fiorentina#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "SA",
@@ -49685,8 +49104,8 @@
   },
   "PL-2627-everton-v-liverpool": {
    "match_id": "PL-2627-everton-v-liverpool",
-   "record_id": "PUB-PL-2627-everton-v-liverpool#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-PL-2627-everton-v-liverpool#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "PL",
@@ -49972,8 +49391,8 @@
   },
   "ELC-2627-swansea-v-cardiff": {
    "match_id": "ELC-2627-swansea-v-cardiff",
-   "record_id": "PUB-ELC-2627-swansea-v-cardiff#r1",
-   "published_at": "2026-11-08T12:27:20.059394+00:00",
+   "record_id": "PUB-ELC-2627-swansea-v-cardiff#r2",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
    "derivation": "public-derived",
    "fixture": {
     "competition": "ELC",
@@ -50249,6 +49668,881 @@
      "strength": "weak",
      "basis": "league-anchored blend, 557 Championship backtest matches",
      "lower_bound": 0.5147
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PD-2627-valencia-v-osasuna": {
+   "match_id": "PD-2627-valencia-v-osasuna",
+   "record_id": "PUB-PD-2627-valencia-v-osasuna#r1",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Valencia",
+    "away": "Osasuna",
+    "kickoff_utc": "2026-11-29T13:00:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-11-29T14:00:00Z",
+      "to": "2026-11-29T00:00:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     },
+     {
+      "from": "2026-11-29T00:00:00Z",
+      "to": "2026-11-29T13:00:00Z",
+      "seen_at": "2026-11-07T00:18:44.269509+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 353 La Liga matches (2025-26): Brier 0.580 against 0.628 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Valencia win",
+      "p": 0.4395,
+      "fair_odds": "≈5/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Valencia win",
+       "p": 0.4395,
+       "fair_odds": "≈5/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.283,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Osasuna win",
+       "p": 0.2775,
+       "fair_odds": "≈5/2"
+      }
+     ],
+     "method": "La Liga Dixon-Coles fitted on La Liga results only",
+     "training_matches": 1254,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-06",
+        "opponent": "Barcelona",
+        "gf": 0,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Real Sociedad",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Athletic Club",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Villarreal",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-07",
+        "opponent": "Real Madrid",
+        "gf": 0,
+        "ga": 3,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-06",
+        "opponent": "Alaves",
+        "gf": 2,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-16",
+        "opponent": "Atletico Madrid",
+        "gf": 0,
+        "ga": 4,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Real Betis",
+        "gf": 2,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-26",
+        "opponent": "Sevilla",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-02",
+        "opponent": "Deportivo La Coruna",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 64,
+      "away": 63
+     },
+     "league_p": [
+      0.4561,
+      0.2608,
+      0.2831
+     ],
+     "pooled_matches": {
+      "home": 43,
+      "away": 42
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.247 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.528,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7285,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2715,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.6959,
+       "league_p": 0.7424
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.472,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.528,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.429,
+       "league_p": 0.4904
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2497,
+        "fair_odds": "≈3/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7503,
+        "fair_odds": "≈1/3"
+       },
+       "model_p": 0.2202,
+       "league_p": 0.2624
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.68,
+      "expected_goals": [
+       1.37,
+       1.03
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.4 goals for Valencia and 1.0 for Osasuna.",
+      "La Liga matches average 2.68 goals; 49% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% La Liga rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5215,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5215,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4785,
+       "fair_odds": "≈11/10"
+      }
+     ],
+     "model_p": 0.4842,
+     "league_p": 0.5375,
+     "explanation": [
+      "Both teams scored in 54% of La Liga matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% La Liga rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "under",
+     "line": 2.5,
+     "label": "Under 2.5",
+     "p": 0.528,
+     "credible_p": 0.5271,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 La Liga backtest matches",
+     "lower_bound": 0.485
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "N1-2627-feyenoord-v-ajax": {
+   "match_id": "N1-2627-feyenoord-v-ajax",
+   "record_id": "PUB-N1-2627-feyenoord-v-ajax#r1",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "Feyenoord",
+    "away": "Ajax",
+    "kickoff_utc": "2026-11-29T13:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 267 Eredivisie matches (2025-26): Brier 0.572 against 0.647 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Feyenoord win",
+      "p": 0.5136,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Feyenoord win",
+       "p": 0.5136,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.22,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Ajax win",
+       "p": 0.2665,
+       "fair_odds": "≈11/4"
+      }
+     ],
+     "method": "Eredivisie Dixon-Coles fitted on Eredivisie results only",
+     "training_matches": 1010,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-16",
+        "opponent": "Go Ahead Eagles",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-08-30",
+        "opponent": "ADO Den Haag",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "FC Utrecht",
+        "gf": 5,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "AZ Alkmaar",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Fortuna Sittard",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-09",
+        "opponent": "PEC Zwolle",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-08-30",
+        "opponent": "Telstar",
+        "gf": 4,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Fortuna Sittard",
+        "gf": 5,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "Groningen",
+        "gf": 5,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Sparta Rotterdam",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 56,
+      "away": 54
+     },
+     "league_p": [
+      0.4366,
+      0.2495,
+      0.3139
+     ],
+     "pooled_matches": {
+      "home": 37,
+      "away": 36
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.229 against 0.232 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.628,
+      "fair_odds": "≈4/7",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8525,
+        "fair_odds": "≈1/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1475,
+        "fair_odds": "≈6/1"
+       },
+       "model_p": 0.8458,
+       "league_p": 0.8554
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.628,
+        "fair_odds": "≈4/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.372,
+        "fair_odds": "≈7/4"
+       },
+       "model_p": 0.647,
+       "league_p": 0.6198
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.4157,
+        "fair_odds": "≈11/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.5843,
+        "fair_odds": "≈8/11"
+       },
+       "model_p": 0.4268,
+       "league_p": 0.4109
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 3.23,
+      "expected_goals": [
+       1.96,
+       1.37
+      ]
+     },
+     "explanation": [
+      "The score model expects about 2.0 goals for Feyenoord and 1.4 for Ajax.",
+      "Eredivisie matches average 3.23 goals; 62% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.232 against 0.233 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.6124,
+      "fair_odds": "≈8/13"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.6124,
+       "fair_odds": "≈8/13"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.3876,
+       "fair_odds": "≈13/8"
+      }
+     ],
+     "model_p": 0.6413,
+     "league_p": 0.6,
+     "explanation": [
+      "Both teams scored in 60% of Eredivisie matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.628,
+     "credible_p": 0.6275,
+     "n": 295,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 295 Eredivisie backtest matches",
+     "lower_bound": 0.5812
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "N1-2627-fortuna-sittard-v-heerenveen": {
+   "match_id": "N1-2627-fortuna-sittard-v-heerenveen",
+   "record_id": "PUB-N1-2627-fortuna-sittard-v-heerenveen#r1",
+   "published_at": "2026-11-08T13:52:41.676879+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "Fortuna Sittard",
+    "away": "Heerenveen",
+    "kickoff_utc": "2026-11-29T13:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 267 Eredivisie matches (2025-26): Brier 0.572 against 0.647 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "A",
+      "label": "Heerenveen win",
+      "p": 0.4019,
+      "fair_odds": "≈6/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Fortuna Sittard win",
+       "p": 0.35,
+       "fair_odds": "≈15/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.248,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Heerenveen win",
+       "p": 0.4019,
+       "fair_odds": "≈6/4"
+      }
+     ],
+     "method": "Eredivisie Dixon-Coles fitted on Eredivisie results only",
+     "training_matches": 1010,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-22",
+        "opponent": "AZ Alkmaar",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Ajax",
+        "gf": 1,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "FC Twente",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Excelsior",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-07",
+        "opponent": "Telstar",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-16",
+        "opponent": "Ajax",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-08-30",
+        "opponent": "Willem II",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Sparta Rotterdam",
+        "gf": 4,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-09",
+        "opponent": "PSV",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "ADO Den Haag",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 57,
+      "away": 55
+     },
+     "league_p": [
+      0.4366,
+      0.2495,
+      0.3139
+     ],
+     "pooled_matches": {
+      "home": 39,
+      "away": 36
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.229 against 0.232 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6007,
+      "fair_odds": "≈4/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.835,
+        "fair_odds": "≈1/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.165,
+        "fair_odds": "≈5/1"
+       },
+       "model_p": 0.7874,
+       "league_p": 0.8554
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.6007,
+        "fair_odds": "≈4/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.3993,
+        "fair_odds": "≈6/4"
+       },
+       "model_p": 0.5561,
+       "league_p": 0.6198
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3873,
+        "fair_odds": "≈13/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6127,
+        "fair_odds": "≈8/13"
+       },
+       "model_p": 0.3323,
+       "league_p": 0.4109
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 3.23,
+      "expected_goals": [
+       1.4,
+       1.51
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.4 goals for Fortuna Sittard and 1.5 for Heerenveen.",
+      "Eredivisie matches average 3.23 goals; 62% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.232 against 0.233 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5962,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5962,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4038,
+       "fair_odds": "≈6/4"
+      }
+     ],
+     "model_p": 0.5873,
+     "league_p": 0.6,
+     "explanation": [
+      "Both teams scored in 60% of Eredivisie matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.6007,
+     "credible_p": 0.6019,
+     "n": 295,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 295 Eredivisie backtest matches",
+     "lower_bound": 0.555
     },
     "best_value": {
      "decision": "no_bet",
