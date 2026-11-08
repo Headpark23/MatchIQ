@@ -87,7 +87,11 @@ async function callGemini(key, question, ctx, nowMs) {
       generationConfig: { temperature: 0.4, maxOutputTokens: 4096, responseMimeType: 'application/json', responseSchema: betai.RESPONSE_SCHEMA }
     })
   });
-  if (!res.ok) throw new Error('Gemini HTTP ' + res.status);
+  if (!res.ok) {
+    let why = '';
+    try { why = ((await res.json()).error || {}).message || ''; } catch (e) {}
+    throw new Error('Gemini HTTP ' + res.status + (why ? ': ' + why.slice(0, 200) : ''));
+  }
   const body = await res.json();
   const text = body.candidates && body.candidates[0] && body.candidates[0].content && body.candidates[0].content.parts &&
     body.candidates[0].content.parts.map(p => p.text || '').join('');
@@ -139,7 +143,7 @@ exports.betAI = onRequest({ cors: true, secrets: [GEMINI_API_KEY], timeoutSecond
     if (!slot.ok) { res.status(429).json({ error: 'daily-limit', remaining: 0, limit: betai.DAILY_LIMIT }); return; }
     try {
       const ctx = betai.buildContext(await loadData('predictions.json'), question, now);
-      const out = betai.normalise(await callGemini(GEMINI_API_KEY.value(), question, ctx, now));
+      const out = betai.normalise(await callGemini(GEMINI_API_KEY.value().trim(), question, ctx, now));
       res.json(Object.assign(out, { remaining: slot.remaining, limit: betai.DAILY_LIMIT }));
     } catch (e) {
       logger.warn('betAI failed', e);
