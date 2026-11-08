@@ -7,7 +7,9 @@ public site is built from:
   * matches kicking off in the next 48 hours without a prediction (a gap);
   * matches played since the league's public ledger began, how many had a prediction sealed
     before kick-off, and how many of those are settled;
-  * matches that kicked off more than RESULT_GRACE_HOURS ago and still have no confirmed result.
+  * matches that kicked off more than RESULT_GRACE_HOURS ago and still have no confirmed result;
+  * predicted leagues with no fixtures at all (every source failed or stopped publishing the
+    league), so a league can never silently disappear from the app.
 
     python -m pipeline.coverage                    # print the table, write data/coverage.json
     python -m pipeline.coverage --summary FILE     # also append a Markdown table (GitHub step summary)
@@ -45,7 +47,7 @@ def compute(fixtures, predictions, ledger_records, now, horizon_days=21):
     for r in ledger_records:
         code, t = r["fixture"]["competition"], _ts(r["published_at"])
         started[code] = min(started.get(code, t), t)
-    leagues, gaps = {}, {"unpredicted_next_48h": [], "unsealed_last_7d": [], "unsettled": [], "results_overdue": []}
+    leagues, gaps = {}, {"league_without_fixtures": [], "unpredicted_next_48h": [], "unsealed_last_7d": [], "unsettled": [], "results_overdue": []}
     history = {"unsealed_before_last_7d": []}
     for code in list(PREDICTED) + list(SCHEDULE_ONLY):
         mine = [f for f in fixtures if f["competition"] == code]
@@ -53,6 +55,8 @@ def compute(fixtures, predictions, ledger_records, now, horizon_days=21):
         if code not in PREDICTED:
             leagues[code] = row
             continue
+        if not mine:
+            gaps["league_without_fixtures"].append(code)
         start = started.get(code)
         row.update({"ledger_start": start.isoformat() if start else None, "upcoming": 0, "upcoming_predicted": 0,
                     "next_48h": 0, "next_48h_predicted": 0, "played_since_start": 0, "sealed": 0, "settled": 0, "results_overdue": 0})

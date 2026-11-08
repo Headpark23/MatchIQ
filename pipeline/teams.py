@@ -67,10 +67,13 @@ def slug(name):
     return re.sub(r"[^a-z0-9]+", "-", _normalise(canonical(name))).strip("-")
 
 
-def match_id(competition, season, home, away):
-    """Stable fixture identifier. Each pairing occurs once per league season, so a
-    rescheduled match keeps its identifier when its kickoff moves."""
-    return f"{competition}-{season}-{slug(home)}-v-{slug(away)}"
+def match_id(competition, season, home, away, meeting=1):
+    """Stable fixture identifier. In most leagues each pairing occurs once per season, so a
+    rescheduled match keeps its identifier when its kickoff moves. Where the same home side
+    hosts the same opponent again (the Scottish Premiership plays each pairing three or four
+    times), later meetings carry their number: "...-v-rangers-2"."""
+    base = f"{competition}-{season}-{slug(home)}-v-{slug(away)}"
+    return base if meeting <= 1 else f"{base}-{meeting}"
 
 
 # --------------------------------------------------------------------------- other leagues
@@ -141,6 +144,14 @@ LEAGUE_ALIASES.update({
            "Moreirense": ["moreirense fc"], "Casa Pia": ["casa pia ac"], "Estoril": ["gd estoril praia"], "Arouca": ["fc arouca"], "Nacional": ["cd nacional"],
            "Santa Clara": ["cd santa clara"], "Estrela Amadora": ["cf estrela da amadora"], "Alverca": ["fc alverca"],
            "Maritimo": ["cs maritimo"], "Academico Viseu": ["academico de viseu fc"]},
+    # Names follow the CLUBS list in app.js ("Hearts", "St. Mirren", "St. Johnstone").
+    "SC0": {"Celtic": ["celtic"], "Rangers": ["rangers"], "Aberdeen": ["aberdeen"], "Hearts": ["heart of midlothian", "hearts"],
+            "Hibernian": ["hibernian", "hibs"], "Dundee United": ["dundee united", "dundee utd"], "Dundee": ["dundee"],
+            "Motherwell": ["motherwell"], "St. Mirren": ["st mirren", "saint mirren"], "Kilmarnock": ["kilmarnock"],
+            "Ross County": ["ross county"], "St. Johnstone": ["st johnstone", "saint johnstone"], "Falkirk": ["falkirk"],
+            "Livingston": ["livingston"], "Partick Thistle": ["partick thistle"], "Ayr United": ["ayr united"],
+            "Inverness CT": ["inverness caledonian thistle", "inverness ct"], "Raith Rovers": ["raith rovers"],
+            "Dunfermline": ["dunfermline athletic", "dunfermline"], "Queen's Park": ["queens park"], "Greenock Morton": ["greenock morton", "morton"]},
 })
 _LEAGUE_LOOKUP = {code: {_normalise(a): name for name, aliases in table.items() for a in aliases + [name]}
                   for code, table in LEAGUE_ALIASES.items()}
@@ -166,7 +177,7 @@ DISPLAY_NAMES = {"Paris SG": "Paris SG", "Paris FC": "Paris FC", "RB Leipzig": "
                  "Ath Bilbao": "Athletic Club", "Ath Madrid": "Atletico Madrid", "Espanol": "Espanyol", "Sociedad": "Real Sociedad",
                  "Vallecano": "Rayo Vallecano", "Betis": "Real Betis", "Celta": "Celta Vigo", "Sheffield Weds": "Sheffield Wednesday",
                  "Milan": "AC Milan", "Verona": "Hellas Verona", "La Coruna": "Deportivo La Coruna", "Santander": "Racing Santander",
-                 **{n: n for n in ("ADO Den Haag", "PSV", "AZ Alkmaar", "NEC Nijmegen", "PEC Zwolle", "Willem II", "FC Utrecht", "FC Twente", "FC Porto", "SC Braga", "Sporting CP")}}
+                 **{n: n for n in ("St. Mirren", "St. Johnstone", "Queen's Park", "Inverness CT", "ADO Den Haag", "PSV", "AZ Alkmaar", "NEC Nijmegen", "PEC Zwolle", "Willem II", "FC Utrecht", "FC Twente", "FC Porto", "SC Braga", "Sporting CP")}}
 
 
 def _display(name):

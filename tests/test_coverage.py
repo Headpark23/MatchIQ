@@ -166,6 +166,9 @@ class CoverageReportTests(unittest.TestCase):
         rec = {"record_id": "PUB-a#r1", "match_id": "a", "fixture": {"competition": "PL"}, "published_at": "2026-10-20T10:00:00+00:00", "evaluated": True}
         fixtures = [{"id": "a", "competition": "PL", "kickoff_utc": "2026-10-25T12:00:00Z", "status": "FINISHED", "score": [1, 0]},
                     {"id": "z", "competition": "PL", "kickoff_utc": "2026-11-07T12:00:00Z", "status": "SCHEDULED", "score": None}]
+        # Every predicted league must have fixtures, otherwise it is a gap (league_without_fixtures).
+        fixtures += [{"id": f"old-{c}", "competition": c, "kickoff_utc": "2026-08-01T12:00:00Z", "status": "FINISHED", "score": [0, 0]}
+                     for c in PREDICTED if c != "PL"]
         report = coverage.compute(fixtures, {"z": {}}, [rec], NOW)
         self.assertTrue(report["complete"], report["gaps"])
 
@@ -185,6 +188,81 @@ class LedgerHonestyTests(unittest.TestCase):
     def test_public_ledger_only_predicts_modelled_competitions(self):
         records = json.loads((self.DATA / "public" / "prediction_history.json").read_text(encoding="utf-8"))["records"]
         self.assertFalse({r["fixture"]["competition"] for r in records} - set(PREDICTED))
+
+
+SPFL_TXT = """= Scotland | Premiership 2026/27
+
+▪ 1st Phase - 1
+Fri Jul 31 2026
+  20:00   Dundee United  1-1 (1-0)  Rangers
+                  (Lachlan Rose 38'; Thelo AASGAARD 56')
+Sat Aug 1
+  15:00   Falkirk  0-2 (0-1)  St. Mirren
+          Aberdeen  2-1  Heart of Midlothian
+Sat Jan 2
+  12:30   Celtic   v   Rangers
+          Saint Johnstone FC   v   Hibernian
+"""
+
+
+class FakeResponse(io.BytesIO):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+class ScottishPremiershipTests(unittest.TestCase):
+    def test_scottish_premiership_is_predicted(self):
+        self.assertIn("SC0", PREDICTED)
+        self.assertNotIn("SC0", SCHEDULE_ONLY)
+
+    def test_text_schedule_parses_both_layouts_dates_times_and_club_names(self):
+        from pipeline.sources import parse_openfootball_txt
+        ms = parse_openfootball_txt(SPFL_TXT, "SC0", "2627", 2026)
+        self.assertEqual([(m["home"], m["away"], m["score"]) for m in ms], [
+            ("Dundee United", "Rangers", [1, 1]), ("Falkirk", "St. Mirren", [0, 2]), ("Aberdeen", "Hearts", [2, 1]),
+            ("Celtic", "Rangers", None), ("St. Johnstone", "Hibernian", None)])
+        self.assertEqual(ms[0]["kickoff_utc"], "2026-07-31T19:00:00Z")   # 20:00 BST
+        self.assertEqual(ms[2]["kickoff_utc"], "2026-08-01T14:00:00Z")   # inherits 15:00 from the line above
+        self.assertEqual(ms[4]["kickoff_utc"], "2027-01-02T12:30:00Z")   # January belongs to the second calendar year
+        self.assertEqual(ms[3]["status"], "SCHEDULED")
+
+    def test_falls_back_to_openfootball_europe_when_football_json_lacks_the_league(self):
+        import urllib.error
+        from pipeline.sources import fetch_openfootball
+        seen = []
+
+        def opener(request, timeout=None):
+            seen.append(request.full_url)
+            if "football.json" in request.full_url:
+                raise urllib.error.HTTPError(request.full_url, 404, "Not Found", {}, None)
+            return FakeResponse(SPFL_TXT.encode("utf-8"))
+
+        ms, error = fetch_openfootball("SC0", "2026-27", "2627", opener=opener)
+        self.assertIsNone(error)
+        self.assertEqual(len(ms), 5)
+        self.assertTrue(seen[-1].endswith("/openfootball/europe/master/scotland/2026-27_sco1.txt"))
+
+    def test_no_football_data_org_call_for_a_league_off_its_free_tier(self):
+        ms, note = fetch_football_data_org("SC0", 2026, "2627", token="x", opener=lambda *a, **k: self.fail("network call"))
+        self.assertEqual(ms, [])
+        self.assertIn("free tier", note)
+
+    def test_repeat_meetings_of_the_same_pairing_keep_separate_fixtures(self):
+        from pipeline.sources import parse_openfootball_txt
+        text = SPFL_TXT + "Sat Mar 6\n  15:00   Celtic   v   Rangers\n"
+        ms = parse_openfootball_txt(text, "SC0", "2627", 2026)
+        merged = merge_fixtures([ms], now=NOW)
+        ids = sorted(f["id"] for f in merged if f["home"] == "Celtic")
+        self.assertEqual(ids, ["SC0-2627-celtic-v-rangers", "SC0-2627-celtic-v-rangers-2"])
+        self.assertEqual(len(merged), len(ms))
+
+    def test_a_predicted_league_with_no_fixtures_is_a_coverage_gap(self):
+        report = coverage.compute([], {}, [], NOW)
+        self.assertIn("SC0", report["gaps"]["league_without_fixtures"])
+        self.assertFalse(report["complete"])
 
 
 if __name__ == "__main__":

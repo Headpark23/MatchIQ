@@ -120,8 +120,9 @@ def default_extra_fetchers():
             f["openligadb"] = (lambda c=code: fetch_openligadb(c, SEASON_START, SEASON))
         out[code] = f
     for code in PUBLIC_ONLY:  # predicted by the public path only (see leagues.PUBLIC_ONLY)
-        out[code] = {"football-data.org": (lambda c=code: fetch_football_data_org(c, SEASON_START, SEASON)),
-                     "openfootball": (lambda c=code: fetch_openfootball(c, SEASON_LABEL, SEASON))}
+        out[code] = {"openfootball": (lambda c=code: fetch_openfootball(c, SEASON_LABEL, SEASON))}
+        if PUBLIC_ONLY[code].get("fdo"):  # not every league is on the football-data.org free tier
+            out[code]["football-data.org"] = (lambda c=code: fetch_football_data_org(c, SEASON_START, SEASON))
     for code in SCHEDULE_ONLY:  # fixtures and scores only; no predictions (see leagues.SCHEDULE_ONLY)
         out[code] = {"openfootball": (lambda c=code: fetch_openfootball(c, SEASON_LABEL, SEASON))}
     return out

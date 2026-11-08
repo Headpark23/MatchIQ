@@ -101,7 +101,7 @@ def merge_fixtures(source_lists, previous=None, now=None):
     by_id = {}
     for matches in source_lists:
         for m in matches:
-            mid = match_id(m["competition"], m["season"], m["home"], m["away"])
+            mid = match_id(m["competition"], m["season"], m["home"], m["away"], m.get("meeting", 1))
             by_id.setdefault(mid, []).append(m)
     merged = []
     for mid, entries in by_id.items():

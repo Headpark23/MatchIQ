@@ -42,7 +42,6 @@ EXTRA = [c for c in LEAGUES if c != "PL"]
 SCHEDULE_ONLY = {
     "E2": {"name": "League One", "short": "E2", "openfootball": "en.3", "tz": "Europe/London"},
     "E3": {"name": "League Two", "short": "E3", "openfootball": "en.4", "tz": "Europe/London"},
-    "SC0": {"name": "Scottish Premiership", "short": "SC0", "openfootball": "sco.1", "tz": "Europe/London"},
     "SC1": {"name": "Scottish Championship", "short": "SC1", "openfootball": "sco.2", "tz": "Europe/London"},
     "B1": {"name": "Belgian Pro League", "short": "B1", "openfootball": "be.1", "tz": "Europe/Brussels"},
 }
@@ -52,9 +51,15 @@ SCHEDULE_ONLY = {
 # them. Training history: final scores from openfootball (CC0) for past seasons, plus confirmed
 # current-season results from permitted sources. Fixtures and timely results: football-data.org
 # (free tier covers DED and PPL) and openfootball.
+# "openfootball_europe" is the same CC0 project's plain-text file in openfootball/europe
+# (path under the repository, {season} = "2026-27"), used when football.json has not published
+# the league for a season. The Scottish Premiership is not on the football.json 2026-27 list and
+# not on the football-data.org free tier, so it relies on that file.
 PUBLIC_ONLY = {
     "N1": {"name": "Eredivisie", "short": "N1", "openfootball": "nl.1", "fdo": "DED", "tz": "Europe/Amsterdam"},
     "P1": {"name": "Primeira Liga", "short": "P1", "openfootball": "pt.1", "fdo": "PPL", "tz": "Europe/Lisbon"},
+    "SC0": {"name": "Scottish Premiership", "short": "SC0", "openfootball": "sco.1", "fdo": None, "tz": "Europe/London",
+            "openfootball_europe": "scotland/{season}_sco1.txt"},
 }
 # Every competition that gets a public prediction for each scheduled match.
 PREDICTED = {**LEAGUES, **PUBLIC_ONLY}
