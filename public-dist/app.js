@@ -3174,50 +3174,31 @@ function viewLeagues() {
   const prof = getUserProfile();
   const authUser = getAuthUser();
   const isUserSignedIn = Boolean(authUser && authUser.signedIn);
-  const signedOutBanner = !isUserSignedIn
-    ? '<div class="signed-out-league-banner" style="margin-bottom:20px;padding:22px 16px;background:linear-gradient(135deg, rgba(2,132,199,0.18), rgba(15,23,42,0.95));border:1px solid rgba(56,189,248,0.4);border-radius:12px;text-align:center;">' +
-        '<div style="font-size:32px;margin-bottom:8px;">🏆</div>' +
-        '<h2 style="font-size:18px;font-weight:700;color:#fff;margin:0 0 6px;">Sign in with Google to join leagues and compete with mates</h2>' +
-        '<p class="muted" style="font-size:13.5px;max-width:480px;margin:0 auto 16px;">Create private leagues, track live leaderboards, and compete against friends with verified model predictions.</p>' +
-        '<button type="button" class="btn google-primary-btn" onclick="signInWithGoogle()" style="margin:0 auto;min-height:46px;display:inline-flex;align-items:center;gap:10px;padding:0 24px;">' +
+  if (!isUserSignedIn) {
+    const googleBtn = '<button type="button" class="btn google-primary-btn" onclick="signInWithGoogle()" style="margin:0 auto;min-height:46px;display:inline-flex;align-items:center;gap:10px;padding:0 24px;">' +
           '<svg class="google-g" viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>' +
           '<span>Continue with Google</span>' +
-        '</button>' +
-      '</div>'
-    : '';
-
-  if (!isUserSignedIn) {
-    return '<section class="view">' +
-      '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
-      '<p class="page-sub">Compete on genuine model predictions with mates across hometown, county, national and private leaderboards.</p>' +
-      signedOutBanner +
-      '<div class="section card">' +
-        '<div class="section-head">' +
-          '<div>' +
-            '<h2 class="section-title">How Buddy Leagues Work</h2>' +
-            '<p class="section-note">Fair, audited competition. Leagues use pretend picks, not real money.</p>' +
-          '</div>' +
-        '</div>' +
-        '<div class="grid grid-2" style="margin-top:16px;gap:12px;">' +
-          '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
-            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🏆 6-Tier Geographic Ladders</h3>' +
-            '<p class="dim" style="font-size:13px;margin:0;">Automatic promotion from your Hometown to County, Region, Home Nation, UK and Global leaderboards.</p>' +
-          '</div>' +
-          '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
-            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">👥 Private Mate Leagues</h3>' +
-            '<p class="dim" style="font-size:13px;margin:0;">Create private 6-character code leagues for your WhatsApp group or pub mates with live sync.</p>' +
-          '</div>' +
-          '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
-            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🔒 Google Sign-In Only</h3>' +
-            '<p class="dim" style="font-size:13px;margin:0;">No passwords or forms. One Google tap saves your rank permanently across desktop and mobile.</p>' +
-          '</div>' +
-          '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">' +
-            '<h3 style="font-size:14.5px;color:var(--cyan);margin:0 0 4px;">🥇 Silverware &amp; Honours</h3>' +
-            '<p class="dim" style="font-size:13px;margin:0;">Earn weekly badges, monthly cups, and season silverware verified on the public ledger.</p>' +
-          '</div>' +
-        '</div>' +
+        '</button>';
+    const pod = [['🥈', 'ExampleEmma', 131, 'p2'], ['🥇', 'SampleSam', 142, 'p1'], ['🥉', 'DemoDave', 127, 'p3']];
+    return '<section class="view lg-view lg-out">' +
+      '<div class="lg-welcome">' +
+        '<div class="lg-cup" aria-hidden="true">🏆</div>' +
+        '<h1 class="lg-title">Beat your mates.<br>Climb the ladders.</h1>' +
+        '<p class="lg-lead">One pick a day, points for every winner. Free, and no money changes hands.</p>' +
+        googleBtn.replace('class="btn google-primary-btn"', 'class="btn google-primary-btn lg-google"') +
+        '<p class="lg-fine">Sign in with Google to join leagues and compete with mates. Got an invite code? Sign in and it is one tap to join.</p>' +
       '</div>' +
-      sampleLeaderboard() +
+      '<ol class="lg-steps">' +
+        '<li><span>⚽</span><b>Pick one bet a day</b><small>Any football result, goals or both-teams-to-score bet</small></li>' +
+        '<li><span>🎯</span><b>Score points</b><small>An Evens winner is 10 pts</small></li>' +
+        '<li><span>🥇</span><b>Win silverware</b><small>Weekly, monthly and season</small></li>' +
+      '</ol>' +
+      '<div class="lg-preview" role="group" aria-label="Sample league, invented names">' +
+        '<div class="lg-preview-head"><span>This week’s podium</span>' + sampleBadge() + '</div>' +
+        '<div class="lg-podium">' + pod.map(x => '<div class="pod ' + x[3] + '"><span class="pod-medal">' + x[0] + '</span><span class="pod-name">' + x[1] + '</span><span class="pod-pts">' + x[2] + ' pts</span><span class="pod-block"></span></div>').join('') + '</div>' +
+        '<div class="lg-ladder-line" aria-label="Six automatic ladders"><span>🏘️ Town</span><i>›</i><span>🏛️ County</span><i>›</i><span>🏴 Country</span><i>›</i><span>🇬🇧 UK</span><i>›</i><span>🇪🇺 Europe</span><i>›</i><span>🌍 World</span></div>' +
+        '<p class="lg-fine">Your league picks count on all six local ladders automatically, plus any private leagues with mates.</p>' +
+      '</div>' +
     '</section>';
   }
 
@@ -3312,10 +3293,10 @@ function viewLeagues() {
     const formStr = (m.form || []).join(' · ');
     const memberId = 'mem-form-' + idx;
     const kickCell = m.isYou
-      ? '<td class="lb-col-action"><span class="bento-badge cyan text-xs">You</span></td>'
+      ? '<td class="lb-col-action"></td>'
       : !isLeagueCreator || !m.uid
       ? '<td class="lb-col-action"></td>'
-      : '<td class="lb-col-action"><button type="button" class="kick-player-btn" data-kick-player="' + esc(m.handle) + '" data-kick-uid="' + esc(m.uid || '') + '" data-league-code="' + esc(currentLeague.code) + '" title="Throw @' + esc(m.handle) + ' out of this league">Kick ✕</button></td>';
+      : '<td class="lb-col-action"><button type="button" class="kick-player-btn" data-kick-player="' + esc(m.handle) + '" data-kick-uid="' + esc(m.uid || '') + '" data-league-code="' + esc(currentLeague.code) + '" title="Throw @' + esc(m.handle) + ' out of this league" aria-label="Remove @' + esc(m.handle) + ' from this league">✕</button></td>';
 
     return '<tr class="lb-row' + (m.isYou ? ' user-row' : '') + '">' +
       '<td class="lb-col-rank"><span class="rank-badge ' + rankClass + '">' + rankIcon + '</span></td>' +
@@ -3337,156 +3318,68 @@ function viewLeagues() {
     '</tr>';
   }).join('');
 
-  // Geo Tiers Bar
-  const geoNavHtml = geoTiers.map(t => {
-    // Ladders are automatic: a tier is joined once the player's location covers it, so Join sends them to set it.
-    const joined = Boolean(ladderTierId(t.id, prof));
-    const part = { 'geo-country': 'country', 'geo-region': 'region', 'geo-town': 'town' }[t.id];
-    return '<div class="geo-tier-box">' +
-      '<button type="button" class="geo-tier-btn' + (t.id === activeLeagueId ? ' active' : '') + '" data-select-league="' + t.id + '">' +
-        '<span class="geo-tier-name">' + t.icon + ' ' + esc(typeof t.name === 'function' ? t.name() : t.name) + '</span>' +
-        '<span class="geo-tier-scope">' + t.scope + ' · ' + t.trophyName + '</span>' +
-      '</button>' +
-      (joined
-        ? '<span class="geo-tier-join joined">✓ Joined</span>'
-        : '<a href="#/more" data-select-more-tab="account" class="geo-tier-join" title="Add your ' + part + ' to your profile to join this ladder">Join</a>') +
-    '</div>';
-  }).join('');
-
-  // Custom Buddy Leagues Tabs
-  const buddyTabsHtml = customLeagues.map(l => {
-    const memCount = (l.members ? l.members.length : 0) + 1;
-    return '<button type="button" class="league-tab-btn' + (l.id === activeLeagueId ? ' active' : '') + '" data-select-league="' + esc(l.id) + '">' +
-      esc(l.icon || '👥') + ' ' + esc(l.name) + ' <span class="tab-member-count" style="opacity:0.75;font-size:11px">(' + memCount + ' ' + (memCount === 1 ? 'punter' : 'punters') + ')</span>' +
-    '</button>';
-  }).join('');
-
-  // League names and icons come from other players, so they are always escaped.
   const leagueTitle = esc(typeof currentLeague.name === 'function' ? currentLeague.name() : currentLeague.name);
   const trophyTitle = esc(currentLeague.trophyName || (currentLeague.name + ' Silverware'));
   const trophyIcon = esc(currentLeague.trophyIcon || currentLeague.icon || '🏆');
+  const periodWord = activeLeagueFreq === 'weekly' ? 'this week' : activeLeagueFreq === 'monthly' ? 'this month' : 'this season';
 
-  
-  // Commercial Inquiries Ledger
-  const enquiries = getStoredEnquiries();
-  const enquiryRows = enquiries.length ? enquiries.map(e =>
-    '<tr>' +
-      '<td><b>' + esc(e.company || e.name) + '</b><br><small class="muted">' + esc(e.name) + ' &middot; <a href="mailto:' + esc(e.email) + '" style="color:var(--cyan)">' + esc(e.email) + '</a></small></td>' +
-      '<td><span class="badge validated">' + esc(e.interest) + '</span></td>' +
-      '<td style="max-width:280px;font-size:12px;color:var(--muted);">' + esc(e.message) + '</td>' +
-      '<td style="font-size:11px;font-family:var(--mono);color:var(--dim);white-space:nowrap;">' + esc(e.submitted_at ? e.submitted_at.slice(0, 16).replace('T', ' ') : 'Just now') + '</td>' +
-    '</tr>'
-  ).join('') : '<tr><td colspan="4" class="muted" style="text-align:center;padding:20px;">No commercial enquiries submitted yet.</td></tr>';
+  // Your private leagues as cards, then the create / join cards.
+  const leagueCards = customLeagues.map(l => {
+    const memCount = (l.members ? l.members.length : 0) + 1;
+    return '<button type="button" class="lg-card' + (l.id === activeLeagueId ? ' on' : '') + '" data-select-league="' + esc(l.id) + '">' +
+      '<span class="lg-card-ico">' + esc(l.icon || '👥') + '</span><b>' + esc(l.name) + '</b><small>' + memCount + (memCount === 1 ? ' player' : ' players') + '</small></button>';
+  }).join('') +
+    '<button type="button" class="lg-card lg-card-add" data-open-league-modal="create"><span class="lg-card-ico">＋</span><b>New league</b><small>Invite your mates</small></button>' +
+    '<button type="button" class="lg-card lg-card-add" data-open-league-modal="join"><span class="lg-card-ico">🔑</span><b>Join with code</b><small>Got an invite?</small></button>';
 
-  const enquiryCard = '<div class="section card" style="margin-top:24px;">' +
-    '<div class="section-head"><div><h2 class="section-title">Commercial &amp; Sponsorship Inquiries (' + enquiries.length + ')</h2><p class="section-note">Incoming bookmaker, brand, and affiliate proposals submitted via #/commercial.</p></div>' +
-    (enquiries.length ? '<button type="button" class="btn small" data-admin-action="clear-enquiries" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Enquiries</button>' : '') +
-    '</div>' +
-    '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
+  // The six automatic ladders, closest to home first.
+  const shortTier = { 'geo-town': 'Town', 'geo-region': 'County', 'geo-country': 'Country', 'geo-uk': 'UK', 'geo-europe': 'Europe', 'geo-world': 'World' };
+  const ladderChips = geoTiers.slice().reverse().map(t => {
+    const joined = Boolean(ladderTierId(t.id, prof));
+    return '<button type="button" class="lg-ladder' + (t.id === activeLeagueId ? ' on' : '') + (joined ? '' : ' off') + '" data-select-league="' + t.id + '" title="' + esc(typeof t.name === 'function' ? t.name() : t.name) + '">' +
+      '<span>' + t.icon + '</span>' + esc(shortTier[t.id] || t.name) + (joined ? '' : ' <small>add location</small>') + '</button>';
+  }).join('');
+
+  // Podium: the top three who have a settled bet this period.
+  const podSrc = allMembers.filter(m => !hasNoBets(m) && !m.outsideTop).slice(0, 3);
+  const podOrder = [[1, '🥈', 'p2'], [0, '🥇', 'p1'], [2, '🥉', 'p3']].filter(x => podSrc[x[0]]);
+  const podium = podSrc.length ? '<div class="lg-podium">' + podOrder.map(([i, medal, cls]) => {
+    const m = podSrc[i];
+    return '<div class="pod ' + cls + (m.isYou ? ' you' : '') + '"><span class="pod-medal">' + medal + '</span><span class="pod-name">' + esc(m.handle) + (m.isYou ? ' (you)' : '') + '</span><span class="pod-pts">' + m.points + ' pts</span><span class="pod-block"></span></div>';
+  }).join('') + '</div>' : '<div class="lg-empty">No settled league bets ' + periodWord + ' yet. Log one before kick-off and you are on the board.</div>';
+
+  const periodSeg = '<div class="seg lg-period" role="group" aria-label="Table period">' +
+    [['weekly', 'Week'], ['monthly', 'Month'], ['yearly', 'Season']].map(([k, l]) => '<button type="button" class="freq-btn' + (activeLeagueFreq === k ? ' active' : '') + '" aria-pressed="' + (activeLeagueFreq === k) + '" data-league-freq="' + k + '">' + l + '</button>').join('') + '</div>';
+
+  const table = allMembers.length ? '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
+      '<th class="lb-col-rank">#</th><th class="lb-col-player">Player</th><th class="lb-col-pts">Pts</th><th class="lb-col-win">Win %</th><th class="lb-col-roi">ROI</th><th class="lb-col-bets num">Bets</th><th class="lb-col-action"></th>' +
+    '</tr></thead><tbody>' + rowsHtml + '</tbody></table></div>' : '';
+
+  const board = '<section class="lg-board">' +
+    '<div class="lg-board-head"><div class="lg-board-title"><span class="lg-board-ico">' + esc(isGeo ? currentLeague.icon : (currentLeague.icon || '👥')) + '</span><div><h2>' + leagueTitle +
+      (!isGeo && isLeagueCreator ? ' <button type="button" class="lg-mini" data-rename-league="' + esc(currentLeague.code) + '" title="Rename this league">✏️</button>' : '') + '</h2>' +
+      '<small>' + trophyIcon + ' ' + trophyTitle + ' · top 3 win medals</small></div></div>' + periodSeg + '</div>' +
+    (isGeo ? '<p class="lg-notice">' + ladderNotice + '</p>' : '') +
+    podium + table +
+    (!isGeo ? '<div class="lg-board-foot"><button type="button" class="btn primary" data-share-league="' + esc(currentLeague.code) + '">Invite friends</button>' +
+      (isLeagueCreator
+        ? '<button type="button" class="lg-quiet danger" data-delete-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '">Delete league</button>'
+        : '<button type="button" class="lg-quiet" data-leave-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '">Leave league</button>') + '</div>' : '') +
+  '</section>';
+
+  const me = '<div class="lg-me">' +
+    '<span class="lg-me-avatar">' + esc(prof.avatar) + '</span>' +
+    '<div class="lg-me-id"><b>@' + esc(prof.handle) + '</b><small>' + (prof.town || prof.region ? esc([prof.town, prof.region].filter(Boolean).join(', ')) : 'No location set') + ' · <a href="#/more" data-select-more-tab="account">Edit</a></small></div>' +
+    '<div class="lg-me-stats"><span><b>' + uStats.points + '</b>pts</span><span><b>' + uStats.winRate + '%</b>wins</span><span><b>' + uStats.settled + '</b>bets</span></div>' +
+    '<button type="button" class="lg-cabinet" data-open-trophy-cabinet title="Trophy cabinet">🏆<b>' + trophies.length + '</b></button>' +
   '</div>';
 
-  return '<section class="view">' + signedOutBanner + locationPromptBanner() +
-    '<div class="fair-play-banner">' +
-      '<span class="fair-play-icon">🛡️</span>' +
-      '<div><strong>Fair Play Rule:</strong> Exactly <strong>1 settled bet per calendar day</strong> counts toward your league score. Chronologically first qualifying bet logged each day counts, keeping the competition fair for all players.</div>' +
-    '</div>' +
-    '<div class="section-head" style="align-items:flex-end"><div>' +
-      '<h1 class="page-title">Buddy &amp; Regional Leagues</h1>' +
-      '<p class="page-sub">Compete with mates in private leagues and on hometown, regional, national and global ladders. Points: a win scores (bookmaker price − 1) × 10, so Evens = 10 pts and 10/1 or bigger = 100 pts (the cap); a loss is −2. <b>One league bet per match day</b>, logged before kick-off: a single on match result or over/under goals, or an accumulator of those (leg prices multiplied, still capped at 10/1). The league server records the bookmaker price when you log it and settles it from the official result.</p>' +
-    '</div>' +
-    '<div class="btn-row">' +
-      '<button type="button" class="btn primary" data-open-league-modal>Create or Join League</button>' +
-      '<a href="#/guide" class="btn" style="text-decoration:none">❓ How leagues work</a>' +
-      '<button type="button" class="trophy-summary-pill' + (trophies.length === 0 ? ' empty' : '') + '" data-open-trophy-cabinet style="' + (trophies.length === 0 ? 'opacity:0.75;' : '') + '">🏆 Trophy Cabinet (' + trophies.length + ' Silverware)</button>' +
-      (isGeo ? '' : '<button type="button" class="btn" data-share-league="' + esc(currentLeague.code) + '">Invite Friends</button>') +
-    '</div></div>' +
-
-    '<div class="user-profile-bar">' +
-      '<div class="profile-pill"><span class="profile-avatar">' + esc(prof.avatar) + '</span><span>@' + esc(prof.handle) + '</span>' +
-        (prof.town || prof.region ? '<span style="font-size:11px;color:var(--dim);margin-left:4px">(' + esc([prof.town, prof.region].filter(Boolean).join(', ')) + ')</span>' : '<span style="font-size:11px;color:var(--dim);margin-left:4px">(no location set)</span>') + '</div>' +
-      '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">' +
-        '<span class="dim" style="font-size:13px">Your Live Form: <b style="color:var(--cyan)">' + uStats.points + ' Pts</b> · Win: <b class="win-pct-pill">' + uStats.winRate + '%</b> · ROI: <b class="roi-pct-pill ' + (uStats.roi >= 0 ? 'pos' : 'neg') + '">' + (uStats.roi > 0 ? '+' : '') + uStats.roi + '%</b></span>' +
-        '<a href="#/more" data-select-more-tab="account" class="btn small" style="text-decoration:none">Edit in More &rarr;</a>' +
-      '</div>' +
-    '</div>' +
-
-    // 1. Private Buddy Mini-Leagues Selector
-    '<div class="section" style="margin-top:20px">' +
-      '<div class="section-head"><div><h2 class="section-title">Private Buddy Mini-Leagues</h2><span class="section-note">Custom leagues with your friends, work colleagues, and pub crew.</span></div></div>' +
-      (buddyTabsHtml ? '<div class="league-selector-bar">' + buddyTabsHtml + '</div>' : '<div style="padding:14px 18px;border-radius:12px;background:rgba(255,255,255,0.03);color:var(--dim);font-size:13.5px">No private leagues joined yet. Tap <b>Create or Join League</b> above to start with friends.</div>') +
-    '</div>' +
-
-    // If Buddy League selected, show table directly underneath!
-    (!isGeo ? (
-      '<div class="leaderboard-card" style="margin-top:16px">' +
-        '<div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">' +
-          '<div>' +
-            '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">' +
-              '<h2 class="section-title" style="margin:0">' + leagueTitle + '</h2>' +
-              (isLeagueCreator ? '<button type="button" class="btn small" data-rename-league="' + esc(currentLeague.code) + '" title="Rename this league" style="padding:2px 8px;font-size:11px;">✏️ Rename</button>' : '') +
-            '</div>' +
-            '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze · <b style="color:var(--cyan)">Max 1 bet/day</b></span>' +
-          '</div>' +
-          '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
-            '<div class="frequency-toggle-bar">' +
-              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'weekly' ? ' active' : '') + '" data-league-freq="weekly">Weekly</button>' +
-              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'monthly' ? ' active' : '') + '" data-league-freq="monthly">Monthly</button>' +
-              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'yearly' ? ' active' : '') + '" data-league-freq="yearly">Yearly</button>' +
-            '</div>' +
-            '<button type="button" class="btn small" data-share-league="' + esc(currentLeague.code) + '">Invite Friends</button>' +
-            (isLeagueCreator
-              ? '<button type="button" class="btn danger small" data-delete-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '" title="Delete this league">Delete League 🗑️</button>'
-              : '<button type="button" class="btn secondary small" data-leave-league="' + esc(currentLeague.id) + '" data-league-code="' + esc(currentLeague.code) + '" title="Leave this league">Leave League 🚪</button>') +
-          '</div>' +
-        '</div>' +
-        '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
-          '<th class="lb-col-rank">#</th>' +
-          '<th class="lb-col-player">Player (Form)</th>' +
-          '<th class="lb-col-pts" style="color:var(--cyan)">Points</th>' +
-          '<th class="lb-col-win">Win %</th>' +
-          '<th class="lb-col-roi">ROI %</th>' +
-          '<th class="lb-col-bets num">Bets</th>' +
-          '<th class="lb-col-action">Manage</th>' +
-        '</tr></thead><tbody>' +
-        rowsHtml +
-        '</tbody></table></div>' +
-      '</div>'
-    ) : '') +
-
-    // 2. Automatic Geographical Leagues Selector
-    '<div class="section" style="margin-top:' + (!isGeo ? '26px' : '16px') + '">' +
-      '<div class="section-head"><div><h2 class="section-title">Automatic Geographical Leagues</h2><span class="section-note">Every league bet counts on all 6 ladders automatically, based on the location in your profile.</span></div></div>' +
-      '<div class="geo-ladder-nav">' + geoNavHtml + '</div>' +
-    '</div>' +
-
-    // If Geo League selected, show table directly underneath Geo Tiers!
-    (isGeo ? (
-      '<div class="leaderboard-card" style="margin-top:16px">' +
-        '<div style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">' +
-          '<div>' +
-            '<h2 class="section-title">' + leagueTitle + '</h2>' +
-            '<span class="section-note">Trophy at Stake: <b>' + trophyIcon + ' ' + trophyTitle + '</b> · Top 3 win Gold, Silver &amp; Bronze · <b style="color:var(--cyan)">Max 1 bet/day</b></span>' +
-          '</div>' +
-          '<div style="display:flex;gap:10px;align-items:center">' +
-            '<div class="frequency-toggle-bar">' +
-              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'weekly' ? ' active' : '') + '" data-league-freq="weekly">Weekly</button>' +
-              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'monthly' ? ' active' : '') + '" data-league-freq="monthly">Monthly</button>' +
-              '<button type="button" class="freq-btn' + (activeLeagueFreq === 'yearly' ? ' active' : '') + '" data-league-freq="yearly">Yearly</button>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-        '<p class="dim" style="margin:0;padding:12px 20px;font-size:13px;border-bottom:1px solid var(--line)">' + ladderNotice + '</p>' +
-        (allMembers.length ? '<div class="lb-table-wrap"><table class="lb-table compact-lb"><thead><tr>' +
-          '<th class="lb-col-rank">#</th>' +
-          '<th class="lb-col-player">Player (Form)</th>' +
-          '<th class="lb-col-pts" style="color:var(--cyan)">Points</th>' +
-          '<th class="lb-col-win">Win %</th>' +
-          '<th class="lb-col-roi">ROI %</th>' +
-          '<th class="lb-col-bets num">Bets</th>' +
-          '<th class="lb-col-action"></th>' +
-        '</tr></thead><tbody>' + rowsHtml + '</tbody></table></div>' : '') +
-      '</div>'
-    ) : '') +
+  return '<section class="view lg-view">' + locationPromptBanner() +
+    '<h1 class="page-title">Leagues</h1>' + me +
+    '<h2 class="lg-h">Your leagues</h2><div class="lg-cards">' + leagueCards + '</div>' +
+    '<h2 class="lg-h">Local ladders <small>automatic, from your location</small></h2><div class="lg-ladders">' + ladderChips + '</div>' +
+    board +
+    '<p class="lg-rules">🛡️ <b>1 league bet a day</b>, logged before kick-off · a winner scores (price − 1) × 10, so Evens = 10 pts, capped at 100 · a loser −2 · <a href="#/guide">Full rules ›</a></p>' +
   '</section>';
 }
 
@@ -6447,6 +6340,8 @@ document.addEventListener('click', event => {
       openAuthModal();
     } else {
       $('league-modal').hidden = false;
+      const tab = $(t.dataset.openLeagueModal === 'join' ? 'tab-join-league' : 'tab-create-league');
+      if (tab && t.dataset.openLeagueModal) tab.click();
     }
   }
   else if (t.dataset.closeLeague !== undefined) { $('league-modal').hidden = true; }
