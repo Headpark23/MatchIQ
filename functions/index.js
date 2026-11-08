@@ -69,6 +69,89 @@ exports.ownerUserStats = onRequest({ cors: true }, async (req, res) => {
   }
 });
 
+// ---------------------------------------------------------- BetAI: signed-in football Q&A, 4 a day
+// The Gemini key lives only here (firebase functions:secrets:set GEMINI_API_KEY). The browser sends a
+// question with its ID token; the answer is built from the app's own model data, picks only.
+const { defineSecret } = require('firebase-functions/params');
+const betai = require('./lib/betai');
+const GEMINI_API_KEY = defineSecret('GEMINI_API_KEY');
+const BETAI_MODEL = process.env.BETAI_MODEL || 'gemini-2.5-flash';
+
+async function callGemini(key, question, ctx, nowMs) {
+  const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + BETAI_MODEL + ':generateContent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: betai.SYSTEM_PROMPT }] },
+      contents: [{ role: 'user', parts: [{ text: betai.buildPrompt(question, ctx, nowMs) }] }],
+      generationConfig: { temperature: 0.4, maxOutputTokens: 4096, responseMimeType: 'application/json', responseSchema: betai.RESPONSE_SCHEMA }
+    })
+  });
+  if (!res.ok) throw new Error('Gemini HTTP ' + res.status);
+  const body = await res.json();
+  const text = body.candidates && body.candidates[0] && body.candidates[0].content && body.candidates[0].content.parts &&
+    body.candidates[0].content.parts.map(p => p.text || '').join('');
+  if (!text) throw new Error('Gemini returned no text');
+  return JSON.parse(text);
+}
+
+// One counter per user per UK day. Taken before the model call, handed back if the call fails.
+async function takeBetAIQuestion(uid, day) {
+  const ref = db.collection('betaiUsage').doc(uid);
+  return db.runTransaction(async tx => {
+    const snap = await tx.get(ref);
+    const used = snap.exists && snap.data().day === day ? snap.data().count || 0 : 0;
+    if (used >= betai.DAILY_LIMIT) return { ok: false, remaining: 0 };
+    tx.set(ref, { day, count: used + 1, updatedAt: FieldValue.serverTimestamp() });
+    return { ok: true, remaining: betai.DAILY_LIMIT - used - 1 };
+  });
+}
+async function readBetAIRemaining(uid, day) {
+  const snap = await db.collection('betaiUsage').doc(uid).get();
+  const used = snap.exists && snap.data().day === day ? snap.data().count || 0 : 0;
+  return Math.max(0, betai.DAILY_LIMIT - used);
+}
+async function giveBackBetAIQuestion(uid, day) {
+  const ref = db.collection('betaiUsage').doc(uid);
+  await db.runTransaction(async tx => {
+    const snap = await tx.get(ref);
+    if (snap.exists && snap.data().day === day && snap.data().count > 0) tx.update(ref, { count: snap.data().count - 1 });
+  });
+}
+
+exports.betAI = onRequest({ cors: true, secrets: [GEMINI_API_KEY], timeoutSeconds: 60, memory: '256MiB' }, async (req, res) => {
+  if (req.method !== 'POST') { res.status(405).json({ error: 'post only' }); return; }
+  let uid;
+  try {
+    const m = /^Bearer (.+)$/.exec(req.get('Authorization') || '');
+    if (!m) { res.status(401).json({ error: 'sign-in-required' }); return; }
+    uid = (await admin.auth().verifyIdToken(m[1])).uid;
+  } catch (e) { res.status(401).json({ error: 'sign-in-required' }); return; }
+
+  const now = Date.now();
+  const day = betai.ukDay(now);
+  const body = req.body && typeof req.body === 'object' ? req.body : {};
+  try {
+    if (body.quota) { res.json({ remaining: await readBetAIRemaining(uid, day), limit: betai.DAILY_LIMIT }); return; }
+    const question = betai.cleanQuestion(body.question);
+    if (question.length < 3) { res.status(400).json({ error: 'question-too-short' }); return; }
+    const slot = await takeBetAIQuestion(uid, day);
+    if (!slot.ok) { res.status(429).json({ error: 'daily-limit', remaining: 0, limit: betai.DAILY_LIMIT }); return; }
+    try {
+      const ctx = betai.buildContext(await loadData('predictions.json'), question, now);
+      const out = betai.normalise(await callGemini(GEMINI_API_KEY.value(), question, ctx, now));
+      res.json(Object.assign(out, { remaining: slot.remaining, limit: betai.DAILY_LIMIT }));
+    } catch (e) {
+      logger.warn('betAI failed', e);
+      await giveBackBetAIQuestion(uid, day).catch(() => {});
+      res.status(502).json({ error: 'ai-unavailable', remaining: slot.remaining + 1, limit: betai.DAILY_LIMIT });
+    }
+  } catch (e) {
+    logger.warn('betAI quota failed', e);
+    res.status(500).json({ error: 'unavailable' });
+  }
+});
+
 const STAT_FIELDS = ['points','winRate', 'roi', 'settled', 'form'];
 
 // ---------------------------------------------------------- 1. a league bet is logged

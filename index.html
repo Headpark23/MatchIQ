@@ -60,7 +60,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="styles.css?v=87">
+<link rel="stylesheet" href="styles.css?v=88">
 </head>
 <body>
   <!-- PWA Service Worker Update Available Banner -->
@@ -245,7 +245,7 @@
 <script src="bet_builder.js?v=84"></script>
 <script src="settlement.js?v=97"></script>
 <script src="league_sync.js?v=97"></script>
-<script src="app.js?v=106"></script>
+<script src="app.js?v=107"></script>
 
 <!-- Create/Join League Modal -->
 <div class="modal-backdrop" id="league-modal" hidden>
@@ -425,7 +425,7 @@
 
 <!-- Return from Bookmaker Confirmation Modal -->
 
-<!-- Bet Butler Bookmaker Preference Modal -->
+<!-- Bookmaker Preference Modal (slip note settings) -->
 <!-- Today's Best Value Bet Modal / Bottom Sheet -->
 <div class="modal-backdrop" id="best-value-modal" hidden>
   <div class="modal best-value-dialog" role="dialog" aria-modal="true" aria-labelledby="best-value-title">
@@ -447,7 +447,7 @@
   <div class="modal slip-card-dialog" role="dialog" aria-modal="true" aria-labelledby="slip-card-title">
     <div class="modal-head">
       <div>
-        <div class="slip-card-badge">SLIP NOTE &middot; BET BUTLER</div>
+        <div class="slip-card-badge">SLIP NOTE</div>
         <h2 id="slip-card-title" class="slip-card-heading">Acca Slip Note</h2>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
@@ -490,13 +490,27 @@
   </div>
 </div>
 
+<!-- BetAI: signed-in Q&A, predictions only -->
+<div class="modal-backdrop" id="betai-modal" hidden>
+  <div class="modal betai-dialog" role="dialog" aria-modal="true" aria-labelledby="betai-title">
+    <div class="modal-head">
+      <div>
+        <div class="slip-card-badge" style="color:#a78bfa;">BETAI &middot; AI PREDICTIONS</div>
+        <h2 id="betai-title" class="slip-card-heading">Ask BetAI</h2>
+      </div>
+      <button type="button" class="icon-btn" onclick="closeBetAI()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body betai-body" id="betai-body"></div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="butler-modal" hidden>
   <div class="modal butler-dialog" role="dialog" aria-modal="true" aria-labelledby="butler-modal-title">
     <div class="modal-head">
       <div style="display:flex;align-items:center;gap:12px;">
         <div class="butler-avatar-badge">🤵</div>
         <div>
-          <div class="slip-card-badge" style="color:#38bdf8;font-size:11px;font-weight:700;letter-spacing:0.06em;">BET BUTLER &middot; SLIP NOTE SETTINGS</div>
+          <div class="slip-card-badge" style="color:#38bdf8;font-size:11px;font-weight:700;letter-spacing:0.06em;">SLIP NOTE SETTINGS</div>
           <h2 id="butler-modal-title" style="margin:2px 0 0;font-size:1.25rem;font-weight:800;color:#fff;">
             Choose Your Bookmakers
           </h2>

@@ -1426,7 +1426,7 @@ function renderWelcomeHero() {
     '<div class="hub-grid">' +
       card('a', 'hub-pick', 'target', 'Model-built acca', 'We build an acca to your target return.', 'Build', 'href="#/picks"') +
       card('button type="button"', 'hub-models portal-card-best-value', 'spark', 'Model picks of the day', 'Biggest model-vs-price gaps. Information only.', 'View', 'onclick="openBestValueModal(\'single\')"') +
-      card('button type="button"', 'hub-butler', 'slip', 'Bet Butler', 'Keep your slip in view as you enter it.', 'Open', 'onclick="openButlerModal()"') +
+      card('button type="button"', 'hub-betai', 'compass', 'BetAI', 'Ask anything: a team, an acca, goals, cards, corners. Picks only.', 'Ask', 'onclick="openBetAI()"') +
       card('a', 'hub-leagues', 'trophy', 'Leagues', 'Compete with mates and in local ladders.', 'Join', 'href="#/leagues"') +
     '</div>' +
     '<nav class="hub-more" aria-label="More">' +
@@ -1434,6 +1434,7 @@ function renderWelcomeHero() {
       '<a href="#/results">' + hubIcon('chart', 16) + 'Results</a>' +
       '<a href="#/diary">' + hubIcon('book', 16) + 'Diary' + (diaryCount ? ' (' + diaryCount + ')' : '') + '</a>' +
     '</nav>' +
+    '<button type="button" class="hub-quiet-link" onclick="openButlerModal()">' + hubIcon('slip', 14) + 'My bookmakers &amp; slip note settings</button>' +
     onboardHtml +
   '</div>';
 }
@@ -4668,7 +4669,7 @@ function viewGuide() {
     '<p class="guide-tip">Bet Buddy never places bets for you. It helps you decide, then you place the bet with your own bookmaker.</p>';
 
   const around = '<div class="guide-grid">' +
-    '<div><b>🏠 Home</b><span>The welcome hub: today&rsquo;s best-value bet, the Bet Butler slip helper and shortcuts.</span></div>' +
+    '<div><b>🏠 Home</b><span>The welcome hub: today&rsquo;s best-value bet, BetAI and shortcuts.</span></div>' +
     '<div><b>🎯 Picks</b><span>The Bet Builder and a card for every upcoming match with its lean and verdict.</span></div>' +
     '<div><b>📅 Fixtures</b><span>The full schedule by competition. Tap a match for its full analysis page.</span></div>' +
     '<div><b>📊 Results</b><span>Every prediction is sealed before kick-off and scored afterwards, so you can judge the model on its record.</span></div>' +
@@ -4690,7 +4691,7 @@ function viewGuide() {
     step(1, 'Open the Bet Builder', 'Go to <b>Picks</b>. Choose today&rsquo;s games or the 7-day slate.') +
     step(2, 'Set your target', 'Enter your stake and how much you would like to win.') +
     step(3, 'Review the acca', 'Bet Buddy suggests legs and shows the combined odds, the probability of every leg landing and the expected value.') +
-    step(4, 'Use the Bet Butler', 'Pick your bookmaker, then tick legs off as you enter them in their app, or copy the selections with one tap.') +
+    step(4, 'Use the slip note','Pick your bookmaker, then tick legs off as you enter them in their app, or copy the selections with one tap.') +
     step(5, 'Share it', 'Send the slip link to a mate and their Bet Builder opens pre-filled.') +
     '</ol><p class="guide-tip">An acca only pays if <b>every</b> leg wins. More legs means bigger returns but a much lower chance.</p>';
 
@@ -6112,6 +6113,7 @@ function initFirebaseAuth() {
   });
 
   firebaseAuth.onAuthStateChanged(async user => {
+    try { betai.remaining = null; betai.result = null; betai.error = ''; if ($('betai-modal') && !$('betai-modal').hidden) openBetAI(); } catch (e) {}
     currentAuthUser = user;
     if (user) {
       // Reflect the signed-in state immediately; cloud sync below must never block or break it.
@@ -6280,7 +6282,7 @@ document.addEventListener('click', event => {
     return;
   }
 
-  // Bet Butler single launch
+  // Slip note single launch
   if (t.dataset.launchButlerSingle !== undefined || (t.closest && t.closest('[data-launch-butler-single]'))) {
     const btn = t.dataset.launchButlerSingle !== undefined ? t : t.closest('[data-launch-butler-single]');
     try {
@@ -7126,7 +7128,7 @@ if (typeof window !== 'undefined') {
 }
 
 // ============================================================ 
-// THE BET BUTLER: Personal Assistant for Existing Bookmaker Account
+// SLIP NOTE & BOOKMAKER PREFERENCES (formerly "Bet Butler"; function names kept for stability)
 // ============================================================ 
 const BUTLER_STORAGE_KEY = 'betbuddy_butler_bookie_v1';
 const BOOKMAKERS_CONFIG = {
@@ -7222,6 +7224,131 @@ function closeButlerModal() {
   const modal = $('butler-modal');
   if (modal) modal.hidden = true;
 }
+
+// ============================================================
+// BETAI: ask anything, get predictions only. Signed-in users, 4 questions a day.
+// The Gemini call happens in the betAI Cloud Function; this only shows what it returns.
+// ============================================================
+const BETAI_URL = 'https://europe-west1-betbuddyuk.cloudfunctions.net/betAI';
+const BETAI_EXAMPLES = ['Best bets for Arsenal this week', 'Build me a 4-fold acca', 'Over 2.5 goals tips today', 'Corners or cards value this weekend'];
+const betai = { remaining: null, limit: 4, loading: false, result: null, error: '', showWhy: false, question: '' };
+
+function betaiSignedIn() { const u = getAuthUser(); return Boolean(u && u.signedIn && firebaseAuth && firebaseAuth.currentUser); }
+
+async function betaiCall(payload) {
+  const token = await firebaseAuth.currentUser.getIdToken();
+  const res = await fetch(BETAI_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify(payload) });
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) { const err = new Error(data.error || ('HTTP ' + res.status)); err.data = data; throw err; }
+  return data;
+}
+
+function renderBetAI() {
+  const body = $('betai-body');
+  if (!body) return;
+  if (!betaiSignedIn()) {
+    body.innerHTML = '<div class="betai-gate"><p>BetAI is for signed-in accounts. Sign in with Google to ask up to 4 questions a day.</p>' +
+      '<button type="button" class="btn google-primary-btn" onclick="signInWithGoogle()" style="min-height:46px;">Sign in with Google</button></div>' + betaiFoot();
+    return;
+  }
+  const out = betai.remaining === 0;
+  const left = betai.remaining == null ? '' : betai.remaining + ' of ' + betai.limit + ' questions left today';
+  let html = '<form class="betai-form" onsubmit="askBetAI(event)">' +
+    '<label class="sr-only" for="betai-input">Your question</label>' +
+    '<textarea id="betai-input" class="betai-input" rows="2" maxlength="300" placeholder="e.g. Best bets for Liverpool, or a goals acca for Saturday"' +
+      (betai.loading || out ? ' disabled' : '') + '>' + esc(betai.question) + '</textarea>' +
+    '<div class="betai-row"><span class="betai-left' + (out ? ' is-out' : '') + '">' + esc(out ? 'No questions left today. Resets at midnight UK time.' : left) + '</span>' +
+    '<button type="submit" class="btn primary betai-go"' + (betai.loading || out ? ' disabled' : '') + '>' + (betai.loading ? 'Thinking…' : 'Ask') + '</button></div>' +
+  '</form>';
+  if (!betai.result && !betai.loading) {
+    html += '<div class="betai-chips">' + BETAI_EXAMPLES.map(q => '<button type="button" class="betai-chip" data-betai-q="' + esc(q) + '">' + esc(q) + '</button>').join('') + '</div>';
+  }
+  if (betai.error) html += '<p class="betai-error" role="alert">' + esc(betai.error) + '</p>';
+  if (betai.result) html += renderBetAIResult(betai.result);
+  body.innerHTML = html + betaiFoot();
+}
+
+function betaiFoot() {
+  return '<p class="slip-card-disclaimer">AI estimates built from Bet Buddy&rsquo;s model data, not tips or guarantees. Lineups and injuries are not included. 18+ only. Play responsibly (<a href="https://www.begambleaware.org" target="_blank" rel="noopener noreferrer" style="color:var(--cyan);">BeGambleAware.org</a>).</p>';
+}
+
+function renderBetAIResult(r) {
+  let html = '';
+  if (r.notice) html += '<p class="betai-notice">' + esc(r.notice) + '</p>';
+  if (r.picks && r.picks.length) {
+    html += '<ul class="betai-picks">' + r.picks.map(p =>
+      '<li class="betai-pick"><div class="betai-pick-top"><span class="betai-match">' + esc(p.match) + '</span><span class="betai-conf" title="Confidence">' + esc(p.confidence) + '%</span></div>' +
+      '<div class="betai-angle"><b>' + esc(p.selection) + '</b> <span>' + esc(p.market) + '</span></div>' +
+      (p.scoreline ? '<div class="betai-sub">Scoreline: ' + esc(p.scoreline) + '</div>' : '') +
+      (p.pivot ? '<div class="betai-sub">If it turns: ' + esc(p.pivot) + '</div>' : '') + '</li>').join('') + '</ul>';
+    if (r.kind === 'acca' && r.combinedP != null) {
+      html += '<p class="betai-acca">Accumulator: all ' + r.picks.length + ' legs landing is about <b>' + (r.combinedP < 0.01 ? '<1' : Math.round(r.combinedP * 100)) + '%</b> on the model. Most accas lose.</p>';
+    }
+  }
+  const why = r.reasoning || {};
+  if ((why.experts && why.experts.length) || why.scenario) {
+    html += '<button type="button" class="betai-why-btn" data-betai-why aria-expanded="' + betai.showWhy + '">' + (betai.showWhy ? 'Hide' : 'Show') + ' thought process</button>';
+    if (betai.showWhy) {
+      html += '<div class="betai-why">' + (why.scenario ? '<p><b>Game script.</b> ' + esc(why.scenario) + '</p>' : '') +
+        (why.experts || []).map(e => '<p><b>' + esc(e.role) + '.</b> ' + esc(e.brief) + '</p>').join('') + '</div>';
+    }
+  }
+  return html;
+}
+
+function betaiErrorText(e) {
+  const code = e && e.message;
+  if (code === 'daily-limit') return 'You have used your 4 questions for today. Back at midnight UK time.';
+  if (code === 'sign-in-required') return 'Please sign in again to use BetAI.';
+  if (code === 'ai-unavailable') return 'BetAI could not answer just now. That question was not counted. Try again shortly.';
+  return 'Something went wrong. Please try again.';
+}
+
+async function openBetAI() {
+  const modal = $('betai-modal');
+  if (!modal) return;
+  modal.hidden = false;
+  renderBetAI();
+  if (betaiSignedIn() && betai.remaining == null) {
+    try {
+      const q = await betaiCall({ quota: true });
+      betai.remaining = q.remaining; betai.limit = q.limit || 4;
+    } catch (e) { /* the count will arrive with the first answer */ }
+    renderBetAI();
+  }
+}
+function closeBetAI() { const m = $('betai-modal'); if (m) m.hidden = true; }
+
+async function askBetAI(ev) {
+  if (ev) ev.preventDefault();
+  const input = $('betai-input');
+  const question = ((input && input.value) || '').trim();
+  if (betai.loading || !betaiSignedIn()) return;
+  if (question.length < 3) { betai.error = 'Type a question first.'; renderBetAI(); return; }
+  betai.question = question; betai.error = ''; betai.loading = true; betai.result = null; betai.showWhy = false;
+  renderBetAI();
+  try {
+    const out = await betaiCall({ question });
+    betai.result = out; betai.remaining = out.remaining; betai.limit = out.limit || 4;
+  } catch (e) {
+    betai.error = betaiErrorText(e);
+    if (e && e.data && typeof e.data.remaining === 'number') betai.remaining = e.data.remaining;
+  }
+  betai.loading = false;
+  renderBetAI();
+}
+
+document.addEventListener('click', e => {
+  const t = e.target;
+  if (!t || !t.closest) return;
+  const chip = t.closest('[data-betai-q]');
+  if (chip) { betai.question = chip.dataset.betaiQ; renderBetAI(); const i = $('betai-input'); if (i) i.focus(); return; }
+  if (t.closest('[data-betai-why]')) { betai.showWhy = !betai.showWhy; renderBetAI(); return; }
+  if (t.id === 'betai-modal') closeBetAI();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBetAI(); });
+if (typeof window !== 'undefined') { window.openBetAI = openBetAI; window.closeBetAI = closeBetAI; window.askBetAI = askBetAI; }
 
 function getButlerLaunchUrl(slipIdx) {
   const butler = getButlerBookmaker();
