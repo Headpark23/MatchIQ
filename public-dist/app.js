@@ -1329,7 +1329,7 @@ function bvGap(l, mode, big) {
   return '<div class="bv-gap' + (big ? ' big' : '') + '">' +
     '<div class="bv-gap-row"><span>Our chance</span><i><em class="ours" style="--w:' + ours + '%"></em></i><b>' + ours + '%</b></div>' +
     '<div class="bv-gap-row"><span>Price says</span><i><em style="--w:' + implied + '%"></em></i><b>' + implied + '%</b></div>' +
-    (big ? '<p class="bv-gap-say">We rate it <b>' + (ours - implied) + ' points</b> likelier than the price.</p>' : '') +
+
   '</div>';
 }
 
@@ -1365,9 +1365,10 @@ function renderBestValueModalContent() {
     '<div class="bv-hero-actions">' + addBtn(top, 0, true) + '<a class="btn" href="#/match/' + encodeURIComponent(top.matchId) + '" onclick="closeBestValueModal()">Analysis ›</a></div>' +
   '</article>';
 
+  const vs = l => '<span class="bv-vs"><b>' + Math.round(l.p * 100) + '%</b>' + (data.mode === 'model' ? ' our chance' : ' vs ' + Math.round(100 / Number(l.odds || 1)) + '%') + '</span>';
   const more = rest.length ? '<h3 class="bv-h">More picks today</h3><div class="bv-legs-list">' + rest.map((l, i) =>
-    '<div class="bv-leg-item"><div class="bv-leg-info"><div class="bv-leg-when">' + esc(bvWhen(l)) + '</div><div class="bv-leg-match">' + esc(bvMatch(l)) + '</div>' +
-      '<div class="bv-leg-sel">' + esc(l.label) + ' <span class="mono">' + esc(bvPrice(l)) + '</span></div>' + bvGap(l, data.mode, false) + '</div>' + addBtn(l, i + 1, false) + '</div>').join('') + '</div>' : '';
+    '<div class="bv-leg-item bv-row"><div class="bv-leg-info"><div class="bv-leg-sel">' + esc(l.label) + ' <span class="mono">' + esc(bvPrice(l)) + '</span></div>' +
+      '<div class="bv-leg-sub">' + esc(bvMatch(l)) + ' · ' + vs(l) + '</div></div>' + addBtn(l, i + 1, false) + '</div>').join('') + '</div>' : '';
 
   const tiers = [['single', 'Single', 1], ['double', 'Double', 2], ['treble', 'Treble', 3], ['fourFold', '4-fold', 4]].filter(t => all.length >= t[2]);
   if (!tiers.some(t => t[0] === activeBestValueTier)) activeBestValueTier = tiers[tiers.length - 1][0];
@@ -1376,16 +1377,16 @@ function renderBestValueModalContent() {
   const chance = tierData.estProb >= 0.1 ? Math.round(tierData.estProb * 100) : (tierData.estProb * 100).toFixed(1);
   const combine = all.length > 1 ? '<h3 class="bv-h">Combine them</h3>' +
     '<div class="bv-tabs" role="group" aria-label="How many picks">' + tiers.map(t => '<button type="button" class="bv-tab' + (activeBestValueTier === t[0] ? ' active' : '') + '" aria-pressed="' + (activeBestValueTier === t[0]) + '" onclick="setBestValueTier(\'' + t[0] + '\')">' + t[1] + '</button>').join('') + '</div>' +
-    '<div class="bv-summary-card"><div><span>Odds</span><b class="mono">' + esc(fmtOdds(tierData.odds)) + '</b></div><div><span>Chance all land</span><b class="mono">' + chance + '%</b></div><div><span>£' + stake.toFixed(0) + ' returns</span><b class="mono pos">£' + (stake * tierData.odds).toFixed(2) + '</b></div></div>' +
-    '<div class="bv-modal-actions"><button type="button" class="btn primary" onclick="addBestValueToDiary(\'' + activeBestValueTier + '\')">Put the ' + esc(tierData.type.toLowerCase()) + ' on my bet slip</button>' +
-      '<button type="button" class="btn" onclick="openSlipCardFromBestValue(\'' + activeBestValueTier + '\')">📋 Slip card</button></div>' : '';
+    '<div class="bv-summary-card bv-sum-line"><span><b class="mono">' + esc(fmtOdds(tierData.odds)) + '</b> odds</span><span><b class="mono">' + chance + '%</b> all land</span><span>£' + stake.toFixed(0) + ' → <b class="mono pos">£' + (stake * tierData.odds).toFixed(2) + '</b></span></div>' +
+    '<div class="bv-modal-actions"><button type="button" class="btn primary" onclick="addBestValueToDiary(\'' + activeBestValueTier + '\')">Add ' + esc(tierData.type.toLowerCase()) + ' to slip</button>' +
+      '<button type="button" class="btn" onclick="openSlipCardFromBestValue(\'' + activeBestValueTier + '\')" aria-label="Open slip card">📋 Slip card</button></div>' : '';
 
   const note = data.mode === 'model'
-    ? 'Bookmaker prices are not fresh right now, so these are our most likely picks at estimated prices. Check the real price before you bet.'
+    ? 'Estimated prices: check the real price before you bet.'
     : data.mode === 'live'
-      ? 'Our evidence for these markets is still early, so a gap against the price is a lead, not proof. No bet is certain.'
-      : 'A gap against the price is not a promise. No bet is certain.';
-  body.innerHTML = hero + more + combine + '<p class="bv-note">' + esc(note) + ' 18+. Only stake what you can afford to lose.</p>';
+      ? 'Early evidence: a gap is a lead, not proof.'
+      : 'A gap against the price is not a promise.';
+  body.innerHTML = hero + more + combine + '<p class="bv-note">' + esc(note) + ' 18+. Stake only what you can afford to lose.</p>';
 }
 
 // One pick onto the bet slip (added alongside anything already there).

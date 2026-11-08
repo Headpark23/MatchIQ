@@ -5036,3 +5036,53 @@ a.hm-chip:hover { border-color: var(--pick); }
 @media (prefers-reduced-motion: reduce) { .dy-month-track i, .dy-stack i { animation: none; } }
 .hm-proof { flex-wrap: nowrap; justify-content: space-around; }
 .view > details.card.section > summary.section-title { font-size: 15px !important; min-height: 48px !important; }
+
+/* Today's top picks: everything on one phone screen */
+.best-value-dialog .modal-head { padding: 12px 16px 10px; }
+.best-value-dialog .slip-card-heading { font-size: 19px; margin: 2px 0 0; }
+.best-value-dialog .bv-kicker { font-size: 10.5px; }
+.best-value-modal-body { padding: 10px 14px 12px !important; gap: 8px; }
+.bv-hero { padding: 12px 12px 10px; }
+.bv-hero-kicker { padding: 2px 8px; font-size: 10.5px; }
+.bv-hero-match { margin-top: 6px; font-size: 12.5px; }
+.bv-hero-pick { margin: 0 0 6px; }
+.bv-hero-pick b { font-size: 20px; }
+.bv-price { padding: 4px 10px; font-size: 17px; }
+.bv-price small { font-size: 9.5px; }
+.bv-gap.big .bv-gap-row { grid-template-columns: 76px 1fr 36px; font-size: 11.5px; }
+.bv-gap.big .bv-gap-row i { height: 7px; }
+.bv-gap { gap: 3px; }
+.bv-hero-actions { margin-top: 8px; gap: 6px; }
+.bv-hero-actions .btn { min-height: 38px; font-size: 14px; }
+.bv-h { margin: 2px 0 -2px; font-size: 11px; }
+.best-value-modal-body .bv-legs-list { gap: 6px; }
+.best-value-modal-body .bv-leg-item.bv-row { gap: 10px; padding: 8px 10px; border-radius: 12px; }
+.bv-row .bv-leg-sel { margin: 0 !important; font-size: 14px !important; }
+.bv-leg-sub { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bv-vs b { color: var(--pick); }
+.bv-row .bv-plus { width: 36px; height: 36px; border-radius: 10px; font-size: 18px; }
+.best-value-modal-body .bv-tab { min-height: 32px; font-size: 12.5px; }
+.best-value-modal-body .bv-sum-line { display: flex; justify-content: space-between; gap: 6px; padding: 8px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.best-value-modal-body .bv-sum-line > span { display: inline; padding: 0; background: none; border: 0; white-space: nowrap; }
+.best-value-modal-body .bv-sum-line b { display: inline; font-size: 14px; color: var(--ink); }
+.best-value-modal-body .bv-sum-line b.pos { color: var(--pick); }
+.best-value-modal-body .bv-modal-actions .btn { min-height: 40px; font-size: 14px; }
+.bv-note { margin: 0; font-size: 11px; }
+
+/* Short phones: squeeze the last spacing so today's picks still fit one screen */
+@media (max-height: 740px) {
+  .best-value-dialog .modal-head { padding: 8px 14px 6px; }
+  .best-value-dialog .slip-card-heading { font-size: 17px; }
+  .best-value-modal-body { padding: 8px 12px 10px !important; gap: 6px; }
+  .bv-hero-kicker, .bv-h { display: none; }
+  .bv-hero { padding: 10px 12px 8px; }
+  .bv-hero-match { margin-top: 0; }
+  .bv-hero-pick b { font-size: 18px; }
+  .bv-hero-actions .btn { min-height: 36px; font-size: 13.5px; }
+  .best-value-modal-body .bv-leg-item.bv-row { padding: 6px 10px; }
+  .bv-row .bv-plus { width: 32px; height: 32px; }
+  .best-value-modal-body .bv-tab { min-height: 30px; }
+  .best-value-modal-body .bv-sum-line { padding: 6px 10px; }
+  .best-value-modal-body .bv-modal-actions .btn { min-height: 38px; }
+  .bv-note { font-size: 10.5px; line-height: 1.3; }
+}
