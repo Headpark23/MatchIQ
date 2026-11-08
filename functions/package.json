@@ -7,7 +7,7 @@
     "node": "22"
   },
   "scripts": {
-    "test": "node test/scoring.test.js && node test/betai.test.js"
+    "test": "node test/scoring.test.js && node test/betai.test.js && node test/dashboard.test.js"
   },
   "dependencies": {
     "firebase-admin": "^12.7.0",

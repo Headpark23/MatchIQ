@@ -40,14 +40,19 @@ const loadFixtures = async () => (await loadData('fixtures.json')).fixtures || [
 // Firebase Auth accounts can't be listed from a browser, so the founder dashboard asks here.
 // The caller's ID token must belong to a verified owner email; nobody else gets a count.
 const OWNER_EMAILS = ['headpark@gmail.com'];
+// Returns true when the request carries a verified owner's ID token; otherwise answers 401/403.
+async function requireOwner(req, res) {
+  const m = /^Bearer (.+)$/.exec(req.get('Authorization') || '');
+  if (!m) { res.status(401).json({ error: 'unauthenticated' }); return false; }
+  const tok = await admin.auth().verifyIdToken(m[1]);
+  if (!tok.email_verified || !OWNER_EMAILS.includes((tok.email || '').toLowerCase())) {
+    res.status(403).json({ error: 'forbidden' }); return false;
+  }
+  return true;
+}
 exports.ownerUserStats = onRequest({ cors: true }, async (req, res) => {
   try {
-    const m = /^Bearer (.+)$/.exec(req.get('Authorization') || '');
-    if (!m) { res.status(401).json({ error: 'unauthenticated' }); return; }
-    const tok = await admin.auth().verifyIdToken(m[1]);
-    if (!tok.email_verified || !OWNER_EMAILS.includes((tok.email || '').toLowerCase())) {
-      res.status(403).json({ error: 'forbidden' }); return;
-    }
+    if (!await requireOwner(req, res)) return;
     let total = 0, google = 0, last7 = 0, new7 = 0, token;
     const now = Date.now(), week = 7 * 864e5;
     do {
@@ -66,6 +71,47 @@ exports.ownerUserStats = onRequest({ cors: true }, async (req, res) => {
   } catch (e) {
     logger.warn('ownerUserStats failed', e);
     res.status(401).json({ error: 'invalid token' });
+  }
+});
+
+// ---------------------------------------------------------- owner-only: growth and usage dashboard
+// Reads every account, synced diary, league bet, league and today's BetAI counters, and returns only
+// totals and counts (functions/lib/dashboard.js). Nothing personal is sent back.
+const dashboard = require('./lib/dashboard');
+const toMs = v => (v && v.toMillis ? v.toMillis() : Date.parse(v));
+exports.ownerDashboard = onRequest({ cors: true, memory: '512MiB', timeoutSeconds: 120 }, async (req, res) => {
+  try {
+    if (!await requireOwner(req, res)) return;
+    const users = [];
+    let token;
+    do {
+      const page = await admin.auth().listUsers(1000, token);
+      page.users.forEach(u => users.push({
+        created: Date.parse(u.metadata.creationTime), lastSeen: Date.parse(u.metadata.lastSignInTime),
+        google: u.providerData.some(p => p.providerId === 'google.com')
+      }));
+      token = page.pageToken;
+    } while (token);
+    const [diarySnap, betsSnap, leaguesSnap, membersSnap, betaiSnap] = await Promise.all([
+      db.collectionGroup('diary').get(), db.collectionGroup('leagueBets').get(), db.collection('leagues').get(),
+      db.collectionGroup('members').get(), db.collection('betaiUsage').get()
+    ]);
+    const memberCount = {};
+    membersSnap.docs.forEach(d => {
+      const league = d.ref.parent.parent;
+      if (league && league.parent && league.parent.id === 'leagues') memberCount[league.id] = (memberCount[league.id] || 0) + 1;
+    });
+    res.json(dashboard.aggregate({
+      users,
+      diary: diarySnap.docs.filter(d => d.ref.parent.parent && d.ref.parent.parent.parent.id === 'users').map(d => ({ uid: d.ref.parent.parent.id, entry: d.data() })),
+      leagueBets: betsSnap.docs.map(d => ({ uid: d.ref.parent.parent ? d.ref.parent.parent.id : '', day: d.id, outcome: d.get('outcome') || d.get('status') })),
+      leagues: leaguesSnap.docs.map(d => ({ created: toMs(d.get('createdAt')), members: memberCount[d.id] || 0 })),
+      betai: betaiSnap.docs.map(d => ({ day: d.get('day'), count: d.get('count') })),
+      now: Date.now()
+    }));
+  } catch (e) {
+    logger.warn('ownerDashboard failed', e);
+    res.status(500).json({ error: 'dashboard unavailable' });
   }
 });
 

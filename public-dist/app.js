@@ -910,7 +910,7 @@ function nextAccaOption() {
 
 // Model legs (from the acca builder or today's top picks) onto the player's bet slip. With replace,
 // the slip becomes exactly these legs (after asking if it already holds others); otherwise they are added.
-function addLegsToOwnBet(modelLegs, replace) {
+function addLegsToOwnBet(modelLegs, replace, source) {
   if (replace && ownBet.legs.length && !confirm('Your bet slip already has ' + ownBet.legs.length + ' selection' + (ownBet.legs.length === 1 ? '' : 's') + '. Replace them?')) return false;
   const legs = [];
   modelLegs.forEach(l => {
@@ -927,6 +927,7 @@ function addLegsToOwnBet(modelLegs, replace) {
       legs.push({ id, kind: 'custom', sport: sport.charAt(0).toUpperCase() + sport.slice(1), pick: String(l.label || '').slice(0, 120), odds: Number(l.odds) > 1 ? Number(l.odds) : null, origin: 'matchiq' });
     }
   });
+  if (!ownBet.legs.length || replace) ownBet.source = source || ownBetRouteSource();
   if (replace) { ownBet.legs = legs.slice(0, OWN_BET_MAX_LEGS); ownBet.stake = Number(builderState.stake) || ownBet.stake; ownBet.origin = ''; }
   else {
     const room = OWN_BET_MAX_LEGS - ownBet.legs.length;
@@ -942,7 +943,7 @@ function addLegsToOwnBet(modelLegs, replace) {
 // Puts the model's acca on the player's bet slip, where it is saved to the Diary or League like any bet.
 function addAccaToOwnBet(idx) {
   const slip = builderResult && builderResult.slips && builderResult.slips[idx];
-  if (!slip || !addLegsToOwnBet(slip.legs, true)) return;
+  if (!slip || !addLegsToOwnBet(slip.legs, true, 'acca')) return;
   location.hash = '#/build';
   toast('Acca added to your bet slip. Add your stake and save it.');
 }
@@ -1413,7 +1414,7 @@ function addBestValueLeg(i) {
   const l = data && data.fourFold.legs[i];
   if (!l) return;
   if (ownBet.legs.some(x => x.fixtureId === l.matchId && x.key === l.selId)) { toast('Already on your bet slip.'); return; }
-  addLegsToOwnBet([l], false);
+  addLegsToOwnBet([l], false, 'toppicks');
   renderBestValueModalContent();
 }
 
@@ -1439,7 +1440,7 @@ function addBestValueToDiary(tier) {
   const data = getTodayBestValuePicks();
   if (!data) return;
   const tierData = data[tier] || data.single;
-  if (!addLegsToOwnBet(tierData.legs, true)) return;
+  if (!addLegsToOwnBet(tierData.legs, true, 'toppicks')) return;
   closeBestValueModal();
   location.hash = '#/build';
   toast('Picks added to your bet slip. Add your stake and save it.');
@@ -4089,7 +4090,7 @@ function handleDiaryFormSubmit(event) {
 const OWN_BET_KEY = 'betbuddy_own_bet_v1';
 const OWN_BET_MAX_LEGS = 10;
 const OWN_BET_SPORTS = ['Football', 'Tennis', 'Golf', 'Darts', 'Rugby', 'Cricket', 'Horse racing', 'Other'];
-let ownBet = { legs: [], stake: 10, bookmaker: '', dest: 'league', origin: '', notes: '' };
+let ownBet = { legs: [], stake: 10, bookmaker: '', dest: 'league', origin: '', notes: '', source: '' };
 let ownBetUI = { tab: 'football', q: '', day: '', comp: 'all', open: '', mtab: 'popular' };
 try {
   const savedOwn = JSON.parse(localStorage.getItem(OWN_BET_KEY) || 'null');
@@ -4190,6 +4191,7 @@ function addToOwnBet(data) {
   if (!leg) return;
   leg.origin = 'matchiq'; // '+ My bet' sits on Bet Buddy's own picks
   if (ownBet.legs.some(l => (leg.kind === 'football' ? l.fixtureId === leg.fixtureId && l.key === leg.key : l.pick === leg.pick))) { toast('Already on your bet slip.'); return; }
+  if (!ownBet.legs.length) ownBet.source = ownBetRouteSource();
   ownBet.legs.push(leg);
   persistOwnBet();
   updateOwnBetBar();
@@ -4246,6 +4248,9 @@ function ownBetFootballLeg(fx, opt, id) {
     match: fx.home + ' v ' + fx.away, market: OWN_BET_GROUP_NAME[opt.group] || '', pick: opt.label, odds: opt.decimal, est: !!opt.est, bookmaker: opt.bookmaker || '', origin: 'independent' };
 }
 
+// Where a bet was built, saved on the diary entry so the owner dashboard can count feature use.
+function ownBetRouteSource() { const r = currentRoute(); return r[0] === 'build' ? (r[1] === 'log' ? 'log' : 'build') : r[0]; }
+
 // Taps a price: adds it to the slip, or takes it off if it is already there (as bookmakers do).
 function toggleOwnBetLeg(fxId, key) {
   const fx = fixtureById(fxId);
@@ -4255,6 +4260,7 @@ function toggleOwnBetLeg(fxId, key) {
   if (ownBet.legs.length >= OWN_BET_MAX_LEGS) { toast('A bet can have up to ' + OWN_BET_MAX_LEGS + ' selections.', 'warn'); return; }
   const opt = ownBetMarketsFor(fx).find(o => o.key === key);
   if (!opt) return;
+  if (!ownBet.legs.length) ownBet.source = ownBetRouteSource();
   ownBet.legs.push(ownBetFootballLeg(fx, opt));
   persistOwnBet(); render();
 }
@@ -4374,12 +4380,13 @@ function addOwnBetCustomLeg() {
   if (!text) { toast('Enter what you backed, e.g. "Djokovic to win".', 'error'); return; }
   if (!odds) { toast('Enter valid odds, such as 6/4, Evens or 2.50.', 'error'); return; }
   if (ownBet.legs.length >= OWN_BET_MAX_LEGS) { toast('A bet can have up to ' + OWN_BET_MAX_LEGS + ' selections.', 'warn'); return; }
+  if (!ownBet.legs.length) ownBet.source = ownBetRouteSource();
   ownBet.legs.push({ id: 'ob' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), kind: 'custom', sport: $('own-custom-sport').value, pick: text.slice(0, 120), odds });
   persistOwnBet(); render();
 }
 
 function removeOwnBetLeg(id) { ownBet.legs = ownBet.legs.filter(l => l.id !== id); persistOwnBet(); render(); }
-function clearOwnBet() { ownBet.legs = []; ownBet.origin = ''; ownBet.notes = ''; persistOwnBet(); render(); }
+function clearOwnBet() { ownBet.legs = []; ownBet.origin = ''; ownBet.notes = ''; ownBet.source = ''; persistOwnBet(); render(); }
 function setOwnBetLegOdds(id, text) {
   const leg = ownBet.legs.find(l => l.id === id);
   if (!leg) return;
@@ -4416,7 +4423,7 @@ function buildOwnBetEntry() {
     id: 'bet-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7), type: acca ? 'accumulator' : 'single',
     profile: (user && user.signedIn) ? ('@' + (user.handle || (user.name || 'User').split(' ')[0])) : (handle && handle !== 'Tester A' ? handle : 'Default'),
     date: first ? first.kickoff_utc.slice(0, 10) : new Date().toISOString().slice(0, 10),
-    origin: ownBetOrigin(), bookmaker: ownBet.bookmaker.trim() || 'Bookmaker',
+    origin: ownBetOrigin(), source: ownBet.source || 'build', bookmaker: ownBet.bookmaker.trim() || 'Bookmaker',
     odds, stake, potentialReturn: stake * odds, outcome: 'pending', timestamp: new Date().toISOString(), inLeague: false, notes: String(ownBet.notes || '').trim()
   };
   if (acca) {
@@ -4451,7 +4458,7 @@ function saveOwnBetToDiary() {
   const state = ownBet.dest === 'league' ? ownBetLeagueState(entry) : null;
   try { const diary = getStoredDiary(); diary.unshift(entry); saveStoredDiary(diary); }
   catch (error) { console.error(error); toast('Could not save to this browser. Check storage space or privacy settings.', 'error'); return; }
-  ownBet.legs = []; ownBet.origin = ''; ownBet.notes = ''; persistOwnBet();
+  ownBet.legs = []; ownBet.origin = ''; ownBet.notes = ''; ownBet.source = ''; persistOwnBet();
   celebrateSave();
   location.hash = '#/diary';
   if (state && state.ok) enterLeagueBet(entry.id);
@@ -5071,35 +5078,6 @@ function saveBugReport(report) {
   try { localStorage.setItem(BUGS_STORAGE_KEY, JSON.stringify(bugs)); } catch (e) { /* ignore */ }
 }
 
-function renderTrafficChartSvg(history) {
-  const h = (Array.isArray(history) && history.length >= 2) ? history : getPast7Days();
-  const width = 600, height = 140, pad = 30;
-  const maxV = Math.max(...h.map(item => Number(item.visits) || 0), 10);
-  const stepX = (width - pad * 2) / (h.length - 1);
-  const getY = v => height - pad - (v / maxV) * (height - pad * 2);
-
-  const ptsVisits = h.map((item, i) => ({ x: pad + i * stepX, y: getY(item.visits) }));
-  const pathVisits = 'M ' + ptsVisits.map(p => p.x + ' ' + p.y).join(' L ');
-  const areaVisits = pathVisits + ' L ' + ptsVisits[ptsVisits.length - 1].x + ' ' + (height - pad) + ' L ' + ptsVisits[0].x + ' ' + (height - pad) + ' Z';
-
-  const ptsClicks = h.map((item, i) => ({ x: pad + i * stepX, y: getY((item.clicks || 0) * 4) }));
-  const pathClicks = 'M ' + ptsClicks.map(p => p.x + ' ' + p.y).join(' L ');
-
-  const xLabels = h.map((item, i) => '<text x="' + (pad + i * stepX) + '" y="' + (height - 8) + '" text-anchor="middle" font-size="11" fill="var(--dim)">' + item.day + '</text>').join('');
-
-  return '<svg viewBox="0 0 ' + width + ' ' + height + '" class="pnl-svg-chart" style="width:100%;height:140px">' +
-    '<defs>' +
-      '<linearGradient id="visGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/></linearGradient>' +
-    '</defs>' +
-    '<line x1="' + pad + '" y1="' + (height - pad) + '" x2="' + (width - pad) + '" y2="' + (height - pad) + '" stroke="var(--line-strong)" stroke-width="1"/>' +
-    '<path d="' + areaVisits + '" fill="url(#visGrad)"/>' +
-    '<path d="' + pathVisits + '" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>' +
-    '<path d="' + pathClicks + '" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" stroke-linecap="round"/>' +
-    ptsVisits.map((p, i) => '<circle cx="' + p.x + '" cy="' + p.y + '" r="3" fill="#38bdf8"><title>' + h[i].day + ': ' + h[i].visits + ' visits</title></circle>').join('') +
-    ptsClicks.map((p, i) => '<circle cx="' + p.x + '" cy="' + p.y + '" r="2.5" fill="#f59e0b"><title>' + h[i].day + ': ' + (h[i].clicks || 0) + ' affiliate clicks</title></circle>').join('') +
-    xLabels +
-  '</svg>';
-}
 
 function viewCommercial() {
   
@@ -5290,6 +5268,111 @@ function renderAdminLeaguesSection() {
   '</div>';
 }
 
+// ---- Owner dashboard (Bet Buddy HQ): real growth and usage from the ownerDashboard function ----
+let adminDash = null, adminDashLoading = false;
+async function loadAdminDashboard() {
+  if (adminDashLoading || !isAppOwner() || !firebaseAuth || !firebaseAuth.currentUser) return;
+  adminDashLoading = true;
+  try {
+    const token = await firebaseAuth.currentUser.getIdToken();
+    const res = await fetch('https://europe-west1-betbuddyuk.cloudfunctions.net/ownerDashboard', { headers: { Authorization: 'Bearer ' + token } });
+    if (!res.ok) throw new Error(res.status === 404 ? 'not deployed yet' : 'HTTP ' + res.status);
+    adminDash = await res.json();
+  } catch (e) {
+    console.warn('Owner dashboard failed:', e);
+    adminDash = { error: (e && e.message) || 'unavailable' };
+  }
+  adminDashLoading = false;
+  if (currentRoute()[0] === 'admin') render();
+}
+
+const HQ_COLORS = ['#10b981', '#38bdf8', '#fbbf24', '#a78bfa', '#f472b6', '#fb7185', '#34d399', '#94a3b8', '#f59e0b', '#22d3ee'];
+function hqSpark(values, color) {
+  const v = values.length ? values : [0], max = Math.max(1, ...v), W = 120, H = 34;
+  const pts = v.map((x, i) => (v.length === 1 ? W : i / (v.length - 1) * W).toFixed(1) + ',' + (H - 2 - x / max * (H - 4)).toFixed(1)).join(' ');
+  return '<svg class="hq-spark" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><polyline points="' + pts + '" style="stroke:' + color + '"/></svg>';
+}
+function hqKpi(label, value, sub, spark, tone) {
+  return '<div class="hq-kpi" style="--c:' + tone + '"><span>' + label + '</span><b>' + value + '</b><small>' + sub + '</small>' + (spark || '') + '</div>';
+}
+// Daily bars with a running-total line on top (growth).
+function hqGrowth(growth) {
+  const W = 600, H = 160, P = 6, n = growth.length;
+  const maxN = Math.max(1, ...growth.map(g => g.n)), maxT = Math.max(1, ...growth.map(g => g.total));
+  const bw = (W - 2 * P) / n;
+  const bars = growth.map((g, i) => g.n ? '<rect x="' + (P + i * bw + 1).toFixed(1) + '" y="' + (H - 18 - g.n / maxN * 50).toFixed(1) + '" width="' + Math.max(1, bw - 2).toFixed(1) + '" height="' + (g.n / maxN * 50).toFixed(1) + '" rx="2" class="hq-bar"><title>' + g.d + ': ' + g.n + ' new</title></rect>' : '').join('');
+  const line = growth.map((g, i) => (P + i * bw + bw / 2).toFixed(1) + ',' + (H - 18 - g.total / maxT * (H - 34)).toFixed(1)).join(' ');
+  return '<svg class="hq-chart" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="Players over time">' +
+    '<defs><linearGradient id="hqg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#38bdf8" stop-opacity=".35"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></linearGradient></defs>' +
+    '<polygon points="' + line + ' ' + (W - P) + ',' + (H - 18) + ' ' + P + ',' + (H - 18) + '" fill="url(#hqg)"/>' + bars +
+    '<polyline points="' + line + '" class="hq-line"/></svg>' + hqAxis(growth);
+}
+// Stacked daily bars: diary bets and league bets.
+function hqActivity(activity) {
+  const W = 600, H = 150, P = 6, n = activity.length, max = Math.max(1, ...activity.map(a => a.diary + a.league));
+  const bw = (W - 2 * P) / n;
+  const bars = activity.map((a, i) => {
+    const x = (P + i * bw + 1).toFixed(1), w = Math.max(1, bw - 2).toFixed(1);
+    const hd = a.diary / max * (H - 26), hl = a.league / max * (H - 26);
+    return (hd ? '<rect x="' + x + '" y="' + (H - 18 - hd).toFixed(1) + '" width="' + w + '" height="' + hd.toFixed(1) + '" rx="2" fill="#10b981"><title>' + a.d + ': ' + a.diary + ' diary bets</title></rect>' : '') +
+      (hl ? '<rect x="' + x + '" y="' + (H - 18 - hd - hl).toFixed(1) + '" width="' + w + '" height="' + hl.toFixed(1) + '" rx="2" fill="#fbbf24"><title>' + a.d + ': ' + a.league + ' league bets</title></rect>' : '');
+  }).join('');
+  return '<svg class="hq-chart" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="Bets logged per day">' + bars + '</svg>' + hqAxis(activity) +
+    '<div class="hq-key"><span><i style="background:#10b981"></i>Diary bets</span><span><i style="background:#fbbf24"></i>League bets</span></div>';
+}
+function hqAxis(series) {
+  const pick = [0, Math.floor(series.length / 2), series.length - 1].map(i => series[i]).filter(Boolean);
+  return '<div class="hq-axis">' + pick.map(x => '<span>' + esc(new Date(x.d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })) + '</span>').join('') + '</div>';
+}
+function hqBars(list, colorAt) {
+  if (!list || !list.length) return '<p class="hq-none">Nothing yet.</p>';
+  const max = Math.max(1, ...list.map(x => x.count)), total = list.reduce((t, x) => t + x.count, 0);
+  return '<div class="hq-bars">' + list.map((x, i) => '<div class="hq-brow"><div class="hq-btop"><span>' + esc(x.name) + '</span><b>' + x.count + ' <small>' + Math.round(x.count / total * 100) + '%</small></b></div>' +
+    '<div class="hq-btrack"><i style="--w:' + Math.max(2, x.count / max * 100).toFixed(0) + '%;background:' + (colorAt ? colorAt(i) : HQ_COLORS[i % HQ_COLORS.length]) + '"></i></div></div>').join('') + '</div>';
+}
+function hqDonut(parts, label) {
+  const total = parts.reduce((t, p) => t + p.count, 0) || 1, r = 42, c = 2 * Math.PI * r;
+  let off = 0;
+  const arcs = parts.map((p, i) => { const len = p.count / total * c; const s = '<circle cx="55" cy="55" r="' + r + '" fill="none" stroke="' + (p.color || HQ_COLORS[i % HQ_COLORS.length]) + '" stroke-width="16" stroke-dasharray="' + len.toFixed(1) + ' ' + (c - len).toFixed(1) + '" stroke-dashoffset="' + (-off).toFixed(1) + '" transform="rotate(-90 55 55)"/>'; off += len; return s; }).join('');
+  return '<div class="hq-donut"><svg viewBox="0 0 110 110" role="img" aria-label="' + esc(label) + '"><circle cx="55" cy="55" r="' + r + '" fill="none" stroke="var(--surface)" stroke-width="16"/>' + arcs +
+    '<text x="55" y="52" text-anchor="middle" class="hq-donut-n">' + (parts.reduce((t, p) => t + p.count, 0)) + '</text><text x="55" y="68" text-anchor="middle" class="hq-donut-l">' + esc(label) + '</text></svg>' +
+    '<div class="hq-legend">' + parts.map((p, i) => '<span><i style="background:' + (p.color || HQ_COLORS[i % HQ_COLORS.length]) + '"></i>' + esc(p.name) + ' <b>' + p.count + '</b></span>').join('') + '</div></div>';
+}
+
+function renderOwnerDashboard() {
+  const d = adminDash;
+  if (!d) { if (!adminDashLoading) setTimeout(loadAdminDashboard, 0); return '<div class="hq-loading">Crunching the numbers…</div>'; }
+  if (d.error) return '<div class="hq-card hq-warn"><b>Live dashboard unavailable (' + esc(d.error) + ').</b><p>' + (/not deployed/.test(d.error) ? 'The ownerDashboard function needs deploying: <code>firebase deploy --only functions:ownerDashboard</code>. Until then, the account and league totals below still work.' : 'Sign in as the owner and tap Refresh.') + '</p></div>';
+  const u = d.users, b = d.bets, lg = d.leagues;
+  const growthTotals = u.growth.map(g => g.total), recent = b.activity.slice(-14);
+  const activePct = u.total ? Math.round(u.active7 / u.total * 100) : 0;
+  const o = b.outcomes;
+  return '<div class="hq-kpis">' +
+      hqKpi('Players', u.total, '+' + u.new7 + ' this week · +' + u.new30 + ' this month', hqSpark(growthTotals, '#38bdf8'), '#38bdf8') +
+      hqKpi('Active this week', u.active7, activePct + '% of players · ' + u.active1 + ' today', '', '#10b981') +
+      hqKpi('Bets logged', b.last30, 'last 30 days · ' + b.total + ' all time', hqSpark(recent.map(a => a.diary), '#10b981'), '#10b981') +
+      hqKpi('League bets', d.league.bets, d.league.players + ' players in the race', hqSpark(recent.map(a => a.league), '#fbbf24'), '#fbbf24') +
+      hqKpi('BetAI today', d.betai.questionsToday, d.betai.usersToday + ' players asked', '', '#a78bfa') +
+      hqKpi('Private leagues', lg.count, lg.members + ' memberships', hqSpark(lg.created.map(x => x.n), '#f472b6'), '#f472b6') +
+    '</div>' +
+    '<section class="hq-card"><div class="hq-card-head"><h2>Growth</h2><span>Players over the last ' + d.days + ' days</span></div>' + hqGrowth(u.growth) + '</section>' +
+    '<section class="hq-card"><div class="hq-card-head"><h2>Activity</h2><span>Bets logged each day</span></div>' + hqActivity(b.activity) + '</section>' +
+    '<div class="hq-two">' +
+      '<section class="hq-card"><div class="hq-card-head"><h2>Where bets are built</h2><span>Which features people use</span></div>' + hqBars(b.sources) + '</section>' +
+      '<section class="hq-card"><div class="hq-card-head"><h2>Bet types</h2><span>' + b.bettors + ' players logging bets</span></div>' + hqDonut(b.types, 'bets') + '</section>' +
+    '</div>' +
+    '<div class="hq-two">' +
+      '<section class="hq-card"><div class="hq-card-head"><h2>Results</h2><span>How logged bets ended</span></div>' + hqDonut([{ name: 'Won', count: o.won, color: '#10b981' }, { name: 'Lost', count: o.lost, color: '#fb7185' }, { name: 'Void', count: o.void, color: '#94a3b8' }, { name: 'Waiting', count: o.pending, color: '#fbbf24' }], 'settled & live') +
+        '<p class="hq-note">£' + Number(b.staked).toLocaleString('en-GB', { maximumFractionDigits: 0 }) + ' staked across all diaries</p></section>' +
+      '<section class="hq-card"><div class="hq-card-head"><h2>Markets</h2><span>What people bet on</span></div>' + hqBars(b.markets) + '</section>' +
+    '</div>' +
+    '<div class="hq-two">' +
+      '<section class="hq-card"><div class="hq-card-head"><h2>Bookmakers</h2><span>Where players bet</span></div>' + hqBars(b.bookmakers) + '</section>' +
+      '<section class="hq-card"><div class="hq-card-head"><h2>League sizes</h2><span>Members per private league</span></div>' + hqBars(lg.sizes.filter(x => x.count), () => '#f472b6') + '</section>' +
+    '</div>' +
+    '<p class="hq-foot">Counts only: no names, emails or individual bets leave the server. Bets cover signed-in players whose diaries sync. "Where bets are built" fills in as new bets are logged.</p>';
+}
+
 function viewAdmin() {
   const authUser = getAuthUser();
   const clicks = getAffiliateClicks();
@@ -5337,30 +5420,16 @@ function viewAdmin() {
     '<div style="overflow-x:auto;"><table class="table"><thead><tr><th>Partner / Contact</th><th>Category</th><th>Proposal</th><th>Submitted</th></tr></thead><tbody>' + enquiryRows + '</tbody></table></div>' +
   '</div>';
 
-  return '<section class="view">' +
-    '<div class="section-head"><div><h1 class="page-title">Commercial & Founder Telemetry</h1>' +
-    '<p class="page-sub">Auto-updating metrics for Martin White & Chris Faulds: punters, site visits, affiliate traffic, and sponsorship conversions.</p></div>' +
-    '<div class="chips">' +
-      '<button type="button" class="chip ok" data-admin-action="refresh-stats" title="Click to refresh telemetry"><span class="admin-pulse-dot"></span>Refresh Telemetry (' + stats.lastRefreshed + ')</button>' +
-      '<button type="button" class="chip" data-admin-action="simulate-click" title="Log a test bookie outbound">⚡ Test Bookie Click</button>' +
-      '<button type="button" class="chip" data-admin-action="clear-clicks" title="Clear outbound click log" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear Outbounds</button>' +
-    '</div></div>' +
-    
-    '<div class="admin-metric-grid">' +
-      '<div class="admin-metric-card"><div>Total App Visits</div><div class="admin-metric-val cyan">' + stats.totalVisits + '</div><div class="admin-metric-sub">+' + stats.visitsToday + ' today across all devices</div></div>' +
-      '<div class="admin-metric-card"><div>Active Punters / Users</div><div class="admin-metric-val">' + stats.uniquePunters + '</div><div class="admin-metric-sub">' + (authUser ? '1 Signed-In (@' + esc(authUser.handle || 'User') + ')' : '1 Signed-In (@HeadPark73)') + '</div></div>' +
-      '<div class="admin-metric-card"><div>Bookmaker Outbounds</div><div class="admin-metric-val amber">' + clicks.length + '</div><div class="admin-metric-sub">Affiliate tracking gateways triggered</div></div>' +
-      '<div class="admin-metric-card"><div>Est. Commission Earned</div><div class="admin-metric-val emerald">£' + estCommission + '</div><div class="admin-metric-sub">' + (isAffiliationActivated ? 'Projected CPA + 25% NGR pool' : '£0.00 until affiliation activated') + '</div></div>' +
-    '</div>' +
-
-    '<div class="admin-chart-box">' +
-      '<div class="admin-chart-head">' +
-        '<div><strong style="color:#fff;font-size:15px;display:block">7-Day Punter Activity & Outbound Click Trajectory</strong><span class="text-sm muted">Cyan: Site Visits · Amber Dashed: Outbound Bookie Clicks</span></div>' +
-        '<span class="bento-badge emerald">Peak Weekend Volume</span>' +
-      '</div>' +
-      renderTrafficChartSvg(stats.dailyHistory) +
-    '</div>' +
-
+  return '<section class="view hq">' +
+    '<div class="hq-head"><div><div class="hq-kicker">Owner only</div><h1 class="page-title">Bet Buddy HQ</h1></div>' +
+      '<button type="button" class="hq-refresh" data-admin-action="refresh-stats"><span class="admin-pulse-dot"></span>' + (adminDash && adminDash.at ? 'Updated ' + esc(new Date(adminDash.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : 'Refresh') + '</button></div>' +
+    renderOwnerDashboard() +
+    '<details class="hq-device"><summary>This device only: test tools and local logs</summary>' +
+      '<div class="chips" style="margin:10px 0">' +
+        '<button type="button" class="chip" data-admin-action="simulate-click">⚡ Test bookie click</button>' +
+        '<button type="button" class="chip" data-admin-action="clear-clicks" style="background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);">Clear outbound log</button></div>' +
+      '<p class="muted" style="font-size:12.5px">Visits on this browser: ' + stats.totalVisits + ' (' + stats.visitsToday + ' today). Bookmaker taps logged here: ' + clicks.length + '. Commission £' + estCommission + (isAffiliationActivated ? '' : ' (affiliate deals not live yet)') + '.</p>' +
+    '</details>' +
     renderAdminUsersSection() +
     renderAdminLeaguesSection() +
 
@@ -5565,7 +5634,7 @@ function render() {
   updateOddsToggleLabel(); updateHeaderAuthUI();
   const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild(arg) : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Prediction results', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Founder Admin & Affiliates', commercial: 'Commercial & Sponsorship', more: 'More' };
+  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Prediction results', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Bet Buddy HQ', commercial: 'Commercial & Sponsorship', more: 'More' };
   document.title = (view === 'build' && arg === 'log' ? 'Log a bet' : titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {
@@ -6172,6 +6241,7 @@ document.addEventListener('click', event => {
       getTrafficStats();
       adminLeagueStats = null;
       adminUserStats = null;
+      adminDash = null;
       toast('Telemetry refreshed.');
       render();
     } else if (act === 'simulate-click') {
@@ -7088,7 +7158,7 @@ function betaiSaveToDiary(kind, idx, dest) {
     const est = betaiEstimatedOdds(pk);
     return { matchId: pk.matchId, selId: pk.key, label: pk.selection, odds: parseOwnBetOdds(est.text), priceSource: /bookmaker/.test(est.source) ? 'live' : 'estimated', sport: 'football' };
   });
-  if (!addLegsToOwnBet(legs, true)) return;
+  if (!addLegsToOwnBet(legs, true, 'betai')) return;
   ownBet.dest = dest === 'diary' ? 'diary' : 'league';
   persistOwnBet();
   closeBetAI();
