@@ -2045,82 +2045,6 @@ function updateDiaryCount() { const n = getStoredDiary().filter(e => e && e.outc
 const money = v => '£' + Math.abs(v).toFixed(2);
 
 
-function diaryPerformanceChart(diary) {
-  const settled = (diary || []).filter(e => e.outcome && e.outcome !== 'pending').slice().reverse();
-  if (settled.length < 2) {
-    return '<div class="card section diary-chart-card">' +
-      '<div class="section-head"><h2 class="section-title">Performance Chart</h2><span class="section-note">Settle 2 or more bets to generate your cumulative profit curve.</span></div>' +
-      '<div class="empty" style="padding:28px">Log and settle your bets in the diary to visualize your real P&L trajectory.</div></div>';
-  }
-
-  // Calculate cumulative profit points
-  let cum = 0;
-  const points = [{ x: 0, y: 0, label: 'Start' }];
-  settled.forEach((b, i) => {
-    const profit = calc.calculateBetProfit(b.stake, b.odds, b.outcome) || 0;
-    cum += profit;
-    points.push({ x: i + 1, y: cum, label: b.selection || 'Bet ' + (i + 1), profit });
-  });
-
-  const ys = points.map(p => p.y);
-  const minY = Math.min(0, ...ys);
-  const maxY = Math.max(0, ...ys);
-  const rangeY = (maxY - minY) || 10;
-  const W = 600, H = 160, PAD = 24;
-
-  const getX = x => PAD + (x / (points.length - 1)) * (W - 2 * PAD);
-  const getY = y => H - PAD - ((y - minY) / rangeY) * (H - 2 * PAD);
-  const zeroY = getY(0);
-
-  const polyPoints = points.map(p => getX(p.x) + ',' + getY(p.y)).join(' ');
-  const areaPoints = polyPoints + ' ' + getX(points.length - 1) + ',' + zeroY + ' ' + getX(0) + ',' + zeroY;
-  const isPos = cum >= 0;
-  const lineColor = isPos ? '#10b981' : '#fb7185';
-  const fillColor = isPos ? 'rgba(16, 185, 129, 0.15)' : 'rgba(251, 113, 133, 0.15)';
-
-  // Market Breakdown
-  const marketStats = {};
-  settled.forEach(b => {
-    const mkt = b.marketName || b.market || 'Single';
-    if (!marketStats[mkt]) marketStats[mkt] = { n: 0, won: 0, profit: 0, staked: 0 };
-    marketStats[mkt].n++;
-    if (b.outcome === 'won') marketStats[mkt].won++;
-    const p = calc.calculateBetProfit(b.stake, b.odds, b.outcome) || 0;
-    marketStats[mkt].profit += p;
-    marketStats[mkt].staked += (+b.stake || 0);
-  });
-
-  const marketRows = Object.entries(marketStats).map(([name, stat]) => {
-    const winRate = Math.round((stat.won / stat.n) * 100);
-    const pSign = stat.profit > 0 ? '+' : stat.profit < 0 ? '−' : '';
-    const pClass = stat.profit > 0 ? 'pos' : stat.profit < 0 ? 'neg' : '';
-    return '<div class="mkt-stat-row">' +
-      '<span class="mkt-name">' + esc(name) + '</span>' +
-      '<div class="mkt-bar-wrap"><div class="mkt-bar-fill ' + pClass + '" style="width:' + winRate + '%"></div></div>' +
-      '<span class="mkt-win-rate">' + winRate + '% win</span>' +
-      '<span class="mkt-profit ' + pClass + '">' + pSign + '£' + Math.abs(stat.profit).toFixed(2) + '</span>' +
-    '</div>';
-  }).join('');
-
-  return '<div class="section card diary-chart-card">' +
-    '<div class="section-head">' +
-      '<div><h2 class="section-title">Cumulative Performance & Strategy Graph</h2><span class="section-note">Visual trajectory of settled stakes across your diary.</span></div>' +
-      '<div class="chart-legend"><span class="legend-dot ' + (isPos ? 'pos' : 'neg') + '"></span>Cumulative ' + (cum >= 0 ? '+' : '−') + '£' + Math.abs(cum).toFixed(2) + '</div>' +
-    '</div>' +
-    '<div class="svg-chart-wrap">' +
-      '<svg viewBox="0 0 ' + W + ' ' + H + '" class="pnl-svg-chart" preserveAspectRatio="none">' +
-        '<line x1="' + PAD + '" y1="' + zeroY + '" x2="' + (W - PAD) + '" y2="' + zeroY + '" stroke="rgba(255,255,255,0.15)" stroke-dasharray="4,4"/>' +
-        '<polygon points="' + areaPoints + '" fill="' + fillColor + '"/>' +
-        '<polyline points="' + polyPoints + '" fill="none" stroke="' + lineColor + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-        points.map(p => '<circle cx="' + getX(p.x) + '" cy="' + getY(p.y) + '" r="3.5" fill="' + lineColor + '"><title>' + esc(p.label) + ': ' + (p.profit >= 0 ? '+' : '') + '£' + (p.profit || 0).toFixed(2) + '</title></circle>').join('') +
-      '</svg>' +
-    '</div>' +
-    '<div class="market-breakdown-section" style="margin-top:18px">' +
-      '<h3 class="section-subhead" style="font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Win Rate by Bet Type / Market</h3>' +
-      marketRows +
-    '</div>' +
-  '</div>';
-}
 
 
 // ------------------------------------------------------------ Phase 2: Buddy Leagues & User Profile
@@ -3345,6 +3269,135 @@ function viewLeagues() {
   '</section>';
 }
 
+// ---- Diary dashboard ----
+let diaryRange = 'all', diaryBreak = 'type';
+function setDiaryRange(r) { diaryRange = r; render(); }
+function setDiaryBreak(b) { diaryBreak = b; render(); }
+const diaryDay = e => String(e.date || (e.timestamp ? e.timestamp.slice(0, 10) : '') || '').slice(0, 10);
+const diarySettleKey = e => String(e.settledAt || e.date || e.timestamp || '');
+const diaryProfit = e => calc.calculateBetProfit(e.stake, e.odds, e.outcome);
+const diarySigned = v => (v > 0 ? '+' : v < 0 ? '−' : '') + money(Math.abs(v));
+function diaryInRange(list) {
+  if (diaryRange === 'all') return list;
+  const cut = Date.now() - Number(diaryRange) * 86400000;
+  return list.filter(e => { const t = Date.parse(diarySettleKey(e).slice(0, 10)); return !Number.isFinite(t) || t >= cut - 86400000; });
+}
+
+function diaryHero(settled, live) {
+  const pl = settled.reduce((t, e) => t + (diaryProfit(e) || 0), 0);
+  const staked = settled.reduce((t, e) => t + (Number(e.stake) || 0), 0);
+  const roi = staked > 0 ? pl / staked * 100 : 0;
+  const ranges = [['all', 'All time'], ['30', '30 days'], ['7', '7 days']];
+  let chart = '<div class="dy-chart-empty">Your profit line appears once two bets have settled.</div>';
+  if (settled.length >= 2) {
+    let cum = 0;
+    const pts = [{ y: 0 }].concat(settled.map(e => { const p = diaryProfit(e) || 0; cum += p; return { y: cum, p, e }; }));
+    const W = 640, H = 190, PX = 8, PY = 14;
+    const lo = Math.min(0, ...pts.map(x => x.y)), hi = Math.max(0, ...pts.map(x => x.y)), span = (hi - lo) || 1;
+    const X = i => PX + i / (pts.length - 1) * (W - 2 * PX), Y = v => PY + (hi - v) / span * (H - 2 * PY);
+    const line = pts.map((x, i) => X(i).toFixed(1) + ',' + Y(x.y).toFixed(1)).join(' ');
+    const up = cum >= 0, col = up ? 'var(--pick)' : '#fb7185';
+    const dots = pts.length <= 80 ? '<div class="dy-dots">' + pts.slice(1).map((x, i) => '<span class="dy-dot ' + (x.p > 0 ? 'w' : x.p < 0 ? 'l' : 'v') + '" style="left:' + (X(i + 1) / W * 100).toFixed(2) + '%;top:' + (Y(x.y) / H * 100).toFixed(2) + '%" title="' + esc((x.e.selection || 'Bet').slice(0, 60) + ': ' + diarySigned(x.p)) + '"></span>').join('') + '</div>' : '';
+    chart = '<div class="dy-chart-wrap"><svg class="dy-chart" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="Running profit after each settled bet, now ' + diarySigned(cum) + '">' +
+      '<defs><linearGradient id="dyfill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="' + col + '" stop-opacity=".38"/><stop offset="1" stop-color="' + col + '" stop-opacity="0"/></linearGradient></defs>' +
+      '<line x1="0" x2="' + W + '" y1="' + Y(0).toFixed(1) + '" y2="' + Y(0).toFixed(1) + '" class="dy-zero"/>' +
+      '<polygon points="' + line + ' ' + X(pts.length - 1).toFixed(1) + ',' + Y(lo).toFixed(1) + ' ' + X(0).toFixed(1) + ',' + Y(lo).toFixed(1) + '" fill="url(#dyfill)"/>' +
+      '<polyline points="' + line + '" class="dy-line" style="stroke:' + col + '" pathLength="1"/>' +
+    '</svg>' + dots + '</div><div class="dy-chart-axis"><span>Start</span><span>' + settled.length + ' settled bets</span><span>Now</span></div>';
+  }
+  return '<section class="dy-hero ' + (pl > 0 ? 'up' : pl < 0 ? 'down' : '') + '">' +
+    '<div class="dy-hero-top"><div><div class="dy-kicker">Profit / loss</div><div class="dy-big">' + diarySigned(pl) + '</div>' +
+      '<div class="dy-sub">from ' + settled.length + ' settled bet' + (settled.length === 1 ? '' : 's') + ' · ' + money(staked) + ' staked' + (live.length ? ' · ' + live.length + ' waiting' : '') + '</div></div>' +
+      '<span class="dy-roi ' + (roi > 0 ? 'pos' : roi < 0 ? 'neg' : '') + '">' + (roi > 0 ? '+' : '') + roi.toFixed(1) + '% ROI</span></div>' +
+    '<div class="dy-ranges" role="group" aria-label="Period">' + ranges.map(r => '<button type="button" aria-pressed="' + (diaryRange === r[0]) + '" onclick="setDiaryRange(\'' + r[0] + '\')">' + r[1] + '</button>').join('') + '</div>' +
+    chart + '</section>';
+}
+
+function diaryTiles(settled, live) {
+  const won = settled.filter(e => e.outcome === 'won').length, lost = settled.filter(e => e.outcome === 'lost').length;
+  const decided = won + lost, rate = decided ? won / decided : 0;
+  const staked = settled.reduce((t, e) => t + (Number(e.stake) || 0), 0);
+  const waiting = live.reduce((t, e) => t + (Number(e.stake) || 0), 0);
+  const returned = settled.reduce((t, e) => { const p = diaryProfit(e); return t + (p === null ? 0 : (Number(e.stake) || 0) + p); }, 0);
+  const best = settled.reduce((b, e) => { const p = diaryProfit(e) || 0; return p > (b ? b.p : 0) ? { p, e } : b; }, null);
+  const seq = settled.filter(e => e.outcome === 'won' || e.outcome === 'lost').map(e => e.outcome);
+  let cur = 0, curType = seq.length ? seq[seq.length - 1] : '';
+  for (let i = seq.length - 1; i >= 0 && seq[i] === curType; i--) cur++;
+  let bestRun = 0, run = 0;
+  seq.forEach(o => { run = o === 'won' ? run + 1 : 0; bestRun = Math.max(bestRun, run); });
+  const r = 30, c = 2 * Math.PI * r;
+  const ring = '<svg class="dy-ring" viewBox="0 0 76 76" role="img" aria-label="' + won + ' won, ' + lost + ' lost"><circle cx="38" cy="38" r="' + r + '" class="dy-ring-bg"/>' +
+    '<circle cx="38" cy="38" r="' + r + '" class="dy-ring-fg" stroke-dasharray="' + (c * rate).toFixed(1) + ' ' + c.toFixed(1) + '" transform="rotate(-90 38 38)"/>' +
+    '<text x="50%" y="50%" text-anchor="middle" dominant-baseline="central">' + Math.round(rate * 100) + '%</text></svg>';
+  return '<div class="dy-tiles">' +
+    '<div class="dy-tile dy-tile-ring">' + ring + '<div class="dy-ring-txt"><span>Win rate</span><b>' + won + ' won</b><small>' + lost + ' lost</small></div></div>' +
+    '<div class="dy-tile"><span>Staked</span><b>' + money(staked) + '</b><small>returned ' + money(returned) + (waiting ? ' · ' + money(waiting) + ' waiting' : '') + '</small></div>' +
+    '<div class="dy-tile"><span>Biggest win</span><b class="pos">' + (best ? '+' + money(best.p) : '—') + '</b><small>' + (best ? esc(String(best.e.selection || '').slice(0, 40)) : 'No winners yet') + '</small></div>' +
+    '<div class="dy-tile"><span>Streak</span><b>' + (cur ? cur + (curType === 'won' ? ' 🔥' : ' ❄️') : '—') + '</b><small>' + (cur ? (curType === 'won' ? 'wins in a row' : 'losses in a row') + ' · best run ' + bestRun : 'Settle a bet to start one') + '</small></div>' +
+  '</div>';
+}
+
+function diaryGroupKey(e, by) {
+  const legs = e.type === 'accumulator' && Array.isArray(e.legs) ? e.legs.length : 1;
+  const odds = Number(e.odds) || 0;
+  if (by === 'type') return legs <= 1 ? 'Singles' : legs === 2 ? 'Doubles' : legs === 3 ? 'Trebles' : '4-folds and bigger';
+  if (by === 'market') return legs > 1 ? 'Accumulators' : (e.marketName || e.market || 'Other');
+  if (by === 'bookmaker') return (e.bookmaker && e.bookmaker !== 'Bookmaker') ? e.bookmaker : 'Not recorded';
+  if (by === 'origin') return e.origin === 'independent' ? '💡 Your own picks' : '🎯 Bet Buddy picks';
+  return odds < 2 ? 'Odds-on (shorter than Evens)' : odds < 3 ? 'Evens to 2/1' : odds < 5 ? '2/1 to 4/1' : odds < 10 ? '4/1 to 9/1' : '9/1 and bigger';
+}
+
+function diaryBreakdownCard(settled) {
+  const tabs = [['type', 'Bet type'], ['market', 'Market'], ['bookmaker', 'Bookmaker'], ['price', 'Price'], ['origin', 'Whose pick']];
+  if (!settled.length) return '';
+  const groups = {};
+  settled.forEach(e => {
+    const k = diaryGroupKey(e, diaryBreak);
+    const g = groups[k] = groups[k] || { n: 0, won: 0, lost: 0, staked: 0, profit: 0, implied: 0 };
+    g.n++; if (e.outcome === 'won') g.won++; if (e.outcome === 'lost') g.lost++;
+    g.staked += Number(e.stake) || 0; g.profit += diaryProfit(e) || 0; g.implied += Number(e.odds) > 1 ? 1 / Number(e.odds) : 0;
+  });
+  const priceOrder = ['Odds-on (shorter than Evens)', 'Evens to 2/1', '2/1 to 4/1', '4/1 to 9/1', '9/1 and bigger'];
+  const rows = Object.entries(groups).sort((a, b) => diaryBreak === 'price' ? priceOrder.indexOf(a[0]) - priceOrder.indexOf(b[0]) : b[1].staked - a[1].staked);
+  const maxStake = Math.max(...rows.map(x => x[1].staked), 1);
+  return '<section class="dy-card"><h2 class="dy-h">Where your money went</h2>' +
+    '<div class="dy-tabs" role="group" aria-label="Break down by">' + tabs.map(t => '<button type="button" aria-pressed="' + (diaryBreak === t[0]) + '" onclick="setDiaryBreak(\'' + t[0] + '\')">' + t[1] + '</button>').join('') + '</div>' +
+    '<div class="dy-bars">' + rows.map(([name, g]) => {
+      const decided = g.won + g.lost, rate = decided ? Math.round(g.won / decided * 100) : 0;
+      const need = Math.round(g.implied / g.n * 100);
+      return '<div class="dy-bar-row"><div class="dy-bar-top"><b>' + esc(name) + '</b><span class="' + (g.profit > 0 ? 'pos' : g.profit < 0 ? 'neg' : '') + '">' + diarySigned(g.profit) + '</span></div>' +
+        '<div class="dy-bar"><i class="' + (g.profit >= 0 ? 'up' : 'down') + '" style="--w:' + Math.max(3, Math.round(g.staked / maxStake * 100)) + '%"></i></div>' +
+        '<small>' + money(g.staked) + ' staked · ' + g.n + (g.n === 1 ? ' bet' : ' bets') + ' · won ' + rate + '%' +
+          (diaryBreak === 'price' && decided ? ' · needed about ' + need + '% to break even' : '') + '</small></div>';
+    }).join('') + '</div>' +
+    (diaryBreak === 'price' ? '<p class="dy-hint">If you win more often than the price needs, you are beating the bookmaker on those bets.</p>' : '') +
+  '</section>';
+}
+
+// Ten weeks of results as a calendar, each day coloured by how much it won or lost.
+function diaryHeatmap(settledAll) {
+  if (!settledAll.length) return '';
+  const byDay = {};
+  settledAll.forEach(e => { const d = diarySettleKey(e).slice(0, 10); if (/^\d{4}-\d{2}-\d{2}$/.test(d)) byDay[d] = (byDay[d] || 0) + (diaryProfit(e) || 0); });
+  const today = new Date(); today.setUTCHours(12, 0, 0, 0);
+  const dow = (today.getUTCDay() + 6) % 7;
+  const start = new Date(today.getTime() - (dow + 9 * 7) * 86400000);
+  const max = Math.max(1, ...Object.values(byDay).map(Math.abs));
+  const cells = [];
+  for (let i = 0; i < 70; i++) {
+    const d = new Date(start.getTime() + i * 86400000), key = d.toISOString().slice(0, 10);
+    if (d > today) { cells.push('<span class="dy-cell future"></span>'); continue; }
+    const v = byDay[key];
+    const cls = v == null ? '' : v > 0 ? 'w' : v < 0 ? 'l' : 'z';
+    const a = v == null ? 0 : 0.25 + 0.75 * Math.min(1, Math.abs(v) / max);
+    cells.push('<span class="dy-cell ' + cls + '" style="--a:' + a.toFixed(2) + '" title="' + esc(d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) + (v == null ? ': no bets settled' : ': ' + diarySigned(v))) + '"></span>');
+  }
+  const days = Object.keys(byDay), upDays = days.filter(k => byDay[k] > 0).length;
+  return '<section class="dy-card"><h2 class="dy-h">Your last 10 weeks</h2>' +
+    '<div class="dy-heat"><div class="dy-heat-days"><span>M</span><span></span><span>W</span><span></span><span>F</span><span></span><span>S</span></div><div class="dy-heat-grid">' + cells.join('') + '</div></div>' +
+    '<div class="dy-heat-key"><span><i class="w"></i>Up day</span><span><i class="l"></i>Down day</span><span>' + upDays + ' of ' + days.length + ' betting days in profit</span></div></section>';
+}
+
 function viewDiary() {
   const all = getStoredDiary();
   if (!all.length) {
@@ -3366,27 +3419,43 @@ function viewDiary() {
   const diary = diaryProfileFilter === 'all' ? all : all.filter(e => (e.profile || 'Default') === diaryProfileFilter);
   const s = calc.summarizeBetDiary(diary);
   const profiles = Array.from(new Set(all.map(e => e.profile || 'Default'))).sort();
-  let html = '<section class="view"><div class="section-head" style="align-items:flex-end"><div><h1 class="page-title">Bet Diary</h1><p class="page-sub">Your private record of bets and prices. ' + (getAuthUser() && getAuthUser().signedIn ? 'Saved on this device and synced to your account. ' : 'Saved only in this browser and web address, so it does not sync between devices until you sign in with Google. Clearing site data removes it. ') + 'Use Backup, then Import, to move it manually.' + '</p></div>' +
-    '<div class="btn-row"><a href="#/build/log" class="btn primary" style="text-decoration:none">Add a bet</a><button type="button" class="btn" data-export="csv">Export CSV</button><button type="button" class="btn" data-export="json">Export JSON</button><button type="button" class="btn" data-export="backup">Backup</button><button type="button" class="btn" data-import="diary">Import</button><input type="file" id="diary-import" accept="application/json,.json" hidden></div></div>';
+  const signedIn = getAuthUser() && getAuthUser().signedIn;
+  const tools = '<details class="dy-tools"><summary>⋯ More</summary><div class="dy-tools-menu">' +
+    '<label class="dy-profile"><span>Profile</span><select id="diary-profile-filter" class="ctl"><option value="all">All profiles</option>' +
+      profiles.map(p => '<option value="' + esc(p) + '"' + (diaryProfileFilter === p ? ' selected' : '') + '>' + esc(p) + '</option>').join('') + '</select></label>' +
+    '<button type="button" class="btn small" data-export="csv">Export CSV</button><button type="button" class="btn small" data-export="json">Export JSON</button>' +
+    '<button type="button" class="btn small" data-export="backup">Backup</button><button type="button" class="btn small" data-import="diary">Import</button>' +
+    '<input type="file" id="diary-import" accept="application/json,.json" hidden>' +
+    '<button type="button" class="btn small danger" data-clear-diary>Clear diary</button>' +
+    '<p>' + (signedIn ? 'Synced to your account.' : 'Saved in this browser only. Sign in to sync it, or use Backup and Import to move it.') + '</p></div></details>';
+  let html = '<section class="view dy-view"><div class="dy-head"><h1 class="page-title">Bet Diary</h1><div class="dy-head-actions"><a href="#/build/log" class="btn primary">+ Log a bet</a>' + tools + '</div></div>';
   if (diaryReadFailed) html += '<div class="notice error">Saved diary data could not be read. It has been left untouched, and saving is disabled to protect it.</div>';
-  html += '<div class="tiles section" style="margin-top:16px">' +
-    '<div class="tile"><div class="k">Profit / loss</div><div class="v ' + (s.netProfit > 0 ? 'pos' : s.netProfit < 0 ? 'neg' : '') + '">' + (s.netProfit > 0 ? '+' : s.netProfit < 0 ? '-' : '') + money(s.netProfit) + '</div><div class="s">ROI ' + s.roiPct.toFixed(1) + '% on settled stakes</div></div>' +
-    '<div class="tile"><div class="k">Staked</div><div class="v">' + money(s.totalStaked) + '</div><div class="s">' + money(s.settledStaked) + ' settled • ' + s.pendingCount + ' pending</div></div>' +
-    '<div class="tile"><div class="k">Returned</div><div class="v">' + money(s.totalReturned) + '</div><div class="s">winnings plus void stakes</div></div>' +
-    '<div class="tile"><div class="k">Won • lost • void</div><div class="v">' + s.wonCount + ' • ' + s.lostCount + ' • ' + s.voidCount + '</div><div class="s">' + s.originBreakdown.matchiq.count + ' following Bet Buddy • ' + s.originBreakdown.independent.count + ' own choice</div></div></div>';
-  html += '<div class="section" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><label class="field" style="grid-auto-flow:column;align-items:center;gap:10px"><span class="lbl">Profile</span><select id="diary-profile-filter" class="ctl" style="width:auto"><option value="all">All profiles</option>' +
-    profiles.map(p => '<option value="' + esc(p) + '"' + (diaryProfileFilter === p ? ' selected' : '') + '>' + esc(p) + '</option>').join('') + '</select></label>' +
-    '<button type="button" class="btn small danger" data-clear-diary>Clear diary</button></div>';
-  const chartHtml = diaryPerformanceChart(diary);
   if (!diary.length) return html + '<div class="empty section">No bets match this profile filter.</div></section>';
+
   const live = diary.filter(e => e.outcome === 'pending');
-  const archived = diary.filter(e => e.outcome !== 'pending').sort((a, b) => String(b.settledAt || b.date || b.timestamp || '').localeCompare(String(a.settledAt || a.date || a.timestamp || '')));
-  html += chartHtml + '<div class="section-head section"><h2 class="section-title">Live bets (' + live.length + ')</h2></div>' +
-    (live.length ? '<div class="grid grid-2">' + live.map(betCard).join('') + '</div>' : '<div class="empty">No live bets. Your settled bets are archived below and counted in your stats.</div>');
-  if (archived.length) {
-    html += '<details class="section diary-archive"' + (live.length ? '' : ' open') + '><summary class="section-title" style="cursor:pointer">Settled &amp; archived (' + archived.length + ')</summary>' +
-      '<div class="arch-table" role="table" aria-label="Settled bets"><div class="arch-row arch-head" role="row"><span>Date</span><span>Bet</span><span>Won</span><span>P/L</span></div>' +
-      archived.map(archiveRow).join('') + '</div><p class="dim" style="font-size:12px;margin:8px 0 0">Tap a row to see the full bet, correct its result or delete it.</p></details>';
+  const settledAll = diary.filter(e => e.outcome && e.outcome !== 'pending');
+  const settled = diaryInRange(settledAll).sort((a, b) => diarySettleKey(a).localeCompare(diarySettleKey(b)));
+  html += diaryHero(settled, live) + diaryTiles(settled, live) + diaryBreakdownCard(settled) + diaryHeatmap(settledAll);
+
+  html += '<section class="dy-section"><h2 class="dy-h">Waiting on results <span>' + live.length + '</span></h2>' +
+    (live.length ? '<div class="grid grid-2 dy-live">' + live.map(betCard).join('') + '</div>' : '<div class="dy-empty">Nothing waiting. Log a bet and it shows here until it settles.</div>') + '</section>';
+
+  if (settledAll.length) {
+    const months = [];
+    settledAll.slice().sort((a, b) => diarySettleKey(b).localeCompare(diarySettleKey(a))).forEach(e => {
+      const k = diarySettleKey(e).slice(0, 7);
+      let m = months.find(x => x.k === k);
+      if (!m) months.push(m = { k, list: [] });
+      m.list.push(e);
+    });
+    html += '<section class="dy-section"><h2 class="dy-h">History <span>' + settledAll.length + '</span></h2>' +
+      months.map((m, idx) => {
+        const pl = m.list.reduce((t, e) => t + (diaryProfit(e) || 0), 0);
+        const label = /^\d{4}-\d{2}$/.test(m.k) ? new Date(m.k + '-01T12:00:00Z').toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) : 'Earlier';
+        return '<details class="dy-month"' + (idx === 0 ? ' open' : '') + '><summary><span>' + esc(label) + '</span><small>' + m.list.length + (m.list.length === 1 ? ' bet' : ' bets') + '</small><b class="' + (pl > 0 ? 'pos' : pl < 0 ? 'neg' : '') + '">' + diarySigned(pl) + '</b></summary>' +
+          '<div class="arch-table" role="table" aria-label="Settled bets, ' + esc(label) + '">' + m.list.map(archiveRow).join('') + '</div></details>';
+      }).join('') +
+      '<p class="dy-hint">Tap a bet to see it in full, correct its result or delete it.</p></section>';
   }
   return html + '</section>';
 }
