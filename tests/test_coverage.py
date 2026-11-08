@@ -162,6 +162,31 @@ class CoverageReportTests(unittest.TestCase):
             self.assertIn("Coverage gaps", summary.read_text(encoding="utf-8"))
             self.assertTrue(Path(tmp, "coverage.json").exists())
 
+    def test_lagging_league_reports_overdue_results_without_failing(self):
+        self.assertTrue(PREDICTED["SC0"].get("results_lag"))
+        rec = {"record_id": "PUB-a#r1", "match_id": "a", "fixture": {"competition": "PL"}, "published_at": "2026-10-20T10:00:00+00:00", "evaluated": True}
+        fixtures = [{"id": "a", "competition": "PL", "kickoff_utc": "2026-10-25T12:00:00Z", "status": "FINISHED", "score": [1, 0]}]
+        fixtures += [{"id": f"old-{c}", "competition": c, "kickoff_utc": "2026-08-01T12:00:00Z", "status": "FINISHED", "score": [0, 0]}
+                     for c in PREDICTED if c not in ("PL", "SC0")]
+        fixtures += [
+            # Played weeks ago, source has no score yet.
+            {"id": "sc-late", "competition": "SC0", "kickoff_utc": "2026-10-10T14:00:00Z", "status": "AWAITING_RESULT", "score": None, "sources": ["openfootball"]},
+            # Match day, time unconfirmed, nothing sealed before today: public.py may not predict it.
+            {"id": "sc-today", "competition": "SC0", "kickoff_utc": "2026-11-06T15:00:00Z", "status": "SCHEDULED", "score": None, "sources": ["openfootball"]},
+            # Tomorrow: still before its seal cut-off, so a missing prediction is a real gap.
+            {"id": "sc-tomorrow", "competition": "SC0", "kickoff_utc": "2026-11-07T15:00:00Z", "status": "SCHEDULED", "score": None, "sources": ["openfootball"]},
+        ]
+        report = coverage.compute(fixtures, {}, [rec], NOW)
+        self.assertEqual(report["known_lag"]["results_overdue"], ["sc-late"])
+        self.assertEqual(report["known_lag"]["untimed_match_day_unsealed"], ["sc-today"])
+        self.assertEqual(report["gaps"]["results_overdue"], [])
+        self.assertEqual(report["gaps"]["unpredicted_next_48h"], ["sc-tomorrow"])
+        self.assertEqual(report["leagues"]["SC0"]["results_overdue"], 1)
+        self.assertIn("Known source lag", coverage.markdown(report))
+        # Once tomorrow's match is predicted, the lag alone does not fail the audit.
+        report = coverage.compute(fixtures, {"sc-tomorrow": {}}, [rec], NOW)
+        self.assertTrue(report["complete"], report["gaps"])
+
     def test_complete_when_every_match_is_predicted_and_settled(self):
         rec = {"record_id": "PUB-a#r1", "match_id": "a", "fixture": {"competition": "PL"}, "published_at": "2026-10-20T10:00:00+00:00", "evaluated": True}
         fixtures = [{"id": "a", "competition": "PL", "kickoff_utc": "2026-10-25T12:00:00Z", "status": "FINISHED", "score": [1, 0]},

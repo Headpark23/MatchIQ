@@ -55,11 +55,16 @@ SCHEDULE_ONLY = {
 # (path under the repository, {season} = "2026-27"), used when football.json has not published
 # the league for a season. The Scottish Premiership is not on the football.json 2026-27 list and
 # not on the football-data.org free tier, so it relies on that file.
+# "results_lag": the league's only permitted results source is known to publish scores weeks
+# late (openfootball/europe had no SPFL result after 20 Sep 2026 as of 8 Nov 2026). Its overdue
+# results, and match-day fixtures that could not be sealed because their time is unconfirmed,
+# are reported by the coverage audit but do not fail it. Remove the flag once a timely
+# permitted source exists for the league.
 PUBLIC_ONLY = {
     "N1": {"name": "Eredivisie", "short": "N1", "openfootball": "nl.1", "fdo": "DED", "tz": "Europe/Amsterdam"},
     "P1": {"name": "Primeira Liga", "short": "P1", "openfootball": "pt.1", "fdo": "PPL", "tz": "Europe/Lisbon"},
     "SC0": {"name": "Scottish Premiership", "short": "SC0", "openfootball": "sco.1", "fdo": None, "tz": "Europe/London",
-            "openfootball_europe": "scotland/{season}_sco1.txt"},
+            "openfootball_europe": "scotland/{season}_sco1.txt", "results_lag": True},
 }
 # Every competition that gets a public prediction for each scheduled match.
 PREDICTED = {**LEAGUES, **PUBLIC_ONLY}

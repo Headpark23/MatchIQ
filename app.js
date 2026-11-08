@@ -533,13 +533,37 @@ function fixtureRow(f) {
     '<span class="fx-lean">' + lean + '</span><span class="fx-chev" aria-hidden="true">›</span></a>';
 }
 
+// When a league's results reach us late (the Scottish Premiership's only permitted source runs
+// weeks behind), its predictions rest on older form. Returns the date of the latest confirmed
+// result when that is more than STALE_FORM_DAYS old and later matches have been played, else null.
+const STALE_FORM_DAYS = 10;
+const staleFormCache = {};
+function staleFormSince(code) {
+  const fixtures = fixturesList();
+  const key = code + ':' + fixtures.length + ':' + ((DATA.fixtures || {}).generated_at || '');
+  if (key in staleFormCache) return staleFormCache[key];
+  let latest = 0, playedSince = false;
+  fixtures.forEach(f => { if (f.competition === code && f.status === 'FINISHED' && f.score) latest = Math.max(latest, kickoffMs(f)); });
+  fixtures.forEach(f => { if (f.competition === code && f.status === 'AWAITING_RESULT' && kickoffMs(f) > latest) playedSince = true; });
+  const out = latest && playedSince && Date.now() - latest > STALE_FORM_DAYS * 864e5 ? latest : null;
+  staleFormCache[key] = out;
+  return out;
+}
+function staleFormNote(code) {
+  const since = staleFormSince(code);
+  if (!since) return '';
+  return '<p class="stale-form-note">' + esc(leagueName(code)) + ' results reach us late: the latest confirmed result is from ' +
+    esc(london(since, { day: 'numeric', month: 'short' })) + ', so these predictions use form up to then. Recent matches will count once their scores arrive.</p>';
+}
+
 function fixtureCouponRow(f) {
   const pred = DATA.predictions && DATA.predictions.predictions[f.id];
   const all = ownBetMarketsFor(f), byKey = k => all.find(o => o.key === k);
   let lean = '<span class="dim">Prediction due nearer kick-off</span>';
   if (pred) {
     const r = pred.markets.result, provisional = r.evidence.status !== 'validated';
-    lean = 'Leans <b>' + esc(String(r.pick.label).replace(/ win$/, '')) + '</b> ' + pct(r.pick.p) + (provisional ? ' · early estimate' : '');
+    lean = 'Leans <b>' + esc(String(r.pick.label).replace(/ win$/, '')) + '</b> ' + pct(r.pick.p) + (provisional ? ' · early estimate' : '') +
+      (staleFormSince(f.competition) ? ' · older form' : '');
   }
   return '<div class="cp-row fx-cp">' +
     '<a class="cp-match" href="#/match/' + encodeURIComponent(f.id) + '">' +
@@ -1679,7 +1703,7 @@ function viewMatch(id) {
 
   if (pred && ms > Date.now()) {
     const r = pred.markets.result;
-    html += matchViewCard(pred, fx) +
+    html += staleFormNote(fx.competition) + matchViewCard(pred, fx) +
       '<section class="card section mv-markets"><div class="section-head"><h2 class="section-title">Markets</h2></div>' +
       '<p class="own-hint" style="margin-top:0">Each button shows the price, and underneath it how often we think it happens. Tap a price to put it on your bet slip, then save it to your Diary or League from there.</p>' +
       ownBetMatchPanel(fx, modelProbsFor(pred)) + '</section>';

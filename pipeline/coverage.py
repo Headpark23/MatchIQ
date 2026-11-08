@@ -17,6 +17,11 @@ public site is built from:
 
 Schedule-only competitions (leagues.SCHEDULE_ONLY) are listed with their fixture counts only:
 no permitted source supplies the history a model needs, so they are not predicted.
+
+Leagues flagged "results_lag" (their only permitted results source is known to run weeks late)
+still have their overdue results counted, and their match-day fixtures with an unconfirmed
+kick-off time and no sealed prediction (which public.py may not predict) are listed, but both
+go under "known_lag" instead of "gaps", so they do not fail --strict.
 """
 import argparse
 import datetime as dt
@@ -26,6 +31,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from .leagues import PREDICTED, SCHEDULE_ONLY
+from .public import TIMED_SOURCES, seal_cutoff
 
 ROOT = Path(__file__).resolve().parents[1]
 GAP_HOURS = 48
@@ -49,7 +55,9 @@ def compute(fixtures, predictions, ledger_records, now, horizon_days=21):
         started[code] = min(started.get(code, t), t)
     leagues, gaps = {}, {"league_without_fixtures": [], "unpredicted_next_48h": [], "unsealed_last_7d": [], "unsettled": [], "results_overdue": []}
     history = {"unsealed_before_last_7d": []}
+    known_lag = {"results_overdue": [], "untimed_match_day_unsealed": []}
     for code in list(PREDICTED) + list(SCHEDULE_ONLY):
+        lag = bool(PREDICTED.get(code, {}).get("results_lag"))
         mine = [f for f in fixtures if f["competition"] == code]
         row = {"name": (PREDICTED.get(code) or SCHEDULE_ONLY[code])["name"], "predicted": code in PREDICTED, "fixtures": len(mine)}
         if code not in PREDICTED:
@@ -71,7 +79,9 @@ def compute(fixtures, predictions, ledger_records, now, horizon_days=21):
                     row["next_48h"] += 1
                     row["next_48h_predicted"] += f["id"] in predictions
                     if f["id"] not in predictions:
-                        gaps["unpredicted_next_48h"].append(f["id"])
+                        untimed_today = (lag and not set(f.get("sources") or []) & TIMED_SOURCES
+                                         and now >= seal_cutoff(kickoff) and not by_match[f["id"]])
+                        (known_lag["untimed_match_day_unsealed"] if untimed_today else gaps["unpredicted_next_48h"]).append(f["id"])
             if kickoff <= now and start and kickoff >= start + START_GRACE:
                 # Every match after the ledger began was inside the horizon at some run before kick-off.
                 row["played_since_start"] += 1
@@ -87,7 +97,8 @@ def compute(fixtures, predictions, ledger_records, now, horizon_days=21):
                         gaps["unsettled"].append(f["id"])
             if f["status"] in ("AWAITING_RESULT", "SCHEDULED", "IN_PLAY", "RESULT_CONFLICT") and kickoff <= now - dt.timedelta(hours=RESULT_GRACE_HOURS):
                 row["results_overdue"] += 1
-                gaps["results_overdue"].append(f["id"])
+                (known_lag if lag else gaps)["results_overdue"].append(f["id"])
+        row["results_lag"] = lag
         leagues[code] = row
     totals = defaultdict(int)
     for row in leagues.values():
@@ -95,7 +106,7 @@ def compute(fixtures, predictions, ledger_records, now, horizon_days=21):
             if isinstance(v, int) and not isinstance(v, bool):
                 totals[k] += v
     return {"generated_at": now.isoformat(), "gap_hours": GAP_HOURS, "result_grace_hours": RESULT_GRACE_HOURS,
-            "leagues": leagues, "totals": dict(totals), "gaps": gaps, "history": history,
+            "leagues": leagues, "totals": dict(totals), "gaps": gaps, "known_lag": known_lag, "history": history,
             "complete": not any(gaps.values())}
 
 
@@ -107,9 +118,13 @@ def markdown(report):
             lines.append(f"| {r['name']} | not predicted ({r['fixtures']} fixtures; no permitted source) | | | |")
             continue
         lines.append(f"| {r['name']} | {r['upcoming_predicted']}/{r['upcoming']} | {r['next_48h_predicted']}/{r['next_48h']} | "
-                     f"{r['sealed']}/{r['played_since_start']} sealed, {r['settled']} settled | {r['results_overdue']} |")
+                     f"{r['sealed']}/{r['played_since_start']} sealed, {r['settled']} settled | {r['results_overdue']}"
+                     f"{' (source lags, allowed)' if r.get('results_lag') and r['results_overdue'] else ''} |")
     gaps = {k: v for k, v in report["gaps"].items() if v}
     lines.append("")
+    lag = {k: v for k, v in (report.get("known_lag") or {}).items() if v}
+    if lag:
+        lines.append("Known source lag (reported, not a failure): " + "; ".join(f"{k}: {len(v)} ({', '.join(v[:5])}{'…' if len(v) > 5 else ''})" for k, v in lag.items()))
     old = report.get("history", {}).get("unsealed_before_last_7d") or []
     if old:
         lines.append(f"Older matches with no sealed prediction (cannot be fixed retroactively): {len(old)} ({', '.join(old[:5])})")

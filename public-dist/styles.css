@@ -4199,6 +4199,7 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .own-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 @media (max-width: 420px) { .own-fields { grid-template-columns: 1fr; } }
 .own-est { color: #fbbf24 !important; }
+.stale-form-note { margin: 12px 0; padding: 10px 14px; border-radius: 12px; border: 1px solid color-mix(in srgb, #fbbf24 45%, transparent); background: color-mix(in srgb, #fbbf24 10%, transparent); color: var(--ink); font-size: 13px; line-height: 1.45; }
 .own-cols { display: flex; flex-direction: column; gap: 14px; }
 @media (min-width: 960px) {
   .own-cols { display: grid; grid-template-columns: minmax(0, 1fr) 360px; align-items: start; }
