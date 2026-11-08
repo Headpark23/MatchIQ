@@ -27,7 +27,7 @@ const checks = [
   ['bookmaker margin is removed when every outcome is priced', /fairImplied: complete \? implied \/ book : null/.test(calcSrc)],
   ['match page leads with one plain verdict, then every market in the shared panel', /function matchViewCard\(/.test(app) && /ownBetMatchPanel\(fx, modelProbsFor\(pred\)\)/.test(app) && /Every market and line/.test(app)],
   ['Best Value scans every selection, not only the Top Six', /calc\.bestValue\(/.test(app) && /function bestValue\(/.test(calcSrc)],
-  ['Most Likely and Best Value both feed the Bet Diary', /rec: 'most_likely'/.test(app) && /rec: 'best_value'/.test(app)],
+  ['Most Likely and top picks both feed the Bet Diary (top picks via the bet slip, as Bet Buddy picks)', /rec: 'most_likely'/.test(app) && /function addBestValueToDiary\([\s\S]*?addLegsToOwnBet\(/.test(app) && /leg\.origin = 'matchiq'/.test(app)],
   ['no "value bet / edge / target return" claims in user-facing copy', !/Today\'s Best Value Bet|% edge vs|Set Target Return|aim to win|Best Value &amp; Target/.test(app)],
   ['age gate, play-safe and terms exist in the page', (() => { const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8'); return /id="age-gate"/.test(html) && /id="safe-modal"/.test(html) && /GAMSTOP/i.test(html) && /id="terms-modal"/.test(html); })()],
   ['non-validated estimates are labelled provisional', Object.values(predictions).every(p => p.markets.result.tier === 'T1' ? p.markets.result.evidence.status === 'validated' : p.markets.result.evidence.status === 'provisional')],

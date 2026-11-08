@@ -974,13 +974,12 @@ function nextAccaOption() {
   if (out) out.innerHTML = builderOutput();
 }
 
-// Puts the model's acca on the player's bet slip, where it is saved to the Diary or League like any bet.
-function addAccaToOwnBet(idx) {
-  const slip = builderResult && builderResult.slips && builderResult.slips[idx];
-  if (!slip) return;
-  if (ownBet.legs.length && !confirm('Your bet slip already has ' + ownBet.legs.length + ' selection' + (ownBet.legs.length === 1 ? '' : 's') + '. Replace them with this acca?')) return;
+// Model legs (from the acca builder or today's top picks) onto the player's bet slip. With replace,
+// the slip becomes exactly these legs (after asking if it already holds others); otherwise they are added.
+function addLegsToOwnBet(modelLegs, replace) {
+  if (replace && ownBet.legs.length && !confirm('Your bet slip already has ' + ownBet.legs.length + ' selection' + (ownBet.legs.length === 1 ? '' : 's') + '. Replace them?')) return false;
   const legs = [];
-  slip.legs.forEach(l => {
+  modelLegs.forEach(l => {
     const id = 'ob' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
     const fx = l.sport && l.sport !== 'football' ? null : fixtureById(l.matchId);
     const opt = fx && ownBetMarketsFor(fx).find(o => o.key === l.selId || o.src === l.label || o.label === l.label);
@@ -994,10 +993,22 @@ function addAccaToOwnBet(idx) {
       legs.push({ id, kind: 'custom', sport: sport.charAt(0).toUpperCase() + sport.slice(1), pick: String(l.label || '').slice(0, 120), odds: Number(l.odds) > 1 ? Number(l.odds) : null, origin: 'matchiq' });
     }
   });
-  ownBet.legs = legs.slice(0, OWN_BET_MAX_LEGS);
-  ownBet.stake = Number(builderState.stake) || ownBet.stake;
-  ownBet.origin = '';
+  if (replace) { ownBet.legs = legs.slice(0, OWN_BET_MAX_LEGS); ownBet.stake = Number(builderState.stake) || ownBet.stake; ownBet.origin = ''; }
+  else {
+    const room = OWN_BET_MAX_LEGS - ownBet.legs.length;
+    if (room <= 0) { toast('A bet can have up to ' + OWN_BET_MAX_LEGS + ' selections.', 'warn'); return false; }
+    ownBet.legs = ownBet.legs.concat(legs.slice(0, room));
+    toast('Added to your bet slip (' + ownBetName(ownBet.legs.length) + ').');
+  }
   persistOwnBet();
+  updateOwnBetBar();
+  return true;
+}
+
+// Puts the model's acca on the player's bet slip, where it is saved to the Diary or League like any bet.
+function addAccaToOwnBet(idx) {
+  const slip = builderResult && builderResult.slips && builderResult.slips[idx];
+  if (!slip || !addLegsToOwnBet(slip.legs, true)) return;
   location.hash = '#/build';
   toast('Acca added to your bet slip. Add your stake and save it.');
 }
@@ -1368,102 +1379,84 @@ function setBestValueTier(tier) {
   renderBestValueModalContent();
 }
 
+// Today's top model picks: a hero "pick of the day", the other picks, then a way to combine them.
+// Each pick shows the gap that makes it interesting: our chance against the chance the price implies.
+function bvGap(l, mode, big) {
+  const ours = Math.round(l.p * 100), implied = Math.round(100 / Number(l.odds || 1));
+  if (mode === 'model') {
+    return '<div class="bv-gap' + (big ? ' big' : '') + '"><div class="bv-gap-row"><span>Our chance</span><i><em class="ours" style="--w:' + ours + '%"></em></i><b>' + ours + '%</b></div></div>';
+  }
+  return '<div class="bv-gap' + (big ? ' big' : '') + '">' +
+    '<div class="bv-gap-row"><span>Our chance</span><i><em class="ours" style="--w:' + ours + '%"></em></i><b>' + ours + '%</b></div>' +
+    '<div class="bv-gap-row"><span>Price says</span><i><em style="--w:' + implied + '%"></em></i><b>' + implied + '%</b></div>' +
+    (big ? '<p class="bv-gap-say">We rate it <b>' + (ours - implied) + ' points</b> likelier than the ' + esc(l.bookmaker || 'bookmaker') + ' price suggests.</p>' : '') +
+  '</div>';
+}
+
+function bvPrice(l) { return oddsFormat === 'decimal' ? calc.formatDecimalOdds(l.odds) : (l.fractional || fmtOdds(l.odds)); }
+function bvWhen(l) {
+  const ms = l.kickoff || kickoffMs(l.fixture), f = l.fixture || {};
+  return (Number.isFinite(ms) ? fmtDay(ms) + ' ' + fmtTime(ms) : '') + (f.competition ? ' · ' + leagueName(f.competition) : '');
+}
+function bvMatch(l) { const f = l.fixture || {}; return f.home && f.away ? f.home + ' v ' + f.away : (f.home || 'Match'); }
+
 function renderBestValueModalContent() {
   const data = getTodayBestValuePicks();
   const body = $('best-value-modal-body');
   if (!body) return;
+  const kicker = $('best-value-kicker');
+  if (kicker) kicker.textContent = !data ? 'Nothing qualifies right now' : data.mode === 'verified' ? '💎 Live prices · proven markets' : data.mode === 'live' ? '⚡ Live prices · early evidence' : '🧠 Model picks · estimated prices';
   if (!data) {
-    body.innerHTML = '<div class="empty" style="padding:32px 20px;text-align:center;">' +
-      '<div style="font-size:36px;margin-bottom:12px;">⚖️</div>' +
-      '<h3 style="font-size:18px;font-weight:700;margin-bottom:8px;color:#fff;">No Value Bets Qualify Today</h3>' +
-      '<p class="muted" style="font-size:14px;max-width:440px;margin:0 auto 16px;line-height:1.5;">Bet Buddy requires backtested model evidence and at least +5% expected value before recommending any bet. No live bookmaker price currently clears our evidence threshold.</p>' +
-      '<a href="#/picks" class="btn primary" onclick="closeBestValueModal()" style="display:inline-block;padding:8px 18px;font-size:14px;">Build Acca with Most Likely Picks ↗</a>' +
-    '</div>';
+    body.innerHTML = '<div class="bv-empty"><div class="bv-empty-ico">⚖️</div><h3>No picks today</h3>' +
+      '<p>None of today’s prices beat our estimates by enough. We would rather show nothing than force a pick.</p>' +
+      '<a href="#/picks" class="btn primary" onclick="closeBestValueModal()">Build an acca instead</a></div>';
     return;
   }
+  const all = data.fourFold.legs, top = all[0], rest = all.slice(1);
+  const onSlip = l => ownBet.legs.some(x => x.fixtureId === l.matchId && x.key === l.selId);
+  const addBtn = (l, i, big) => '<button type="button" class="' + (big ? 'btn primary bv-add' : 'bv-plus') + (onSlip(l) ? ' on' : '') + '" onclick="addBestValueLeg(' + i + ')" aria-label="Add ' + esc(l.label) + ' to my bet slip">' +
+    (onSlip(l) ? (big ? '✓ On your slip' : '✓') : big ? '+ Add to bet slip' : '+') + '</button>';
 
-  const tierData = data[activeBestValueTier] || data.single;
-  const tierNeeds = { single: 1, double: 2, treble: 3, fourFold: 4 }[activeBestValueTier] || 1;
-  const tierName = { single: 'single', double: 'double', treble: 'treble', fourFold: '4-fold' }[activeBestValueTier] || 'single';
-  const legs = tierData.legs;
-  if (legs.length < tierNeeds) {
-    const tabs = ['single', 'double', 'treble', 'fourFold'].map(function (t, i) {
-      const lbl = ['Single (1)', 'Double (2)', 'Treble (3)', '4-Fold (4)'][i];
-      return '<button type="button" class="bv-tab' + (activeBestValueTier === t ? ' active' : '') + '" onclick="setBestValueTier(\'' + t + '\')">' + lbl + '</button>';
-    }).join('');
-    body.innerHTML = '<div class="bv-tabs">' + tabs + '</div>' +
-      '<div class="empty" style="padding:32px 20px;text-align:center;">' +
-      '<div style="font-size:36px;margin-bottom:12px;">⚖️</div>' +
-      '<h3 style="font-size:18px;font-weight:700;margin-bottom:8px;color:#fff;">Not enough value bets today for a ' + tierName + '</h3>' +
-      '<p class="muted" style="font-size:14px;max-width:440px;margin:0 auto;line-height:1.5;">Only ' + legs.length + ' qualifying pick' + (legs.length === 1 ? '' : 's') + ' from different matches today, and a ' + tierName + ' needs ' + tierNeeds + '. We would rather show nothing than pad it out with weaker bets.</p>' +
-      '</div>';
-    return;
-  }
-  const totalOdds = tierData.odds;
-  const avgEv = tierData.avgEv;
-  const estProb = tierData.estProb;
+  const hero = '<article class="bv-hero">' +
+    '<div class="bv-hero-kicker">⭐ Pick of the day</div>' +
+    '<div class="bv-hero-when">' + esc(bvWhen(top)) + '</div>' +
+    '<div class="bv-hero-match">' + esc(bvMatch(top)) + '</div>' +
+    '<div class="bv-hero-pick"><b>' + esc(top.label) + '</b><span class="bv-price mono">' + esc(bvPrice(top)) + '<small>' + esc(data.mode === 'model' ? 'estimate' : (top.bookmaker || 'bookmaker')) + '</small></span></div>' +
+    bvGap(top, data.mode, true) +
+    '<div class="bv-hero-actions">' + addBtn(top, 0, true) + '<a class="btn" href="#/match/' + encodeURIComponent(top.matchId) + '" onclick="closeBestValueModal()">Analysis ›</a></div>' +
+  '</article>';
+
+  const more = rest.length ? '<h3 class="bv-h">More picks today</h3><div class="bv-legs-list">' + rest.map((l, i) =>
+    '<div class="bv-leg-item"><div class="bv-leg-info"><div class="bv-leg-when">' + esc(bvWhen(l)) + '</div><div class="bv-leg-match">' + esc(bvMatch(l)) + '</div>' +
+      '<div class="bv-leg-sel">' + esc(l.label) + ' <span class="mono">' + esc(bvPrice(l)) + '</span></div>' + bvGap(l, data.mode, false) + '</div>' + addBtn(l, i + 1, false) + '</div>').join('') + '</div>' : '';
+
+  const tiers = [['single', 'Single', 1], ['double', 'Double', 2], ['treble', 'Treble', 3], ['fourFold', '4-fold', 4]].filter(t => all.length >= t[2]);
+  if (!tiers.some(t => t[0] === activeBestValueTier)) activeBestValueTier = tiers[tiers.length - 1][0];
+  const tierData = data[activeBestValueTier];
   const stake = Number((builderState && builderState.stake) || 10) || 10;
-  const potRet = (stake * totalOdds).toFixed(2);
-  const profit = (stake * totalOdds - stake).toFixed(2);
+  const chance = tierData.estProb >= 0.1 ? Math.round(tierData.estProb * 100) : (tierData.estProb * 100).toFixed(1);
+  const combine = all.length > 1 ? '<h3 class="bv-h">Combine them</h3>' +
+    '<div class="bv-tabs" role="group" aria-label="How many picks">' + tiers.map(t => '<button type="button" class="bv-tab' + (activeBestValueTier === t[0] ? ' active' : '') + '" aria-pressed="' + (activeBestValueTier === t[0]) + '" onclick="setBestValueTier(\'' + t[0] + '\')">' + t[1] + '</button>').join('') + '</div>' +
+    '<div class="bv-summary-card"><div><span>Odds</span><b class="mono">' + esc(fmtOdds(tierData.odds)) + '</b></div><div><span>Chance all land</span><b class="mono">' + chance + '%</b></div><div><span>£' + stake.toFixed(0) + ' returns</span><b class="mono pos">£' + (stake * tierData.odds).toFixed(2) + '</b></div></div>' +
+    '<div class="bv-modal-actions"><button type="button" class="btn primary" onclick="addBestValueToDiary(\'' + activeBestValueTier + '\')">Put the ' + esc(tierData.type.toLowerCase()) + ' on my bet slip</button>' +
+      '<button type="button" class="btn" onclick="openSlipCardFromBestValue(\'' + activeBestValueTier + '\')">📋 Slip card</button></div>' : '';
 
-  const tabsHtml = '<div class="bv-tabs">' +
-    '<button type="button" class="bv-tab' + (activeBestValueTier === 'single' ? ' active' : '') + '" onclick="setBestValueTier(\'single\')">Single (1)</button>' +
-    '<button type="button" class="bv-tab' + (activeBestValueTier === 'double' ? ' active' : '') + '" onclick="setBestValueTier(\'double\')">Double (2)</button>' +
-    '<button type="button" class="bv-tab' + (activeBestValueTier === 'treble' ? ' active' : '') + '" onclick="setBestValueTier(\'treble\')">Treble (3)</button>' +
-    '<button type="button" class="bv-tab' + (activeBestValueTier === 'fourFold' ? ' active' : '') + '" onclick="setBestValueTier(\'fourFold\')">4-Fold (4)</button>' +
-  '</div>';
-
-  const legsHtml = '<div class="bv-legs-list">' +
-    legs.map((l, i) => {
-      const fix = l.fixture || {};
-      const matchText = (fix.home && fix.away) ? (fix.home + ' v ' + fix.away) : (fix.home || 'Match');
-      const oddsLabel = oddsFormat === 'decimal' ? calc.formatDecimalOdds(l.odds) : (l.fractional || fmtOdds(l.odds));
-      const evPct = Math.round(l.ev * 100);
-      return '<div class="bv-leg-item">' +
-        '<div class="bv-leg-left">' +
-          '<span class="bv-leg-num">' + (i + 1) + '</span>' +
-          '<div class="bv-leg-info">' +
-            '<div class="bv-leg-match">' + esc(matchText) + '</div>' +
-            '<div class="bv-leg-sel">' + esc(l.label) + '</div>' +
-            (data.mode === 'model'
-              ? '<div class="bv-leg-ev-badge">Model pick &bull; indicative price</div>'
-              : '<div class="bv-leg-ev-badge">+' + evPct + '% above ' + esc(l.bookmaker || 'market') + ' price (estimate)</div>') +
-          '</div>' +
-        '</div>' +
-        '<div class="bv-leg-right">' +
-          '<div class="bv-leg-odds mono">' + esc(oddsLabel) + '</div>' +
-          '<div class="bv-leg-prob">' + Math.round(l.p * 100) + '% model chance</div>' +
-        '</div>' +
-      '</div>';
-    }).join('') +
-  '</div>';
-
-  const statsHtml = '<div class="bv-summary-card">' +
-    '<div class="bv-sum-col"><span>Total Odds</span><b class="mono">' + fmtOdds(totalOdds) + '</b></div>' +
-    '<div class="bv-sum-col"><span>Est. Edge</span>' + (data.mode === 'model' ? '<b class="mono">n/a</b>' : '<b class="pos">+' + Math.round(avgEv * 100) + '% EV</b>') + '</div>' +
-    '<div class="bv-sum-col"><span>Win Chance</span><b class="mono">' + (estProb >= 0.1 ? Math.round(estProb * 100) : (estProb * 100).toFixed(1)) + '%</b></div>' +
-    '<div class="bv-sum-col"><span>Returns (£' + stake.toFixed(2) + ')</span><b class="mono emerald">£' + potRet + '</b></div>' +
-  '</div>';
-
-  const actionsHtml = '<div class="bv-modal-actions">' +
-    '<button type="button" class="btn primary" onclick="addBestValueToDiary(\'' + activeBestValueTier + '\')" style="flex:1;min-height:48px;font-size:15px;font-weight:700;">' +
-      '📓 Add to Bet Diary / League 🏆' +
-    '</button>' +
-    '<button type="button" class="btn" onclick="openSlipCardFromBestValue(\'' + activeBestValueTier + '\')" style="min-height:48px;">' +
-      '📋 Slip Card' +
-    '</button>' +
-  '</div>';
-
-  const noteText = data.mode === 'model'
-    ? 'Live bookmaker prices are not fresh right now, so these are the model\'s most likely picks at indicative prices. Check the real price in your bookmaker app; nothing here can be confirmed until live prices refresh.'
+  const note = data.mode === 'model'
+    ? 'Bookmaker prices are not fresh right now, so these are our most likely picks at estimated prices. Check the real price before you bet.'
     : data.mode === 'live'
-      ? 'The model estimate is above the bookmaker price here, but the backtest evidence for these markets is still provisional. A gap against a price is not proof of value, and no bet is certain.'
-      : '';
-  const noteHtml = noteText
-    ? '<p class="muted" style="font-size:12.5px;line-height:1.5;margin:0 0 12px;">' + esc(noteText) + '</p>'
-    : '';
+      ? 'Our evidence for these markets is still early, so a gap against the price is a lead, not proof. No bet is certain.'
+      : 'A gap against the price is not a promise. No bet is certain.';
+  body.innerHTML = hero + more + combine + '<p class="bv-note">' + esc(note) + ' 18+. Only stake what you can afford to lose.</p>';
+}
 
-  body.innerHTML = tabsHtml + noteHtml + statsHtml + legsHtml + actionsHtml;
+// One pick onto the bet slip (added alongside anything already there).
+function addBestValueLeg(i) {
+  const data = getTodayBestValuePicks();
+  const l = data && data.fourFold.legs[i];
+  if (!l) return;
+  if (ownBet.legs.some(x => x.fixtureId === l.matchId && x.key === l.selId)) { toast('Already on your bet slip.'); return; }
+  addLegsToOwnBet([l], false);
+  renderBestValueModalContent();
 }
 
 function openSlipCardFromBestValue(tier) {
@@ -1483,46 +1476,15 @@ function openSlipCardFromBestValue(tier) {
   renderSlipCardModal(activeSlipCardData);
 }
 
+// Puts the chosen combination on the bet slip, where it is saved to the Diary or League like any bet.
 function addBestValueToDiary(tier) {
   const data = getTodayBestValuePicks();
   if (!data) return;
   const tierData = data[tier] || data.single;
+  if (!addLegsToOwnBet(tierData.legs, true)) return;
   closeBestValueModal();
-  const legs = tierData.legs;
-  const isSingle = legs.length === 1;
-
-  if (isSingle) {
-    const l = legs[0];
-    const fix = l.fixture || {};
-    openDiary({
-      id: l.matchId,
-      selection: l.label,
-      market: MARKETS[l.market] ? MARKETS[l.market].diary : 'wins',
-      odds: l.fractional || fmtOdds(l.odds),
-      p: l.p,
-      fair: calc.formatFractionalOdds(1 / l.p),
-      rec: 'best_value',
-      notes: data.mode === 'model'
-        ? "Top model pick (indicative price, not a recommendation)"
-        : "Top model pick (model estimate " + Math.round(l.ev * 100) + "% above the " + (l.bookmaker || 'bookmaker') + " price; not a recommendation)"
-    });
-  } else {
-    openDiary({});
-    $('modal-bet-type').value = 'accumulator';
-    toggleAccumulatorFields();
-    if ($('modal-legs-input')) {
-      $('modal-legs-input').value = legs.map(l => {
-        const matchLabel = l.fixture && l.fixture.home ? (l.fixture.home + (l.fixture.away ? ' v ' + l.fixture.away : '') + ': ') : '';
-        const frac = String(l.fractional || fmtOdds(l.odds)).replace(/[≈~]/g, '').trim();
-        return (matchLabel + l.label).replace(/^([^:]+:\s*)\1/, '$1') + ' | ' + (frac || 'Evens');
-      }).join('\n');
-    }
-    if ($('modal-stake-input')) $('modal-stake-input').value = Number((builderState && builderState.stake) || 10).toFixed(2);
-    if ($('modal-odds-input')) $('modal-odds-input').value = fmtOdds(tierData.odds).replace(/[≈~]/g, '');
-    if ($('modal-origin-select')) $('modal-origin-select').value = 'matchiq';
-    if ($('modal-notes-input')) $('modal-notes-input').value = "Top model picks, " + tierData.type + " (model estimate avg " + Math.round(tierData.avgEv * 100) + "% above price; not a recommendation).";
-    updateModalPnlPreview();
-  }
+  location.hash = '#/build';
+  toast('Picks added to your bet slip. Add your stake and save it.');
 }
 
 // Nudges signed-in players who have not set their full location: regional ladders are opt-in by location.

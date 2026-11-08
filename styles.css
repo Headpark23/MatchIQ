@@ -4519,3 +4519,60 @@ a.cp-match:hover .cp-teams b, a.cp-match:focus-visible .cp-teams b { color: var(
   .lg-board .lb-col-win, .lg-board .lb-col-roi, .lg-board .lb-form-indicator { display: none; }
   .lg-board .lb-table { table-layout: auto; }
 }
+
+/* ---- Today's top picks: hero pick, gap bars, more picks, combine ---- */
+.bv-kicker { color: var(--pick) !important; letter-spacing: .06em; }
+.best-value-modal-body { display: flex; flex-direction: column; gap: 12px; }
+.bv-hero { position: relative; padding: 18px 16px 16px; border-radius: 20px; overflow: hidden; isolation: isolate;
+  background: radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, #fbbf24 20%, transparent), transparent 55%), linear-gradient(160deg, color-mix(in srgb, var(--pick) 18%, var(--surface-solid)), var(--surface-solid));
+  border: 1px solid color-mix(in srgb, var(--pick) 45%, var(--line-strong)); box-shadow: 0 16px 34px -22px var(--pick); }
+.bv-hero-kicker { display: inline-flex; padding: 4px 10px; border-radius: 999px; background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fcd34d; font: 700 11.5px var(--display); letter-spacing: .06em; text-transform: uppercase; }
+.bv-hero-when { margin-top: 10px; font-size: 12px; color: var(--muted); }
+.bv-hero-match { font: 600 15px var(--display); color: var(--soft); }
+.bv-hero-pick { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 6px 0 12px; }
+.bv-hero-pick b { font: 800 26px/1.15 var(--display); color: var(--ink); letter-spacing: -.01em; }
+.bv-price { flex: none; display: flex; flex-direction: column; align-items: center; padding: 8px 14px; border-radius: 14px; background: var(--pick); color: #04140d; font-size: 22px; font-weight: 800; }
+.bv-price small { font: 600 10.5px var(--display); opacity: .75; }
+.bv-gap { display: flex; flex-direction: column; gap: 5px; }
+.bv-gap-row { display: grid; grid-template-columns: 74px 1fr 36px; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.bv-gap-row i { position: relative; display: block; height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 10%, transparent); overflow: hidden; }
+.bv-gap-row em { position: absolute; inset: 0 auto 0 0; width: var(--w); border-radius: 999px; background: color-mix(in srgb, var(--ink) 40%, transparent); animation: bv-grow .8s .15s cubic-bezier(.2, .8, .2, 1) both; }
+.bv-gap-row em.ours { background: linear-gradient(90deg, var(--pick), #34d399); }
+.bv-gap-row b { color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+@keyframes bv-grow { from { width: 0; } }
+.bv-gap.big .bv-gap-row { grid-template-columns: 84px 1fr 40px; font-size: 13px; }
+.bv-gap.big .bv-gap-row i { height: 10px; }
+.bv-gap-say { margin: 6px 0 0; font-size: 13px; color: var(--soft); }
+.bv-gap-say b { color: var(--pick); }
+.bv-hero-actions { display: flex; gap: 8px; margin-top: 14px; }
+.bv-hero-actions .btn { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+.bv-add { flex: 1; font-size: 15px; font-weight: 700; }
+.bv-add.on, .bv-plus.on { background: color-mix(in srgb, var(--pick) 18%, var(--surface-solid)) !important; color: var(--pick) !important; border: 1px solid var(--pick) !important; }
+.bv-h { margin: 6px 0 -2px; font: 700 12px var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.best-value-modal-body .bv-legs-list { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+.best-value-modal-body .bv-leg-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.best-value-modal-body .bv-leg-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.bv-leg-when { font-size: 11.5px; color: var(--muted); }
+.best-value-modal-body .bv-leg-match { font-size: 13px; color: var(--soft); }
+.best-value-modal-body .bv-leg-sel { font: 700 15px var(--display); color: var(--ink); margin-bottom: 4px; }
+.best-value-modal-body .bv-leg-sel .mono { color: var(--pick); margin-left: 4px; }
+.bv-plus { flex: none; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--pick); background: color-mix(in srgb, var(--pick) 14%, transparent); color: var(--pick); font: 700 20px var(--display); cursor: pointer; }
+.bv-plus.on { font-size: 18px; }
+.best-value-modal-body .bv-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; padding: 0; margin: 0; background: none; border: 0; }
+.best-value-modal-body .bv-tab { min-height: 40px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--soft); font: 600 13px var(--display); cursor: pointer; }
+.best-value-modal-body .bv-tab.active { border-color: var(--pick); background: color-mix(in srgb, var(--pick) 18%, var(--surface-solid)); color: var(--ink); }
+.best-value-modal-body .bv-summary-card { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0; padding: 0; background: none; border: 0; }
+.best-value-modal-body .bv-summary-card > div { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.best-value-modal-body .bv-summary-card span { font-size: 11px; color: var(--muted); text-align: center; }
+.best-value-modal-body .bv-summary-card b { font-size: 17px; color: var(--ink); }
+.best-value-modal-body .bv-summary-card b.pos { color: var(--pick); }
+.best-value-modal-body .bv-modal-actions { display: flex; gap: 8px; margin: 0; }
+.best-value-modal-body .bv-modal-actions .btn { min-height: 46px; }
+.best-value-modal-body .bv-modal-actions .btn.primary { flex: 1; font-weight: 700; }
+.bv-note { margin: 2px 0 0; font-size: 12px; line-height: 1.45; color: var(--muted); }
+.bv-empty { padding: 28px 12px; text-align: center; }
+.bv-empty-ico { font-size: 40px; }
+.bv-empty h3 { margin: 8px 0 6px; font: 700 18px var(--display); color: var(--ink); }
+.bv-empty p { margin: 0 auto 16px; max-width: 34ch; font-size: 14px; color: var(--soft); }
+@media (prefers-reduced-motion: reduce) { .bv-gap-row em { animation: none; } }
+.best-value-modal-body .bv-legs-list { max-height: none; overflow: visible; }
