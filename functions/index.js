@@ -75,7 +75,7 @@ exports.ownerUserStats = onRequest({ cors: true }, async (req, res) => {
 const { defineSecret } = require('firebase-functions/params');
 const betai = require('./lib/betai');
 const GEMINI_API_KEY = defineSecret('GEMINI_API_KEY');
-const BETAI_MODEL = process.env.BETAI_MODEL || 'gemini-2.5-flash';
+const BETAI_MODEL = process.env.BETAI_MODEL || 'gemini-3.5-flash-lite';
 
 async function callGemini(key, question, ctx, nowMs) {
   const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + BETAI_MODEL + ':generateContent', {
@@ -84,7 +84,7 @@ async function callGemini(key, question, ctx, nowMs) {
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: betai.SYSTEM_PROMPT }] },
       contents: [{ role: 'user', parts: [{ text: betai.buildPrompt(question, ctx, nowMs) }] }],
-      generationConfig: { temperature: 0.4, maxOutputTokens: 4096, responseMimeType: 'application/json', responseSchema: betai.RESPONSE_SCHEMA }
+      generationConfig: { temperature: 0.4, maxOutputTokens: 8192, responseMimeType: 'application/json', responseSchema: betai.RESPONSE_SCHEMA }
     })
   });
   if (!res.ok) {
