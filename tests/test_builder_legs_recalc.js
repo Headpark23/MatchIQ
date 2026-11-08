@@ -40,9 +40,19 @@ vm.runInContext('Object.assign(DATA, ' + JSON.stringify(DATA) + ');', context);
 vm.runInContext(`
   // Use the full 7-day pool so the test does not depend on how many matches are scheduled today.
   builderState.timing = 'all';
+  // Which win targets a given acca size can hit depends on that day's prices, so try a few
+  // amounts and use the first one that produces accas (the app shows a message otherwise).
+  function legsWithFittingTarget(n) {
+    for (const win of [25, 40, 60, 100, 150, 250, 500]) {
+      builderState.win = win;
+      setBuilderLegs(n);
+      const out = builderOutput();
+      if (builderResult && builderResult.slips && builderResult.slips.length) return out;
+    }
+    throw new Error('No win target produced a ' + n + '-leg acca: ' + JSON.stringify(builderResult));
+  }
   // 1. Test 2-Leg Acca
-  setBuilderLegs(2);
-  let out2 = builderOutput();
+  let out2 = legsWithFittingTarget(2);
   let r2 = builderResult;
   console.log('--- LEGS = 2 ---');
   console.log('builderState.legs:', builderState.legs);
@@ -52,8 +62,7 @@ vm.runInContext(`
   if (!r2.slips.every(s => s.legs.length === 2)) throw new Error('Legs 2 mismatch');
 
   // 2. Test 4-Leg Acca
-  setBuilderLegs(4);
-  let out4 = builderOutput();
+  let out4 = legsWithFittingTarget(4);
   let r4 = builderResult;
   console.log('--- LEGS = 4 ---');
   console.log('builderState.legs:', builderState.legs);
@@ -63,8 +72,7 @@ vm.runInContext(`
   if (!r4.slips.every(s => s.legs.length === 4)) throw new Error('Legs 4 mismatch');
 
   // 3. Test 3-Leg Acca
-  setBuilderLegs(3);
-  let out3 = builderOutput();
+  let out3 = legsWithFittingTarget(3);
   let r3 = builderResult;
   console.log('--- LEGS = 3 ---');
   console.log('builderState.legs:', builderState.legs);
@@ -74,8 +82,7 @@ vm.runInContext(`
   if (!r3.slips.every(s => s.legs.length === 3)) throw new Error('Legs 3 mismatch');
 
   // 4. One acca is shown at a time, with a way to step through the other options.
-  setBuilderLegs(3);
-  let one = builderOutput();
+  let one = legsWithFittingTarget(3);
   const cards = (one.match(/<article class="slip/g) || []).length;
   console.log('Acca cards shown:', cards);
   if (cards !== 1) throw new Error('Expected exactly one acca card, got ' + cards);
