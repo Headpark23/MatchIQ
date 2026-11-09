@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-08T13:52:41.676879+00:00",
+ "generated_at": "2026-11-09T11:35:03.656311+00:00",
  "min_report_n": 20,
  "markets": {
   "result": {
@@ -662,57 +662,57 @@
   "best_value:no_bet": 15
  },
  "evaluated_matches": 30,
- "published_records": 219,
+ "published_records": 224,
  "by_competition": {
   "BL1": {
    "min_report_n": 20,
    "markets": {
     "result": {
-     "n": 15,
-     "hits": 8,
-     "brier": 0.5829,
-     "logloss": 0.9783,
-     "pick_hit_rate": 0.5333,
-     "mean_pick_p": 0.4989,
+     "n": 18,
+     "hits": 11,
+     "brier": 0.5435,
+     "logloss": 0.924,
+     "pick_hit_rate": 0.6111,
+     "mean_pick_p": 0.5033,
      "sufficient_sample": false
     },
     "goals": {
-     "n": 15,
-     "hits": 10,
-     "brier": 0.2211,
-     "logloss": 0.6342,
+     "n": 18,
+     "hits": 12,
+     "brier": 0.2199,
+     "logloss": 0.6316,
      "pick_hit_rate": 0.6667,
-     "mean_pick_p": 0.6288,
+     "mean_pick_p": 0.6271,
      "sufficient_sample": false
     },
     "btts": {
-     "n": 15,
-     "hits": 11,
-     "brier": 0.2147,
-     "logloss": 0.6219,
-     "pick_hit_rate": 0.7333,
-     "mean_pick_p": 0.6041,
+     "n": 18,
+     "hits": 13,
+     "brier": 0.2153,
+     "logloss": 0.6229,
+     "pick_hit_rate": 0.7222,
+     "mean_pick_p": 0.6027,
      "sufficient_sample": false
     }
    },
    "bands": {
     "result": {
      "40-50%": {
-      "n": 7,
-      "hits": 2,
-      "brier": 0.6908,
-      "logloss": 1.1361,
-      "pick_hit_rate": 0.2857,
-      "mean_pick_p": 0.4211,
+      "n": 8,
+      "hits": 3,
+      "brier": 0.6666,
+      "logloss": 1.1008,
+      "pick_hit_rate": 0.375,
+      "mean_pick_p": 0.4217,
       "sufficient_sample": false
      },
      "50-60%": {
-      "n": 2,
-      "hits": 1,
-      "brier": 0.583,
-      "logloss": 0.9698,
-      "pick_hit_rate": 0.5,
-      "mean_pick_p": 0.5548,
+      "n": 4,
+      "hits": 3,
+      "brier": 0.4269,
+      "logloss": 0.7611,
+      "pick_hit_rate": 0.75,
+      "mean_pick_p": 0.5652,
       "sufficient_sample": false
      },
      "0-40%": {
@@ -745,12 +745,12 @@
     },
     "goals": {
      "60-70%": {
-      "n": 13,
-      "hits": 9,
-      "brier": 0.2162,
-      "logloss": 0.6242,
-      "pick_hit_rate": 0.6923,
-      "mean_pick_p": 0.6348,
+      "n": 16,
+      "hits": 11,
+      "brier": 0.2157,
+      "logloss": 0.6231,
+      "pick_hit_rate": 0.6875,
+      "mean_pick_p": 0.6319,
       "sufficient_sample": false
      },
      "50-60%": {
@@ -765,21 +765,21 @@
     },
     "btts": {
      "50-60%": {
-      "n": 7,
+      "n": 8,
       "hits": 5,
-      "brier": 0.2209,
-      "logloss": 0.6344,
-      "pick_hit_rate": 0.7143,
-      "mean_pick_p": 0.5953,
+      "brier": 0.2356,
+      "logloss": 0.6641,
+      "pick_hit_rate": 0.625,
+      "mean_pick_p": 0.5936,
       "sufficient_sample": false
      },
      "60-70%": {
-      "n": 8,
-      "hits": 6,
-      "brier": 0.2094,
-      "logloss": 0.6109,
-      "pick_hit_rate": 0.75,
-      "mean_pick_p": 0.6118,
+      "n": 10,
+      "hits": 8,
+      "brier": 0.1991,
+      "logloss": 0.59,
+      "pick_hit_rate": 0.8,
+      "mean_pick_p": 0.61,
       "sufficient_sample": false
      }
     }
@@ -787,64 +787,64 @@
    "versions": {
     "result": {
      "league-average-v1": {
-      "n": 5,
-      "hits": 2,
-      "brier": 0.6783,
-      "logloss": 1.1206,
-      "pick_hit_rate": 0.4,
+      "n": 6,
+      "hits": 3,
+      "brier": 0.6481,
+      "logloss": 1.0761,
+      "pick_hit_rate": 0.5,
       "mean_pick_p": 0.4262,
       "sufficient_sample": false
      },
      "dc-league-v1": {
-      "n": 10,
-      "hits": 6,
-      "brier": 0.5353,
-      "logloss": 0.9071,
-      "pick_hit_rate": 0.6,
-      "mean_pick_p": 0.5352,
+      "n": 12,
+      "hits": 8,
+      "brier": 0.4912,
+      "logloss": 0.848,
+      "pick_hit_rate": 0.6667,
+      "mean_pick_p": 0.5419,
       "sufficient_sample": false
      }
     },
     "goals": {
      "blend30-league-v1": {
-      "n": 15,
-      "hits": 10,
-      "brier": 0.2211,
-      "logloss": 0.6342,
+      "n": 18,
+      "hits": 12,
+      "brier": 0.2199,
+      "logloss": 0.6316,
       "pick_hit_rate": 0.6667,
-      "mean_pick_p": 0.6288,
+      "mean_pick_p": 0.6271,
       "sufficient_sample": false
      }
     },
     "btts": {
      "blend30-league-v1": {
-      "n": 15,
-      "hits": 11,
-      "brier": 0.2147,
-      "logloss": 0.6219,
-      "pick_hit_rate": 0.7333,
-      "mean_pick_p": 0.6041,
+      "n": 18,
+      "hits": 13,
+      "brier": 0.2153,
+      "logloss": 0.6229,
+      "pick_hit_rate": 0.7222,
+      "mean_pick_p": 0.6027,
       "sufficient_sample": false
      }
     }
    },
    "tiers": {
     "T3": {
-     "n": 5,
-     "hits": 2,
-     "brier": 0.6783,
-     "logloss": 1.1206,
-     "pick_hit_rate": 0.4,
+     "n": 6,
+     "hits": 3,
+     "brier": 0.6481,
+     "logloss": 1.0761,
+     "pick_hit_rate": 0.5,
      "mean_pick_p": 0.4262,
      "sufficient_sample": false
     },
     "L1": {
-     "n": 10,
-     "hits": 6,
-     "brier": 0.5353,
-     "logloss": 0.9071,
-     "pick_hit_rate": 0.6,
-     "mean_pick_p": 0.5352,
+     "n": 12,
+     "hits": 8,
+     "brier": 0.4912,
+     "logloss": 0.848,
+     "pick_hit_rate": 0.6667,
+     "mean_pick_p": 0.5419,
      "sufficient_sample": false
     }
    },
@@ -877,21 +877,21 @@
      "sufficient_sample": false
     },
     "Freiburg": {
-     "n": 1,
-     "hits": 0,
-     "brier": 0.647,
-     "logloss": 1.0531,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4,
+     "n": 2,
+     "hits": 1,
+     "brier": 0.4575,
+     "logloss": 0.8005,
+     "pick_hit_rate": 0.5,
+     "mean_pick_p": 0.4891,
      "sufficient_sample": false
     },
     "Leverkusen": {
-     "n": 1,
-     "hits": 0,
-     "brier": 0.8946,
-     "logloss": 1.3859,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.5348,
+     "n": 2,
+     "hits": 1,
+     "brier": 0.5841,
+     "logloss": 0.9714,
+     "pick_hit_rate": 0.5,
+     "mean_pick_p": 0.5539,
      "sufficient_sample": false
     },
     "Stuttgart": {
@@ -922,12 +922,12 @@
      "sufficient_sample": false
     },
     "Schalke 04": {
-     "n": 1,
-     "hits": 0,
-     "brier": 0.7034,
-     "logloss": 1.1307,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4267,
+     "n": 2,
+     "hits": 1,
+     "brier": 0.6003,
+     "logloss": 0.9923,
+     "pick_hit_rate": 0.5,
+     "mean_pick_p": 0.4263,
      "sufficient_sample": false
     },
     "RB Leipzig": {
@@ -949,12 +949,12 @@
      "sufficient_sample": false
     },
     "Hoffenheim": {
-     "n": 1,
-     "hits": 1,
-     "brier": 0.5571,
-     "logloss": 0.9266,
+     "n": 2,
+     "hits": 2,
+     "brier": 0.5271,
+     "logloss": 0.8902,
      "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.3959,
+     "mean_pick_p": 0.4108,
      "sufficient_sample": false
     },
     "Bayern Munich": {
@@ -976,21 +976,21 @@
      "sufficient_sample": false
     },
     "Union Berlin": {
-     "n": 1,
-     "hits": 0,
-     "brier": 0.7974,
-     "logloss": 1.2966,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4164,
+     "n": 2,
+     "hits": 1,
+     "brier": 0.5327,
+     "logloss": 0.9222,
+     "pick_hit_rate": 0.5,
+     "mean_pick_p": 0.4973,
      "sufficient_sample": false
     },
     "FC Koln": {
-     "n": 1,
-     "hits": 0,
-     "brier": 0.7974,
-     "logloss": 1.2966,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.4164,
+     "n": 2,
+     "hits": 1,
+     "brier": 0.5355,
+     "logloss": 0.9267,
+     "pick_hit_rate": 0.5,
+     "mean_pick_p": 0.4947,
      "sufficient_sample": false
     },
     "Eintracht Frankfurt": {
@@ -1087,6 +1087,21 @@
      "kickoff_utc": "2026-11-07T17:30:00Z",
      "won": true,
      "brier": 0.19918
+    },
+    {
+     "kickoff_utc": "2026-11-08T14:30:00Z",
+     "won": true,
+     "brier": 0.27357
+    },
+    {
+     "kickoff_utc": "2026-11-08T16:30:00Z",
+     "won": true,
+     "brier": 0.26795
+    },
+    {
+     "kickoff_utc": "2026-11-08T18:30:00Z",
+     "won": true,
+     "brier": 0.49712
     }
    ],
    "most_likely": {
@@ -1119,12 +1134,12 @@
     }
    },
    "decisions": {
-    "most_likely:no_bet": 5,
-    "best_value:no_bet": 15,
-    "most_likely:most_likely": 10
+    "most_likely:no_bet": 6,
+    "best_value:no_bet": 18,
+    "most_likely:most_likely": 12
    },
-   "evaluated_matches": 15,
-   "published_records": 109
+   "evaluated_matches": 18,
+   "published_records": 127
   },
   "ELC": {
    "min_report_n": 20,
@@ -2142,7 +2157,7 @@
     "most_likely:no_bet": 2
    },
    "evaluated_matches": 13,
-   "published_records": 172
+   "published_records": 175
   },
   "PD": {
    "min_report_n": 20,
@@ -2618,7 +2633,7 @@
     "most_likely:no_bet": 1
    },
    "evaluated_matches": 16,
-   "published_records": 184
+   "published_records": 187
   },
   "SA": {
    "min_report_n": 20,
@@ -3125,7 +3140,7 @@
     "best_value:no_bet": 26
    },
    "evaluated_matches": 26,
-   "published_records": 221
+   "published_records": 224
   }
  },
  "challenger": {

@@ -88,7 +88,8 @@ const LEAGUES = {
   FL1: 'Ligue 1',
   N1: 'Eredivisie',
   P1: 'Primeira Liga',
-  B1: 'Belgian Pro League'
+  B1: 'Belgian Pro League',
+  NLA: 'Nations League A'
 };
 const leagueName = c => LEAGUES[c] || c || 'Premier League';
 const COMP_KEY = 'matchiq_competition_v1';
@@ -148,6 +149,13 @@ let clubFilter = '';
 
 // ------------------------------------------------------------ clubs
 const CLUBS = {
+  // National teams (Nations League A): shirt colours and FIFA codes; no single home ground
+  'Belgium': ['#C8102E', '#FDDA24', 'BEL'], 'Croatia': ['#FFFFFF', '#D80621', 'CRO'], 'Czech Republic': ['#D7141A', '#11457E', 'CZE'],
+  'Denmark': ['#C60C30', '#FFFFFF', 'DEN'], 'England': ['#FFFFFF', '#1D2C5E', 'ENG'], 'France': ['#002654', '#ED2939', 'FRA'],
+  'Germany': ['#FFFFFF', '#000000', 'GER'], 'Greece': ['#0D5EAF', '#FFFFFF', 'GRE'], 'Italy': ['#0066B3', '#FFFFFF', 'ITA'],
+  'Netherlands': ['#F36C21', '#FFFFFF', 'NED'], 'Norway': ['#BA0C2F', '#00205B', 'NOR'], 'Portugal': ['#C8102E', '#046A38', 'POR'],
+  'Serbia': ['#C6363C', '#0C4076', 'SRB'], 'Spain': ['#C60B1E', '#FFC400', 'ESP'], 'Turkey': ['#E30A17', '#FFFFFF', 'TUR'],
+  'Wales': ['#C8102E', '#00B140', 'WAL'],
   // Scottish Premiership & Championship
   'Celtic': ['#018749', '#FFFFFF', 'CEL', 'Celtic Park'],
   'Rangers': ['#1B458F', '#FFFFFF', 'RAN', 'Ibrox Stadium'],
@@ -1696,7 +1704,7 @@ function viewMatch(id) {
       '<div class="match-team">' + crest(fx.home, 64) + esc(fx.home) + (promoted.includes(fx.home) ? '<small>Promoted club</small>' : '') + '</div>' +
       '<div class="match-centre">' + centre + '</div>' +
       '<div class="match-team">' + crest(fx.away, 64) + esc(fx.away) + (promoted.includes(fx.away) ? '<small>Promoted club</small>' : '') + '</div></div>' +
-      '<div class="facts"><span><b>' + esc(leagueName(fx.competition)) + '</b> 2026/27</span><span>' + esc(fmtFull(ms)) + '</span><span>Home ground: <b>' + esc((CLUBS[fx.home] || [])[3] || 'not listed') + '</b></span></div>' +
+      '<div class="facts"><span><b>' + esc(leagueName(fx.competition)) + '</b> 2026/27</span><span>' + esc(fmtFull(ms)) + '</span>' + (fx.competition === 'NLA' ? '' : '<span>Home ground: <b>' + esc((CLUBS[fx.home] || [])[3] || 'not listed') + '</b></span>') + '</div>' +
       '<div class="chips" style="justify-content:center"><span class="chip ' + statusChip[0] + '"><span class="dot"></span>' + esc(statusChip[1]) + '</span>' + freshnessChips() + '</div>' +
       (f && f.kickoff_history && f.kickoff_history.length ? '<p class="dim" style="text-align:center;font-size:13px">Rescheduled from ' + esc(fmtFull(Date.parse(f.kickoff_history[f.kickoff_history.length - 1].from))) + '</p>' : '') +
     '</header>';
@@ -1787,7 +1795,7 @@ function recordSpark(st, w, h) {
     '<div class="rt-spark-key"><span><i class="ln"></i>Right so far</span><span><i class="dash"></i>What we said</span></div>';
 }
 
-const RECORD_FLAGS = { PL: 'ENG', ELC: 'ENG', E2: 'ENG', E3: 'ENG', SC0: 'SCO', SC1: 'SCO', BL1: 'GER', PD: 'ESP', SA: 'ITA', FL1: 'FRA', N1: 'NED', P1: 'POR', B1: 'BEL', CL: 'EUR' };
+const RECORD_FLAGS = { PL: 'ENG', ELC: 'ENG', E2: 'ENG', E3: 'ENG', SC0: 'SCO', SC1: 'SCO', BL1: 'GER', PD: 'ESP', SA: 'ITA', FL1: 'FRA', N1: 'NED', P1: 'POR', B1: 'BEL', CL: 'EUR', NLA: 'UNL' };
 function recordTile(code, name, st, wide) {
   const pctNum = Math.round(st.rate * 100), tone = st.rate >= 0.6 ? 'hot' : st.rate >= 0.5 ? 'ok' : 'cold';
   const said = Math.round((st.said || 0) * 100), gap = pctNum - said;
