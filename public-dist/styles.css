@@ -724,6 +724,18 @@ textarea.ctl { min-height: 96px; resize: vertical; }
 .auth-divider span {
   padding: 0 10px;
 }
+.email-auth-form { display: grid; gap: 12px; }
+.email-auth-tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px;
+  border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line);
+}
+.email-auth-tab {
+  min-height: 38px; border: 0; border-radius: 9px; background: transparent;
+  color: var(--soft); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;
+}
+.email-auth-tab.active { background: var(--surface-solid); color: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.25); }
+.email-auth-tab:focus-visible { outline: 2px solid var(--pick); }
+.email-auth-forgot { justify-self: center; min-height: 32px; }
 .auth-error-box {
   background: rgba(239, 68, 68, 0.12);
   border: 1px solid rgba(239, 68, 68, 0.35);
@@ -815,6 +827,11 @@ textarea.ctl { min-height: 96px; resize: vertical; }
   display: inline-block; width: fit-content; padding: 2px 8px; border-radius: 9999px;
   font-size: 11px; font-weight: 700; background: rgba(16, 185, 129, 0.15); color: #34d399;
   border: 1px solid rgba(16, 185, 129, 0.35); margin-top: 4px;
+}
+.badge-status-amber {
+  display: inline-block; width: fit-content; padding: 2px 8px; border-radius: 9999px;
+  font-size: 11px; font-weight: 700; background: rgba(245, 158, 11, 0.15); color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.35); margin-top: 4px;
 }
 
 /* Install Modal styling */

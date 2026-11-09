@@ -3,19 +3,18 @@ const fs = require('fs');
 const vm = require('vm');
 const assert = require('assert');
 
-console.log('Testing Google-Only Auth and Leagues Logic...');
+console.log('Testing Google + Email Auth and Leagues Logic...');
 
 // 1. Inspect index.html markup
 const indexHtml = fs.readFileSync('index.html', 'utf8');
 assert(indexHtml.includes('Continue with Google'), 'Must have Continue with Google button');
-assert(!indexHtml.includes('or with email'), 'Must NOT have or with email divider');
-assert(!indexHtml.includes('id="signin-email"'), 'Must NOT have email signin input');
-assert(!indexHtml.includes('id="auth-register-view"'), 'Must NOT have auth-register-view');
-assert(!indexHtml.includes('id="auth-verify-view"'), 'Must NOT have auth-verify-view');
-assert(!indexHtml.includes('id="auth-forgot-view"'), 'Must NOT have auth-forgot-view');
-assert(!indexHtml.includes('id="profile-password-section"'), 'Must NOT have profile-password-section');
-assert(indexHtml.includes('You can browse predictions without signing in. Sign in with Google to join leagues and sync across devices.'), 'Must have updated non-bettor plain English copy in modal');
-console.log('  PASS: index.html contains ONLY Google sign-in controls and zero email/password forms.');
+assert(indexHtml.includes('id="email-auth-form"'), 'Must have the email sign-in / sign-up form');
+assert(indexHtml.includes('id="email-auth-handle"'), 'Sign-up must ask for a gamertag');
+assert(indexHtml.includes('id="email-auth-forgot"'), 'Must have a Forgot password link');
+assert(indexHtml.includes('id="email-reset-form"'), 'Must have the password reset form');
+assert(indexHtml.includes('data-verify-check') && indexHtml.includes('data-verify-resend'), 'Must offer email confirmation check and resend');
+assert(indexHtml.includes('Sign in with Google or email to join leagues and sync across devices.'), 'Modal copy must mention both sign-in options');
+console.log('  PASS: index.html offers Google plus email/password sign-in, sign-up and password reset.');
 
 // 2. Test app.js runtime logic
 const mcCode = fs.readFileSync('market_calculations.js', 'utf8');
@@ -37,7 +36,7 @@ const mockEl = {
   querySelectorAll: () => [mockEl],
   setAttribute: () => {},
   removeAttribute: () => {},
-  classList: { add: () => {}, remove: () => {} },
+  classList: { add: () => {}, remove: () => {}, toggle: () => {} },
   dataset: {}
 };
 
@@ -85,9 +84,25 @@ vm.runInContext(appCode, context);
 
 // Test signed-out visitor on Leagues page
 const leaguesHtml = vm.runInContext('viewLeagues()', context);
-assert(leaguesHtml.includes('Sign in with Google to join leagues and compete with mates'), 'Leagues view must show prominent Google prompt for signed-out visitor');
+assert(leaguesHtml.includes('Sign in to join leagues and compete with mates'), 'Leagues view must show a sign-in prompt for signed-out visitor');
 assert(leaguesHtml.includes('Continue with Google'), 'Leagues view prompt must have Continue with Google button');
-console.log('  PASS: Signed-out visitor sees clear "Sign in with Google to join leagues" prompt on Leagues tab.');
+assert(leaguesHtml.includes('data-email-mode-open="signup"'), 'Leagues view prompt must offer email sign-up');
+console.log('  PASS: Signed-out visitor sees Google and email sign-in options on Leagues tab.');
+
+// Email accounts only reach leagues once the address is confirmed (mirrors firestore.rules).
+assert.strictEqual(vm.runInContext("canUseLeagues({ signedIn: true, isGoogle: true, emailVerified: true })", context), true);
+assert.strictEqual(vm.runInContext("canUseLeagues({ signedIn: true, isPassword: true, emailVerified: false })", context), false);
+assert.strictEqual(vm.runInContext("canUseLeagues({ signedIn: true, isPassword: true, emailVerified: true })", context), true);
+assert.strictEqual(vm.runInContext("canUseLeagues(null)", context), false);
+vm.runInContext("saveAuthUser({ uid: 'u1', email: 'pal@example.com', displayName: 'PalPunter', emailVerified: false, providerData: [{ providerId: 'password' }] })", context);
+const cached = JSON.parse(storageStore['betbuddy_auth_user_v1']);
+assert.strictEqual(cached.isGoogle, false, 'Email account must not be cached as Google');
+assert.strictEqual(cached.isPassword, true);
+assert.strictEqual(cached.emailVerified, false);
+const gated = vm.runInContext('viewLeagues()', context);
+assert(gated.includes('Confirm your email') && gated.includes('data-verify-resend'), 'Unconfirmed email account sees the confirm-email gate');
+vm.runInContext("handleSignOut()", context);
+console.log('  PASS: Unconfirmed email accounts are held at a confirm-email gate before leagues.');
 
 // Test pending invite link flow when signed out
 vm.runInContext("joinCloudLeague('TESTCODE')", context);
@@ -132,4 +147,4 @@ assert.strictEqual(storageStore['matchiq_odds_pref_v1'], 'decimal', 'Odds prefer
 assert.strictEqual(storageStore['betbuddy_data_epoch_v1'], '2026-11-wipe-1', 'New epoch must be recorded');
 console.log('  PASS: DATA_EPOCH cleans stale user/league caches while strictly preserving Bet Diary and Odds format.');
 
-console.log('ALL Google-Only Auth & League Tests PASSED!');
+console.log('ALL Google + Email Auth & League Tests PASSED!');

@@ -42,7 +42,7 @@ service cloud.firestore {
     //   - createdAt: timestamp or ISO string (required, immutable)
     //   - updatedAt: timestamp or ISO string (optional)
     //   - memberCount: int, >= 0 (optional)
-    // Access: Verified Google user (sign_in_provider == 'google.com') get; list only for the app owner. Creator create/update/delete.
+    // Access: Verified user (Google, or email/password with email_verified) get; list only for the app owner. Creator create/update/delete.
     //
     // Subcollection: leagues/{code}/members/{uid}
     // Document ID: Firebase Auth UID
@@ -53,7 +53,7 @@ service cloud.firestore {
     //   - handle must be registered to this uid in handles/{handleLower}
     //   - points, winRate, roi, settled, form, periods, scoredAt: written only by the server
     //   - updatedAt: timestamp or string (required)
-    // Access: Verified Google user (sign_in_provider == 'google.com') read. Member create (league must exist,
+    // Access: Verified user (Google, or email/password with email_verified) read. Member create (league must exist,
     //   member not banned) and update (league must exist). Member leave OR Creator kick on delete.
     //
     // Subcollection: leagues/{code}/banned/{uid}
@@ -84,10 +84,13 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    // Google accounts, or email/password accounts whose address has been confirmed.
     function isVerifiedUser() {
       return isAuthenticated() &&
         'firebase' in request.auth.token &&
-        request.auth.token.firebase.get('sign_in_provider', '') == 'google.com';
+        (request.auth.token.firebase.get('sign_in_provider', '') == 'google.com' ||
+         (request.auth.token.firebase.get('sign_in_provider', '') == 'password' &&
+          request.auth.token.get('email_verified', false) == true));
     }
 
     function isOwner(userId) {

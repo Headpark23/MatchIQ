@@ -1,10 +1,10 @@
 /**
- * Bet Buddy (MatchIQ) - Firestore Security Rules Unit Test Suite (Google Auth Only)
+ * Bet Buddy (MatchIQ) - Firestore Security Rules Unit Test Suite
  *
  * Covers:
  *  1. Unauthenticated access denied across protected collections (leagues, members, users)
  *  2. Anonymous provider access denied for leagues & members
- *  3. Email/Password provider (even with email_verified true) denied for leagues & members
+ *  3. Email/Password provider: denied until email_verified, then allowed for leagues & members
  *  4. Verified Google provider (google.com) granted access to create & join leagues
  *  5. User A cannot write User B's user profile, diary, memberships, or league member doc
  *  6. Non-creator cannot rename, update or delete another creator's league
@@ -82,10 +82,10 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
     }).firestore();
   }
 
-  function getEmailUser(uid = 'bob') {
+  function getEmailUser(uid = 'bob', verified = true) {
     return testEnv.authenticatedContext(uid, {
       email: `${uid}@example.com`,
-      email_verified: true,
+      email_verified: verified,
       firebase: { sign_in_provider: 'password' }
     }).firestore();
   }
@@ -158,18 +158,23 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
   });
 
   // -----------------------------------------------------------------
-  // 3. Email/Password Provider Access Denied (Even with email_verified: true)
+  // 3. Email/Password Provider: confirmed email required for leagues
   // -----------------------------------------------------------------
-  describe('3. Email/Password Provider Access Denied for Leagues', function () {
-    it('(c) denies email/password user from creating, reading, or joining leagues even with email_verified true', async function () {
-      const dbEmail = getEmailUser('bob');
+  describe('3. Email/Password Provider Needs a Confirmed Email for Leagues', function () {
+    it('(c) denies an email/password user whose email is not confirmed', async function () {
+      const dbEmail = getEmailUser('bob', false);
       await assertFails(dbEmail.collection('leagues').doc(validLeagueCode).get());
-      await assertFails(dbEmail.collection('leagues').doc(validLeagueCode).set({
-        ...validLeaguePayload,
-        creatorUid: 'bob'
-      }));
+      await assertFails(dbEmail.collection('leagues').doc(validLeagueCode).set(
+        leagueDocs.leagueDoc({ code: validLeagueCode, name: 'Bobs Bets', icon: '⚽', freq: 'weekly', creatorUid: 'bob', creatorHandle: 'Bob_99', now: NOW })
+      ));
       await assertFails(dbEmail.collection('leagues').doc(validLeagueCode).collection('members').doc('bob').get());
-      await assertFails(dbEmail.collection('leagues').doc(validLeagueCode).collection('members').doc('bob').set(validMemberPayload));
+    });
+
+    it('allows a confirmed email/password user to create and read a league', async function () {
+      const dbEmail = getEmailUser('bob', true);
+      const payload = leagueDocs.leagueDoc({ code: validLeagueCode, name: 'Bobs Bets', icon: '⚽', freq: 'weekly', creatorUid: 'bob', creatorHandle: 'Bob_99', now: NOW });
+      await assertSucceeds(dbEmail.collection('leagues').doc(validLeagueCode).set(payload));
+      await assertSucceeds(dbEmail.collection('leagues').doc(validLeagueCode).get());
     });
   });
 
@@ -525,7 +530,7 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       await assertFails(betRef(db, 'bob', 'not-a-day').set(leagueBet()));
       await assertFails(betRef(getGoogleUser('charlie'), 'bob', '2026-11-09').set(leagueBet()), 'someone else\'s bets');
       await assertFails(betRef(getGoogleUser('charlie'), 'bob').get());
-      await assertFails(betRef(getEmailUser('bob'), 'bob', '2026-11-10').set(leagueBet()), 'Google sign-in only');
+      await assertFails(betRef(getEmailUser('bob', false), 'bob', '2026-11-10').set(leagueBet()), 'unconfirmed email account');
       // Accumulators carry 2 to 10 legs; the server checks each one.
       const legs = n => Array.from({ length: n }, (_, i) => ({ fixtureId: 'PL-' + i, selection: 'Team ' + i }));
       await assertSucceeds(betRef(db, 'bob', '2026-11-12').set(leagueDocs.leagueBetDoc({ betId: 'acca-1', fixtureId: 'PL-0', selection: 'Team 0 + Team 1', legs: legs(2), now: serverTime() })));

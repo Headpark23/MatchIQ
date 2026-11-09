@@ -2577,7 +2577,7 @@ async function joinCloudLeague(code) {
     // Not signed in, or Firebase is still restoring the session: join once sign-in completes.
     sessionStorage.setItem('betbuddy_pending_join_league', code);
     if (!user || !user.signedIn) {
-      toast('Sign in with Google to join leagues and compete with mates');
+      toast('Sign in to join leagues and compete with mates');
       openAuthModal();
     }
     return;
@@ -3039,7 +3039,8 @@ function viewLeagues() {
         '<h1 class="lg-title">Beat your mates.<br>Climb the ladders.</h1>' +
         '<p class="lg-lead">One pick a day, points for every winner. Free, and no money changes hands.</p>' +
         googleBtn.replace('class="btn google-primary-btn"', 'class="btn google-primary-btn lg-google"') +
-        '<p class="lg-fine">Sign in with Google to join leagues and compete with mates. Got an invite code? Sign in and it is one tap to join.</p>' +
+        '<button type="button" class="text-link" data-open-auth data-email-mode-open="signup" style="margin:10px auto 0;display:block;">Or sign up with email</button>' +
+        '<p class="lg-fine">Sign in to join leagues and compete with mates. Got an invite code? Sign in and it is one tap to join.</p>' +
       '</div>' +
       '<ol class="lg-steps">' +
         '<li><span>⚽</span><b>Pick one bet a day</b><small>Any football result, goals or both-teams-to-score bet</small></li>' +
@@ -3053,6 +3054,21 @@ function viewLeagues() {
           '<div class="lg-who"><b>' + r[1] + '</b><span class="lg-form">' + r[3].map(f => '<i class="' + f + '"></i>').join('') + '</span></div><div class="lg-score"><b>' + r[2] + '</b><small>pts</small><span class="lg-bar"><i style="--w:' + Math.round(r[2] / 142 * 100) + '%"></i></span></div></div>').join('') + '</div>' +
         '<div class="lg-ladder-line" aria-label="Six automatic ladders"><span>🏘️ Town</span><i>›</i><span>🏛️ County</span><i>›</i><span>🏴 Country</span><i>›</i><span>🇬🇧 UK</span><i>›</i><span>🇪🇺 Europe</span><i>›</i><span>🌍 World</span></div>' +
         '<p class="lg-fine">Your league picks count on all six local ladders automatically, plus any private leagues with mates.</p>' +
+      '</div>' +
+    '</section>';
+  }
+
+  if (!canUseLeagues(authUser)) {
+    return '<section class="view lg-view lg-out">' +
+      '<div class="lg-welcome">' +
+        '<div class="lg-cup" aria-hidden="true">📧</div>' +
+        '<h1 class="lg-title">Confirm your email</h1>' +
+        '<p class="lg-lead">We sent a link to <b>' + esc(authUser.email || 'your inbox') + '</b>. Open it to unlock leagues, then come back here.</p>' +
+        '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px;">' +
+          '<button type="button" class="btn primary" data-verify-check>I\'ve confirmed it</button>' +
+          '<button type="button" class="btn secondary" data-verify-resend>Resend email</button>' +
+        '</div>' +
+        '<p class="lg-fine">Can\'t find it? Check your spam or promotions folder.</p>' +
       '</div>' +
     '</section>';
   }
@@ -3814,7 +3830,7 @@ function leagueBetCheck(entry) {
 // Sends a diary bet to the league server as the player's league bet for its match day.
 async function submitLeagueBet(entry) {
   const user = getAuthUser();
-  if (!firestoreDb || !currentAuthUser || !user || !user.signedIn) return { ok: false, reason: 'Sign in with Google to enter league bets.' };
+  if (!firestoreDb || !currentAuthUser || !user || !user.signedIn) return { ok: false, reason: 'Sign in to enter league bets.' };
   const chk = leagueBetCheck(entry);
   if (!chk.ok) return chk;
   const existing = myLeagueBets.get(chk.day);
@@ -4627,7 +4643,7 @@ function viewBuild(mode) {
       '<button type="button" class="icon-btn" aria-label="Remove ' + esc(l.pick) + '" onclick="removeOwnBetLeg(\'' + esc(l.id) + '\')">&times;</button></li>').join('');
     const leagueNote = ownBet.dest !== 'league' ? '' :
       !state ? '<p class="own-hint">Enter your odds and stake to check league eligibility.</p>' :
-      state.ok ? '<p class="own-ok">✓ Eligible for leagues' + (signedIn ? '.' : '. Sign in with Google to enter it.') + '</p>' :
+      state.ok ? '<p class="own-ok">✓ Eligible for leagues' + (signedIn ? '.' : '. Sign in to enter it.') + '</p>' :
       '<p class="own-warn">Diary only: ' + esc(state.reason) + '</p>';
     const fxIds = legs.filter(l => l.fixtureId).map(l => l.fixtureId);
     const sameMatch = fxIds.length !== new Set(fxIds).size;
@@ -4669,7 +4685,7 @@ function viewGuide() {
     step(1, 'Browse the matches', 'Open <b>Matches</b> to see every upcoming game with prices and our lean. Tap one for the full analysis. No account needed.') +
     step(2, 'Check the price', 'Bet Buddy compares its own probability with UK bookmaker prices. A pick is only flagged as value when the price is better than the chance deserves.') +
     step(3, 'Log your bet', 'Tap a price to put it on your bet slip, add your stake and save it. Your <b>Diary</b> tracks your profit and loss automatically.') +
-    step(4, 'Compete', 'Sign in with Google, then create a private league with mates or just play: your league bets also climb the regional ladders.') +
+    step(4, 'Compete', 'Sign in with Google or email, then create a private league with mates or just play: your league bets also climb the regional ladders.') +
     '</ol>' +
     '<p class="guide-tip">Bet Buddy never places bets for you. It helps you decide, then you place the bet with your own bookmaker.</p>';
 
@@ -4800,7 +4816,7 @@ function viewMore() {
   const profile = '<section class="st-profile">' +
     '<span class="st-avatar">' + esc(prof.avatar || '⚽') + '</span>' +
     '<div class="st-id"><b>' + (signedIn ? '@' + esc(prof.handle) : 'Not signed in') + '</b><small>' +
-      (signedIn ? ([prof.town, prof.region, prof.country].filter(Boolean).map(esc).join(', ') || 'No location yet: add it to join your local ladders') : 'Sign in with Google to join leagues and sync your diary') + '</small></div>' +
+      (signedIn ? ([prof.town, prof.region, prof.country].filter(Boolean).map(esc).join(', ') || 'No location yet: add it to join your local ladders') : 'Sign in to join leagues and sync your diary') + '</small></div>' +
     (signedIn ? '<button type="button" class="btn small" data-open-handle-modal>Edit</button>' : '<button type="button" class="btn primary small" data-open-auth>Sign in</button>') +
   '</section>';
 
@@ -4811,7 +4827,7 @@ function viewMore() {
       row('id="toggle-odds-format"', '🔢', 'Odds format', oddsFormat === 'decimal' ? 'Showing decimal odds, like 2.50' : 'Showing fractional odds, like 6/4', oddsSeg) +
       row('onclick="openButlerModal()"', '📋', 'My bookmakers', 'Which bookmakers you use, for slip notes') +
       (signedIn ? row('data-open-handle-modal', '📍', 'Username and location', 'Your name on leagues and your local ladders') : '') +
-      row('data-open-auth', '🔑', signedIn ? 'Google account' : 'Sign in with Google', signedIn ? 'Switch account or sign out' : 'Join leagues and sync your diary across devices') +
+      row('data-open-auth', '🔑', signedIn ? 'Your account' : 'Sign in or join', signedIn ? 'Switch account or sign out' : 'Join leagues and sync your diary across devices') +
       row('data-share-app', '💬', 'Share Bet Buddy', 'Send it to a mate')) +
     group('Learn',
       row('href="#/guide"', '🧭', 'How Bet Buddy works', 'A two-minute tour of every feature') +
@@ -4879,7 +4895,7 @@ function currentRoute() {
       else {
         // Sign in first; the modal opens with the code once sign-in completes.
         try { sessionStorage.setItem('betbuddy_invite_code', code); } catch (e) { /* ignore */ }
-        toast('Sign in with Google to join this league');
+        toast('Sign in to join this league');
         openAuthModal();
       }
     } catch (e) { /* ignore */ }
@@ -5817,9 +5833,28 @@ function mapAuthError(err) {
     case 'auth/network-request-failed':
       return 'Network connection issue. Please check your internet connection.';
     case 'auth/operation-not-allowed':
-      return 'Google sign-in is not enabled for this project. Check Firebase Console.';
+      return 'This sign-in method is not switched on yet. Please try Google sign-in for now.';
     case 'auth/too-many-requests':
       return 'Too many attempts. Please wait a few minutes before trying again.';
+    case 'auth/invalid-email':
+      return 'That email address doesn\'t look right.';
+    case 'auth/missing-password':
+      return 'Enter your password.';
+    case 'auth/weak-password':
+      return 'Choose a stronger password (at least 8 characters).';
+    case 'auth/email-already-in-use':
+      return 'There\'s already an account with that email. Sign in instead, or reset your password.';
+    case 'auth/account-exists-with-different-credential':
+      return 'That email already uses Google sign-in. Tap "Continue with Google" instead.';
+    case 'auth/invalid-credential':
+    case 'auth/invalid-login-credentials':
+    case 'auth/wrong-password':
+    case 'auth/user-not-found':
+      return 'Email or password is incorrect. If you joined with Google, use "Continue with Google".';
+    case 'auth/user-disabled':
+      return 'This account has been disabled.';
+    case 'auth/requires-recent-login':
+      return 'Please sign in again and retry.';
     default:
       return err.message || 'Authentication error. Please try again.';
   }
@@ -5864,6 +5899,18 @@ function getAuthUser() {
   };
 }
 
+// Leagues need a Google account or an email account whose address has been confirmed
+// (mirrors isVerifiedUser() in firestore.rules).
+function canUseLeagues(user) {
+  return Boolean(user && user.signedIn && (user.isGoogle || user.emailVerified));
+}
+
+function authProviderFlags(user) {
+  const ids = ((user && user.providerData) || []).map(p => p && p.providerId);
+  const isGoogle = ids.includes('google.com');
+  return { isGoogle, isPassword: !isGoogle && ids.includes('password') };
+}
+
 function saveAuthUser(user) {
   if (!user) {
     cachedAuthUser = null;
@@ -5884,7 +5931,8 @@ function saveAuthUser(user) {
     email: user.email || '',
     handle: toUsername(username, user.email),
     photoURL: user.photoURL || '',
-    isGoogle: true
+    emailVerified: Boolean(user.emailVerified),
+    ...authProviderFlags(user)
   };
   try {
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(cachedAuthUser));
@@ -5945,6 +5993,8 @@ async function claimFreeHandle(uid, wanted, avatar) {
   }
 }
 
+let pendingSignupHandle = '';
+
 async function ensureUserProfile(user) {
   if (!user) return;
   try {
@@ -5952,6 +6002,9 @@ async function ensureUserProfile(user) {
       .replace(/[^A-Za-z0-9_]/g, '');
     if (baseHandle.length < 3) baseHandle = 'Player' + String(user.uid || '').replace(/[^A-Za-z0-9]/g, '').slice(0, 6);
     if (baseHandle.length > 20) baseHandle = baseHandle.slice(0, 20);
+    // A gamertag picked on the email sign-up form wins over one derived from the address.
+    if (pendingSignupHandle && isValidHandle(pendingSignupHandle)) baseHandle = pendingSignupHandle;
+    pendingSignupHandle = '';
 
     if (firestoreDb) {
       const userDocRef = firestoreDb.collection('users').doc(user.uid);
@@ -6013,8 +6066,171 @@ function switchAuthModalView(viewName) {
     const el = $(id);
     if (el) el.hidden = (id !== viewName);
   });
-  const errBox = $('signin-error');
-  if (errBox) { errBox.hidden = true; errBox.textContent = ''; }
+  clearAuthMessages();
+}
+
+function clearAuthMessages() {
+  ['signin-error', 'signin-info', 'authed-error'].forEach(id => {
+    const box = $(id);
+    if (box) { box.hidden = true; box.textContent = ''; }
+  });
+}
+
+function showAuthInfo(message) {
+  const err = $('signin-error');
+  if (err) err.hidden = true;
+  const box = $('signin-info');
+  if (box) { box.textContent = message; box.hidden = false; }
+}
+
+let emailAuthMode = 'signin';
+
+// Switches the email form between sign in, create account and the forgotten-password form.
+function setEmailAuthMode(mode) {
+  emailAuthMode = mode;
+  const form = $('email-auth-form'), reset = $('email-reset-form');
+  if (!form || !reset) return;
+  clearAuthMessages();
+  form.hidden = mode === 'reset';
+  reset.hidden = mode !== 'reset';
+  if (mode === 'reset') {
+    if ($('email-reset-email')) $('email-reset-email').value = ($('email-auth-email') && $('email-auth-email').value) || '';
+    return;
+  }
+  const signup = mode === 'signup';
+  form.querySelectorAll('[data-email-mode]').forEach(tab => {
+    const on = tab.dataset.emailMode === mode;
+    tab.classList.toggle('active', on);
+    tab.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  if ($('email-auth-handle-row')) $('email-auth-handle-row').hidden = !signup;
+  if ($('email-auth-password')) $('email-auth-password').autocomplete = signup ? 'new-password' : 'current-password';
+  if ($('email-auth-submit')) $('email-auth-submit').textContent = signup ? 'Create account' : 'Sign in';
+  if ($('email-auth-forgot')) $('email-auth-forgot').hidden = signup;
+}
+
+// Where the links in verification and reset emails send the player back to.
+function emailActionSettings() {
+  return { url: window.location.origin + window.location.pathname };
+}
+
+function setBusy(btn, busy, label) {
+  if (!btn) return;
+  if (busy) { btn.dataset.label = btn.textContent; btn.textContent = label; btn.disabled = true; }
+  else { btn.textContent = btn.dataset.label || btn.textContent; btn.disabled = false; }
+}
+
+async function submitEmailAuth() {
+  if (!firebaseAuth) { showAuthError('signin-error', 'Authentication is not available in this browser.'); return; }
+  const email = (($('email-auth-email') || {}).value || '').trim();
+  const password = ($('email-auth-password') || {}).value || '';
+  const signup = emailAuthMode === 'signup';
+  clearAuthMessages();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthError('signin-error', 'Enter a valid email address.'); return; }
+  if (!password) { showAuthError('signin-error', 'Enter your password.'); return; }
+  const btn = $('email-auth-submit');
+
+  if (!signup) {
+    setBusy(btn, true, 'Signing in…');
+    try {
+      const cred = await firebaseAuth.signInWithEmailAndPassword(email, password);
+      if (cred && cred.user) { currentAuthUser = cred.user; saveAuthUser(cred.user); }
+      if ($('email-auth-password')) $('email-auth-password').value = '';
+      toast('Signed in! ⚽');
+      updateHeaderAuthUI();
+      render();
+      if (cred && cred.user && !cred.user.emailVerified) openAuthModal(); else closeAuthModal();
+    } catch (err) {
+      showAuthError('signin-error', mapAuthError(err));
+    } finally {
+      setBusy(btn, false);
+    }
+    return;
+  }
+
+  const handle = (($('email-auth-handle') || {}).value || '').trim().replace(/^@/, '');
+  if (!isValidHandle(handle)) { showAuthError('signin-error', 'Usernames are 3 to 20 letters, numbers or underscores.'); return; }
+  if (password.length < 8) { showAuthError('signin-error', 'Choose a password of at least 8 characters.'); return; }
+  setBusy(btn, true, 'Creating account…');
+  try {
+    if (firestoreDb) {
+      const taken = await firestoreDb.collection('handles').doc(handle.toLowerCase()).get();
+      if (taken.exists) { showAuthError('signin-error', 'That username is taken. Please choose another.'); return; }
+    }
+    pendingSignupHandle = handle;
+    const cred = await firebaseAuth.createUserWithEmailAndPassword(email, password);
+    const user = cred && cred.user;
+    if (user) {
+      try { await user.updateProfile({ displayName: handle }); } catch (e) {}
+      try { await user.sendEmailVerification(emailActionSettings()); } catch (e) { console.warn('Verification email notice:', e); }
+      currentAuthUser = user;
+      saveAuthUser(user);
+    }
+    if ($('email-auth-password')) $('email-auth-password').value = '';
+    toast('Account created! Check your inbox to confirm your email.');
+    updateHeaderAuthUI();
+    render();
+    openAuthModal();
+  } catch (err) {
+    pendingSignupHandle = '';
+    showAuthError('signin-error', mapAuthError(err));
+  } finally {
+    setBusy(btn, false);
+  }
+}
+
+async function submitPasswordReset() {
+  if (!firebaseAuth) { showAuthError('signin-error', 'Authentication is not available in this browser.'); return; }
+  const email = (($('email-reset-email') || {}).value || '').trim();
+  clearAuthMessages();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthError('signin-error', 'Enter a valid email address.'); return; }
+  const btn = $('email-reset-submit');
+  setBusy(btn, true, 'Sending…');
+  try {
+    await firebaseAuth.sendPasswordResetEmail(email, emailActionSettings());
+    showAuthInfo('If an account uses ' + email + ', a reset link is on its way. Check your spam folder too.');
+  } catch (err) {
+    // Don't reveal whether an address has an account.
+    if (err && err.code === 'auth/user-not-found') showAuthInfo('If an account uses ' + email + ', a reset link is on its way. Check your spam folder too.');
+    else showAuthError('signin-error', mapAuthError(err));
+  } finally {
+    setBusy(btn, false);
+  }
+}
+
+async function resendVerificationEmail() {
+  const user = firebaseAuth && firebaseAuth.currentUser;
+  if (!user) return;
+  try {
+    await user.sendEmailVerification(emailActionSettings());
+    toast('Confirmation email sent to ' + user.email);
+  } catch (err) {
+    showAuthError('authed-error', mapAuthError(err));
+  }
+}
+
+// Picks up a confirmation done in another tab or app: reloads the account and refreshes the
+// ID token so Firestore sees email_verified, then starts the league sync.
+async function checkEmailVerified(silent) {
+  const user = firebaseAuth && firebaseAuth.currentUser;
+  if (!user || user.emailVerified) return;
+  try {
+    await user.reload();
+    const fresh = firebaseAuth.currentUser;
+    if (!fresh || !fresh.emailVerified) {
+      if (!silent) showAuthError('authed-error', 'Not confirmed yet. Open the link in the email we sent, then try again.');
+      return;
+    }
+    await fresh.getIdToken(true);
+    currentAuthUser = fresh;
+    saveAuthUser(fresh);
+    toast('Email confirmed — leagues unlocked! 🏆');
+    if (!$('google-auth-modal').hidden) openAuthModal();
+    await runPostSignInSync(fresh);
+    render();
+  } catch (err) {
+    if (!silent) showAuthError('authed-error', mapAuthError(err));
+  }
 }
 
 function openAuthModal() {
@@ -6027,10 +6243,17 @@ function openAuthModal() {
     if ($('modal-avatar-initials')) $('modal-avatar-initials').textContent = initials;
     if ($('modal-auth-name')) $('modal-auth-name').textContent = user.name || 'Bet Buddy User';
     if ($('modal-auth-email')) $('modal-auth-email').textContent = user.email || '';
+    const verified = canUseLeagues(user);
     const badge = $('modal-auth-badge');
-    if (badge) { badge.textContent = 'Verified Google Account'; badge.className = 'badge-status-green'; }
+    if (badge) {
+      badge.textContent = user.isGoogle ? 'Verified Google Account' : (verified ? 'Verified Email Account' : 'Email not confirmed yet');
+      badge.className = verified ? 'badge-status-green' : 'badge-status-amber';
+    }
+    if ($('auth-verify-notice')) $('auth-verify-notice').hidden = verified;
+    if ($('auth-verify-email')) $('auth-verify-email').textContent = user.email || 'your email';
   } else {
     switchAuthModalView('auth-signin-view');
+    setEmailAuthMode(emailAuthMode === 'reset' ? 'signin' : emailAuthMode);
   }
   modal.hidden = false;
 }
@@ -6093,8 +6316,35 @@ async function handleSignOut() {
   render();
 }
 
+// League and diary sync. An email account waits here until its address is confirmed, because
+// the Firestore rules only open leagues to Google accounts and confirmed email accounts.
+async function runPostSignInSync(user) {
+  if (!canUseLeagues(getAuthUser())) return;
+  hasSyncedUserLeagues = false;
+  listenToMyLeagueData(user.uid);
+  await syncUserLeaguesFromCloud();
+  try { await syncDiaryFromCloud(); } catch (e) {}
+
+  // Preserve pending league invite across sign-in popup/redirect
+  const inviteCode = sessionStorage.getItem('betbuddy_invite_code');
+  if (inviteCode) {
+    sessionStorage.removeItem('betbuddy_invite_code');
+    setTimeout(() => { showJoinLeagueModal(inviteCode); }, 600);
+  }
+  const pendingLeague = sessionStorage.getItem('betbuddy_pending_join_league');
+  if (pendingLeague) {
+    sessionStorage.removeItem('betbuddy_pending_join_league');
+    setTimeout(() => { joinCloudLeague(pendingLeague); }, 600);
+  }
+}
+
 function initFirebaseAuth() {
   if (!firebaseAuth) return;
+
+  // Coming back from the confirmation email in another tab: notice it without a button press.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') checkEmailVerified(true);
+  });
 
   try {
     if (firebase.auth && firebase.auth.Auth && firebase.auth.Auth.Persistence) {
@@ -6124,22 +6374,7 @@ function initFirebaseAuth() {
       render();
       try {
         await ensureUserProfile(user);
-        hasSyncedUserLeagues = false;
-        listenToMyLeagueData(user.uid);
-        await syncUserLeaguesFromCloud();
-        try { await syncDiaryFromCloud(); } catch (e) {}
-
-        // Preserve pending league invite across sign-in popup/redirect
-        const inviteCode = sessionStorage.getItem('betbuddy_invite_code');
-        if (inviteCode) {
-          sessionStorage.removeItem('betbuddy_invite_code');
-          setTimeout(() => { showJoinLeagueModal(inviteCode); }, 600);
-        }
-        const pendingLeague = sessionStorage.getItem('betbuddy_pending_join_league');
-        if (pendingLeague) {
-          sessionStorage.removeItem('betbuddy_pending_join_league');
-          setTimeout(() => { joinCloudLeague(pendingLeague); }, 600);
-        }
+        await runPostSignInSync(user);
       } catch (e) {
         console.warn('Post sign-in sync notice:', e);
       }
@@ -6440,7 +6675,18 @@ document.addEventListener('click', event => {
   }
   if (t.id === 'header-install-btn' || t.id === 'btn-trigger-native-install') { triggerDirectDownload(); return; }
   if (t.dataset.closeInstall !== undefined) { closeInstallModal(); return; }
-  if (t.id === 'header-auth-btn' || t.id === 'header-user-btn' || t.dataset.openAuth !== undefined || t.closest('#header-auth-btn') || t.closest('#header-user-btn') || t.closest('.google-sub-btn')) { openAuthModal(); return; }
+  if (t.id === 'header-auth-btn' || t.id === 'header-user-btn' || t.dataset.openAuth !== undefined || t.closest('#header-auth-btn') || t.closest('#header-user-btn') || t.closest('.google-sub-btn')) {
+    if (t.dataset.emailModeOpen) emailAuthMode = t.dataset.emailModeOpen;
+    openAuthModal();
+    if (t.dataset.emailModeOpen && $('email-auth-email')) setTimeout(() => $(emailAuthMode === 'signup' ? 'email-auth-handle' : 'email-auth-email').focus(), 50);
+    return;
+  }
+  const emailTab = t.closest('[data-email-mode]');
+  if (emailTab) { setEmailAuthMode(emailTab.dataset.emailMode); return; }
+  if (t.id === 'email-auth-forgot') { setEmailAuthMode('reset'); return; }
+  if (t.id === 'email-reset-back') { setEmailAuthMode('signin'); return; }
+  if (t.closest('[data-verify-check]')) { checkEmailVerified(false); return; }
+  if (t.closest('[data-verify-resend]')) { resendVerificationEmail(); return; }
   if (t.dataset.closeAuth !== undefined || t.closest('[data-close-auth]')) { closeAuthModal(); return; }
   if (t.id === 'btn-auth-google' || t.closest('#btn-auth-google') || t.closest('.google-primary-btn')) { signInWithGoogle(); return; }
 
@@ -6481,7 +6727,7 @@ document.addEventListener('click', event => {
   else if (t.dataset.openLeagueModal !== undefined) {
     const u = getAuthUser();
     if (!u || !u.signedIn) {
-      toast('Sign in with Google to join leagues and compete with mates');
+      toast('Sign in to join leagues and compete with mates');
       openAuthModal();
     } else {
       $('league-modal').hidden = false;
@@ -6611,13 +6857,14 @@ document.addEventListener('change', event => {
 });
 document.addEventListener('submit', event => {
   if (event.target.id === 'diary-form') handleDiaryFormSubmit(event);
+  if (event.target.id === 'email-auth-form') { event.preventDefault(); submitEmailAuth(); return; }
+  if (event.target.id === 'email-reset-form') { event.preventDefault(); submitPasswordReset(); return; }
 
-  
   if (event.target.id === 'create-league-form') {
     event.preventDefault();
     const user = getAuthUser();
     if (!user || !user.signedIn) {
-      toast('Sign in with Google to create a private league.');
+      toast('Sign in to create a private league.');
       openAuthModal();
       return;
     }
@@ -7199,8 +7446,8 @@ function renderBetAI() {
   const body = $('betai-body');
   if (!body) return;
   if (!betaiSignedIn()) {
-    body.innerHTML = '<div class="betai-gate"><p>BetAI is for signed-in accounts. Sign in with Google to ask up to 4 questions a day.</p>' +
-      '<button type="button" class="btn google-primary-btn" onclick="signInWithGoogle()" style="min-height:46px;">Sign in with Google</button></div>' + betaiFoot();
+    body.innerHTML = '<div class="betai-gate"><p>BetAI is for signed-in accounts. Sign in to ask up to 4 questions a day.</p>' +
+      '<button type="button" class="btn google-primary-btn" onclick="signInWithGoogle()" style="min-height:46px;">Sign in with Google</button><button type="button" class="text-link" data-open-auth data-email-mode-open="signin" style="display:block;margin:10px auto 0;">Use email instead</button></div>' + betaiFoot();
     return;
   }
   const out = betai.remaining === 0;
