@@ -203,7 +203,7 @@ UEFA_CLUBS = {
     "SC Braga": ["Sporting Braga", "Sporting Clube de Braga"],
     "Celtic": ["Celtic Glasgow", "Celtic FC"], "Hearts": ["Heart of Midlothian FC", "Heart of Midlothian"],
     # Other clubs.
-    "AEK Athens": ["AEK Athen"], "AGF": ["AGF Aarhus"], "Anderlecht": ["RSC Anderlecht"], "Ararat-Armenia": ["FC Ararat-Armenia"],
+    "AEK Athens": ["AEK Athen", "PAE AEK"], "AGF": ["AGF Aarhus"], "Anderlecht": ["RSC Anderlecht"], "Ararat-Armenia": ["FC Ararat-Armenia"],
     "Besiktas": ["Besiktas Istanbul", "Beşiktaş"], "Bodo/Glimt": ["FK Bodö/Glimt", "FK Bodø/Glimt"], "Borac Banja Luka": [], "Brann": ["SK Brann"],
     "Celje": ["NK Celje"], "Club Brugge": ["FC Brügge", "Club Brugge KV"], "Copenhagen": ["FC Kopenhagen", "FC København"], "CSKA Sofia": ["ZSKA Sofia"],
     "Dinamo Zagreb": ["GNK Dinamo Zagreb"], "Drita": ["KF Drita", "Drita Gjilan"], "Egnatia": ["KF Egnatia", "Egnatia Rrogozhine"],
@@ -211,7 +211,7 @@ UEFA_CLUBS = {
     "Galatasaray": ["Galatasaray Istanbul", "Galatasaray SK"], "Gent": ["KAA Gent"], "Hajduk Split": [],
     "Hapoel Beer Sheva": ["Hapoel Beer Scheva", "Hapoel Be'er Sheva"], "Iberia 1999": ["FC Iberia 1999 Tiflis", "FC Iberia 1999"],
     "Inter Escaldes": ["Inter Club d'Escaldes"], "Jablonec": ["FK Jablonec"], "Jagiellonia": ["Jagiellonia Bialystok", "Jagiellonia Białystok"],
-    "Kairat": ["FK Kairat"], "Kauno Zalgiris": ["FK Kauno Žalgiris", "Kauno Žalgiris"], "KuPS": ["KuPS Kuopio", "Kuopion PS"], "LASK": [],
+    "Kairat": ["FK Kairat"], "Kauno Zalgiris": ["FK Kauno Žalgiris", "Kauno Žalgiris"], "KuPS": ["KuPS Kuopio", "Kuopion PS"], "LASK": ["LASK Linz"],
     "Lech Poznan": ["Lech Poznań"], "Levski Sofia": [], "Lillestrom": ["Lillestrøm SK"], "Lincoln Red Imps": [], "Lugano": ["FC Lugano"],
     "Midtjylland": ["FC Midtjylland"], "Mjallby": ["Mjällby AIF"], "Nordsjaelland": ["FC Nordsjaelland", "FC Nordsjælland"], "OFI Crete": ["OFI Kreta"],
     "Olympiacos": ["Olympiakos Piräus", "Olympiakos Piraeus", "PAE Olympiakos SFP"], "Omonia Nicosia": ["Omonia Nikosia"],

@@ -135,7 +135,8 @@ class Names(unittest.TestCase):
             self.assertEqual(missing, [], f"{code}: add these OpenLigaDB names to teams.UEFA_CLUBS")
             self.assertTrue(all(canonical_for(code, n) in UEFA_CLUBS for n in names))
         examples = {"FC Arsenal": "Arsenal", "Inter Mailand": "Inter", "FC Brügge": "Club Brugge", "Roter Stern Belgrad": "Red Star Belgrade",
-                    "ZSKA Sofia": "CSKA Sofia", "SSC Napoli ": "Napoli", "Brighton & Hove Albion F.C.": "Brighton", "FK Bodö/Glimt": "Bodo/Glimt"}
+                    "ZSKA Sofia": "CSKA Sofia", "SSC Napoli ": "Napoli", "Brighton & Hove Albion F.C.": "Brighton", "FK Bodö/Glimt": "Bodo/Glimt",
+                    "LASK Linz": "LASK", "PAE AEK": "AEK Athens"}  # football-data.org spellings
         for raw, want in examples.items():
             self.assertEqual(canonical_for("CL", raw), want, raw)
 
