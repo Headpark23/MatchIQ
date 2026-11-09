@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-09T11:35:17.413653+00:00",
+ "generated_at": "2026-11-09T18:48:26.186500+00:00",
  "gap_hours": 48,
  "result_grace_hours": 72,
  "leagues": {
@@ -14,7 +14,7 @@
    "next_48h_predicted": 0,
    "played_since_start": 32,
    "sealed": 29,
-   "settled": 24,
+   "settled": 29,
    "results_overdue": 0,
    "results_lag": false
   },
@@ -59,7 +59,7 @@
    "next_48h_predicted": 0,
    "played_since_start": 20,
    "sealed": 20,
-   "settled": 15,
+   "settled": 20,
    "results_overdue": 0,
    "results_lag": false
   },
@@ -68,13 +68,13 @@
    "predicted": true,
    "fixtures": 380,
    "ledger_start": "2026-10-26T17:32:31.484448+00:00",
-   "upcoming": 18,
-   "upcoming_predicted": 18,
+   "upcoming": 19,
+   "upcoming_predicted": 19,
    "next_48h": 0,
    "next_48h_predicted": 0,
    "played_since_start": 29,
    "sealed": 29,
-   "settled": 25,
+   "settled": 29,
    "results_overdue": 0,
    "results_lag": false
   },
@@ -89,7 +89,7 @@
    "next_48h_predicted": 0,
    "played_since_start": 18,
    "sealed": 18,
-   "settled": 12,
+   "settled": 18,
    "results_overdue": 0,
    "results_lag": false
   },
@@ -153,6 +153,51 @@
    "results_overdue": 0,
    "results_lag": false
   },
+  "CL": {
+   "name": "Champions League",
+   "predicted": true,
+   "fixtures": 144,
+   "ledger_start": "2026-11-09T18:47:26.413227+00:00",
+   "upcoming": 18,
+   "upcoming_predicted": 18,
+   "next_48h": 0,
+   "next_48h_predicted": 0,
+   "played_since_start": 0,
+   "sealed": 0,
+   "settled": 0,
+   "results_overdue": 0,
+   "results_lag": false
+  },
+  "EL": {
+   "name": "Europa League",
+   "predicted": true,
+   "fixtures": 144,
+   "ledger_start": "2026-11-09T18:47:26.413227+00:00",
+   "upcoming": 18,
+   "upcoming_predicted": 18,
+   "next_48h": 0,
+   "next_48h_predicted": 0,
+   "played_since_start": 0,
+   "sealed": 0,
+   "settled": 0,
+   "results_overdue": 0,
+   "results_lag": false
+  },
+  "ECL": {
+   "name": "Conference League",
+   "predicted": true,
+   "fixtures": 108,
+   "ledger_start": "2026-11-09T18:47:26.413227+00:00",
+   "upcoming": 18,
+   "upcoming_predicted": 18,
+   "next_48h": 0,
+   "next_48h_predicted": 0,
+   "played_since_start": 0,
+   "sealed": 0,
+   "settled": 0,
+   "results_overdue": 0,
+   "results_lag": false
+  },
   "E2": {
    "name": "League One",
    "predicted": false,
@@ -175,14 +220,14 @@
   }
  },
  "totals": {
-  "fixtures": 3162,
-  "upcoming": 184,
-  "upcoming_predicted": 184,
+  "fixtures": 3558,
+  "upcoming": 239,
+  "upcoming_predicted": 239,
   "next_48h": 0,
   "next_48h_predicted": 0,
   "played_since_start": 153,
   "sealed": 150,
-  "settled": 130,
+  "settled": 150,
   "results_overdue": 28
  },
  "gaps": {
