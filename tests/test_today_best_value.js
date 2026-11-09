@@ -52,7 +52,11 @@ const pool = builder.legPool(preds, {
   reliability: relData,
   feedFor,
   nowMs: DATA_NOW,
-  timing: 'all'
+  timing: 'all',
+  // Every published match, not just the app's 7-day window: during an international break the
+  // next club match can be more than 7 days after the data was published, and an empty pool
+  // here stopped the scheduled refresh (it runs these tests before refreshing the data).
+  horizonMs: Infinity
 });
 
 assert(pool.length > 0, 'Leg pool has candidates');

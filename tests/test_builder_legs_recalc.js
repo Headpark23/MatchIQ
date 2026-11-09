@@ -32,6 +32,13 @@ context.window = context;
 vm.createContext(context);
 vm.runInContext(mc, context);
 vm.runInContext(bb, context);
+// Evaluate the data as of its own publication time and over every published match, not the
+// wall clock and the app's 7-day window: the scheduled refresh runs this test before it
+// refreshes the data, so stale prices or an international break (next club match more than
+// 7 days away) emptied the pool and blocked every refresh.
+vm.runInContext('Date.now = () => ' + Date.parse(DATA.predictions.generated_at) + ';' +
+  'const __legPool = MatchIQBuilder.legPool;' +
+  'MatchIQBuilder.legPool = (preds, opts) => __legPool(preds, Object.assign({}, opts, { horizonMs: Infinity }));', context);
 vm.runInContext(fs.readFileSync('settlement.js', 'utf8'), context);
 vm.runInContext(fs.readFileSync('league_sync.js', 'utf8'), context);
 vm.runInContext(js, context);
