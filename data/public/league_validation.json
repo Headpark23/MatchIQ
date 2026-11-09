@@ -312,6 +312,99 @@
      "league_brier": 0.2519
     }
    }
+  },
+  "CL": {
+   "competition": "CL",
+   "name": "Champions League",
+   "test_season": "2425",
+   "test_season_label": "2024-25",
+   "test_matches": 189,
+   "result_tiers": {
+    "L1": 172,
+    "T3": 17
+   },
+   "markets": {
+    "result": {
+     "n": 172,
+     "model_brier": 0.5374,
+     "league_brier": 0.6035,
+     "blend_brier": 0.5374,
+     "gain": 0.0661,
+     "strength": "moderate"
+    },
+    "goals": {
+     "n": 189,
+     "blend_brier": 0.2352,
+     "league_brier": 0.2413
+    },
+    "btts": {
+     "n": 189,
+     "blend_brier": 0.2464,
+     "league_brier": 0.2496
+    }
+   }
+  },
+  "EL": {
+   "competition": "EL",
+   "name": "Europa League",
+   "test_season": "2425",
+   "test_season_label": "2024-25",
+   "test_matches": 189,
+   "result_tiers": {
+    "L1": 172,
+    "T3": 17
+   },
+   "markets": {
+    "result": {
+     "n": 172,
+     "model_brier": 0.6082,
+     "league_brier": 0.6308,
+     "blend_brier": 0.6082,
+     "gain": 0.0226,
+     "strength": "moderate"
+    },
+    "goals": {
+     "n": 189,
+     "blend_brier": 0.2528,
+     "league_brier": 0.2468
+    },
+    "btts": {
+     "n": 189,
+     "blend_brier": 0.2514,
+     "league_brier": 0.2499
+    }
+   }
+  },
+  "ECL": {
+   "competition": "ECL",
+   "name": "Conference League",
+   "test_season": "2425",
+   "test_season_label": "2024-25",
+   "test_matches": 153,
+   "result_tiers": {
+    "L1": 150,
+    "T3": 3
+   },
+   "markets": {
+    "result": {
+     "n": 150,
+     "model_brier": 0.59,
+     "league_brier": 0.6216,
+     "blend_brier": 0.59,
+     "gain": 0.0316,
+     "strength": "moderate"
+    },
+    "goals": {
+     "n": 153,
+     "blend_brier": 0.2482,
+     "league_brier": 0.247
+    },
+    "btts": {
+     "n": 153,
+     "blend_brier": 0.2516,
+     "league_brier": 0.2496
+    }
+   }
   }
  }
 }

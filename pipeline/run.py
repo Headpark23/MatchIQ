@@ -293,7 +293,7 @@ def run(out_dir, now, offline=False, fetchers=None, extra_fetchers=None, league_
                    "fixtures": len(fixtures), "upcoming_predicted": len(predictions), "published_revisions": published,
                    "imported_frozen_records": imported, "settlement_updates": settled, "training_results": len(results),
                    "results_latest": max(r["date"] for r in epl).isoformat(), "model_versions": VERSIONS,
-                   "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0), martj42/international_results (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk."})
+                   "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0, including openfootball/champions-league for European club history), martj42/international_results (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk."})
     if ok:
         write_json(out_dir / "fixtures.json", {"generated_at": now.isoformat(), "season": SEASON, "fixtures": fixtures})
         write_json(out_dir / "predictions.json", {"generated_at": now.isoformat(), "horizon_days": HORIZON_DAYS, "predictions": predictions})

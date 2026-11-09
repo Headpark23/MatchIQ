@@ -33,11 +33,11 @@ import time
 from pathlib import Path
 
 from . import history as hist
-from . import internationals
+from . import european, internationals
 from .data import uk_date
 from .leagues import LEAGUES, PREDICTED, PUBLIC_ONLY
 from .league_validation import validate_league
-from .models import Context, predict
+from .models import POOLED_MIN_MATCHES, Context, predict
 from .recommend import recommend
 from .rights import RESTRICTED_MARKETS
 from .sources import fetch_football_data_org, fetch_openfootball
@@ -55,7 +55,7 @@ PUBLIC_DIR = ROOT / "data" / "public"
 PUBLIC_MODEL_VERSION = "dc-public-v1"
 RECORD_PREFIX = "PUB-"
 HISTORY_SEASONS = (2023, 2024, 2025)
-PERMITTED_RESULT_SOURCES = {"football-data.org", "openligadb", "openfootball", internationals.SOURCE}
+PERMITTED_RESULT_SOURCES = {"football-data.org", "openligadb", "openfootball", internationals.SOURCE, european.SOURCE}
 REFRESH_DAYS = 30
 
 
@@ -112,10 +112,12 @@ def load_history(path=HISTORY_PATH, source="football-data.org"):
 
 
 def load_all_history():
-    """football-data.org history for LEAGUES, openfootball history for PUBLIC_ONLY leagues and
-    martj42/international_results history for international competitions."""
+    """football-data.org history for LEAGUES, openfootball history for PUBLIC_ONLY leagues,
+    martj42/international_results history for international competitions and
+    openfootball/champions-league history (pooled) for the UEFA club competitions."""
     return (load_history() + [r for r in load_history(OPENFOOTBALL_HISTORY_PATH, "openfootball") if r["competition"] in PUBLIC_ONLY]
-            + [r for r in load_history(internationals.HISTORY_PATH, internationals.SOURCE) if r["competition"] in internationals.INTERNATIONAL])
+            + [r for r in load_history(internationals.HISTORY_PATH, internationals.SOURCE) if r["competition"] in internationals.INTERNATIONAL]
+            + european.load_history())
 
 
 def permitted_result(f):
@@ -138,8 +140,11 @@ def training_rows(history, fixtures, season):
     for f in fixtures:
         if permitted_result(f) and f["season"] == season and f["id"] not in known:
             kick = dt.datetime.fromisoformat(f["kickoff_utc"].replace("Z", "+00:00"))
-            rows.append({"date": uk_date(kick), "competition": f["competition"], "season": f["season"], "home": f["home"], "away": f["away"],
-                         "hg": f["score"][0], "ag": f["score"][1], "stats": {}, "source": f["result_source"]})
+            # A pooled competition's result trains every competition of its pool (the UEFA
+            # competitions share one model); "origin" keeps where it was played.
+            for code in PREDICTED.get(f["competition"], {}).get("pool") or (f["competition"],):
+                rows.append({"date": uk_date(kick), "competition": code, "origin": f["competition"], "season": f["season"], "home": f["home"],
+                             "away": f["away"], "hg": f["score"][0], "ag": f["score"][1], "stats": {}, "source": f["result_source"]})
     return rows
 
 
@@ -163,10 +168,11 @@ def evidence_tiers(validation):
     side = "team" if meta.get("international") else "club"
     if not r:
         return {"L1": {"strength": "none", "summary": f"The public {name} model has not been backtested yet."},
-                "T3": {"strength": "none", "summary": f"Not enough data on one {side}, so this is the {name} average."}}
-    why = "" if meta.get("international") else " (for example a newly promoted side)"
-    return {"L1": {"strength": r["strength"], "summary": f"Backtest on {r['n']} {sample} ({validation['test_season_label']}): Brier {r['model_brier']:.3f} against {r['league_brier']:.3f} for the {'' if meta.get('international') else 'league '}average. A single-season test with no forward record yet, so provisional."},
-            "T3": {"strength": "none", "summary": f"Not enough recent matches for one {side}{why}, so this is the {name} average. Limited evidence."}}
+                "T3": {"strength": "none", "summary": f"Not enough data on one {side}, so this is the {meta.get('average') or name + ' average'}."}}
+    why = "" if meta.get("international") else f" (for example {meta.get('new_side', 'a newly promoted side')})"
+    average = meta.get("average") or ("average" if meta.get("international") else "league average")
+    return {"L1": {"strength": r["strength"], "summary": f"Backtest on {r['n']} {sample} ({validation['test_season_label']}): Brier {r['model_brier']:.3f} against {r['league_brier']:.3f} for the {average}. A single-season test with no forward record yet, so provisional."},
+            "T3": {"strength": "none", "summary": f"Not enough recent matches for one {side}{why}, so this is the {meta.get('average') or name + ' average'}. Limited evidence."}}
 
 
 def _public_markets(markets):
@@ -222,8 +228,11 @@ def run_public(now, fixtures, season, horizon_days, history=None, validation=Non
                 predictions[f["id"]] = {**shown, "fixture": {k: f[k] for k in ("competition", "season", "home", "away", "kickoff_utc", "status", "kickoff_history")}}
             continue
         if code not in contexts:
+            meta = PREDICTED[code]
             contexts[code] = Context([r for r in rows if r["competition"] == code], uk_date(now), competition=code,
-                                     league_name=PREDICTED[code]["name"], validation=lv.get(code), public=True)
+                                     league_name=meta.get("context_name", meta["name"]), validation=lv.get(code), public=True,
+                                     min_matches=meta.get("min_matches", POOLED_MIN_MATCHES), model_note=meta.get("model_note"),
+                                     full_weight_matches=meta.get("full_weight_matches"))
         markets = _public_markets(predict({**f, "date": uk_date(kickoff)}, contexts[code], evidence_tiers(lv.get(code))))
         recs = recommend(markets, None, lv.get(code))
         hist.publish(ledger, f, markets, fp, list(f["sources"]), now, origin="public-derived", recommendations=recs, record_prefix=RECORD_PREFIX)
@@ -283,6 +292,11 @@ def main(argv=None):
             print(json.dumps(internationals.build_history()))
         except RuntimeError as error:  # keep the stored copy; the refresh must not fail on this
             print(f"international history not refreshed: {error}")
+    if args.history and (not args.if_stale or stale(european.HISTORY_PATH)):
+        try:
+            print(json.dumps(european.build_history()))
+        except RuntimeError as error:  # keep the stored copy; the refresh must not fail on this
+            print(f"European history not refreshed: {error}")
     if args.validate and (not args.if_stale or stale(PUBLIC_DIR / "league_validation.json") or missing_validation()):
         rows = load_all_history()
         if not rows:

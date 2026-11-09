@@ -173,6 +173,58 @@ NATIONAL_TEAMS = {
     "Ukraine": [], "Wales": [],
 }
 LEAGUE_ALIASES["NLA"] = NATIONAL_TEAMS
+# UEFA club competitions (leagues.PUBLIC_ONLY "CL", "EL", "ECL"). Fixtures come from OpenLigaDB
+# (German names), history from openfootball/champions-league (English or local names, and not
+# always the same spelling from one season to the next). A club from a league MatchIQ covers
+# takes that league's display name, so it is the same club at home and in Europe; any other
+# club gets a plain name here. Aliases are source spellings (normalised on lookup) and resolve
+# by exact match only: "Inter Club d'Escaldes" must not become Inter. Every club in the
+# 2026-27 league phases is listed (tests/test_european.py checks it); add next season's
+# newcomers when OpenLigaDB publishes them.
+UEFA_CLUBS = {
+    # Clubs from covered leagues: display name = the domestic league's display name.
+    "Arsenal": ["FC Arsenal"], "Aston Villa": [], "Bournemouth": ["AFC Bournemouth"], "Brighton": ["Brighton & Hove Albion F.C.", "Brighton & Hove Albion"],
+    "Crystal Palace": ["Crystal Palace FC"], "Liverpool": ["FC Liverpool", "Liverpool FC"], "Man City": ["Manchester City", "Manchester City FC"],
+    "Man United": ["Manchester United FC", "Manchester United"], "Sunderland": ["Sunderland AFC"],
+    "Bayern Munich": ["FC Bayern München", "Bayern München"], "Dortmund": ["Borussia Dortmund"], "Leverkusen": ["Bayer 04 Leverkusen", "Bayer Leverkusen"],
+    "RB Leipzig": [], "Freiburg": ["SC Freiburg"], "Hoffenheim": ["TSG Hoffenheim", "1899 Hoffenheim", "TSG 1899 Hoffenheim"], "Stuttgart": ["VfB Stuttgart"],
+    "Atletico Madrid": ["Club Atlético de Madrid", "Atlético Madrid"], "Barcelona": ["FC Barcelona"], "Real Madrid": ["Real Madrid CF"],
+    "Real Betis": ["Real Betis Balompié"], "Real Sociedad": ["Real Sociedad de Fútbol"], "Villarreal": ["Villarreal CF"], "Getafe": ["FC Getafe", "Getafe CF"],
+    "Celta Vigo": ["RC Celta de Vigo"],
+    "AC Milan": ["AC Mailand"], "Inter": ["Inter Mailand", "FC Internazionale Milano"], "Juventus": ["Juventus Turin", "Juventus FC"],
+    "Roma": ["AS Rom", "AS Roma"], "Lazio": ["Lazio Roma", "SS Lazio"], "Napoli": ["SSC Napoli"], "Atalanta": ["Atalanta Bergamo", "Atalanta BC"],
+    "Como": ["Como 1907"],
+    "Paris SG": ["Paris St. Germain", "Paris Saint-Germain", "Paris Saint-Germain FC"], "Marseille": ["Olympique Marseille", "Olympique de Marseille"],
+    "Lyon": ["Olympique Lyon", "Olympique Lyonnais"], "Monaco": ["AS Monaco", "AS Monaco FC"], "Lille": ["Lille OSC"], "Lens": ["RC Lens", "Racing Club de Lens"],
+    "Rennes": ["Stade Rennes", "Stade Rennais"],
+    "Ajax": ["Ajax Amsterdam", "AFC Ajax"], "PSV": ["PSV Eindhoven"], "Feyenoord": ["Feyenoord Rotterdam"], "AZ Alkmaar": [],
+    "FC Twente": ["FC Twente Enschede"], "NEC Nijmegen": [],
+    "Benfica": ["Benfica Lissabon", "SL Benfica", "Sport Lisboa e Benfica"], "FC Porto": [], "Sporting CP": ["Sporting Clube de Portugal"],
+    "SC Braga": ["Sporting Braga", "Sporting Clube de Braga"],
+    "Celtic": ["Celtic Glasgow", "Celtic FC"], "Hearts": ["Heart of Midlothian FC", "Heart of Midlothian"],
+    # Other clubs.
+    "AEK Athens": ["AEK Athen"], "AGF": ["AGF Aarhus"], "Anderlecht": ["RSC Anderlecht"], "Ararat-Armenia": ["FC Ararat-Armenia"],
+    "Besiktas": ["Besiktas Istanbul", "Beşiktaş"], "Bodo/Glimt": ["FK Bodö/Glimt", "FK Bodø/Glimt"], "Borac Banja Luka": [], "Brann": ["SK Brann"],
+    "Celje": ["NK Celje"], "Club Brugge": ["FC Brügge", "Club Brugge KV"], "Copenhagen": ["FC Kopenhagen", "FC København"], "CSKA Sofia": ["ZSKA Sofia"],
+    "Dinamo Zagreb": ["GNK Dinamo Zagreb"], "Drita": ["KF Drita", "Drita Gjilan"], "Egnatia": ["KF Egnatia", "Egnatia Rrogozhine"],
+    "Fenerbahce": ["Fenerbahçe SK", "Fenerbahçe"], "Ferencvaros": ["Ferencváros Budapest", "Ferencvárosi TC"],
+    "Galatasaray": ["Galatasaray Istanbul", "Galatasaray SK"], "Gent": ["KAA Gent"], "Hajduk Split": [],
+    "Hapoel Beer Sheva": ["Hapoel Beer Scheva", "Hapoel Be'er Sheva"], "Iberia 1999": ["FC Iberia 1999 Tiflis", "FC Iberia 1999"],
+    "Inter Escaldes": ["Inter Club d'Escaldes"], "Jablonec": ["FK Jablonec"], "Jagiellonia": ["Jagiellonia Bialystok", "Jagiellonia Białystok"],
+    "Kairat": ["FK Kairat"], "Kauno Zalgiris": ["FK Kauno Žalgiris", "Kauno Žalgiris"], "KuPS": ["KuPS Kuopio", "Kuopion PS"], "LASK": [],
+    "Lech Poznan": ["Lech Poznań"], "Levski Sofia": [], "Lillestrom": ["Lillestrøm SK"], "Lincoln Red Imps": [], "Lugano": ["FC Lugano"],
+    "Midtjylland": ["FC Midtjylland"], "Mjallby": ["Mjällby AIF"], "Nordsjaelland": ["FC Nordsjaelland", "FC Nordsjælland"], "OFI Crete": ["OFI Kreta"],
+    "Olympiacos": ["Olympiakos Piräus", "Olympiakos Piraeus", "PAE Olympiakos SFP"], "Omonia Nicosia": ["Omonia Nikosia"],
+    "Pafos": ["Paphos FC", "Pafos FC"], "Panathinaikos": ["Panathinaikos FC"], "Qarabag": ["Qarabağ Ağdam FK", "Qarabağ FK"],
+    "RB Salzburg": ["FC Red Bull Salzburg"], "Red Star Belgrade": ["Roter Stern Belgrad", "Crvena Zvezda", "FK Crvena Zvezda"], "Riga FC": [],
+    "Sabah": ["Sabah FK"], "Shakhtar Donetsk": ["FK Shakhtar Donetsk"], "Sint-Truiden": ["VV Sint-Truiden"],
+    "Slavia Prague": ["Slavia Prag", "Slavia Praha", "SK Slavia Praha"], "Slovan Bratislava": ["ŠK Slovan Bratislava"],
+    "Sparta Prague": ["Sparta Prag", "AC Sparta Praha"], "Sturm Graz": ["SK Sturm Graz"], "Thun": ["FC Thun"], "Torreense": ["SC União Torreense"],
+    "Trabzonspor": [], "Union Saint-Gilloise": ["Royale Union Saint-Gilloise"], "Universitatea Craiova": ["CS Universitatea Craiova"],
+    "Viking": ["Viking FK"], "Viktoria Plzen": ["Viktoria Pilsen", "Viktoria Plzeň"],
+}
+for _code in ("CL", "EL", "ECL"):
+    LEAGUE_ALIASES[_code] = UEFA_CLUBS
 _LEAGUE_LOOKUP = {code: {_normalise(a): name for name, aliases in table.items() for a in aliases + [name]}
                   for code, table in LEAGUE_ALIASES.items()}
 
@@ -180,9 +232,9 @@ _LEAGUE_LOOKUP = {code: {_normalise(a): name for name, aliases in table.items() 
 _LEAGUE_NOISE = {"cf", "ud", "cd", "rcd", "ca", "sd", "ac", "as", "us", "ss", "sc", "ssc", "fk", "sv", "vfl", "vfb", "tsg", "rc", "ogc", "aj", "es", "fsv", "1", "calcio", "de", "la", "del"}
 
 
-# National-team names resolve by exact alias only: word containment would turn "Elba Island" into
-# Iceland ("island") or "Northern Cyprus" into Cyprus.
-EXACT_ONLY = {"NLA"}
+# National-team and UEFA club names resolve by exact alias only: word containment would turn
+# "Elba Island" into Iceland ("island") or "Inter Club d'Escaldes" into Inter.
+EXACT_ONLY = {"NLA", "CL", "EL", "ECL"}
 
 
 def _league_match(table, key, exact=False):
@@ -203,7 +255,7 @@ DISPLAY_NAMES = {"Paris SG": "Paris SG", "Paris FC": "Paris FC", "RB Leipzig": "
                  "Vallecano": "Rayo Vallecano", "Betis": "Real Betis", "Celta": "Celta Vigo", "Sheffield Weds": "Sheffield Wednesday",
                  "Milan": "AC Milan", "Verona": "Hellas Verona", "La Coruna": "Deportivo La Coruna", "Santander": "Racing Santander",
                  **{n: n for n in ("St. Mirren", "St. Johnstone", "Queen's Park", "Inverness CT", "ADO Den Haag", "PSV", "AZ Alkmaar", "NEC Nijmegen", "PEC Zwolle", "Willem II", "FC Utrecht", "FC Twente", "FC Porto", "SC Braga", "Sporting CP")},
-                 **{n: n for n in NATIONAL_TEAMS}}
+                 **{n: n for n in NATIONAL_TEAMS}, **{n: n for n in UEFA_CLUBS}}
 
 
 def _display(name):

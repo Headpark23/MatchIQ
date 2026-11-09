@@ -22,7 +22,7 @@ import urllib.request
 from zoneinfo import ZoneInfo
 
 from .leagues import LOCAL_TZ, PUBLIC_ONLY, SCHEDULE_ONLY
-from .teams import canonical, canonical_for, known_club
+from .teams import EXACT_ONLY, canonical, canonical_for, known_club
 
 UK = ZoneInfo("Europe/London")
 UTC = dt.timezone.utc
@@ -34,6 +34,7 @@ SOURCE_LABELS = {
     "openfootball": "openfootball/football.json (CC0 public domain)",
     "football-data.co.uk": "football-data.co.uk (personal/research use; match statistics)",
     "international_results": "martj42/international_results (CC0 public domain; international results history)",
+    "openfootball_uefa": "openfootball/champions-league (CC0 public domain; European club results history)",
 }
 
 
@@ -119,14 +120,19 @@ def fetch_openligadb(competition, season_start, season, opener=None):
         payload = http_json(f"https://api.openligadb.de/getmatchdata/{shortcut}/{season_start}", opener=opener)
     except RuntimeError as error:
         return [], str(error)
-    out = []
+    out, unknown = [], set()
     for m in payload:
         kickoff = dt.datetime.fromisoformat(m["matchDateTimeUTC"].replace("Z", "+00:00"))
+        # resultTypeID 2 ("Endergebnis") is the 90-minute score; extra time and penalties are
+        # separate result types (4 and 5) and are not used.
         final = [r for r in m.get("matchResults") or [] if r.get("resultTypeID") == 2]
         score = [final[0]["pointsTeam1"], final[0]["pointsTeam2"]] if m.get("matchIsFinished") and final else None
+        if competition in EXACT_ONLY:  # OpenLigaDB is the only fixture source: keep the match, report the name
+            unknown |= {n for n in (m["team1"]["teamName"], m["team2"]["teamName"]) if not known_club(competition, n)}
         out.append(_match(competition, season, m["team1"]["teamName"], m["team2"]["teamName"], kickoff,
                           "FINISHED" if score else "SCHEDULED", score, "openligadb", m.get("lastUpdateDateTime")))
-    return out, None
+    # A knockout tie can repeat a league-phase pairing with the same home side.
+    return number_meetings(out), (f"unrecognised team name(s), shown as published and predicted from the average: {', '.join(sorted(unknown))}" if unknown else None)
 
 
 def number_meetings(matches):

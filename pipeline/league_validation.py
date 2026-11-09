@@ -15,7 +15,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from .leagues import EXTRA, LEAGUES, PREDICTED, load_results
-from .models import Context, predict
+from .models import POOLED_MIN_MATCHES, Context, predict
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data" / "league_validation.json"
@@ -38,15 +38,22 @@ def outcome(market, row):
 
 
 def validate_league(code, results, progress=None, public=False):
+    """A competition with a pooled training set (the UEFA competitions, leagues.EUROPEAN_SETTINGS)
+    trains on every pooled row but is scored only on its own main-draw matches ("origin"
+    names the competition a pooled row was played in) of its own test season."""
+    meta = PREDICTED[code]
+    test_season, test_label = meta.get("test_season", (TEST_SEASON, TEST_LABEL))
     rows = [r for r in results if r["competition"] == code]
-    test = [r for r in rows if r["season"] == TEST_SEASON]
+    test = [r for r in rows if r["season"] == test_season and r.get("origin", code) == code and not r.get("qualifying")]
     by_week = defaultdict(list)
     for r in test:
         by_week[week_start(r["date"])].append(r)
     scores = defaultdict(lambda: [0, 0.0, 0.0])  # n, model brier sum, league brier sum
     tiers = defaultdict(int)
     for week in sorted(by_week):
-        ctx = Context(rows, week, competition=code, league_name=PREDICTED[code]["name"], public=public)
+        ctx = Context(rows, week, competition=code, league_name=meta.get("context_name", meta["name"]), public=public,
+                      min_matches=meta.get("min_matches", POOLED_MIN_MATCHES), model_note=meta.get("model_note"),
+                      full_weight_matches=meta.get("full_weight_matches"))
         if not ctx.epl or ctx.base["btts"] is None:
             continue
         for r in by_week[week]:
@@ -77,7 +84,7 @@ def validate_league(code, results, progress=None, public=False):
                 s[2] += (base - float(won)) ** 2
         if progress:
             progress(code, week)
-    out = {"competition": code, "name": PREDICTED[code]["name"], "test_season": TEST_SEASON, "test_season_label": TEST_LABEL,
+    out = {"competition": code, "name": meta["name"], "test_season": test_season, "test_season_label": test_label,
            "test_matches": len(test), "result_tiers": dict(tiers), "markets": {}}
     for market, (n, model, league) in scores.items():
         if n:

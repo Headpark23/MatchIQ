@@ -89,7 +89,10 @@ const LEAGUES = {
   N1: 'Eredivisie',
   P1: 'Primeira Liga',
   B1: 'Belgian Pro League',
-  NLA: 'Nations League A'
+  NLA: 'Nations League A',
+  CL: 'Champions League',
+  EL: 'Europa League',
+  ECL: 'Conference League'
 };
 const leagueName = c => LEAGUES[c] || c || 'Premier League';
 const COMP_KEY = 'matchiq_competition_v1';
@@ -188,6 +191,40 @@ const CLUBS = {
   'Notts County': ['#111111', '#FFFFFF', 'NCO', 'Meadow Lane'],
   'Chesterfield': ['#00539F', '#FFFFFF', 'CHE', 'SMH Group Stadium'],
   'Bradford City': ['#800020', '#FDB913', 'BRA', 'Valley Parade'],
+  // Clubs from covered leagues that appear in Europe, under their league display names
+  'Dortmund': ['#FDB913', '#111111', 'BVB', 'Signal Iduna Park'], 'Leverkusen': ['#E32221', '#111111', 'B04', 'BayArena'],
+  'RB Leipzig': ['#DD0741', '#FFFFFF', 'RBL', 'Red Bull Arena'], 'Freiburg': ['#111111', '#E2001A', 'SCF', 'Europa-Park Stadion'],
+  'Hoffenheim': ['#1C63B7', '#FFFFFF', 'TSG', 'PreZero Arena'], 'Stuttgart': ['#E32219', '#FFFFFF', 'VFB', 'MHPArena'],
+  'Barcelona': ['#A50044', '#004D98', 'BAR', 'Camp Nou'], 'Real Betis': ['#00954C', '#FFFFFF', 'BET', 'Estadio Benito Villamarin'],
+  'Real Sociedad': ['#0067B1', '#FFFFFF', 'RSO', 'Anoeta'], 'Villarreal': ['#FDB913', '#005187', 'VIL', 'Estadio de la Ceramica'],
+  'Getafe': ['#005999', '#FFFFFF', 'GET', 'Coliseum'], 'Celta Vigo': ['#6CABDD', '#E5254E', 'CEL', 'Balaidos'],
+  'Inter': ['#004DA0', '#111111', 'INT', 'San Siro'], 'Juventus': ['#111111', '#FFFFFF', 'JUV', 'Allianz Stadium'],
+  'Roma': ['#8E1F2F', '#F0BC42', 'ROM', 'Stadio Olimpico'], 'Lazio': ['#6CABDD', '#FFFFFF', 'LAZ', 'Stadio Olimpico'],
+  'Napoli': ['#12A0D7', '#FFFFFF', 'NAP', 'Stadio Diego Armando Maradona'], 'Atalanta': ['#1E71B8', '#111111', 'ATA'],
+  'Como': ['#1C3F94', '#FFFFFF', 'COM', 'Stadio Giuseppe Sinigaglia'], 'Paris SG': ['#004170', '#DA291C', 'PSG', 'Parc des Princes'],
+  'Marseille': ['#2FAEE0', '#FFFFFF', 'OM', 'Orange Velodrome'], 'Lyon': ['#FFFFFF', '#DA291C', 'OL', 'Groupama Stadium'],
+  'Monaco': ['#E7192B', '#FFFFFF', 'ASM', 'Stade Louis II'], 'Lille': ['#E01E13', '#20325F', 'LIL', 'Stade Pierre-Mauroy'],
+  'Lens': ['#FDB913', '#DA291C', 'RCL', 'Stade Bollaert-Delelis'], 'Rennes': ['#E13327', '#111111', 'REN', 'Roazhon Park'],
+  'NEC Nijmegen': ['#DA291C', '#111111', 'NEC', 'Goffertstadion'],
+  // Champions League, Europa League and Conference League clubs from other leagues
+  'AEK Athens': ['#FDB913', '#111111', 'AEK'], 'AGF': ['#FFFFFF', '#00205B', 'AGF', 'Ceres Park'], 'Anderlecht': ['#4F2D7F', '#FFFFFF', 'AND', 'Lotto Park'],
+  'Besiktas': ['#111111', '#FFFFFF', 'BJK'], 'Bodo/Glimt': ['#FDB913', '#111111', 'BOD', 'Aspmyra Stadion'], 'Borac Banja Luka': ['#DA291C', '#0038A8', 'BOR'],
+  'Brann': ['#DA291C', '#FFFFFF', 'BRA', 'Brann Stadion'], 'Celje': ['#FDB913', '#0038A8', 'CEL'], 'Club Brugge': ['#0057B8', '#111111', 'CLB', 'Jan Breydel Stadium'],
+  'Copenhagen': ['#FFFFFF', '#0038A8', 'FCK', 'Parken'], 'CSKA Sofia': ['#DA291C', '#FFFFFF', 'CSK'], 'Dinamo Zagreb': ['#0038A8', '#FFFFFF', 'DIN', 'Stadion Maksimir'],
+  'Fenerbahce': ['#002D72', '#FDB913', 'FB'], 'Ferencvaros': ['#00843D', '#FFFFFF', 'FTC', 'Groupama Arena'], 'Galatasaray': ['#A90432', '#FDB913', 'GS'],
+  'Gent': ['#0038A8', '#FFFFFF', 'GNT'], 'Hajduk Split': ['#FFFFFF', '#0038A8', 'HAJ', 'Stadion Poljud'], 'Hapoel Beer Sheva': ['#DA291C', '#FFFFFF', 'HBS'],
+  'Jablonec': ['#00843D', '#FFFFFF', 'JAB'], 'Jagiellonia': ['#FDB913', '#DA291C', 'JAG'], 'Kairat': ['#FDB913', '#111111', 'KAI'],
+  'Kauno Zalgiris': ['#00843D', '#FFFFFF', 'KZA'], 'KuPS': ['#FDB913', '#111111', 'KUP'], 'LASK': ['#111111', '#FFFFFF', 'LAS'],
+  'Lech Poznan': ['#0038A8', '#FFFFFF', 'LPO'], 'Levski Sofia': ['#0038A8', '#FFFFFF', 'LEV'], 'Lillestrom': ['#FDB913', '#111111', 'LSK'],
+  'Lincoln Red Imps': ['#DA291C', '#FFFFFF', 'LRI'], 'Lugano': ['#111111', '#FFFFFF', 'LUG'], 'Midtjylland': ['#111111', '#DA291C', 'FCM', 'MCH Arena'],
+  'Mjallby': ['#FDB913', '#111111', 'MJA', 'Strandvallen'], 'Nordsjaelland': ['#DA291C', '#FDB913', 'FCN', 'Right to Dream Park'], 'OFI Crete': ['#111111', '#FFFFFF', 'OFI'],
+  'Olympiacos': ['#DA291C', '#FFFFFF', 'OLY', 'Karaiskakis Stadium'], 'Omonia Nicosia': ['#00843D', '#FFFFFF', 'OMO'], 'Pafos': ['#0038A8', '#FFFFFF', 'PAF'],
+  'Panathinaikos': ['#00843D', '#FFFFFF', 'PAO'], 'Qarabag': ['#111111', '#FFFFFF', 'QAR'], 'RB Salzburg': ['#FFFFFF', '#DA291C', 'RBS'],
+  'Red Star Belgrade': ['#DA291C', '#FFFFFF', 'CZV', 'Rajko Mitic Stadium'], 'Shakhtar Donetsk': ['#F37021', '#111111', 'SHA'], 'Sint-Truiden': ['#FDB913', '#0038A8', 'STV', 'Stayen'],
+  'Slavia Prague': ['#DA291C', '#FFFFFF', 'SLA'], 'Slovan Bratislava': ['#6CABDD', '#FFFFFF', 'SLO', 'Tehelne pole'], 'Sparta Prague': ['#8E1F2F', '#FFFFFF', 'SPA'],
+  'Sturm Graz': ['#111111', '#FFFFFF', 'STU'], 'Thun': ['#DA291C', '#FFFFFF', 'THU'], 'Trabzonspor': ['#7B1E3A', '#6CABDD', 'TS'],
+  'Union Saint-Gilloise': ['#FDB913', '#0038A8', 'USG'], 'Universitatea Craiova': ['#0038A8', '#FFFFFF', 'UCV'], 'Viking': ['#0038A8', '#FFFFFF', 'VIK'],
+  'Viktoria Plzen': ['#DA291C', '#0038A8', 'PLZ'],
   // European & Champions League
   'Ajax': ['#DA291C', '#FFFFFF', 'AJX', 'Johan Cruyff Arena'],
   'PSV': ['#DA291C', '#FFFFFF', 'PSV', 'Philips Stadion'],
@@ -1795,7 +1832,7 @@ function recordSpark(st, w, h) {
     '<div class="rt-spark-key"><span><i class="ln"></i>Right so far</span><span><i class="dash"></i>What we said</span></div>';
 }
 
-const RECORD_FLAGS = { PL: 'ENG', ELC: 'ENG', E2: 'ENG', E3: 'ENG', SC0: 'SCO', SC1: 'SCO', BL1: 'GER', PD: 'ESP', SA: 'ITA', FL1: 'FRA', N1: 'NED', P1: 'POR', B1: 'BEL', CL: 'EUR', NLA: 'UNL' };
+const RECORD_FLAGS = { PL: 'ENG', ELC: 'ENG', E2: 'ENG', E3: 'ENG', SC0: 'SCO', SC1: 'SCO', BL1: 'GER', PD: 'ESP', SA: 'ITA', FL1: 'FRA', N1: 'NED', P1: 'POR', B1: 'BEL', CL: 'UCL', EL: 'UEL', ECL: 'ECL', NLA: 'UNL' };
 function recordTile(code, name, st, wide) {
   const pctNum = Math.round(st.rate * 100), tone = st.rate >= 0.6 ? 'hot' : st.rate >= 0.5 ? 'ok' : 'cold';
   const said = Math.round((st.said || 0) * 100), gap = pctNum - said;

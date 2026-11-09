@@ -59,8 +59,16 @@ class Context:
     """Everything fitted from results strictly before `as_of`. Built once per run (or
     once per backtest day) so every fixture on that day sees identical inputs."""
 
-    def __init__(self, results, as_of, promoted_by_season=None, frozen_ledger=None, competition="PL", league_name="Premier League", validation=None, public=False):
+    def __init__(self, results, as_of, promoted_by_season=None, frozen_ledger=None, competition="PL", league_name="Premier League", validation=None, public=False,
+                 min_matches=POOLED_MIN_MATCHES, model_note=None, full_weight_matches=None):
         self.as_of = as_of
+        # League model (L1) gate and wording; the UEFA competitions use a lower gate and a
+        # pooled training set (pipeline/european.py).
+        self.min_matches = min_matches
+        self.model_note = model_note
+        # When set, the L1 probabilities are blended toward the average in proportion to the
+        # sample: weight min(1, n / full_weight_matches), n = the smaller club's recent matches.
+        self.full_weight_matches = full_weight_matches
         self.public = public  # rights-compliant public path: the league model for every competition, Premier League included
         self.competition, self.league_name, self.validation = competition, league_name, validation or {}
         self.prior = sorted([r for r in results if r["date"] < as_of], key=lambda r: r["date"])
@@ -120,13 +128,20 @@ class Context:
 
     def league_result(self, fixture):
         """Other leagues: Dixon-Coles with time decay fitted on that league's own results.
-        A club with fewer than POOLED_MIN_MATCHES recent matches (a newly promoted side)
-        falls back to the league average, because no second-division data is held."""
+        A club with fewer than `min_matches` (default POOLED_MIN_MATCHES) recent matches (a newly
+        promoted side) falls back to the league average, because no second-division data is held."""
         home, away = fixture["home"], fixture["away"]
-        if self.league_model is not None and min(self.pooled_counts[home], self.pooled_counts[away]) >= POOLED_MIN_MATCHES:
+        n = min(self.pooled_counts[home], self.pooled_counts[away])
+        if self.league_model is not None and n >= self.min_matches:
             pred = self.league_model.predict(home, away)
-            return {"tier": "L1", "p": [float(x) for x in pred.home_draw_away], "grid": pred, "note": f"{self.league_name} Dixon-Coles fitted on {self.league_name} results only",
-                    "training_matches": len(self.epl)}
+            p = [float(x) for x in pred.home_draw_away]
+            out = {"tier": "L1", "p": p, "grid": pred, "note": self.model_note or f"{self.league_name} Dixon-Coles fitted on {self.league_name} results only",
+                   "training_matches": len(self.epl)}
+            if self.full_weight_matches and n < self.full_weight_matches:
+                w = n / self.full_weight_matches
+                out.update(p=[w * a + (1 - w) * b for a, b in zip(p, self.base["result"])], model_weight=round(w, 2),
+                           note=out["note"] + f"; {round(100 * w)}% model, {round(100 * (1 - w))}% {self.league_name} average, because one club has only {n} recent matches")
+            return out
         return {"tier": "T3", "p": self.base["result"], "note": f"{self.league_name} average result frequencies (not enough recent matches for one of the clubs)",
                 "training_matches": len(self.epl)}
 
@@ -251,6 +266,8 @@ def predict(fixture, ctx, evidence=None):
     }
     if "pooled_raw" in res:
         result_market["pooled_raw"] = [round(x, 4) for x in res["pooled_raw"]]
+    if "model_weight" in res:
+        result_market["model_weight"] = res["model_weight"]
 
     # Goals and BTTS from the result model's score grid when it has one.
     grid = res.get("grid")

@@ -68,7 +68,7 @@ jobs:
           git config user.name 'matchiq-data-bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           if [ "$DATA_OK" = "true" ]; then
-            git add data/fixtures.json data/predictions.json data/prediction_history.json data/shadow_history.json data/performance.json data/pipeline_status.json data/odds.json data/league_results.json data/public data/public_results.json data/public_results_openfootball.json data/public_results_internationals.json data/coverage.json public-dist
+            git add data/fixtures.json data/predictions.json data/prediction_history.json data/shadow_history.json data/performance.json data/pipeline_status.json data/odds.json data/league_results.json data/public data/public_results.json data/public_results_openfootball.json data/public_results_internationals.json data/public_results_european.json data/coverage.json public-dist
           else
             git add data/pipeline_status.json
           fi

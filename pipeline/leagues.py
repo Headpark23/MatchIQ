@@ -72,7 +72,26 @@ PUBLIC_ONLY = {
     # Europe-only or home-venue-only training sets).
     "NLA": {"name": "Nations League A", "short": "NLA", "openfootball": None, "fdo": None, "openligadb": "nla", "tz": "Europe/London",
             "international": True, "sample": "international matches involving European teams"},
+    # UEFA club competitions (pipeline/european.py). Fixtures and timely results: OpenLigaDB
+    # (ODbL); the Champions League is also on the football-data.org free tier. OpenLigaDB league
+    # shortcuts are per season ("uel2026"): check https://api.openligadb.de/getavailableleagues and
+    # update them, with SEASON in run.py, each July. Training history: every European match since
+    # 2021-22 from openfootball/champions-league (CC0), shared by all three ("pool"), so the model
+    # is used once both clubs have "min_matches" European matches in the last 400 days. The
+    # backtest scores this competition's main-draw matches of "test_season".
+    "CL": {"name": "Champions League", "short": "CL", "openfootball": None, "fdo": "CL", "openligadb": "ucl", "tz": "Europe/London",
+           "european": True, "sample": "Champions League main-draw matches"},
+    "EL": {"name": "Europa League", "short": "EL", "openfootball": None, "fdo": None, "openligadb": "uel2026", "tz": "Europe/London",
+           "european": True, "sample": "Europa League main-draw matches"},
+    "ECL": {"name": "Conference League", "short": "ECL", "openfootball": None, "fdo": None, "openligadb": "uecl2026", "tz": "Europe/London",
+            "european": True, "sample": "Conference League main-draw matches"},
 }
+EUROPEAN_SETTINGS = {"pool": ("CL", "EL", "ECL"), "min_matches": 3, "full_weight_matches": 10, "context_name": "European", "test_season": ("2425", "2024-25"),
+                     "model_note": "Dixon-Coles fitted on every Champions League, Europa League and Conference League match since 2021-22, qualifiers included",
+                     "average": "European average", "new_side": "a club new to European football"}
+for _meta in PUBLIC_ONLY.values():
+    if _meta.get("european"):
+        _meta.update(EUROPEAN_SETTINGS)
 # Every competition that gets a public prediction for each scheduled match.
 PREDICTED = {**LEAGUES, **PUBLIC_ONLY}
 # Local-time zone of openfootball kick-off times for leagues outside the original six.
