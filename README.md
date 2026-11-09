@@ -14,8 +14,9 @@ Your personal sports prediction, bet builder and friends leagues app, with hones
 | Source | Use | Terms |
 |---|---|---|
 | football-data.org (free tier) | Schedule, results, postponements | Optional. Needs a free token in the repository secret `FOOTBALL_DATA_ORG_TOKEN`; limit 10 requests/minute |
-| OpenLigaDB | Schedule and results | ODbL 1.0, attribution required |
+| OpenLigaDB | Schedule and results (Bundesliga, Nations League A) | ODbL 1.0, attribution required |
 | openfootball/football.json | Schedule, results, Championship history | CC0 |
+| martj42/international_results | International results history (Nations League A model) | CC0 |
 | football-data.co.uk (`data/matches.json`) | Corners, cards, shots statistics; results | Personal/research use only; refreshed manually by `update.yml`, not automated |
 
 When sources disagree on a score, a majority of two or more wins and the dissent is recorded. A tie stays `RESULT_CONFLICT` and is not settled.

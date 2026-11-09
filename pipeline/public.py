@@ -33,6 +33,7 @@ import time
 from pathlib import Path
 
 from . import history as hist
+from . import internationals
 from .data import uk_date
 from .leagues import LEAGUES, PREDICTED, PUBLIC_ONLY
 from .league_validation import validate_league
@@ -54,7 +55,7 @@ PUBLIC_DIR = ROOT / "data" / "public"
 PUBLIC_MODEL_VERSION = "dc-public-v1"
 RECORD_PREFIX = "PUB-"
 HISTORY_SEASONS = (2023, 2024, 2025)
-PERMITTED_RESULT_SOURCES = {"football-data.org", "openligadb", "openfootball"}
+PERMITTED_RESULT_SOURCES = {"football-data.org", "openligadb", "openfootball", internationals.SOURCE}
 REFRESH_DAYS = 30
 
 
@@ -87,7 +88,7 @@ def build_history(fetch=fetch_football_data_org, sleep=7, path=HISTORY_PATH):
 def build_openfootball_history(fetch=fetch_openfootball, path=OPENFOOTBALL_HISTORY_PATH):
     """Final scores of past seasons for leagues.PUBLIC_ONLY from openfootball (CC0, no key)."""
     rows, notes = [], {}
-    for code in PUBLIC_ONLY:
+    for code in (c for c, m in PUBLIC_ONLY.items() if m.get("openfootball")):
         for start in OPENFOOTBALL_SEASONS:
             label = season_label(start)
             matches, error = fetch(code, f"{start}-{(start + 1) % 100:02d}", label)
@@ -111,8 +112,10 @@ def load_history(path=HISTORY_PATH, source="football-data.org"):
 
 
 def load_all_history():
-    """football-data.org history for LEAGUES plus openfootball history for PUBLIC_ONLY."""
-    return load_history() + [r for r in load_history(OPENFOOTBALL_HISTORY_PATH, "openfootball") if r["competition"] in PUBLIC_ONLY]
+    """football-data.org history for LEAGUES, openfootball history for PUBLIC_ONLY leagues and
+    martj42/international_results history for international competitions."""
+    return (load_history() + [r for r in load_history(OPENFOOTBALL_HISTORY_PATH, "openfootball") if r["competition"] in PUBLIC_ONLY]
+            + [r for r in load_history(internationals.HISTORY_PATH, internationals.SOURCE) if r["competition"] in internationals.INTERNATIONAL])
 
 
 def permitted_result(f):
@@ -155,11 +158,15 @@ def validate(rows, path=PUBLIC_DIR / "league_validation.json"):
 def evidence_tiers(validation):
     r = (validation or {}).get("markets", {}).get("result")
     name = (validation or {}).get("name", "this league")
+    meta = PREDICTED.get((validation or {}).get("competition"), {})
+    sample = meta.get("sample") or f"{name} matches"  # what the model is trained and tested on
+    side = "team" if meta.get("international") else "club"
     if not r:
         return {"L1": {"strength": "none", "summary": f"The public {name} model has not been backtested yet."},
-                "T3": {"strength": "none", "summary": f"Not enough data on one club, so this is the {name} average."}}
-    return {"L1": {"strength": r["strength"], "summary": f"Backtest on {r['n']} {name} matches ({validation['test_season_label']}): Brier {r['model_brier']:.3f} against {r['league_brier']:.3f} for the league average. A single-season test with no forward record yet, so provisional."},
-            "T3": {"strength": "none", "summary": f"Not enough recent matches for one club (for example a newly promoted side), so this is the {name} average. Limited evidence."}}
+                "T3": {"strength": "none", "summary": f"Not enough data on one {side}, so this is the {name} average."}}
+    why = "" if meta.get("international") else " (for example a newly promoted side)"
+    return {"L1": {"strength": r["strength"], "summary": f"Backtest on {r['n']} {sample} ({validation['test_season_label']}): Brier {r['model_brier']:.3f} against {r['league_brier']:.3f} for the {'' if meta.get('international') else 'league '}average. A single-season test with no forward record yet, so provisional."},
+            "T3": {"strength": "none", "summary": f"Not enough recent matches for one {side}{why}, so this is the {name} average. Limited evidence."}}
 
 
 def _public_markets(markets):
@@ -271,6 +278,11 @@ def main(argv=None):
             print(json.dumps(build_history()))
     if args.history and (not args.if_stale or stale(OPENFOOTBALL_HISTORY_PATH)):
         print(json.dumps(build_openfootball_history()))
+    if args.history and (not args.if_stale or stale(internationals.HISTORY_PATH)):
+        try:
+            print(json.dumps(internationals.build_history()))
+        except RuntimeError as error:  # keep the stored copy; the refresh must not fail on this
+            print(f"international history not refreshed: {error}")
     if args.validate and (not args.if_stale or stale(PUBLIC_DIR / "league_validation.json") or missing_validation()):
         rows = load_all_history()
         if not rows:

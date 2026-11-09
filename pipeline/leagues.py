@@ -65,6 +65,13 @@ PUBLIC_ONLY = {
     "P1": {"name": "Primeira Liga", "short": "P1", "openfootball": "pt.1", "fdo": "PPL", "tz": "Europe/Lisbon"},
     "SC0": {"name": "Scottish Premiership", "short": "SC0", "openfootball": "sco.1", "fdo": None, "tz": "Europe/London",
             "openfootball_europe": "scotland/{season}_sco1.txt", "results_lag": True},
+    # Internationals (pipeline/internationals.py). Fixtures and timely results: OpenLigaDB league
+    # "nla" (ODbL); neither football.json nor the football-data.org free tier covers the Nations
+    # League. Training history: every match involving a European national team from the CC0
+    # martj42/international_results dataset (a 2025-26 walk-forward chose that over
+    # Europe-only or home-venue-only training sets).
+    "NLA": {"name": "Nations League A", "short": "NLA", "openfootball": None, "fdo": None, "openligadb": "nla", "tz": "Europe/London",
+            "international": True, "sample": "international matches involving European teams"},
 }
 # Every competition that gets a public prediction for each scheduled match.
 PREDICTED = {**LEAGUES, **PUBLIC_ONLY}

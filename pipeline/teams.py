@@ -153,6 +153,26 @@ LEAGUE_ALIASES.update({
             "Inverness CT": ["inverness caledonian thistle", "inverness ct"], "Raith Rovers": ["raith rovers"],
             "Dunfermline": ["dunfermline athletic", "dunfermline"], "Queen's Park": ["queens park"], "Greenock Morton": ["greenock morton", "morton"]},
 })
+# National teams (leagues.PUBLIC_ONLY "NLA"): canonical names are the martj42/international_results
+# spellings; OpenLigaDB publishes German names. Every UEFA member is listed so promotion into
+# League A in a later edition needs no change.
+NATIONAL_TEAMS = {
+    "Albania": ["albanien"], "Andorra": [], "Armenia": ["armenien"], "Austria": ["osterreich", "oesterreich"],
+    "Azerbaijan": ["aserbaidschan"], "Belarus": ["weissrussland", "weißrussland"], "Belgium": ["belgien"],
+    "Bosnia and Herzegovina": ["bosnien und herzegowina", "bosnien herzegowina", "bosnia herzegovina"], "Bulgaria": ["bulgarien"],
+    "Croatia": ["kroatien"], "Cyprus": ["zypern"], "Czech Republic": ["tschechien", "czechia", "tschechische republik"],
+    "Denmark": ["danemark", "daenemark"], "England": [], "Estonia": ["estland"], "Faroe Islands": ["faroer", "faeroeer", "faroer inseln"],
+    "Finland": ["finnland"], "France": ["frankreich"], "Georgia": ["georgien"], "Germany": ["deutschland"], "Gibraltar": [],
+    "Greece": ["griechenland"], "Hungary": ["ungarn"], "Iceland": ["island"], "Israel": [], "Italy": ["italien"],
+    "Kazakhstan": ["kasachstan"], "Kosovo": [], "Latvia": ["lettland"], "Liechtenstein": [], "Lithuania": ["litauen"],
+    "Luxembourg": ["luxemburg"], "Malta": [], "Moldova": ["moldau", "republik moldau", "moldawien"], "Montenegro": [],
+    "Netherlands": ["niederlande", "holland"], "North Macedonia": ["nordmazedonien", "mazedonien"], "Northern Ireland": ["nordirland"],
+    "Norway": ["norwegen"], "Poland": ["polen"], "Portugal": [], "Republic of Ireland": ["irland", "ireland"], "Romania": ["rumanien", "rumaenien"],
+    "Russia": ["russland"], "San Marino": [], "Scotland": ["schottland"], "Serbia": ["serbien"], "Slovakia": ["slowakei"],
+    "Slovenia": ["slowenien"], "Spain": ["spanien"], "Sweden": ["schweden"], "Switzerland": ["schweiz"], "Turkey": ["turkei", "tuerkei", "turkiye"],
+    "Ukraine": [], "Wales": [],
+}
+LEAGUE_ALIASES["NLA"] = NATIONAL_TEAMS
 _LEAGUE_LOOKUP = {code: {_normalise(a): name for name, aliases in table.items() for a in aliases + [name]}
                   for code, table in LEAGUE_ALIASES.items()}
 
@@ -160,9 +180,14 @@ _LEAGUE_LOOKUP = {code: {_normalise(a): name for name, aliases in table.items() 
 _LEAGUE_NOISE = {"cf", "ud", "cd", "rcd", "ca", "sd", "ac", "as", "us", "ss", "sc", "ssc", "fk", "sv", "vfl", "vfb", "tsg", "rc", "ogc", "aj", "es", "fsv", "1", "calcio", "de", "la", "del"}
 
 
-def _league_match(table, key):
-    if key in table:
-        return table[key]
+# National-team names resolve by exact alias only: word containment would turn "Elba Island" into
+# Iceland ("island") or "Northern Cyprus" into Cyprus.
+EXACT_ONLY = {"NLA"}
+
+
+def _league_match(table, key, exact=False):
+    if key in table or exact:
+        return table.get(key)
     words = [w for w in key.split() if w not in _LEAGUE_NOISE]
     if " ".join(words) in table:
         return table[" ".join(words)]
@@ -177,7 +202,8 @@ DISPLAY_NAMES = {"Paris SG": "Paris SG", "Paris FC": "Paris FC", "RB Leipzig": "
                  "Ath Bilbao": "Athletic Club", "Ath Madrid": "Atletico Madrid", "Espanol": "Espanyol", "Sociedad": "Real Sociedad",
                  "Vallecano": "Rayo Vallecano", "Betis": "Real Betis", "Celta": "Celta Vigo", "Sheffield Weds": "Sheffield Wednesday",
                  "Milan": "AC Milan", "Verona": "Hellas Verona", "La Coruna": "Deportivo La Coruna", "Santander": "Racing Santander",
-                 **{n: n for n in ("St. Mirren", "St. Johnstone", "Queen's Park", "Inverness CT", "ADO Den Haag", "PSV", "AZ Alkmaar", "NEC Nijmegen", "PEC Zwolle", "Willem II", "FC Utrecht", "FC Twente", "FC Porto", "SC Braga", "Sporting CP")}}
+                 **{n: n for n in ("St. Mirren", "St. Johnstone", "Queen's Park", "Inverness CT", "ADO Den Haag", "PSV", "AZ Alkmaar", "NEC Nijmegen", "PEC Zwolle", "Willem II", "FC Utrecht", "FC Twente", "FC Porto", "SC Braga", "Sporting CP")},
+                 **{n: n for n in NATIONAL_TEAMS}}
 
 
 def _display(name):
@@ -187,7 +213,7 @@ def _display(name):
 def known_club(competition, raw):
     """True when `raw` resolves through the league's alias table (not just the cleaned fallback)."""
     table = _LEAGUE_LOOKUP.get(competition)
-    return bool(table) and _league_match(table, _normalise(raw)) is not None
+    return bool(table) and _league_match(table, _normalise(raw), competition in EXACT_ONLY) is not None
 
 
 def canonical_for(competition, raw):
@@ -195,7 +221,7 @@ def canonical_for(competition, raw):
     if competition == "PL" or competition not in _LEAGUE_LOOKUP:
         return canonical(raw)
     key = _normalise(raw)
-    hit = _league_match(_LEAGUE_LOOKUP[competition], key)
+    hit = _league_match(_LEAGUE_LOOKUP[competition], key, competition in EXACT_ONLY)
     if hit:
         return _display(hit)
     if competition == "ELC" and key in _LOOKUP:  # relegated/promoted clubs shared with the PL table

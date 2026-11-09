@@ -17,7 +17,7 @@ import json
 
 RESTRICTED_MARKETS = ("corners", "cards", "shots")
 PUBLIC_MARKETS = ("result", "goals", "btts")
-PUBLIC_ATTRIBUTION = ("Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0) and openfootball (CC0). "
+PUBLIC_ATTRIBUTION = ("Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0) and openfootball (CC0). International results history: martj42/international_results (CC0). "
                       "Bookmaker prices: The Odds API.")
 
 

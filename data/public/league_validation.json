@@ -281,6 +281,37 @@
      "strength": "moderate"
     }
    }
+  },
+  "NLA": {
+   "competition": "NLA",
+   "name": "Nations League A",
+   "test_season": "2526",
+   "test_season_label": "2025-26",
+   "test_matches": 364,
+   "result_tiers": {
+    "L1": 220,
+    "T3": 144
+   },
+   "markets": {
+    "result": {
+     "n": 220,
+     "model_brier": 0.4351,
+     "league_brier": 0.6323,
+     "blend_brier": 0.4351,
+     "gain": 0.1972,
+     "strength": "moderate"
+    },
+    "goals": {
+     "n": 364,
+     "blend_brier": 0.2434,
+     "league_brier": 0.2497
+    },
+    "btts": {
+     "n": 364,
+     "blend_brier": 0.2482,
+     "league_brier": 0.2519
+    }
+   }
   }
  }
 }

@@ -33,6 +33,7 @@ SOURCE_LABELS = {
     "openligadb": "OpenLigaDB (ODbL 1.0, © OpenLigaDB contributors)",
     "openfootball": "openfootball/football.json (CC0 public domain)",
     "football-data.co.uk": "football-data.co.uk (personal/research use; match statistics)",
+    "international_results": "martj42/international_results (CC0 public domain; international results history)",
 }
 
 
@@ -111,7 +112,7 @@ def fetch_football_data_org(competition, season_start, season, token=None, opene
 
 
 def fetch_openligadb(competition, season_start, season, opener=None):
-    shortcut = {"PL": "pl", "BL1": "bl1"}.get(competition)
+    shortcut = {"PL": "pl", "BL1": "bl1", **{c: m["openligadb"] for c, m in PUBLIC_ONLY.items() if m.get("openligadb")}}.get(competition)
     if not shortcut:
         return [], "skipped: competition not covered by OpenLigaDB"
     try:
@@ -203,6 +204,8 @@ def parse_openfootball_txt(text, competition, season, season_start, namer=None):
 def fetch_openfootball(competition, season_label, season, opener=None):
     league = {"PL": "en.1", "ELC": "en.2", "BL1": "de.1", "PD": "es.1", "SA": "it.1", "FL1": "fr.1",
               **{c: m["openfootball"] for c, m in {**SCHEDULE_ONLY, **PUBLIC_ONLY}.items()}}[competition]
+    if not league:
+        return [], "skipped: competition not published by openfootball"
     try:
         payload = http_json(f"https://raw.githubusercontent.com/openfootball/football.json/master/{season_label}/{league}.json", opener=opener)
     except RuntimeError as error:
