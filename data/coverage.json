@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-10T12:58:45.956827+00:00",
+ "generated_at": "2026-11-10T21:00:41.537991+00:00",
  "gap_hours": 48,
  "result_grace_hours": 72,
  "leagues": {
@@ -8,8 +8,8 @@
    "predicted": true,
    "fixtures": 380,
    "ledger_start": "2026-10-17T13:30:34.090257+00:00",
-   "upcoming": 20,
-   "upcoming_predicted": 20,
+   "upcoming": 21,
+   "upcoming_predicted": 21,
    "next_48h": 0,
    "next_48h_predicted": 0,
    "played_since_start": 32,
@@ -135,7 +135,7 @@
    "played_since_start": 0,
    "sealed": 0,
    "settled": 0,
-   "results_overdue": 28,
+   "results_overdue": 32,
    "results_lag": true
   },
   "NLA": {
@@ -145,8 +145,8 @@
    "ledger_start": "2026-11-09T11:35:03.656311+00:00",
    "upcoming": 16,
    "upcoming_predicted": 16,
-   "next_48h": 0,
-   "next_48h_predicted": 0,
+   "next_48h": 4,
+   "next_48h_predicted": 4,
    "played_since_start": 0,
    "sealed": 0,
    "settled": 0,
@@ -221,14 +221,14 @@
  },
  "totals": {
   "fixtures": 3558,
-  "upcoming": 243,
-  "upcoming_predicted": 243,
-  "next_48h": 0,
-  "next_48h_predicted": 0,
+  "upcoming": 244,
+  "upcoming_predicted": 244,
+  "next_48h": 4,
+  "next_48h_predicted": 4,
   "played_since_start": 153,
   "sealed": 150,
   "settled": 150,
-  "results_overdue": 28
+  "results_overdue": 32
  },
  "gaps": {
   "league_without_fixtures": [],
@@ -266,7 +266,11 @@
    "SC0-2627-dundee-united-v-hearts",
    "SC0-2627-kilmarnock-v-st-johnstone",
    "SC0-2627-motherwell-v-st-mirren",
-   "SC0-2627-falkirk-v-celtic"
+   "SC0-2627-falkirk-v-celtic",
+   "SC0-2627-dundee-united-v-motherwell",
+   "SC0-2627-st-johnstone-v-dundee",
+   "SC0-2627-aberdeen-v-hibernian",
+   "SC0-2627-st-mirren-v-rangers"
   ],
   "untimed_match_day_unsealed": []
  },

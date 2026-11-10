@@ -12993,6 +12993,63 @@
    ],
    "origin": "shadow",
    "sha256": "7f1667fa779c98101e14424a7f6831fc7613e1f80f5aec31e1927c7861477e63"
+  },
+  {
+   "record_id": "PL-2627-coventry-v-ipswich#r1",
+   "match_id": "PL-2627-coventry-v-ipswich",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Coventry",
+    "away": "Ipswich",
+    "kickoff_utc": "2026-12-01T20:00:00Z"
+   },
+   "published_at": "2026-11-10T20:59:58.716434+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Coventry win",
+      "p": 0.4695,
+      "fair_odds": "≈11/10"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Coventry win",
+       "p": 0.4695,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2345,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Ipswich win",
+       "p": 0.296,
+       "fair_odds": "≈5/2"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "ba9f6ebe20daf7e44c719363f5dc71a99772c08f06209a420e51f4ef43cb7597"
   }
  ]
 }

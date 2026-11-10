@@ -370650,6 +370650,145 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "b1c217be3d94c10a3ce251745ad0756c2e95823025d31c9d127a1f8aa33503ae"
+  },
+  {
+   "record_id": "PUB-PL-2627-coventry-v-ipswich#r1",
+   "match_id": "PL-2627-coventry-v-ipswich",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Coventry",
+    "away": "Ipswich",
+    "kickoff_utc": "2026-12-01T20:00:00Z"
+   },
+   "published_at": "2026-11-10T20:59:58.716434+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Coventry win",
+      "p": 0.4793,
+      "fair_odds": "≈11/10"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Coventry win",
+       "p": 0.4793,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2329,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Ipswich win",
+       "p": 0.2878,
+       "fair_odds": "≈5/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6028,
+      "fair_odds": "≈4/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8286,
+       "over_fair_odds": "≈1/5",
+       "under_fair_odds": "≈5/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.6028,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.378,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.6023,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.6023,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.3977,
+       "fair_odds": "≈6/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.6028,
+     "credible_p": 0.6016,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Premier League backtest matches",
+     "lower_bound": 0.5603
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "5343aca03648119db1553890df364a2bca53c88c7dec34dff0f61ebffd83212e"
   }
  ]
 }
