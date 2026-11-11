@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-11T09:50:41.436112+00:00",
+ "generated_at": "2026-11-11T18:02:45.219925+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -23687,29 +23687,6 @@
    "kickoff_history": []
   },
   {
-   "id": "P1-2627-estoril-v-maritimo",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Estoril",
-   "away": "Maritimo",
-   "kickoff_utc": "2026-11-08T00:00:00Z",
-   "status": "POSTPONED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-11-08T15:30:00Z",
-     "to": "2026-11-08T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
    "id": "N1-2627-heerenveen-v-feyenoord",
    "competition": "N1",
    "season": "2627",
@@ -38076,6 +38053,34 @@
    ],
    "first_seen": "2026-10-26T16:44:38.256231+00:00",
    "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-estoril-v-maritimo",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Estoril",
+   "away": "Maritimo",
+   "kickoff_utc": "2027-01-04T20:15:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-11-08T15:30:00Z",
+     "to": "2026-11-08T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-11-08T00:00:00Z",
+     "to": "2027-01-04T20:15:00Z",
+     "seen_at": "2026-11-11T18:02:45.219925+00:00"
+    }
+   ]
   },
   {
    "id": "SA-2627-genoa-v-monza",
