@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-11-12T00:59:59.572327+00:00",
+ "attempted_at": "2026-11-12T10:16:05.869551+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -147,7 +147,7 @@
    "label": "OpenLigaDB (ODbL 1.0, © OpenLigaDB contributors)",
    "matches": 144,
    "results": 72,
-   "note": null
+   "note": "unrecognised team name(s), shown as published and predicted from the average: Excelsior Rotterdam"
   },
   "CL:football-data.org": {
    "ok": true,
@@ -265,10 +265,10 @@
  ],
  "errors": [],
  "ok": true,
- "last_success": "2026-11-12T00:59:59.572327+00:00",
- "fixtures": 3558,
+ "last_success": "2026-11-12T10:16:05.869551+00:00",
+ "fixtures": 3566,
  "upcoming_predicted": 143,
- "published_revisions": 9,
+ "published_revisions": 0,
  "imported_frozen_records": 0,
  "settlement_updates": 151,
  "training_results": 1938,
@@ -283,8 +283,8 @@
  "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0, including openfootball/champions-league for European club history), martj42/international_results (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk.",
  "public": {
   "model_version": "dc-public-v1",
-  "predictions": 260,
-  "records": 2582,
+  "predictions": 261,
+  "records": 2843,
   "validated": true
  }
 }
