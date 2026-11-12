@@ -13050,6 +13050,462 @@
    ],
    "origin": "shadow",
    "sha256": "ba9f6ebe20daf7e44c719363f5dc71a99772c08f06209a420e51f4ef43cb7597"
+  },
+  {
+   "record_id": "PL-2627-chelsea-v-crystal-palace#r1",
+   "match_id": "PL-2627-chelsea-v-crystal-palace",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Chelsea",
+    "away": "Crystal Palace",
+    "kickoff_utc": "2026-12-02T19:30:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Chelsea win",
+      "p": 0.5969,
+      "fair_odds": "≈4/6"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Chelsea win",
+       "p": 0.5969,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.224,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Crystal Palace win",
+       "p": 0.1792,
+       "fair_odds": "≈9/2"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "d03d686fafed87440211d05da3efcb627d0b9d502170313b0670f1041409a46b"
+  },
+  {
+   "record_id": "PL-2627-hull-v-nottm-forest#r1",
+   "match_id": "PL-2627-hull-v-nottm-forest",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Hull",
+    "away": "Nott'm Forest",
+    "kickoff_utc": "2026-12-02T19:30:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Hull win",
+      "p": 0.3718,
+      "fair_odds": "≈7/4"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Hull win",
+       "p": 0.3718,
+       "fair_odds": "≈7/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3294,
+       "fair_odds": "≈2/1"
+      },
+      {
+       "key": "A",
+       "label": "Nott'm Forest win",
+       "p": 0.2988,
+       "fair_odds": "≈9/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "104b0e2afc7b3a6bbb5d9824e5440736af9d581979d08476b122d34f813223e4"
+  },
+  {
+   "record_id": "PL-2627-liverpool-v-sunderland#r1",
+   "match_id": "PL-2627-liverpool-v-sunderland",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Liverpool",
+    "away": "Sunderland",
+    "kickoff_utc": "2026-12-02T19:30:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Liverpool win",
+      "p": 0.6123,
+      "fair_odds": "≈8/13"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Liverpool win",
+       "p": 0.6123,
+       "fair_odds": "≈8/13"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2326,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Sunderland win",
+       "p": 0.1551,
+       "fair_odds": "≈11/2"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "8e48fba9b0c25c4baa636cb6fc9ff03df0e2e0debbf691d9b143b5160b1915eb"
+  },
+  {
+   "record_id": "PL-2627-man-city-v-leeds#r1",
+   "match_id": "PL-2627-man-city-v-leeds",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Man City",
+    "away": "Leeds",
+    "kickoff_utc": "2026-12-02T19:30:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Man City win",
+      "p": 0.6001,
+      "fair_odds": "≈4/6"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Man City win",
+       "p": 0.6001,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2368,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Leeds win",
+       "p": 0.1631,
+       "fair_odds": "≈5/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "676cba5325ceaae3fd37b2d7e76622195993d160dc72875e99ced6ee1789aa32"
+  },
+  {
+   "record_id": "PL-2627-aston-villa-v-everton#r1",
+   "match_id": "PL-2627-aston-villa-v-everton",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Aston Villa",
+    "away": "Everton",
+    "kickoff_utc": "2026-12-02T20:15:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Aston Villa win",
+      "p": 0.4477,
+      "fair_odds": "≈5/4"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Aston Villa win",
+       "p": 0.4477,
+       "fair_odds": "≈5/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2808,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Everton win",
+       "p": 0.2715,
+       "fair_odds": "≈11/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "962c20ff1788efcee343e3cd0cf7f41a82bd598fe1372a5fce0efcb7db05c1c4"
+  },
+  {
+   "record_id": "PL-2627-bournemouth-v-brighton#r1",
+   "match_id": "PL-2627-bournemouth-v-brighton",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Bournemouth",
+    "away": "Brighton",
+    "kickoff_utc": "2026-12-02T20:15:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Brighton win",
+      "p": 0.3851,
+      "fair_odds": "≈13/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Bournemouth win",
+       "p": 0.352,
+       "fair_odds": "≈15/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2629,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Brighton win",
+       "p": 0.3851,
+       "fair_odds": "≈13/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "3d765a605100971b0fe8f1b5f0db005c850da37ee87a195a50c54ee4d26924f6"
+  },
+  {
+   "record_id": "PL-2627-brentford-v-arsenal#r1",
+   "match_id": "PL-2627-brentford-v-arsenal",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Brentford",
+    "away": "Arsenal",
+    "kickoff_utc": "2026-12-02T20:15:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Arsenal win",
+      "p": 0.5087,
+      "fair_odds": "≈Evens"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Brentford win",
+       "p": 0.2143,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.277,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Arsenal win",
+       "p": 0.5087,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "6eaf64ae98b14d37d60f9d9f38a9117d307c339ca7cef6a9b35638ce4292e9ee"
+  },
+  {
+   "record_id": "PL-2627-newcastle-v-man-united#r1",
+   "match_id": "PL-2627-newcastle-v-man-united",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Newcastle",
+    "away": "Man United",
+    "kickoff_utc": "2026-12-02T20:15:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Newcastle win",
+      "p": 0.4274,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Newcastle win",
+       "p": 0.4274,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2469,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Man United win",
+       "p": 0.3258,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "272c8956d7158975b6629d79edf05657a07b5f15ec6fc052e06f45e9426a5f96"
   }
  ]
 }

@@ -370926,6 +370926,2055 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "2f08b7a6060d53adda1dbca934c5abdee5f957d6871235484fc6f8d66604e819"
+  },
+  {
+   "record_id": "PUB-PL-2627-chelsea-v-crystal-palace#r1",
+   "match_id": "PL-2627-chelsea-v-crystal-palace",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Chelsea",
+    "away": "Crystal Palace",
+    "kickoff_utc": "2026-12-02T19:30:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Chelsea win",
+      "p": 0.5882,
+      "fair_odds": "≈8/11"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Chelsea win",
+       "p": 0.5882,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2229,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Crystal Palace win",
+       "p": 0.1889,
+       "fair_odds": "≈9/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.586,
+      "fair_odds": "≈8/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8183,
+       "over_fair_odds": "≈2/9",
+       "under_fair_odds": "≈9/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.586,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3596,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5776,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5776,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4224,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.586,
+     "credible_p": 0.5856,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Premier League backtest matches",
+     "lower_bound": 0.544
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "3c34b988e32799731598bb82eb0e0b160dfc1735a2dd681a4412a9d6e3859321"
+  },
+  {
+   "record_id": "PUB-PL-2627-hull-v-nottm-forest#r1",
+   "match_id": "PL-2627-hull-v-nottm-forest",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Hull",
+    "away": "Nott'm Forest",
+    "kickoff_utc": "2026-12-02T19:30:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Hull win",
+      "p": 0.3867,
+      "fair_odds": "≈13/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Hull win",
+       "p": 0.3867,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3264,
+       "fair_odds": "≈2/1"
+      },
+      {
+       "key": "A",
+       "label": "Nott'm Forest win",
+       "p": 0.2869,
+       "fair_odds": "≈5/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5003,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7496,
+       "over_fair_odds": "≈1/3",
+       "under_fair_odds": "≈3/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4997,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2868,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5228,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5228,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4772,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5228,
+     "credible_p": 0.5254,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Premier League backtest matches",
+     "lower_bound": 0.4833
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "5d1ebcfd3d7d5b8068d7de072e1236843c02f90797bd51c8662a41da2dda7d92"
+  },
+  {
+   "record_id": "PUB-PL-2627-liverpool-v-sunderland#r1",
+   "match_id": "PL-2627-liverpool-v-sunderland",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Liverpool",
+    "away": "Sunderland",
+    "kickoff_utc": "2026-12-02T19:30:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Liverpool win",
+      "p": 0.6234,
+      "fair_odds": "≈8/13"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Liverpool win",
+       "p": 0.6234,
+       "fair_odds": "≈8/13"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2282,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Sunderland win",
+       "p": 0.1484,
+       "fair_odds": "≈11/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5595,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8003,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5595,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3338,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5487,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5487,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4513,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Liverpool win",
+     "p": 0.6234,
+     "credible_p": 0.613,
+     "n": 351,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Premier League model, 351 backtest matches (2025-26)",
+     "lower_bound": 0.5702
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "30af481b77ecc626477b1c217fe40081b94ab7b59a4bee7e118042536295f194"
+  },
+  {
+   "record_id": "PUB-PL-2627-man-city-v-leeds#r1",
+   "match_id": "PL-2627-man-city-v-leeds",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Man City",
+    "away": "Leeds",
+    "kickoff_utc": "2026-12-02T19:30:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Man City win",
+      "p": 0.6154,
+      "fair_odds": "≈8/13"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Man City win",
+       "p": 0.6154,
+       "fair_odds": "≈8/13"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2315,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Leeds win",
+       "p": 0.1532,
+       "fair_odds": "≈11/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5583,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7994,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5583,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3326,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5491,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5491,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4509,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Man City win",
+     "p": 0.6154,
+     "credible_p": 0.6055,
+     "n": 351,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Premier League model, 351 backtest matches (2025-26)",
+     "lower_bound": 0.5626
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "ab243639133b502b6ae914b9e3cbf30d1ffcbaffedaf922b8edd5ae0e0a6e503"
+  },
+  {
+   "record_id": "PUB-SC0-2627-dundee-v-celtic#r1",
+   "match_id": "SC0-2627-dundee-v-celtic",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Dundee",
+    "away": "Celtic",
+    "kickoff_utc": "2026-12-02T19:45:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Celtic win",
+      "p": 0.7635,
+      "fair_odds": "≈3/10"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Dundee win",
+       "p": 0.0964,
+       "fair_odds": "≈9/1"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1401,
+       "fair_odds": "≈6/1"
+      },
+      {
+       "key": "A",
+       "label": "Celtic win",
+       "p": 0.7635,
+       "fair_odds": "≈3/10"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6022,
+      "fair_odds": "≈4/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8114,
+       "over_fair_odds": "≈2/9",
+       "under_fair_odds": "≈9/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.6022,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3625,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.527,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.527,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.473,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "A",
+     "label": "Celtic win",
+     "p": 0.7635,
+     "credible_p": 0.6094,
+     "n": 38,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Scottish Premiership model, 38 backtest matches (2025-26)",
+     "lower_bound": 0.4792
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "896a0b85cad1d50d3eeb09caf64bca6418db66be89fe8f97bfb5651b528b53c4"
+  },
+  {
+   "record_id": "PUB-SC0-2627-falkirk-v-motherwell#r1",
+   "match_id": "SC0-2627-falkirk-v-motherwell",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Falkirk",
+    "away": "Motherwell",
+    "kickoff_utc": "2026-12-02T19:45:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Falkirk win",
+      "p": 0.4231,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Falkirk win",
+       "p": 0.4231,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2459,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Motherwell win",
+       "p": 0.331,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5508,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7774,
+       "over_fair_odds": "≈2/7",
+       "under_fair_odds": "≈7/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5508,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3096,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5321,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5321,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4679,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5321,
+     "credible_p": 0.5308,
+     "n": 58,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 58 Scottish Premiership backtest matches",
+     "lower_bound": 0.423
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "044d91b01d9778a29fb47f0a5df4181580d67b745b4a0ebcc0b87eb575327741"
+  },
+  {
+   "record_id": "PUB-SC0-2627-hearts-v-aberdeen#r1",
+   "match_id": "SC0-2627-hearts-v-aberdeen",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Hearts",
+    "away": "Aberdeen",
+    "kickoff_utc": "2026-12-02T19:45:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Hearts win",
+      "p": 0.5899,
+      "fair_odds": "≈4/6"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Hearts win",
+       "p": 0.5899,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.226,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Aberdeen win",
+       "p": 0.1841,
+       "fair_odds": "≈9/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5401,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7694,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5401,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3002,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5078,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5078,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4922,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Hearts win",
+     "p": 0.5899,
+     "credible_p": 0.5384,
+     "n": 38,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Scottish Premiership model, 38 backtest matches (2025-26)",
+     "lower_bound": 0.4054
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "0234cf90064bbe33070ede19ab5d472b620f8d96e93b4bf687bb6829055730e4"
+  },
+  {
+   "record_id": "PUB-SC0-2627-kilmarnock-v-hibernian#r1",
+   "match_id": "SC0-2627-kilmarnock-v-hibernian",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Kilmarnock",
+    "away": "Hibernian",
+    "kickoff_utc": "2026-12-02T19:45:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Hibernian win",
+      "p": 0.4418,
+      "fair_odds": "≈5/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Kilmarnock win",
+       "p": 0.323,
+       "fair_odds": "≈2/1"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2353,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Hibernian win",
+       "p": 0.4418,
+       "fair_odds": "≈5/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.565,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7876,
+       "over_fair_odds": "≈2/7",
+       "under_fair_odds": "≈7/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.565,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3229,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5428,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5428,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4572,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5428,
+     "credible_p": 0.5387,
+     "n": 58,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 58 Scottish Premiership backtest matches",
+     "lower_bound": 0.431
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "cafb2a0fe69a2ed9c15c6d399d5b00b1d5feb5789cca73e2e621839e4495cae4"
+  },
+  {
+   "record_id": "PUB-SC0-2627-rangers-v-dundee-united#r1",
+   "match_id": "SC0-2627-rangers-v-dundee-united",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "Rangers",
+    "away": "Dundee United",
+    "kickoff_utc": "2026-12-02T19:45:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Rangers win",
+      "p": 0.6801,
+      "fair_odds": "≈4/9"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Rangers win",
+       "p": 0.6801,
+       "fair_odds": "≈4/9"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1849,
+       "fair_odds": "≈9/2"
+      },
+      {
+       "key": "A",
+       "label": "Dundee United win",
+       "p": 0.135,
+       "fair_odds": "≈13/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5666,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.789,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5666,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3245,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5146,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5146,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4854,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Rangers win",
+     "p": 0.6801,
+     "credible_p": 0.5975,
+     "n": 38,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Scottish Premiership model, 38 backtest matches (2025-26)",
+     "lower_bound": 0.4666
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "b97d4ac21c042bcb8e048568d6617d3a9deb27d40cf322bb7d94efefbd793af0"
+  },
+  {
+   "record_id": "PUB-SC0-2627-st-johnstone-v-st-mirren#r1",
+   "match_id": "SC0-2627-st-johnstone-v-st-mirren",
+   "revision": 1,
+   "fixture": {
+    "competition": "SC0",
+    "season": "2627",
+    "home": "St. Johnstone",
+    "away": "St. Mirren",
+    "kickoff_utc": "2026-12-02T19:45:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "St. Johnstone win",
+      "p": 0.4406,
+      "fair_odds": "≈5/4"
+     },
+     "tier": "T3",
+     "selections": [
+      {
+       "key": "H",
+       "label": "St. Johnstone win",
+       "p": 0.4406,
+       "fair_odds": "≈5/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2428,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "St. Mirren win",
+       "p": 0.3165,
+       "fair_odds": "≈9/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5683,
+      "fair_odds": "≈8/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7896,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5683,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3183,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.527,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.527,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.473,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "no_bet",
+     "reason": "No market has enough evidence about this match to feature a selection."
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "78e5dfce6ffea8838f085a749065293b6b46026b03e96e5f75c8d7fd0ffb881c"
+  },
+  {
+   "record_id": "PUB-PL-2627-aston-villa-v-everton#r1",
+   "match_id": "PL-2627-aston-villa-v-everton",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Aston Villa",
+    "away": "Everton",
+    "kickoff_utc": "2026-12-02T20:15:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Aston Villa win",
+      "p": 0.4599,
+      "fair_odds": "≈6/5"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Aston Villa win",
+       "p": 0.4599,
+       "fair_odds": "≈6/5"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2772,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Everton win",
+       "p": 0.2629,
+       "fair_odds": "≈11/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.544,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.789,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.544,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3201,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5564,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5564,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4436,
+       "fair_odds": "≈5/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5564,
+     "credible_p": 0.5574,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Premier League backtest matches",
+     "lower_bound": 0.5155
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "d3459c2c763e42b60286a791ddd4e1ac1a3b299cdbeb79b1487a18767483b09e"
+  },
+  {
+   "record_id": "PUB-PL-2627-bournemouth-v-brighton#r1",
+   "match_id": "PL-2627-bournemouth-v-brighton",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Bournemouth",
+    "away": "Brighton",
+    "kickoff_utc": "2026-12-02T20:15:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Brighton win",
+      "p": 0.3759,
+      "fair_odds": "≈13/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Bournemouth win",
+       "p": 0.3609,
+       "fair_odds": "≈7/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2632,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Brighton win",
+       "p": 0.3759,
+       "fair_odds": "≈13/8"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5705,
+      "fair_odds": "≈8/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8084,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5705,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3441,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5807,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5807,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4193,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5807,
+     "credible_p": 0.5804,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Premier League backtest matches",
+     "lower_bound": 0.5388
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "758c5d75b4044a3c1a05d09b9613b2757bfa9a475dada7cccd91f641b2a8a5ff"
+  },
+  {
+   "record_id": "PUB-PL-2627-brentford-v-arsenal#r1",
+   "match_id": "PL-2627-brentford-v-arsenal",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Brentford",
+    "away": "Arsenal",
+    "kickoff_utc": "2026-12-02T20:15:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Arsenal win",
+      "p": 0.5365,
+      "fair_odds": "≈5/6"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Brentford win",
+       "p": 0.1967,
+       "fair_odds": "≈4/1"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2668,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Arsenal win",
+       "p": 0.5365,
+       "fair_odds": "≈5/6"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5382,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7842,
+       "over_fair_odds": "≈2/7",
+       "under_fair_odds": "≈7/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5382,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3153,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5437,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5437,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4563,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5437,
+     "credible_p": 0.5453,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Premier League backtest matches",
+     "lower_bound": 0.5033
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "ead1f3a362695484bfb58584c5042394100da7bec951b1fd59a4d5adca6e5172"
+  },
+  {
+   "record_id": "PUB-PL-2627-newcastle-v-man-united#r1",
+   "match_id": "PL-2627-newcastle-v-man-united",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Newcastle",
+    "away": "Man United",
+    "kickoff_utc": "2026-12-02T20:15:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Newcastle win",
+      "p": 0.4488,
+      "fair_odds": "≈5/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Newcastle win",
+       "p": 0.4488,
+       "fair_odds": "≈5/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2412,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Man United win",
+       "p": 0.31,
+       "fair_odds": "≈9/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5954,
+      "fair_odds": "≈4/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8242,
+       "over_fair_odds": "≈2/9",
+       "under_fair_odds": "≈9/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5954,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3697,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5981,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5981,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4019,
+       "fair_odds": "≈6/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5981,
+     "credible_p": 0.597,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Premier League backtest matches",
+     "lower_bound": 0.5556
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "ab5f01d8db4d6e7447a5e8eb72819e8b20ad6dc7ddf9ba59123c66bf13d57841"
+  },
+  {
+   "record_id": "PUB-PD-2627-barcelona-v-atletico-madrid#r1",
+   "match_id": "PD-2627-barcelona-v-atletico-madrid",
+   "revision": 1,
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Barcelona",
+    "away": "Atletico Madrid",
+    "kickoff_utc": "2026-12-02T20:30:00Z"
+   },
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "inputs_fingerprint": "67e38fb851061e56",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Barcelona win",
+      "p": 0.6415,
+      "fair_odds": "≈4/7"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Barcelona win",
+       "p": 0.6415,
+       "fair_odds": "≈4/7"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1907,
+       "fair_odds": "≈9/2"
+      },
+      {
+       "key": "A",
+       "label": "Atletico Madrid win",
+       "p": 0.1678,
+       "fair_odds": "≈5/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5499,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7817,
+       "over_fair_odds": "≈2/7",
+       "under_fair_odds": "≈7/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5499,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3262,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5644,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5644,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4356,
+       "fair_odds": "≈5/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Barcelona win",
+     "p": 0.6415,
+     "credible_p": 0.6315,
+     "n": 353,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "La Liga model, 353 backtest matches (2025-26)",
+     "lower_bound": 0.5893
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "c1bcae4d93ad9d9b74e45f59fe52f48657dc53df1d97526a9878c9cf772105ea"
   }
  ]
 }

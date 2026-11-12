@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-11T18:02:45.219925+00:00",
+ "generated_at": "2026-11-12T00:59:59.572327+00:00",
  "horizon_days": 21,
  "predictions": {
   "BL1-2627-bayern-munich-v-koln": {
@@ -71432,6 +71432,4802 @@
      "strength": "weak",
      "basis": "league-anchored blend, 380 La Liga backtest matches",
      "lower_bound": 0.6328
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-chelsea-v-crystal-palace": {
+   "match_id": "PL-2627-chelsea-v-crystal-palace",
+   "record_id": "PL-2627-chelsea-v-crystal-palace#r1",
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Chelsea",
+    "away": "Crystal Palace",
+    "kickoff_utc": "2026-12-02T19:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T1",
+     "model_version": "dixon-coles-v1-forward-frozen",
+     "evidence": {
+      "status": "validated",
+      "strength": "moderate",
+      "summary": "Backtest of 409 matches: Brier 0.622 vs 0.660 for league averages; well calibrated between 50% and 70%."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Chelsea win",
+      "p": 0.5545,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Chelsea win",
+       "p": 0.5545,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2459,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Crystal Palace win",
+       "p": 0.1996,
+       "fair_odds": "≈4/1"
+      }
+     ],
+     "method": "Frozen Dixon-Coles v1",
+     "training_matches": 860,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-30",
+        "opponent": "Brighton",
+        "gf": 4,
+        "ga": 3,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Hull",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Bournemouth",
+        "gf": 5,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Tottenham",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Man United",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Everton",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Fulham",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Leeds",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "Brighton",
+        "gf": 0,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Tottenham",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 43,
+      "away": 43
+     },
+     "league_p": [
+      0.4174,
+      0.2605,
+      0.3221
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5442,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7911,
+        "fair_odds": "≈1/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2089,
+        "fair_odds": "≈4/1"
+       },
+       "model_p": 0.7812,
+       "league_p": 0.7953
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5442,
+        "fair_odds": "≈5/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4558,
+        "fair_odds": "≈6/5"
+       },
+       "model_p": 0.5361,
+       "league_p": 0.5477
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3129,
+        "fair_odds": "≈9/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6871,
+        "fair_odds": "≈4/9"
+       },
+       "model_p": 0.3133,
+       "league_p": 0.3128
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.83,
+      "expected_goals": [
+       1.81,
+       1.01
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.8 goals for Chelsea and 1.0 for Crystal Palace.",
+      "Premier League matches average 2.83 goals; 55% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches)."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5527,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5527,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4473,
+       "fair_odds": "≈5/4"
+      }
+     ],
+     "model_p": 0.5401,
+     "league_p": 0.5581,
+     "explanation": [
+      "Both teams scored in 56% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5588,
+      "fair_odds": "≈4/5",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6648,
+        "fair_odds": "≈1/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3352,
+        "fair_odds": "≈2/1"
+       },
+       "model_p": 0.6615,
+       "league_p": 0.6663
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5588,
+        "fair_odds": "≈4/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4412,
+        "fair_odds": "≈5/4"
+       },
+       "model_p": 0.5358,
+       "league_p": 0.5687
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4412,
+        "fair_odds": "≈5/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5588,
+        "fair_odds": "≈4/5"
+       },
+       "model_p": 0.4107,
+       "league_p": 0.4542
+      }
+     ],
+     "inputs": {
+      "venue_expected": 9.95,
+      "league_mean": 10.08,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 9.9 (last 10 Chelsea home games, last 10 Crystal Palace away games).",
+      "Premier League average: 10.1 per match; 57% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.5358,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5668,
+      "fair_odds": "≈4/5",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.7383,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.2617,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.7545,
+       "league_p": 0.7313
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.5668,
+        "fair_odds": "≈4/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.4332,
+        "fair_odds": "≈5/4"
+       },
+       "model_p": 0.5567,
+       "league_p": 0.5711
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.3648,
+        "fair_odds": "≈7/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.6352,
+        "fair_odds": "≈4/7"
+       },
+       "model_p": 0.3614,
+       "league_p": 0.3663
+      }
+     ],
+     "inputs": {
+      "venue_expected": 3.95,
+      "league_mean": 3.91,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 3.9 (last 10 Chelsea home games, last 10 Crystal Palace away games).",
+      "Premier League average: 3.9 per match; 57% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5043,
+      "fair_odds": "≈Evens",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.6371,
+        "fair_odds": "≈4/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.3629,
+        "fair_odds": "≈7/4"
+       },
+       "model_p": 0.6336,
+       "league_p": 0.6386
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.5043,
+        "fair_odds": "≈Evens"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.4957,
+        "fair_odds": "≈Evens"
+       },
+       "model_p": 0.4974,
+       "league_p": 0.5072
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.3756,
+        "fair_odds": "≈13/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.6244,
+        "fair_odds": "≈8/13"
+       },
+       "model_p": 0.3666,
+       "league_p": 0.3795
+      }
+     ],
+     "inputs": {
+      "venue_expected": 8.65,
+      "league_mean": 8.74,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 8.7 (last 10 Chelsea home games, last 10 Crystal Palace away games).",
+      "Premier League average: 8.7 per match; 51% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5668,
+     "credible_p": 0.567,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5267
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-hull-v-nottm-forest": {
+   "match_id": "PL-2627-hull-v-nottm-forest",
+   "record_id": "PL-2627-hull-v-nottm-forest#r1",
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Hull",
+    "away": "Nott'm Forest",
+    "kickoff_utc": "2026-12-02T19:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [
+    "Hull"
+   ],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T1",
+     "model_version": "dixon-coles-v1-forward-frozen",
+     "evidence": {
+      "status": "validated",
+      "strength": "moderate",
+      "summary": "Backtest of 409 matches: Brier 0.622 vs 0.660 for league averages; well calibrated between 50% and 70%."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Hull win",
+      "p": 0.3657,
+      "fair_odds": "≈7/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Hull win",
+       "p": 0.3657,
+       "fair_odds": "≈7/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3297,
+       "fair_odds": "≈2/1"
+      },
+      {
+       "key": "A",
+       "label": "Nott'm Forest win",
+       "p": 0.3046,
+       "fair_odds": "≈9/4"
+      }
+     ],
+     "method": "Frozen Dixon-Coles v1",
+     "training_matches": 860,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Man United",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Aston Villa",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Everton",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Brentford",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Ipswich",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Liverpool",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Aston Villa",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Crystal Palace",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-23",
+        "opponent": "Ipswich",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Brentford",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 5,
+      "away": 43
+     },
+     "league_p": [
+      0.4174,
+      0.2605,
+      0.3221
+     ],
+     "pooled_matches": {
+      "home": 47,
+      "away": 41
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5208,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7369,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2631,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.6004,
+       "league_p": 0.7953
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.4792,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.5208,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.3194,
+       "league_p": 0.5477
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.261,
+        "fair_odds": "≈11/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.739,
+        "fair_odds": "≈4/11"
+       },
+       "model_p": 0.1403,
+       "league_p": 0.3128
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.83,
+      "expected_goals": [
+       1.05,
+       0.93
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.1 goals for Hull and 0.9 for Nott'm Forest.",
+      "Premier League matches average 2.83 goals; 55% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches)."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5123,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5123,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4877,
+       "fair_odds": "≈11/10"
+      }
+     ],
+     "model_p": 0.4053,
+     "league_p": 0.5581,
+     "explanation": [
+      "Both teams scored in 56% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "No team-level data for this market; this is the Premier League average."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5687,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6663,
+        "fair_odds": "≈1/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3337,
+        "fair_odds": "≈2/1"
+       },
+       "model_p": null,
+       "league_p": 0.6663
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5687,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4313,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": null,
+       "league_p": 0.5687
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4542,
+        "fair_odds": "≈6/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5458,
+        "fair_odds": "≈5/6"
+       },
+       "model_p": null,
+       "league_p": 0.4542
+      }
+     ],
+     "inputs": {
+      "venue_expected": null,
+      "league_mean": 10.08,
+      "home_games": 3,
+      "away_games": 10
+     },
+     "explanation": [
+      "Not enough venue statistics yet (3 home / 10 away games with data), so this is the league average.",
+      "Premier League average: 10.1 per match; 57% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "No team-level data for this market; this is the Premier League average."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5711,
+      "fair_odds": "≈8/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.7313,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.2687,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": null,
+       "league_p": 0.7313
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.5711,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.4289,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": null,
+       "league_p": 0.5711
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.3663,
+        "fair_odds": "≈7/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.6337,
+        "fair_odds": "≈4/7"
+       },
+       "model_p": null,
+       "league_p": 0.3663
+      }
+     ],
+     "inputs": {
+      "venue_expected": null,
+      "league_mean": 3.91,
+      "home_games": 3,
+      "away_games": 10
+     },
+     "explanation": [
+      "Not enough venue statistics yet (3 home / 10 away games with data), so this is the league average.",
+      "Premier League average: 3.9 per match; 57% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "No team-level data for this market; this is the Premier League average."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5072,
+      "fair_odds": "≈Evens",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.6386,
+        "fair_odds": "≈4/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.3614,
+        "fair_odds": "≈7/4"
+       },
+       "model_p": null,
+       "league_p": 0.6386
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.5072,
+        "fair_odds": "≈Evens"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.4928,
+        "fair_odds": "≈Evens"
+       },
+       "model_p": null,
+       "league_p": 0.5072
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.3795,
+        "fair_odds": "≈13/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.6205,
+        "fair_odds": "≈8/13"
+       },
+       "model_p": null,
+       "league_p": 0.3795
+      }
+     ],
+     "inputs": {
+      "venue_expected": null,
+      "league_mean": 8.74,
+      "home_games": 3,
+      "away_games": 10
+     },
+     "explanation": [
+      "Not enough venue statistics yet (3 home / 10 away games with data), so this is the league average.",
+      "Premier League average: 8.7 per match; 51% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "under",
+     "line": 2.5,
+     "label": "Under 2.5",
+     "p": 0.5208,
+     "credible_p": 0.5176,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.477
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-liverpool-v-sunderland": {
+   "match_id": "PL-2627-liverpool-v-sunderland",
+   "record_id": "PL-2627-liverpool-v-sunderland#r1",
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Liverpool",
+    "away": "Sunderland",
+    "kickoff_utc": "2026-12-02T19:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T1",
+     "model_version": "dixon-coles-v1-forward-frozen",
+     "evidence": {
+      "status": "validated",
+      "strength": "moderate",
+      "summary": "Backtest of 409 matches: Brier 0.622 vs 0.660 for league averages; well calibrated between 50% and 70%."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Liverpool win",
+      "p": 0.6073,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Liverpool win",
+       "p": 0.6073,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2351,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Sunderland win",
+       "p": 0.1576,
+       "fair_odds": "≈11/2"
+      }
+     ],
+     "method": "Frozen Dixon-Coles v1",
+     "training_matches": 860,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Nott'm Forest",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Fulham",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Man City",
+        "gf": 0,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Brighton",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Arsenal",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Ipswich",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Brentford",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Man City",
+        "gf": 3,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "Bournemouth",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Coventry",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 43,
+      "away": 24
+     },
+     "league_p": [
+      0.4174,
+      0.2605,
+      0.3221
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5382,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7867,
+        "fair_odds": "≈2/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2133,
+        "fair_odds": "≈7/2"
+       },
+       "model_p": 0.7665,
+       "league_p": 0.7953
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5382,
+        "fair_odds": "≈5/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4618,
+        "fair_odds": "≈6/5"
+       },
+       "model_p": 0.5162,
+       "league_p": 0.5477
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3074,
+        "fair_odds": "≈9/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6926,
+        "fair_odds": "≈4/9"
+       },
+       "model_p": 0.2948,
+       "league_p": 0.3128
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.83,
+      "expected_goals": [
+       1.88,
+       0.86
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.9 goals for Liverpool and 0.9 for Sunderland.",
+      "Premier League matches average 2.83 goals; 55% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches)."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5395,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5395,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4605,
+       "fair_odds": "≈6/5"
+      }
+     ],
+     "model_p": 0.4961,
+     "league_p": 0.5581,
+     "explanation": [
+      "Both teams scored in 56% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5718,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6764,
+        "fair_odds": "≈1/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3236,
+        "fair_odds": "≈2/1"
+       },
+       "model_p": 0.6999,
+       "league_p": 0.6663
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5718,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4282,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": 0.579,
+       "league_p": 0.5687
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4543,
+        "fair_odds": "≈6/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5457,
+        "fair_odds": "≈5/6"
+       },
+       "model_p": 0.4544,
+       "league_p": 0.4542
+      }
+     ],
+     "inputs": {
+      "venue_expected": 10.3,
+      "league_mean": 10.08,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 10.3 (last 10 Liverpool home games, last 10 Sunderland away games).",
+      "Premier League average: 10.1 per match; 57% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.579,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5697,
+      "fair_odds": "≈8/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.7405,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.2595,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.7619,
+       "league_p": 0.7313
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.5697,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.4303,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": 0.5665,
+       "league_p": 0.5711
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.3677,
+        "fair_odds": "≈7/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.6323,
+        "fair_odds": "≈4/7"
+       },
+       "model_p": 0.3712,
+       "league_p": 0.3663
+      }
+     ],
+     "inputs": {
+      "venue_expected": 4.0,
+      "league_mean": 3.91,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 4.0 (last 10 Liverpool home games, last 10 Sunderland away games).",
+      "Premier League average: 3.9 per match; 57% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5223,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.6533,
+        "fair_odds": "≈8/15"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.3467,
+        "fair_odds": "≈15/8"
+       },
+       "model_p": 0.6877,
+       "league_p": 0.6386
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.5223,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.4777,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.5574,
+       "league_p": 0.5072
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.3934,
+        "fair_odds": "≈6/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.6066,
+        "fair_odds": "≈4/6"
+       },
+       "model_p": 0.4258,
+       "league_p": 0.3795
+      }
+     ],
+     "inputs": {
+      "venue_expected": 9.1,
+      "league_mean": 8.74,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 9.1 (last 10 Liverpool home games, last 10 Sunderland away games).",
+      "Premier League average: 8.7 per match; 51% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5718,
+     "credible_p": 0.5717,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5315
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-man-city-v-leeds": {
+   "match_id": "PL-2627-man-city-v-leeds",
+   "record_id": "PL-2627-man-city-v-leeds#r1",
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Man City",
+    "away": "Leeds",
+    "kickoff_utc": "2026-12-02T19:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T1",
+     "model_version": "dixon-coles-v1-forward-frozen",
+     "evidence": {
+      "status": "validated",
+      "strength": "moderate",
+      "summary": "Backtest of 409 matches: Brier 0.622 vs 0.660 for league averages; well calibrated between 50% and 70%."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Man City win",
+      "p": 0.6036,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Man City win",
+       "p": 0.6036,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2325,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Leeds win",
+       "p": 0.1639,
+       "fair_odds": "≈5/1"
+      }
+     ],
+     "method": "Frozen Dixon-Coles v1",
+     "training_matches": 860,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-23",
+        "opponent": "Bournemouth",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Coventry",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Sunderland",
+        "gf": 5,
+        "ga": 3,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Ipswich",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Brighton",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Nott'm Forest",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Brighton",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Arsenal",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Sunderland",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Bournemouth",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 43,
+      "away": 24
+     },
+     "league_p": [
+      0.4174,
+      0.2605,
+      0.3221
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5445,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7912,
+        "fair_odds": "≈1/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2088,
+        "fair_odds": "≈4/1"
+       },
+       "model_p": 0.7814,
+       "league_p": 0.7953
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5445,
+        "fair_odds": "≈5/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4555,
+        "fair_odds": "≈6/5"
+       },
+       "model_p": 0.537,
+       "league_p": 0.5477
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3132,
+        "fair_odds": "≈9/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6868,
+        "fair_odds": "≈4/9"
+       },
+       "model_p": 0.3141,
+       "league_p": 0.3128
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.83,
+      "expected_goals": [
+       1.92,
+       0.91
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.9 goals for Man City and 0.9 for Leeds.",
+      "Premier League matches average 2.83 goals; 55% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches)."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5457,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5457,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4543,
+       "fair_odds": "≈6/5"
+      }
+     ],
+     "model_p": 0.5166,
+     "league_p": 0.5581,
+     "explanation": [
+      "Both teams scored in 56% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5736,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6779,
+        "fair_odds": "≈1/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3221,
+        "fair_odds": "≈2/1"
+       },
+       "model_p": 0.7052,
+       "league_p": 0.6663
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5736,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4264,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": 0.585,
+       "league_p": 0.5687
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4562,
+        "fair_odds": "≈6/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5438,
+        "fair_odds": "≈5/6"
+       },
+       "model_p": 0.4607,
+       "league_p": 0.4542
+      }
+     ],
+     "inputs": {
+      "venue_expected": 10.35,
+      "league_mean": 10.08,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 10.4 (last 10 Man City home games, last 10 Leeds away games).",
+      "Premier League average: 10.1 per match; 57% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.585,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5668,
+      "fair_odds": "≈4/5",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.7383,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.2617,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.7545,
+       "league_p": 0.7313
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.5668,
+        "fair_odds": "≈4/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.4332,
+        "fair_odds": "≈5/4"
+       },
+       "model_p": 0.5567,
+       "league_p": 0.5711
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.3648,
+        "fair_odds": "≈7/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.6352,
+        "fair_odds": "≈4/7"
+       },
+       "model_p": 0.3614,
+       "league_p": 0.3663
+      }
+     ],
+     "inputs": {
+      "venue_expected": 3.95,
+      "league_mean": 3.91,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 4.0 (last 10 Man City home games, last 10 Leeds away games).",
+      "Premier League average: 3.9 per match; 57% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5319,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.6616,
+        "fair_odds": "≈1/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.3384,
+        "fair_odds": "≈2/1"
+       },
+       "model_p": 0.7155,
+       "league_p": 0.6386
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.5319,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.4681,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.5895,
+       "league_p": 0.5072
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.4032,
+        "fair_odds": "≈6/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.5968,
+        "fair_odds": "≈4/6"
+       },
+       "model_p": 0.4586,
+       "league_p": 0.3795
+      }
+     ],
+     "inputs": {
+      "venue_expected": 9.35,
+      "league_mean": 8.74,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 9.3 (last 10 Man City home games, last 10 Leeds away games).",
+      "Premier League average: 8.7 per match; 51% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5736,
+     "credible_p": 0.5734,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5332
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-aston-villa-v-everton": {
+   "match_id": "PL-2627-aston-villa-v-everton",
+   "record_id": "PL-2627-aston-villa-v-everton#r1",
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Aston Villa",
+    "away": "Everton",
+    "kickoff_utc": "2026-12-02T20:15:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T1",
+     "model_version": "dixon-coles-v1-forward-frozen",
+     "evidence": {
+      "status": "validated",
+      "strength": "moderate",
+      "summary": "Backtest of 409 matches: Brier 0.622 vs 0.660 for league averages; well calibrated between 50% and 70%."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Aston Villa win",
+      "p": 0.4369,
+      "fair_odds": "≈5/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Aston Villa win",
+       "p": 0.4369,
+       "fair_odds": "≈5/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2915,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Everton win",
+       "p": 0.2715,
+       "fair_odds": "≈11/4"
+      }
+     ],
+     "method": "Frozen Dixon-Coles v1",
+     "training_matches": 860,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-31",
+        "opponent": "Arsenal",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Nott'm Forest",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Brentford",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Man City",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Fulham",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Bournemouth",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Tottenham",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Hull",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Arsenal",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-02",
+        "opponent": "Newcastle",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 43,
+      "away": 43
+     },
+     "league_p": [
+      0.4174,
+      0.2605,
+      0.3221
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.512,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7668,
+        "fair_odds": "≈3/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2332,
+        "fair_odds": "≈100/30"
+       },
+       "model_p": 0.7,
+       "league_p": 0.7953
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.512,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.488,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.4287,
+       "league_p": 0.5477
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.285,
+        "fair_odds": "≈5/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.715,
+        "fair_odds": "≈2/5"
+       },
+       "model_p": 0.22,
+       "league_p": 0.3128
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.83,
+      "expected_goals": [
+       1.37,
+       1.03
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.4 goals for Aston Villa and 1.0 for Everton.",
+      "Premier League matches average 2.83 goals; 55% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches)."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5371,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5371,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4629,
+       "fair_odds": "≈6/5"
+      }
+     ],
+     "model_p": 0.488,
+     "league_p": 0.5581,
+     "explanation": [
+      "Both teams scored in 56% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5626,
+      "fair_odds": "≈4/5",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6682,
+        "fair_odds": "≈1/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3318,
+        "fair_odds": "≈2/1"
+       },
+       "model_p": 0.6728,
+       "league_p": 0.6663
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5626,
+        "fair_odds": "≈4/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4374,
+        "fair_odds": "≈5/4"
+       },
+       "model_p": 0.5483,
+       "league_p": 0.5687
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4449,
+        "fair_odds": "≈5/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5551,
+        "fair_odds": "≈4/5"
+       },
+       "model_p": 0.4232,
+       "league_p": 0.4542
+      }
+     ],
+     "inputs": {
+      "venue_expected": 10.05,
+      "league_mean": 10.08,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 10.1 (last 10 Aston Villa home games, last 10 Everton away games).",
+      "Premier League average: 10.1 per match; 57% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.5483,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5919,
+      "fair_odds": "≈4/6",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.7564,
+        "fair_odds": "≈1/3"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.2436,
+        "fair_odds": "≈3/1"
+       },
+       "model_p": 0.8149,
+       "league_p": 0.7313
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.5919,
+        "fair_odds": "≈4/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.4081,
+        "fair_odds": "≈6/4"
+       },
+       "model_p": 0.6406,
+       "league_p": 0.5711
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.391,
+        "fair_odds": "≈6/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.609,
+        "fair_odds": "≈4/6"
+       },
+       "model_p": 0.4488,
+       "league_p": 0.3663
+      }
+     ],
+     "inputs": {
+      "venue_expected": 4.4,
+      "league_mean": 3.91,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 4.4 (last 10 Aston Villa home games, last 10 Everton away games).",
+      "Premier League average: 3.9 per match; 57% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5338,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.6632,
+        "fair_odds": "≈1/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.3368,
+        "fair_odds": "≈2/1"
+       },
+       "model_p": 0.7208,
+       "league_p": 0.6386
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.5338,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.4662,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.5958,
+       "league_p": 0.5072
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.4052,
+        "fair_odds": "≈6/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.5948,
+        "fair_odds": "≈4/6"
+       },
+       "model_p": 0.4651,
+       "league_p": 0.3795
+      }
+     ],
+     "inputs": {
+      "venue_expected": 9.4,
+      "league_mean": 8.74,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 9.4 (last 10 Aston Villa home games, last 10 Everton away games).",
+      "Premier League average: 8.7 per match; 51% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5919,
+     "credible_p": 0.5909,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5509
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-bournemouth-v-brighton": {
+   "match_id": "PL-2627-bournemouth-v-brighton",
+   "record_id": "PL-2627-bournemouth-v-brighton#r1",
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Bournemouth",
+    "away": "Brighton",
+    "kickoff_utc": "2026-12-02T20:15:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T1",
+     "model_version": "dixon-coles-v1-forward-frozen",
+     "evidence": {
+      "status": "validated",
+      "strength": "moderate",
+      "summary": "Backtest of 409 matches: Brier 0.622 vs 0.660 for league averages; well calibrated between 50% and 70%."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Bournemouth win",
+      "p": 0.3841,
+      "fair_odds": "≈13/8"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Bournemouth win",
+       "p": 0.3841,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2616,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Brighton win",
+       "p": 0.3543,
+       "fair_odds": "≈15/8"
+      }
+     ],
+     "method": "Frozen Dixon-Coles v1",
+     "training_matches": 860,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Everton",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Brentford",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Liverpool",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "Sunderland",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Leeds",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-30",
+        "opponent": "Chelsea",
+        "gf": 3,
+        "ga": 4,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-13",
+        "opponent": "Coventry",
+        "gf": 5,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Sunderland",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Liverpool",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Man City",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 43,
+      "away": 43
+     },
+     "league_p": [
+      0.4174,
+      0.2605,
+      0.3221
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5543,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7982,
+        "fair_odds": "≈1/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2018,
+        "fair_odds": "≈4/1"
+       },
+       "model_p": 0.8047,
+       "league_p": 0.7953
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5543,
+        "fair_odds": "≈4/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4457,
+        "fair_odds": "≈5/4"
+       },
+       "model_p": 0.5697,
+       "league_p": 0.5477
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3227,
+        "fair_odds": "≈2/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6773,
+        "fair_odds": "≈1/2"
+       },
+       "model_p": 0.3457,
+       "league_p": 0.3128
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.83,
+      "expected_goals": [
+       1.52,
+       1.45
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.5 goals for Bournemouth and 1.4 for Brighton.",
+      "Premier League matches average 2.83 goals; 55% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches)."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5726,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5726,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4274,
+       "fair_odds": "≈11/8"
+      }
+     ],
+     "model_p": 0.6064,
+     "league_p": 0.5581,
+     "explanation": [
+      "Both teams scored in 56% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5807,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6841,
+        "fair_odds": "≈4/9"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3159,
+        "fair_odds": "≈9/4"
+       },
+       "model_p": 0.7256,
+       "league_p": 0.6663
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5807,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4193,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": 0.6087,
+       "league_p": 0.5687
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4636,
+        "fair_odds": "≈6/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5364,
+        "fair_odds": "≈5/6"
+       },
+       "model_p": 0.4854,
+       "league_p": 0.4542
+      }
+     ],
+     "inputs": {
+      "venue_expected": 10.55,
+      "league_mean": 10.08,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 10.6 (last 10 Bournemouth home games, last 10 Brighton away games).",
+      "Premier League average: 10.1 per match; 57% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.6087,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5484,
+      "fair_odds": "≈5/6",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.7237,
+        "fair_odds": "≈2/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.2763,
+        "fair_odds": "≈5/2"
+       },
+       "model_p": 0.706,
+       "league_p": 0.7313
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.5484,
+        "fair_odds": "≈5/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.4516,
+        "fair_odds": "≈6/5"
+       },
+       "model_p": 0.4954,
+       "league_p": 0.5711
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.3473,
+        "fair_odds": "≈15/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.6527,
+        "fair_odds": "≈8/15"
+       },
+       "model_p": 0.3031,
+       "league_p": 0.3663
+      }
+     ],
+     "inputs": {
+      "venue_expected": 3.65,
+      "league_mean": 3.91,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 3.6 (last 10 Bournemouth home games, last 10 Brighton away games).",
+      "Premier League average: 3.9 per match; 57% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5063,
+      "fair_odds": "≈Evens",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.6389,
+        "fair_odds": "≈4/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.3611,
+        "fair_odds": "≈7/4"
+       },
+       "model_p": 0.6398,
+       "league_p": 0.6386
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.5063,
+        "fair_odds": "≈Evens"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.4937,
+        "fair_odds": "≈Evens"
+       },
+       "model_p": 0.5042,
+       "league_p": 0.5072
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.3776,
+        "fair_odds": "≈13/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.6224,
+        "fair_odds": "≈8/13"
+       },
+       "model_p": 0.3731,
+       "league_p": 0.3795
+      }
+     ],
+     "inputs": {
+      "venue_expected": 8.7,
+      "league_mean": 8.74,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 8.7 (last 10 Bournemouth home games, last 10 Brighton away games).",
+      "Premier League average: 8.7 per match; 51% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5807,
+     "credible_p": 0.5801,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.54
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-brentford-v-arsenal": {
+   "match_id": "PL-2627-brentford-v-arsenal",
+   "record_id": "PL-2627-brentford-v-arsenal#r1",
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Brentford",
+    "away": "Arsenal",
+    "kickoff_utc": "2026-12-02T20:15:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T1",
+     "model_version": "dixon-coles-v1-forward-frozen",
+     "evidence": {
+      "status": "validated",
+      "strength": "moderate",
+      "summary": "Backtest of 409 matches: Brier 0.622 vs 0.660 for league averages; well calibrated between 50% and 70%."
+     },
+     "pick": {
+      "key": "A",
+      "label": "Arsenal win",
+      "p": 0.5227,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Brentford win",
+       "p": 0.2114,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2659,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Arsenal win",
+       "p": 0.5227,
+       "fair_odds": "≈10/11"
+      }
+     ],
+     "method": "Frozen Dixon-Coles v1",
+     "training_matches": 860,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Tottenham",
+        "gf": 3,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Sunderland",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-18",
+        "opponent": "Chelsea",
+        "gf": 3,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Liverpool",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Nott'm Forest",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-31",
+        "opponent": "Aston Villa",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Sunderland",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Brighton",
+        "gf": 0,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "Nott'm Forest",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Liverpool",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 43,
+      "away": 43
+     },
+     "league_p": [
+      0.4174,
+      0.2605,
+      0.3221
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5257,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7776,
+        "fair_odds": "≈2/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2224,
+        "fair_odds": "≈7/2"
+       },
+       "model_p": 0.7361,
+       "league_p": 0.7953
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5257,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4743,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.4745,
+       "league_p": 0.5477
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2963,
+        "fair_odds": "≈5/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7037,
+        "fair_odds": "≈2/5"
+       },
+       "model_p": 0.2579,
+       "league_p": 0.3128
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.83,
+      "expected_goals": [
+       0.95,
+       1.62
+      ]
+     },
+     "explanation": [
+      "The score model expects about 0.9 goals for Brentford and 1.6 for Arsenal.",
+      "Premier League matches average 2.83 goals; 55% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches)."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.541,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.541,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.459,
+       "fair_odds": "≈6/5"
+      }
+     ],
+     "model_p": 0.5009,
+     "league_p": 0.5581,
+     "explanation": [
+      "Both teams scored in 56% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5238,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6317,
+        "fair_odds": "≈4/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3683,
+        "fair_odds": "≈7/4"
+       },
+       "model_p": 0.5509,
+       "league_p": 0.6663
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5238,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4762,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.4192,
+       "league_p": 0.5687
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4079,
+        "fair_odds": "≈6/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5921,
+        "fair_odds": "≈4/6"
+       },
+       "model_p": 0.3,
+       "league_p": 0.4542
+      }
+     ],
+     "inputs": {
+      "venue_expected": 9.05,
+      "league_mean": 10.08,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 9.1 (last 10 Brentford home games, last 10 Arsenal away games).",
+      "Premier League average: 10.1 per match; 57% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.4192,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5638,
+      "fair_odds": "≈4/5",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.736,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.264,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.7469,
+       "league_p": 0.7313
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.5638,
+        "fair_odds": "≈4/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.4362,
+        "fair_odds": "≈5/4"
+       },
+       "model_p": 0.5468,
+       "league_p": 0.5711
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.3619,
+        "fair_odds": "≈7/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.6381,
+        "fair_odds": "≈4/7"
+       },
+       "model_p": 0.3516,
+       "league_p": 0.3663
+      }
+     ],
+     "inputs": {
+      "venue_expected": 3.9,
+      "league_mean": 3.91,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 3.9 (last 10 Brentford home games, last 10 Arsenal away games).",
+      "Premier League average: 3.9 per match; 57% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5394,
+      "fair_odds": "≈5/6",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.594,
+        "fair_odds": "≈4/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.406,
+        "fair_odds": "≈6/4"
+       },
+       "model_p": 0.49,
+       "league_p": 0.6386
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.4606,
+        "fair_odds": "≈6/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.5394,
+        "fair_odds": "≈5/6"
+       },
+       "model_p": 0.3518,
+       "league_p": 0.5072
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.3362,
+        "fair_odds": "≈2/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.6638,
+        "fair_odds": "≈1/2"
+       },
+       "model_p": 0.2351,
+       "league_p": 0.3795
+      }
+     ],
+     "inputs": {
+      "venue_expected": 7.6,
+      "league_mean": 8.74,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 7.6 (last 10 Brentford home games, last 10 Arsenal away games).",
+      "Premier League average: 8.7 per match; 51% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.5638,
+     "credible_p": 0.5641,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5238
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-newcastle-v-man-united": {
+   "match_id": "PL-2627-newcastle-v-man-united",
+   "record_id": "PL-2627-newcastle-v-man-united#r1",
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Newcastle",
+    "away": "Man United",
+    "kickoff_utc": "2026-12-02T20:15:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T1",
+     "model_version": "dixon-coles-v1-forward-frozen",
+     "evidence": {
+      "status": "validated",
+      "strength": "moderate",
+      "summary": "Backtest of 409 matches: Brier 0.622 vs 0.660 for league averages; well calibrated between 50% and 70%."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Newcastle win",
+      "p": 0.4515,
+      "fair_odds": "≈6/5"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Newcastle win",
+       "p": 0.4515,
+       "fair_odds": "≈6/5"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2536,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Man United win",
+       "p": 0.2949,
+       "fair_odds": "≈5/2"
+      }
+     ],
+     "method": "Frozen Dixon-Coles v1",
+     "training_matches": 860,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-23",
+        "opponent": "Liverpool",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Bournemouth",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Hull",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Aston Villa",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-02",
+        "opponent": "Everton",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Hull",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-06",
+        "opponent": "Everton",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Fulham",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "Leeds",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Chelsea",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 43,
+      "away": 43
+     },
+     "league_p": [
+      0.4174,
+      0.2605,
+      0.3221
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5592,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8013,
+        "fair_odds": "≈1/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1987,
+        "fair_odds": "≈4/1"
+       },
+       "model_p": 0.8153,
+       "league_p": 0.7953
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5592,
+        "fair_odds": "≈4/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4408,
+        "fair_odds": "≈5/4"
+       },
+       "model_p": 0.5861,
+       "league_p": 0.5477
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3276,
+        "fair_odds": "≈2/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6724,
+        "fair_odds": "≈1/2"
+       },
+       "model_p": 0.3621,
+       "league_p": 0.3128
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.83,
+      "expected_goals": [
+       1.7,
+       1.34
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.7 goals for Newcastle and 1.3 for Man United.",
+      "Premier League matches average 2.83 goals; 55% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches)."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5743,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5743,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4257,
+       "fair_odds": "≈11/8"
+      }
+     ],
+     "model_p": 0.6119,
+     "league_p": 0.5581,
+     "explanation": [
+      "Both teams scored in 56% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5278,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6356,
+        "fair_odds": "≈4/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3644,
+        "fair_odds": "≈7/4"
+       },
+       "model_p": 0.5639,
+       "league_p": 0.6663
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5278,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4722,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.4323,
+       "league_p": 0.5687
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4115,
+        "fair_odds": "≈11/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5885,
+        "fair_odds": "≈8/11"
+       },
+       "model_p": 0.3119,
+       "league_p": 0.4542
+      }
+     ],
+     "inputs": {
+      "venue_expected": 9.15,
+      "league_mean": 10.08,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 9.1 (last 10 Newcastle home games, last 10 Man United away games).",
+      "Premier League average: 10.1 per match; 57% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.4323,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.6137,
+      "fair_odds": "≈8/13",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.7706,
+        "fair_odds": "≈3/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.2294,
+        "fair_odds": "≈100/30"
+       },
+       "model_p": 0.8621,
+       "league_p": 0.7313
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.6137,
+        "fair_odds": "≈8/13"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.3863,
+        "fair_odds": "≈13/8"
+       },
+       "model_p": 0.7133,
+       "league_p": 0.5711
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.4162,
+        "fair_odds": "≈11/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.5838,
+        "fair_odds": "≈8/11"
+       },
+       "model_p": 0.5328,
+       "league_p": 0.3663
+      }
+     ],
+     "inputs": {
+      "venue_expected": 4.85,
+      "league_mean": 3.91,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 4.8 (last 10 Newcastle home games, last 10 Man United away games).",
+      "Premier League average: 3.9 per match; 57% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5144,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.6463,
+        "fair_odds": "≈8/15"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.3537,
+        "fair_odds": "≈15/8"
+       },
+       "model_p": 0.6643,
+       "league_p": 0.6386
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.5144,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.4856,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.5311,
+       "league_p": 0.5072
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.3855,
+        "fair_odds": "≈13/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.6145,
+        "fair_odds": "≈8/13"
+       },
+       "model_p": 0.3994,
+       "league_p": 0.3795
+      }
+     ],
+     "inputs": {
+      "venue_expected": 8.9,
+      "league_mean": 8.74,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 8.9 (last 10 Newcastle home games, last 10 Man United away games).",
+      "Premier League average: 8.7 per match; 51% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.6137,
+     "credible_p": 0.6117,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5721
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PD-2627-barcelona-v-atletico-madrid": {
+   "match_id": "PD-2627-barcelona-v-atletico-madrid",
+   "record_id": "PD-2627-barcelona-v-atletico-madrid#r1",
+   "published_at": "2026-11-12T00:59:59.572327+00:00",
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Barcelona",
+    "away": "Atletico Madrid",
+    "kickoff_utc": "2026-12-02T20:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2027-02-07T14:00:00Z",
+      "to": "2027-02-07T00:00:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     },
+     {
+      "from": "2027-02-07T00:00:00Z",
+      "to": "2026-12-02T20:30:00Z",
+      "seen_at": "2026-11-07T23:56:30.561705+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 353 La Liga matches (2025-26): Brier 0.580 against 0.628 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Barcelona win",
+      "p": 0.6415,
+      "fair_odds": "≈4/7"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Barcelona win",
+       "p": 0.6415,
+       "fair_odds": "≈4/7"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1907,
+       "fair_odds": "≈9/2"
+      },
+      {
+       "key": "A",
+       "label": "Atletico Madrid win",
+       "p": 0.1678,
+       "fair_odds": "≈5/1"
+      }
+     ],
+     "method": "La Liga Dixon-Coles fitted on La Liga results only",
+     "training_matches": 1259,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-31",
+        "opponent": "Rayo Vallecano",
+        "gf": 5,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-16",
+        "opponent": "Racing Santander",
+        "gf": 7,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Getafe",
+        "gf": 3,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Real Madrid",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Alaves",
+        "gf": 6,
+        "ga": 1,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-05",
+        "opponent": "Athletic Club",
+        "gf": 0,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-13",
+        "opponent": "Real Sociedad",
+        "gf": 3,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Alaves",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Espanyol",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Levante",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 63,
+      "away": 63
+     },
+     "league_p": [
+      0.4559,
+      0.2605,
+      0.2836
+     ],
+     "pooled_matches": {
+      "home": 42,
+      "away": 42
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.247 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5499,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7817,
+        "fair_odds": "≈2/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2183,
+        "fair_odds": "≈7/2"
+       },
+       "model_p": 0.8745,
+       "league_p": 0.7419
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5499,
+        "fair_odds": "≈5/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4501,
+        "fair_odds": "≈6/5"
+       },
+       "model_p": 0.6913,
+       "league_p": 0.4893
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3262,
+        "fair_odds": "≈2/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6738,
+        "fair_odds": "≈1/2"
+       },
+       "model_p": 0.4777,
+       "league_p": 0.2613
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.68,
+      "expected_goals": [
+       2.4,
+       1.17
+      ]
+     },
+     "explanation": [
+      "The score model expects about 2.4 goals for Barcelona and 1.2 for Atletico Madrid.",
+      "La Liga matches average 2.68 goals; 49% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% La Liga rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5644,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5644,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4356,
+       "fair_odds": "≈5/4"
+      }
+     ],
+     "model_p": 0.6304,
+     "league_p": 0.5361,
+     "explanation": [
+      "Both teams scored in 54% of La Liga matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% La Liga rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.248 against 0.250 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5589,
+      "fair_odds": "≈4/5",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6703,
+        "fair_odds": "≈1/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3297,
+        "fair_odds": "≈2/1"
+       },
+       "model_p": 0.8482,
+       "league_p": 0.594
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5589,
+        "fair_odds": "≈4/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4411,
+        "fair_odds": "≈5/4"
+       },
+       "model_p": 0.7619,
+       "league_p": 0.4719
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4526,
+        "fair_odds": "≈6/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5474,
+        "fair_odds": "≈5/6"
+       },
+       "model_p": 0.658,
+       "league_p": 0.3645
+      }
+     ],
+     "inputs": {
+      "venue_expected": 12.05,
+      "league_mean": 9.54,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 12.1 (last 10 Barcelona home games, last 10 Atletico Madrid away games).",
+      "La Liga average: 9.5 per match; 47% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% La Liga rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.7619,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.235 against 0.238 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.6416,
+      "fair_odds": "≈4/7",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.8083,
+        "fair_odds": "≈1/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.1917,
+        "fair_odds": "≈4/1"
+       },
+       "model_p": 0.8149,
+       "league_p": 0.8055
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.6416,
+        "fair_odds": "≈4/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.3584,
+        "fair_odds": "≈7/4"
+       },
+       "model_p": 0.6406,
+       "league_p": 0.642
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.465,
+        "fair_odds": "≈6/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.535,
+        "fair_odds": "≈5/6"
+       },
+       "model_p": 0.4488,
+       "league_p": 0.4719
+      }
+     ],
+     "inputs": {
+      "venue_expected": 4.4,
+      "league_mean": 4.54,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 4.4 (last 10 Barcelona home games, last 10 Atletico Madrid away games).",
+      "La Liga average: 4.5 per match; 64% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% La Liga rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.249 against 0.253 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5133,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.6476,
+        "fair_odds": "≈8/15"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.3524,
+        "fair_odds": "≈15/8"
+       },
+       "model_p": 0.71,
+       "league_p": 0.6208
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.5133,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.4867,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.5832,
+       "league_p": 0.4833
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.3896,
+        "fair_odds": "≈13/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.6104,
+        "fair_odds": "≈8/13"
+       },
+       "model_p": 0.4521,
+       "league_p": 0.3629
+      }
+     ],
+     "inputs": {
+      "venue_expected": 9.3,
+      "league_mean": 8.55,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 9.3 (last 10 Barcelona home games, last 10 Atletico Madrid away games).",
+      "La Liga average: 8.6 per match; 48% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% La Liga rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.6416,
+     "credible_p": 0.6416,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 La Liga backtest matches",
+     "lower_bound": 0.6011
     },
     "best_value": {
      "decision": "no_bet",
