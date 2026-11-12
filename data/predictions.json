@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-12T18:35:48.108664+00:00",
+ "generated_at": "2026-11-12T23:52:40.539862+00:00",
  "horizon_days": 21,
  "predictions": {
   "BL1-2627-bayern-munich-v-koln": {
@@ -76228,6 +76228,538 @@
      "strength": "weak",
      "basis": "league-anchored blend, 380 La Liga backtest matches",
      "lower_bound": 0.6011
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-tottenham-v-fulham": {
+   "match_id": "PL-2627-tottenham-v-fulham",
+   "record_id": "PL-2627-tottenham-v-fulham#r1",
+   "published_at": "2026-11-12T23:52:40.539862+00:00",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Tottenham",
+    "away": "Fulham",
+    "kickoff_utc": "2026-12-03T20:00:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T1",
+     "model_version": "dixon-coles-v1-forward-frozen",
+     "evidence": {
+      "status": "validated",
+      "strength": "moderate",
+      "summary": "Backtest of 409 matches: Brier 0.622 vs 0.660 for league averages; well calibrated between 50% and 70%."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Tottenham win",
+      "p": 0.404,
+      "fair_odds": "≈6/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Tottenham win",
+       "p": 0.404,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2717,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Fulham win",
+       "p": 0.3242,
+       "fair_odds": "≈2/1"
+      }
+     ],
+     "method": "Frozen Dixon-Coles v1",
+     "training_matches": 860,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Newcastle",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Everton",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Aston Villa",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-19",
+        "opponent": "Coventry",
+        "gf": 3,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Crystal Palace",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-30",
+        "opponent": "Sunderland",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Liverpool",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Ipswich",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Coventry",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Aston Villa",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 43,
+      "away": 43
+     },
+     "league_p": [
+      0.4174,
+      0.2605,
+      0.3221
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5402,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7885,
+        "fair_odds": "≈2/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2115,
+        "fair_odds": "≈7/2"
+       },
+       "model_p": 0.7724,
+       "league_p": 0.7953
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5402,
+        "fair_odds": "≈5/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4598,
+        "fair_odds": "≈6/5"
+       },
+       "model_p": 0.5227,
+       "league_p": 0.5477
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3092,
+        "fair_odds": "≈9/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6908,
+        "fair_odds": "≈4/9"
+       },
+       "model_p": 0.3007,
+       "league_p": 0.3128
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.83,
+      "expected_goals": [
+       1.47,
+       1.3
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.5 goals for Tottenham and 1.3 for Fulham.",
+      "Premier League matches average 2.83 goals; 55% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches)."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5613,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5613,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4387,
+       "fair_odds": "≈5/4"
+      }
+     ],
+     "model_p": 0.5687,
+     "league_p": 0.5581,
+     "explanation": [
+      "Both teams scored in 56% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5824,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6856,
+        "fair_odds": "≈4/9"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3144,
+        "fair_odds": "≈9/4"
+       },
+       "model_p": 0.7306,
+       "league_p": 0.6663
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.5824,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.4176,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": 0.6146,
+       "league_p": 0.5687
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.4654,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.5346,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.4916,
+       "league_p": 0.4542
+      }
+     ],
+     "inputs": {
+      "venue_expected": 10.6,
+      "league_mean": 10.08,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 10.6 (last 10 Tottenham home games, last 10 Fulham away games).",
+      "Premier League average: 10.1 per match; 57% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.6146,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5123,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.6916,
+        "fair_odds": "≈4/9"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.3084,
+        "fair_odds": "≈9/4"
+       },
+       "model_p": 0.5988,
+       "league_p": 0.7313
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.5123,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.4877,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.3752,
+       "league_p": 0.5711
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.3169,
+        "fair_odds": "≈9/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.6831,
+        "fair_odds": "≈4/9"
+       },
+       "model_p": 0.2018,
+       "league_p": 0.3663
+      }
+     ],
+     "inputs": {
+      "venue_expected": 3.1,
+      "league_mean": 3.91,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 3.1 (last 10 Tottenham home games, last 10 Fulham away games).",
+      "Premier League average: 3.9 per match; 57% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Backtests show no proven edge over the league average (409 matches). Read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5332,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.6005,
+        "fair_odds": "≈4/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.3995,
+        "fair_odds": "≈6/4"
+       },
+       "model_p": 0.5116,
+       "league_p": 0.6386
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.4668,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.5332,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.3726,
+       "league_p": 0.5072
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.3415,
+        "fair_odds": "≈15/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.6585,
+        "fair_odds": "≈8/15"
+       },
+       "model_p": 0.2529,
+       "league_p": 0.3795
+      }
+     ],
+     "inputs": {
+      "venue_expected": 7.75,
+      "league_mean": 8.74,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 7.8 (last 10 Tottenham home games, last 10 Fulham away games).",
+      "Premier League average: 8.7 per match; 51% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% Premier League rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5824,
+     "credible_p": 0.5818,
+     "n": 409,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 409 backtest matches",
+     "lower_bound": 0.5417
     },
     "best_value": {
      "decision": "no_bet",

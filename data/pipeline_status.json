@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-11-12T18:35:48.108664+00:00",
+ "attempted_at": "2026-11-12T23:52:40.539862+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -139,7 +139,7 @@
    "ok": true,
    "label": "OpenLigaDB (ODbL 1.0, © OpenLigaDB contributors)",
    "matches": 48,
-   "results": 32,
+   "results": 36,
    "note": null
   },
   "CL:openligadb": {
@@ -265,10 +265,10 @@
  ],
  "errors": [],
  "ok": true,
- "last_success": "2026-11-12T18:35:48.108664+00:00",
+ "last_success": "2026-11-12T23:52:40.539862+00:00",
  "fixtures": 3566,
- "upcoming_predicted": 143,
- "published_revisions": 0,
+ "upcoming_predicted": 144,
+ "published_revisions": 1,
  "imported_frozen_records": 0,
  "settlement_updates": 151,
  "training_results": 1938,
@@ -283,8 +283,8 @@
  "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0, including openfootball/champions-league for European club history), martj42/international_results (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk.",
  "public": {
   "model_version": "dc-public-v1",
-  "predictions": 260,
-  "records": 2843,
+  "predictions": 258,
+  "records": 3101,
   "validated": true
  }
 }

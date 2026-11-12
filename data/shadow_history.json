@@ -13506,6 +13506,63 @@
    ],
    "origin": "shadow",
    "sha256": "272c8956d7158975b6629d79edf05657a07b5f15ec6fc052e06f45e9426a5f96"
+  },
+  {
+   "record_id": "PL-2627-tottenham-v-fulham#r1",
+   "match_id": "PL-2627-tottenham-v-fulham",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Tottenham",
+    "away": "Fulham",
+    "kickoff_utc": "2026-12-03T20:00:00Z"
+   },
+   "published_at": "2026-11-12T23:52:40.539862+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Tottenham win",
+      "p": 0.394,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Tottenham win",
+       "p": 0.394,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2876,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Fulham win",
+       "p": 0.3184,
+       "fair_odds": "≈9/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "c06be62df3e5b2130cd0928b5e37310830dbeb5d521c3a08de95e379eb1f57ba"
   }
  ]
 }
