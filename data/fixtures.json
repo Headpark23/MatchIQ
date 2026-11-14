@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-14T15:20:35.865789+00:00",
+ "generated_at": "2026-11-14T20:55:57.545707+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -24641,9 +24641,12 @@
    "home": "Norway",
    "away": "Wales",
    "kickoff_utc": "2026-11-14T17:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    3,
+    1
+   ],
+   "result_source": "openligadb",
    "sources": [
     "openligadb"
    ],
@@ -24657,7 +24660,7 @@
    "home": "Portugal",
    "away": "Denmark",
    "kickoff_utc": "2026-11-14T19:45:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [

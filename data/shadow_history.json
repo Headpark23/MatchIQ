@@ -13848,6 +13848,120 @@
    ],
    "origin": "shadow",
    "sha256": "e87d3827c48471e9f0503c32ebca737e7107595be7f1f48c25623a7c92edf73c"
+  },
+  {
+   "record_id": "PL-2627-nottm-forest-v-brighton#r1",
+   "match_id": "PL-2627-nottm-forest-v-brighton",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Nott'm Forest",
+    "away": "Brighton",
+    "kickoff_utc": "2026-12-05T17:30:00Z"
+   },
+   "published_at": "2026-11-14T20:55:57.545707+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Brighton win",
+      "p": 0.42,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Nott'm Forest win",
+       "p": 0.3025,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2774,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Brighton win",
+       "p": 0.42,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "bd6b99b10edbc77a15b8414622bcc38b57e090a0f59aa3c6b4118e81c08cbd29"
+  },
+  {
+   "record_id": "PL-2627-brentford-v-man-city#r1",
+   "match_id": "PL-2627-brentford-v-man-city",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Brentford",
+    "away": "Man City",
+    "kickoff_utc": "2026-12-05T20:00:00Z"
+   },
+   "published_at": "2026-11-14T20:55:57.545707+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Man City win",
+      "p": 0.4525,
+      "fair_odds": "≈6/5"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Brentford win",
+       "p": 0.2937,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2538,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Man City win",
+       "p": 0.4525,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "b776c302224a866a72307b77e53dbe4d232edbf4b6adb486928fc802798e77c2"
   }
  ]
 }
