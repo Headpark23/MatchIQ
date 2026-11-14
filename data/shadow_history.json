@@ -13563,6 +13563,291 @@
    ],
    "origin": "shadow",
    "sha256": "c06be62df3e5b2130cd0928b5e37310830dbeb5d521c3a08de95e379eb1f57ba"
+  },
+  {
+   "record_id": "PL-2627-chelsea-v-liverpool#r1",
+   "match_id": "PL-2627-chelsea-v-liverpool",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Chelsea",
+    "away": "Liverpool",
+    "kickoff_utc": "2026-12-05T12:30:00Z"
+   },
+   "published_at": "2026-11-14T15:20:35.865789+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Liverpool win",
+      "p": 0.3752,
+      "fair_odds": "≈13/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Chelsea win",
+       "p": 0.3747,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2501,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Liverpool win",
+       "p": 0.3752,
+       "fair_odds": "≈13/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "a45cd713d869650a052a317f85b2cdcde2b47d04141ba578a4bf8a8de4c01e72"
+  },
+  {
+   "record_id": "PL-2627-aston-villa-v-crystal-palace#r1",
+   "match_id": "PL-2627-aston-villa-v-crystal-palace",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Aston Villa",
+    "away": "Crystal Palace",
+    "kickoff_utc": "2026-12-05T15:00:00Z"
+   },
+   "published_at": "2026-11-14T15:20:35.865789+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Aston Villa win",
+      "p": 0.5657,
+      "fair_odds": "≈4/5"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Aston Villa win",
+       "p": 0.5657,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2372,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Crystal Palace win",
+       "p": 0.1971,
+       "fair_odds": "≈4/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "1d5a22e12eba19e22c546ad8d93f865f08699a117232a5ac93fc61c059da4bbf"
+  },
+  {
+   "record_id": "PL-2627-bournemouth-v-hull#r1",
+   "match_id": "PL-2627-bournemouth-v-hull",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Bournemouth",
+    "away": "Hull",
+    "kickoff_utc": "2026-12-05T15:00:00Z"
+   },
+   "published_at": "2026-11-14T15:20:35.865789+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Bournemouth win",
+      "p": 0.4505,
+      "fair_odds": "≈6/5"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Bournemouth win",
+       "p": 0.4505,
+       "fair_odds": "≈6/5"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2996,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "A",
+       "label": "Hull win",
+       "p": 0.2499,
+       "fair_odds": "≈3/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "c10145455c7f68b479367382f156a5ff24041d177261bdddb367b940627f6e43"
+  },
+  {
+   "record_id": "PL-2627-leeds-v-ipswich#r1",
+   "match_id": "PL-2627-leeds-v-ipswich",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Leeds",
+    "away": "Ipswich",
+    "kickoff_utc": "2026-12-05T15:00:00Z"
+   },
+   "published_at": "2026-11-14T15:20:35.865789+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Leeds win",
+      "p": 0.6176,
+      "fair_odds": "≈8/13"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Leeds win",
+       "p": 0.6176,
+       "fair_odds": "≈8/13"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2194,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Ipswich win",
+       "p": 0.163,
+       "fair_odds": "≈5/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "9319d7485f2e90d92662e232f4d55eefbee707a996c94c6a82a54e8b3e193a50"
+  },
+  {
+   "record_id": "PL-2627-man-united-v-coventry#r1",
+   "match_id": "PL-2627-man-united-v-coventry",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Man United",
+    "away": "Coventry",
+    "kickoff_utc": "2026-12-05T15:00:00Z"
+   },
+   "published_at": "2026-11-14T15:20:35.865789+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Man United win",
+      "p": 0.6377,
+      "fair_odds": "≈4/7"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Man United win",
+       "p": 0.6377,
+       "fair_odds": "≈4/7"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1999,
+       "fair_odds": "≈4/1"
+      },
+      {
+       "key": "A",
+       "label": "Coventry win",
+       "p": 0.1625,
+       "fair_odds": "≈5/1"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "e87d3827c48471e9f0503c32ebca737e7107595be7f1f48c25623a7c92edf73c"
   }
  ]
 }
