@@ -1272,6 +1272,74 @@ function resultsScoreboard(rec) {
   '</a>';
 }
 
+// ---- Since you were last here ----
+// A visit is a load more than 30 minutes after the last one, so reloads and quick returns keep
+// the same "last here" time for the whole session. Stored per browser; nothing leaves the device.
+const VISIT_KEY = 'betbuddy_visits_v1', VISIT_GAP_MS = 30 * 60000;
+const PREV_VISIT_MS = (() => {
+  try {
+    const now = Date.now(), v = JSON.parse(localStorage.getItem(VISIT_KEY) || '{}') || {};
+    const last = Number(v.last) || 0;
+    const prev = last && now - last > VISIT_GAP_MS ? last : (Number(v.prev) || 0);
+    localStorage.setItem(VISIT_KEY, JSON.stringify({ prev, last: now }));
+    return prev;
+  } catch (e) { return 0; }
+})();
+
+// The earliest upcoming kick-off on a pending diary bet (single or any acca leg).
+function diaryNextKickoff(entry) {
+  const now = Date.now();
+  const ids = entry.type === 'accumulator' && Array.isArray(entry.legs) ? entry.legs.filter(l => l && l.outcome !== 'won' && l.outcome !== 'lost').map(l => l.fixtureId) : [entry.match_id];
+  return ids.map(id => id && fixtureById(id)).filter(Boolean).map(kickoffMs).filter(ms => ms > now).sort((a, b) => a - b)[0] || 0;
+}
+
+function sinceLastVisitCard() {
+  const now = Date.now();
+  const diary = getStoredDiary();
+  // Look back to the last visit, but never more than two weeks.
+  const since = PREV_VISIT_MS ? Math.max(PREV_VISIT_MS, now - 14 * 86400000) : 0;
+  const rows = [];
+
+  if (since) {
+    const settled = diary.filter(e => e && ['won', 'lost', 'void'].includes(e.outcome) && Date.parse(e.settledAt || '') > since);
+    if (settled.length) {
+      const won = settled.filter(e => e.outcome === 'won').length, lost = settled.filter(e => e.outcome === 'lost').length;
+      const pl = settled.reduce((t, e) => t + (diaryProfit(e) || 0), 0);
+      rows.push('<a class="hm-since-row" href="#/diary"><span class="hm-since-ico">🧾</span><span class="hm-since-txt"><b>' +
+        settled.length + (settled.length === 1 ? ' bet settled' : ' bets settled') + '</b><small>' + won + ' won · ' + lost + ' lost</small></span>' +
+        '<b class="hm-since-val mono ' + (pl > 0 ? 'up' : pl < 0 ? 'down' : '') + '">' + diarySigned(pl) + '</b></a>');
+    }
+    // Our sealed picks whose matches finished since the last visit (one per match).
+    const seen = new Set(), picks = [];
+    historyRecords().filter(r => r.evaluated && r.settlement && r.settlement.result).forEach(r => {
+      const ms = Date.parse((r.result && r.result.kickoff_utc) || (r.fixture && r.fixture.kickoff_utc) || '');
+      if (!(ms > since && ms <= now) || seen.has(r.match_id)) return;
+      seen.add(r.match_id); picks.push({ r, ms });
+    });
+    if (picks.length) {
+      picks.sort((a, b) => b.ms - a.ms);
+      const right = picks.filter(x => x.r.settlement.result.pick_won).length;
+      const recent = picks.slice(0, 3).map(x => {
+        const f = x.r.fixture || {}, ok = x.r.settlement.result.pick_won;
+        return '<span class="hm-since-chip ' + (ok ? 'ok' : 'no') + '">' + (ok ? '✓' : '✗') + ' ' + esc(f.home || '') + ' v ' + esc(f.away || '') + '</span>';
+      }).join('');
+      rows.push('<a class="hm-since-row" href="#/results"><span class="hm-since-ico">🎯</span><span class="hm-since-txt"><b>Our picks went ' + right + ' from ' + picks.length + '</b>' +
+        '<small class="hm-since-chips">' + recent + '</small></span><span class="hm-since-go">›</span></a>');
+    }
+  }
+
+  const pending = diary.filter(e => e && e.outcome === 'pending');
+  if (pending.length) {
+    const next = pending.map(diaryNextKickoff).filter(Boolean).sort((a, b) => a - b)[0];
+    rows.push('<a class="hm-since-row" href="#/diary"><span class="hm-since-ico">⏳</span><span class="hm-since-txt"><b>' + pending.length + (pending.length === 1 ? ' bet' : ' bets') + ' still running</b>' +
+      '<small>' + (next ? 'Next kick-off ' + esc(ownBetDayLabel(next)) + ' ' + esc(fmtTime(next)) : 'Settles itself after the final whistle') + '</small></span><span class="hm-since-go">›</span></a>');
+  }
+
+  if (!rows.length) return '';
+  return '<section class="hm-since" aria-label="' + (since ? 'Since you were last here' : 'Your bets') + '">' +
+    '<div class="hm-since-kicker">' + (since ? 'Since you were last here' : 'Your bets') + '</div>' + rows.join('') + '</section>';
+}
+
 function renderWelcomeHero() {
   const user = getAuthUser();
   const userName = user && user.signedIn ? (user.handle || user.name || '').replace(/^@+/, '').split(' ')[0] : '';
@@ -1330,7 +1398,10 @@ function renderWelcomeHero() {
 
   const record = rec ? resultsScoreboard(rec) : '';
 
-  return '<div class="hm">' + hero + record + teaser + tiles + upNext +
+  let since = '';
+  try { since = sinceLastVisitCard(); } catch (e) { /* the summary is optional */ }
+
+  return '<div class="hm">' + hero + since + record + teaser + tiles + upNext +
     '<p class="hm-trust">🛡️ We say <b>No bet</b> when the evidence is thin · Bet Buddy never places bets · 18+ · <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware</a></p>' +
     '<button type="button" class="hub-quiet-link" onclick="openButlerModal()">' + hubIcon('slip', 14) + 'My bookmakers &amp; slip note settings</button>' +
   '</div>';
@@ -7713,7 +7784,7 @@ function renderBetAI() {
   const body = $('betai-body');
   if (!body) return;
   if (!betaiSignedIn()) {
-    body.innerHTML = '<div class="betai-gate"><p>BetAI is for signed-in accounts. Sign in to ask up to 4 questions a day.</p>' +
+    body.innerHTML = betaiSampleHtml() + '<div class="betai-gate"><p>BetAI is for signed-in accounts. Sign in free to ask up to 4 questions a day.</p>' +
       '<button type="button" class="btn google-primary-btn" onclick="signInWithGoogle()" style="min-height:46px;">Sign in with Google</button><button type="button" class="text-link" data-open-auth data-email-mode-open="signin" style="display:block;margin:10px auto 0;">Use email instead</button></div>' + betaiFoot();
     return;
   }
@@ -7732,6 +7803,28 @@ function renderBetAI() {
   if (betai.error) html += '<p class="betai-error" role="alert">' + esc(betai.error) + '</p>';
   if (betai.result) html += renderBetAIResult(betai.result);
   body.innerHTML = html + betaiFoot();
+}
+
+// Signed-out visitors see the kind of question BetAI answers, with an answer built from the
+// published model figures for a real upcoming match (not AI text, and labelled as an example).
+function betaiSampleHtml() {
+  try {
+    const list = upcoming().filter(p => p.markets && p.markets.result && !noLeanYet(p.markets.result));
+    const pred = list.find(p => (p.fixture || {}).competition === 'PL') || list[0];
+    if (!pred) return '';
+    const f = pred.fixture || {}, r = pred.markets.result;
+    const sel = k => (r.selections || []).find(s => s.key === k) || { p: 0 };
+    const H = sel('H').p, D = sel('D').p, A = sel('A').p;
+    const fav = H >= A ? f.home : f.away, favP = Math.max(H, A);
+    const lead = Math.abs(H - A) < 0.06 ? 'Too close to call' : fav + (favP >= 0.55 ? ' are clear favourites' : ' are slight favourites');
+    const ml = pred.recommendations && pred.recommendations.most_likely;
+    const likely = ml && ml.decision === 'most_likely' && ml.label ? ' The likeliest single outcome we rate: ' + (ml.market === 'btts' ? 'both teams to score, ' : ml.market === 'goals' ? 'total goals, ' : '') + ml.label + ' (' + pct(ml.p) + ').' : '';
+    return '<div class="betai-sample"><div class="betai-sample-kicker">Example</div>' +
+      '<p class="betai-sample-q">“Who wins ' + esc(f.home) + ' v ' + esc(f.away) + '?”</p>' +
+      '<p class="betai-sample-a">' + esc(lead + ': ' + pct(H) + ' ' + f.home + ', ' + pct(D) + ' draw, ' + pct(A) + ' ' + f.away + '.' + likely) + '</p>' +
+      '<small>Built from Bet Buddy’s published figures for ' + esc(fmtDay(kickoffMs(f))) + '. Signed in, you can ask about any match, team or acca.</small>' +
+      '<div class="betai-sample-qs">' + BETAI_EXAMPLES.slice(0, 3).map(q => '<span>' + esc(q) + '</span>').join('') + '</div></div>';
+  } catch (e) { return ''; }
 }
 
 function betaiFoot() {

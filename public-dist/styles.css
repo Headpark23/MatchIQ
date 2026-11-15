@@ -4319,6 +4319,13 @@ span.cp-price.nop { cursor: default; opacity: .5; }
 .betai-why b { color: var(--soft); }
 .betai-gate { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 8px 0; color: var(--muted); }
 .betai-gate p { margin: 0; font-size: 14px; }
+.betai-sample { margin-bottom: 14px; padding: 12px 14px; border-radius: 14px; background: color-mix(in srgb, var(--cyan) 8%, var(--surface-solid)); border: 1px solid color-mix(in srgb, var(--cyan) 28%, var(--line-strong)); text-align: left; }
+.betai-sample-kicker { font: 700 10.5px var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--cyan); }
+.betai-sample-q { margin: 6px 0 4px; font: 700 15px var(--display); color: var(--ink); }
+.betai-sample-a { margin: 0 0 6px; font-size: 14px; line-height: 1.45; color: var(--ink); }
+.betai-sample small { display: block; font-size: 12px; color: var(--muted); }
+.betai-sample-qs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.betai-sample-qs span { padding: 3px 9px; border-radius: 999px; font-size: 12px; color: var(--muted); border: 1px dashed var(--line-strong); }
 
 .betai-save { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .betai-save .btn { min-height: 40px; flex: 1 1 140px; }
@@ -5347,6 +5354,25 @@ a.hm-chip:hover { border-color: var(--pick); }
 .hm-lg { flex-direction: row; align-items: baseline; gap: 5px; min-width: 0; padding: 4px 9px; border-radius: 999px; }
 .hm-lg b { font-size: 13px; }
 .hm-lg em { font: 600 11px var(--body); letter-spacing: 0; color: var(--soft); white-space: nowrap; }
+
+/* Since you were last here: settled bets, our picks since the last visit, bets still running */
+.hm-since { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 16px;
+  background: radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--pick) 16%, transparent), transparent 60%), var(--surface-solid); border: 1px solid color-mix(in srgb, var(--pick) 35%, var(--line-strong)); }
+.hm-since-kicker { font: 700 11px var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--pick); }
+.hm-since-row { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 6px 0; text-decoration: none; color: var(--ink); }
+.hm-since-row + .hm-since-row { border-top: 1px solid var(--line); }
+.hm-since-ico { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: color-mix(in srgb, var(--ink) 8%, transparent); font-size: 16px; }
+.hm-since-txt { display: flex; flex-direction: column; gap: 2px; flex: 1 1 auto; min-width: 0; }
+.hm-since-txt b { font: 700 14px var(--display); }
+.hm-since-txt small { font-size: 12px; color: var(--muted); }
+.hm-since-chips { display: flex; gap: 4px; overflow: hidden; white-space: nowrap; }
+.hm-since-chip { flex: none; padding: 1px 7px; border-radius: 999px; font-size: 11px; background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.hm-since-chip.ok { color: var(--pick); }
+.hm-since-chip.no { color: #fb7185; }
+.hm-since-val { flex: none; font-size: 16px; font-weight: 800; }
+.hm-since-val.up { color: var(--pick); }
+.hm-since-val.down { color: #fb7185; }
+.hm-since-go { flex: none; color: var(--cyan); font-weight: 700; }
 
 .hm-pick { gap: 3px; padding: 10px 12px; border-radius: 16px; }
 .hm-pick-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
