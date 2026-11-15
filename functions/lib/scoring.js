@@ -20,15 +20,16 @@ const SCORE_MARKET = /^(result:[HDA]|dc:(1X|X2|12)|dnb:[HA]|btts:(yes|no)|goals:
 // ---------------------------------------------------------- bet checks
 // Checks one pick (a single, or one leg of an accumulator) against its fixture and the recorded
 // bookmaker prices. Returns the checked leg, or { reason } when it cannot count.
-function checkPick(fixtureId, selection, createdMs, fixtures, odds, settler, market, predictions) {
+function checkPick(fixtureId, selection, createdMs, fixtures, odds, settler, market, predictions, playerOdds, allowAfterKickoff) {
   const fixture = (fixtures || []).find(f => f.id === fixtureId);
   if (!fixture) return { reason: 'Match not found in the fixture list.' };
   const kickoff = Date.parse(fixture.kickoff_utc || '');
   if (!Number.isFinite(kickoff)) return { reason: 'Match has no kick-off time yet.' };
-  if (!(createdMs < kickoff)) return { reason: 'Logged after kick-off (' + fixture.home + ' v ' + fixture.away + ').' };
+  if (!allowAfterKickoff && !(createdMs < kickoff)) return { reason: 'Logged after kick-off (' + fixture.home + ' v ' + fixture.away + ').' };
   const feed = ((((odds && odds.matches) || {})[fixture.id]) || {}).selections || {};
   const pred = predictions && predictions.predictions ? predictions.predictions[fixture.id] : null;
-  const priced = settlement.pricedMarkets(feed, pred);
+  // Bookmaker or model prices where they exist; otherwise a best guess (the player's own price).
+  const priced = settlement.pricedMarkets(feed, pred, playerOdds);
   const candidates = Object.keys(priced);
   if (!candidates.length) return { reason: 'No bookmaker price for ' + fixture.home + ' v ' + fixture.away + ', so it cannot be scored.' };
   let key = null;
@@ -53,23 +54,28 @@ function checkPick(fixtureId, selection, createdMs, fixtures, odds, settler, mar
 }
 
 // Returns the fields the server stores on a newly logged league bet.
-function validateLeagueBet({ bet, dayKey, createdMs, fixtures, odds, predictions }) {
+// `dayKey` may carry a slot suffix (2026-11-15-3); only the date part matters here.
+// `allowAfterKickoff` is for the owner's backfill of bets saved in the diary before leagues saw them.
+function validateLeagueBet({ bet, dayKey, createdMs, fixtures, odds, predictions, allowAfterKickoff }) {
   const reject = reason => ({ status: 'rejected', reason });
   const settler = settlement.create(() => fixtures);
   const isAcca = Array.isArray(bet.legs);
-  const picks = isAcca ? bet.legs : [{ fixtureId: bet.fixtureId, selection: bet.selection, market: bet.market }];
+  const picks = isAcca ? bet.legs : [{ fixtureId: bet.fixtureId, selection: bet.selection, market: bet.market, odds: bet.odds }];
   if (isAcca && (picks.length < 2 || picks.length > MAX_LEGS)) return reject('Accumulators need 2 to ' + MAX_LEGS + ' legs.');
+  // An accumulator leg without its own price gets an equal share of the combined price as its best guess.
+  const shareOdds = isAcca && Number(bet.odds) > 1 ? Math.pow(Number(bet.odds), 1 / picks.length) : null;
   const legs = [];
   for (const p of picks) {
     if (!p || typeof p.fixtureId !== 'string' || typeof p.selection !== 'string') return reject('Accumulator leg is missing its match.');
-    const leg = checkPick(p.fixtureId, p.selection, createdMs, fixtures, odds, settler, p.market, predictions);
+    const playerOdds = Number(p.odds) > 1 ? Number(p.odds) : shareOdds;
+    const leg = checkPick(p.fixtureId, p.selection, createdMs, fixtures, odds, settler, p.market, predictions, playerOdds, allowAfterKickoff);
     if (leg.reason) return reject(leg.reason);
     if (legs.some(l => l.fixtureId === leg.fixtureId)) return reject('Each accumulator leg must be a different match.');
     legs.push(leg);
   }
   legs.sort((a, b) => a.kickoffMs - b.kickoffMs);
   const first = legs[0];
-  if (new Date(first.kickoffMs).toISOString().slice(0, 10) !== dayKey) return reject('League bets are filed under the day of the first match.');
+  if (new Date(first.kickoffMs).toISOString().slice(0, 10) !== String(dayKey).slice(0, 10)) return reject('League bets are filed under the day of the first match.');
   if (!isAcca) return Object.assign({ status: 'pending' }, first);
   return {
     status: 'pending',

@@ -13,6 +13,8 @@ const { onRequest } = require('firebase-functions/v2/https');
 const { setGlobalOptions, logger } = require('firebase-functions/v2');
 const admin = require('firebase-admin');
 const scoring = require('./lib/scoring');
+const backfill = require('./lib/backfill');
+const { leagueBetDay } = require('./shared/league_sync.js');
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -105,7 +107,7 @@ exports.ownerDashboard = onRequest({ cors: true, memory: '512MiB', timeoutSecond
     res.json(dashboard.aggregate({
       users,
       diary: diarySnap.docs.filter(d => d.ref.parent.parent && d.ref.parent.parent.parent.id === 'users').map(d => ({ uid: d.ref.parent.parent.id, entry: d.data() })),
-      leagueBets: betsSnap.docs.map(d => ({ uid: d.ref.parent.parent ? d.ref.parent.parent.id : '', day: d.id, outcome: d.get('outcome') || d.get('status') })),
+      leagueBets: betsSnap.docs.map(d => ({ uid: d.ref.parent.parent ? d.ref.parent.parent.id : '', day: leagueBetDay(d.id), outcome: d.get('outcome') || d.get('status') })),
       leagues: leaguesSnap.docs.map(d => ({ created: toMs(d.get('createdAt')), members: memberCount[d.id] || 0 })),
       betai: betaiSnap.docs.map(d => ({ day: d.get('day'), count: d.get('count') })),
       now: Date.now()
@@ -210,12 +212,13 @@ exports.checkLeagueBet = onDocumentCreated('users/{uid}/leagueBets/{day}', async
   const snap = event.data;
   if (!snap) return;
   const bet = snap.data() || {};
+  if (bet.status) return;  // written already checked (the owner's backfill); the app cannot set status
   let result;
   try {
     const [fixtures, odds, predictions] = await Promise.all([loadFixtures(), loadData('odds.json'), loadData('predictions.json').catch(() => null)]);
     result = scoring.validateLeagueBet({
       bet,
-      dayKey: event.params.day,
+      dayKey: leagueBetDay(event.params.day),
       createdMs: snap.createTime.toMillis(),  // server clock, not the phone's
       fixtures,
       odds,
@@ -254,7 +257,10 @@ exports.syncLeagueProfile = onDocumentWritten('users/{uid}', async event => {
 
 // ---------------------------------------------------------- 4. settle, score and rank
 exports.settleLeagues = onSchedule({ schedule: 'every 30 minutes', timeZone: 'Europe/London', timeoutSeconds: 540, memory: '512MiB' }, async () => {
-  const now = new Date();
+  await runSettlement(new Date());
+});
+
+async function runSettlement(now) {
   const fixtures = await loadFixtures();
 
   // Settle every pending bet whose match should be over.
@@ -288,6 +294,57 @@ exports.settleLeagues = onSchedule({ schedule: 'every 30 minutes', timeZone: 'Eu
     await metaRef.set({ builtAt: FieldValue.serverTimestamp(), settled: due.size });
   }
   logger.info('settleLeagues', { due: due.size, players: touched.size });
+  return { due: due.size, players: touched.size };
+}
+
+// ---------------------------------------------------------- 5. owner-only: backfill past bets
+// Adds players' cloud-synced Bet Diary bets (since BACKFILL_SINCE) to their league history, at most
+// five per match day, then settles and rescores straight away. POST with {"run": true} to write;
+// anything else is a dry run that only reports what would be added.
+exports.backfillLeagueBets = onRequest({ cors: true, memory: '1GiB', timeoutSeconds: 540 }, async (req, res) => {
+  try {
+    if (!await requireOwner(req, res)) return;
+    const body = req.body && typeof req.body === 'object' ? req.body : {};
+    const run = body.run === true;
+    const since = /^\d{4}-\d{2}-\d{2}$/.test(String(body.since || '')) ? body.since : backfill.BACKFILL_SINCE;
+    const [fixtures, odds, predictions, diarySnap, betsSnap] = await Promise.all([
+      loadFixtures(), loadData('odds.json'), loadData('predictions.json').catch(() => null),
+      db.collectionGroup('diary').get(), db.collectionGroup('leagueBets').get()
+    ]);
+    const diary = diarySnap.docs
+      .filter(d => d.ref.parent.parent && d.ref.parent.parent.parent.id === 'users')
+      .map(d => ({ uid: d.ref.parent.parent.id, entry: d.data() }));
+    const existing = betsSnap.docs
+      .filter(d => d.ref.parent.parent)
+      .map(d => ({ uid: d.ref.parent.parent.id, slot: d.id, betId: d.get('betId'), status: d.get('status') }));
+    const plan = backfill.planBackfill({ diary, existing, fixtures, odds, predictions, since });
+    if (run) {
+      const writer = db.bulkWriter();
+      plan.add.forEach(a => {
+        const doc = Object.assign({}, a.doc, a.checked, {
+          createdAt: FieldValue.serverTimestamp(), checkedAt: FieldValue.serverTimestamp(), backfilled: true,
+          kickoffAt: Timestamp.fromMillis(a.checked.kickoffMs)
+        });
+        delete doc.kickoffMs;
+        writer.create(db.collection('users').doc(a.uid).collection('leagueBets').doc(a.slot), doc);
+      });
+      await writer.close();
+      // Settle the finished ones and rescore everyone touched now, rather than waiting for the schedule.
+      await runSettlement(new Date());
+      const uids = new Set(plan.add.map(a => a.uid));
+      for (const uid of uids) {
+        try { await recomputePlayer(uid, new Date()); } catch (e) { logger.error('backfill recompute failed', uid, e); }
+      }
+      await rebuildLadders(new Date());
+    }
+    res.json({
+      run, since, added: plan.add.length, players: new Set(plan.add.map(a => a.uid)).size,
+      skipped: plan.skipped, reasons: plan.reasons
+    });
+  } catch (e) {
+    logger.error('backfillLeagueBets failed', e);
+    res.status(500).json({ error: 'backfill failed: ' + String(e && e.message || e).slice(0, 200) });
+  }
 });
 
 function profileFields(user) {
@@ -318,7 +375,7 @@ async function recomputePlayer(uid, now) {
     userRef.get(),
     userRef.collection('leagueMemberships').get()
   ]);
-  const bets = betsSnap.docs.map(d => Object.assign({ day: d.id }, d.data()));
+  const bets = betsSnap.docs.map(d => Object.assign({ day: leagueBetDay(d.id) }, d.data()));
   const periods = scoring.computePeriods(bets, now);
   const stats = Object.assign(profileFields(userSnap.data()), { periods, updatedAt: Timestamp.now() });
   await db.collection('leagueStats').doc(uid).set(stats);

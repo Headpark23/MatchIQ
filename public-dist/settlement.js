@@ -227,10 +227,25 @@
   // Every market the league can score for a match, with its reference price: the recorded bookmaker
   // price where there is one; double chance and draw no bet worked out from the three result prices;
   // and goals lines and both teams to score from the sealed model, at its fair price less a typical
-  // bookmaker margin. Players' own odds are never used. `feed` is odds.json's selections for the
+  // bookmaker margin. Only when none of those exist for a market is a best guess used: the price
+  // the player says they took (`playerOdds`), else Evens. `feed` is odds.json's selections for the
   // match, `pred` its published prediction (either may be missing).
   const ESTIMATED_MARGIN = 1.07;
-  function pricedMarkets(feed, pred) {
+  // Every market that settles from the final score. With a best-guess price these can always count.
+  const GOAL_LINES = ['0.5', '1.5', '2.5', '3.5', '4.5', '5.5'];
+  const SCORE_MARKETS = ['result:H', 'result:D', 'result:A', 'dc:1X', 'dc:X2', 'dc:12', 'dnb:H', 'dnb:A', 'btts:yes', 'btts:no']
+    .concat(...GOAL_LINES.map(l => ['goals:over:' + l, 'goals:under:' + l]));
+  const MAX_GUESS_ODDS = 11;  // wins count at most 10/1 anyway
+  function pricedMarkets(feed, pred, playerOdds) {
+    const out = pricedFromData(feed, pred);
+    const guess = Number(playerOdds) > 1 ? Math.min(MAX_GUESS_ODDS, Math.round(Number(playerOdds) * 1000) / 1000) : 2;
+    SCORE_MARKETS.forEach(key => {
+      if (!out[key]) out[key] = { decimal: guess, bookmaker: Number(playerOdds) > 1 ? 'your price (best guess)' : 'best guess (Evens)', source: 'guess' };
+    });
+    return out;
+  }
+
+  function pricedFromData(feed, pred) {
     const out = {};
     Object.keys(feed || {}).forEach(k => {
       const d = Number(feed[k] && feed[k].decimal);
@@ -257,5 +272,5 @@
     return out;
   }
 
-  return { create, pricedMarkets };
+  return { create, pricedMarkets, SCORE_MARKETS };
 });

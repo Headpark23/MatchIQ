@@ -2834,13 +2834,15 @@ function saveUserProfile(handle, town, region, country) {
 // League points are calculated by the server (functions/) from league bets it has checked and
 // settled. The app listens to this player's stats (leagueStats/{uid}) and recent league bets.
 let myLeagueStats = null;
-const myLeagueBets = new Map();  // match day (YYYY-MM-DD) -> server record of that day's league bet
+let myLeagueBetsLoaded = false;  // first snapshot seen; then unsent diary bets are entered automatically
+const myLeagueBets = new Map();  // slot id (YYYY-MM-DD or YYYY-MM-DD-2..5) -> server record; rec.day is the match day
 let myLeagueUnsubs = [];
 function stopMyLeagueListeners() {
   myLeagueUnsubs.forEach(u => { try { u(); } catch (e) { /* ignore */ } });
   myLeagueUnsubs = [];
   myLeagueStats = null;
   myLeagueBets.clear();
+  myLeagueBetsLoaded = false;
 }
 function listenToMyLeagueData(uid) {
   stopMyLeagueListeners();
@@ -2854,12 +2856,36 @@ function listenToMyLeagueData(uid) {
     myLeagueUnsubs.push(firestoreDb.collection('users').doc(uid).collection('leagueBets')
       .where(firebase.firestore.FieldPath.documentId(), '>=', since).onSnapshot(snap => {
         myLeagueBets.clear();
-        snap.docs.forEach(d => myLeagueBets.set(d.id, Object.assign({ day: d.id }, d.data())));
+        snap.docs.forEach(d => myLeagueBets.set(d.id, Object.assign({ day: leagueDocs.leagueBetDay(d.id), slot: d.id }, d.data())));
         if (['diary', 'leagues'].includes(currentRoute()[0])) scheduleLeaguesRender(true);
+        if (!myLeagueBetsLoaded) { myLeagueBetsLoaded = true; autoEnterLeagueBets(); }
       }, err => console.warn('League bets listener notice:', err)));
   } catch (e) {
     console.warn('listenToMyLeagueData notice:', e);
   }
+}
+
+// The player's own recent league bets, newest match day first, so they can see each one is in and
+// how it scored. Shown on the Leagues page.
+function myLeagueBetsCard() {
+  const recs = Array.from(myLeagueBets.values()).sort((a, b) => (a.slot < b.slot ? 1 : -1)).slice(0, 12);
+  if (!recs.length) return '';
+  const row = r => {
+    const fixtureLabel = r.legs && r.legs.length ? r.legs.length + '-leg acca' : (r.home && r.away ? r.home + ' v ' + r.away : '');
+    const status = r.status === 'settled'
+      ? (r.outcome === 'won' ? '<b style="color:#34d399">Won +' + r.points + '</b>' : r.outcome === 'lost' ? '<b style="color:#f87171">Lost ' + r.points + '</b>' : '<b class="dim">Void · 0</b>')
+      : r.status === 'pending' ? '<span class="dim">Waiting for result · ' + (r.refOdds ? esc(calc.formatFractionalOdds(r.refOdds)) : '') + '</span>'
+      : r.status === 'rejected' ? '<span style="color:#fbbf24" title="' + esc(r.reason || '') + '">Not counted</span>'
+      : '<span class="dim">Checking…</span>';
+    return '<li style="display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid rgba(255,255,255,0.06)">' +
+      '<span style="min-width:0"><span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(r.selection || 'League bet') + '</span>' +
+      '<span class="dim" style="font-size:12px">' + esc(r.day) + (fixtureLabel ? ' · ' + esc(fixtureLabel) : '') + (r.backfilled ? ' · added from diary' : '') + '</span>' +
+      (r.status === 'rejected' && r.reason ? '<span style="display:block;font-size:12px;color:#fbbf24">' + esc(r.reason) + '</span>' : '') + '</span>' +
+      '<span style="flex:none;text-align:right;font-size:13px">' + status + '</span></li>';
+  };
+  return '<section class="card" style="margin-top:12px"><h3 style="margin:0 0 4px;font-size:15px">🏆 Your league bets</h3>' +
+    '<p class="dim" style="margin:0;font-size:12.5px">Up to ' + leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ' a day. Points arrive within about 30 minutes of full time.</p>' +
+    '<ul style="list-style:none;margin:6px 0 0;padding:0">' + recs.map(row).join('') + '</ul></section>';
 }
 
 // This player's server-scored stats for one period (zeros until the server has scored a bet).
@@ -3080,7 +3106,7 @@ function viewLeagues() {
         '<p class="lg-fine">Sign in to join leagues and compete with mates. Got an invite code? Sign in and it is one tap to join.</p>' +
       '</div>' +
       '<ol class="lg-steps">' +
-        '<li><span>⚽</span><b>Pick one bet a day</b><small>Any football result, goals or both-teams-to-score bet</small></li>' +
+        '<li><span>⚽</span><b>Up to 5 bets a day</b><small>Any football result, goals or both-teams-to-score bet</small></li>' +
         '<li><span>🎯</span><b>Score points</b><small>An Evens winner is 10 pts</small></li>' +
         '<li><span>🥇</span><b>Win silverware</b><small>Weekly, monthly and season</small></li>' +
       '</ol>' +
@@ -3264,7 +3290,7 @@ function viewLeagues() {
     race = 'Log a league bet before kick-off and you are in the race.';
   }
   const today = new Date().toISOString().slice(0, 10);
-  const todayBet = getLeagueBetForDay(today);
+  const todayBets = getLeagueBetsForDay(today).length;
   const spotlight = '<section class="lg-spot">' +
     '<div class="lg-spot-top"><span class="lg-spot-league">' + esc(isGeo ? currentLeague.icon : (currentLeague.icon || '👥')) + ' ' + leagueTitle +
       (!isGeo && isLeagueCreator ? ' <button type="button" class="lg-mini" data-rename-league="' + esc(currentLeague.code) + '" title="Rename this league" aria-label="Rename this league">✏️</button>' : '') + '</span>' +
@@ -3273,8 +3299,9 @@ function viewLeagues() {
       '<div class="lg-spot-stats"><span><b>' + uStats.points + '</b>pts</span><span><b>' + uStats.winRate + '%</b>wins</span><span><b>' + uStats.settled + '</b>bets</span></div></div>' +
     '<p class="lg-race">' + race + '</p>' +
     '<div class="lg-spot-foot"><span class="lg-clock">⏱ ' + periodName + ' ends in <b>' + leagueCountdown(activeLeagueFreq) + '</b></span>' +
-      (todayBet ? '<span class="lg-today ok">✓ Today’s bet is in</span>' : '<a href="#/build/log" class="lg-today">+ Log today’s league bet</a>') + '</div>' +
-  '</section>';
+      (todayBets >= leagueDocs.MAX_LEAGUE_BETS_PER_DAY ? '<span class="lg-today ok">✓ All ' + todayBets + ' of today’s bets are in</span>'
+        : '<a href="#/build/log" class="lg-today">' + (todayBets ? '✓ ' + todayBets + ' in today · + add another' : '+ Log today’s league bet') + '</a>') + '</div>' +
+  '</section>' + myLeagueBetsCard();
 
   // Podium with avatars for the top three.
   const podSrc = ranked.slice(0, 3);
@@ -3298,7 +3325,7 @@ function viewLeagues() {
   return '<section class="view lg-view">' + locationPromptBanner() +
     '<div class="lg-topbar"><h1 class="page-title">Leagues</h1><button type="button" class="lg-cabinet" data-open-trophy-cabinet title="Trophy cabinet">🏆<b>' + trophies.length + '</b><span>trophies</span></button></div>' +
     switcher + spotlight + board +
-    '<p class="lg-rules">🛡️ <b>1 league bet a day</b>, before kick-off · winner scores (price − 1) × 10, so Evens = 10 pts, max 100 · loser −2 · <a href="#/guide">Full rules ›</a></p>' +
+    '<p class="lg-rules">🛡️ <b>Every bet counts, up to ' + leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ' a day</b>, before kick-off · winner scores (price − 1) × 10, so Evens = 10 pts, max 100 · loser −2 · <a href="#/guide">Full rules ›</a></p>' +
   '</section>';
 }
 
@@ -3564,8 +3591,9 @@ function betCard(entry) {
   const leagueRec = leagueBetRecordFor(entry);
   const greenBadge = text => ' <span class="badge" style="background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.5);color:#34d399;font-weight:700;">' + text + '</span>';
   const greyBadge = (text, title) => ' <span class="badge" style="background:rgba(148,163,184,0.12);border:1px solid rgba(148,163,184,0.25);color:#94a3b8;"' + (title ? ' title="' + esc(title) + '"' : '') + '>' + text + '</span>';
-  const leagueBadge = !entry.inLeague && !leagueRec ? greyBadge('Diary only')
-    : !leagueRec ? greenBadge('🏆 League Bet')
+  const whyNot = leagueRec && leagueRec.status === 'rejected' ? leagueRec.reason : entry.leagueReason;
+  const leagueBadge = !entry.inLeague && !leagueRec ? greyBadge(entry.leagueReason ? 'Not in league' : 'Diary only', entry.leagueReason || '')
+    : !leagueRec ? greenBadge('🏆 League Bet · sending…')
     : leagueRec.status === 'rejected' ? greyBadge('Not in league', leagueRec.reason || '')
     : leagueRec.status === 'settled' ? greenBadge('🏆 League ' + (leagueRec.outcome === 'void' ? 'void · 0 pts' : (leagueRec.points > 0 ? '+' : '') + leagueRec.points + ' pts'))
     : leagueRec.status === 'pending' ? greenBadge('🏆 League Bet · scores at ' + esc(calc.formatFractionalOdds(leagueRec.refOdds)))
@@ -3573,8 +3601,8 @@ function betCard(entry) {
 
   const leagueActionBtn = entry.inLeague
     ? '<button type="button" class="btn small" data-toggle-league="' + esc(entry.id) + '" title="Remove from league standings" style="padding:2px 8px;font-size:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:var(--muted)">Remove from League</button>'
-    : (!getLeagueBetForDay(dayKey)
-      ? '<button type="button" class="btn small" data-toggle-league="' + esc(entry.id) + '" title="Designate as your 1 qualifying league bet for this day" style="padding:2px 8px;font-size:11px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#34d399">🏆 Make League Bet</button>'
+    : (!leagueDayFull(dayKey) && entry.outcome === 'pending'
+      ? '<button type="button" class="btn small" data-toggle-league="' + esc(entry.id) + '" title="Add to your league bets for this day (up to ' + leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ')" style="padding:2px 8px;font-size:11px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#34d399">🏆 Make League Bet</button>'
       : '');
 
   return '<article class="card bet"><div class="bet-top"><div><div class="bet-sel">' + esc(entry.selection) + '</div><div class="dim" style="font-size:13px">' + esc(entry.fixture || '') + ' • ' + esc(entry.date || '') + ' • ' + esc(entry.marketName || entry.market || '') + '</div></div>' +
@@ -3586,6 +3614,7 @@ function betCard(entry) {
       '<div><span>Stake</span><b>' + money(+entry.stake) + '</b></div><div><span>Bookmaker</span><b style="font-family:var(--body)">' + esc(entry.bookmaker || '-') + '</b></div>' +
       '<div><span>Profile</span><b style="font-family:var(--body)">' + esc(entry.profile || 'Default') + (entry.type === 'accumulator' ? ' • ' + (entry.legs || []).length + '-pick combined bet' : '') + '</b></div></div>' +
     (entry.settledBy === 'auto' ? '<p class="dim" style="font-size:12.5px;margin:0 0 6px">✅ Settled automatically' + (entry.finalScore ? ' · final score ' + esc(entry.finalScore) : '') + '</p>' : '') +
+    (whyNot && !(leagueRec && leagueRec.status !== 'rejected') ? '<p style="font-size:12.5px;margin:0 0 6px;color:#fbbf24">⚠️ Not in the league: ' + esc(whyNot) + '</p>' : '') +
     '<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span>' + pl + '</span><span style="display:flex;gap:8px;align-items:center">' +
       leagueActionBtn +
       outcomeSelect(entry.outcome, 'data-outcome="' + esc(entry.id) + '"', 'Settle bet') +
@@ -3788,15 +3817,24 @@ function diaryFixtureOptions() {
 
 // The league bet already entered for a match day: the server's record when signed in, otherwise
 // a diary bet marked for the league on this device.
-function getLeagueBetForDay(dayKey) {
-  if (!dayKey) return null;
-  const server = myLeagueBets.get(dayKey);
-  if (server) return server;
-  const diary = getStoredDiary();
-  return diary.find(e => {
+// Every league bet this player has for a match day: the server's records, plus diary bets marked as
+// in the league that the server has not reported yet. Up to leagueDocs.MAX_LEAGUE_BETS_PER_DAY.
+function getLeagueBetsForDay(dayKey) {
+  if (!dayKey) return [];
+  const server = Array.from(myLeagueBets.values()).filter(r => r.day === dayKey);
+  const ids = new Set(server.map(r => r.betId));
+  const local = getStoredDiary().filter(e => {
     const d = (e.date || (e.timestamp ? e.timestamp.slice(0, 10) : '') || '').slice(0, 10);
-    return d === dayKey && e.inLeague;
-  }) || null;
+    return d === dayKey && e.inLeague && !ids.has(e.id);
+  });
+  return server.concat(local);
+}
+function leagueDayFull(dayKey, exceptBetId) {
+  return getLeagueBetsForDay(dayKey).filter(r => (r.betId || r.id) !== exceptBetId).length >= leagueDocs.MAX_LEAGUE_BETS_PER_DAY;
+}
+// The first free slot id for a match day, or null when all five are used.
+function freeLeagueSlot(dayKey) {
+  return leagueDocs.leagueBetSlots(dayKey).find(s => !myLeagueBets.has(s)) || null;
 }
 
 // The text the settlement code reads for a diary bet (the same as Bet Diary auto-settlement).
@@ -3806,24 +3844,23 @@ function diaryBetText(entry) {
 
 const LEAGUE_MARKET_RE = /^(result:[HDA]|goals:(over|under):\d+(\.\d+)?)$/;
 
-// The markets the league can score for a match, with their reference prices (the same code the server runs).
-function leaguePricedMarkets(fx) {
+// The markets the league can score for a match, with their reference prices (the same code the server
+// runs): bookmaker or model prices where there are some, otherwise the player's own price as a best guess.
+function leaguePricedMarkets(fx, playerOdds) {
   const feed = ((((DATA.odds && DATA.odds.matches) || {})[fx.id]) || {}).selections || {};
   const pred = DATA.predictions && DATA.predictions.predictions && DATA.predictions.predictions[fx.id];
-  return window.BetBuddySettlement.pricedMarkets(feed, pred);
+  return window.BetBuddySettlement.pricedMarkets(feed, pred, playerOdds);
 }
 
 // Checks one pick (a single, or one accumulator leg) on its match: not kicked off, and a market that
-// settles from the final score with a price. `market` is the market key when the app knows it.
-function checkLeaguePick(text, fx, market) {
-  if (!(kickoffMs(fx) > Date.now())) return { ok: false, reason: fx.home + ' v ' + fx.away + ' has already kicked off.' };
-  const priced = leaguePricedMarkets(fx);
+// settles from the final score. `market` is the market key when the app knows it.
+function checkLeaguePick(text, fx, market, playerOdds) {
+  if (!(kickoffMs(fx) > Date.now())) return { ok: false, reason: fx.home + ' v ' + fx.away + ' had already kicked off when it was saved.' };
+  const priced = leaguePricedMarkets(fx, playerOdds);
   const candidates = Object.keys(priced);
-  if (!candidates.length) return { ok: false, reason: 'There is no price for ' + fx.home + ' v ' + fx.away + ' yet, so it cannot count in leagues.' };
   let key = market || settler.classifyMarket(text, fx.home, fx.away, candidates);
-  if (!key) return { ok: false, reason: 'Only markets that settle from the final score, with a price, count in leagues ("' + text + '").' };
-  if (!priced[key] && /^(corners|cards|shots|tts|other)/.test(key)) return { ok: false, reason: 'Corners, cards, shots and team-to-score bets cannot be checked against the final score, so they stay in your diary.' };
-  if (!priced[key]) return { ok: false, reason: 'There is no usable price for "' + text + '" on ' + fx.home + ' v ' + fx.away + ', so it cannot count in leagues.' };
+  if (key && !priced[key] && /^(corners|cards|shots|tts|other)/.test(key)) return { ok: false, reason: 'Corners, cards, shots and team-to-score bets cannot be settled from the final score.' };
+  if (!key || !priced[key]) return { ok: false, reason: 'The league could not tell which market "' + text + '" is. Pick it from the match coupon (result, double chance, draw no bet, goals or both teams to score).' };
   return { ok: true, fixture: fx, market: key, refOdds: Number(priced[key].decimal) };
 }
 
@@ -3838,15 +3875,17 @@ function leagueBetCheck(entry) {
     // Look from a few hours back, so a leg whose match has just kicked off is caught rather than
     // matched to that club's next fixture.
     const since = Date.now() - 6 * 3600000;
+    const shareOdds = Number(entry.odds) > 1 ? Math.pow(Number(entry.odds), 1 / legs.length) : null;
     const picks = [];
     for (let i = 0; i < legs.length; i++) {
       const text = String((legs[i] && legs[i].selection) || '');
+      const legOdds = Number(legs[i] && legs[i].odds) > 1 ? Number(legs[i].odds) : shareOdds;
       const fx = (legs[i] && legs[i].fixtureId && fixtureById(legs[i].fixtureId)) || settler.findUpcomingFixture(text, since);
       if (!fx) return { ok: false, reason: 'Leg ' + (i + 1) + ' ("' + text + '") does not say which match it is for, so the league cannot check the result. Add a club name to the leg, e.g. "Arsenal v Chelsea over 2.5 goals".' };
       if (picks.some(p => p.fixture.id === fx.id)) return { ok: false, reason: 'Leg ' + (i + 1) + ' is on the same match as an earlier leg. Each accumulator leg must be a different match.' };
-      const pick = checkLeaguePick(text, fx, legs[i] && legs[i].market);
+      const pick = checkLeaguePick(text, fx, legs[i] && legs[i].market, legOdds);
       if (!pick.ok) return pick;
-      picks.push(Object.assign(pick, { selection: text }));
+      picks.push(Object.assign(pick, { selection: text, odds: legOdds }));
     }
     picks.sort((x, y) => kickoffMs(x.fixture) - kickoffMs(y.fixture));
     return {
@@ -3855,12 +3894,12 @@ function leagueBetCheck(entry) {
       fixture: picks[0].fixture,
       day: picks[0].fixture.kickoff_utc.slice(0, 10),
       refOdds: picks.reduce((t, p) => t * p.refOdds, 1),
-      legs: picks.map(p => ({ fixtureId: p.fixture.id, selection: p.selection, market: p.market }))
+      legs: picks.map(p => ({ fixtureId: p.fixture.id, selection: p.selection, market: p.market, odds: p.odds }))
     };
   }
   const fx = (entry.match_id && fixtureById(entry.match_id)) || findDiaryFixture(diaryBetText(entry), entry);
-  if (!fx) return { ok: false, reason: 'Choose the match from the list so the league can check the result.' };
-  const pick = checkLeaguePick(diaryBetText(entry), fx, entry.leagueMarket);
+  if (!fx) return { ok: false, reason: 'Not linked to a listed football match, so the league cannot check the result. Log it from the match coupon.' };
+  const pick = checkLeaguePick(diaryBetText(entry), fx, entry.leagueMarket, entry.odds);
   return pick.ok ? Object.assign(pick, { day: fx.kickoff_utc.slice(0, 10) }) : pick;
 }
 
@@ -3870,17 +3909,32 @@ async function submitLeagueBet(entry) {
   if (!firestoreDb || !currentAuthUser || !user || !user.signedIn) return { ok: false, reason: 'Sign in to enter league bets.' };
   const chk = leagueBetCheck(entry);
   if (!chk.ok) return chk;
-  const existing = myLeagueBets.get(chk.day);
-  if (existing && existing.betId !== entry.id) return { ok: false, reason: 'You already have a league bet for ' + chk.day + '.' };
+  const already = leagueBetRecordFor(entry);
+  if (already && already.status !== 'rejected') return chk;  // in the league already
+  if (already) {  // refused before: clear it so the retry can use its slot
+    try {
+      await firestoreDb.collection('users').doc(currentAuthUser.uid).collection('leagueBets').doc(already.slot).delete();
+      myLeagueBets.delete(already.slot);
+    } catch (e) { /* the retry takes another slot */ }
+  }
+  const slot = freeLeagueSlot(chk.day);
+  if (!slot) return { ok: false, reason: 'You already have ' + leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ' league bets for ' + chk.day + ' (the daily limit).' };
   try {
-    await firestoreDb.collection('users').doc(currentAuthUser.uid).collection('leagueBets').doc(chk.day).set(leagueDocs.leagueBetDoc({
+    await firestoreDb.collection('users').doc(currentAuthUser.uid).collection('leagueBets').doc(slot).set(leagueDocs.leagueBetDoc({
       betId: entry.id, fixtureId: chk.fixture.id, selection: chk.acca ? entry.selection : diaryBetText(entry), odds: entry.odds,
-      legs: chk.acca ? chk.legs : undefined, market: !chk.acca && /^(dc|dnb|btts):/.test(chk.market) ? chk.market : undefined, now: firebase.firestore.FieldValue.serverTimestamp()
+      legs: chk.acca ? chk.legs : undefined, market: !chk.acca && /^(result|goals|dc|dnb|btts):/.test(chk.market) ? chk.market : undefined, now: firebase.firestore.FieldValue.serverTimestamp()
     }));
+    // Hold the slot until the listener reports the server's copy, so a second bet that day takes the next one.
+    if (!myLeagueBets.has(slot)) myLeagueBets.set(slot, { day: chk.day, slot, betId: entry.id, selection: entry.selection, refOdds: chk.refOdds });
     return chk;
   } catch (e) {
     console.warn('submitLeagueBet notice:', e);
-    return { ok: false, reason: e && e.code === 'permission-denied' ? 'You already have a league bet for ' + chk.day + '.' : 'Could not reach the league server. Please try again.' };
+    if (e && e.code === 'permission-denied') {
+      const u = firebase.auth && firebase.auth().currentUser;
+      const unverified = u && !u.emailVerified && !(u.providerData || []).some(p => p.providerId === 'google.com');
+      return { ok: false, reason: unverified ? 'Confirm your email address (check your inbox) before league bets can count.' : 'The league refused this bet. Sign out and back in, then try again.' };
+    }
+    return { ok: false, reason: 'Could not reach the league server. Please try again.' };
   }
 }
 
@@ -3894,16 +3948,49 @@ async function enterLeagueBet(id) {
   const entry = getStoredDiary().find(e => e.id === id);
   if (!entry) return;
   const res = await submitLeagueBet(entry);
+  recordLeagueAttempt(id, res);
+  toast(res.ok
+    ? 'Entered into your leagues 🏆 It scores at ' + calc.formatFractionalOdds(res.refOdds) + (res.refOdds > leagueDocs.MAX_COUNTED_ODDS ? ' (counted as 10/1, the 100-point cap)' : '') + ' if it wins.'
+    : 'Saved to your Bet Diary, but not the league: ' + res.reason, res.ok ? undefined : 'warn');
+  if (['diary', 'leagues'].includes(currentRoute()[0])) render();
+}
+
+// Remembers on the diary entry whether it went into the league and, if not, why (shown on the bet).
+function recordLeagueAttempt(id, res) {
   const diary = getStoredDiary();
   const saved = diary.find(e => e.id === id);
-  if (saved) {
-    saved.inLeague = !!res.ok;
-    saveStoredDiary(diary);
+  if (!saved) return;
+  saved.inLeague = !!res.ok;
+  if (res.ok) delete saved.leagueReason; else saved.leagueReason = String(res.reason || '').slice(0, 200);
+  saveStoredDiary(diary);
+}
+
+// Every football bet joins the league. After sign-in, diary bets on matches not yet started that never
+// reached the league (saved while signed out, or before this fix) are entered automatically. Bets the
+// player chose to keep diary-only (leagueOptOut) are left alone.
+let autoEnterRunning = false;
+async function autoEnterLeagueBets() {
+  if (autoEnterRunning || !firestoreDb || !currentAuthUser) return;
+  autoEnterRunning = true;
+  try {
+    const todo = getStoredDiary().filter(e => e && e.outcome === 'pending' && !e.inLeague && !e.leagueOptOut && !leagueBetRecordFor(e));
+    let added = 0;
+    for (const e of todo) {
+      const chk = leagueBetCheck(e);
+      if (!chk.ok) continue;  // not checkable (kicked off, not a listed match...): stays in the diary
+      const res = await submitLeagueBet(e);
+      recordLeagueAttempt(e.id, res);
+      if (res.ok) added++;
+    }
+    if (added) {
+      toast('Added ' + added + ' of your diary bets to your leagues 🏆');
+      if (['diary', 'leagues'].includes(currentRoute()[0])) render();
+    }
+  } catch (err) {
+    console.warn('autoEnterLeagueBets notice:', err);
+  } finally {
+    autoEnterRunning = false;
   }
-  toast(res.ok
-    ? 'Entered into your leagues 🏆 It scores at the bookmaker price of ' + calc.formatFractionalOdds(res.refOdds) + (res.refOdds > leagueDocs.MAX_COUNTED_ODDS ? ' (counted as 10/1, the 100-point cap)' : '') + ' if it wins.'
-    : 'Saved to your Bet Diary only. ' + res.reason);
-  if (['diary', 'leagues'].includes(currentRoute()[0])) render();
 }
 
 function updateDiarySubmitBtn() {
@@ -3918,21 +4005,21 @@ function updateDiaryDestinationOptions() {
   const f = !acc && $('modal-fixture-select') ? fixtureById($('modal-fixture-select').value) : null;
   const targetDate = f ? f.kickoff_utc.slice(0, 10) : ((modalPrefill && modalPrefill.date) || new Date().toISOString().slice(0, 10));
 
-  const existingLeagueBet = getLeagueBetForDay(targetDate);
+  const dayBets = getLeagueBetsForDay(targetDate);
   const bothOpt = $('dest-option-both');
   const usedNote = $('modal-dest-league-used-note');
   const bothRadio = $('dest-both-radio');
   const diaryRadio = $('dest-diary-radio');
 
-  if (existingLeagueBet) {
-    // If user already picked a bet for the league for that day, remove the option from future bets!
+  if (dayBets.length >= leagueDocs.MAX_LEAGUE_BETS_PER_DAY) {
+    // All of the day's league slots are used, so this one can only go in the diary.
     if (bothOpt) bothOpt.style.display = 'none';
     if (bothRadio) bothRadio.checked = false;
     if (diaryRadio) diaryRadio.checked = true;
     if (usedNote) {
       usedNote.style.display = 'block';
       const nameEl = $('modal-existing-league-bet');
-      if (nameEl) nameEl.textContent = existingLeagueBet.selection || existingLeagueBet.fixture || 'Selected bet';
+      if (nameEl) nameEl.textContent = leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ' bets already (the daily limit)';
     }
   } else {
     // Both options available: default to 'Add to Bet Diary & to League'
@@ -3956,7 +4043,8 @@ async function toggleLeagueBet(id) {
     }
     if (rec) {
       try {
-        await firestoreDb.collection('users').doc(currentAuthUser.uid).collection('leagueBets').doc(rec.day).delete();
+        await firestoreDb.collection('users').doc(currentAuthUser.uid).collection('leagueBets').doc(rec.slot || rec.day).delete();
+        myLeagueBets.delete(rec.slot || rec.day);
       } catch (e) {
         toast('Could not remove the league bet. Please try again.', 'warn');
         return;
@@ -3964,16 +4052,18 @@ async function toggleLeagueBet(id) {
     }
     const fresh = getStoredDiary();
     const target = fresh.find(e => e.id === id);
-    if (target) { target.inLeague = false; saveStoredDiary(fresh); }
+    if (target) { target.inLeague = false; target.leagueOptOut = true; delete target.leagueReason; saveStoredDiary(fresh); }
     toast('Removed from League. Bet is now Diary only.');
     render();
   } else {
     const chk = leagueBetCheck(entry);
-    const existing = chk.ok ? getLeagueBetForDay(chk.day) : null;
-    if (existing && existing.betId !== entry.id && existing.id !== entry.id) {
-      toast('You already have a league bet for ' + chk.day + ' (' + (existing.selection || 'existing bet') + '). Remove it first to swap.', 'warn');
+    if (chk.ok && leagueDayFull(chk.day, entry.id)) {
+      toast('You already have ' + leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ' league bets for ' + chk.day + '. Remove one first to swap.', 'warn');
       return;
     }
+    const fresh = getStoredDiary();
+    const target = fresh.find(e => e.id === id);
+    if (target && target.leagueOptOut) { delete target.leagueOptOut; saveStoredDiary(fresh); }
     toast('Checking with the league…');
     enterLeagueBet(id);
   }
@@ -4140,8 +4230,7 @@ function handleDiaryFormSubmit(event) {
   const linked = f && modalPrefill.id === f.id && !acc;
   const targetDate = f ? f.kickoff_utc.slice(0, 10) : ((modalPrefill && modalPrefill.date) || new Date().toISOString().slice(0, 10));
   const destVal = (document.querySelector('input[name="modal-destination"]:checked') || {}).value || 'diary';
-  const existingLeagueBet = getLeagueBetForDay(targetDate);
-  const inLeague = destVal === 'league' && !existingLeagueBet;
+  const inLeague = destVal === 'league' && !leagueDayFull(targetDate);
 
   const entry = {
     id: 'bet-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7), type: acc ? 'accumulator' : 'single',
@@ -4153,6 +4242,7 @@ function handleDiaryFormSubmit(event) {
     origin: $('modal-origin-select').value, bookmaker: $('modal-bookmaker-input').value.trim() || 'Bookmaker',
     odds, stake, potentialReturn: stake * odds, outcome: 'pending', timestamp: new Date().toISOString(),
     inLeague: false,  // set once the league server accepts it (enterLeagueBet)
+    leagueOptOut: destVal === 'diary' ? true : undefined,  // the player chose Diary only
     model_p: linked && modalPrefill.p != null ? modalPrefill.p : undefined, model_fair_odds: linked ? modalPrefill.fair : undefined,
     recommendation: linked && modalPrefill.rec && $('modal-selection-input').value.trim() === modalPrefill.selection ? modalPrefill.rec : undefined,
     notes: $('modal-notes-input').value.trim()
@@ -4162,7 +4252,7 @@ function handleDiaryFormSubmit(event) {
   closeDiary();
   celebrateSave();
   if (inLeague) enterLeagueBet(entry.id);
-  else toast('Saved to your Bet Diary.');
+  else toast(destVal === 'league' ? 'Saved to your Bet Diary. You already have ' + leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ' league bets that day.' : 'Saved to your Bet Diary.');
   if (currentRoute()[0] === 'diary') render();
 }
 
@@ -4601,6 +4691,7 @@ function buildOwnBetEntry() {
     origin: ownBetOrigin(), source: ownBet.source || 'build', bookmaker: ownBet.bookmaker.trim() || 'Bookmaker',
     odds, stake, potentialReturn: stake * odds, outcome: 'pending', timestamp: new Date().toISOString(), inLeague: false, notes: String(ownBet.notes || '').trim()
   };
+  if (ownBet.dest === 'diary') entry.leagueOptOut = true;
   if (acca) {
     Object.assign(entry, { fixture: 'Accumulator', market: 'accumulator', marketName: 'Accumulator', selection: legs.map(ownBetLegText).join(' + '),
       legs: legs.map(l => Object.assign({ selection: ownBetLegText(l), odds: l.odds, outcome: 'pending' }, l.kind === 'football' ? { fixtureId: l.fixtureId, market: l.key } : {})) });
@@ -4619,8 +4710,7 @@ function ownBetLeagueState(entry) {
   if (ownBet.legs.some(l => l.kind !== 'football')) return { ok: false, reason: 'League bets are football match result or over/under goals picked from the match list. Typed-in selections stay in your diary.' };
   const chk = leagueBetCheck(entry);
   if (!chk.ok) return chk;
-  const existing = getLeagueBetForDay(chk.day);
-  if (existing) return { ok: false, reason: 'You already have a league bet for ' + chk.day + ' (' + (existing.selection || 'an earlier bet') + '). This one goes in your diary only.' };
+  if (leagueDayFull(chk.day)) return { ok: false, reason: 'You already have ' + leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ' league bets for ' + chk.day + ' (the daily limit). This one goes in your diary only.' };
   return chk;
 }
 
@@ -4637,7 +4727,10 @@ function saveOwnBetToDiary() {
   celebrateSave();
   location.hash = '#/diary';
   if (state && state.ok) enterLeagueBet(entry.id);
-  else toast(state ? 'Saved to your Bet Diary only. ' + state.reason : 'Saved to your Bet Diary.');
+  else {
+    if (state) recordLeagueAttempt(entry.id, state);
+    toast(state ? 'Saved to your Bet Diary, but not the league: ' + state.reason : 'Saved to your Bet Diary.', state ? 'warn' : undefined);
+  }
 }
 
 function viewBuild(mode) {
@@ -4695,7 +4788,7 @@ function viewBuild(mode) {
       '<div class="field"><label for="own-bookie">Bookmaker (optional)</label><input id="own-bookie" class="ctl" maxlength="40" value="' + esc(ownBet.bookmaker) + '" placeholder="e.g. Bet365" onchange="setOwnBetBookmaker(this.value)"></div>' +
       '<div class="field own-note"><label for="own-notes">Note (optional)</label><input id="own-notes" class="ctl" maxlength="280" value="' + esc(ownBet.notes || '') + '" placeholder="e.g. cash out offered at half-time" onchange="setOwnBetNotes(this.value)"></div></div>' +
       '<div class="dest-toggle-group" role="radiogroup" aria-label="Where to save">' +
-        '<label class="dest-opt"><input type="radio" name="own-dest" value="league"' + (ownBet.dest === 'league' ? ' checked' : '') + ' onchange="setOwnBetDest(\'league\')"><div class="dest-opt-content"><span class="dest-opt-title">🏆 Bet Diary &amp; League</span><span class="dest-opt-sub">Your 1 qualifying bet for the day, football only.</span></div></label>' +
+        '<label class="dest-opt"><input type="radio" name="own-dest" value="league"' + (ownBet.dest === 'league' ? ' checked' : '') + ' onchange="setOwnBetDest(\'league\')"><div class="dest-opt-content"><span class="dest-opt-title">🏆 Bet Diary &amp; League</span><span class="dest-opt-sub">Counts in your leagues (up to 5 a day), football only.</span></div></label>' +
         '<label class="dest-opt diary-only"><input type="radio" name="own-dest" value="diary"' + (ownBet.dest === 'diary' ? ' checked' : '') + ' onchange="setOwnBetDest(\'diary\')"><div class="dest-opt-content"><span class="dest-opt-title">📓 Bet Diary only</span><span class="dest-opt-sub">Private. Does not affect league scores.</span></div></label></div>' +
       leagueNote +
       '<div class="btn-row"><button type="button" class="btn primary" onclick="saveOwnBetToDiary()">' + (ownBet.dest === 'league' ? 'Save to Diary &amp; League' : 'Save to Bet Diary') + '</button>' +
@@ -4772,7 +4865,7 @@ function viewGuide() {
     '<li>Switch between <b>Weekly / Monthly / Yearly</b> tables above the league table.</li>' +
     '<li>The creator can <b>Rename</b> or <b>Delete</b> the league; everyone else can <b>Leave</b>.</li>' +
     '<li>The top three each period win Gold, Silver and Bronze for your Trophy Cabinet.</li>' +
-    '<li>You can be in as many leagues as you like. Your one qualifying bet a day counts in all of them.</li></ul>';
+    '<li>You can be in as many leagues as you like. Your league bets (up to 5 a day) count in all of them.</li></ul>';
 
   const regional = '<p>You do not need to join anything. Once your location is set, every league bet you make is entered on <b>six ladders</b> automatically:</p>' +
     '<div class="guide-tiers"><span>🏘️ Hometown</span><span>🏛️ Region / County</span><span>🏴 Country</span><span>🇬🇧 UK</span><span>🇪🇺 Europe</span><span>🌍 Worldwide</span></div>' +
@@ -4783,11 +4876,11 @@ function viewGuide() {
     '</ol><p class="guide-tip">Ladders show the top 50 players and refresh every 30 minutes, so a new result can take a little while to appear. If a ladder asks you to add your location, finish step 1.</p>';
 
   const rules = '<ul class="guide-list">' +
-    '<li><b>Win:</b> (bookmaker price &minus; 1) &times; 10 points. Evens = 10 pts. Prices count up to 10/1, so 100 pts is the most one bet can score.</li>' +
+    '<li><b>Win:</b> (price &minus; 1) &times; 10 points. Evens = 10 pts. Prices count up to 10/1, so 100 pts is the most one bet can score.</li>' +
     '<li><b>Loss:</b> &minus;2 points.</li>' +
-    '<li><b>One league bet per match day</b>, logged before kick-off. Extra bets that day go to your Diary only.</li>' +
-    '<li><b>What counts:</b> a single, or an accumulator, on any football market that settles from the final score: match result, double chance, draw no bet, both teams to score and goals over/under. Corners, cards, shots and other sports stay in your Diary. Leg prices are multiplied (still capped at 10/1). One losing leg loses the acca; a postponed or void leg drops out.</li><li><b>Which price:</b> the league uses a recorded bookmaker price where there is one. Double chance and draw no bet are worked out from the three result prices; both teams to score and other goals lines use Bet Buddy&rsquo;s model price less a typical bookmaker margin. The odds you type never count.</li>' +
-    '<li><b>Fair play:</b> the league server records the bookmaker price when you log the bet and settles it from the official result, so scores cannot be edited.</li>' +
+    '<li><b>Every bet counts</b>, up to ' + leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ' league bets per match day, logged before kick-off. Extra bets that day go to your Diary only.</li>' +
+    '<li><b>What counts:</b> a single, or an accumulator, on any football market that settles from the final score: match result, double chance, draw no bet, both teams to score and goals over/under. Corners, cards, shots and other sports stay in your Diary. Leg prices are multiplied (still capped at 10/1). One losing leg loses the acca; a postponed or void leg drops out.</li><li><b>Which price:</b> the league uses a recorded bookmaker price where there is one. Double chance and draw no bet are worked out from the three result prices; both teams to score and other goals lines use Bet Buddy&rsquo;s model price less a typical bookmaker margin. Only when none of those exist is the price you took used as a best guess.</li>' +
+    '<li><b>Fair play:</b> the league server records the price when you log the bet and settles it from the official result, so scores cannot be edited.</li>' +
     '<li><b>Locked in:</b> once the match has kicked off a league bet stands and cannot be removed.</li></ul>';
 
   const faq = '<details class="guide-q"><summary>Do I need an account?</summary><p>Not for picks, fixtures, results or a local diary. Google sign-in is needed for leagues, ladders and cross-device diary sync.</p></details>' +
@@ -5461,6 +5554,40 @@ async function loadAdminDashboard() {
   if (currentRoute()[0] === 'admin') render();
 }
 
+// ---- Owner tool: add players' past diary bets to their league history (backfillLeagueBets function) ----
+let backfillState = null;  // { busy, result, error }
+async function runLeagueBackfill(run) {
+  if (!isAppOwner() || !firebaseAuth || !firebaseAuth.currentUser || (backfillState && backfillState.busy)) return;
+  backfillState = Object.assign({}, backfillState, { busy: true, error: null });
+  render();
+  try {
+    const token = await firebaseAuth.currentUser.getIdToken();
+    const res = await fetch('https://europe-west1-betbuddyuk.cloudfunctions.net/backfillLeagueBets', {
+      method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ run: !!run })
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || (res.status === 404 ? 'not deployed yet' : 'HTTP ' + res.status));
+    backfillState = { busy: false, result: body };
+    if (run) toast('Backfill done: ' + body.added + ' bets added for ' + body.players + ' players.');
+  } catch (e) {
+    backfillState = { busy: false, result: backfillState && backfillState.result, error: (e && e.message) || 'failed' };
+  }
+  if (currentRoute()[0] === 'admin') render();
+}
+function renderBackfillCard() {
+  const s = backfillState || {};
+  const r = s.result;
+  const reasons = r && r.reasons ? Object.entries(r.reasons).sort((a, b) => b[1] - a[1]).slice(0, 8) : [];
+  return '<div class="card" style="margin:14px 0"><h3 style="margin:0 0 4px">League backfill</h3>' +
+    '<p class="muted" style="font-size:13px;margin:0 0 10px">Adds every cloud-synced football diary bet since ' + esc((r && r.since) || '1 Nov') + ' to its player’s league history (up to 5 a match day), settles finished ones and rescores the tables. Preview first; it changes nothing.</p>' +
+    '<div class="chips"><button type="button" class="chip" data-admin-action="backfill-preview"' + (s.busy ? ' disabled' : '') + '>' + (s.busy ? 'Working…' : '🔍 Preview') + '</button>' +
+    (r && !r.run && r.added ? '<button type="button" class="chip" data-admin-action="backfill-run" style="background:rgba(16,185,129,0.18);color:#34d399"' + (s.busy ? ' disabled' : '') + '>✅ Add ' + r.added + ' bets</button>' : '') + '</div>' +
+    (s.error ? '<p style="color:#fca5a5;font-size:13px">Backfill failed: ' + esc(s.error) + '</p>' : '') +
+    (r ? '<p style="font-size:13px;margin:10px 0 4px">' + (r.run ? '<b>Done.</b> Added ' : 'Would add ') + '<b>' + r.added + '</b> bets for <b>' + r.players + '</b> players. Skipped ' + r.skipped + '.</p>' +
+      (reasons.length ? '<ul class="muted" style="font-size:12.5px;margin:0;padding-left:18px">' + reasons.map(([k, n]) => '<li>' + n + ' × ' + esc(k) + '</li>').join('') + '</ul>' : '') : '') +
+    '</div>';
+}
+
 const HQ_COLORS = ['#10b981', '#38bdf8', '#fbbf24', '#a78bfa', '#f472b6', '#fb7185', '#34d399', '#94a3b8', '#f59e0b', '#22d3ee'];
 function hqSpark(values, color) {
   const v = values.length ? values : [0], max = Math.max(1, ...v), W = 120, H = 34;
@@ -5599,6 +5726,7 @@ function viewAdmin() {
     '<div class="hq-head"><div><div class="hq-kicker">Owner only</div><h1 class="page-title">Bet Buddy HQ</h1></div>' +
       '<button type="button" class="hq-refresh" data-admin-action="refresh-stats"><span class="admin-pulse-dot"></span>' + (adminDash && adminDash.at ? 'Updated ' + esc(new Date(adminDash.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : 'Refresh') + '</button></div>' +
     renderOwnerDashboard() +
+    renderBackfillCard() +
     '<details class="hq-device"><summary>This device only: test tools and local logs</summary>' +
       '<div class="chips" style="margin:10px 0">' +
         '<button type="button" class="chip" data-admin-action="simulate-click">⚡ Test bookie click</button>' +
@@ -6631,7 +6759,10 @@ document.addEventListener('click', event => {
   // Admin interactive actions
   if (t.dataset.adminAction !== undefined) {
     const act = t.dataset.adminAction;
-    if (act === 'refresh-stats') {
+    if (act === 'backfill-preview' || act === 'backfill-run') {
+      if (act === 'backfill-run' && !confirm('Add ' + ((backfillState && backfillState.result && backfillState.result.added) || 'the previewed') + ' past diary bets to players’ league history? This writes to every affected player’s record.')) return;
+      runLeagueBackfill(act === 'backfill-run');
+    } else if (act === 'refresh-stats') {
       getTrafficStats();
       adminLeagueStats = null;
       adminUserStats = null;
@@ -7294,16 +7425,23 @@ function confirmRealBetPlaced() {
   const marketType = isAcca ? 'accumulator' : ((launch.data && launch.data.market) || 'wins');
   const marketName = isAcca ? 'Accumulator' : ((launch.data && launch.data.marketName) || (Object.values(MARKETS).find(m => m.diary === marketType) || {}).name || 'Match Bet');
 
+  // Link the bet (and each leg) to its listed match so it can join the league and settle itself.
+  const single = isAcca ? null : bookieFixtureFor(launch.data);
   const entry = {
     id: 'bet-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
     type: isAcca ? 'accumulator' : 'single',
     profile: (getAuthUser() && getAuthUser().signedIn) ? ('@' + (getAuthUser().handle || (getAuthUser().name || 'User').split(' ')[0])) : 'Default',
-    date: new Date().toISOString().slice(0, 10),
+    date: single ? single.kickoff_utc.slice(0, 10) : new Date().toISOString().slice(0, 10),
+    match_id: single ? single.id : undefined,
+    leagueMarket: single ? bookieMarketKey(launch.data) : undefined,
     fixture: fixtureName,
     market: marketType,
     marketName: marketName,
     selection: isAcca ? launch.data.legs.map(l => l.label).join(' + ') : ((launch.data && launch.data.selection) || 'Selection'),
-    legs: isAcca ? launch.data.legs.map(l => ({ selection: l.label, odds: l.odds || 2.0, outcome: 'pending', match: (l.fixture && l.fixture.home && l.fixture.away) ? l.fixture.home + ' v ' + l.fixture.away : undefined })) : undefined,
+    legs: isAcca ? launch.data.legs.map(l => {
+      const fx = bookieFixtureFor(l);
+      return { selection: l.label, odds: l.odds || 2.0, outcome: 'pending', match: (l.fixture && l.fixture.home && l.fixture.away) ? l.fixture.home + ' v ' + l.fixture.away : (fx ? fx.home + ' v ' + fx.away : undefined), fixtureId: fx ? fx.id : undefined, market: bookieMarketKey(l) };
+    }) : undefined,
     origin: 'matchiq',
     bookmaker: launch.bookie,
     odds,
@@ -7323,8 +7461,28 @@ function confirmRealBetPlaced() {
   }
 
   celebrateSave();
-  toast('Bet saved to your Bet Diary (self-reported)!');
+  const signedIn = getAuthUser() && getAuthUser().signedIn && currentAuthUser;
+  if (signedIn) enterLeagueBet(entry.id);  // every bet joins the league; the toast says if it could not
+  else toast('Bet saved to your Bet Diary. Sign in to have your bets count in leagues.');
   if (currentRoute()[0] === 'diary') render();
+}
+
+// The listed fixture a bookmaker-launched bet (or one acca leg) is on, from whatever the launch carried.
+function bookieFixtureFor(d) {
+  if (!d) return null;
+  const ids = [d.fixtureId, d.matchId, d.match_id, d.id, d.fixture && d.fixture.id];
+  for (const id of ids) { const f = id && fixtureById(id); if (f) return f; }
+  const home = d.fixture && d.fixture.home, away = d.fixture && d.fixture.away;
+  if (home && away) {
+    const f = findDiaryFixture(home + ' v ' + away, { date: new Date(Date.now() - 86400000).toISOString().slice(0, 10) });
+    if (f) return f;
+  }
+  return d.label || d.selection ? settler.findUpcomingFixture(String(d.label || d.selection), Date.now() - 6 * 3600000) : null;
+}
+// The league market key a launched pick carries, when it carries one.
+function bookieMarketKey(d) {
+  const k = d && (d.leagueMarket || d.marketKey || d.selId || d.key);
+  return /^(result:[HDA]|dc:(1X|X2|12)|dnb:[HA]|btts:(yes|no)|goals:(over|under):\d+(\.\d+)?)$/.test(String(k || '')) ? k : undefined;
 }
 
 let returnCheckDebounce = false;

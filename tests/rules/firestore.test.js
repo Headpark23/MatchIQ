@@ -515,7 +515,7 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       await assertFails(getUnauth().collection('ladders').doc('weekly__world').get());
     });
 
-    // submitLeagueBet(): one league bet per match day, stamped with the server clock.
+    // submitLeagueBet(): up to five league bets per match day, stamped with the server clock.
     const betRef = (db, uid, day = '2026-11-08') => db.collection('users').doc(uid).collection('leagueBets').doc(day);
     const leagueBet = (extra = {}) => ({ ...leagueDocs.leagueBetDoc({ betId: 'bet-1', fixtureId: 'PL-2627-ars-v-tot', selection: 'Arsenal', odds: 2.5, now: serverTime() }), ...extra });
 
@@ -524,6 +524,11 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       await assertSucceeds(betRef(db, 'bob').set(leagueBet()));
       await assertFails(betRef(db, 'bob').set(leagueBet({ selection: 'Tottenham' })), 'second bet for the same day');
       await assertFails(betRef(db, 'bob').update({ selection: 'Draw' }));
+      // Up to five a day: slots 2026-11-08-2 ... -5; no sixth slot.
+      for (const n of [2, 3, 4, 5]) await assertSucceeds(betRef(db, 'bob', '2026-11-08-' + n).set(leagueBet({ betId: 'bet-' + n })));
+      await assertFails(betRef(db, 'bob', '2026-11-08-6').set(leagueBet({ betId: 'bet-6' })), 'no sixth slot');
+      await assertFails(betRef(db, 'bob', '2026-11-08-1').set(leagueBet({ betId: 'bet-x' })), 'slot 1 is the bare date');
+      await assertFails(betRef(db, 'bob', '2026-11-08-2').set(leagueBet({ selection: 'Tottenham' })), 'a slot is written once');
       await assertFails(betRef(db, 'bob', '2026-11-09').set(leagueBet({ createdAt: new Date('2026-11-01') })), 'backdated');
       await assertFails(betRef(db, 'bob', '2026-11-09').set(leagueBet({ refOdds: 15 })), 'client cannot set the scoring price');
       await assertFails(betRef(db, 'bob', '2026-11-09').set(leagueBet({ status: 'settled', points: 100 })), 'client cannot settle');

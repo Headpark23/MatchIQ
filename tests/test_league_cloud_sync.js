@@ -369,32 +369,41 @@ const settle = async (n = 15) => { for (let i = 0; i < n; i++) await new Promise
   let msg = await enter(diaryBet('lb1', 'PL-ars-tot', 'Arsenal'));
   const sentBet = cloud.docs.get('users/carol/leagueBets/' + day);
   assert(sentBet, 'league bet sent to the server');
-  assert.deepStrictEqual(Object.keys(sentBet).sort(), ['betId', 'createdAt', 'fixtureId', 'odds', 'selection'], 'the app sends only what was backed');
+  assert.deepStrictEqual(Object.keys(sentBet).sort(), ['betId', 'createdAt', 'fixtureId', 'market', 'odds', 'selection'], 'the app sends only what was backed');
   assert.strictEqual(sentBet.selection, 'Arsenal');
-  assert(/11\/8|4\/5|4\/5/.test(msg) || /bookmaker price/.test(msg), 'player is told the price it scores at: ' + msg);
+  assert.strictEqual(sentBet.market, 'result:H');
+  assert(/4\/5/.test(msg), 'player is told the price it scores at (the bookmaker price, not their 49/1): ' + msg);
   assert.strictEqual(carol.run("getStoredDiary().find(e => e.id === 'lb1').inLeague"), true);
+  // Every bet joins: up to five a match day, in slots day, day-2 ... day-5.
   msg = await enter(diaryBet('lb2', 'PL-ars-tot', 'Tottenham'));
-  assert(/already have a league bet/.test(msg), 'one league bet per match day: ' + msg);
+  assert.strictEqual(cloud.docs.get('users/carol/leagueBets/' + day + '-2').betId, 'lb2', 'second bet of the day takes slot 2: ' + msg);
   assert.strictEqual(cloud.docs.get('users/carol/leagueBets/' + day).betId, 'lb1', 'first bet of the day stands');
-  msg = await enter(diaryBet('lb3', 'PL-che-liv', 'Both teams to score', { marketName: 'Both teams to score', date: later.slice(0, 10) }));
-  assert(/Only markets that settle from the final score/.test(msg), 'unpriced market stays diary-only: ' + msg);
-  assert(!cloud.docs.has('users/carol/leagueBets/' + later.slice(0, 10)));
+  for (const n of [3, 4, 5]) await enter(diaryBet('lbx' + n, 'PL-ars-tot', 'Draw'));
+  assert.strictEqual(cloud.docs.get('users/carol/leagueBets/' + day + '-5').betId, 'lbx5');
+  msg = await enter(diaryBet('lbx6', 'PL-ars-tot', 'Arsenal'));
+  assert(/5 league bets/.test(msg), 'sixth bet of the day stays in the diary: ' + msg);
+  assert(/5 league bets/.test(carol.run("getStoredDiary().find(e => e.id === 'lbx6').leagueReason")), 'the reason is kept on the bet');
+  // No bookmaker or model price: the bet still counts, at the player's price as a best guess.
+  msg = await enter(diaryBet('lb3', 'PL-che-liv', 'Both teams to score', { marketName: 'Both teams to score', date: later.slice(0, 10), odds: 1.9 }));
+  assert(cloud.docs.has('users/carol/leagueBets/' + later.slice(0, 10)), 'unpriced market counts at a best guess: ' + msg);
+  assert(/9\/10|10\/11/.test(msg), 'scores at the player price 1.9: ' + msg);
   msg = await enter(diaryBet('lb4', 'PL-mun-new', 'Man United', { date: past.slice(0, 10) }));
   assert(/already kicked off/.test(msg), 'after kick-off is refused: ' + msg);
-  // Accumulators: every leg must be a priced pick on a different match, before kick-off.
+  // Accumulators: every leg a pick on a different match, before kick-off.
   const acca = (id, legs) => diaryBet(id, null, legs.join(' + '), { type: 'accumulator', marketName: 'Accumulator', date: today, legs: legs.map(l => ({ selection: l, odds: 2, outcome: 'pending' })) });
   msg = await enter(acca('lb6', ['Chelsea', 'Man United']));
-  assert(/Man United v Newcastle has already kicked off/.test(msg), 'acca leg after kick-off is refused: ' + msg);
-  msg = await enter(acca('lb7', ['Chelsea', 'Both teams to score Burnley v Aston Villa']));
-  assert(/Only markets that settle from the final score/.test(msg), 'acca leg on an unpriced market is refused: ' + msg);
+  assert(/Man United v Newcastle had already kicked off/.test(msg), 'acca leg after kick-off is refused: ' + msg);
+  msg = await enter(acca('lb7', ['Chelsea', 'Burnley v Aston Villa corners over 9.5']));
+  assert(/Corners, cards|could not tell which market/.test(msg), 'acca leg on a market the score cannot settle is refused: ' + msg);
   msg = await enter(acca('lb8', ['Chelsea', 'Chelsea to win']));
   assert(/different match/.test(msg), 'two legs on one match refused: ' + msg);
   msg = await enter(acca('lb9', ['Aston Villa', 'Chelsea']));
-  const accaDoc = cloud.docs.get('users/carol/leagueBets/' + later.slice(0, 10));
+  const accaDoc = cloud.docs.get('users/carol/leagueBets/' + later.slice(0, 10) + '-2');
   assert(accaDoc, 'accumulator sent as a league bet: ' + msg);
   assert.strictEqual(JSON.stringify(accaDoc.legs.map(l => l.fixtureId).sort()), '["PL-bur-avl","PL-che-liv"]', 'each leg sent with its match');
-  assert(/6\/1|31\/5|bookmaker price/.test(msg), 'player told the combined price (2.6 x 2.4): ' + msg);
-  console.log('  PASS: league bets send only the picks; one per day, priced markets, before kick-off, accumulators included.');
+  assert(accaDoc.legs.every(l => l.odds === 2), 'each leg sent with the price taken');
+  assert(/5\/1|21\/4/.test(msg), 'player told the combined price (2.6 x 2.4 = 6.24, about 5/1): ' + msg);
+  console.log('  PASS: every bet joins (up to 5 a day), best-guess prices, before kick-off, accumulators included.');
 
   // The diary shows what the server decided.
   cloud.docs.set('users/carol/leagueBets/' + day, Object.assign({}, sentBet, { status: 'settled', outcome: 'won', points: 8, refOdds: 1.8 }));

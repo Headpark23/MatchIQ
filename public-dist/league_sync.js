@@ -120,18 +120,29 @@
     return p && p.key === currentKey ? clampStats(p) : empty;
   }
 
-  // users/{uid}/leagueBets/{day}: the player's one league bet for a match day. The app sends only
-  // what was backed; the server checks it, records the bookmaker price and settles it.
+  // users/{uid}/leagueBets/{slot}: up to five league bets per match day, in slots named
+  // 2026-11-15, 2026-11-15-2 ... 2026-11-15-5 (the first slot is the bare date, as older bets used).
+  // The app sends only what was backed and the price taken; the server checks it, records the
+  // reference price (bookmaker, model or best guess) and settles it.
   // `now` must be serverTimestamp(): the rules require the server's clock.
-  // For an accumulator, `legs` lists each leg's match and pick: [{ fixtureId, selection }].
+  // For an accumulator, `legs` lists each leg's match, pick and price: [{ fixtureId, selection, odds }].
+  const MAX_LEAGUE_BETS_PER_DAY = 5;
+  function leagueBetSlots(day) {
+    const d = String(day || '').slice(0, 10);
+    const out = [d];
+    for (let i = 2; i <= MAX_LEAGUE_BETS_PER_DAY; i++) out.push(d + '-' + i);
+    return out;
+  }
+  const leagueBetDay = slotId => String(slotId || '').slice(0, 10);
   const LEAGUE_MARKET_KEY = /^[a-z]{2,6}:[A-Za-z0-9.:]{1,12}$/;
   function leagueBetDoc({ betId, fixtureId, selection, odds, legs, market, now }) {
     const doc = { betId: String(betId).slice(0, 64), fixtureId: String(fixtureId).slice(0, 80), selection: String(selection || '').slice(0, 400), createdAt: now };
-    if (Number(odds) > 1) doc.odds = Math.round(Number(odds) * 1000) / 1000;
+    if (Number(odds) > 1 && Number(odds) < 10000) doc.odds = Math.round(Number(odds) * 1000) / 1000;
     if (LEAGUE_MARKET_KEY.test(String(market || ''))) doc.market = market;
     if (Array.isArray(legs)) doc.legs = legs.slice(0, 10).map(l => {
       const leg = { fixtureId: String(l.fixtureId).slice(0, 80), selection: String(l.selection || '').slice(0, 160) };
       if (LEAGUE_MARKET_KEY.test(String(l.market || ''))) leg.market = l.market;
+      if (Number(l.odds) > 1 && Number(l.odds) < 1000) leg.odds = Math.round(Number(l.odds) * 1000) / 1000;
       return leg;
     });
     return doc;
@@ -247,6 +258,9 @@
     currentPeriodKey,
     memberStatsFor,
     leagueBetDoc,
+    MAX_LEAGUE_BETS_PER_DAY,
+    leagueBetSlots,
+    leagueBetDay,
     cleanPlace,
     cleanLeagueName,
     cleanIcon,
