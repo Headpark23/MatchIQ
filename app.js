@@ -542,12 +542,32 @@ function resultExplanation(pred) {
 }
 
 // ------------------------------------------------------------ components
-function freshnessChips() {
+// Leagues whose only permitted results source publishes scores weeks late (the "results_lag"
+// flag in pipeline/leagues.py). Their matches sit in "Awaiting result" until it catches up.
+const RESULTS_LAG = new Set(['SC0']);
+const resultsLagLeague = comp => RESULTS_LAG.has(comp);
+const RESULTS_LAG_NOTE = 'Scottish Premiership scores come from a free source that publishes them a few weeks late, so these matches stay here until it catches up. Predictions for this league use the results we have, marked “older form”.';
+
+// "Results to": the latest confirmed result in the fixtures the user is looking at (one
+// competition on a match page, every competition elsewhere). The pipeline's results_latest is
+// the Premier League only, which read as stale during other leagues' and international weeks.
+function latestResultMs(comp) {
+  let best = 0;
+  fixturesList().forEach(f => {
+    if (f.status !== 'FINISHED' || !Array.isArray(f.score) || (comp && f.competition !== comp)) return;
+    const ms = kickoffMs(f);
+    if (ms > best) best = ms;
+  });
+  return best;
+}
+function freshnessChips(comp) {
   const s = DATA.status;
   if (!s) return '<span class="chip bad"><span class="dot"></span>Update status unavailable</span>';
   const age = (Date.now() - Date.parse(s.last_success || 0)) / 3600000;
   const cls = !s.ok ? 'bad' : age > 13 ? 'warn' : 'ok';
-  const resultsTo = s.results_latest ? london(Date.parse(s.results_latest + 'T12:00:00Z'), { day: 'numeric', month: 'short' }) : '?';
+  const latestMs = latestResultMs(comp);
+  const resultsTo = latestMs ? london(latestMs, { day: 'numeric', month: 'short' })
+    : s.results_latest ? london(Date.parse(s.results_latest + 'T12:00:00Z'), { day: 'numeric', month: 'short' }) : '?';
   return '<span class="chip ' + cls + '"><span class="dot"></span>' + (s.ok ? 'Updated ' + ago(s.last_success) : 'Last refresh failed') + '</span>' +
     '<span class="chip"><span class="dot"></span>Results to ' + esc(resultsTo) + '</span>' +
     (s.warnings || []).map(w => '<span class="chip warn"><span class="dot"></span>' + esc(w) + '</span>').join('');
@@ -567,7 +587,7 @@ function fixtureRow(f) {
     lean = '<span class="badge provisional">' + esc({ POSTPONED: 'Postponed', CANCELLED: 'Cancelled', REMOVED_FROM_SCHEDULE: 'Removed from schedule' }[f.status]) + '</span>';
   } else if (pred) {
     const r = pred.markets.result, provisional = r.evidence.status !== 'validated';
-    lean = '<span>Leans <b>' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (provisional ? ' <span class="badge provisional">Early estimate</span>' : '') + '</span>' +
+    lean = noLeanYet(r) ? '<span class="dim">' + esc(noLeanText(pred)) + '</span>' : '<span>Leans <b>' + esc(r.pick.label) + '</b> ' + pct(r.pick.p) + (provisional ? ' <span class="badge provisional">Early estimate</span>' : '') + '</span>' +
       wayBar(r.selections, r.pick.key, [f.home, f.away], true, provisional ? 'provisional' : '');
   } else {
     lean = '<span class="dim">Prediction published within 21 days of kick-off</span>';
@@ -601,13 +621,18 @@ function staleFormNote(code) {
     esc(london(since, { day: 'numeric', month: 'short' })) + ', so these predictions use form up to then. Recent matches will count once their scores arrive.</p>';
 }
 
+// A league-average fallback (strength "none", e.g. a newly promoted club with too few matches)
+// gives every such match the same home-win figure, so it is not a lean on this match at all.
+const noLeanYet = r => !!(r && r.evidence && r.evidence.strength === 'none');
+const noLeanText = pred => 'No lean yet: ' + ((pred.promoted && pred.promoted.length) ? 'too few matches for ' + pred.promoted.join(' and ') : 'not enough data on a newly promoted club');
 function fixtureCouponRow(f) {
   const pred = DATA.predictions && DATA.predictions.predictions[f.id];
   const all = ownBetMarketsFor(f), byKey = k => all.find(o => o.key === k);
   let lean = '<span class="dim">Prediction due nearer kick-off</span>';
   if (pred) {
     const r = pred.markets.result, provisional = r.evidence.status !== 'validated';
-    lean = 'Leans <b>' + esc(String(r.pick.label).replace(/ win$/, '')) + '</b> ' + pct(r.pick.p) + (provisional ? ' · early estimate' : '') +
+    lean = noLeanYet(r) ? '<span class="dim">' + esc(noLeanText(pred)) + '</span>'
+      : 'Leans <b>' + esc(String(r.pick.label).replace(/ win$/, '')) + '</b> ' + pct(r.pick.p) + (provisional ? ' · early estimate' : '') +
       (staleFormSince(f.competition) ? ' · older form' : '');
   }
   return '<div class="cp-row fx-cp">' +
@@ -723,6 +748,9 @@ try {
 
 
 
+// The timing the last build actually used: "today" falls back to the next 7 days when today
+// has too few matches, and every label must say which one the user is looking at.
+let builderTimingUsed = 'today';
 function builderCompute() {
   const { stake, legs, win } = builderState;
   const numLegs = Number(legs) || 4;
@@ -740,6 +768,7 @@ function builderCompute() {
       effectiveTiming = 'all';
     }
   }
+  builderTimingUsed = effectiveTiming;
 
   const footballPool = activeSports.includes('football')
     ? MatchIQBuilder.legPool(predictionsList(), { calc, reliability: DATA.reliability, feedFor, nowMs: now, timing: effectiveTiming })
@@ -950,7 +979,7 @@ function slipCard(slip, idx, stake, total) {
   const loses = slip.chance >= 0.5 ? 'It still loses about ' + Math.round((1 - slip.chance) * 10) + ' times in 10.'
     : slip.chance >= 0.1 ? 'It loses about ' + Math.round((1 - slip.chance) * 10) + ' times in 10.'
     : 'Roughly a 1 in ' + Math.round(1 / Math.max(slip.chance, 0.001)) + ' shot: most slips like this lose.';
-  const kicker = (idx === 0 ? 'Our best ' : 'Option ' + (idx + 1) + ': ') + slip.legs.length + '-leg acca' + (builderState.timing === 'today' ? ' · all games today' : '');
+  const kicker = (idx === 0 ? 'Our best ' : 'Option ' + (idx + 1) + ': ') + slip.legs.length + '-leg acca' + (builderTimingUsed === 'today' ? ' · all games today' : ' · next 7 days');
   return '<article class="slip primary acca-one">' +
     '<div class="slip-head"><div><div class="slip-kicker">' + esc(kicker) + ' ' + jargonTip('acca') + '</div>' +
     '<div class="slip-odds mono">' + esc(fmtOdds(odds)) + '</div></div>' +
@@ -1114,7 +1143,8 @@ function viewBuilder() {
   const winChips = [10, 25, 50, 100, 250].map(w => chip('class="win-chip" data-win="' + w + '"', win === w, '£' + w)).join('') +
     '<label class="bq-own"><span class="sr-only">Other win amount in pounds</span>£<input id="b-win" class="ctl mono" type="number" inputmode="decimal" min="1" max="10000" step="1" value="' + win + '" data-b="win"></label>';
   const sportIcons = sports.filter(sp => activeSports.includes(sp[0])).map(sp => sp[1].split(' ')[0]).join('');
-  const summary = '<span class="bq-sum"><b>' + (curTiming === 'today' ? 'Today' : 'Next 7 days') + '</b><i>·</i><b>' + legs + ' legs</b><i>·</i><b>£' + stake + ' → win £' + win + '</b><i>·</i><span>' + sportIcons + '</span></span><span class="bq-edit-btn">Change</span>';
+  const fellBack = curTiming === 'today' && builderTimingUsed !== 'today';
+  const summary = '<span class="bq-sum"><b>' + (curTiming === 'today' && !fellBack ? 'Today' : 'Next 7 days') + '</b><i>·</i><b>' + legs + ' legs</b><i>·</i><b>£' + stake + ' → win £' + win + '</b><i>·</i><span>' + sportIcons + '</span></span><span class="bq-edit-btn">Change</span>';
   return '<section class="builder card" aria-labelledby="builder-title">' +
     '<div class="builder-kicker">Model-built acca</div>' +
     '<h1 class="page-title builder-h" id="builder-title">Tell us the win. We’ll build the acca.</h1>' +
@@ -1266,8 +1296,10 @@ function renderWelcomeHero() {
     const l = data && data.topLeg;
     if (l) {
       const f = l.fixture || {}, ours = Math.round(l.p * 100), implied = Math.round(100 / Number(l.odds || 1));
-      teaser = '<button type="button" class="hm-pick" onclick="openBestValueModal(\'single\')" aria-label="Open today’s top picks">' +
-        '<span class="hm-pick-top"><span class="hm-pick-kicker">⭐ Pick of the day</span><span class="hm-pick-match">' + esc((f.home || '') + (f.away ? ' v ' + f.away : '')) + '</span></span>' +
+      const pickDay = kickoffMs(f) ? ownBetDayLabel(kickoffMs(f)) : 'Today';
+      const pickKicker = pickDay === 'Today' ? '⭐ Pick of the day' : '⭐ Top pick · ' + pickDay;
+      teaser = '<button type="button" class="hm-pick" onclick="openBestValueModal(\'single\')" aria-label="Open the top picks">' +
+        '<span class="hm-pick-top"><span class="hm-pick-kicker">' + esc(pickKicker) + '</span><span class="hm-pick-match">' + esc((f.home || '') + (f.away ? ' v ' + f.away : '')) + '</span></span>' +
         '<span class="hm-pick-row"><b>' + esc(l.label) + '</b><span class="hm-pick-price mono">' + esc(oddsFormat === 'decimal' ? calc.formatDecimalOdds(l.odds) : (l.fractional || fmtOdds(l.odds))) + '</span></span>' +
         '<span class="hm-pick-gap"><i style="--w:' + ours + '%"></i></span>' +
         '<span class="hm-pick-foot">' + (data.mode === 'model' ? 'Our chance ' + ours + '% · estimated price' : 'Our chance ' + ours + '% · price says ' + implied + '%') + '<em>All picks ›</em></span>' +
@@ -1341,18 +1373,24 @@ function getTodayBestValuePicks() {
   }
   if (!qualified.length) {
     mode = 'model';
-    qualified = withEv.filter(leg => leg.p >= 0.5);
+    // Likely, but not so short that it is not worth backing (about 1/4 or longer).
+    qualified = withEv.filter(leg => leg.p >= 0.5 && leg.p <= 0.8);
+    if (!qualified.length) qualified = withEv.filter(leg => leg.p >= 0.5);
   }
   if (!qualified.length) return null;
 
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const todayPool = qualified.filter(l => l.fixture && l.fixture.kickoff_utc && l.fixture.kickoff_utc.slice(0, 10) === todayStr);
-  const candidatePool = todayPool.length >= 1 ? todayPool : qualified;
-  if (mode === 'model') {
-    candidatePool.sort((a, b) => (isValidated(b) - isValidated(a)) || (b.p - a.p));
-  } else {
-    candidatePool.sort((a, b) => b.ev - a.ev);
-  }
+  // The top pick comes from the next day that has one (today if possible), never a week ahead.
+  // Further legs come from that day first, then the following days, ranked the same way.
+  const legDay = l => l.fixture && kickoffMs(l.fixture) ? dayKey(kickoffMs(l.fixture)) : '';
+  const byStart = qualified.filter(l => legDay(l)).sort((a, b) => kickoffMs(a.fixture) - kickoffMs(b.fixture));
+  const firstDay = byStart.length ? legDay(byStart[0]) : '';
+  const rank = mode === 'model'
+    ? (a, b) => (isValidated(b) - isValidated(a)) || (b.p - a.p)
+    : (a, b) => b.ev - a.ev;
+  const dayPool = qualified.filter(l => legDay(l) === firstDay).sort(rank);
+  const horizon = byStart.length ? kickoffMs(byStart[0].fixture) + 3 * 86400000 : Infinity;
+  const laterPool = qualified.filter(l => legDay(l) && legDay(l) !== firstDay && kickoffMs(l.fixture) <= horizon).sort(rank);
+  const candidatePool = dayPool.concat(laterPool);
 
   const unique = [];
   const seenMatches = new Set();
@@ -1447,7 +1485,7 @@ function renderBestValueModalContent() {
     (onSlip(l) ? (big ? '✓ On your slip' : '✓') : big ? '+ Add to bet slip' : '+') + '</button>';
 
   const hero = '<article class="bv-hero">' +
-    '<div class="bv-hero-kicker">⭐ Pick of the day' + (multi ? ' · leg 1' : '') + '</div>' +
+    '<div class="bv-hero-kicker">' + (kickoffMs(top.fixture) && ownBetDayLabel(kickoffMs(top.fixture)) !== 'Today' ? '⭐ Top pick · ' + esc(ownBetDayLabel(kickoffMs(top.fixture))) : '⭐ Pick of the day') + (multi ? ' · leg 1' : '') + '</div>' +
     '<div class="bv-hero-match">' + esc(bvMatch(top)) + ' <span>' + esc(bvWhen(top)) + '</span></div>' +
     '<div class="bv-hero-pick"><b>' + esc(top.label) + '</b><span class="bv-price mono">' + esc(bvPrice(top)) + '<small>' + esc(data.mode === 'model' ? 'estimate' : (top.bookmaker || 'bookmaker')) + '</small></span></div>' +
     bvGap(top, data.mode, true) +
@@ -1658,9 +1696,10 @@ function viewFixtures() {
   const searchBar = '<div class="search-bar"><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off"></div>';
   let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">' + (compFilter === 'ALL' ? 'All ' + Object.keys(LEAGUES).length + ' competitions' : esc(leagueName(compFilter))) + ' 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
     searchBar + '<div class="section" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between"><div class="seg" role="group" aria-label="Fixture list">' +
-    Object.entries(tabs).map(([k, label]) => '<button type="button" data-tab="' + k + '" aria-pressed="' + (fixturesTab === k) + '">' + label + '</button>').join('') + '</div><div class="chips">' + freshnessChips() + '</div></div>' + compBar(counts) +
+    Object.entries(tabs).map(([k, label]) => '<button type="button" data-tab="' + k + '" aria-pressed="' + (fixturesTab === k) + '">' + label + '</button>').join('') + '</div><div class="chips">' + freshnessChips(compFilter === 'ALL' ? '' : compFilter) + '</div></div>' + compBar(counts) +
     (fixturesTab === 'upcoming' ? '<p class="own-hint cp-how">Tap a match for the full analysis, or tap a price to put it on your bet slip.</p>' : '');
   if (LOAD_ERRORS.fixtures) return html + errorPanel('fixtures') + '</section>';
+  if (fixturesTab === 'awaiting' && list.some(f => resultsLagLeague(f.competition))) html += '<p class="own-hint">' + esc(RESULTS_LAG_NOTE) + '</p>';
   html += list.length ? groupedRows(list, fixturesTab === 'upcoming') : '<div class="empty" style="margin-top:16px">' + (fixturesTab === 'awaiting' ? 'No matches are waiting for a confirmed result.' : 'Nothing to show yet.') + '</div>';
   if ((fixturesTab === 'upcoming' || fixturesTab === 'results') && !fixturesShowAll) html += '<button type="button" class="btn" data-showall style="margin-top:8px">Show ' + (fixturesTab === 'upcoming' ? 'the rest of the season' : 'all results') + '</button>';
   if (fixturesTotal > list.length) html += '<button type="button" class="btn" data-more style="margin-top:8px">Show more matches (' + (fixturesTotal - list.length) + ' left)</button>';
@@ -1691,7 +1730,8 @@ function matchViewCard(pred, fx) {
   const name = k => k === 'H' ? fx.home : k === 'A' ? fx.away : 'Draw';
   const ranked = res.slice().sort((a, b) => b.p - a.p);
   const top = ranked[0], gap = ranked[0].p - ranked[1].p;
-  const headline = top.key === 'D' ? 'Looks tight: a draw is the single most likely result'
+  const headline = noLeanYet(r) ? 'No view yet: these are league-average figures, not about this match'
+    : top.key === 'D' ? 'Looks tight: a draw is the single most likely result'
     : gap < 0.06 ? 'Too close to call'
     : top.p >= 0.55 ? name(top.key) + ' are clear favourites'
     : name(top.key) + ' are slight favourites';
@@ -1742,7 +1782,8 @@ function viewMatch(id) {
       '<div class="match-centre">' + centre + '</div>' +
       '<div class="match-team">' + crest(fx.away, 64) + esc(fx.away) + (promoted.includes(fx.away) ? '<small>Promoted club</small>' : '') + '</div></div>' +
       '<div class="facts"><span><b>' + esc(leagueName(fx.competition)) + '</b> 2026/27</span><span>' + esc(fmtFull(ms)) + '</span>' + (fx.competition === 'NLA' ? '' : '<span>Home ground: <b>' + esc((CLUBS[fx.home] || [])[3] || 'not listed') + '</b></span>') + '</div>' +
-      '<div class="chips" style="justify-content:center"><span class="chip ' + statusChip[0] + '"><span class="dot"></span>' + esc(statusChip[1]) + '</span>' + freshnessChips() + '</div>' +
+      '<div class="chips" style="justify-content:center"><span class="chip ' + statusChip[0] + '"><span class="dot"></span>' + esc(statusChip[1]) + '</span>' + freshnessChips(fx.competition) + '</div>' +
+      (status === 'AWAITING_RESULT' && resultsLagLeague(fx.competition) ? '<p class="dim" style="text-align:center;font-size:13px">' + esc(RESULTS_LAG_NOTE) + '</p>' : '') +
       (f && f.kickoff_history && f.kickoff_history.length ? '<p class="dim" style="text-align:center;font-size:13px">Rescheduled from ' + esc(fmtFull(Date.parse(f.kickoff_history[f.kickoff_history.length - 1].from))) + '</p>' : '') +
     '</header>';
 
@@ -3101,7 +3142,7 @@ function viewLeagues() {
       '<div class="lg-welcome">' +
         '<div class="lg-cup" aria-hidden="true">🏆</div>' +
         '<h1 class="lg-title">Beat your mates.<br>Climb the ladders.</h1>' +
-        '<p class="lg-lead">One pick a day, points for every winner. Free, and no money changes hands.</p>' +
+        '<p class="lg-lead">Up to 5 picks a day, points for every winner. Free, and no money changes hands.</p>' +
         googleBtn.replace('class="btn google-primary-btn"', 'class="btn google-primary-btn lg-google"') +
         '<button type="button" class="text-link" data-open-auth data-email-mode-open="signup" style="margin:10px auto 0;display:block;">Or sign up with email</button>' +
         '<p class="lg-fine">Sign in to join leagues and compete with mates. Got an invite code? Sign in and it is one tap to join.</p>' +
@@ -4506,7 +4547,7 @@ function updateOwnBetBar() {
       shown.map(l => '<li><span class="own-mini-pick">' + (l.match ? '<small>' + esc(l.match) + '</small>' : '') + esc(l.pick) + '</span>' +
         '<span class="mono">' + (l.odds > 1 ? esc(fmtOdds(l.odds)) : '—') + '</span></li>').join('') +
     '</ul>' +
-    '<a class="btn primary small own-mini-go" href="#/build">Go to bet slip ›</a>';
+    '<a class="btn primary small own-mini-go" href="#/build/slip">Go to bet slip ›</a>';
   restoreOwnMiniPos(bar);
 }
 
@@ -4819,7 +4860,7 @@ function viewBuild(mode) {
   }
 
   return '<section class="view own-build">' +
-    '<div class="picks-top-bar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' + (logging ? '<a href="#/diary" class="btn small" style="text-decoration:none">← Bet Diary</a>' : '<a href="#/" class="btn small" style="text-decoration:none">← Welcome Hub</a>') + '</div>' +
+    '<div class="picks-top-bar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' + (logging ? '<a href="#/diary" class="btn small" style="text-decoration:none">← Bet Diary</a>' : '<button type="button" class="btn small" data-back aria-label="Go back">← Back</button>') + '</div>' +
     (logging
       ? '<h1 class="page-title">Log a bet</h1><p class="page-sub">Placed a bet with your bookmaker? Find the match, tap the prices you backed, then add your stake. It goes straight into your Diary and, for football, can count in your League.</p>'
       : '<h1 class="page-title">Build your own bet</h1><p class="page-sub">Singles, doubles, trebles, 4-folds, 5-folds and bigger. Add your selections, then save the bet to your Diary and, for football, your League.</p>') +
@@ -5969,7 +6010,10 @@ function render() {
     // Animate and scroll only on navigation, not on in-page updates.
     const first = $('app').querySelector('.view');
     if (first) first.classList.add('enter');
-    window.scrollTo({ top: 0 });
+    // "Go to bet slip" (#/build/slip) opens the builder at the slip itself, not at the match list.
+    const slipEl = view === 'build' && arg === 'slip' ? $('own-slip') : null;
+    if (slipEl) slipEl.scrollIntoView({ block: 'start' });
+    else window.scrollTo({ top: 0 });
     lastRoute = key;
   }
   updateOwnBetBar();
