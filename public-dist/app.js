@@ -2763,6 +2763,7 @@ const TROPHY_CABINET_KEY = 'betbuddy_trophy_cabinet_v1';
 
 let activeLeagueId = 'default';
 let activeLeagueFreq = 'weekly';
+let leagueFreqChosen = false;  // the player tapped Week/Month/Season; until then the table picks a period with results
 let activeMoreTab = 'account';
 
 function getUserProfile() {
@@ -3136,7 +3137,7 @@ function viewLeagues() {
     '</section>';
   }
 
-  const uStats = getUserLeagueStats(activeLeagueFreq);
+  let uStats = getUserLeagueStats(activeLeagueFreq);
   const geoTiers = getGeoTiers(prof);
   const customLeagues = getStoredLeagues();
   const trophies = getStoredTrophies();
@@ -3158,6 +3159,26 @@ function viewLeagues() {
       activeLeagueId = currentLeague.id;
       isGeo = true;
     }
+  }
+
+  // Until the player picks a period, open on the shortest one that has results in it, so a quiet
+  // week (an international break) shows the month or season table instead of an empty one.
+  let periodAutoNote = '';
+  if (!leagueFreqChosen) {
+    const hasResults = freq => {
+      const key = leagueDocs.currentPeriodKey(freq);
+      if (getUserLeagueStats(freq).settled > 0) return true;
+      if (isGeo) {
+        const tier = ladderTierId(currentLeague.id, prof);
+        const ladder = tier ? getLadder(freq + '__' + tier) : null;
+        return !!(ladder && ladder.key === key && ladder.entries && ladder.entries.length);
+      }
+      return (currentLeague.members || []).some(m => leagueDocs.memberStatsFor(m, freq, key).settled > 0);
+    };
+    const pick = leagueDocs.FREQS.find(hasResults) || 'weekly';
+    if (pick !== 'weekly') periodAutoNote = 'No results this week yet, so this shows the ' + (pick === 'monthly' ? 'month' : 'season') + '. Tap Week to switch.';
+    activeLeagueFreq = pick;
+    uStats = getUserLeagueStats(activeLeagueFreq);
   }
   const isLeagueCreator = !isGeo && currentLeague && (currentLeague.creatorUid ? currentLeague.creatorUid === authUser.uid : !currentLeague.is_joined);
 
@@ -3301,7 +3322,7 @@ function viewLeagues() {
     '<div class="lg-spot-foot"><span class="lg-clock">⏱ ' + periodName + ' ends in <b>' + leagueCountdown(activeLeagueFreq) + '</b></span>' +
       (todayBets >= leagueDocs.MAX_LEAGUE_BETS_PER_DAY ? '<span class="lg-today ok">✓ All ' + todayBets + ' of today’s bets are in</span>'
         : '<a href="#/build/log" class="lg-today">' + (todayBets ? '✓ ' + todayBets + ' in today · + add another' : '+ Log today’s league bet') + '</a>') + '</div>' +
-  '</section>' + myLeagueBetsCard();
+  '</section>';
 
   // Podium with avatars for the top three.
   const podSrc = ranked.slice(0, 3);
@@ -3314,6 +3335,7 @@ function viewLeagues() {
   const board = '<section class="lg-board">' +
     '<div class="lg-board-head"><h2>Table</h2><small>' + trophyIcon + ' ' + trophyTitle + '</small></div>' +
     (isGeo ? '<p class="lg-notice">' + ladderNotice + '</p>' : '') +
+    (periodAutoNote ? '<p class="lg-notice">' + periodAutoNote + '</p>' : '') +
     podium + (allMembers.length ? '<div class="lg-rows">' + rowsHtml + '</div>' : '') +
     (!isGeo ? '<div class="lg-board-foot"><button type="button" class="btn primary" data-share-league="' + esc(currentLeague.code) + '">Invite friends</button>' +
       '<span class="lg-code" title="Invite code">Code <b class="mono">' + esc(currentLeague.code || '') + '</b></span></div>' +
@@ -3324,7 +3346,7 @@ function viewLeagues() {
 
   return '<section class="view lg-view">' + locationPromptBanner() +
     '<div class="lg-topbar"><h1 class="page-title">Leagues</h1><button type="button" class="lg-cabinet" data-open-trophy-cabinet title="Trophy cabinet">🏆<b>' + trophies.length + '</b><span>trophies</span></button></div>' +
-    switcher + spotlight + board +
+    switcher + spotlight + board + myLeagueBetsCard() +
     '<p class="lg-rules">🛡️ <b>Every bet counts, up to ' + leagueDocs.MAX_LEAGUE_BETS_PER_DAY + ' a day</b>, before kick-off · winner scores (price − 1) × 10, so Evens = 10 pts, max 100 · loser −2 · <a href="#/guide">Full rules ›</a></p>' +
   '</section>';
 }
@@ -5556,19 +5578,20 @@ async function loadAdminDashboard() {
 
 // ---- Owner tool: add players' past diary bets to their league history (backfillLeagueBets function) ----
 let backfillState = null;  // { busy, result, error }
-async function runLeagueBackfill(run) {
+async function runLeagueBackfill(run, rescoreOnly) {
   if (!isAppOwner() || !firebaseAuth || !firebaseAuth.currentUser || (backfillState && backfillState.busy)) return;
   backfillState = Object.assign({}, backfillState, { busy: true, error: null });
   render();
   try {
     const token = await firebaseAuth.currentUser.getIdToken();
     const res = await fetch('https://europe-west1-betbuddyuk.cloudfunctions.net/backfillLeagueBets', {
-      method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ run: !!run })
+      method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify(rescoreOnly ? { rescore: true } : { run: !!run })
     });
     const body = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(body.error || (res.status === 404 ? 'not deployed yet' : 'HTTP ' + res.status));
     backfillState = { busy: false, result: body };
-    if (run) toast('Backfill done: ' + body.added + ' bets added for ' + body.players + ' players.');
+    if (run) toast('Backfill done: ' + body.added + ' bets added for ' + body.players + ' players. Tables rescored.');
+    else if (rescoreOnly && body.rescored) toast('Tables rescored for ' + body.rescored.players + ' players.');
   } catch (e) {
     backfillState = { busy: false, result: backfillState && backfillState.result, error: (e && e.message) || 'failed' };
   }
@@ -5581,10 +5604,12 @@ function renderBackfillCard() {
   return '<div class="card" style="margin:14px 0"><h3 style="margin:0 0 4px">League backfill</h3>' +
     '<p class="muted" style="font-size:13px;margin:0 0 10px">Adds every cloud-synced football diary bet since ' + esc((r && r.since) || '1 Nov') + ' to its player’s league history (up to 5 a match day), settles finished ones and rescores the tables. Preview first; it changes nothing.</p>' +
     '<div class="chips"><button type="button" class="chip" data-admin-action="backfill-preview"' + (s.busy ? ' disabled' : '') + '>' + (s.busy ? 'Working…' : '🔍 Preview') + '</button>' +
+    '<button type="button" class="chip" data-admin-action="backfill-rescore"' + (s.busy ? ' disabled' : '') + '>🔄 Rescore tables</button>' +
     (r && !r.run && r.added ? '<button type="button" class="chip" data-admin-action="backfill-run" style="background:rgba(16,185,129,0.18);color:#34d399"' + (s.busy ? ' disabled' : '') + '>✅ Add ' + r.added + ' bets</button>' : '') + '</div>' +
     (s.error ? '<p style="color:#fca5a5;font-size:13px">Backfill failed: ' + esc(s.error) + '</p>' : '') +
     (r ? '<p style="font-size:13px;margin:10px 0 4px">' + (r.run ? '<b>Done.</b> Added ' : 'Would add ') + '<b>' + r.added + '</b> bets for <b>' + r.players + '</b> players. Skipped ' + r.skipped + '.</p>' +
-      (reasons.length ? '<ul class="muted" style="font-size:12.5px;margin:0;padding-left:18px">' + reasons.map(([k, n]) => '<li>' + n + ' × ' + esc(k) + '</li>').join('') + '</ul>' : '') : '') +
+      (reasons.length ? '<ul class="muted" style="font-size:12.5px;margin:0;padding-left:18px">' + reasons.map(([k, n]) => '<li>' + n + ' × ' + esc(k) + '</li>').join('') + '</ul>' : '') +
+      (r.rescored ? '<p style="font-size:13px;margin:8px 0 0"><b>Tables rescored:</b> ' + r.rescored.players + ' players, ' + r.rescored.leagueRows + ' league rows updated' + (r.rescored.failed ? ', ' + r.rescored.failed + ' failed' : '') + '.</p>' : '') : '') +
     '</div>';
 }
 
@@ -6717,6 +6742,7 @@ document.addEventListener('click', event => {
   // League Frequency Switcher
   if (t.dataset.leagueFreq !== undefined) {
     activeLeagueFreq = t.dataset.leagueFreq;
+    leagueFreqChosen = true;
     render();
     return;
   }
@@ -6759,7 +6785,9 @@ document.addEventListener('click', event => {
   // Admin interactive actions
   if (t.dataset.adminAction !== undefined) {
     const act = t.dataset.adminAction;
-    if (act === 'backfill-preview' || act === 'backfill-run') {
+    if (act === 'backfill-rescore') {
+      runLeagueBackfill(false, true);
+    } else if (act === 'backfill-preview' || act === 'backfill-run') {
       if (act === 'backfill-run' && !confirm('Add ' + ((backfillState && backfillState.result && backfillState.result.added) || 'the previewed') + ' past diary bets to players’ league history? This writes to every affected player’s record.')) return;
       runLeagueBackfill(act === 'backfill-run');
     } else if (act === 'refresh-stats') {

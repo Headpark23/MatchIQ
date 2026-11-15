@@ -281,8 +281,9 @@ async function runSettlement(now) {
   await writer.close();
 
   // Recompute the stats of everyone who had a bet settled.
+  const memberRefs = touched.size ? await memberRefsByUid() : new Map();
   for (const uid of touched) {
-    try { await recomputePlayer(uid, now); } catch (e) { logger.error('recomputePlayer failed', uid, e); }
+    try { await recomputePlayer(uid, now, memberRefs.get(uid)); } catch (e) { logger.error('recomputePlayer failed', uid, e); }
   }
 
   // Rebuild the ladders when results changed, or at least every 6 hours so weekly/monthly resets show.
@@ -329,17 +330,17 @@ exports.backfillLeagueBets = onRequest({ cors: true, memory: '1GiB', timeoutSeco
         writer.create(db.collection('users').doc(a.uid).collection('leagueBets').doc(a.slot), doc);
       });
       await writer.close();
-      // Settle the finished ones and rescore everyone touched now, rather than waiting for the schedule.
+    }
+    // Settle anything finished and rescore every table now, rather than waiting for the schedule.
+    // Runs on its own too ({"rescore": true}), so tables can be rebuilt after an earlier backfill.
+    let rescored = null;
+    if (run || body.rescore === true) {
       await runSettlement(new Date());
-      const uids = new Set(plan.add.map(a => a.uid));
-      for (const uid of uids) {
-        try { await recomputePlayer(uid, new Date()); } catch (e) { logger.error('backfill recompute failed', uid, e); }
-      }
-      await rebuildLadders(new Date());
+      rescored = await rescoreAll(new Date());
     }
     res.json({
       run, since, added: plan.add.length, players: new Set(plan.add.map(a => a.uid)).size,
-      skipped: plan.skipped, reasons: plan.reasons
+      skipped: plan.skipped, reasons: plan.reasons, rescored
     });
   } catch (e) {
     logger.error('backfillLeagueBets failed', e);
@@ -367,7 +368,21 @@ function memberStatsFields(stats) {
   return fields;
 }
 
-async function recomputePlayer(uid, now) {
+// Every private-league member record, grouped by player: { uid: [ref, ...] }. Read from the leagues
+// themselves, so a player whose own leagueMemberships index is missing a league still gets scored there.
+async function memberRefsByUid() {
+  const snap = await db.collectionGroup('members').get();
+  const out = new Map();
+  snap.docs.forEach(d => {
+    const league = d.ref.parent.parent;
+    if (!league || !league.parent || league.parent.id !== 'leagues') return;
+    if (!out.has(d.id)) out.set(d.id, []);
+    out.get(d.id).push(d.ref);
+  });
+  return out;
+}
+
+async function recomputePlayer(uid, now, extraMemberRefs) {
   const userRef = db.collection('users').doc(uid);
   const since = scoring.statsWindowStart(now);
   const [betsSnap, userSnap, membershipsSnap] = await Promise.all([
@@ -380,13 +395,31 @@ async function recomputePlayer(uid, now) {
   const stats = Object.assign(profileFields(userSnap.data()), { periods, updatedAt: Timestamp.now() });
   await db.collection('leagueStats').doc(uid).set(stats);
 
-  // Copy into every private league the player is in.
+  // Copy into every private league the player is in: from their own index and the league member records.
+  const refs = new Map();
+  membershipsSnap.docs.forEach(m => { const r = db.collection('leagues').doc(m.id).collection('members').doc(uid); refs.set(r.path, r); });
+  (extraMemberRefs || []).forEach(r => refs.set(r.path, r));
   const writer = db.bulkWriter();
   writer.onWriteError(err => err.code !== 5 && err.failedAttempts < 3);  // 5 = NOT_FOUND: no longer a member
-  membershipsSnap.docs.forEach(m => {
-    writer.update(db.collection('leagues').doc(m.id).collection('members').doc(uid), memberStatsFields(stats));
-  });
+  refs.forEach(r => writer.update(r, memberStatsFields(stats)));
   await writer.close();
+  return refs.size;
+}
+
+// Rescores every player who has league bets (and everyone in a league, so period resets show), then
+// rebuilds the ladders. Used after a backfill and by the owner's "Rescore tables" button.
+async function rescoreAll(now) {
+  const [betsSnap, memberRefs] = await Promise.all([db.collectionGroup('leagueBets').select().get(), memberRefsByUid()]);
+  const uids = new Set(memberRefs.keys());
+  betsSnap.docs.forEach(d => { if (d.ref.parent.parent) uids.add(d.ref.parent.parent.id); });
+  let players = 0, leagueRows = 0, failed = 0;
+  for (const uid of uids) {
+    try { leagueRows += await recomputePlayer(uid, now, memberRefs.get(uid)); players++; } catch (e) { failed++; logger.error('rescore failed', uid, e); }
+  }
+  await rebuildLadders(now);
+  await db.collection('system').doc('ladders').set({ builtAt: FieldValue.serverTimestamp(), rescoredAll: true }, { merge: true });
+  logger.info('rescoreAll', { players, leagueRows, failed });
+  return { players, leagueRows, failed };
 }
 
 async function rebuildLadders(now) {
