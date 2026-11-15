@@ -270,15 +270,24 @@ async function runSettlement(now) {
     .limit(3000)
     .get();
   const touched = new Set();
+  const settledByUid = new Map();
   const writer = db.bulkWriter();
   due.docs.forEach(doc => {
     const bet = doc.data();
     const res = scoring.settleLeagueBet(Object.assign({}, bet, { kickoffMs: bet.kickoffAt && bet.kickoffAt.toMillis() }), fixtures, now.getTime());
     if (!res) return;
     writer.update(doc.ref, Object.assign(res, { settledAt: FieldValue.serverTimestamp() }));
-    touched.add(doc.ref.parent.parent.id);
+    const uid = doc.ref.parent.parent.id;
+    touched.add(uid);
+    if (!settledByUid.has(uid)) settledByUid.set(uid, []);
+    settledByUid.get(uid).push({ outcome: res.outcome, points: res.points, selection: bet.selection });
   });
   await writer.close();
+
+  // Tell each player whose bets just settled (one message per player per run), if they opted in.
+  for (const [uid, bets] of settledByUid) {
+    try { await sendPush(uid, 'settled', push.settledMessage(bets)); } catch (e) { logger.warn('settled push failed', uid, e); }
+  }
 
   // Recompute the stats of everyone who had a bet settled.
   const memberRefs = touched.size ? await memberRefsByUid() : new Map();
@@ -297,6 +306,43 @@ async function runSettlement(now) {
   logger.info('settleLeagues', { due: due.size, players: touched.size });
   return { due: due.size, players: touched.size };
 }
+
+// ---------------------------------------------------------- push notifications
+// Devices opt in from the app (users/{uid}/pushTokens/{token}, with a settled and a picks switch).
+// Messages are data-only; the app's service worker (sw.js) shows them and opens the route on tap.
+const push = require('./lib/push');
+
+async function sendToTokenDocs(docs, msg) {
+  if (!msg || !docs.length) return 0;
+  const data = { title: String(msg.title), body: String(msg.body), url: String(msg.url || '#/'), tag: String(msg.tag || 'betbuddy') };
+  const messages = docs.map(d => ({ token: d.get('token'), data, webpush: { headers: { TTL: '86400', Urgency: 'normal' } } }));
+  let sent = 0;
+  for (let i = 0; i < messages.length; i += 500) {
+    const res = await admin.messaging().sendEach(messages.slice(i, i + 500));
+    res.responses.forEach((r, j) => {
+      if (r.success) sent++;
+      else if (r.error && push.isDeadToken(r.error.code)) docs[i + j].ref.delete().catch(() => {});  // uninstalled or blocked
+    });
+  }
+  return sent;
+}
+
+// kind: 'settled' or 'picks', the switch the device must have on.
+async function sendPush(uid, kind, msg) {
+  if (!msg) return 0;
+  const snap = await db.collection('users').doc(uid).collection('pushTokens').where(kind, '==', true).get();
+  return sendToTokenDocs(snap.docs, msg);
+}
+
+// Friday 6pm UK: the weekend's likeliest picks, to everyone who switched picks alerts on.
+exports.weekendPicksPush = onSchedule({ schedule: '0 18 * * 5', timeZone: 'Europe/London', timeoutSeconds: 300 }, async () => {
+  const msg = push.weekendPicksMessage(await loadData('predictions.json'), Date.now());
+  if (!msg) { logger.info('weekendPicksPush: no picks to send'); return; }
+  const snap = await db.collectionGroup('pushTokens').get();
+  const docs = snap.docs.filter(d => d.get('picks') === true && d.ref.parent.parent && d.ref.parent.parent.parent.id === 'users');
+  const sent = await sendToTokenDocs(docs, msg);
+  logger.info('weekendPicksPush', { devices: docs.length, sent });
+});
 
 // ---------------------------------------------------------- 5. owner-only: backfill past bets
 // Adds players' cloud-synced Bet Diary bets (since BACKFILL_SINCE) to their league history, at most

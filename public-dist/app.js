@@ -1400,6 +1400,7 @@ function renderWelcomeHero() {
 
   let since = '';
   try { since = sinceLastVisitCard(); } catch (e) { /* the summary is optional */ }
+  try { since += pushPromptCard(); } catch (e) { /* optional */ }
 
   return '<div class="hm">' + hero + since + record + teaser + tiles + upNext +
     '<p class="hm-trust">🛡️ We say <b>No bet</b> when the evidence is thin · Bet Buddy never places bets · 18+ · <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware</a></p>' +
@@ -5045,6 +5046,113 @@ function viewGuide() {
 const feedbackState = { understand: 0, convincing: 0, useful: '', chips: new Set() };
 function getStoredFeedback() { try { const v = JSON.parse(localStorage.getItem(FEEDBACK_STORAGE_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
 
+// ------------------------------------------------------------ Push notifications
+// Signed-in players can opt in per device. The token is saved at users/{uid}/pushTokens/{token}
+// with two switches (settled bets, Friday picks); functions/index.js sends, sw.js shows them.
+// Optional own web push key (Firebase console > Project settings > Cloud Messaging > Web Push
+// certificates). Left empty, the Firebase SDK uses its built-in default key, which works the same.
+const FCM_VAPID_KEY = '';
+const PUSH_KEY = 'betbuddy_push_v1', PUSH_ASKED_KEY = 'betbuddy_push_asked_v1';
+const pushState = () => { try { return JSON.parse(localStorage.getItem(PUSH_KEY) || 'null'); } catch (e) { return null; } };
+const savePushState = s => { try { s ? localStorage.setItem(PUSH_KEY, JSON.stringify(s)) : localStorage.removeItem(PUSH_KEY); } catch (e) {} };
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isStandalone = () => (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+// '' when push can work here, otherwise a plain reason to show instead of the switch.
+function pushBlocker() {
+  if (isIOS() && !isStandalone()) return 'On iPhone, add Bet Buddy to your Home Screen first (Share › Add to Home Screen), then turn this on there.';
+  if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window) || typeof firebase === 'undefined' || !firebase.messaging) return 'This browser does not support notifications.';
+  if (Notification.permission === 'denied') return 'Notifications are blocked for Bet Buddy. Allow them in your browser or phone settings, then come back.';
+  return '';
+}
+const pushPlatform = () => isIOS() ? 'ios' : /Android/.test(navigator.userAgent) ? 'android' : 'desktop';
+const pushTokenRef = (uid, token) => firestoreDb.collection('users').doc(uid).collection('pushTokens').doc(token);
+async function pushGetToken() {
+  const reg = await navigator.serviceWorker.ready;
+  const opts = { serviceWorkerRegistration: reg };
+  if (FCM_VAPID_KEY) opts.vapidKey = FCM_VAPID_KEY;
+  return firebase.messaging().getToken(opts);
+}
+async function pushSave(uid, token, prefs) {
+  await pushTokenRef(uid, token).set({ token, settled: !!prefs.settled, picks: !!prefs.picks, platform: pushPlatform(), updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+  savePushState({ uid, token, settled: !!prefs.settled, picks: !!prefs.picks });
+}
+
+async function enablePush() {
+  const user = firebaseAuth && firebaseAuth.currentUser;
+  if (!user) { toast('Sign in first, so we know which bets are yours.'); try { openAuthModal(); } catch (e) {} return; }
+  const why = pushBlocker();
+  if (why) { toast(why); return; }
+  try { localStorage.setItem(PUSH_ASKED_KEY, 'done'); } catch (e) {}
+  try {
+    if (await Notification.requestPermission() !== 'granted') { toast('No problem. You can turn notifications on any time in More.'); render(); return; }
+    const token = await pushGetToken();
+    if (!token) throw new Error('no token');
+    await pushSave(user.uid, token, { settled: true, picks: true });
+    toast('🔔 Notifications on. We’ll tell you when your league bets settle and when the weekend picks are out.');
+  } catch (e) {
+    console.warn('enablePush failed', e);
+    toast('Could not turn notifications on just now. Please try again.');
+  }
+  render();
+}
+
+async function setPushPref(kind, on) {
+  const s = pushState(), user = firebaseAuth && firebaseAuth.currentUser;
+  if (!s || !user) return;
+  try { await pushSave(user.uid, s.token, Object.assign({}, s, { [kind]: on })); } catch (e) { toast('Could not save that just now.'); }
+  render();
+}
+
+async function disablePush() {
+  const s = pushState(), user = firebaseAuth && firebaseAuth.currentUser;
+  savePushState(null);
+  try { if (s && user) await pushTokenRef(user.uid, s.token).delete(); } catch (e) {}
+  try { await firebase.messaging().deleteToken(); } catch (e) {}
+  toast('Notifications off on this device.');
+  render();
+}
+
+// Tokens can change; on each sign-in, re-save this device's token under whoever is signed in.
+async function refreshPushToken(user) {
+  const s = pushState();
+  if (!s || !user || pushBlocker() || Notification.permission !== 'granted') return;
+  try {
+    const token = await pushGetToken();
+    if (!token) return;
+    if (token !== s.token || user.uid !== s.uid) {
+      if (s.uid === user.uid && s.token !== token) pushTokenRef(user.uid, s.token).delete().catch(() => {});
+      await pushSave(user.uid, token, s);
+    }
+  } catch (e) { console.warn('refreshPushToken notice:', e); }
+}
+
+// The Notifications entry in More: a fold with the switches when on, a button when off.
+function pushSettingsRow(fold) {
+  const s = pushState(), why = pushBlocker(), signedIn = !!(firebaseAuth && firebaseAuth.currentUser);
+  const sw = (kind, label, sub) => '<label class="push-sw"><span><b>' + label + '</b><small>' + sub + '</small></span>' +
+    '<input type="checkbox" role="switch"' + (s && s[kind] ? ' checked' : '') + ' onchange="setPushPref(\'' + kind + '\', this.checked)"></label>';
+  let body;
+  if (s) body = sw('settled', 'My league bets settle', 'Won, lost or void, with your points') + sw('picks', 'Weekend picks are out', 'Friday evenings, our likeliest picks') +
+    '<button type="button" class="btn small" onclick="disablePush()">Turn off on this device</button>';
+  else if (why) body = '<p class="muted" style="margin:0;font-size:13.5px">' + esc(why) + '</p>';
+  else body = '<p class="muted" style="margin:0 0 10px;font-size:13.5px">Get a ping when your league bets settle and when the weekend picks are out. You can change this any time.</p>' +
+    (signedIn ? '<button type="button" class="btn primary small" onclick="enablePush()">Turn on notifications</button>' : '<button type="button" class="btn primary small" data-open-auth>Sign in to turn them on</button>');
+  const kinds = s ? [s.settled && 'settled bets', s.picks && 'weekend picks'].filter(Boolean) : [];
+  const sub = !s ? 'Off' : kinds.length ? 'On: ' + kinds.join(' and ') : 'On, but both switches are off';
+  return fold('push', '🔔', 'Notifications', sub, body);
+}
+
+// A one-time card on Home for signed-in players who have not decided yet.
+function pushPromptCard() {
+  const signedIn = !!(firebaseAuth && firebaseAuth.currentUser);
+  let asked = '';
+  try { asked = localStorage.getItem(PUSH_ASKED_KEY) || ''; } catch (e) {}
+  if (!signedIn || pushState() || asked || pushBlocker() || Notification.permission === 'granted') return '';
+  return '<section class="hm-push"><span class="hm-push-ico">🔔</span><span class="hm-push-txt"><b>Know the moment your bets settle</b><small>And get the weekend picks on Friday evening.</small></span>' +
+    '<span class="hm-push-act"><button type="button" class="btn primary small" onclick="enablePush()">Turn on</button><button type="button" class="link-btn" onclick="dismissPushPrompt()">Not now</button></span></section>';
+}
+function dismissPushPrompt() { try { localStorage.setItem(PUSH_ASKED_KEY, 'later'); } catch (e) {} render(); }
+
 function viewMore() {
   const prof = getUserProfile();
   const s = DATA.status || {};
@@ -5088,6 +5196,7 @@ function viewMore() {
 
   return '<section class="view st-view"><h1 class="page-title">More</h1>' + profile +
     group('Your app',
+      pushSettingsRow(fold) +
       row('id="toggle-odds-format"', '🔢', 'Odds format', oddsFormat === 'decimal' ? 'Showing decimal odds, like 2.50' : 'Showing fractional odds, like 6/4', oddsSeg) +
       row('onclick="openButlerModal()"', '📋', 'My bookmakers', 'Which bookmakers you use, for slip notes') +
       (signedIn ? row('data-open-handle-modal', '📍', 'Username and location', 'Your name on leagues and your local ladders') : '') +
@@ -6677,6 +6786,7 @@ function initFirebaseAuth() {
       try { saveAuthUser(user); } catch (e) { console.warn('saveAuthUser notice:', e); }
       updateHeaderAuthUI();
       render();
+      try { refreshPushToken(user); } catch (e) {}
       try {
         await ensureUserProfile(user);
         await runPostSignInSync(user);

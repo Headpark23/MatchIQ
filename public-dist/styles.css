@@ -5374,6 +5374,21 @@ a.hm-chip:hover { border-color: var(--pick); }
 .hm-since-val.down { color: #fb7185; }
 .hm-since-go { flex: none; color: var(--cyan); font-weight: 700; }
 
+/* Push notifications: the one-time prompt on Home and the switches in More */
+.hm-push { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 12px; border-radius: 16px; background: var(--surface-solid); border: 1px solid color-mix(in srgb, var(--cyan) 30%, var(--line-strong)); }
+.hm-push-ico { flex: none; font-size: 20px; }
+.hm-push-txt { display: flex; flex-direction: column; gap: 2px; flex: 1 1 160px; min-width: 0; }
+.hm-push-txt b { font: 700 14px var(--display); color: var(--ink); }
+.hm-push-txt small { font-size: 12px; color: var(--muted); }
+.hm-push-act { display: flex; align-items: center; gap: 10px; flex: none; }
+.push-sw { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; cursor: pointer; }
+.push-sw + .push-sw { border-top: 1px solid var(--line); }
+.push-sw span { display: flex; flex-direction: column; gap: 2px; }
+.push-sw b { font-size: 14px; color: var(--ink); }
+.push-sw small { font-size: 12px; color: var(--muted); }
+.push-sw input { flex: none; width: 22px; height: 22px; accent-color: var(--pick); }
+.st-fold-body .push-sw:last-of-type { margin-bottom: 10px; }
+
 .hm-pick { gap: 3px; padding: 10px 12px; border-radius: 16px; }
 .hm-pick-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .hm-pick-kicker { flex: none; padding: 2px 8px; font-size: 10px; }

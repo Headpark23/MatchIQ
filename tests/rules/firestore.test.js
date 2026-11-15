@@ -258,6 +258,24 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       await assertFails(dbBob.collection('users').doc('alice').collection('diary').doc('bet1').set({ stake: 10 }));
       await assertFails(dbBob.collection('users').doc('alice').collection('leagueMemberships').doc(validLeagueCode).set({ code: validLeagueCode }));
     });
+
+    it('lets a player save, change and remove only their own push token', async function () {
+      const token = 'fcm-token-' + 'x'.repeat(140);
+      const stamp = firebase.firestore.FieldValue.serverTimestamp();
+      const doc = (db, uid) => db.collection('users').doc(uid).collection('pushTokens').doc(token);
+      const dbAlice = getGoogleUser('alice'), dbBob = getGoogleUser('bob');
+      await assertSucceeds(doc(dbAlice, 'alice').set({ token, settled: true, picks: true, platform: 'android', updatedAt: stamp }));
+      await assertSucceeds(doc(dbAlice, 'alice').set({ token, settled: true, picks: false, platform: 'android', updatedAt: stamp }));
+      await assertSucceeds(doc(dbAlice, 'alice').get());
+      // Wrong id, extra fields, client clock, other people's tokens: all refused.
+      await assertFails(dbAlice.collection('users').doc('alice').collection('pushTokens').doc('other-id-' + 'y'.repeat(30)).set({ token, settled: true, picks: true, updatedAt: stamp }));
+      await assertFails(doc(dbAlice, 'alice').set({ token, settled: true, picks: true, updatedAt: stamp, admin: true }));
+      await assertFails(doc(dbAlice, 'alice').set({ token, settled: true, picks: true, updatedAt: new Date() }));
+      await assertFails(doc(dbBob, 'alice').get());
+      await assertFails(doc(dbBob, 'alice').set({ token, settled: true, picks: true, updatedAt: stamp }));
+      await assertFails(doc(getUnauth(), 'alice').get());
+      await assertSucceeds(doc(dbAlice, 'alice').delete());
+    });
   });
 
   // -----------------------------------------------------------------

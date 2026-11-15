@@ -97,6 +97,15 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    // A device's push token: the document id must be the token itself, with two on/off choices.
+    function isValidPushToken(d, tokenId) {
+      return d.keys().hasOnly(['token', 'settled', 'picks', 'platform', 'updatedAt']) &&
+        d.token is string && d.token == tokenId && d.token.size() > 20 && d.token.size() < 400 &&
+        d.settled is bool && d.picks is bool &&
+        (!('platform' in d) || (d.platform is string && d.platform.size() <= 40)) &&
+        d.updatedAt == request.time;
+    }
+
     // App owner (founder telemetry dashboard). Mirrors OWNER_EMAILS in app.js.
     function isAppOwner() {
       return isAuthenticated() &&
@@ -238,6 +247,13 @@ service cloud.firestore {
       // 3. User Cloud Diary entries
       match /diary/{betId} {
         allow read, write: if isOwner(uid);
+      }
+
+      // 3a. Push notification tokens, one document per device (id = the FCM token). Only the
+      // owner reads or writes them; the server reads them to send settled-bet and picks alerts.
+      match /pushTokens/{tokenId} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid) && isValidPushToken(request.resource.data, tokenId);
       }
 
       // 3b. League bets: create only. A bet can be withdrawn before kick-off, or removed if the

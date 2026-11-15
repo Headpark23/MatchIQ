@@ -1,7 +1,7 @@
 // Bet Buddy Progressive Web App Service Worker (v70)
 // Network-first for shell code & data, cache-first for images/fonts, instant offline fallback
 
-const CACHE_NAME = 'betbuddy-pwa-v142';
+const CACHE_NAME = 'betbuddy-pwa-v143';
 
 const PRECACHE_ASSETS = [
   './',
@@ -47,6 +47,36 @@ self.addEventListener('activate', event => {
       );
     }).then(() => self.clients.claim())
   );
+});
+
+// Push notifications (settled league bets, Friday picks). The server sends data-only FCM messages
+// ({ title, body, url, tag }), so this worker always shows them itself, on every browser.
+self.addEventListener('push', event => {
+  let payload = {};
+  try { payload = event.data ? event.data.json() : {}; } catch (e) { payload = { data: { body: event.data && event.data.text() } }; }
+  const d = payload.data || payload.notification || payload;
+  const title = d.title || 'Bet Buddy';
+  event.waitUntil(self.registration.showNotification(title, {
+    body: d.body || '',
+    tag: d.tag || 'betbuddy',
+    renotify: true,
+    icon: './assets/icon-192.png',
+    badge: './assets/favicon-32.png',
+    data: { url: d.url || '#/' }
+  }));
+});
+
+// A tap opens (or focuses) the app on the route the message points at, on this site only.
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  const route = String((event.notification.data && event.notification.data.url) || '#/');
+  // ?from=push lets index.html keep the route instead of its usual "always open on Home".
+  const target = new URL('./?from=push' + (route.startsWith('#') ? route : '#/'), self.registration.scope).href;
+  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+    const open = list.find(c => c.url.startsWith(self.registration.scope));
+    if (open) return open.focus().then(c => (c && c.navigate ? c.navigate(target) : null)).catch(() => self.clients.openWindow(target));
+    return self.clients.openWindow(target);
+  }));
 });
 
 // Fetch: Network First for all HTML, JS, JSON code; Cache First only for static media
