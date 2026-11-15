@@ -13962,6 +13962,177 @@
    ],
    "origin": "shadow",
    "sha256": "b776c302224a866a72307b77e53dbe4d232edbf4b6adb486928fc802798e77c2"
+  },
+  {
+   "record_id": "PL-2627-everton-v-fulham#r1",
+   "match_id": "PL-2627-everton-v-fulham",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Everton",
+    "away": "Fulham",
+    "kickoff_utc": "2026-12-06T14:00:00Z"
+   },
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Everton win",
+      "p": 0.4168,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Everton win",
+       "p": 0.4168,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3085,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "A",
+       "label": "Fulham win",
+       "p": 0.2746,
+       "fair_odds": "≈11/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "81205c29af9838724d495af85383e039f676aadaa81b3a8c5b4fecc0f174008d"
+  },
+  {
+   "record_id": "PL-2627-newcastle-v-sunderland#r1",
+   "match_id": "PL-2627-newcastle-v-sunderland",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Newcastle",
+    "away": "Sunderland",
+    "kickoff_utc": "2026-12-06T14:00:00Z"
+   },
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Newcastle win",
+      "p": 0.5053,
+      "fair_odds": "≈Evens"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Newcastle win",
+       "p": 0.5053,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2672,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Sunderland win",
+       "p": 0.2276,
+       "fair_odds": "≈100/30"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "7096310b47ede42d687deadcc91d1b08a3119e3af40e98571bbeb55e4d471140"
+  },
+  {
+   "record_id": "PL-2627-tottenham-v-arsenal#r1",
+   "match_id": "PL-2627-tottenham-v-arsenal",
+   "revision": 1,
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Tottenham",
+    "away": "Arsenal",
+    "kickoff_utc": "2026-12-06T16:30:00Z"
+   },
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "inputs_fingerprint": "b6054931130ce1f2",
+   "markets": {
+    "result": {
+     "model_version": "dc-decay-epl-v1-shadow",
+     "evidence": {
+      "status": "shadow",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Arsenal win",
+      "p": 0.5968,
+      "fair_odds": "≈4/6"
+     },
+     "tier": "shadow",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Tottenham win",
+       "p": 0.1508,
+       "fair_odds": "≈11/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2524,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Arsenal win",
+       "p": 0.5968,
+       "fair_odds": "≈4/6"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "origin": "shadow",
+   "sha256": "85f353d4533ff345ddf64d60f5cc2efb6db3fd71f2feb995e3dcd0aceb2a0dc2"
   }
  ]
 }

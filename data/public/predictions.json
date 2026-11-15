@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-15T09:53:12.724884+00:00",
+ "generated_at": "2026-11-15T17:24:29.221903+00:00",
  "horizon_days": 21,
  "model_version": "dc-public-v1",
  "predictions": {
@@ -90210,6 +90210,4910 @@
      "strength": "moderate",
      "basis": "La Liga model, 353 backtest matches (2025-26)",
      "lower_bound": 0.5424
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "N1-2627-heerenveen-v-cambuur": {
+   "match_id": "N1-2627-heerenveen-v-cambuur",
+   "record_id": "PUB-N1-2627-heerenveen-v-cambuur#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "Heerenveen",
+    "away": "Cambuur",
+    "kickoff_utc": "2026-12-06T11:15:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 267 Eredivisie matches (2025-26): Brier 0.572 against 0.647 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Heerenveen win",
+      "p": 0.509,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Heerenveen win",
+       "p": 0.509,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1933,
+       "fair_odds": "≈4/1"
+      },
+      {
+       "key": "A",
+       "label": "Cambuur win",
+       "p": 0.2977,
+       "fair_odds": "≈9/4"
+      }
+     ],
+     "method": "Eredivisie Dixon-Coles fitted on Eredivisie results only",
+     "training_matches": 1015,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-06",
+        "opponent": "AZ Alkmaar",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-13",
+        "opponent": "Telstar",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-16",
+        "opponent": "Excelsior",
+        "gf": 4,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "NEC Nijmegen",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "Feyenoord",
+        "gf": 5,
+        "ga": 3,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-15",
+        "opponent": "Fortuna Sittard",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-06",
+        "opponent": "Telstar",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "ADO Den Haag",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "PEC Zwolle",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Willem II",
+        "gf": 6,
+        "ga": 1,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 57,
+      "away": 5
+     },
+     "league_p": [
+      0.4365,
+      0.2493,
+      0.3143
+     ],
+     "pooled_matches": {
+      "home": 36,
+      "away": 12
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.229 against 0.232 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6754,
+      "fair_odds": "≈1/2",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8775,
+        "fair_odds": "≈1/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1225,
+        "fair_odds": "≈7/1"
+       },
+       "model_p": 0.9274,
+       "league_p": 0.8562
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.6754,
+        "fair_odds": "≈1/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.3246,
+        "fair_odds": "≈2/1"
+       },
+       "model_p": 0.8006,
+       "league_p": 0.6217
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.4756,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.5244,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.6199,
+       "league_p": 0.4138
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 3.25,
+      "expected_goals": [
+       2.43,
+       1.86
+      ]
+     },
+     "explanation": [
+      "The score model expects about 2.4 goals for Heerenveen and 1.9 for Cambuur.",
+      "Eredivisie matches average 3.25 goals; 62% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.232 against 0.233 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.6522,
+      "fair_odds": "≈8/15"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.6522,
+       "fair_odds": "≈8/15"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.3478,
+       "fair_odds": "≈15/8"
+      }
+     ],
+     "model_p": 0.7695,
+     "league_p": 0.602,
+     "explanation": [
+      "Both teams scored in 60% of Eredivisie matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.6754,
+     "credible_p": 0.672,
+     "n": 295,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 295 Eredivisie backtest matches",
+     "lower_bound": 0.627
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "SA-2627-genoa-v-torino": {
+   "match_id": "SA-2627-genoa-v-torino",
+   "record_id": "PUB-SA-2627-genoa-v-torino#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Genoa",
+    "away": "Torino",
+    "kickoff_utc": "2026-12-06T11:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-06T14:00:00Z",
+      "to": "2026-12-06T11:30:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 350 Serie A matches (2025-26): Brier 0.589 against 0.658 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Genoa win",
+      "p": 0.3963,
+      "fair_odds": "≈6/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Genoa win",
+       "p": 0.3963,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2847,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Torino win",
+       "p": 0.319,
+       "fair_odds": "≈9/4"
+      }
+     ],
+     "method": "Serie A Dixon-Coles fitted on Serie A results only",
+     "training_matches": 1250,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-12",
+        "opponent": "Frosinone",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Fiorentina",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Venezia",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-28",
+        "opponent": "Juventus",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "AC Milan",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Sassuolo",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Fiorentina",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Bologna",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-19",
+        "opponent": "Parma",
+        "gf": 3,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Frosinone",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 64,
+      "away": 62
+     },
+     "league_p": [
+      0.4072,
+      0.2704,
+      0.3224
+     ],
+     "pooled_matches": {
+      "home": 43,
+      "away": 43
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Serie A backtest (380 matches, 2025-26): Brier 0.250 against 0.249 for the league average. No better than the league average, so this is shown as the league rate."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5358,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.72,
+        "fair_odds": "≈2/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.28,
+        "fair_odds": "≈5/2"
+       },
+       "model_p": 0.675,
+       "league_p": 0.7392
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.4642,
+        "fair_odds": "≈6/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.5358,
+        "fair_odds": "≈5/6"
+       },
+       "model_p": 0.4088,
+       "league_p": 0.488
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2394,
+        "fair_odds": "≈100/30"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7606,
+        "fair_odds": "≈3/10"
+       },
+       "model_p": 0.2043,
+       "league_p": 0.2544
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.58,
+      "expected_goals": [
+       1.24,
+       1.08
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.2 goals for Genoa and 1.1 for Torino.",
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Serie A rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Serie A backtest (380 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5054,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4946,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5054,
+       "fair_odds": "≈Evens"
+      }
+     ],
+     "model_p": 0.4707,
+     "league_p": 0.5048,
+     "explanation": [
+      "Both teams scored in 50% of Serie A matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Serie A rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "no",
+     "label": "No",
+     "p": 0.5054,
+     "credible_p": 0.5049,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.4627
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "ELC-2627-burnley-v-preston": {
+   "match_id": "ELC-2627-burnley-v-preston",
+   "record_id": "PUB-ELC-2627-burnley-v-preston#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Burnley",
+    "away": "Preston",
+    "kickoff_utc": "2026-12-06T12:00:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 503 Championship matches (2025-26): Brier 0.639 against 0.655 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Burnley win",
+      "p": 0.6081,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Burnley win",
+       "p": 0.6081,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2244,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Preston win",
+       "p": 0.1675,
+       "fair_odds": "≈5/1"
+      }
+     ],
+     "method": "Championship Dixon-Coles fitted on Championship results only",
+     "training_matches": 1851,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-05",
+        "opponent": "Bristol City",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Derby",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-13",
+        "opponent": "Charlton",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-16",
+        "opponent": "Wolves",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Portsmouth",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-08",
+        "opponent": "Watford",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "QPR",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-13",
+        "opponent": "Birmingham",
+        "gf": 0,
+        "ga": 4,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Wrexham",
+        "gf": 1,
+        "ga": 4,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Stoke",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 30,
+      "away": 76
+     },
+     "league_p": [
+      0.4387,
+      0.2604,
+      0.3009
+     ],
+     "pooled_matches": {
+      "home": 15,
+      "away": 52
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5113,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7514,
+        "fair_odds": "≈1/3"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2486,
+        "fair_odds": "≈3/1"
+       },
+       "model_p": 0.7712,
+       "league_p": 0.7428
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5113,
+        "fair_odds": "≈Evens"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4887,
+        "fair_odds": "≈Evens"
+       },
+       "model_p": 0.5294,
+       "league_p": 0.5035
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2751,
+        "fair_odds": "≈11/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7249,
+        "fair_odds": "≈4/11"
+       },
+       "model_p": 0.307,
+       "league_p": 0.2615
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.61,
+      "expected_goals": [
+       1.9,
+       0.89
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.9 goals for Burnley and 0.9 for Preston.",
+      "Championship matches average 2.61 goals; 50% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Championship rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.247 against 0.248 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5286,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5286,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4714,
+       "fair_odds": "≈11/10"
+      }
+     ],
+     "model_p": 0.5052,
+     "league_p": 0.5386,
+     "explanation": [
+      "Both teams scored in 54% of Championship matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Championship rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Burnley win",
+     "p": 0.6081,
+     "credible_p": 0.6016,
+     "n": 503,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Championship model, 503 backtest matches (2025-26)",
+     "lower_bound": 0.5657
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "N1-2627-ajax-v-utrecht": {
+   "match_id": "N1-2627-ajax-v-utrecht",
+   "record_id": "PUB-N1-2627-ajax-v-utrecht#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "Ajax",
+    "away": "FC Utrecht",
+    "kickoff_utc": "2026-12-06T13:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 267 Eredivisie matches (2025-26): Brier 0.572 against 0.647 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Ajax win",
+      "p": 0.6104,
+      "fair_odds": "≈8/13"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Ajax win",
+       "p": 0.6104,
+       "fair_odds": "≈8/13"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1958,
+       "fair_odds": "≈4/1"
+      },
+      {
+       "key": "A",
+       "label": "FC Utrecht win",
+       "p": 0.1938,
+       "fair_odds": "≈4/1"
+      }
+     ],
+     "method": "Eredivisie Dixon-Coles fitted on Eredivisie results only",
+     "training_matches": 1015,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-05",
+        "opponent": "PSV",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-15",
+        "opponent": "Willem II",
+        "gf": 5,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Excelsior",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "NEC Nijmegen",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "AZ Alkmaar",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Sparta Rotterdam",
+        "gf": 3,
+        "ga": 3,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-13",
+        "opponent": "Excelsior",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Feyenoord",
+        "gf": 0,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "FC Twente",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Telstar",
+        "gf": 2,
+        "ga": 4,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 57,
+      "away": 56
+     },
+     "league_p": [
+      0.4365,
+      0.2493,
+      0.3143
+     ],
+     "pooled_matches": {
+      "home": 36,
+      "away": 37
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.229 against 0.232 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6374,
+      "fair_odds": "≈4/7",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8578,
+        "fair_odds": "≈1/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1422,
+        "fair_odds": "≈6/1"
+       },
+       "model_p": 0.8615,
+       "league_p": 0.8562
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.6374,
+        "fair_odds": "≈4/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.3626,
+        "fair_odds": "≈7/4"
+       },
+       "model_p": 0.674,
+       "league_p": 0.6217
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.4269,
+        "fair_odds": "≈11/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.5731,
+        "fair_odds": "≈8/11"
+       },
+       "model_p": 0.4574,
+       "league_p": 0.4138
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 3.25,
+      "expected_goals": [
+       2.26,
+       1.21
+      ]
+     },
+     "explanation": [
+      "The score model expects about 2.3 goals for Ajax and 1.2 for FC Utrecht.",
+      "Eredivisie matches average 3.25 goals; 62% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.232 against 0.233 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.6101,
+      "fair_odds": "≈8/13"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.6101,
+       "fair_odds": "≈8/13"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.3899,
+       "fair_odds": "≈13/8"
+      }
+     ],
+     "model_p": 0.6291,
+     "league_p": 0.602,
+     "explanation": [
+      "Both teams scored in 60% of Eredivisie matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.6374,
+     "credible_p": 0.6364,
+     "n": 295,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 295 Eredivisie backtest matches",
+     "lower_bound": 0.5903
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "N1-2627-go-ahead-eagles-v-twente": {
+   "match_id": "N1-2627-go-ahead-eagles-v-twente",
+   "record_id": "PUB-N1-2627-go-ahead-eagles-v-twente#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "Go Ahead Eagles",
+    "away": "FC Twente",
+    "kickoff_utc": "2026-12-06T13:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 267 Eredivisie matches (2025-26): Brier 0.572 against 0.647 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "A",
+      "label": "FC Twente win",
+      "p": 0.5272,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Go Ahead Eagles win",
+       "p": 0.255,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2178,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "FC Twente win",
+       "p": 0.5272,
+       "fair_odds": "≈10/11"
+      }
+     ],
+     "method": "Eredivisie Dixon-Coles fitted on Eredivisie results only",
+     "training_matches": 1015,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-08",
+        "opponent": "Willem II",
+        "gf": 4,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-08-23",
+        "opponent": "ADO Den Haag",
+        "gf": 3,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Groningen",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Sparta Rotterdam",
+        "gf": 3,
+        "ga": 3,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-23",
+        "opponent": "Telstar",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-30",
+        "opponent": "Cambuur",
+        "gf": 4,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-06",
+        "opponent": "Groningen",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Fortuna Sittard",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "AZ Alkmaar",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Excelsior",
+        "gf": 9,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 55,
+      "away": 57
+     },
+     "league_p": [
+      0.4365,
+      0.2493,
+      0.3143
+     ],
+     "pooled_matches": {
+      "home": 36,
+      "away": 36
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.229 against 0.232 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6288,
+      "fair_odds": "≈4/7",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8527,
+        "fair_odds": "≈1/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1473,
+        "fair_odds": "≈6/1"
+       },
+       "model_p": 0.8446,
+       "league_p": 0.8562
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.6288,
+        "fair_odds": "≈4/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.3712,
+        "fair_odds": "≈7/4"
+       },
+       "model_p": 0.6454,
+       "league_p": 0.6217
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.4172,
+        "fair_odds": "≈11/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.5828,
+        "fair_odds": "≈8/11"
+       },
+       "model_p": 0.425,
+       "league_p": 0.4138
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 3.25,
+      "expected_goals": [
+       1.33,
+       1.99
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.3 goals for Go Ahead Eagles and 2.0 for FC Twente.",
+      "Eredivisie matches average 3.25 goals; 62% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.232 against 0.233 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.6122,
+      "fair_odds": "≈8/13"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.6122,
+       "fair_odds": "≈8/13"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.3878,
+       "fair_odds": "≈13/8"
+      }
+     ],
+     "model_p": 0.6361,
+     "league_p": 0.602,
+     "explanation": [
+      "Both teams scored in 60% of Eredivisie matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.6288,
+     "credible_p": 0.6283,
+     "n": 295,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 295 Eredivisie backtest matches",
+     "lower_bound": 0.582
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-everton-v-fulham": {
+   "match_id": "PL-2627-everton-v-fulham",
+   "record_id": "PUB-PL-2627-everton-v-fulham#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Everton",
+    "away": "Fulham",
+    "kickoff_utc": "2026-12-06T14:00:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 351 Premier League matches (2025-26): Brier 0.620 against 0.658 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Everton win",
+      "p": 0.4107,
+      "fair_odds": "≈11/8"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Everton win",
+       "p": 0.4107,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3085,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "A",
+       "label": "Fulham win",
+       "p": 0.2808,
+       "fair_odds": "≈5/2"
+      }
+     ],
+     "method": "Premier League Dixon-Coles fitted on Premier League results only",
+     "training_matches": 1239,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Crystal Palace",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-06",
+        "opponent": "Man United",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Ipswich",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Chelsea",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-06",
+        "opponent": "Coventry",
+        "gf": 3,
+        "ga": 1,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-30",
+        "opponent": "Sunderland",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Liverpool",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Ipswich",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Coventry",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Aston Villa",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 62,
+      "away": 62
+     },
+     "league_p": [
+      0.431,
+      0.2462,
+      0.3228
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Premier League backtest (380 matches, 2025-26): Brier 0.249 against 0.250 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5149,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7643,
+        "fair_odds": "≈3/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2357,
+        "fair_odds": "≈100/30"
+       },
+       "model_p": 0.6455,
+       "league_p": 0.8152
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5149,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4851,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.3678,
+       "league_p": 0.5779
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2973,
+        "fair_odds": "≈9/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7027,
+        "fair_odds": "≈4/9"
+       },
+       "model_p": 0.1737,
+       "league_p": 0.3503
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.97,
+      "expected_goals": [
+       1.21,
+       0.95
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.2 goals for Everton and 0.9 for Fulham.",
+      "Premier League matches average 2.97 goals; 58% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Premier League backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5349,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5349,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4651,
+       "fair_odds": "≈6/5"
+      }
+     ],
+     "model_p": 0.4404,
+     "league_p": 0.5755,
+     "explanation": [
+      "Both teams scored in 58% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5349,
+     "credible_p": 0.5369,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Premier League backtest matches",
+     "lower_bound": 0.4948
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "SA-2627-lazio-v-atalanta": {
+   "match_id": "SA-2627-lazio-v-atalanta",
+   "record_id": "PUB-SA-2627-lazio-v-atalanta#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Lazio",
+    "away": "Atalanta",
+    "kickoff_utc": "2026-12-06T14:00:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 350 Serie A matches (2025-26): Brier 0.589 against 0.658 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Lazio win",
+      "p": 0.3894,
+      "fair_odds": "≈13/8"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Lazio win",
+       "p": 0.3894,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.266,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Atalanta win",
+       "p": 0.3447,
+       "fair_odds": "≈15/8"
+      }
+     ],
+     "method": "Serie A Dixon-Coles fitted on Serie A results only",
+     "training_matches": 1250,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-30",
+        "opponent": "Genoa",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "AC Milan",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Monza",
+        "gf": 3,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Parma",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Cagliari",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-05",
+        "opponent": "Roma",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Juventus",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "AC Milan",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-29",
+        "opponent": "Fiorentina",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "Monza",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 62,
+      "away": 62
+     },
+     "league_p": [
+      0.4072,
+      0.2704,
+      0.3224
+     ],
+     "pooled_matches": {
+      "home": 43,
+      "away": 43
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Serie A backtest (380 matches, 2025-26): Brier 0.250 against 0.249 for the league average. No better than the league average, so this is shown as the league rate."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5128,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7386,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2614,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.7371,
+       "league_p": 0.7392
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.4872,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.5128,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.4852,
+       "league_p": 0.488
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2582,
+        "fair_odds": "≈3/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7418,
+        "fair_odds": "≈1/3"
+       },
+       "model_p": 0.2672,
+       "league_p": 0.2544
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.58,
+      "expected_goals": [
+       1.36,
+       1.26
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.4 goals for Lazio and 1.3 for Atalanta.",
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Serie A rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Serie A backtest (380 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5133,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5133,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4867,
+       "fair_odds": "≈11/10"
+      }
+     ],
+     "model_p": 0.5331,
+     "league_p": 0.5048,
+     "explanation": [
+      "Both teams scored in 50% of Serie A matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Serie A rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5133,
+     "credible_p": 0.5129,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.4707
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-newcastle-v-sunderland": {
+   "match_id": "PL-2627-newcastle-v-sunderland",
+   "record_id": "PUB-PL-2627-newcastle-v-sunderland#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Newcastle",
+    "away": "Sunderland",
+    "kickoff_utc": "2026-12-06T14:00:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 351 Premier League matches (2025-26): Brier 0.620 against 0.658 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Newcastle win",
+      "p": 0.5221,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Newcastle win",
+       "p": 0.5221,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2589,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Sunderland win",
+       "p": 0.219,
+       "fair_odds": "≈7/2"
+      }
+     ],
+     "method": "Premier League Dixon-Coles fitted on Premier League results only",
+     "training_matches": 1239,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-23",
+        "opponent": "Liverpool",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Bournemouth",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Hull",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Aston Villa",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-02",
+        "opponent": "Everton",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Ipswich",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Brentford",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Man City",
+        "gf": 3,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "Bournemouth",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Coventry",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 62,
+      "away": 24
+     },
+     "league_p": [
+      0.431,
+      0.2462,
+      0.3228
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Premier League backtest (380 matches, 2025-26): Brier 0.249 against 0.250 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5538,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7964,
+        "fair_odds": "≈1/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2036,
+        "fair_odds": "≈4/1"
+       },
+       "model_p": 0.7525,
+       "league_p": 0.8152
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5538,
+        "fair_odds": "≈4/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4462,
+        "fair_odds": "≈5/4"
+       },
+       "model_p": 0.4977,
+       "league_p": 0.5779
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3286,
+        "fair_odds": "≈2/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6714,
+        "fair_odds": "≈1/2"
+       },
+       "model_p": 0.2782,
+       "league_p": 0.3503
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.97,
+      "expected_goals": [
+       1.67,
+       1.0
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.7 goals for Newcastle and 1.0 for Sunderland.",
+      "Premier League matches average 2.97 goals; 58% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Premier League backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5588,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5588,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4412,
+       "fair_odds": "≈5/4"
+      }
+     ],
+     "model_p": 0.52,
+     "league_p": 0.5755,
+     "explanation": [
+      "Both teams scored in 58% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5588,
+     "credible_p": 0.5596,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Premier League backtest matches",
+     "lower_bound": 0.5177
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "FL1-2627-troyes-v-lyon": {
+   "match_id": "FL1-2627-troyes-v-lyon",
+   "record_id": "PUB-FL1-2627-troyes-v-lyon#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "FL1",
+    "season": "2627",
+    "home": "Troyes",
+    "away": "Lyon",
+    "kickoff_utc": "2026-12-06T14:00:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-05T14:00:00Z",
+      "to": "2026-12-06T14:00:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 275 Ligue 1 matches (2025-26): Brier 0.599 against 0.645 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "A",
+      "label": "Lyon win",
+      "p": 0.5867,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Troyes win",
+       "p": 0.1555,
+       "fair_odds": "≈11/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2579,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Lyon win",
+       "p": 0.5867,
+       "fair_odds": "≈8/11"
+      }
+     ],
+     "method": "Ligue 1 Dixon-Coles fitted on Ligue 1 results only",
+     "training_matches": 1008,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Paris FC",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-06",
+        "opponent": "Strasbourg",
+        "gf": 2,
+        "ga": 6,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Marseille",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Lens",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Le Mans",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Toulouse",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Paris FC",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-09",
+        "opponent": "Lens",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-26",
+        "opponent": "Paris SG",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "Brest",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 5,
+      "away": 56
+     },
+     "league_p": [
+      0.4425,
+      0.2361,
+      0.3214
+     ],
+     "pooled_matches": {
+      "home": 10,
+      "away": 37
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Ligue 1 backtest (306 matches, 2025-26): Brier 0.248 against 0.250 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5009,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.742,
+        "fair_odds": "≈1/3"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.258,
+        "fair_odds": "≈3/1"
+       },
+       "model_p": 0.6747,
+       "league_p": 0.7708
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.4991,
+        "fair_odds": "≈Evens"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.5009,
+        "fair_odds": "≈Evens"
+       },
+       "model_p": 0.4044,
+       "league_p": 0.5397
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2867,
+        "fair_odds": "≈5/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7133,
+        "fair_odds": "≈2/5"
+       },
+       "model_p": 0.201,
+       "league_p": 0.3234
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.84,
+      "expected_goals": [
+       0.7,
+       1.6
+      ]
+     },
+     "explanation": [
+      "The score model expects about 0.7 goals for Troyes and 1.6 for Lyon.",
+      "Ligue 1 matches average 2.84 goals; 54% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Ligue 1 rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Ligue 1 backtest (306 matches, 2025-26): Brier 0.251 against 0.252 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5018,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5018,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4982,
+       "fair_odds": "≈Evens"
+      }
+     ],
+     "model_p": 0.4064,
+     "league_p": 0.5427,
+     "explanation": [
+      "Both teams scored in 54% of Ligue 1 matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Ligue 1 rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "A",
+     "label": "Lyon win",
+     "p": 0.5867,
+     "credible_p": 0.5687,
+     "n": 275,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Ligue 1 model, 275 backtest matches (2025-26)",
+     "lower_bound": 0.5196
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "BL1-2627-schalke-04-v-dortmund": {
+   "match_id": "BL1-2627-schalke-04-v-dortmund",
+   "record_id": "PUB-BL1-2627-schalke-04-v-dortmund#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "BL1",
+    "season": "2627",
+    "home": "Schalke 04",
+    "away": "Dortmund",
+    "kickoff_utc": "2026-12-06T14:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-05T14:30:00Z",
+      "to": "2026-12-05T00:00:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     },
+     {
+      "from": "2026-12-05T00:00:00Z",
+      "to": "2026-12-06T14:30:00Z",
+      "seen_at": "2026-11-05T21:13:49.781151+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T3",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Not enough recent matches for one club (for example a newly promoted side), so this is the Bundesliga average. Limited evidence."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Schalke 04 win",
+      "p": 0.4274,
+      "fair_odds": "≈11/8"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Schalke 04 win",
+       "p": 0.4274,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2503,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Dortmund win",
+       "p": 0.3223,
+       "fair_odds": "≈2/1"
+      }
+     ],
+     "method": "Bundesliga average result frequencies (not enough recent matches for one of the clubs)",
+     "training_matches": 999,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-05",
+        "opponent": "Bayern Munich",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Elversberg",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Mainz",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "RB Leipzig",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-05-16",
+        "opponent": "Werder Bremen",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Hoffenheim",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Stuttgart",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Union Berlin",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Bayern Munich",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 4,
+      "away": 55
+     },
+     "league_p": [
+      0.4274,
+      0.2503,
+      0.3223
+     ],
+     "pooled_matches": {
+      "home": 9,
+      "away": 37
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.230 against 0.232 for the league average. No better than the league average, so this is shown as the league rate."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6266,
+      "fair_odds": "≈8/13",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8308,
+        "fair_odds": "≈1/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1692,
+        "fair_odds": "≈5/1"
+       },
+       "model_p": null,
+       "league_p": 0.8308
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.6266,
+        "fair_odds": "≈8/13"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.3734,
+        "fair_odds": "≈13/8"
+       },
+       "model_p": null,
+       "league_p": 0.6266
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.4294,
+        "fair_odds": "≈11/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.5706,
+        "fair_odds": "≈8/11"
+       },
+       "model_p": null,
+       "league_p": 0.4294
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 3.22,
+      "expected_goals": null
+     },
+     "explanation": [
+      "Bundesliga matches average 3.22 goals; 63% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Bundesliga rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.239 against 0.237 for the league average. No better than the league average, so this is shown as the league rate."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.6016,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.6016,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.3984,
+       "fair_odds": "≈6/4"
+      }
+     ],
+     "model_p": null,
+     "league_p": 0.6016,
+     "explanation": [
+      "Both teams scored in 60% of Bundesliga matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Bundesliga rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "no_bet",
+     "reason": "No market has enough evidence about this match to feature a selection."
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "P1-2627-estrela-amadora-v-gil-vicente": {
+   "match_id": "P1-2627-estrela-amadora-v-gil-vicente",
+   "record_id": "PUB-P1-2627-estrela-amadora-v-gil-vicente#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "P1",
+    "season": "2627",
+    "home": "Estrela Amadora",
+    "away": "Gil Vicente",
+    "kickoff_utc": "2026-12-06T15:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-06T15:00:00Z",
+      "to": "2026-12-06T15:30:00Z",
+      "seen_at": "2026-11-08T06:40:44.055440+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 268 Primeira Liga matches (2025-26): Brier 0.533 against 0.643 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "A",
+      "label": "Gil Vicente win",
+      "p": 0.4643,
+      "fair_odds": "≈6/5"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Estrela Amadora win",
+       "p": 0.3259,
+       "fair_odds": "≈2/1"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2099,
+       "fair_odds": "≈4/1"
+      },
+      {
+       "key": "A",
+       "label": "Gil Vicente win",
+       "p": 0.4643,
+       "fair_odds": "≈6/5"
+      }
+     ],
+     "method": "Primeira Liga Dixon-Coles fitted on Primeira Liga results only",
+     "training_matches": 997,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-05",
+        "opponent": "Famalicao",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-10",
+        "opponent": "SC Braga",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Academico Viseu",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Casa Pia",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "Benfica",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-30",
+        "opponent": "Famalicao",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-13",
+        "opponent": "Benfica",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-09",
+        "opponent": "Moreirense",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-19",
+        "opponent": "SC Braga",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "Santa Clara",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 55,
+      "away": 53
+     },
+     "league_p": [
+      0.4323,
+      0.2367,
+      0.331
+     ],
+     "pooled_matches": {
+      "home": 34,
+      "away": 35
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Primeira Liga backtest (287 matches, 2025-26): Brier 0.241 against 0.246 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5176,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.738,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.262,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.6955,
+       "league_p": 0.7563
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5176,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4824,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.4684,
+       "league_p": 0.5386
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2914,
+        "fair_odds": "≈5/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7086,
+        "fair_odds": "≈2/5"
+       },
+       "model_p": 0.2527,
+       "league_p": 0.3079
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.75,
+      "expected_goals": [
+       1.13,
+       1.42
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.1 goals for Estrela Amadora and 1.4 for Gil Vicente.",
+      "Primeira Liga matches average 2.75 goals; 54% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Primeira Liga rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Primeira Liga backtest (287 matches, 2025-26): Brier 0.248 against 0.250 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.501,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.501,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.499,
+       "fair_odds": "≈Evens"
+      }
+     ],
+     "model_p": 0.4859,
+     "league_p": 0.5075,
+     "explanation": [
+      "Both teams scored in 51% of Primeira Liga matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Primeira Liga rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5176,
+     "credible_p": 0.519,
+     "n": 287,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 287 Primeira Liga backtest matches",
+     "lower_bound": 0.4705
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "P1-2627-rio-ave-v-casa-pia": {
+   "match_id": "P1-2627-rio-ave-v-casa-pia",
+   "record_id": "PUB-P1-2627-rio-ave-v-casa-pia#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "P1",
+    "season": "2627",
+    "home": "Rio Ave",
+    "away": "Casa Pia",
+    "kickoff_utc": "2026-12-06T15:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-06T15:00:00Z",
+      "to": "2026-12-06T15:30:00Z",
+      "seen_at": "2026-11-08T06:40:44.055440+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 268 Primeira Liga matches (2025-26): Brier 0.533 against 0.643 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Rio Ave win",
+      "p": 0.442,
+      "fair_odds": "≈5/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Rio Ave win",
+       "p": 0.442,
+       "fair_odds": "≈5/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2089,
+       "fair_odds": "≈4/1"
+      },
+      {
+       "key": "A",
+       "label": "Casa Pia win",
+       "p": 0.3492,
+       "fair_odds": "≈15/8"
+      }
+     ],
+     "method": "Primeira Liga Dixon-Coles fitted on Primeira Liga results only",
+     "training_matches": 997,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-28",
+        "opponent": "Sporting CP",
+        "gf": 0,
+        "ga": 4,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-14",
+        "opponent": "Estrela Amadora",
+        "gf": 3,
+        "ga": 3,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Nacional",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Famalicao",
+        "gf": 0,
+        "ga": 4,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "SC Braga",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-24",
+        "opponent": "Gil Vicente",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-06",
+        "opponent": "Vitoria Guimaraes",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Estoril",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Estrela Amadora",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-07",
+        "opponent": "Alverca",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 55,
+      "away": 55
+     },
+     "league_p": [
+      0.4323,
+      0.2367,
+      0.331
+     ],
+     "pooled_matches": {
+      "home": 35,
+      "away": 33
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Primeira Liga backtest (287 matches, 2025-26): Brier 0.241 against 0.246 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5215,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7411,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2589,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.7059,
+       "league_p": 0.7563
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5215,
+        "fair_odds": "≈10/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4785,
+        "fair_odds": "≈11/10"
+       },
+       "model_p": 0.4816,
+       "league_p": 0.5386
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2947,
+        "fair_odds": "≈5/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7053,
+        "fair_odds": "≈2/5"
+       },
+       "model_p": 0.264,
+       "league_p": 0.3079
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.75,
+      "expected_goals": [
+       1.4,
+       1.2
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.4 goals for Rio Ave and 1.2 for Casa Pia.",
+      "Primeira Liga matches average 2.75 goals; 54% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Primeira Liga rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Primeira Liga backtest (287 matches, 2025-26): Brier 0.248 against 0.250 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5052,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5052,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4948,
+       "fair_odds": "≈Evens"
+      }
+     ],
+     "model_p": 0.4998,
+     "league_p": 0.5075,
+     "explanation": [
+      "Both teams scored in 51% of Primeira Liga matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Primeira Liga rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5215,
+     "credible_p": 0.5226,
+     "n": 287,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 287 Primeira Liga backtest matches",
+     "lower_bound": 0.4741
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "N1-2627-ado-den-haag-v-excelsior": {
+   "match_id": "N1-2627-ado-den-haag-v-excelsior",
+   "record_id": "PUB-N1-2627-ado-den-haag-v-excelsior#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "N1",
+    "season": "2627",
+    "home": "ADO Den Haag",
+    "away": "Excelsior",
+    "kickoff_utc": "2026-12-06T15:45:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 267 Eredivisie matches (2025-26): Brier 0.572 against 0.647 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "ADO Den Haag win",
+      "p": 0.4583,
+      "fair_odds": "≈6/5"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "ADO Den Haag win",
+       "p": 0.4583,
+       "fair_odds": "≈6/5"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2332,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Excelsior win",
+       "p": 0.3085,
+       "fair_odds": "≈9/4"
+      }
+     ],
+     "method": "Eredivisie Dixon-Coles fitted on Eredivisie results only",
+     "training_matches": 1015,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-06",
+        "opponent": "Fortuna Sittard",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Cambuur",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "PSV",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Heerenveen",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-07",
+        "opponent": "Sparta Rotterdam",
+        "gf": 3,
+        "ga": 1,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-05",
+        "opponent": "Willem II",
+        "gf": 3,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-08",
+        "opponent": "NEC Nijmegen",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Ajax",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-16",
+        "opponent": "Heerenveen",
+        "gf": 0,
+        "ga": 4,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Fortuna Sittard",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 6,
+      "away": 39
+     },
+     "league_p": [
+      0.4365,
+      0.2493,
+      0.3143
+     ],
+     "pooled_matches": {
+      "home": 12,
+      "away": 37
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.229 against 0.232 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6183,
+      "fair_odds": "≈8/13",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8462,
+        "fair_odds": "≈1/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1538,
+        "fair_odds": "≈11/2"
+       },
+       "model_p": 0.8231,
+       "league_p": 0.8562
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.6183,
+        "fair_odds": "≈8/13"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.3817,
+        "fair_odds": "≈13/8"
+       },
+       "model_p": 0.6104,
+       "league_p": 0.6217
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.4058,
+        "fair_odds": "≈6/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.5942,
+        "fair_odds": "≈4/6"
+       },
+       "model_p": 0.3873,
+       "league_p": 0.4138
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 3.25,
+      "expected_goals": [
+       1.75,
+       1.4
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.8 goals for ADO Den Haag and 1.4 for Excelsior.",
+      "Eredivisie matches average 3.25 goals; 62% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Eredivisie backtest (295 matches, 2025-26): Brier 0.232 against 0.233 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.6084,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.6084,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.3916,
+       "fair_odds": "≈6/4"
+      }
+     ],
+     "model_p": 0.6235,
+     "league_p": 0.602,
+     "explanation": [
+      "Both teams scored in 60% of Eredivisie matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Eredivisie rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.6183,
+     "credible_p": 0.6185,
+     "n": 295,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 295 Eredivisie backtest matches",
+     "lower_bound": 0.572
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "FL1-2627-rennes-v-brest": {
+   "match_id": "FL1-2627-rennes-v-brest",
+   "record_id": "PUB-FL1-2627-rennes-v-brest#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "FL1",
+    "season": "2627",
+    "home": "Rennes",
+    "away": "Brest",
+    "kickoff_utc": "2026-12-06T16:15:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-05T14:00:00Z",
+      "to": "2026-12-06T16:15:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 275 Ligue 1 matches (2025-26): Brier 0.599 against 0.645 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Rennes win",
+      "p": 0.5033,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Rennes win",
+       "p": 0.5033,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2209,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Brest win",
+       "p": 0.2758,
+       "fair_odds": "≈11/4"
+      }
+     ],
+     "method": "Ligue 1 Dixon-Coles fitted on Ligue 1 results only",
+     "training_matches": 1008,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-30",
+        "opponent": "Le Mans",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-11",
+        "opponent": "Marseille",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Auxerre",
+        "gf": 4,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Strasbourg",
+        "gf": 3,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "Lille",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-22",
+        "opponent": "Le Mans",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-05",
+        "opponent": "Le Havre",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Auxerre",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Lille",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-11-02",
+        "opponent": "Lorient",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 57,
+      "away": 56
+     },
+     "league_p": [
+      0.4425,
+      0.2361,
+      0.3214
+     ],
+     "pooled_matches": {
+      "home": 37,
+      "away": 37
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Ligue 1 backtest (306 matches, 2025-26): Brier 0.248 against 0.250 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5842,
+      "fair_odds": "≈8/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8016,
+        "fair_odds": "≈1/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1984,
+        "fair_odds": "≈4/1"
+       },
+       "model_p": 0.8732,
+       "league_p": 0.7708
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5842,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4158,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": 0.6881,
+       "league_p": 0.5397
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3686,
+        "fair_odds": "≈7/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6314,
+        "fair_odds": "≈4/7"
+       },
+       "model_p": 0.4739,
+       "league_p": 0.3234
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.84,
+      "expected_goals": [
+       2.06,
+       1.49
+      ]
+     },
+     "explanation": [
+      "The score model expects about 2.1 goals for Rennes and 1.5 for Brest.",
+      "Ligue 1 matches average 2.84 goals; 54% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Ligue 1 rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Ligue 1 backtest (306 matches, 2025-26): Brier 0.251 against 0.252 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5839,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5839,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4161,
+       "fair_odds": "≈11/8"
+      }
+     ],
+     "model_p": 0.6801,
+     "league_p": 0.5427,
+     "explanation": [
+      "Both teams scored in 54% of Ligue 1 matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Ligue 1 rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5842,
+     "credible_p": 0.5815,
+     "n": 306,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 306 Ligue 1 backtest matches",
+     "lower_bound": 0.5351
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "BL1-2627-elversberg-v-stuttgart": {
+   "match_id": "BL1-2627-elversberg-v-stuttgart",
+   "record_id": "PUB-BL1-2627-elversberg-v-stuttgart#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "BL1",
+    "season": "2627",
+    "home": "Elversberg",
+    "away": "Stuttgart",
+    "kickoff_utc": "2026-12-06T16:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-05T14:30:00Z",
+      "to": "2026-12-05T00:00:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     },
+     {
+      "from": "2026-12-05T00:00:00Z",
+      "to": "2026-12-06T16:30:00Z",
+      "seen_at": "2026-11-05T21:13:49.781151+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "T3",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Not enough recent matches for one club (for example a newly promoted side), so this is the Bundesliga average. Limited evidence."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Elversberg win",
+      "p": 0.4274,
+      "fair_odds": "≈11/8"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Elversberg win",
+       "p": 0.4274,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2503,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Stuttgart win",
+       "p": 0.3223,
+       "fair_odds": "≈2/1"
+      }
+     ],
+     "method": "Bundesliga average result frequencies (not enough recent matches for one of the clubs)",
+     "training_matches": 999,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Leverkusen",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-13",
+        "opponent": "Bayern Munich",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Augsburg",
+        "gf": 4,
+        "ga": 3,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-30",
+        "opponent": "Mainz",
+        "gf": 4,
+        "ga": 1,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-28",
+        "opponent": "Bayern Munich",
+        "gf": 1,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Hoffenheim",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Paderborn",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Hamburg",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Leverkusen",
+        "gf": 4,
+        "ga": 2,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 4,
+      "away": 56
+     },
+     "league_p": [
+      0.4274,
+      0.2503,
+      0.3223
+     ],
+     "pooled_matches": {
+      "home": 9,
+      "away": 37
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.230 against 0.232 for the league average. No better than the league average, so this is shown as the league rate."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6266,
+      "fair_odds": "≈8/13",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.8308,
+        "fair_odds": "≈1/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.1692,
+        "fair_odds": "≈5/1"
+       },
+       "model_p": null,
+       "league_p": 0.8308
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.6266,
+        "fair_odds": "≈8/13"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.3734,
+        "fair_odds": "≈13/8"
+       },
+       "model_p": null,
+       "league_p": 0.6266
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.4294,
+        "fair_odds": "≈11/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.5706,
+        "fair_odds": "≈8/11"
+       },
+       "model_p": null,
+       "league_p": 0.4294
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 3.22,
+      "expected_goals": null
+     },
+     "explanation": [
+      "Bundesliga matches average 3.22 goals; 63% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Bundesliga rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Bundesliga backtest (306 matches, 2025-26): Brier 0.239 against 0.237 for the league average. No better than the league average, so this is shown as the league rate."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.6016,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.6016,
+       "fair_odds": "≈4/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.3984,
+       "fair_odds": "≈6/4"
+      }
+     ],
+     "model_p": null,
+     "league_p": 0.6016,
+     "explanation": [
+      "Both teams scored in 60% of Bundesliga matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Bundesliga rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "no_bet",
+     "reason": "No market has enough evidence about this match to feature a selection."
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PL-2627-tottenham-v-arsenal": {
+   "match_id": "PL-2627-tottenham-v-arsenal",
+   "record_id": "PUB-PL-2627-tottenham-v-arsenal#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "PL",
+    "season": "2627",
+    "home": "Tottenham",
+    "away": "Arsenal",
+    "kickoff_utc": "2026-12-06T16:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 351 Premier League matches (2025-26): Brier 0.620 against 0.658 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "A",
+      "label": "Arsenal win",
+      "p": 0.603,
+      "fair_odds": "≈4/6"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Tottenham win",
+       "p": 0.152,
+       "fair_odds": "≈11/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.245,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Arsenal win",
+       "p": 0.603,
+       "fair_odds": "≈4/6"
+      }
+     ],
+     "method": "Premier League Dixon-Coles fitted on Premier League results only",
+     "training_matches": 1239,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Newcastle",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Everton",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Aston Villa",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-19",
+        "opponent": "Coventry",
+        "gf": 3,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Crystal Palace",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-31",
+        "opponent": "Aston Villa",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-12",
+        "opponent": "Sunderland",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Brighton",
+        "gf": 0,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "Nott'm Forest",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Liverpool",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 62,
+      "away": 62
+     },
+     "league_p": [
+      0.431,
+      0.2462,
+      0.3228
+     ],
+     "pooled_matches": {
+      "home": 41,
+      "away": 41
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Premier League backtest (380 matches, 2025-26): Brier 0.249 against 0.250 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5427,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7877,
+        "fair_odds": "≈2/7"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2123,
+        "fair_odds": "≈7/2"
+       },
+       "model_p": 0.7235,
+       "league_p": 0.8152
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5427,
+        "fair_odds": "≈5/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4573,
+        "fair_odds": "≈6/5"
+       },
+       "model_p": 0.4607,
+       "league_p": 0.5779
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.3191,
+        "fair_odds": "≈9/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.6809,
+        "fair_odds": "≈4/9"
+       },
+       "model_p": 0.2462,
+       "league_p": 0.3503
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.97,
+      "expected_goals": [
+       0.76,
+       1.75
+      ]
+     },
+     "explanation": [
+      "The score model expects about 0.8 goals for Tottenham and 1.8 for Arsenal.",
+      "Premier League matches average 2.97 goals; 58% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Premier League backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5375,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5375,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4625,
+       "fair_odds": "≈6/5"
+      }
+     ],
+     "model_p": 0.4488,
+     "league_p": 0.5755,
+     "explanation": [
+      "Both teams scored in 58% of Premier League matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Premier League rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "A",
+     "label": "Arsenal win",
+     "p": 0.603,
+     "credible_p": 0.5879,
+     "n": 351,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Premier League model, 351 backtest matches (2025-26)",
+     "lower_bound": 0.5447
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "SA-2627-juventus-v-udinese": {
+   "match_id": "SA-2627-juventus-v-udinese",
+   "record_id": "PUB-SA-2627-juventus-v-udinese#r1",
+   "published_at": "2026-11-15T17:24:29.221903+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Juventus",
+    "away": "Udinese",
+    "kickoff_utc": "2026-12-06T17:00:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-06T14:00:00Z",
+      "to": "2026-12-06T17:00:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 350 Serie A matches (2025-26): Brier 0.589 against 0.658 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Juventus win",
+      "p": 0.6177,
+      "fair_odds": "≈8/13"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Juventus win",
+       "p": 0.6177,
+       "fair_odds": "≈8/13"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2272,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Udinese win",
+       "p": 0.1551,
+       "fair_odds": "≈11/2"
+      }
+     ],
+     "method": "Serie A Dixon-Coles fitted on Serie A results only",
+     "training_matches": 1250,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Parma",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-06",
+        "opponent": "AC Milan",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Atalanta",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-18",
+        "opponent": "Lazio",
+        "gf": 0,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Napoli",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Monza",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-14",
+        "opponent": "Inter",
+        "gf": 3,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-12",
+        "opponent": "Torino",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-28",
+        "opponent": "Parma",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-11-06",
+        "opponent": "Venezia",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 62,
+      "away": 62
+     },
+     "league_p": [
+      0.4072,
+      0.2704,
+      0.3224
+     ],
+     "pooled_matches": {
+      "home": 43,
+      "away": 43
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Serie A backtest (380 matches, 2025-26): Brier 0.250 against 0.249 for the league average. No better than the league average, so this is shown as the league rate."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5144,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7373,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2627,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.7328,
+       "league_p": 0.7392
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.4856,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.5144,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.48,
+       "league_p": 0.488
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2569,
+        "fair_odds": "≈3/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7431,
+        "fair_odds": "≈1/3"
+       },
+       "model_p": 0.2627,
+       "league_p": 0.2544
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.58,
+      "expected_goals": [
+       1.81,
+       0.78
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.8 goals for Juventus and 0.8 for Udinese.",
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Serie A rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Serie A backtest (380 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5101,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4899,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5101,
+       "fair_odds": "≈Evens"
+      }
+     ],
+     "model_p": 0.455,
+     "league_p": 0.5048,
+     "explanation": [
+      "Both teams scored in 50% of Serie A matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Serie A rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Juventus win",
+     "p": 0.6177,
+     "credible_p": 0.6063,
+     "n": 350,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Serie A model, 350 backtest matches (2025-26)",
+     "lower_bound": 0.5633
     },
     "best_value": {
      "decision": "no_bet",
