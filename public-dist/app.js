@@ -453,6 +453,7 @@ async function loadData() {
       LOAD_ERRORS[key] = String(error.message || error);
     }
   }));
+  dropStaleMultiSport();
 }
 const predictionsList = () => Object.values((DATA.predictions && DATA.predictions.predictions) || {});
 const fixturesList = () => (DATA.fixtures && DATA.fixtures.fixtures) || [];
@@ -524,6 +525,21 @@ function bandText(band) {
 
 function formStrip(games) {
   return '<span class="form-strip" aria-label="Last ' + games.length + ' results, oldest first">' + games.map(g => '<i class="' + g.res + '">' + g.res + '</i>').join('') + '</span>';
+}
+
+// Recent form on the match page itself, so the reason behind the numbers is visible without
+// opening "Why". Each side's last league games at this venue: W/D/L and goals for and against.
+function matchFormBlock(pred, fx) {
+  const form = pred && pred.markets && pred.markets.result && pred.markets.result.form;
+  if (!form) return '';
+  const row = (team, where, games) => {
+    if (!games || !games.length) return '<div class="mv-form-row"><span class="mv-form-team">' + esc(team) + ' <small>' + where + '</small></span><span class="dim">No league games here yet</span></div>';
+    const gf = games.reduce((s, g) => s + g.gf, 0) / games.length, ga = games.reduce((s, g) => s + g.ga, 0) / games.length;
+    return '<div class="mv-form-row"><span class="mv-form-team">' + esc(team) + ' <small>' + where + '</small></span>' + formStrip(games) +
+      '<span class="mv-form-goals mono" title="Average goals scored and conceded">' + gf.toFixed(1) + '–' + ga.toFixed(1) + '</span></div>';
+  };
+  return '<div class="mv-form"><div class="mv-form-head"><span>Recent form</span><small>goals for–against a game</small></div>' +
+    row(fx.home, 'at home', form.home) + row(fx.away, 'away', form.away) + '</div>';
 }
 
 function resultExplanation(pred) {
@@ -1154,7 +1170,7 @@ function viewBuilder() {
       row('Legs', [2, 3, 4, 5, 6, 8].map(n => chip('class="legpick" data-legs="' + n + '"', legs === n, String(n))).join('')) +
       row('Stake', stakeChips) +
       row('To win', winChips) +
-      row('Sports', sports.map(sp => chip('data-toggle-sport="' + sp[0] + '"', activeSports.includes(sp[0]), sp[1])).join('')) +
+      (multiSportLive() ? row('Sports', sports.map(sp => chip('data-toggle-sport="' + sp[0] + '"', activeSports.includes(sp[0]), sp[1])).join('')) : '') +
     '</div></details>' +
     '<div id="builder-out" class="builder-out" aria-live="polite">' + builderOutput() + '</div>' +
     '<p class="stake-safety-note">Only stake what you are happy to lose. Most people keep it to £5–£10.</p>' +
@@ -1351,7 +1367,7 @@ function renderWelcomeHero() {
   // Slim header: the hit rate, top pick and builder each have their own block just below, so they are not repeated here.
   const hero = '<header class="hm-hero">' +
     '<div class="hm-top"><p class="hm-hello">' + (userName ? 'Welcome back, ' + esc(userName) + ' 👋' : 'Welcome to Bet Buddy 👋') + '</p>' +
-      '<span class="hm-sports" aria-label="Football, tennis, golf, darts and rugby">⚽🎾⛳🎯🏉</span></div>' +
+      (multiSportLive() ? '<span class="hm-sports" aria-label="Football, tennis, golf, darts and rugby">⚽🎾⛳🎯🏉</span>' : '<span class="hm-sports" aria-label="Football">⚽</span>') + '</div>' +
     '<div class="hm-hero-row"><h1 class="hm-title">Smarter bets. <span>Honest numbers.</span></h1>' +
       '<a href="#/build" class="btn primary hm-cta">Build a bet</a></div>' +
     '<p class="hm-meta"><a href="#/fixtures"><b>' + weekN + '</b> games this week</a> · <b>' + leaguesN + '</b> leagues · free</p>' +
@@ -1830,7 +1846,7 @@ function matchViewCard(pred, fx) {
   return '<section class="card section mv-card">' +
     '<div class="mv-kicker"><span>Bet Buddy’s view</span><span class="evidence-row">' + statusBadge(selFull.status) + meter(selFull.strength) + '</span></div>' +
     '<h2 class="mv-head">' + esc(headline) + '</h2>' + bar +
-    '<p class="mv-line">' + likely + '</p>' +
+    '<p class="mv-line">' + likely + '</p>' + matchFormBlock(pred, fx) +
     '<div class="mv-verdict ' + verdict[0] + '"><b>' + verdict[1] + '</b><span>' + verdict[2] + '</span></div>' +
     '<details class="mv-why"><summary>Why, and check a price you were offered</summary>' +
       '<ul class="explain" style="margin-top:6px">' + resultExplanation(pred) + '</ul>' +
@@ -5165,7 +5181,7 @@ function viewMore() {
       '<div style="overflow-x:auto"><table class="table" style="margin-top:8px"><thead><tr><th>Source</th><th>Status</th><th style="text-align:right">Fixtures</th><th style="text-align:right">Results</th></tr></thead><tbody>' + sourceRows + '</tbody></table></div>' +
       '<p class="section-note" style="margin-top:10px">' + esc(s.attribution || '') + ' Bookmaker prices come from UK bookmakers via The Odds API, for match results and total goals. We stop using a price once it is 12 hours old. For anything else, type in the price you were offered.</p></div>' +
       '<div class="card"><h2 class="section-title">Where each number comes from</h2><table class="table" style="margin-top:8px"><tbody>' +
-        '<tr><td><b>Who wins</b></td><td>Worked out from every team’s recent scores in its own league, with recent games counting most. We tested it on last season’s matches before using it. A newly promoted club with little history gets the league average. Treat every estimate as early until our live record builds up.</td></tr>' +
+        '<tr><td><b>Who wins</b></td><td>Worked out from every team’s recent scores in its own league, with recent games counting most. We tested it on last season’s matches before using it. For a newly promoted club’s first ten games, the estimate is blended with the league average, leaning on the model more with each game played. Treat every estimate as early until our live record builds up.</td></tr>' +
         '<tr><td><b>Goals and both teams to score</b></td><td>Mostly the league’s usual rate, nudged a little by the teams’ scoring. Testing has not shown it beats the bookmakers, so treat it as a rough guide.</td></tr>' +
         '<tr><td><b>Corners, cards and shots</b></td><td>No predictions from us: the only stats available are not licensed for public use. You can still add these bets yourself.</td></tr>' +
         '<tr><td><b>Our record</b></td><td>Every prediction is saved and locked before kick-off, then marked right or wrong. Nothing is changed afterwards.</td></tr>' +
@@ -6015,6 +6031,15 @@ function viewAdmin() {
 // ------------------------------------------------------------ Multi-Sport State & View
 const ACTIVE_SPORTS_KEY = 'betbuddy_active_sports_v1';
 let activeSports = ['football'];
+const MULTI_SPORT_MAX_AGE_MS = 7 * 86400000;
+const multiSportLive = () => !!(DATA.multiSport && DATA.multiSport.sports);
+// Other sports (tennis, golf, darts, rugby) only while their file is fresh: it is updated by
+// hand, and stale events with weekday-only dates must not reach slips or accas.
+function dropStaleMultiSport() {
+  const m = DATA.multiSport;
+  if (m && Date.now() - Date.parse(m.last_updated || 0) > MULTI_SPORT_MAX_AGE_MS) DATA.multiSport = null;
+  if (!multiSportLive() && activeSports.some(s => s !== 'football')) activeSports = ['football'];
+}
 try {
   const savedSports = JSON.parse(localStorage.getItem(ACTIVE_SPORTS_KEY) || 'null');
   if (Array.isArray(savedSports) && savedSports.length > 0) {
@@ -7482,7 +7507,10 @@ async function checkAutoUpdateResults(force = false) {
     if (histRes) DATA.history = histRes;
     if (perfRes) DATA.performance = perfRes;
     if (fixRes) DATA.fixtures = fixRes;
+    // Other sports (tennis, golf, darts, rugby) only while their file is fresh: it is updated by
+    // hand, and stale events with weekday-only dates must not reach slips or accas.
     if (multiRes) DATA.multiSport = multiRes;
+    dropStaleMultiSport();
     try { autoSettleDiary(); } catch (e) { console.warn('autoSettleDiary notice:', e); }
     if (window.location.hash.startsWith('#/results')) {
       render();

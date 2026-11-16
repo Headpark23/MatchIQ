@@ -94,6 +94,18 @@ for _meta in PUBLIC_ONLY.values():
         _meta.update(EUROPEAN_SETTINGS)
 # Every competition that gets a public prediction for each scheduled match.
 PREDICTED = {**LEAGUES, **PUBLIC_ONLY}
+# Domestic leagues on the public path use the same small-sample rule as the European model:
+# the league model from 3 recent matches per club, blended toward the league average with
+# weight n/10 below 10. Before this, a newly promoted club got the flat league average for its
+# first 10 matches. Walk-forward 2025-26, eight leagues, settings taken from the European model
+# (not tuned here): result Brier 0.5969 against 0.5981 over 2,891 matches, and 0.6386 against
+# 0.6534 on the 237 where a club had fewer than 10 matches. Better in PL, PD, SA, N1, P1;
+# slightly worse in ELC, BL1, FL1 (19-54 such matches each).
+DOMESTIC_SMALL_SAMPLE = {"min_matches": 3, "full_weight_matches": 10}
+for _meta in PREDICTED.values():
+    if not _meta.get("european") and not _meta.get("international"):
+        for _k, _v in DOMESTIC_SMALL_SAMPLE.items():
+            _meta.setdefault(_k, _v)
 # Local-time zone of openfootball kick-off times for leagues outside the original six.
 LOCAL_TZ = {code: meta["tz"] for code, meta in {**SCHEDULE_ONLY, **PUBLIC_ONLY}.items()}
 

@@ -4351,6 +4351,17 @@ span.cp-price.nop { cursor: default; opacity: .5; }
 .mv-legend span:last-child { text-align: right; }
 .mv-legend b { color: var(--ink); font-size: 14px; }
 .mv-line { margin: 12px 0 0; font-size: 14px; color: var(--soft); line-height: 1.45; }
+.mv-form { margin-top: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); }
+.mv-form-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+.mv-form-head span { font: 700 11px var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.mv-form-head small { font-size: 11px; color: var(--muted); }
+.mv-form-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; min-width: 0; }
+.mv-form-row + .mv-form-row { border-top: 1px solid var(--line); }
+.mv-form-team { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.mv-form-team small { font-weight: 400; color: var(--muted); }
+.mv-form-row .form-strip { flex: none; }
+.mv-form-goals { flex: none; min-width: 52px; text-align: right; font-size: 13px; color: var(--soft); }
+@media (max-width: 380px) { .mv-form-row .form-strip i { width: 15px; height: 15px; font-size: 9px; } }
 .mv-verdict { display: flex; flex-direction: column; gap: 2px; margin-top: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); font-size: 13.5px; line-height: 1.45; color: var(--soft); }
 .mv-verdict b { font: 700 15px var(--display); color: var(--ink); }
 .mv-verdict.value { border-color: var(--pick); background: color-mix(in srgb, var(--pick) 10%, var(--surface-solid)); }

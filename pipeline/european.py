@@ -13,7 +13,8 @@ Walk-forward evidence (result Brier on the 610 European matches of 2025-26): add
 domestic results MatchIQ holds for nine leagues did not help (0.611 against 0.611 European-only,
 monthly refit) and made each fit five times slower, so the model is European-only. Clubs play
 few European matches, so the model is used once both clubs have 3 of them in the last 400 days
-("min_matches" in leagues.py; the domestic leagues need 10): weekly refit 0.609 with 3, 0.612
+("min_matches" in leagues.py; since November 2026 the domestic leagues use the same rule,
+see DOMESTIC_SMALL_SAMPLE there): weekly refit 0.609 with 3, 0.612
 with 10, 0.628 for the average. On 2024-25 main-draw matches with the same settings: CL 0.551
 vs 0.605 for the average, EL 0.611 vs 0.628, ECL 0.593 vs 0.620. Qualifying rounds score worse
 than the average (2024-25 ECL qualifiers 0.672 vs 0.623), but they are training data only:
