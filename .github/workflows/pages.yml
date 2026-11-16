@@ -29,8 +29,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - uses: actions/upload-pages-artifact@v3
+      # Node 24 releases: the Node 20 versions (upload v3, deploy v4) failed to find the uploaded
+      # artifact ("Found 0 artifact(s)") once runners forced them onto Node 24 in November 2026.
+      # v4+ of the upload action leaves out dotfiles (.gitignore, .vercel), which is intended.
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: public-dist
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
