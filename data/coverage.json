@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-15T23:10:57.341767+00:00",
+ "generated_at": "2026-11-16T07:15:29.620386+00:00",
  "gap_hours": 48,
  "result_grace_hours": 72,
  "leagues": {
@@ -125,18 +125,9 @@
   },
   "SC0": {
    "name": "Scottish Premiership",
-   "predicted": true,
+   "predicted": false,
    "fixtures": 198,
-   "ledger_start": "2026-11-08T12:27:20.059394+00:00",
-   "upcoming": 26,
-   "upcoming_predicted": 26,
-   "next_48h": 0,
-   "next_48h_predicted": 0,
-   "played_since_start": 0,
-   "sealed": 0,
-   "settled": 0,
-   "results_overdue": 34,
-   "results_lag": true
+   "paused": true
   },
   "NLA": {
    "name": "Nations League A",
@@ -221,14 +212,14 @@
  },
  "totals": {
   "fixtures": 3566,
-  "upcoming": 331,
-  "upcoming_predicted": 331,
+  "upcoming": 305,
+  "upcoming_predicted": 305,
   "next_48h": 4,
   "next_48h_predicted": 4,
   "played_since_start": 165,
   "sealed": 162,
   "settled": 162,
-  "results_overdue": 34
+  "results_overdue": 0
  },
  "gaps": {
   "league_without_fixtures": [],
@@ -238,42 +229,7 @@
   "results_overdue": []
  },
  "known_lag": {
-  "results_overdue": [
-   "SC0-2627-dundee-united-v-hibernian",
-   "SC0-2627-falkirk-v-dundee",
-   "SC0-2627-hearts-v-st-mirren",
-   "SC0-2627-rangers-v-kilmarnock",
-   "SC0-2627-motherwell-v-celtic",
-   "SC0-2627-aberdeen-v-st-johnstone",
-   "SC0-2627-aberdeen-v-st-mirren",
-   "SC0-2627-hibernian-v-falkirk",
-   "SC0-2627-kilmarnock-v-motherwell",
-   "SC0-2627-st-johnstone-v-dundee-united",
-   "SC0-2627-dundee-v-rangers",
-   "SC0-2627-celtic-v-hearts",
-   "SC0-2627-dundee-united-v-aberdeen",
-   "SC0-2627-falkirk-v-kilmarnock",
-   "SC0-2627-rangers-v-st-johnstone",
-   "SC0-2627-st-mirren-v-dundee",
-   "SC0-2627-hibernian-v-celtic",
-   "SC0-2627-motherwell-v-hearts",
-   "SC0-2627-aberdeen-v-falkirk",
-   "SC0-2627-celtic-v-dundee-united",
-   "SC0-2627-dundee-v-kilmarnock",
-   "SC0-2627-st-johnstone-v-motherwell",
-   "SC0-2627-st-mirren-v-hibernian",
-   "SC0-2627-hearts-v-rangers",
-   "SC0-2627-dundee-united-v-hearts",
-   "SC0-2627-kilmarnock-v-st-johnstone",
-   "SC0-2627-motherwell-v-st-mirren",
-   "SC0-2627-falkirk-v-celtic",
-   "SC0-2627-dundee-united-v-motherwell",
-   "SC0-2627-st-johnstone-v-dundee",
-   "SC0-2627-aberdeen-v-hibernian",
-   "SC0-2627-st-mirren-v-rangers",
-   "SC0-2627-hearts-v-falkirk",
-   "SC0-2627-celtic-v-kilmarnock"
-  ],
+  "results_overdue": [],
   "untimed_match_day_unsealed": []
  },
  "history": {

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-15T23:09:59.246931+00:00",
+ "generated_at": "2026-11-16T07:14:30.761741+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -30461,29 +30461,6 @@
    ]
   },
   {
-   "id": "PD-2627-getafe-v-valencia",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Getafe",
-   "away": "Valencia",
-   "kickoff_utc": "2026-12-06T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-06T14:00:00Z",
-     "to": "2026-12-06T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
    "id": "PD-2627-sevilla-v-malaga",
    "competition": "PD",
    "season": "2627",
@@ -30911,6 +30888,34 @@
      "from": "2026-12-06T14:00:00Z",
      "to": "2026-12-06T17:00:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PD-2627-getafe-v-valencia",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Getafe",
+   "away": "Valencia",
+   "kickoff_utc": "2026-12-06T17:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-06T14:00:00Z",
+     "to": "2026-12-06T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-06T00:00:00Z",
+     "to": "2026-12-06T17:30:00Z",
+     "seen_at": "2026-11-16T07:14:30.761741+00:00"
     }
    ]
   },

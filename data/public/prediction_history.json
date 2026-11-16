@@ -687005,7 +687005,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "e0deab733e4b71ff0c01ad6d77b26e9afc81dd811703ba491cbf30741647c8d9"
+   "sha256": "e0deab733e4b71ff0c01ad6d77b26e9afc81dd811703ba491cbf30741647c8d9",
+   "superseded_by": "PUB-PD-2627-getafe-v-valencia#r3"
   },
   {
    "record_id": "PUB-PD-2627-sevilla-v-malaga#r2",
@@ -690290,6 +690291,144 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "d8b3c32b4c20f2d363d7691cb4b928373669a7fa0c6bf0d4cec26b34983adfbe"
+  },
+  {
+   "record_id": "PUB-PD-2627-getafe-v-valencia#r3",
+   "match_id": "PD-2627-getafe-v-valencia",
+   "revision": 3,
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Getafe",
+    "away": "Valencia",
+    "kickoff_utc": "2026-12-06T17:30:00Z"
+   },
+   "published_at": "2026-11-16T07:14:30.761741+00:00",
+   "inputs_fingerprint": "2c045d04acb0fb5c",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Getafe win",
+      "p": 0.3835,
+      "fair_odds": "≈13/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Getafe win",
+       "p": 0.3835,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3413,
+       "fair_odds": "≈15/8"
+      },
+      {
+       "key": "A",
+       "label": "Valencia win",
+       "p": 0.2752,
+       "fair_odds": "≈11/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.579,
+      "fair_odds": "≈8/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.6797,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.421,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2142,
+       "over_fair_odds": "≈7/2",
+       "under_fair_odds": "≈2/7"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5205,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4795,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5205,
+       "fair_odds": "≈10/11"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "under",
+     "line": 2.5,
+     "label": "Under 2.5",
+     "p": 0.579,
+     "credible_p": 0.5756,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 La Liga backtest matches",
+     "lower_bound": 0.5339
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "474490364519de10ec8bccbabeafd2e46d7e2a1a5c0d87ab56846697c7e63b4a"
   }
  ]
 }

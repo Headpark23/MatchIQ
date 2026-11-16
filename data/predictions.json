@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-15T23:09:59.246931+00:00",
+ "generated_at": "2026-11-16T07:14:30.761741+00:00",
  "horizon_days": 21,
  "predictions": {
   "BL1-2627-bayern-munich-v-koln": {
@@ -98751,544 +98751,6 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
-  "PD-2627-getafe-v-valencia": {
-   "match_id": "PD-2627-getafe-v-valencia",
-   "record_id": "PD-2627-getafe-v-valencia#r1",
-   "published_at": "2026-11-15T02:07:26.247309+00:00",
-   "fixture": {
-    "competition": "PD",
-    "season": "2627",
-    "home": "Getafe",
-    "away": "Valencia",
-    "kickoff_utc": "2026-12-06T00:00:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": [
-     {
-      "from": "2026-12-06T14:00:00Z",
-      "to": "2026-12-06T00:00:00Z",
-      "seen_at": "2026-10-26T17:03:38.162299+00:00"
-     }
-    ]
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 353 La Liga matches (2025-26): Brier 0.580 against 0.628 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "H",
-      "label": "Getafe win",
-      "p": 0.3835,
-      "fair_odds": "≈13/8"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "Getafe win",
-       "p": 0.3835,
-       "fair_odds": "≈13/8"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.3413,
-       "fair_odds": "≈15/8"
-      },
-      {
-       "key": "A",
-       "label": "Valencia win",
-       "p": 0.2752,
-       "fair_odds": "≈11/4"
-      }
-     ],
-     "method": "La Liga Dixon-Coles fitted on La Liga results only",
-     "training_matches": 1259,
-     "form": {
-      "home": [
-       {
-        "date": "2026-09-07",
-        "opponent": "Celta Vigo",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-09-13",
-        "opponent": "Deportivo La Coruna",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-09-20",
-        "opponent": "Malaga",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-19",
-        "opponent": "Rayo Vallecano",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-11-01",
-        "opponent": "Sevilla",
-        "gf": 3,
-        "ga": 1,
-        "res": "W"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-08-30",
-        "opponent": "Deportivo La Coruna",
-        "gf": 1,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-11",
-        "opponent": "Sevilla",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-15",
-        "opponent": "Alaves",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-11",
-        "opponent": "Racing Santander",
-        "gf": 2,
-        "ga": 2,
-        "res": "D"
-       },
-       {
-        "date": "2026-11-01",
-        "opponent": "Elche",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 63,
-      "away": 62
-     },
-     "league_p": [
-      0.4559,
-      0.2605,
-      0.2836
-     ],
-     "pooled_matches": {
-      "home": 42,
-      "away": 42
-     }
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.247 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 2.5",
-      "p": 0.579,
-      "fair_odds": "≈8/11",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.6797,
-        "fair_odds": "≈4/9"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.3203,
-        "fair_odds": "≈9/4"
-       },
-       "model_p": 0.5346,
-       "league_p": 0.7419
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.421,
-        "fair_odds": "≈11/8"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.579,
-        "fair_odds": "≈8/11"
-       },
-       "model_p": 0.2619,
-       "league_p": 0.4893
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.2142,
-        "fair_odds": "≈7/2"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.7858,
-        "fair_odds": "≈2/7"
-       },
-       "model_p": 0.1042,
-       "league_p": 0.2613
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 2.68,
-      "expected_goals": [
-       0.98,
-       0.79
-      ]
-     },
-     "explanation": [
-      "The score model expects about 1.0 goals for Getafe and 0.8 for Valencia.",
-      "La Liga matches average 2.68 goals; 49% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% La Liga rate for each line"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "no",
-      "label": "No",
-      "p": 0.5205,
-      "fair_odds": "≈10/11"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.4795,
-       "fair_odds": "≈11/10"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.5205,
-       "fair_odds": "≈10/11"
-      }
-     ],
-     "model_p": 0.3472,
-     "league_p": 0.5361,
-     "explanation": [
-      "Both teams scored in 54% of La Liga matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% La Liga rate"
-    },
-    "corners": {
-     "market": "corners",
-     "name": "Total corners",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.248 against 0.250 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 9.5",
-      "p": 0.5146,
-      "fair_odds": "≈10/11",
-      "line": 9.5
-     },
-     "lines": [
-      {
-       "line": 8.5,
-       "over": {
-        "key": "over",
-        "label": "Over 8.5",
-        "p": 0.6091,
-        "fair_odds": "≈4/6"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 8.5",
-        "p": 0.3909,
-        "fair_odds": "≈6/4"
-       },
-       "model_p": 0.6442,
-       "league_p": 0.594
-      },
-      {
-       "line": 9.5,
-       "over": {
-        "key": "over",
-        "label": "Over 9.5",
-        "p": 0.4854,
-        "fair_odds": "≈11/10"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 9.5",
-        "p": 0.5146,
-        "fair_odds": "≈10/11"
-       },
-       "model_p": 0.5168,
-       "league_p": 0.4719
-      },
-      {
-       "line": 10.5,
-       "over": {
-        "key": "over",
-        "label": "Over 10.5",
-        "p": 0.3728,
-        "fair_odds": "≈13/8"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 10.5",
-        "p": 0.6272,
-        "fair_odds": "≈8/13"
-       },
-       "model_p": 0.392,
-       "league_p": 0.3645
-      }
-     ],
-     "inputs": {
-      "venue_expected": 9.8,
-      "league_mean": 9.54,
-      "home_games": 10,
-      "away_games": 10
-     },
-     "explanation": [
-      "Recent venue form points to about 9.8 (last 10 Getafe home games, last 10 Valencia away games).",
-      "La Liga average: 9.5 per match; 47% go over 9.5."
-     ],
-     "method": "30% venue-average Poisson + 70% La Liga rate",
-     "frozen_reference": {
-      "model_version": "v0.9-frozen-poisson",
-      "over_9_5": 0.5168,
-      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
-     }
-    },
-    "cards": {
-     "market": "cards",
-     "name": "Total cards (yellow)",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.235 against 0.238 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 3.5",
-      "p": 0.6541,
-      "fair_odds": "≈8/15",
-      "line": 3.5
-     },
-     "lines": [
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.8167,
-        "fair_odds": "≈2/9"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.1833,
-        "fair_odds": "≈9/2"
-       },
-       "model_p": 0.8426,
-       "league_p": 0.8055
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.6541,
-        "fair_odds": "≈8/15"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.3459,
-        "fair_odds": "≈15/8"
-       },
-       "model_p": 0.6824,
-       "league_p": 0.642
-      },
-      {
-       "line": 4.5,
-       "over": {
-        "key": "over",
-        "label": "Over 4.5",
-        "p": 0.4792,
-        "fair_odds": "≈11/10"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 4.5",
-        "p": 0.5208,
-        "fair_odds": "≈10/11"
-       },
-       "model_p": 0.4961,
-       "league_p": 0.4719
-      }
-     ],
-     "inputs": {
-      "venue_expected": 4.65,
-      "league_mean": 4.54,
-      "home_games": 10,
-      "away_games": 10
-     },
-     "explanation": [
-      "Recent venue form points to about 4.7 (last 10 Getafe home games, last 10 Valencia away games).",
-      "La Liga average: 4.5 per match; 64% go over 3.5."
-     ],
-     "method": "30% venue-average Poisson + 70% La Liga rate"
-    },
-    "shots": {
-     "market": "shots",
-     "name": "Shots on target",
-     "model_version": "blend30-league-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.249 against 0.253 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 8.5",
-      "p": 0.5582,
-      "fair_odds": "≈4/5",
-      "line": 8.5
-     },
-     "lines": [
-      {
-       "line": 7.5,
-       "over": {
-        "key": "over",
-        "label": "Over 7.5",
-        "p": 0.5794,
-        "fair_odds": "≈8/11"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 7.5",
-        "p": 0.4206,
-        "fair_odds": "≈11/8"
-       },
-       "model_p": 0.4827,
-       "league_p": 0.6208
-      },
-      {
-       "line": 8.5,
-       "over": {
-        "key": "over",
-        "label": "Over 8.5",
-        "p": 0.4418,
-        "fair_odds": "≈5/4"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 8.5",
-        "p": 0.5582,
-        "fair_odds": "≈4/5"
-       },
-       "model_p": 0.3449,
-       "league_p": 0.4833
-      },
-      {
-       "line": 9.5,
-       "over": {
-        "key": "over",
-        "label": "Over 9.5",
-        "p": 0.3228,
-        "fair_odds": "≈2/1"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 9.5",
-        "p": 0.6772,
-        "fair_odds": "≈1/2"
-       },
-       "model_p": 0.2293,
-       "league_p": 0.3629
-      }
-     ],
-     "inputs": {
-      "venue_expected": 7.55,
-      "league_mean": 8.55,
-      "home_games": 10,
-      "away_games": 10
-     },
-     "explanation": [
-      "Recent venue form points to about 7.5 (last 10 Getafe home games, last 10 Valencia away games).",
-      "La Liga average: 8.6 per match; 48% go over 8.5."
-     ],
-     "method": "30% venue-average Poisson + 70% La Liga rate"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "cards",
-     "key": "over",
-     "line": 3.5,
-     "label": "Over 3.5",
-     "p": 0.6541,
-     "credible_p": 0.6535,
-     "n": 380,
-     "status": "provisional",
-     "strength": "weak",
-     "basis": "league-anchored blend, 380 La Liga backtest matches",
-     "lower_bound": 0.6133
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
   "PD-2627-sevilla-v-malaga": {
    "match_id": "PD-2627-sevilla-v-malaga",
    "record_id": "PD-2627-sevilla-v-malaga#r1",
@@ -106747,6 +106209,549 @@
      "strength": "moderate",
      "basis": "Serie A model, 350 backtest matches (2025-26)",
      "lower_bound": 0.5633
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "PD-2627-getafe-v-valencia": {
+   "match_id": "PD-2627-getafe-v-valencia",
+   "record_id": "PD-2627-getafe-v-valencia#r2",
+   "published_at": "2026-11-16T07:14:30.761741+00:00",
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Getafe",
+    "away": "Valencia",
+    "kickoff_utc": "2026-12-06T17:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-06T14:00:00Z",
+      "to": "2026-12-06T00:00:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     },
+     {
+      "from": "2026-12-06T00:00:00Z",
+      "to": "2026-12-06T17:30:00Z",
+      "seen_at": "2026-11-16T07:14:30.761741+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 353 La Liga matches (2025-26): Brier 0.580 against 0.628 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Getafe win",
+      "p": 0.3835,
+      "fair_odds": "≈13/8"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Getafe win",
+       "p": 0.3835,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3413,
+       "fair_odds": "≈15/8"
+      },
+      {
+       "key": "A",
+       "label": "Valencia win",
+       "p": 0.2752,
+       "fair_odds": "≈11/4"
+      }
+     ],
+     "method": "La Liga Dixon-Coles fitted on La Liga results only",
+     "training_matches": 1259,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-07",
+        "opponent": "Celta Vigo",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-13",
+        "opponent": "Deportivo La Coruna",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Malaga",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-19",
+        "opponent": "Rayo Vallecano",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Sevilla",
+        "gf": 3,
+        "ga": 1,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-30",
+        "opponent": "Deportivo La Coruna",
+        "gf": 1,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-11",
+        "opponent": "Sevilla",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-15",
+        "opponent": "Alaves",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-11",
+        "opponent": "Racing Santander",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-11-01",
+        "opponent": "Elche",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 63,
+      "away": 62
+     },
+     "league_p": [
+      0.4559,
+      0.2605,
+      0.2836
+     ],
+     "pooled_matches": {
+      "home": 42,
+      "away": 42
+     }
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.247 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.579,
+      "fair_odds": "≈8/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.6797,
+        "fair_odds": "≈4/9"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.3203,
+        "fair_odds": "≈9/4"
+       },
+       "model_p": 0.5346,
+       "league_p": 0.7419
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.421,
+        "fair_odds": "≈11/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.579,
+        "fair_odds": "≈8/11"
+       },
+       "model_p": 0.2619,
+       "league_p": 0.4893
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2142,
+        "fair_odds": "≈7/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7858,
+        "fair_odds": "≈2/7"
+       },
+       "model_p": 0.1042,
+       "league_p": 0.2613
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.68,
+      "expected_goals": [
+       0.98,
+       0.79
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.0 goals for Getafe and 0.8 for Valencia.",
+      "La Liga matches average 2.68 goals; 49% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% La Liga rate for each line"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5205,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4795,
+       "fair_odds": "≈11/10"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5205,
+       "fair_odds": "≈10/11"
+      }
+     ],
+     "model_p": 0.3472,
+     "league_p": 0.5361,
+     "explanation": [
+      "Both teams scored in 54% of La Liga matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% La Liga rate"
+    },
+    "corners": {
+     "market": "corners",
+     "name": "Total corners",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.248 against 0.250 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 9.5",
+      "p": 0.5146,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.6091,
+        "fair_odds": "≈4/6"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.3909,
+        "fair_odds": "≈6/4"
+       },
+       "model_p": 0.6442,
+       "league_p": 0.594
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.4854,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.5146,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.5168,
+       "league_p": 0.4719
+      },
+      {
+       "line": 10.5,
+       "over": {
+        "key": "over",
+        "label": "Over 10.5",
+        "p": 0.3728,
+        "fair_odds": "≈13/8"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 10.5",
+        "p": 0.6272,
+        "fair_odds": "≈8/13"
+       },
+       "model_p": 0.392,
+       "league_p": 0.3645
+      }
+     ],
+     "inputs": {
+      "venue_expected": 9.8,
+      "league_mean": 9.54,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 9.8 (last 10 Getafe home games, last 10 Valencia away games).",
+      "La Liga average: 9.5 per match; 47% go over 9.5."
+     ],
+     "method": "30% venue-average Poisson + 70% La Liga rate",
+     "frozen_reference": {
+      "model_version": "v0.9-frozen-poisson",
+      "over_9_5": 0.5168,
+      "note": "Frozen v0.9 raw output. Backtest: over-confident and worse than the league average, so it is shown for reference, not used."
+     }
+    },
+    "cards": {
+     "market": "cards",
+     "name": "Total cards (yellow)",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.235 against 0.238 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.6541,
+      "fair_odds": "≈8/15",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.8167,
+        "fair_odds": "≈2/9"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.1833,
+        "fair_odds": "≈9/2"
+       },
+       "model_p": 0.8426,
+       "league_p": 0.8055
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.6541,
+        "fair_odds": "≈8/15"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.3459,
+        "fair_odds": "≈15/8"
+       },
+       "model_p": 0.6824,
+       "league_p": 0.642
+      },
+      {
+       "line": 4.5,
+       "over": {
+        "key": "over",
+        "label": "Over 4.5",
+        "p": 0.4792,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 4.5",
+        "p": 0.5208,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.4961,
+       "league_p": 0.4719
+      }
+     ],
+     "inputs": {
+      "venue_expected": 4.65,
+      "league_mean": 4.54,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 4.7 (last 10 Getafe home games, last 10 Valencia away games).",
+      "La Liga average: 4.5 per match; 64% go over 3.5."
+     ],
+     "method": "30% venue-average Poisson + 70% La Liga rate"
+    },
+    "shots": {
+     "market": "shots",
+     "name": "Shots on target",
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.249 against 0.253 for the league average. No proven edge: read this as the league rate nudged by recent venue averages."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5582,
+      "fair_odds": "≈4/5",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": {
+        "key": "over",
+        "label": "Over 7.5",
+        "p": 0.5794,
+        "fair_odds": "≈8/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 7.5",
+        "p": 0.4206,
+        "fair_odds": "≈11/8"
+       },
+       "model_p": 0.4827,
+       "league_p": 0.6208
+      },
+      {
+       "line": 8.5,
+       "over": {
+        "key": "over",
+        "label": "Over 8.5",
+        "p": 0.4418,
+        "fair_odds": "≈5/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 8.5",
+        "p": 0.5582,
+        "fair_odds": "≈4/5"
+       },
+       "model_p": 0.3449,
+       "league_p": 0.4833
+      },
+      {
+       "line": 9.5,
+       "over": {
+        "key": "over",
+        "label": "Over 9.5",
+        "p": 0.3228,
+        "fair_odds": "≈2/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 9.5",
+        "p": 0.6772,
+        "fair_odds": "≈1/2"
+       },
+       "model_p": 0.2293,
+       "league_p": 0.3629
+      }
+     ],
+     "inputs": {
+      "venue_expected": 7.55,
+      "league_mean": 8.55,
+      "home_games": 10,
+      "away_games": 10
+     },
+     "explanation": [
+      "Recent venue form points to about 7.5 (last 10 Getafe home games, last 10 Valencia away games).",
+      "La Liga average: 8.6 per match; 48% go over 8.5."
+     ],
+     "method": "30% venue-average Poisson + 70% La Liga rate"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.6541,
+     "credible_p": 0.6535,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 La Liga backtest matches",
+     "lower_bound": 0.6133
     },
     "best_value": {
      "decision": "no_bet",
