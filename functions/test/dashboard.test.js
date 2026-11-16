@@ -106,6 +106,15 @@ assert.deepStrictEqual(n.last14.find(x => x.kind === 'recap'), { kind: 'recap', 
 assert.deepStrictEqual(n.last14.find(x => x.kind === 'picks'), { kind: 'picks', sent: 2, opened: 1, pct: 50 });
 assert.deepStrictEqual(n.last14.find(x => x.kind === 'settled'), { kind: 'settled', sent: 0, opened: 0, pct: null });
 
+// shares of the pick record: counted over the last 14 days only
+const sharedVisits = activity.concat([
+  { uid: 'u1', day: '2026-11-14', opens: 1, shares: 2 }, { uid: 'u4', day: '2026-11-15', opens: 1, shares: 1 },
+  { uid: 'u2', day: '2026-10-20', opens: 1, shares: 5 }
+]);
+const sh = d.aggregate({ users: rUsers, visits: sharedVisits, devices, runs, now: nowMon }).retention.shares;
+assert.deepStrictEqual(sh, { total: 3, players: 2 });
+assert.deepStrictEqual(r.shares, { total: 0, players: 0 });
+
 // no tracking data yet: empty, not a crash, and the old fields are unchanged
 const none = d.aggregate({ users: rUsers, now: nowMon });
 assert.strictEqual(none.retention.since, null);

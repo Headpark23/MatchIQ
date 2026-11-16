@@ -76,7 +76,12 @@ function retention(users, activity, now) {
     }
   });
   const rate = ([n, k]) => ({ n, kept: k, pct: pct(k, n) });
+  // Shares of the pick record in the last 14 days: how many, and by how many players.
+  const shareCut = ukDay(now - 13 * DAY), sharers = new Set();
+  let shares = 0;
+  activity.forEach(a => { if (a && a.day >= shareCut && Number(a.shares) > 0) { shares += Number(a.shares); sharers.add(a.uid); } });
   return {
+    shares: { total: shares, players: sharers.size },
     since: since || null, tracked: byUser.size, daily, wau, mau,
     stickiness: mau ? Math.round(avgDau / mau * 100) : null,
     weekOnWeek: { prior: priorWeek.length, kept, pct: pct(kept, priorWeek.length) },

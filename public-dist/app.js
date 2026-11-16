@@ -1368,6 +1368,50 @@ function diaryNextKickoff(entry) {
   return ids.map(id => id && fixtureById(id)).filter(Boolean).map(kickoffMs).filter(ms => ms > now).sort((a, b) => a - b)[0] || 0;
 }
 
+// ---- Share how our picks did ----
+// Shares our public record (sealed before kick-off, wins and losses alike), never a player's own
+// bets, stakes or winnings. Uses the last 7 days when there are enough finished picks, otherwise
+// the record since October.
+function weeklyPicksRecord(nowMs) {
+  const since = nowMs - 7 * 86400000, seen = new Set();
+  let right = 0, total = 0;
+  historyRecords().filter(r => r.evaluated && r.settlement && r.settlement.result).forEach(r => {
+    const ms = Date.parse((r.result && r.result.kickoff_utc) || (r.fixture && r.fixture.kickoff_utc) || '');
+    if (!(ms > since && ms <= nowMs) || seen.has(r.match_id)) return;
+    seen.add(r.match_id); total++;
+    if (r.settlement.result.pick_won) right++;
+  });
+  return { right, total };
+}
+
+function ourRecordShareText(nowMs) {
+  const wk = weeklyPicksRecord(nowMs), all = DATA.performance ? recordAll(DATA.performance) : null;
+  let line;
+  // A single week can run hot or cold, so the weekly line always comes with the overall record.
+  if (wk.total >= 5) line = 'Bet Buddy’s football picks this week: ' + wk.right + ' right from ' + wk.total + ' (' + Math.round(wk.right / wk.total * 100) + '%).' +
+    (all ? ' Overall so far: ' + all.hits + ' from ' + all.n + ' (' + Math.round(all.rate * 100) + '%).' : '');
+  else if (all) line = 'Bet Buddy’s football picks so far: ' + all.hits + ' right from ' + all.n + ' (' + Math.round(all.rate * 100) + '%).';
+  else return '';
+  return line + '\nEvery pick is sealed before kick-off and marked once the result is in, wins and losses alike. Estimates, not tips. 18+ BeGambleAware.org';
+}
+
+function shareOurRecord() {
+  const text = ourRecordShareText(Date.now());
+  if (!text) { toast('No results to share yet.'); return; }
+  openUniversalShare({ title: 'How Bet Buddy’s picks did', text, url: 'https://betbuddyuk.uk/#/results' });
+  recordShare();
+}
+
+// Counts the share on today's visit record (owner numbers only; signed-in players, failures ignored).
+function recordShare() {
+  const user = firebaseAuth && firebaseAuth.currentUser;
+  if (!user || typeof firestoreDb === 'undefined' || !firestoreDb) return;
+  const day = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+  firestoreDb.collection('users').doc(user.uid).collection('activity').doc(day)
+    .set({ shares: firebase.firestore.FieldValue.increment(1), lastAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+    .catch(e => console.warn('share count notice:', e && e.code));
+}
+
 // ---- Visit counts for the owner's retention numbers ----
 // Signed-in players only: one small record per UK day at users/{uid}/activity/{day} holding how
 // many visits that day and which notification (if any) opened one. Counts, no content. Failures
@@ -2132,7 +2176,7 @@ function viewResults() {
 
   let html = '<section class="view rt-view"><h1 class="page-title">Prediction results</h1>' +
     '<p class="page-sub">Every football prediction Bet Buddy makes is sealed before kick-off, then marked right or wrong once the result is confirmed. Nothing is edited afterwards. Tap a league to see how it is going.</p>' +
-    '<p class="rt-scores">Looking for scores? <a href="#/fixtures" onclick="fixturesTab=\'results\'">Fixtures → Results</a></p>' +
+    '<p class="rt-scores">Looking for scores? <a href="#/fixtures" onclick="fixturesTab=\'results\'">Fixtures → Results</a> · <button type="button" class="link-btn" onclick="shareOurRecord()">Share our record</button></p>' +
     recordTiles(allPerf);
   if (LOAD_ERRORS.history) return html + errorPanel('history') + '</section>';
 
@@ -6015,6 +6059,7 @@ function renderRetentionSection(d) {
       hqKpi('Back the next day', rate(r.d1), of(r.d1), '', '#fbbf24') +
       hqKpi('Back after a week', rate(r.d7), of(r.d7), '', '#a78bfa') +
       hqKpi('Back after a month', rate(r.d30), of(r.d30), '', '#f472b6') +
+      hqKpi('Record shares', r.shares ? r.shares.total : 0, 'last 14 days · ' + (r.shares ? r.shares.players : 0) + ' players', '', '#f472b6') +
       hqKpi('Notifications on', n.optInPct != null ? n.optInPct + '%' : '–', n.users + ' players · ' + n.devices + ' devices', '', '#34d399') +
     '</div>' +
     '<section class="hq-card"><div class="hq-card-head"><h2>Notifications, last 14 days</h2><span>Switches on: ' + n.switches.settled + ' settled · ' + n.switches.picks + ' picks · ' + n.switches.recap + ' recap</span></div>' +

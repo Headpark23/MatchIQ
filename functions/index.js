@@ -114,7 +114,7 @@ exports.ownerDashboard = onRequest({ cors: true, memory: '512MiB', timeoutSecond
       leagueBets: betsSnap.docs.map(d => ({ uid: d.ref.parent.parent ? d.ref.parent.parent.id : '', day: leagueBetDay(d.id), outcome: d.get('outcome') || d.get('status') })),
       leagues: leaguesSnap.docs.map(d => ({ created: toMs(d.get('createdAt')), members: memberCount[d.id] || 0 })),
       betai: betaiSnap.docs.map(d => ({ day: d.get('day'), count: d.get('count') })),
-      visits: activitySnap.docs.filter(userSub).map(d => ({ uid: uidOf(d), day: d.id, opens: d.get('opens'), push: d.get('push') })),
+      visits: activitySnap.docs.filter(userSub).map(d => ({ uid: uidOf(d), day: d.id, opens: d.get('opens'), push: d.get('push'), shares: d.get('shares') })),
       devices: tokensSnap.docs.filter(userSub).map(d => ({ uid: uidOf(d), settled: d.get('settled') === true, picks: d.get('picks') === true, recap: d.get('recap') === true })),
       runs: runsSnap.docs.map(d => ({ kind: d.get('kind'), at: toMs(d.get('at')), devices: d.get('devices'), sent: d.get('sent') })),
       now: Date.now()

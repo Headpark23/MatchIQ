@@ -301,6 +301,12 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       await assertFails(ref(dbAlice, 'alice').set({ day, opens: 3, lastAt: new Date() }));
       await assertFails(ref(dbAlice, 'alice').set({ day, opens: 3, lastAt: stamp(), push: 'free-text' }));
       await assertFails(ref(dbAlice, 'alice').set({ day, opens: 3, lastAt: stamp(), extra: 1 }));
+      // A share count starts at 1 and moves up one at a time.
+      await assertSucceeds(ref(dbAlice, 'alice').set({ day, opens: 2, lastAt: stamp(), shares: 1 }));
+      await assertSucceeds(ref(dbAlice, 'alice').set({ day, opens: 2, lastAt: stamp(), shares: 2 }));
+      await assertFails(ref(dbAlice, 'alice').set({ day, opens: 2, lastAt: stamp(), shares: 9 }));
+      await assertFails(ref(dbAlice, 'alice').set({ day, opens: 2, lastAt: stamp(), shares: 1 }));
+      await assertFails(ref(dbAlice, 'alice').set({ day, opens: 2, lastAt: stamp(), shares: 'lots' }));
       // A new document must start at 1, with a day that matches its id and a real date format.
       await assertFails(ref(dbAlice, 'alice', '2026-11-17').set({ day: '2026-11-17', opens: 5, lastAt: stamp() }));
       await assertFails(ref(dbAlice, 'alice', '2026-11-18').set({ day: '2026-11-19', opens: 1, lastAt: stamp() }));
