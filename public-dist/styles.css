@@ -5447,3 +5447,6 @@ a.hm-chip:hover { border-color: var(--pick); }
 .fd-foot { margin-top: 18px; font-size: 13px; color: var(--muted); }
 .fd-foot a { color: var(--cyan); }
 @media (min-width: 760px) { .fd-view { max-width: 640px; } }
+.mv-table .table td, .mv-table .table th { padding: 7px 6px; font-size: 13px; }
+.mv-table .table tr.mv-tr-on td { background: color-mix(in srgb, var(--pick) 14%, transparent); }
+.mv-meet { margin: 6px 0 0; padding-left: 18px; font-size: 14px; }

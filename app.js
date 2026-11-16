@@ -557,6 +557,48 @@ function matchFormBlock(pred, fx) {
     row(fx.home, 'at home', form.home) + row(fx.away, 'away', form.away) + '</div>';
 }
 
+// ---- League table and this season's meetings, built only from confirmed results in the schedule ----
+// Domestic leagues only: cup and Nations League groups are not in the data, and Scotland is paused.
+const TABLE_COMPS = new Set(['PL', 'ELC', 'BL1', 'PD', 'SA', 'FL1', 'N1', 'P1']);
+function leagueTable(comp) {
+  const rows = new Map();
+  const row = t => { if (!rows.has(t)) rows.set(t, { team: t, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 }); return rows.get(t); };
+  fixturesList().forEach(f => {
+    if (f.competition !== comp) return;
+    const h = row(f.home), a = row(f.away);
+    if (f.status !== 'FINISHED' || !Array.isArray(f.score)) return;
+    const [hg, ag] = f.score;
+    h.p++; a.p++; h.gf += hg; h.ga += ag; a.gf += ag; a.ga += hg;
+    if (hg > ag) { h.w++; a.l++; h.pts += 3; } else if (hg < ag) { a.w++; h.l++; a.pts += 3; } else { h.d++; a.d++; h.pts++; a.pts++; }
+  });
+  // Points, then goal difference, then goals scored. Official tie-breaks differ by league, so ties may be ordered differently.
+  return [...rows.values()].sort((x, y) => y.pts - x.pts || (y.gf - y.ga) - (x.gf - x.ga) || y.gf - x.gf || x.team.localeCompare(y.team))
+    .map((r, i) => Object.assign(r, { pos: i + 1, gd: r.gf - r.ga }));
+}
+
+// Earlier finished matches between the same two clubs in the same season (usually none or one).
+function earlierMeetings(fx) {
+  return fixturesList().filter(f => f.id !== fx.id && f.season === fx.season && f.status === 'FINISHED' && Array.isArray(f.score) &&
+    ((f.home === fx.home && f.away === fx.away) || (f.home === fx.away && f.away === fx.home)))
+    .sort((a, b) => kickoffMs(a) - kickoffMs(b));
+}
+
+function matchTableBlock(fx) {
+  if (!TABLE_COMPS.has(fx.competition)) return '';
+  const table = leagueTable(fx.competition);
+  const hr = table.find(r => r.team === fx.home), ar = table.find(r => r.team === fx.away);
+  if (!hr || !ar || !table.some(r => r.p > 0)) return '';
+  const ord = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' })[n % 10] || 'th');
+  const tr = r => '<tr class="' + (r.team === fx.home || r.team === fx.away ? 'mv-tr-on' : '') + '"><td class="num">' + r.pos + '</td><td><span class="teams-line">' + crest(r.team, 18) + esc(r.team) + '</span></td>' +
+    '<td class="num">' + r.p + '</td><td class="num">' + r.w + '</td><td class="num">' + r.d + '</td><td class="num">' + r.l + '</td><td class="num">' + (r.gd > 0 ? '+' : '') + r.gd + '</td><td class="num"><b>' + r.pts + '</b></td></tr>';
+  const meet = earlierMeetings(fx).map(f => '<li>' + esc(f.home) + ' <b class="mono">' + f.score[0] + '–' + f.score[1] + '</b> ' + esc(f.away) + ' <small class="dim">' + esc(fmtDay(kickoffMs(f))) + '</small></li>').join('');
+  return '<details class="card section mv-table"><summary class="section-title" style="cursor:pointer;min-height:44px;display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px">League table' +
+      '<small class="dim" style="font-weight:400">' + esc(fx.home) + ' ' + ord(hr.pos) + ' · ' + esc(fx.away) + ' ' + ord(ar.pos) + '</small></summary>' +
+    '<div style="overflow-x:auto"><table class="table"><thead><tr><th class="num">#</th><th>Club</th><th class="num">P</th><th class="num">W</th><th class="num">D</th><th class="num">L</th><th class="num">GD</th><th class="num">Pts</th></tr></thead><tbody>' + table.map(tr).join('') + '</tbody></table></div>' +
+    '<p class="dim" style="font-size:12.5px;margin:8px 0 0">Built from confirmed 2026/27 results only. Ordered by points, goal difference, then goals scored; official tie-breaks can differ.</p>' +
+    (meet ? '<h3 class="day-label" style="margin-top:12px">Earlier this season</h3><ul class="mv-meet">' + meet + '</ul>' : '') + '</details>';
+}
+
 function resultExplanation(pred) {
   const r = pred.markets.result, f = pred.fixture, lines = [];
   const line = (team, where, games) => {
@@ -1931,7 +1973,7 @@ function viewMatch(id) {
 
   if (pred && ms > Date.now()) {
     const r = pred.markets.result;
-    html += staleFormNote(fx.competition) + matchViewCard(pred, fx) +
+    html += staleFormNote(fx.competition) + matchViewCard(pred, fx) + matchTableBlock(fx) +
       '<section class="card section mv-markets"><div class="section-head"><h2 class="section-title">Markets</h2></div>' +
       '<p class="own-hint" style="margin-top:0">Each button shows the price, and underneath it how often we think it happens. Tap a price to put it on your bet slip, then save it to your Diary or League from there.</p>' +
       ownBetMatchPanel(fx, modelProbsFor(pred)) + '</section>';
@@ -1949,6 +1991,7 @@ function viewMatch(id) {
   } else {
     html += '<div class="empty section">No prediction was published for this match. Bet Buddy publishes up to 21 days before kick-off, and the history starts in October 2026.</div>';
   }
+  if (!(pred && ms > Date.now())) html += matchTableBlock(fx);
   return html + '</section>';
 }
 
