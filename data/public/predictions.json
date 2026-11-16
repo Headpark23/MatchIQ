@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-16T07:14:30.761741+00:00",
+ "generated_at": "2026-11-16T18:53:55.646046+00:00",
  "horizon_days": 21,
  "model_version": "dc-public-v1",
  "predictions": {
@@ -80247,592 +80247,6 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
-  "PD-2627-atletico-madrid-v-real-betis": {
-   "match_id": "PD-2627-atletico-madrid-v-real-betis",
-   "record_id": "PUB-PD-2627-atletico-madrid-v-real-betis#r2",
-   "published_at": "2026-11-15T23:09:59.246931+00:00",
-   "derivation": "public-derived",
-   "fixture": {
-    "competition": "PD",
-    "season": "2627",
-    "home": "Atletico Madrid",
-    "away": "Real Betis",
-    "kickoff_utc": "2026-12-06T00:00:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": [
-     {
-      "from": "2026-12-06T14:00:00Z",
-      "to": "2026-12-06T00:00:00Z",
-      "seen_at": "2026-10-26T17:03:38.162299+00:00"
-     }
-    ]
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 353 La Liga matches (2025-26): Brier 0.580 against 0.628 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "H",
-      "label": "Atletico Madrid win",
-      "p": 0.5692,
-      "fair_odds": "≈8/11"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "Atletico Madrid win",
-       "p": 0.5692,
-       "fair_odds": "≈8/11"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2338,
-       "fair_odds": "≈100/30"
-      },
-      {
-       "key": "A",
-       "label": "Real Betis win",
-       "p": 0.197,
-       "fair_odds": "≈4/1"
-      }
-     ],
-     "method": "La Liga Dixon-Coles fitted on La Liga results only",
-     "training_matches": 1259,
-     "form": {
-      "home": [
-       {
-        "date": "2026-08-23",
-        "opponent": "Villarreal",
-        "gf": 2,
-        "ga": 2,
-        "res": "D"
-       },
-       {
-        "date": "2026-09-16",
-        "opponent": "Osasuna",
-        "gf": 4,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-20",
-        "opponent": "Real Madrid",
-        "gf": 2,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-24",
-        "opponent": "Deportivo La Coruna",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-11-08",
-        "opponent": "Barcelona",
-        "gf": 1,
-        "ga": 2,
-        "res": "L"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-08-29",
-        "opponent": "Levante",
-        "gf": 2,
-        "ga": 5,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-14",
-        "opponent": "Villarreal",
-        "gf": 2,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-20",
-        "opponent": "Deportivo La Coruna",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-25",
-        "opponent": "Celta Vigo",
-        "gf": 0,
-        "ga": 0,
-        "res": "D"
-       },
-       {
-        "date": "2026-11-08",
-        "opponent": "Elche",
-        "gf": 2,
-        "ga": 0,
-        "res": "W"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 63,
-      "away": 63
-     },
-     "league_p": [
-      0.4559,
-      0.2605,
-      0.2836
-     ],
-     "pooled_matches": {
-      "home": 42,
-      "away": 42
-     },
-     "derivation": "public-derived"
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.247 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 2.5",
-      "p": 0.5072,
-      "fair_odds": "≈Evens",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.7553,
-        "fair_odds": "≈1/3"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.2447,
-        "fair_odds": "≈3/1"
-       },
-       "model_p": 0.7867,
-       "league_p": 0.7419
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.5072,
-        "fair_odds": "≈Evens"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.4928,
-        "fair_odds": "≈Evens"
-       },
-       "model_p": 0.5491,
-       "league_p": 0.4893
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.2806,
-        "fair_odds": "≈5/2"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.7194,
-        "fair_odds": "≈2/5"
-       },
-       "model_p": 0.3256,
-       "league_p": 0.2613
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 2.68,
-      "expected_goals": [
-       1.87,
-       1.01
-      ]
-     },
-     "explanation": [
-      "The score model expects about 1.9 goals for Atletico Madrid and 1.0 for Real Betis.",
-      "La Liga matches average 2.68 goals; 49% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% La Liga rate for each line",
-     "derivation": "public-derived"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5381,
-      "fair_odds": "≈5/6"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5381,
-       "fair_odds": "≈5/6"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4619,
-       "fair_odds": "≈6/5"
-      }
-     ],
-     "model_p": 0.5427,
-     "league_p": 0.5361,
-     "explanation": [
-      "Both teams scored in 54% of La Liga matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% La Liga rate",
-     "derivation": "public-derived"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "result",
-     "key": "H",
-     "label": "Atletico Madrid win",
-     "p": 0.5692,
-     "credible_p": 0.5631,
-     "n": 353,
-     "status": "provisional",
-     "strength": "moderate",
-     "basis": "La Liga model, 353 backtest matches (2025-26)",
-     "lower_bound": 0.5197
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
-  "PD-2627-sevilla-v-malaga": {
-   "match_id": "PD-2627-sevilla-v-malaga",
-   "record_id": "PUB-PD-2627-sevilla-v-malaga#r2",
-   "published_at": "2026-11-15T23:09:59.246931+00:00",
-   "derivation": "public-derived",
-   "fixture": {
-    "competition": "PD",
-    "season": "2627",
-    "home": "Sevilla",
-    "away": "Malaga",
-    "kickoff_utc": "2026-12-06T00:00:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": [
-     {
-      "from": "2026-12-06T14:00:00Z",
-      "to": "2026-12-06T00:00:00Z",
-      "seen_at": "2026-10-26T17:03:38.162299+00:00"
-     }
-    ]
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 353 La Liga matches (2025-26): Brier 0.580 against 0.628 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "H",
-      "label": "Sevilla win",
-      "p": 0.6666,
-      "fair_odds": "≈1/2"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "Sevilla win",
-       "p": 0.6666,
-       "fair_odds": "≈1/2"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2126,
-       "fair_odds": "≈7/2"
-      },
-      {
-       "key": "A",
-       "label": "Malaga win",
-       "p": 0.1208,
-       "fair_odds": "≈15/2"
-      }
-     ],
-     "method": "La Liga Dixon-Coles fitted on La Liga results only",
-     "training_matches": 1259,
-     "form": {
-      "home": [
-       {
-        "date": "2026-08-29",
-        "opponent": "Atletico Madrid",
-        "gf": 1,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-11",
-        "opponent": "Valencia",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-19",
-        "opponent": "Barcelona",
-        "gf": 1,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-26",
-        "opponent": "Osasuna",
-        "gf": 2,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-11-06",
-        "opponent": "Alaves",
-        "gf": 0,
-        "ga": 0,
-        "res": "D"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-08-30",
-        "opponent": "Real Madrid",
-        "gf": 0,
-        "ga": 4,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-13",
-        "opponent": "Celta Vigo",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-09-20",
-        "opponent": "Getafe",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-23",
-        "opponent": "Alaves",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "Real Betis",
-        "gf": 1,
-        "ga": 2,
-        "res": "L"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 63,
-      "away": 6
-     },
-     "league_p": [
-      0.4559,
-      0.2605,
-      0.2836
-     ],
-     "pooled_matches": {
-      "home": 42,
-      "away": 12
-     },
-     "derivation": "public-derived"
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.247 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 2.5",
-      "p": 0.5078,
-      "fair_odds": "≈Evens",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.7443,
-        "fair_odds": "≈1/3"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.2557,
-        "fair_odds": "≈3/1"
-       },
-       "model_p": 0.7502,
-       "league_p": 0.7419
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.4922,
-        "fair_odds": "≈Evens"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.5078,
-        "fair_odds": "≈Evens"
-       },
-       "model_p": 0.4991,
-       "league_p": 0.4893
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.2667,
-        "fair_odds": "≈11/4"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.7333,
-        "fair_odds": "≈4/11"
-       },
-       "model_p": 0.2794,
-       "league_p": 0.2613
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 2.68,
-      "expected_goals": [
-       1.96,
-       0.71
-      ]
-     },
-     "explanation": [
-      "The score model expects about 2.0 goals for Sevilla and 0.7 for Malaga.",
-      "La Liga matches average 2.68 goals; 49% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% La Liga rate for each line",
-     "derivation": "public-derived"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5072,
-      "fair_odds": "≈Evens"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5072,
-       "fair_odds": "≈Evens"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4928,
-       "fair_odds": "≈Evens"
-      }
-     ],
-     "model_p": 0.4396,
-     "league_p": 0.5361,
-     "explanation": [
-      "Both teams scored in 54% of La Liga matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% La Liga rate",
-     "derivation": "public-derived"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "result",
-     "key": "H",
-     "label": "Sevilla win",
-     "p": 0.6666,
-     "credible_p": 0.6553,
-     "n": 353,
-     "status": "provisional",
-     "strength": "moderate",
-     "basis": "La Liga model, 353 backtest matches (2025-26)",
-     "lower_bound": 0.6137
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
   "N1-2627-heerenveen-v-cambuur": {
    "match_id": "N1-2627-heerenveen-v-cambuur",
    "record_id": "PUB-N1-2627-heerenveen-v-cambuur#r2",
@@ -87523,6 +86937,304 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    }
   },
+  "PD-2627-atletico-madrid-v-real-betis": {
+   "match_id": "PD-2627-atletico-madrid-v-real-betis",
+   "record_id": "PUB-PD-2627-atletico-madrid-v-real-betis#r3",
+   "published_at": "2026-11-16T18:53:55.646046+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Atletico Madrid",
+    "away": "Real Betis",
+    "kickoff_utc": "2026-12-06T20:00:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-06T14:00:00Z",
+      "to": "2026-12-06T00:00:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     },
+     {
+      "from": "2026-12-06T00:00:00Z",
+      "to": "2026-12-06T20:00:00Z",
+      "seen_at": "2026-11-16T18:53:55.646046+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 353 La Liga matches (2025-26): Brier 0.580 against 0.628 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Atletico Madrid win",
+      "p": 0.5692,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Atletico Madrid win",
+       "p": 0.5692,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2338,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Real Betis win",
+       "p": 0.197,
+       "fair_odds": "≈4/1"
+      }
+     ],
+     "method": "La Liga Dixon-Coles fitted on La Liga results only",
+     "training_matches": 1259,
+     "form": {
+      "home": [
+       {
+        "date": "2026-08-23",
+        "opponent": "Villarreal",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-16",
+        "opponent": "Osasuna",
+        "gf": 4,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Real Madrid",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Deportivo La Coruna",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "Barcelona",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-08-29",
+        "opponent": "Levante",
+        "gf": 2,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-14",
+        "opponent": "Villarreal",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Deportivo La Coruna",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-25",
+        "opponent": "Celta Vigo",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-11-08",
+        "opponent": "Elche",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 63,
+      "away": 63
+     },
+     "league_p": [
+      0.4559,
+      0.2605,
+      0.2836
+     ],
+     "pooled_matches": {
+      "home": 42,
+      "away": 42
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.247 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5072,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7553,
+        "fair_odds": "≈1/3"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2447,
+        "fair_odds": "≈3/1"
+       },
+       "model_p": 0.7867,
+       "league_p": 0.7419
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5072,
+        "fair_odds": "≈Evens"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4928,
+        "fair_odds": "≈Evens"
+       },
+       "model_p": 0.5491,
+       "league_p": 0.4893
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2806,
+        "fair_odds": "≈5/2"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7194,
+        "fair_odds": "≈2/5"
+       },
+       "model_p": 0.3256,
+       "league_p": 0.2613
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.68,
+      "expected_goals": [
+       1.87,
+       1.01
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.9 goals for Atletico Madrid and 1.0 for Real Betis.",
+      "La Liga matches average 2.68 goals; 49% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% La Liga rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "La Liga backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5381,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5381,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4619,
+       "fair_odds": "≈6/5"
+      }
+     ],
+     "model_p": 0.5427,
+     "league_p": 0.5361,
+     "explanation": [
+      "Both teams scored in 54% of La Liga matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% La Liga rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Atletico Madrid win",
+     "p": 0.5692,
+     "credible_p": 0.5631,
+     "n": 353,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "La Liga model, 353 backtest matches (2025-26)",
+     "lower_bound": 0.5197
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
   "P1-2627-famalicao-v-academico-viseu": {
    "match_id": "P1-2627-famalicao-v-academico-viseu",
    "record_id": "PUB-P1-2627-famalicao-v-academico-viseu#r1",
@@ -87808,6 +87520,299 @@
      "strength": "weak",
      "basis": "league-anchored blend, 287 Primeira Liga backtest matches",
      "lower_bound": 0.4715
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "SA-2627-venezia-v-sassuolo": {
+   "match_id": "SA-2627-venezia-v-sassuolo",
+   "record_id": "PUB-SA-2627-venezia-v-sassuolo#r1",
+   "published_at": "2026-11-16T18:53:55.646046+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Venezia",
+    "away": "Sassuolo",
+    "kickoff_utc": "2026-12-07T17:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": [
+     {
+      "from": "2026-12-06T14:00:00Z",
+      "to": "2026-12-07T17:30:00Z",
+      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+     }
+    ]
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 350 Serie A matches (2025-26): Brier 0.589 against 0.658 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "A",
+      "label": "Sassuolo win",
+      "p": 0.4425,
+      "fair_odds": "≈5/4"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Venezia win",
+       "p": 0.2939,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2636,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Sassuolo win",
+       "p": 0.4425,
+       "fair_odds": "≈5/4"
+      }
+     ],
+     "method": "Serie A Dixon-Coles fitted on Serie A results only",
+     "training_matches": 1250,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-11",
+        "opponent": "Fiorentina",
+        "gf": 2,
+        "ga": 4,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Lazio",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-17",
+        "opponent": "Napoli",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-28",
+        "opponent": "Inter",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-06",
+        "opponent": "Udinese",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-06",
+        "opponent": "Bologna",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-09-18",
+        "opponent": "Monza",
+        "gf": 1,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-16",
+        "opponent": "Frosinone",
+        "gf": 2,
+        "ga": 4,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Como",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-07",
+        "opponent": "Roma",
+        "gf": 0,
+        "ga": 3,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 25,
+      "away": 44
+     },
+     "league_p": [
+      0.4072,
+      0.2704,
+      0.3224
+     ],
+     "pooled_matches": {
+      "home": 11,
+      "away": 43
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none",
+      "summary": "Serie A backtest (380 matches, 2025-26): Brier 0.250 against 0.249 for the league average. No better than the league average, so this is shown as the league rate."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5144,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7373,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2627,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.733,
+       "league_p": 0.7392
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.4856,
+        "fair_odds": "≈11/10"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.5144,
+        "fair_odds": "≈10/11"
+       },
+       "model_p": 0.48,
+       "league_p": 0.488
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2569,
+        "fair_odds": "≈3/1"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7431,
+        "fair_odds": "≈1/3"
+       },
+       "model_p": 0.2626,
+       "league_p": 0.2544
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.58,
+      "expected_goals": [
+       1.14,
+       1.46
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.1 goals for Venezia and 1.5 for Sassuolo.",
+      "Serie A matches average 2.58 goals; 49% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Serie A rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Serie A backtest (380 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5102,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5102,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4898,
+       "fair_odds": "≈Evens"
+      }
+     ],
+     "model_p": 0.5227,
+     "league_p": 0.5048,
+     "explanation": [
+      "Both teams scored in 50% of Serie A matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Serie A rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5102,
+     "credible_p": 0.5099,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.4677
     },
     "best_value": {
      "decision": "no_bet",

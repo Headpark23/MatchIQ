@@ -686867,7 +686867,8 @@
     },
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
-   "sha256": "2f5ca372624b66ed7f5e1416b2f2d99d256ad6d5a30234b94ba46864bf1e661e"
+   "sha256": "2f5ca372624b66ed7f5e1416b2f2d99d256ad6d5a30234b94ba46864bf1e661e",
+   "superseded_by": "PUB-PD-2627-atletico-madrid-v-real-betis#r3"
   },
   {
    "record_id": "PUB-PD-2627-getafe-v-valencia#r2",
@@ -690429,6 +690430,280 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "474490364519de10ec8bccbabeafd2e46d7e2a1a5c0d87ab56846697c7e63b4a"
+  },
+  {
+   "record_id": "PUB-PD-2627-atletico-madrid-v-real-betis#r3",
+   "match_id": "PD-2627-atletico-madrid-v-real-betis",
+   "revision": 3,
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Atletico Madrid",
+    "away": "Real Betis",
+    "kickoff_utc": "2026-12-06T20:00:00Z"
+   },
+   "published_at": "2026-11-16T18:53:55.646046+00:00",
+   "inputs_fingerprint": "2c045d04acb0fb5c",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Atletico Madrid win",
+      "p": 0.5692,
+      "fair_odds": "≈8/11"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Atletico Madrid win",
+       "p": 0.5692,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2338,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Real Betis win",
+       "p": 0.197,
+       "fair_odds": "≈4/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5072,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7553,
+       "over_fair_odds": "≈1/3",
+       "under_fair_odds": "≈3/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5072,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2806,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5381,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5381,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4619,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Atletico Madrid win",
+     "p": 0.5692,
+     "credible_p": 0.5631,
+     "n": 353,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "La Liga model, 353 backtest matches (2025-26)",
+     "lower_bound": 0.5197
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "01c46413f54ffe68726d17b753a4343a6e63ef98b77dc4bbb7c0b2c34b2c11a2"
+  },
+  {
+   "record_id": "PUB-SA-2627-venezia-v-sassuolo#r1",
+   "match_id": "SA-2627-venezia-v-sassuolo",
+   "revision": 1,
+   "fixture": {
+    "competition": "SA",
+    "season": "2627",
+    "home": "Venezia",
+    "away": "Sassuolo",
+    "kickoff_utc": "2026-12-07T17:30:00Z"
+   },
+   "published_at": "2026-11-16T18:53:55.646046+00:00",
+   "inputs_fingerprint": "2c045d04acb0fb5c",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Sassuolo win",
+      "p": 0.4425,
+      "fair_odds": "≈5/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Venezia win",
+       "p": 0.2939,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2636,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Sassuolo win",
+       "p": 0.4425,
+       "fair_odds": "≈5/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5144,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7373,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4856,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2569,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5102,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5102,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4898,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5102,
+     "credible_p": 0.5099,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 Serie A backtest matches",
+     "lower_bound": 0.4677
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "1df365e02759078fee78b1e0e14d06a8d833ec7dde892b4b37648490388eb09d"
   }
  ]
 }

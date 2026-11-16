@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-16T07:14:30.761741+00:00",
+ "generated_at": "2026-11-16T18:53:55.646046+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -747,7 +747,7 @@
     1,
     2
    ],
-   "result_source": "football-data.org",
+   "result_source": "openfootball",
    "sources": [
     "football-data.org",
     "openfootball",
@@ -10074,7 +10074,7 @@
     1,
     1
    ],
-   "result_source": "football-data.org",
+   "result_source": "openfootball",
    "sources": [
     "football-data.org",
     "openfootball",
@@ -30438,52 +30438,6 @@
    ]
   },
   {
-   "id": "PD-2627-atletico-madrid-v-real-betis",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Atletico Madrid",
-   "away": "Real Betis",
-   "kickoff_utc": "2026-12-06T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-06T14:00:00Z",
-     "to": "2026-12-06T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-sevilla-v-malaga",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Sevilla",
-   "away": "Malaga",
-   "kickoff_utc": "2026-12-06T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-06T14:00:00Z",
-     "to": "2026-12-06T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
    "id": "N1-2627-heerenveen-v-cambuur",
    "competition": "N1",
    "season": "2627",
@@ -30989,6 +30943,34 @@
    ]
   },
   {
+   "id": "PD-2627-atletico-madrid-v-real-betis",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Atletico Madrid",
+   "away": "Real Betis",
+   "kickoff_utc": "2026-12-06T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-06T14:00:00Z",
+     "to": "2026-12-06T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-06T00:00:00Z",
+     "to": "2026-12-06T20:00:00Z",
+     "seen_at": "2026-11-16T18:53:55.646046+00:00"
+    }
+   ]
+  },
+  {
    "id": "P1-2627-famalicao-v-academico-viseu",
    "competition": "P1",
    "season": "2627",
@@ -31054,6 +31036,34 @@
      "from": "2026-12-06T14:00:00Z",
      "to": "2026-12-07T19:45:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PD-2627-sevilla-v-malaga",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Sevilla",
+   "away": "Malaga",
+   "kickoff_utc": "2026-12-07T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-06T14:00:00Z",
+     "to": "2026-12-06T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-06T00:00:00Z",
+     "to": "2026-12-07T20:00:00Z",
+     "seen_at": "2026-11-16T18:53:55.646046+00:00"
     }
    ]
   },
