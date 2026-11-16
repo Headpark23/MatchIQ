@@ -1,7 +1,7 @@
 // Bet Buddy Progressive Web App Service Worker (v70)
 // Network-first for shell code & data, cache-first for images/fonts, instant offline fallback
 
-const CACHE_NAME = 'betbuddy-pwa-v143';
+const CACHE_NAME = 'betbuddy-pwa-v144';
 
 const PRECACHE_ASSETS = [
   './',
@@ -71,7 +71,9 @@ self.addEventListener('notificationclick', event => {
   event.notification.close();
   const route = String((event.notification.data && event.notification.data.url) || '#/');
   // ?from=push lets index.html keep the route instead of its usual "always open on Home".
-  const target = new URL('./?from=push' + (route.startsWith('#') ? route : '#/'), self.registration.scope).href;
+  // &k= says which message it was (recap, settled or picks), so the owner can count opens by kind.
+  const kind = String(event.notification.tag || '').replace(/[^a-z]/g, '').slice(0, 12);
+  const target = new URL('./?from=push' + (kind ? '&k=' + kind : '') + (route.startsWith('#') ? route : '#/'), self.registration.scope).href;
   event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
     const open = list.find(c => c.url.startsWith(self.registration.scope));
     if (open) return open.focus().then(c => (c && c.navigate ? c.navigate(target) : null)).catch(() => self.clients.openWindow(target));

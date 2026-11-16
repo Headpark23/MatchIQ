@@ -99,11 +99,26 @@ service cloud.firestore {
 
     // A device's push token: the document id must be the token itself, with two on/off choices.
     function isValidPushToken(d, tokenId) {
-      return d.keys().hasOnly(['token', 'settled', 'picks', 'platform', 'updatedAt']) &&
+      return d.keys().hasOnly(['token', 'settled', 'picks', 'recap', 'platform', 'updatedAt']) &&
         d.token is string && d.token == tokenId && d.token.size() > 20 && d.token.size() < 400 &&
         d.settled is bool && d.picks is bool &&
+        (!('recap' in d) || d.recap is bool) &&
         (!('platform' in d) || (d.platform is string && d.platform.size() <= 40)) &&
         d.updatedAt == request.time;
+    }
+
+    // One document per player per UK day (users/{uid}/activity/{YYYY-MM-DD}): how many visits that
+    // day and which notification kind (if any) opened one. Counts only, used for the owner's
+    // retention numbers. Visits move by at most one per write and never down.
+    function isValidActivity(d, day, old) {
+      return day.matches('^20[0-9]{2}-[01][0-9]-[0-3][0-9]$') &&
+        d.keys().hasOnly(['day', 'opens', 'lastAt', 'push']) &&
+        d.keys().hasAll(['day', 'opens', 'lastAt']) &&
+        d.day == day &&
+        d.opens is int && d.opens >= 1 && d.opens <= 500 &&
+        (old == null ? d.opens == 1 : (d.opens == old.opens || d.opens == old.opens + 1)) &&
+        d.lastAt == request.time &&
+        (!('push' in d) || (d.push is string && d.push in ['recap', 'settled', 'picks', 'other']));
     }
 
     // App owner (founder telemetry dashboard). Mirrors OWNER_EMAILS in app.js.
@@ -254,6 +269,15 @@ service cloud.firestore {
       match /pushTokens/{tokenId} {
         allow read, delete: if isOwner(uid);
         allow create, update: if isOwner(uid) && isValidPushToken(request.resource.data, tokenId);
+      }
+
+      // 3a2. Daily activity counts (owner retention numbers). Written by the signed-in player's
+      // own app; read only by the player (the owner's totals come from the server).
+      match /activity/{day} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && isValidActivity(request.resource.data, day, null);
+        allow update: if isOwner(uid) && isValidActivity(request.resource.data, day, resource.data);
+        allow delete: if false;
       }
 
       // 3b. League bets: create only. A bet can be withdrawn before kick-off, or removed if the

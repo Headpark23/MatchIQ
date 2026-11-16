@@ -25,9 +25,83 @@ function betType(e) {
 function bump(obj, key, by) { obj[key] = (obj[key] || 0) + (by == null ? 1 : by); }
 function top(obj, n) { return Object.entries(obj).sort((a, b) => b[1] - a[1]).slice(0, n || 8).map(([name, count]) => ({ name, count })); }
 
-// users: [{ created, lastSeen, google }] (ms); diary: [{ uid, entry }]; leagueBets: [{ uid, day, outcome }];
-// leagues: [{ created, members }]; betai: [{ day, count }].
-function aggregate({ users = [], diary = [], leagueBets = [], leagues = [], betai = [], now = Date.now(), days = 60 }) {
+// ---- Retention and notifications ----
+// Days are UK calendar days (YYYY-MM-DD), the same days the app writes its activity records under.
+const ukDay = ms => new Date(ms).toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+const addDays = (day, n) => new Date(Date.parse(day + 'T12:00:00Z') + n * DAY).toISOString().slice(0, 10);
+const pct = (n, d) => (d ? Math.round(n / d * 100) : null);
+
+// activity: [{ uid, day, opens, push }]; users: [{ uid, created }]; devices: [{ uid, settled, picks, recap }];
+// runs: [{ kind, at, devices, sent }] (one per notification send). Only counts and rates leave here.
+function retention(users, activity, now) {
+  const today = ukDay(now);
+  const byUser = new Map();
+  let since = '';
+  activity.forEach(a => {
+    if (!a || !a.uid || !a.day) return;
+    if (!byUser.has(a.uid)) byUser.set(a.uid, new Set());
+    byUser.get(a.uid).add(a.day);
+    if (!since || a.day < since) since = a.day;
+  });
+  const activeIn = (uid, from, to) => { const s = byUser.get(uid); if (!s) return false; for (let i = from; i <= to; i++) if (s.has(addDays(today, -i))) return true; return false; };
+  const countActive = (from, to) => [...byUser.keys()].filter(uid => activeIn(uid, from, to)).length;
+
+  const daily = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = addDays(today, -i);
+    daily.push({ d, n: [...byUser.values()].filter(s => s.has(d)).length });
+  }
+  const wau = countActive(0, 6), mau = countActive(0, 29);
+  const priorWeek = [...byUser.keys()].filter(uid => activeIn(uid, 7, 13));
+  const kept = priorWeek.filter(uid => activeIn(uid, 0, 6)).length;
+  const avgDau = daily.slice(-7).reduce((t, x) => t + x.n, 0) / 7;
+
+  // Day-N return for people who signed up while tracking was on, once day N has finished.
+  const exact = { d1: [0, 0], d7: [0, 0], d30: [0, 0] }, within = [0, 0];
+  users.forEach(u => {
+    const c = Number(u.created);
+    if (!u.uid || !Number.isFinite(c) || !since) return;
+    const cDay = ukDay(c);
+    if (cDay < since) return;
+    const days = byUser.get(u.uid) || new Set();
+    [['d1', 1], ['d7', 7], ['d30', 30]].forEach(([k, n]) => {
+      const dn = addDays(cDay, n);
+      if (dn >= today) return;
+      exact[k][0]++;
+      if (days.has(dn)) exact[k][1]++;
+    });
+    if (addDays(cDay, 7) < today) {
+      within[0]++;
+      for (let n = 1; n <= 7; n++) if (days.has(addDays(cDay, n))) { within[1]++; break; }
+    }
+  });
+  const rate = ([n, k]) => ({ n, kept: k, pct: pct(k, n) });
+  return {
+    since: since || null, tracked: byUser.size, daily, wau, mau,
+    stickiness: mau ? Math.round(avgDau / mau * 100) : null,
+    weekOnWeek: { prior: priorWeek.length, kept, pct: pct(kept, priorWeek.length) },
+    d1: rate(exact.d1), d7: rate(exact.d7), d30: rate(exact.d30), within7: rate(within)
+  };
+}
+
+function notifications(users, activity, devices, runs, now) {
+  const withDevice = new Set(devices.map(d => d.uid));
+  const cutoff = ukDay(now - 13 * DAY);
+  const kinds = ['recap', 'settled', 'picks'];
+  const opens = {}, sent = {};
+  kinds.forEach(k => { opens[k] = 0; sent[k] = 0; });
+  activity.forEach(a => { if (a && a.day >= cutoff && opens[a.push] != null) opens[a.push]++; });
+  runs.forEach(r => { if (r && Number(r.at) >= now - 14 * DAY && sent[r.kind] != null) sent[r.kind] += Number(r.sent) || 0; });
+  return {
+    users: withDevice.size, devices: devices.length, optInPct: pct(withDevice.size, users.length),
+    switches: { settled: devices.filter(d => d.settled).length, picks: devices.filter(d => d.picks).length, recap: devices.filter(d => d.recap).length },
+    last14: kinds.map(k => ({ kind: k, sent: sent[k], opened: opens[k], pct: sent[k] ? Math.min(100, pct(opens[k], sent[k])) : null }))
+  };
+}
+
+// users: [{ uid, created, lastSeen, google }] (ms); diary: [{ uid, entry }]; leagueBets: [{ uid, day, outcome }];
+// leagues: [{ created, members }]; betai: [{ day, count }]; visits (the activity records), devices, runs: see above.
+function aggregate({ users = [], diary = [], leagueBets = [], leagues = [], betai = [], visits = [], devices = [], runs = [], now = Date.now(), days = 60 }) {
   const today = dayOf(now);
   const span = [];
   for (let i = days - 1; i >= 0; i--) span.push(dayOf(now - i * DAY));
@@ -103,8 +177,10 @@ function aggregate({ users = [], diary = [], leagueBets = [], leagues = [], beta
     },
     league: { bets: leagueBets.length, players: leaguePlayers.size, outcomes: leagueOutcomes },
     leagues: { count: leagues.length, members, sizes: Object.entries(sizes).map(([name, count]) => ({ name, count })), created: span.map(d => ({ d, n: leaguesByDay[d] || 0 })) },
-    betai: { usersToday: betaiToday.length, questionsToday: betaiToday.reduce((t, b) => t + (Number(b.count) || 0), 0) }
+    betai: { usersToday: betaiToday.length, questionsToday: betaiToday.reduce((t, b) => t + (Number(b.count) || 0), 0) },
+    retention: retention(users, visits, now),
+    notifications: notifications(users, visits, devices, runs, now)
   };
 }
 
-module.exports = { aggregate, sourceOf, betType, SOURCE_NAMES };
+module.exports = { aggregate, retention, notifications, ukDay, addDays, sourceOf, betType, SOURCE_NAMES };

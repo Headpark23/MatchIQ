@@ -57,6 +57,63 @@ assert.strictEqual(s.leagues.sizes.find(x => x.name === '11+').count, 1);
 assert.strictEqual(s.betai.usersToday, 2);
 assert.strictEqual(s.betai.questionsToday, 4);
 
+// ---- retention and notifications ----
+// "Now" is Monday 16 Nov 2026. Activity is tracked from 1 Nov, so u3 (signed up before that) is
+// counted as active but is not part of any sign-up cohort.
+const rUsers = [
+  { uid: 'u1', created: Date.parse('2026-11-02T10:00:00Z') },
+  { uid: 'u2', created: Date.parse('2026-11-03T10:00:00Z') },
+  { uid: 'u3', created: Date.parse('2026-10-20T10:00:00Z') },
+  { uid: 'u4', created: Date.parse('2026-11-12T10:00:00Z') },
+  { uid: 'u5', created: Date.parse('2026-11-16T08:00:00Z') }
+];
+const act = (uid, day, push) => Object.assign({ uid, day, opens: 1 }, push ? { push } : {});
+const activity = [
+  act('u1', '2026-11-02'), act('u1', '2026-11-03'), act('u1', '2026-11-09'), act('u1', '2026-11-14', 'recap'),
+  act('u2', '2026-11-03'), act('u2', '2026-11-02', 'recap'),
+  act('u3', '2026-11-01'), act('u3', '2026-11-15', 'picks'),
+  act('u4', '2026-11-12'), act('u4', '2026-11-13', 'recap'), act('u5', '2026-11-16')
+];
+const devices = [
+  { uid: 'u1', settled: true, picks: true, recap: true }, { uid: 'u1', settled: true, picks: false },
+  { uid: 'u4', settled: false, picks: true, recap: false }
+];
+const runs = [
+  { kind: 'recap', at: now - DAY, sent: 4 }, { kind: 'recap', at: now - 20 * DAY, sent: 3 },
+  { kind: 'picks', at: now - 3 * DAY, sent: 2 }
+];
+const nowMon = Date.parse('2026-11-16T12:00:00Z');
+const r = d.aggregate({ users: rUsers, visits: activity, devices, runs, now: nowMon }).retention;
+assert.strictEqual(r.since, '2026-11-01');
+assert.strictEqual(r.tracked, 5);
+assert.deepStrictEqual(r.d1, { n: 3, kept: 2, pct: 67 });      // u1, u2, u4 are old enough; u1 and u4 came back the next day
+assert.deepStrictEqual(r.d7, { n: 2, kept: 1, pct: 50 });      // u1, u2; only u1 was back on day 7
+assert.deepStrictEqual(r.d30, { n: 0, kept: 0, pct: null });   // nobody is 30 days old yet
+assert.deepStrictEqual(r.within7, { n: 2, kept: 1, pct: 50 });
+assert.strictEqual(r.wau, 4);                                  // u1, u3, u4, u5 in the last 7 days
+assert.strictEqual(r.mau, 5);
+assert.deepStrictEqual(r.weekOnWeek, { prior: 2, kept: 1, pct: 50 });
+assert.strictEqual(r.daily.length, 30);
+assert.strictEqual(r.daily[r.daily.length - 1].d, '2026-11-16');
+assert.strictEqual(r.daily[r.daily.length - 1].n, 1);
+
+const n = d.aggregate({ users: rUsers, visits: activity, devices, runs, now: nowMon }).notifications;
+assert.strictEqual(n.users, 2);
+assert.strictEqual(n.devices, 3);
+assert.strictEqual(n.optInPct, 40);
+assert.deepStrictEqual(n.switches, { settled: 2, picks: 2, recap: 1 });
+assert.deepStrictEqual(n.last14.find(x => x.kind === 'recap'), { kind: 'recap', sent: 4, opened: 2, pct: 50 });
+assert.deepStrictEqual(n.last14.find(x => x.kind === 'picks'), { kind: 'picks', sent: 2, opened: 1, pct: 50 });
+assert.deepStrictEqual(n.last14.find(x => x.kind === 'settled'), { kind: 'settled', sent: 0, opened: 0, pct: null });
+
+// no tracking data yet: empty, not a crash, and the old fields are unchanged
+const none = d.aggregate({ users: rUsers, now: nowMon });
+assert.strictEqual(none.retention.since, null);
+assert.strictEqual(none.retention.d1.pct, null);
+assert.strictEqual(none.retention.stickiness, null);
+assert.strictEqual(none.notifications.optInPct, 0);
+assert.strictEqual(none.users.total, 5);
+
 // nothing personal leaves the server
 const json = JSON.stringify(s);
 assert.ok(!/"uid"|Bet365 v|@/.test(json.replace('Bet365', '')), 'no ids or handles in the output');

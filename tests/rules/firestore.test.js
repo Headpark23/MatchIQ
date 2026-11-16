@@ -276,6 +276,41 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       await assertFails(doc(getUnauth(), 'alice').get());
       await assertSucceeds(doc(dbAlice, 'alice').delete());
     });
+
+    it('accepts the weekly-recap switch on a push token and refuses a non-boolean one', async function () {
+      const token = 'fcm-token-' + 'r'.repeat(140);
+      const stamp = firebase.firestore.FieldValue.serverTimestamp();
+      const doc = db => db.collection('users').doc('alice').collection('pushTokens').doc(token);
+      const dbAlice = getGoogleUser('alice');
+      await assertSucceeds(doc(dbAlice).set({ token, settled: true, picks: true, recap: true, platform: 'ios', updatedAt: stamp }));
+      await assertFails(doc(dbAlice).set({ token, settled: true, picks: true, recap: 'yes', platform: 'ios', updatedAt: stamp }));
+    });
+
+    it('lets a player keep a daily visit count: one per visit, never down, only their own', async function () {
+      const day = '2026-11-16';
+      const stamp = () => firebase.firestore.FieldValue.serverTimestamp();
+      const ref = (db, uid, d) => db.collection('users').doc(uid).collection('activity').doc(d || day);
+      const dbAlice = getGoogleUser('alice'), dbBob = getGoogleUser('bob');
+      await assertSucceeds(ref(dbAlice, 'alice').set({ day, opens: 1, lastAt: stamp() }));
+      await assertSucceeds(ref(dbAlice, 'alice').set({ day, opens: 2, lastAt: stamp(), push: 'recap' }));
+      await assertSucceeds(ref(dbAlice, 'alice').get());
+      // Same count again (a push tap on an already-counted visit) is fine; jumping, going down or forging is not.
+      await assertSucceeds(ref(dbAlice, 'alice').set({ day, opens: 2, lastAt: stamp(), push: 'recap' }));
+      await assertFails(ref(dbAlice, 'alice').set({ day, opens: 9, lastAt: stamp() }));
+      await assertFails(ref(dbAlice, 'alice').set({ day, opens: 1, lastAt: stamp() }));
+      await assertFails(ref(dbAlice, 'alice').set({ day, opens: 3, lastAt: new Date() }));
+      await assertFails(ref(dbAlice, 'alice').set({ day, opens: 3, lastAt: stamp(), push: 'free-text' }));
+      await assertFails(ref(dbAlice, 'alice').set({ day, opens: 3, lastAt: stamp(), extra: 1 }));
+      // A new document must start at 1, with a day that matches its id and a real date format.
+      await assertFails(ref(dbAlice, 'alice', '2026-11-17').set({ day: '2026-11-17', opens: 5, lastAt: stamp() }));
+      await assertFails(ref(dbAlice, 'alice', '2026-11-18').set({ day: '2026-11-19', opens: 1, lastAt: stamp() }));
+      await assertFails(ref(dbAlice, 'alice', 'today').set({ day: 'today', opens: 1, lastAt: stamp() }));
+      // Nobody else can read or write it, and it cannot be deleted.
+      await assertFails(ref(dbBob, 'alice').get());
+      await assertFails(ref(dbBob, 'alice').set({ day, opens: 3, lastAt: stamp() }));
+      await assertFails(ref(getUnauth(), 'alice').get());
+      await assertFails(ref(dbAlice, 'alice').delete());
+    });
   });
 
   // -----------------------------------------------------------------

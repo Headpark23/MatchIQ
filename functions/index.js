@@ -90,15 +90,19 @@ exports.ownerDashboard = onRequest({ cors: true, memory: '512MiB', timeoutSecond
     do {
       const page = await admin.auth().listUsers(1000, token);
       page.users.forEach(u => users.push({
-        created: Date.parse(u.metadata.creationTime), lastSeen: Date.parse(u.metadata.lastSignInTime),
+        uid: u.uid, created: Date.parse(u.metadata.creationTime), lastSeen: Date.parse(u.metadata.lastSignInTime),
         google: u.providerData.some(p => p.providerId === 'google.com')
       }));
       token = page.pageToken;
     } while (token);
-    const [diarySnap, betsSnap, leaguesSnap, membersSnap, betaiSnap] = await Promise.all([
+    const [diarySnap, betsSnap, leaguesSnap, membersSnap, betaiSnap, activitySnap, tokensSnap, runsSnap] = await Promise.all([
       db.collectionGroup('diary').get(), db.collectionGroup('leagueBets').get(), db.collection('leagues').get(),
-      db.collectionGroup('members').get(), db.collection('betaiUsage').get()
+      db.collectionGroup('members').get(), db.collection('betaiUsage').get(),
+      db.collectionGroup('activity').get(), db.collectionGroup('pushTokens').get(),
+      db.collection('pushRuns').orderBy('at', 'desc').limit(200).get()
     ]);
+    const userSub = d => d.ref.parent.parent && d.ref.parent.parent.parent.id === 'users';
+    const uidOf = d => d.ref.parent.parent.id;
     const memberCount = {};
     membersSnap.docs.forEach(d => {
       const league = d.ref.parent.parent;
@@ -110,6 +114,9 @@ exports.ownerDashboard = onRequest({ cors: true, memory: '512MiB', timeoutSecond
       leagueBets: betsSnap.docs.map(d => ({ uid: d.ref.parent.parent ? d.ref.parent.parent.id : '', day: leagueBetDay(d.id), outcome: d.get('outcome') || d.get('status') })),
       leagues: leaguesSnap.docs.map(d => ({ created: toMs(d.get('createdAt')), members: memberCount[d.id] || 0 })),
       betai: betaiSnap.docs.map(d => ({ day: d.get('day'), count: d.get('count') })),
+      visits: activitySnap.docs.filter(userSub).map(d => ({ uid: uidOf(d), day: d.id, opens: d.get('opens'), push: d.get('push') })),
+      devices: tokensSnap.docs.filter(userSub).map(d => ({ uid: uidOf(d), settled: d.get('settled') === true, picks: d.get('picks') === true, recap: d.get('recap') === true })),
+      runs: runsSnap.docs.map(d => ({ kind: d.get('kind'), at: toMs(d.get('at')), devices: d.get('devices'), sent: d.get('sent') })),
       now: Date.now()
     }));
   } catch (e) {
@@ -285,9 +292,11 @@ async function runSettlement(now) {
   await writer.close();
 
   // Tell each player whose bets just settled (one message per player per run), if they opted in.
+  let settledSent = 0;
   for (const [uid, bets] of settledByUid) {
-    try { await sendPush(uid, 'settled', push.settledMessage(bets)); } catch (e) { logger.warn('settled push failed', uid, e); }
+    try { settledSent += await sendPush(uid, 'settled', push.settledMessage(bets)); } catch (e) { logger.warn('settled push failed', uid, e); }
   }
+  await logPushRun('settled', settledByUid.size, settledSent);
 
   // Recompute the stats of everyone who had a bet settled.
   const memberRefs = touched.size ? await memberRefsByUid() : new Map();
@@ -334,6 +343,14 @@ async function sendPush(uid, kind, msg) {
   return sendToTokenDocs(snap.docs, msg);
 }
 
+// One record per send run (counts only), so the owner dashboard can set notification opens against
+// messages sent. A run that sent nothing is not recorded.
+async function logPushRun(kind, devices, sent) {
+  if (!sent) return;
+  try { await db.collection('pushRuns').add({ kind, at: FieldValue.serverTimestamp(), devices, sent }); }
+  catch (e) { logger.warn('logPushRun failed', e); }
+}
+
 // Friday 6pm UK: the weekend's likeliest picks, to everyone who switched picks alerts on.
 exports.weekendPicksPush = onSchedule({ schedule: '0 18 * * 5', timeZone: 'Europe/London', timeoutSeconds: 300 }, async () => {
   const msg = push.weekendPicksMessage(await loadData('predictions.json'), Date.now());
@@ -341,7 +358,37 @@ exports.weekendPicksPush = onSchedule({ schedule: '0 18 * * 5', timeZone: 'Europ
   const snap = await db.collectionGroup('pushTokens').get();
   const docs = snap.docs.filter(d => d.get('picks') === true && d.ref.parent.parent && d.ref.parent.parent.parent.id === 'users');
   const sent = await sendToTokenDocs(docs, msg);
+  await logPushRun('picks', docs.length, sent);
   logger.info('weekendPicksPush', { devices: docs.length, sent });
+});
+
+// Monday 10am UK: how the player's league bets went over the last week and how our picks did, to
+// devices that switched the weekly recap on. Each player gets their own message; no message when
+// there is nothing to report.
+exports.weeklyRecapPush = onSchedule({ schedule: '0 10 * * 1', timeZone: 'Europe/London', timeoutSeconds: 540, memory: '512MiB' }, async () => {
+  const now = Date.now();
+  const picks = push.weeklyPickResults(await loadData('prediction_history.json').catch(() => null), now);
+  const snap = await db.collectionGroup('pushTokens').get();
+  const byUid = new Map();
+  snap.docs.forEach(d => {
+    if (d.get('recap') !== true || !d.ref.parent.parent || d.ref.parent.parent.parent.id !== 'users') return;
+    const uid = d.ref.parent.parent.id;
+    if (!byUid.has(uid)) byUid.set(uid, []);
+    byUid.get(uid).push(d);
+  });
+  let devices = 0, sent = 0;
+  for (const [uid, docs] of byUid) {
+    try {
+      const betsSnap = await db.collection('users').doc(uid).collection('leagueBets')
+        .where('settledAt', '>=', Timestamp.fromMillis(now - 7 * 86400000)).get();
+      const msg = push.weeklyRecapMessage(betsSnap.docs.map(b => ({ outcome: b.get('outcome'), points: b.get('points') })), picks);
+      if (!msg) continue;
+      devices += docs.length;
+      sent += await sendToTokenDocs(docs, msg);
+    } catch (e) { logger.warn('weeklyRecapPush failed for a player', e); }
+  }
+  await logPushRun('recap', devices, sent);
+  logger.info('weeklyRecapPush', { players: byUid.size, devices, sent, picks });
 });
 
 // ---------------------------------------------------------- 5. owner-only: backfill past bets

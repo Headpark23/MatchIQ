@@ -49,6 +49,41 @@ assert.ok(m.body.includes('18+'));
 assert.strictEqual(m.url, '#/picks');
 assert.strictEqual(push.weekendPicksMessage({ predictions: {} }, fri), null);
 
+// Monday recap: our picks over the last 7 days, and the two message shapes.
+const mon = Date.parse('2026-11-16T09:00:00Z');
+const rec = (id, kick, won, extra) => Object.assign({ match_id: id, evaluated: true, fixture: { kickoff_utc: kick }, settlement: { result: { pick_won: won } } }, extra);
+const history = { records: [
+  rec('a', '2026-11-14T15:00:00Z', true),
+  rec('b', '2026-11-14T17:30:00Z', false),
+  rec('b', '2026-11-14T17:30:00Z', true),          // a second record for the same match is not counted twice
+  rec('c', '2026-11-08T15:00:00Z', true),          // more than 7 days ago
+  rec('d', '2026-11-17T15:00:00Z', true),          // not played yet
+  { match_id: 'e', evaluated: false, fixture: { kickoff_utc: '2026-11-15T15:00:00Z' } },
+  rec('f', '2026-11-15T12:00:00Z', true, { result: { kickoff_utc: '2026-11-15T12:30:00Z' } })
+] };
+const wk = push.weeklyPickResults(history, mon);
+assert.deepStrictEqual(wk, { right: 2, total: 3 });
+assert.deepStrictEqual(push.weeklyPickResults({ records: [] }, mon), { right: 0, total: 0 });
+assert.deepStrictEqual(push.weeklyPickResults(null, mon), { right: 0, total: 0 });
+
+m = push.weeklyRecapMessage([{ outcome: 'won', points: 12 }, { outcome: 'lost', points: -2 }, { outcome: 'won', points: 6 }, { outcome: 'void', points: 0 }], wk);
+assert.strictEqual(m.title, 'Your week: 2 won, 1 lost (+16 pts)');
+assert.ok(m.body.startsWith('Our picks went 2 from 3.'));
+assert.ok(m.body.includes('18+'));
+assert.strictEqual(m.url, '#/leagues');
+assert.strictEqual(m.tag, 'recap');
+m = push.weeklyRecapMessage([{ outcome: 'lost', points: -2 }], { right: 0, total: 0 });
+assert.strictEqual(m.title, 'Your week: 0 won, 1 lost (-2 pts)');
+assert.ok(!/Our picks/.test(m.body));
+m = push.weeklyRecapMessage([], wk);                  // no league bets: how our picks did
+assert.strictEqual(m.title, 'Last week: our picks went 2 from 3');
+assert.strictEqual(m.url, '#/results');
+assert.ok(m.body.includes('18+'));
+m = push.weeklyRecapMessage([{ outcome: 'void', points: 0 }], wk);  // only a void: not a bet result
+assert.strictEqual(m.url, '#/results');
+assert.strictEqual(push.weeklyRecapMessage([], { right: 0, total: 0 }), null);
+assert.strictEqual(push.weeklyRecapMessage(undefined, undefined), null);
+
 assert.ok(push.isDeadToken('messaging/registration-token-not-registered'));
 assert.ok(!push.isDeadToken('messaging/internal-error'));
 

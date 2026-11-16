@@ -1307,10 +1307,12 @@ function resultsScoreboard(rec) {
 // A visit is a load more than 30 minutes after the last one, so reloads and quick returns keep
 // the same "last here" time for the whole session. Stored per browser; nothing leaves the device.
 const VISIT_KEY = 'betbuddy_visits_v1', VISIT_GAP_MS = 30 * 60000;
+let IS_NEW_VISIT = true;  // true when this load starts a visit (more than 30 minutes since the last)
 const PREV_VISIT_MS = (() => {
   try {
     const now = Date.now(), v = JSON.parse(localStorage.getItem(VISIT_KEY) || '{}') || {};
     const last = Number(v.last) || 0;
+    IS_NEW_VISIT = !last || now - last > VISIT_GAP_MS;
     const prev = last && now - last > VISIT_GAP_MS ? last : (Number(v.prev) || 0);
     localStorage.setItem(VISIT_KEY, JSON.stringify({ prev, last: now }));
     return prev;
@@ -1322,6 +1324,29 @@ function diaryNextKickoff(entry) {
   const now = Date.now();
   const ids = entry.type === 'accumulator' && Array.isArray(entry.legs) ? entry.legs.filter(l => l && l.outcome !== 'won' && l.outcome !== 'lost').map(l => l.fixtureId) : [entry.match_id];
   return ids.map(id => id && fixtureById(id)).filter(Boolean).map(kickoffMs).filter(ms => ms > now).sort((a, b) => a - b)[0] || 0;
+}
+
+// ---- Visit counts for the owner's retention numbers ----
+// Signed-in players only: one small record per UK day at users/{uid}/activity/{day} holding how
+// many visits that day and which notification (if any) opened one. Counts, no content. Failures
+// are ignored: this must never get in the way of using the app.
+let activityRecorded = false;
+function recordActivity(user) {
+  if (activityRecorded || !user || typeof firestoreDb === 'undefined' || !firestoreDb) return;
+  let kind = '';
+  try {
+    const q = new URLSearchParams(window.location.search || '');
+    if (q.get('from') === 'push') kind = ['recap', 'settled', 'picks'].includes(q.get('k')) ? q.get('k') : 'other';
+  } catch (e) {}
+  activityRecorded = true;
+  // Drop ?from=push so a reload is not counted as another notification open.
+  if (kind) { try { history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (e) {} }
+  if (!IS_NEW_VISIT && !kind) return;
+  const day = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+  const data = { day, opens: firebase.firestore.FieldValue.increment(1), lastAt: firebase.firestore.FieldValue.serverTimestamp() };
+  if (kind) data.push = kind;
+  firestoreDb.collection('users').doc(user.uid).collection('activity').doc(day).set(data, { merge: true })
+    .catch(e => console.warn('activity notice:', e && e.code));
 }
 
 function sinceLastVisitCard() {
@@ -5104,8 +5129,8 @@ async function pushGetToken() {
   return firebase.messaging().getToken(opts);
 }
 async function pushSave(uid, token, prefs) {
-  await pushTokenRef(uid, token).set({ token, settled: !!prefs.settled, picks: !!prefs.picks, platform: pushPlatform(), updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
-  savePushState({ uid, token, settled: !!prefs.settled, picks: !!prefs.picks });
+  await pushTokenRef(uid, token).set({ token, settled: !!prefs.settled, picks: !!prefs.picks, recap: !!prefs.recap, platform: pushPlatform(), updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+  savePushState({ uid, token, settled: !!prefs.settled, picks: !!prefs.picks, recap: !!prefs.recap });
 }
 
 async function enablePush() {
@@ -5118,8 +5143,8 @@ async function enablePush() {
     if (await Notification.requestPermission() !== 'granted') { toast('No problem. You can turn notifications on any time in More.'); render(); return; }
     const token = await pushGetToken();
     if (!token) throw new Error('no token');
-    await pushSave(user.uid, token, { settled: true, picks: true });
-    toast('🔔 Notifications on. We’ll tell you when your league bets settle and when the weekend picks are out.');
+    await pushSave(user.uid, token, { settled: true, picks: true, recap: true });
+    toast('🔔 Notifications on: league bets settling, weekend picks and a Monday recap. Change any of them in More.');
   } catch (e) {
     console.warn('enablePush failed', e);
     toast('Could not turn notifications on just now. Please try again.');
@@ -5164,12 +5189,13 @@ function pushSettingsRow(fold) {
     '<input type="checkbox" role="switch"' + (s && s[kind] ? ' checked' : '') + ' onchange="setPushPref(\'' + kind + '\', this.checked)"></label>';
   let body;
   if (s) body = sw('settled', 'My league bets settle', 'Won, lost or void, with your points') + sw('picks', 'Weekend picks are out', 'Friday evenings, our likeliest picks') +
+    sw('recap', 'Monday recap', 'How your week and our picks went') +
     '<button type="button" class="btn small" onclick="disablePush()">Turn off on this device</button>';
   else if (why) body = '<p class="muted" style="margin:0;font-size:13.5px">' + esc(why) + '</p>';
-  else body = '<p class="muted" style="margin:0 0 10px;font-size:13.5px">Get a ping when your league bets settle and when the weekend picks are out. You can change this any time.</p>' +
+  else body = '<p class="muted" style="margin:0 0 10px;font-size:13.5px">Get a ping when your league bets settle, when the weekend picks are out, and a Monday recap. You can change each one any time.</p>' +
     (signedIn ? '<button type="button" class="btn primary small" onclick="enablePush()">Turn on notifications</button>' : '<button type="button" class="btn primary small" data-open-auth>Sign in to turn them on</button>');
-  const kinds = s ? [s.settled && 'settled bets', s.picks && 'weekend picks'].filter(Boolean) : [];
-  const sub = !s ? 'Off' : kinds.length ? 'On: ' + kinds.join(' and ') : 'On, but both switches are off';
+  const kinds = s ? [s.settled && 'settled bets', s.picks && 'weekend picks', s.recap && 'Monday recap'].filter(Boolean) : [];
+  const sub = !s ? 'Off' : kinds.length ? 'On: ' + kinds.join(', ').replace(/, ([^,]*)$/, ' and $1') : 'On, but all the switches are off';
   return fold('push', '🔔', 'Notifications', sub, body);
 }
 
@@ -5918,6 +5944,28 @@ function hqDonut(parts, label) {
     '<div class="hq-legend">' + parts.map((p, i) => '<span><i style="background:' + (p.color || HQ_COLORS[i % HQ_COLORS.length]) + '"></i>' + esc(p.name) + ' <b>' + p.count + '</b></span>').join('') + '</div></div>';
 }
 
+// Retention and notification numbers (signed-in players only; tracking starts when visit records were switched on).
+function renderRetentionSection(d) {
+  const r = d.retention, n = d.notifications;
+  if (!r || !n) return '';
+  const rate = x => x && x.pct != null ? x.pct + '%' : '–';
+  const of = x => x && x.n ? x.kept + ' of ' + x.n + ' signed-up players' : 'too early to tell';
+  const kindName = { recap: 'Monday recap', settled: 'Bets settled', picks: 'Weekend picks' };
+  const notifRows = n.last14.map(k => '<tr><td>' + esc(kindName[k.kind] || k.kind) + '</td><td class="num">' + k.sent + '</td><td class="num">' + k.opened + '</td><td class="num">' + (k.pct != null ? k.pct + '%' : '–') + '</td></tr>').join('');
+  return '<div class="hq-kpis">' +
+      hqKpi('Visited this week', r.wau, r.mau + ' this month' + (r.stickiness != null ? ' · ' + r.stickiness + '% daily/monthly' : ''), hqSpark(r.daily.map(x => x.n), '#10b981'), '#10b981') +
+      hqKpi('Came back week on week', rate(r.weekOnWeek), r.weekOnWeek.prior ? r.weekOnWeek.kept + ' of ' + r.weekOnWeek.prior + ' who visited the week before' : 'too early to tell', '', '#38bdf8') +
+      hqKpi('Back the next day', rate(r.d1), of(r.d1), '', '#fbbf24') +
+      hqKpi('Back after a week', rate(r.d7), of(r.d7), '', '#a78bfa') +
+      hqKpi('Back after a month', rate(r.d30), of(r.d30), '', '#f472b6') +
+      hqKpi('Notifications on', n.optInPct != null ? n.optInPct + '%' : '–', n.users + ' players · ' + n.devices + ' devices', '', '#34d399') +
+    '</div>' +
+    '<section class="hq-card"><div class="hq-card-head"><h2>Notifications, last 14 days</h2><span>Switches on: ' + n.switches.settled + ' settled · ' + n.switches.picks + ' picks · ' + n.switches.recap + ' recap</span></div>' +
+      '<div style="overflow-x:auto"><table class="table"><thead><tr><th>Message</th><th class="num">Sent</th><th class="num">Opened</th><th class="num">Rate</th></tr></thead><tbody>' + notifRows + '</tbody></table></div>' +
+      '<p class="hq-note">Opened counts visits that started from tapping that message; sent counts devices reached. It is a rough rate, not an exact one.</p></section>' +
+    '<p class="hq-foot">Visits are counted for signed-in players only' + (r.since ? ', since ' + esc(r.since) + ' (' + r.tracked + ' players seen)' : ' and none are recorded yet') + '. “Back” rates cover only players who signed up after that date, so they are small numbers at first: read them with the “of N” beside them, not on their own.</p>';
+}
+
 function renderOwnerDashboard() {
   const d = adminDash;
   if (!d) { if (!adminDashLoading) setTimeout(loadAdminDashboard, 0); return '<div class="hq-loading">Crunching the numbers…</div>'; }
@@ -5934,6 +5982,7 @@ function renderOwnerDashboard() {
       hqKpi('BetAI today', d.betai.questionsToday, d.betai.usersToday + ' players asked', '', '#a78bfa') +
       hqKpi('Private leagues', lg.count, lg.members + ' memberships', hqSpark(lg.created.map(x => x.n), '#f472b6'), '#f472b6') +
     '</div>' +
+    renderRetentionSection(d) +
     '<section class="hq-card"><div class="hq-card-head"><h2>Growth</h2><span>Players over the last ' + d.days + ' days</span></div>' + hqGrowth(u.growth) + '</section>' +
     '<section class="hq-card"><div class="hq-card-head"><h2>Activity</h2><span>Bets logged each day</span></div>' + hqActivity(b.activity) + '</section>' +
     '<div class="hq-two">' +
@@ -6827,6 +6876,7 @@ function initFirebaseAuth() {
       updateHeaderAuthUI();
       render();
       try { refreshPushToken(user); } catch (e) {}
+      try { recordActivity(user); } catch (e) {}
       try {
         await ensureUserProfile(user);
         await runPostSignInSync(user);

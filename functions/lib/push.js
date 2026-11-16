@@ -61,8 +61,51 @@ function weekendPicksMessage(predictions, nowMs) {
   };
 }
 
+// How our sealed picks did over the last `days` days: one result per match, counted once its
+// match has finished. Same rule as the "Since you were last here" card in the app.
+// history: the published prediction_history.json ({ records: [...] }).
+function weeklyPickResults(history, nowMs, days = 7) {
+  const since = nowMs - days * 86400000;
+  const seen = new Set();
+  let right = 0, total = 0;
+  for (const r of (history && history.records) || []) {
+    if (!r || !r.evaluated || !r.settlement || !r.settlement.result || seen.has(r.match_id)) continue;
+    const ms = Date.parse((r.result && r.result.kickoff_utc) || (r.fixture && r.fixture.kickoff_utc) || '');
+    if (!(ms > since && ms <= nowMs)) continue;
+    seen.add(r.match_id);
+    total++;
+    if (r.settlement.result.pick_won) right++;
+  }
+  return { right, total };
+}
+
+// Monday morning recap. bets: the player's league bets that settled this week
+// ([{ outcome, points }]); picks: { right, total } from weeklyPickResults.
+// A player with league bets hears how they did; everyone else hears how our picks did. Nothing
+// to report (no settled bets and no finished picks) means no message.
+function weeklyRecapMessage(bets, picks) {
+  const list = (bets || []).filter(b => b && ['won', 'lost'].includes(b.outcome));
+  const hasPicks = picks && picks.total > 0;
+  const pickLine = hasPicks ? 'Our picks went ' + picks.right + ' from ' + picks.total + '.' : '';
+  if (list.length) {
+    const won = list.filter(b => b.outcome === 'won').length, lost = list.length - won;
+    const total = list.reduce((t, b) => t + (Number(b.points) || 0), 0);
+    return {
+      title: 'Your week: ' + won + ' won, ' + lost + ' lost (' + pts(total) + ')',
+      body: short((pickLine ? pickLine + ' ' : '') + 'See your leagues. Estimates, not tips. 18+', 160),
+      url: APP_URL + '#/leagues', tag: 'recap'
+    };
+  }
+  if (!hasPicks) return null;
+  return {
+    title: 'Last week: our picks went ' + picks.right + ' from ' + picks.total,
+    body: 'See how every league did. Estimates, not tips. 18+',
+    url: APP_URL + '#/results', tag: 'recap'
+  };
+}
+
 // FCM error codes meaning the token will never work again, so its document can be deleted.
 const DEAD_TOKEN_CODES = new Set(['messaging/registration-token-not-registered', 'messaging/invalid-registration-token']);
 const isDeadToken = code => DEAD_TOKEN_CODES.has(code);
 
-module.exports = { settledMessage, weekendPicks, weekendPicksMessage, isDeadToken, APP_URL };
+module.exports = { settledMessage, weekendPicks, weekendPicksMessage, weeklyPickResults, weeklyRecapMessage, isDeadToken, APP_URL };
