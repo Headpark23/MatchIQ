@@ -1839,6 +1839,8 @@ function viewFind() {
     '<span class="fd-txt"><b>' + title + '</b><small>' + desc + '</small></span><span class="fd-go" aria-hidden="true">›</span></' + tag + '>';
   return '<section class="view fd-view"><h1 class="page-title">Find me a bet</h1>' +
     '<p class="page-sub">Pick your own, let us suggest one, or ask. Every pick is an estimate, not a tip. 18+</p>' +
+    '<div class="fd-group"><div class="fd-kicker">Already placed it?</div>' +
+      card('a', 'href="#/import"', 'f-import', 'slip', 'Import a bet', 'Share a screenshot from your bookmaker. No typing it in twice.') + '</div>' +
     '<div class="fd-group"><div class="fd-kicker">Do it yourself</div>' +
       card('a', 'href="#/build"', 'f-build', 'slip', 'Pick it myself', 'Tap the prices you like. Singles up to 10-folds.') + '</div>' +
     '<div class="fd-group"><div class="fd-kicker">Let us suggest one</div>' +
@@ -3816,7 +3818,7 @@ function viewDiary() {
     '<input type="file" id="diary-import" accept="application/json,.json" hidden>' +
     '<button type="button" class="btn small danger" data-clear-diary>Clear diary</button>' +
     '<p>' + (signedIn ? 'Synced to your account.' : 'Saved in this browser only. Sign in to sync it, or use Backup and Import to move it.') + '</p></div></details>';
-  let html = '<section class="view dy-view"><div class="dy-head"><h1 class="page-title">Bet Diary</h1><div class="dy-head-actions"><a href="#/build/log" class="btn primary">+ Log a bet</a>' + tools + '</div></div>';
+  let html = '<section class="view dy-view"><div class="dy-head"><h1 class="page-title">Bet Diary</h1><div class="dy-head-actions"><a href="#/import" class="btn">Import</a><a href="#/build/log" class="btn primary">+ Log a bet</a>' + tools + '</div></div>';
   if (diaryReadFailed) html += '<div class="notice error">Saved diary data could not be read. It has been left untouched, and saving is disabled to protect it.</div>';
   if (!diary.length) return html + '<div class="empty section">No bets match this profile filter.</div></section>';
 
@@ -5023,6 +5025,205 @@ function saveOwnBetToDiary() {
     if (state) recordLeagueAttempt(entry.id, state);
     toast(state ? 'Saved to your Bet Diary, but not the league: ' + state.reason : 'Saved to your Bet Diary.', state ? 'warn' : undefined);
   }
+}
+
+// ---- Import a bet from a bookmaker (#/import) ----
+// The player shares a screenshot of the bet confirmation, or pastes the slip text. The server reads it
+// (parseBetSlip, Gemini; nothing is stored) and returns the selections as data. Here they are matched to
+// Bet Buddy's own matches and markets and put on the normal bet slip, where the usual diary or league
+// choice and the league's own checks (before kick-off, daily limit) apply. Whatever cannot be matched
+// goes on the slip as a typed-in selection, which stays in the diary only.
+const SLIP_URL = 'https://europe-west1-betbuddyuk.cloudfunctions.net/parseBetSlip';
+const TEAM_NOISE = new Set(['fc', 'afc', 'cf', 'sc', 'ssc', 'fsv', 'vfb', 'vfl', 'tsg', 'as', 'rc', 'rcd', 'cd', 'sd', 'ud', 'ogc', 'us', 'ss', 'the']);
+const TEAM_ALIASES = {
+  'manchester united': 'man united', 'man utd': 'man united', 'manchester utd': 'man united', 'manchester city': 'man city',
+  'spurs': 'tottenham', 'tottenham hotspur': 'tottenham', 'newcastle united': 'newcastle', 'newcastle utd': 'newcastle',
+  'nottingham forest': 'nott m forest', 'nottm forest': 'nott m forest', 'wolverhampton wanderers': 'wolves', 'wolverhampton': 'wolves',
+  'west bromwich albion': 'west brom', 'brighton and hove albion': 'brighton', 'brighton hove albion': 'brighton', 'west ham united': 'west ham',
+  'leeds united': 'leeds', 'sheffield utd': 'sheffield united', 'queens park rangers': 'qpr', 'stoke city': 'stoke', 'swansea city': 'swansea',
+  'cardiff city': 'cardiff', 'norwich city': 'norwich', 'ipswich town': 'ipswich', 'hull city': 'hull', 'derby county': 'derby',
+  'coventry city': 'coventry', 'preston north end': 'preston', 'birmingham city': 'birmingham', 'leicester city': 'leicester',
+  'inter milan': 'inter', 'internazionale': 'inter', 'milan': 'ac milan', 'atletico': 'atletico madrid', 'atl madrid': 'atletico madrid',
+  'athletic bilbao': 'athletic club', 'celta': 'celta vigo', 'celta de vigo': 'celta vigo', 'deportivo alaves': 'alaves', 'rayo': 'rayo vallecano',
+  'betis': 'real betis', 'bayern': 'bayern munich', 'bayern munchen': 'bayern munich', 'borussia dortmund': 'dortmund', 'bvb': 'dortmund',
+  'bayer leverkusen': 'leverkusen', 'bayer 04 leverkusen': 'leverkusen', 'borussia monchengladbach': 'm gladbach', 'monchengladbach': 'm gladbach',
+  'gladbach': 'm gladbach', 'cologne': 'koln', 'frankfurt': 'eintracht frankfurt', 'leipzig': 'rb leipzig', 'mainz 05': 'mainz', 'schalke': 'schalke 04',
+  'paris saint germain': 'paris sg', 'psg': 'paris sg', 'olympique marseille': 'marseille', 'olympique lyonnais': 'lyon', 'olympique lyon': 'lyon', 'stade rennais': 'rennes'
+};
+function canonTeam(s) {
+  const t = String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9 ]+/g, ' ')
+    .split(/\s+/).filter(w => w && !TEAM_NOISE.has(w)).join(' ');
+  return TEAM_ALIASES[t] || t;
+}
+const TEAM_GENERIC = new Set(['city', 'united', 'town', 'county', 'rovers', 'athletic', 'real', 'sporting', 'inter']);
+function sameTeam(a, b) {
+  const x = canonTeam(a), y = canonTeam(b);
+  if (!x || !y) return false;
+  if (x === y) return true;
+  const within = (small, big) => small.length >= 4 && !TEAM_GENERIC.has(small) && (' ' + big + ' ').includes(' ' + small + ' ');
+  return within(x, y) || within(y, x);
+}
+
+// The match on Bet Buddy's list that a slip leg is about: both teams must match. Upcoming first, soonest.
+function findImportFixture(leg) {
+  if (!leg.home || !leg.away) return null;
+  const now = Date.now();
+  const hits = diaryFixtureOptions().filter(f => (sameTeam(leg.home, f.home) && sameTeam(leg.away, f.away)) || (sameTeam(leg.home, f.away) && sameTeam(leg.away, f.home)));
+  return hits.find(f => kickoffMs(f) > now) || hits.slice().reverse()[0] || null;
+}
+
+// The app's market key for a slip leg on a matched fixture ('' when it is not one the app offers).
+function importMarketKey(fx, leg) {
+  const side = team => sameTeam(team, fx.home) ? 'H' : sameTeam(team, fx.away) ? 'A' : '';
+  const t = side(leg.pickedTeam), o = leg.outcome, m = leg.marketKey;
+  let key = '';
+  if (m === 'result') key = o === 'draw' ? 'result:D' : (o === 'win' && t ? 'result:' + t : '');
+  else if (m === 'dc') key = o === 'either' ? 'dc:12' : (o === 'win_or_draw' && t ? (t === 'H' ? 'dc:1X' : 'dc:X2') : '');
+  else if (m === 'dnb') key = o === 'win' && t ? 'dnb:' + t : '';
+  else if (m === 'tts') key = o === 'yes' && t ? 'tts:' + t : '';
+  else if (m === 'btts') key = o === 'yes' || o === 'no' ? 'btts:' + o : '';
+  else if (['goals', 'corners', 'cards', 'shots'].includes(m)) key = (o === 'over' || o === 'under') && leg.line != null ? m + ':' + o + ':' + Number(leg.line) : '';
+  return key && ownBetMarketsFor(fx).some(x => x.key === key) ? key : '';
+}
+
+// Turns the server's reading of a slip into bet-slip legs plus a plain summary for the player to check.
+function buildImportedSlip(parsed) {
+  const legs = [], summary = [];
+  (parsed && parsed.legs || []).slice(0, OWN_BET_MAX_LEGS).forEach(leg => {
+    const slipOdds = parseOwnBetOdds(/^evs$/i.test(leg.oddsText) ? 'evens' : leg.oddsText);
+    const fx = findImportFixture(leg), key = fx ? importMarketKey(fx, leg) : '';
+    const opt = key ? ownBetMarketsFor(fx).find(o => o.key === key) : null;
+    if (fx && opt) {
+      const l = ownBetFootballLeg(fx, opt);
+      if (slipOdds) { l.odds = slipOdds; l.est = false; }   // the price the player actually took
+      legs.push(l);
+      const upcoming = kickoffMs(fx) > Date.now();
+      summary.push({ text: l.match + ': ' + l.pick, matched: true, upcoming, odds: l.odds, note: upcoming ? 'Can count in your league if saved before kick-off' : 'This match has kicked off, so it goes in your diary only' });
+    } else {
+      const sport = OWN_BET_SPORTS.find(s => s.toLowerCase() === String(leg.sport || '').toLowerCase()) || (leg.home && leg.away ? 'Football' : 'Other');
+      const withMatch = leg.home && leg.away && !leg.selectionText.toLowerCase().includes(leg.home.toLowerCase()) ? leg.home + ' v ' + leg.away + ': ' + leg.selectionText : leg.selectionText;
+      legs.push({ id: 'ob' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), kind: 'custom', sport, pick: withMatch.slice(0, 120), odds: slipOdds || null });
+      summary.push({ text: withMatch, matched: false, odds: slipOdds, note: 'Typed in, so it stays in your diary only' + (slipOdds ? '' : ' (add the price on the next screen)') });
+    }
+  });
+  return { legs, summary, stake: parsed && parsed.stake > 0 ? parsed.stake : null, bookmaker: parsed && parsed.bookmaker || '' };
+}
+
+let importUI = { busy: false, error: '', parsed: null, file: null, text: '', remaining: null, limit: 10, sharedChecked: false };
+
+// Android's share menu (manifest share_target, sw.js) leaves the shared picture or text in a cache for us.
+async function importLoadShared() {
+  try {
+    if (!('caches' in window)) return;
+    const cache = await caches.open('bb-share-target');
+    const img = await cache.match('shared-slip-image'), txt = await cache.match('shared-slip-text');
+    if (img) { const blob = await img.blob(); importUI.file = new File([blob], 'shared-slip', { type: blob.type || 'image/jpeg' }); }
+    if (txt) importUI.text = (await txt.text()).slice(0, 4000);
+    if (img || txt) { await cache.delete('shared-slip-image'); await cache.delete('shared-slip-text'); try { history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (e) {} render(); }
+  } catch (e) { /* sharing in is optional */ }
+}
+
+function importPickFile(file) {
+  importUI.file = file || null; importUI.parsed = null; importUI.error = '';
+  render();
+}
+function importReset() { importUI = Object.assign(importUI, { busy: false, error: '', parsed: null, file: null, text: '' }); render(); }
+
+// A smaller JPEG keeps the upload quick and the cost low; the slip stays readable at 1600 pixels.
+async function importImageData(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = bad; i.src = url; });
+    const k = Math.min(1, 1600 / Math.max(img.width, img.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.82).split(',')[1];
+  } finally { URL.revokeObjectURL(url); }
+}
+
+function importErrorText(code) {
+  const m = {
+    'daily-limit': 'You have used today’s ' + importUI.limit + ' reads. It resets at midnight UK time.',
+    'sign-in-required': 'Please sign in again to import a bet.',
+    'ai-unavailable': 'Could not read that just now. It was not counted. Try again shortly.',
+    'unsupported-image': 'Please use a JPEG, PNG or WebP screenshot.',
+    'bad-image': 'That picture could not be read. Try a fresh screenshot.',
+    'image-too-large': 'That picture is too big. Try a smaller screenshot.',
+    'nothing-to-read': 'Add a screenshot or paste the slip text first.'
+  };
+  return m[code] || 'Something went wrong. Please try again.';
+}
+
+async function importRead() {
+  if (importUI.busy || !betaiSignedIn()) return;
+  const ta = $('imp-text'), text = ((ta && ta.value) || importUI.text || '').trim();
+  importUI.text = text;
+  if (!importUI.file && text.length < 8) { importUI.error = importErrorText('nothing-to-read'); render(); return; }
+  importUI.busy = true; importUI.error = ''; importUI.parsed = null; render();
+  try {
+    const payload = {};
+    if (importUI.file) payload.image = { mime: 'image/jpeg', data: await importImageData(importUI.file) };
+    if (text) payload.text = text;
+    const token = await firebaseAuth.currentUser.getIdToken();
+    const res = await fetch(SLIP_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify(payload) });
+    let data = {};
+    try { data = await res.json(); } catch (e) {}
+    if (typeof data.remaining === 'number') importUI.remaining = data.remaining;
+    if (data.limit) importUI.limit = data.limit;
+    if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+    importUI.parsed = data;
+    if (!data.legs || !data.legs.length) importUI.error = data.notice || importErrorText('');
+  } catch (e) { importUI.error = importErrorText(e && e.message); }
+  importUI.busy = false; render();
+}
+
+// Puts the checked bet on the slip and opens it, where the player chooses diary or league and saves.
+function importApply() {
+  const built = buildImportedSlip(importUI.parsed);
+  if (!built.legs.length) return;
+  ownBet.legs = built.legs;
+  if (built.stake) ownBet.stake = built.stake;
+  if (built.bookmaker) ownBet.bookmaker = built.bookmaker.slice(0, 40);
+  ownBet.dest = 'league'; ownBet.origin = 'independent'; ownBet.source = 'import'; ownBet.notes = '';
+  persistOwnBet();
+  importUI = Object.assign(importUI, { parsed: null, file: null, text: '', error: '' });
+  location.hash = '#/build/slip';
+}
+
+function viewImport() {
+  if (!importUI.sharedChecked) { importUI.sharedChecked = true; importLoadShared(); }
+  const head = '<section class="view imp-view"><button type="button" class="link-btn" data-back aria-label="Go back">&larr; Back</button>' +
+    '<h1 class="page-title">Import a bet</h1>' +
+    '<p class="page-sub">Placed a bet on a bookmaker’s site or app? Share the confirmation here instead of typing it in again. You check it, then save it to your diary and, if you like, your league.</p>';
+  if (!betaiSignedIn()) {
+    return head + '<div class="card imp-gate"><p>Importing is for signed-in accounts. Sign in free to read up to ' + importUI.limit + ' bets a day.</p>' +
+      '<button type="button" class="btn google-primary-btn" onclick="signInWithGoogle()" style="min-height:46px;">Sign in with Google</button>' +
+      '<button type="button" class="text-link" data-open-auth data-email-mode-open="signin" style="display:block;margin:10px auto 0;">Use email instead</button></div></section>';
+  }
+  const f = importUI.file;
+  const form = '<div class="card imp-form">' +
+    '<label class="imp-pick"><span class="btn primary">' + (f ? 'Choose a different screenshot' : '📷 Choose a screenshot') + '</span>' +
+      '<input id="imp-file" type="file" accept="image/*" class="sr-only" onchange="importPickFile(this.files && this.files[0])"></label>' +
+    (f ? '<p class="imp-file">✓ ' + esc(f.name || 'Screenshot') + ' ready</p>' : '<p class="own-hint">Screenshot the bet confirmation (not the whole bookmaker page). On Android you can also use Share → Bet Buddy straight from the bookmaker’s app.</p>') +
+    '<p class="imp-or">or paste the slip text</p>' +
+    '<label class="sr-only" for="imp-text">Slip text</label>' +
+    '<textarea id="imp-text" class="ctl" rows="4" maxlength="4000" placeholder="e.g. Arsenal to win, Chelsea v Arsenal, 6/4. Stake £10">' + esc(importUI.text) + '</textarea>' +
+    '<div class="imp-row"><span class="dim imp-left">' + (importUI.remaining == null ? '' : importUI.remaining + ' of ' + importUI.limit + ' reads left today') + '</span>' +
+      '<button type="button" class="btn primary" onclick="importRead()"' + (importUI.busy ? ' disabled' : '') + '>' + (importUI.busy ? 'Reading…' : 'Read my bet') + '</button></div>' +
+    '<p class="imp-priv">The picture is sent to Google’s Gemini to be read, once, and is not kept by Bet Buddy. Crop out your name, balance and account number first if you can. Nothing is sent to the bookmaker.</p></div>';
+  let result = '';
+  if (importUI.error) result += '<div class="notice section" role="alert">' + esc(importUI.error) + '</div>';
+  if (importUI.parsed && importUI.parsed.legs && importUI.parsed.legs.length) {
+    const b = buildImportedSlip(importUI.parsed);
+    const anyLeague = b.summary.some(s => s.matched && s.upcoming) && b.summary.every(s => s.matched && s.upcoming);
+    result += '<section class="card imp-result"><h2 class="section-title">Is this your bet?</h2><ul class="imp-legs">' +
+      b.summary.map(s => '<li class="' + (s.matched ? 'ok' : 'typed') + '"><b>' + esc(s.text) + '</b><small>' + (s.odds ? esc(ownBetOddsText(s.odds)) + ' · ' : '') + esc(s.note) + '</small></li>').join('') + '</ul>' +
+      '<p class="dim imp-meta">' + (b.stake ? 'Stake £' + esc(String(b.stake)) + ' · ' : '') + (b.bookmaker ? esc(b.bookmaker) + ' · ' : '') + ownBetName(b.legs.length) + '</p>' +
+      '<p class="own-hint">' + (anyLeague ? 'Every selection is on a match that has not started, so you can add it to your league on the next screen. A league bet must be saved before kick-off.' : 'Some selections can only go in your diary. Check them on the next screen, where you also choose diary or league.') + '</p>' +
+      '<div class="btn-row"><button type="button" class="btn primary" onclick="importApply()">Use this bet</button><button type="button" class="btn" onclick="importReset()">Start again</button></div></section>';
+  }
+  return head + form + result + '<p class="fd-foot">We read what is printed on the slip, nothing more, and mistakes can happen: always check the selections and prices. Bet Buddy never places bets. 18+ <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware.org</a></p></section>';
 }
 
 function viewBuild(mode) {
@@ -6369,12 +6570,12 @@ function render() {
   if (view === 'admin' && !isAppOwner()) view = 'home';
   // Live league listeners cost a read per member update; keep them only while Leagues is open.
   if (view !== 'leagues' && currentLeagueListeningCode) stopLeagueListeners();
-  const navKey = view === 'match' ? 'fixtures' : (view === 'results' || view === 'build' || view === 'picks') ? 'find' : (view === 'guide' || view === 'commercial') ? 'more' : view;
+  const navKey = view === 'match' ? 'fixtures' : (view === 'results' || view === 'build' || view === 'picks' || view === 'import') ? 'find' : (view === 'guide' || view === 'commercial') ? 'more' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
-  const html = view === 'find' ? viewFind() : view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild(arg) : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
+  const html = view === 'find' ? viewFind() : view === 'import' ? viewImport() : view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild(arg) : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Welcome Hub', find: 'Find me a bet', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Prediction results', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Bet Buddy HQ', commercial: 'Commercial & Sponsorship', more: 'More' };
+  const titles = { home: 'Welcome Hub', find: 'Find me a bet', import: 'Import a bet', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Prediction results', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Bet Buddy HQ', commercial: 'Commercial & Sponsorship', more: 'More' };
   document.title = (view === 'build' && arg === 'log' ? 'Log a bet' : titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {

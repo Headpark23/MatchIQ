@@ -1,7 +1,7 @@
 // Bet Buddy Progressive Web App Service Worker (v70)
 // Network-first for shell code & data, cache-first for images/fonts, instant offline fallback
 
-const CACHE_NAME = 'betbuddy-pwa-v147';
+const CACHE_NAME = 'betbuddy-pwa-v148';
 
 const PRECACHE_ASSETS = [
   './',
@@ -83,6 +83,21 @@ self.addEventListener('notificationclick', event => {
 
 // Fetch: Network First for all HTML, JS, JSON code; Cache First only for static media
 self.addEventListener('fetch', event => {
+  // Android "Share to Bet Buddy": keep the shared screenshot or text for the import page, then open it.
+  if (event.request.method === 'POST' && new URL(event.request.url).pathname.endsWith('/share-target')) {
+    event.respondWith((async () => {
+      try {
+        const form = await event.request.formData();
+        const cache = await caches.open('bb-share-target');
+        const file = form.get('slip');
+        if (file && typeof file === 'object' && file.size) await cache.put('shared-slip-image', new Response(file, { headers: { 'Content-Type': file.type || 'image/jpeg' } }));
+        const text = [form.get('title'), form.get('text'), form.get('url')].filter(v => typeof v === 'string' && v).join(' ').slice(0, 4000);
+        if (text) await cache.put('shared-slip-text', new Response(text));
+      } catch (e) { /* open the import page anyway */ }
+      return Response.redirect('./?shared=1#/import', 303);
+    })());
+    return;
+  }
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);

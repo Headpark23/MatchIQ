@@ -262,6 +262,86 @@ exports.syncLeagueProfile = onDocumentWritten('users/{uid}', async event => {
   await ref.set(profileFields(after.data()), { merge: true });
 });
 
+// ---------------------------------------------------------- bet import: read a bet from a screenshot or text
+// A signed-in player sends a bookmaker screenshot (or pasted slip text); Gemini returns the selections
+// as data (functions/lib/slip.js). Nothing is stored: not the picture, not the text, not the answer.
+// The app matches the result to its own fixtures, and the league's usual checks still apply there.
+const slipLib = require('./lib/slip');
+async function takeSlipRead(uid, day) {
+  const ref = db.collection('slipImportUsage').doc(uid);
+  return db.runTransaction(async tx => {
+    const snap = await tx.get(ref);
+    const used = snap.exists && snap.data().day === day ? snap.data().count || 0 : 0;
+    if (used >= slipLib.DAILY_LIMIT) return { ok: false, remaining: 0 };
+    tx.set(ref, { day, count: used + 1, updatedAt: FieldValue.serverTimestamp() });
+    return { ok: true, remaining: slipLib.DAILY_LIMIT - used - 1 };
+  });
+}
+async function giveBackSlipRead(uid, day) {
+  const ref = db.collection('slipImportUsage').doc(uid);
+  await db.runTransaction(async tx => {
+    const snap = await tx.get(ref);
+    if (snap.exists && snap.data().day === day && snap.data().count > 0) tx.update(ref, { count: snap.data().count - 1 });
+  });
+}
+async function callGeminiSlip(key, input) {
+  const parts = [{ text: 'Read this bet slip.' + (input.text ? '\n\nPASTED TEXT:\n' + input.text : '') }];
+  if (input.image) parts.push({ inlineData: { mimeType: input.image.mime, data: input.image.data } });
+  const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + BETAI_MODEL + ':generateContent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: slipLib.SYSTEM_PROMPT }] },
+      contents: [{ role: 'user', parts }],
+      generationConfig: { temperature: 0, maxOutputTokens: 2048, responseMimeType: 'application/json', responseSchema: slipLib.RESPONSE_SCHEMA }
+    })
+  });
+  if (!res.ok) {
+    let why = '';
+    try { why = ((await res.json()).error || {}).message || ''; } catch (e) {}
+    throw new Error('Gemini HTTP ' + res.status + (why ? ': ' + why.slice(0, 200) : ''));
+  }
+  const body = await res.json();
+  const text = body.candidates && body.candidates[0] && body.candidates[0].content && body.candidates[0].content.parts &&
+    body.candidates[0].content.parts.map(p => p.text || '').join('');
+  if (!text) throw new Error('Gemini returned no text');
+  return JSON.parse(text);
+}
+
+exports.parseBetSlip = onRequest({ cors: true, secrets: [GEMINI_API_KEY], timeoutSeconds: 60, memory: '512MiB' }, async (req, res) => {
+  if (req.method !== 'POST') { res.status(405).json({ error: 'post only' }); return; }
+  let uid;
+  try {
+    const m = /^Bearer (.+)$/.exec(req.get('Authorization') || '');
+    if (!m) { res.status(401).json({ error: 'sign-in-required' }); return; }
+    uid = (await admin.auth().verifyIdToken(m[1])).uid;
+  } catch (e) { res.status(401).json({ error: 'sign-in-required' }); return; }
+
+  const day = betai.ukDay(Date.now());
+  const body = req.body && typeof req.body === 'object' ? req.body : {};
+  try {
+    const input = slipLib.parseInput(body);
+    if (input.error) { res.status(400).json({ error: input.error }); return; }
+    const slot = await takeSlipRead(uid, day);
+    if (!slot.ok) { res.status(429).json({ error: 'daily-limit', remaining: 0, limit: slipLib.DAILY_LIMIT }); return; }
+    try {
+      const out = slipLib.normalise(await callGeminiSlip(GEMINI_API_KEY.value().trim(), input));
+      // An unreadable slip is not counted against the player.
+      if (!out.legs.length) { await giveBackSlipRead(uid, day).catch(() => {}); out.remaining = slot.remaining + 1; }
+      else out.remaining = slot.remaining;
+      out.limit = slipLib.DAILY_LIMIT;
+      res.json(out);
+    } catch (e) {
+      logger.warn('parseBetSlip failed', e.message);
+      await giveBackSlipRead(uid, day).catch(() => {});
+      res.status(502).json({ error: 'ai-unavailable', remaining: slot.remaining + 1, limit: slipLib.DAILY_LIMIT });
+    }
+  } catch (e) {
+    logger.warn('parseBetSlip quota failed', e.message);
+    res.status(500).json({ error: 'unavailable' });
+  }
+});
+
 // ---------------------------------------------------------- 4. settle, score and rank
 exports.settleLeagues = onSchedule({ schedule: 'every 30 minutes', timeZone: 'Europe/London', timeoutSeconds: 540, memory: '512MiB' }, async () => {
   await runSettlement(new Date());
