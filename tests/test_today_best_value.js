@@ -13,7 +13,7 @@ assert(appCode.includes('function setBestValueTier('), 'setBestValueTier exists'
 assert(appCode.includes('function renderBestValueModalContent()'), 'renderBestValueModalContent exists');
 assert(appCode.includes('function addBestValueToDiary('), 'addBestValueToDiary exists');
 assert(appCode.includes('function openSlipCardFromBestValue('), 'openSlipCardFromBestValue exists');
-assert(appCode.includes("'Top picks', 'Where we beat the price'") && appCode.includes("openBestValueModal(\\'single\\')"), 'Home hero card for model picks exists and opens the modal');
+assert(appCode.includes("'Top pick', 'Where our chance beats the bookmaker’s price'") && appCode.includes("openBestValueModal(\\'single\\')") && appCode.includes('class="hm-pick" onclick="openBestValueModal'), 'Find me a bet and the Home pick card exist and open the modal');
 console.log('✓ All Best Value core functions and hero card present in app.js');
 
 // 2. Verify index.html contains modal backdrop

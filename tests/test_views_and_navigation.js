@@ -77,6 +77,7 @@ vm.runInContext('Object.assign(DATA, ' + JSON.stringify(DATA) + ');', context);
 // Test all tab views
 const views = [
   { name: 'home', fn: 'viewHome' },
+  { name: 'find', fn: 'viewFind' },
   { name: 'picks', fn: 'viewPicks' },
   { name: 'fixtures', fn: 'viewFixtures' },
   { name: 'results', fn: 'viewResults' },
@@ -95,12 +96,21 @@ for (const v of views) {
 }
 
 // Test render() routing
-const routes = ['#/picks', '#/build', '#/results', '#/fixtures', '#/leagues', '#/diary', '#/more', '#/'];
+const routes = ['#/find', '#/picks', '#/build', '#/results', '#/fixtures', '#/leagues', '#/diary', '#/more', '#/'];
 for (const r of routes) {
   context.location.hash = r;
   vm.runInContext('render()', context);
   console.log('  PASS: render() executes cleanly for route ' + r);
 }
+
+// Find me a bet is the one front door: it links to every way in, and Home has just five tiles.
+const find = vm.runInContext('viewFind()', context);
+['href="#/build"', 'href="#/picks"', 'openBestValueModal', 'openBetAI()', 'href="#/results"', '18+'].forEach(s => assert(find.includes(s), 'Find me a bet should include ' + s));
+const home = vm.runInContext('viewHome()', context);
+assert.strictEqual((home.match(/class="hm-tile /g) || []).length, 5, 'Home should have five tiles');
+assert(home.includes('href="#/find"'), 'Home should link to Find me a bet');
+['t-build', 't-acca', 't-picks', 't-ai'].forEach(c => assert(!home.includes('hm-tile ' + c), 'Home should no longer have the ' + c + ' tile'));
+console.log('  PASS: Find me a bet page and five-tile Home');
 
 console.log('ALL View & Navigation Tests PASSED!');
 

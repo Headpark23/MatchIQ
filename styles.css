@@ -5428,3 +5428,22 @@ a.hm-chip:hover { border-color: var(--pick); }
   .hm-hero-row .hm-cta { padding: 0 12px !important; font-size: 13.5px !important; }
   .hm-tile b { font-size: 10.5px; }
 }
+
+/* Find me a bet (#/find) and its Home tile */
+.hm-tile.t-find { --c: var(--pick); grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 12px; padding: 12px 14px; text-align: left; min-height: 0; }
+.hm-tile.t-find .hm-tile-ico { margin: 0; flex: none; }
+.hm-tile.t-find b { margin: 0; font-size: 15px; white-space: nowrap; }
+.hm-tile.t-find small { display: block; flex: 1; min-width: 0; }
+.fd-group { margin-top: 16px; }
+.fd-kicker { margin: 0 2px 6px; font: 700 11.5px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.fd-card { --c: var(--pick); display: flex; align-items: center; gap: 12px; width: 100%; min-height: 64px; margin-bottom: 8px; padding: 12px 14px; border-radius: 16px; text-align: left; text-decoration: none; cursor: pointer; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line, rgba(255,255,255,.1)); }
+.fd-card:hover, .fd-card:focus-visible { border-color: var(--c); }
+.fd-card.f-build { --c: #f472b6; } .fd-card.f-picks { --c: var(--cyan); } .fd-card.f-acca { --c: var(--pick); } .fd-card.f-ai { --c: #a78bfa; }
+.fd-ico { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 12px; background: color-mix(in srgb, var(--c) 18%, transparent); color: var(--c); }
+.fd-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.fd-txt b { font: 700 15px/1.2 var(--display); }
+.fd-txt small { font-size: 12.5px; line-height: 1.35; color: var(--muted); }
+.fd-go { font-size: 22px; color: var(--muted); }
+.fd-foot { margin-top: 18px; font-size: 13px; color: var(--muted); }
+.fd-foot a { color: var(--cyan); }
+@media (min-width: 760px) { .fd-view { max-width: 640px; } }

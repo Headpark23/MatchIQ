@@ -1442,10 +1442,7 @@ function renderWelcomeHero() {
   const tile = (tag, attrs, cls, icon, title, desc) => '<' + tag + ' class="hm-tile ' + cls + '" ' + attrs + ' aria-label="' + title + ': ' + desc + '"><span class="hm-tile-ico">' + hubIcon(icon, 22) + '</span><b>' + title + '</b><small>' + desc + '</small></' + tag + '>';
   const diaryCount = getStoredDiary().length;
   const tiles = '<section class="hm-block"><div class="hm-block-head"><h2>Everything in one place</h2></div><div class="hm-tiles">' +
-    tile('a', 'href="#/build"', 't-build', 'slip', 'Build a bet', 'Singles to 10-folds, tap the prices') +
-    tile('a', 'href="#/picks"', 't-acca', 'target', 'Model acca', 'Tell us the win, we find the bet') +
-    tile('button type="button"', 'onclick="openBestValueModal(\'single\')"', 't-picks', 'spark', 'Top picks', 'Where we beat the price') +
-    tile('button type="button"', 'onclick="openBetAI()"', 't-ai', 'compass', 'BetAI', 'Ask anything about a match') +
+    tile('a', 'href="#/find"', 't-find', 'target', 'Find me a bet', 'Build your own, get a suggestion, or ask BetAI') +
     tile('a', 'href="#/leagues"', 't-leagues', 'trophy', 'Leagues', 'Beat your mates, climb ladders') +
     tile('a', 'href="#/diary"', 't-diary', 'book', 'Diary', diaryCount ? diaryCount + ' bets tracked' : 'See where your money goes') +
     tile('a', 'href="#/results"', 't-results', 'chart', 'Results', rec ? Math.round(rec.rate * 100) + '% of our picks right' : 'How our picks did') +
@@ -1747,6 +1744,23 @@ function viewPicks() {
   }
 
   return html + '</section>';
+}
+
+// ---- Find me a bet (#/find): the one front door for every way of getting to a bet ----
+// The old pages stay where they were (#/build, #/picks), so shared links and bookmarks still work.
+function viewFind() {
+  const card = (tag, attrs, cls, icon, title, desc) => '<' + tag + ' class="fd-card ' + cls + '" ' + attrs + '><span class="fd-ico">' + hubIcon(icon, 24) + '</span>' +
+    '<span class="fd-txt"><b>' + title + '</b><small>' + desc + '</small></span><span class="fd-go" aria-hidden="true">›</span></' + tag + '>';
+  return '<section class="view fd-view"><h1 class="page-title">Find me a bet</h1>' +
+    '<p class="page-sub">Pick your own, let us suggest one, or ask. Every pick is an estimate, not a tip. 18+</p>' +
+    '<div class="fd-group"><div class="fd-kicker">Do it yourself</div>' +
+      card('a', 'href="#/build"', 'f-build', 'slip', 'Pick it myself', 'Tap the prices you like. Singles up to 10-folds.') + '</div>' +
+    '<div class="fd-group"><div class="fd-kicker">Let us suggest one</div>' +
+      card('button type="button"', 'onclick="openBestValueModal(\'single\')"', 'f-picks', 'spark', 'Top pick', 'Where our chance beats the bookmaker’s price') +
+      card('a', 'href="#/picks"', 'f-acca', 'target', 'Model acca', 'Tell us the win you want, we find the bet') + '</div>' +
+    '<div class="fd-group"><div class="fd-kicker">Ask a question</div>' +
+      card('button type="button"', 'onclick="openBetAI()"', 'f-ai', 'compass', 'BetAI', 'Ask anything about a match') + '</div>' +
+    '<p class="fd-foot">Not sure we’re any good? <a href="#/results">See how our picks did</a>, league by league.</p></section>';
 }
 
 function renderMultiSportSection(sportKey) {
@@ -6267,12 +6281,12 @@ function render() {
   if (view === 'admin' && !isAppOwner()) view = 'home';
   // Live league listeners cost a read per member update; keep them only while Leagues is open.
   if (view !== 'leagues' && currentLeagueListeningCode) stopLeagueListeners();
-  const navKey = view === 'match' ? 'fixtures' : (view === 'results' || view === 'build') ? 'picks' : (view === 'guide' || view === 'commercial') ? 'more' : view;
+  const navKey = view === 'match' ? 'fixtures' : (view === 'results' || view === 'build' || view === 'picks') ? 'find' : (view === 'guide' || view === 'commercial') ? 'more' : view;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.nav === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   updateOddsToggleLabel(); updateHeaderAuthUI();
-  const html = view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild(arg) : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
+  const html = view === 'find' ? viewFind() : view === 'picks' ? viewPicks() : view === 'fixtures' ? viewFixtures() : view === 'match' ? viewMatch(arg) : view === 'results' ? viewResults() : view === 'diary' ? viewDiary() : view === 'leagues' ? viewLeagues() : view === 'admin' ? viewAdmin() : view === 'guide' ? viewGuide() : view === 'build' ? viewBuild(arg) : view === 'commercial' ? viewCommercial() : view === 'more' ? viewMore() : viewHome();
   $('app').innerHTML = html;
-  const titles = { home: 'Welcome Hub', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Prediction results', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Bet Buddy HQ', commercial: 'Commercial & Sponsorship', more: 'More' };
+  const titles = { home: 'Welcome Hub', find: 'Find me a bet', picks: 'Picks & Acca Builder', build: 'Build your own bet', fixtures: 'Fixtures', match: 'Match analysis', results: 'Prediction results', diary: 'Bet Diary', leagues: 'Buddy Leagues', guide: 'How to use Bet Buddy', admin: 'Bet Buddy HQ', commercial: 'Commercial & Sponsorship', more: 'More' };
   document.title = (view === 'build' && arg === 'log' ? 'Log a bet' : titles[view] || 'Bet Buddy') + ' · Bet Buddy';
   const key = view + '/' + arg;
   if (key !== lastRoute) {
