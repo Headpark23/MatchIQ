@@ -95,6 +95,20 @@ const LEAGUES = {
   ECL: 'Conference League'
 };
 const leagueName = c => LEAGUES[c] || c || 'Premier League';
+// Competitions paused in the pipeline (leagues.PUBLIC_ONLY "paused"): no timely results source,
+// so their fixtures, open predictions and unsettled records are left out everywhere. Settled
+// records stay in the prediction history.
+const PAUSED_COMPS = new Set(['SC0']);
+function hidePausedCompetitions() {
+  const paused = c => PAUSED_COMPS.has(c);
+  if (DATA.fixtures && Array.isArray(DATA.fixtures.fixtures)) DATA.fixtures.fixtures = DATA.fixtures.fixtures.filter(f => !paused(f.competition));
+  const preds = DATA.predictions && DATA.predictions.predictions;
+  if (preds) Object.keys(preds).forEach(id => { if (paused(((preds[id] || {}).fixture || {}).competition)) delete preds[id]; });
+  if (DATA.history && Array.isArray(DATA.history.records)) DATA.history.records = DATA.history.records.filter(r => !(paused((r.fixture || {}).competition) && !r.evaluated));
+  if (paused(compFilter)) compFilter = 'ALL';
+}
+// How many competitions currently have matches to show (not every name in LEAGUES does).
+const shownCompetitionCount = () => new Set((DATA.fixtures && DATA.fixtures.fixtures || []).map(f => f.competition || 'PL')).size;
 const COMP_KEY = 'matchiq_competition_v1';
 let compFilter = 'ALL';
 try { const v = localStorage.getItem(COMP_KEY); if (v && LEAGUES[v]) compFilter = v; } catch (e) { /* the filter is a convenience */ }
@@ -454,6 +468,7 @@ async function loadData() {
     }
   }));
   dropStaleMultiSport();
+  hidePausedCompetitions();
 }
 const predictionsList = () => Object.values((DATA.predictions && DATA.predictions.predictions) || {});
 const fixturesList = () => (DATA.fixtures && DATA.fixtures.fixtures) || [];
@@ -1362,7 +1377,7 @@ function renderWelcomeHero() {
   const rec = DATA.performance ? recordAll(DATA.performance) : null;
   const now = Date.now();
   const weekN = fixturesList().filter(f => f.status === 'SCHEDULED' && kickoffMs(f) > now && kickoffMs(f) - now < 7 * 86400000).length;
-  const leaguesN = Object.keys(LEAGUES).length;
+  const leaguesN = shownCompetitionCount();
 
   // Slim header: the hit rate, top pick and builder each have their own block just below, so they are not repeated here.
   const hero = '<header class="hm-hero">' +
@@ -1782,7 +1797,7 @@ function viewFixtures() {
   const fixturesTotal = list.length;
   list = list.slice(0, fixturesLimit);
   const searchBar = '<div class="search-bar"><svg viewBox="0 0 24 24" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="search" id="club-search" class="ctl search-input" placeholder="Search club (e.g. Arsenal, Liverpool)..." value="' + esc(clubFilter) + '" autocomplete="off"></div>';
-  let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">' + (compFilter === 'ALL' ? 'All ' + Object.keys(LEAGUES).length + ' competitions' : esc(leagueName(compFilter))) + ' 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
+  let html = '<section class="view"><h1 class="page-title">Fixtures</h1><p class="page-sub">' + (compFilter === 'ALL' ? 'All ' + shownCompetitionCount() + ' competitions' : esc(leagueName(compFilter))) + ' 2026/27. The schedule refreshes automatically; matches leave Upcoming at kick-off and move to Results once a source confirms the score.</p>' +
     searchBar + '<div class="section" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between"><div class="seg" role="group" aria-label="Fixture list">' +
     Object.entries(tabs).map(([k, label]) => '<button type="button" data-tab="' + k + '" aria-pressed="' + (fixturesTab === k) + '">' + label + '</button>').join('') + '</div><div class="chips">' + freshnessChips(compFilter === 'ALL' ? '' : compFilter) + '</div></div>' + compBar(counts) +
     (fixturesTab === 'upcoming' ? '<p class="own-hint cp-how">Tap a match for the full analysis, or tap a price to put it on your bet slip.</p>' : '');
@@ -7507,8 +7522,7 @@ async function checkAutoUpdateResults(force = false) {
     if (histRes) DATA.history = histRes;
     if (perfRes) DATA.performance = perfRes;
     if (fixRes) DATA.fixtures = fixRes;
-    // Other sports (tennis, golf, darts, rugby) only while their file is fresh: it is updated by
-    // hand, and stale events with weekday-only dates must not reach slips or accas.
+    hidePausedCompetitions();
     if (multiRes) DATA.multiSport = multiRes;
     dropStaleMultiSport();
     try { autoSettleDiary(); } catch (e) { console.warn('autoSettleDiary notice:', e); }

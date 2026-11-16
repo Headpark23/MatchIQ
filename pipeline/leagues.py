@@ -63,8 +63,12 @@ SCHEDULE_ONLY = {
 PUBLIC_ONLY = {
     "N1": {"name": "Eredivisie", "short": "N1", "openfootball": "nl.1", "fdo": "DED", "tz": "Europe/Amsterdam"},
     "P1": {"name": "Primeira Liga", "short": "P1", "openfootball": "pt.1", "fdo": "PPL", "tz": "Europe/Lisbon"},
+    # "paused": fixtures are still fetched, but no new predictions are published (public.py) and
+    # the app hides the league. Set on 16 Nov 2026: openfootball/europe stopped updating on 1 Oct
+    # and no free, timely source permits public use (football-data.org covers it on paid plans).
+    # Remove the flag once a permitted results source is wired in.
     "SC0": {"name": "Scottish Premiership", "short": "SC0", "openfootball": "sco.1", "fdo": None, "tz": "Europe/London",
-            "openfootball_europe": "scotland/{season}_sco1.txt", "results_lag": True},
+            "openfootball_europe": "scotland/{season}_sco1.txt", "results_lag": True, "paused": True},
     # Internationals (pipeline/internationals.py). Fixtures and timely results: OpenLigaDB league
     # "nla" (ODbL); neither football.json nor the football-data.org free tier covers the Nations
     # League. Training history: every match involving a European national team from the CC0

@@ -219,6 +219,8 @@ def run_public(now, fixtures, season, horizon_days, history=None, validation=Non
         kickoff = dt.datetime.fromisoformat(f["kickoff_utc"].replace("Z", "+00:00"))
         if f["status"] != "SCHEDULED" or not now < kickoff <= horizon or f["competition"] not in PREDICTED:
             continue
+        if PREDICTED[f["competition"]].get("paused"):  # no timely results source (leagues.PUBLIC_ONLY)
+            continue
         code = f["competition"]
         existing = [r for r in ledger["records"] if r["match_id"] == f["id"]]
         if not set(f["sources"]) & TIMED_SOURCES and now >= seal_cutoff(kickoff):

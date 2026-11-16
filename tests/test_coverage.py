@@ -6,6 +6,7 @@ import io
 import json
 import tempfile
 import unittest
+import unittest.mock
 from pathlib import Path
 
 from pipeline import coverage, public
@@ -162,6 +163,7 @@ class CoverageReportTests(unittest.TestCase):
             self.assertIn("Coverage gaps", summary.read_text(encoding="utf-8"))
             self.assertTrue(Path(tmp, "coverage.json").exists())
 
+    @unittest.mock.patch.dict(PREDICTED["SC0"], {"paused": False})  # the lag rules, as when SC0 was predicted
     def test_lagging_league_reports_overdue_results_without_failing(self):
         self.assertTrue(PREDICTED["SC0"].get("results_lag"))
         rec = {"record_id": "PUB-a#r1", "match_id": "a", "fixture": {"competition": "PL"}, "published_at": "2026-10-20T10:00:00+00:00", "evaluated": True}
@@ -286,8 +288,22 @@ class ScottishPremiershipTests(unittest.TestCase):
 
     def test_a_predicted_league_with_no_fixtures_is_a_coverage_gap(self):
         report = coverage.compute([], {}, [], NOW)
-        self.assertIn("SC0", report["gaps"]["league_without_fixtures"])
+        self.assertIn("N1", report["gaps"]["league_without_fixtures"])
         self.assertFalse(report["complete"])
+
+    def test_paused_league_is_listed_but_never_a_gap_and_gets_no_prediction(self):
+        self.assertTrue(PREDICTED["SC0"].get("paused"))
+        fixtures = [{"id": "sc-soon", "competition": "SC0", "kickoff_utc": "2026-11-07T15:00:00Z", "status": "SCHEDULED", "score": None, "sources": ["openfootball"]},
+                    {"id": "sc-late", "competition": "SC0", "kickoff_utc": "2026-10-10T14:00:00Z", "status": "AWAITING_RESULT", "score": None, "sources": ["openfootball"]}]
+        report = coverage.compute(fixtures, {}, [], NOW)
+        self.assertEqual(report["leagues"]["SC0"], {"name": "Scottish Premiership", "predicted": False, "fixtures": 2, "paused": True})
+        self.assertFalse(any("sc-" in i or i == "SC0" for v in report["gaps"].values() for i in v))
+        self.assertIn("paused: no timely results source", coverage.markdown(report))
+        # The public path publishes nothing for it.
+        fx = [{"id": "sc-soon", "competition": "SC0", "season": "2627", "home": "Celtic", "away": "Rangers", "kickoff_utc": "2026-11-07T15:00:00Z",
+               "status": "SCHEDULED", "score": None, "sources": ["openfootball"], "kickoff_history": []}]
+        payload, _, _ = public.run_public(NOW, fx, "2627", 21, history=[], validation={"leagues": {}}, ledger=None, previous={})
+        self.assertEqual(payload["predictions"], {})
 
 
 if __name__ == "__main__":

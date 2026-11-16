@@ -18,6 +18,9 @@ public site is built from:
 Schedule-only competitions (leagues.SCHEDULE_ONLY) are listed with their fixture counts only:
 no permitted source supplies the history a model needs, so they are not predicted.
 
+Leagues flagged "paused" (leagues.PUBLIC_ONLY) are listed the same way: their predictions are
+switched off until a permitted, timely results source exists.
+
 Leagues flagged "results_lag" (their only permitted results source is known to run weeks late)
 still have their overdue results counted, and their match-day fixtures with an unconfirmed
 kick-off time and no sealed prediction (which public.py may not predict) are listed, but both
@@ -59,8 +62,11 @@ def compute(fixtures, predictions, ledger_records, now, horizon_days=21):
     for code in list(PREDICTED) + list(SCHEDULE_ONLY):
         lag = bool(PREDICTED.get(code, {}).get("results_lag"))
         mine = [f for f in fixtures if f["competition"] == code]
-        row = {"name": (PREDICTED.get(code) or SCHEDULE_ONLY[code])["name"], "predicted": code in PREDICTED, "fixtures": len(mine)}
-        if code not in PREDICTED:
+        paused = bool(PREDICTED.get(code, {}).get("paused"))
+        row = {"name": (PREDICTED.get(code) or SCHEDULE_ONLY[code])["name"], "predicted": code in PREDICTED and not paused, "fixtures": len(mine)}
+        if paused:
+            row["paused"] = True  # listed like a schedule-only league: no predictions expected
+        if code not in PREDICTED or paused:
             leagues[code] = row
             continue
         if not mine:
@@ -115,7 +121,8 @@ def markdown(report):
              "|---|---|---|---|---|"]
     for code, r in report["leagues"].items():
         if not r["predicted"]:
-            lines.append(f"| {r['name']} | not predicted ({r['fixtures']} fixtures; no permitted source) | | | |")
+            why = "paused: no timely results source" if r.get("paused") else "no permitted source"
+            lines.append(f"| {r['name']} | not predicted ({r['fixtures']} fixtures; {why}) | | | |")
             continue
         lines.append(f"| {r['name']} | {r['upcoming_predicted']}/{r['upcoming']} | {r['next_48h_predicted']}/{r['next_48h']} | "
                      f"{r['sealed']}/{r['played_since_start']} sealed, {r['settled']} settled | {r['results_overdue']}"
