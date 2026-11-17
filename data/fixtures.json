@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-17T13:49:24.218683+00:00",
+ "generated_at": "2026-11-17T22:38:43.163631+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -9364,10 +9364,10 @@
    "kickoff_history": []
   },
   {
-   "id": "EL-2627-sturm-graz-v-rennes",
+   "id": "EL-2627-sk-puntigamer-sturm-graz-v-rennes",
    "competition": "EL",
    "season": "2627",
-   "home": "Sturm Graz",
+   "home": "Sk Puntigamer Sturm Graz",
    "away": "Rennes",
    "kickoff_utc": "2026-09-16T19:00:00Z",
    "status": "FINISHED",
@@ -9379,7 +9379,7 @@
    "sources": [
     "openligadb"
    ],
-   "first_seen": "2026-11-09T18:47:26.413227+00:00",
+   "first_seen": "2026-11-17T22:38:43.163631+00:00",
    "kickoff_history": []
   },
   {
@@ -14727,11 +14727,11 @@
    "kickoff_history": []
   },
   {
-   "id": "EL-2627-bournemouth-v-sturm-graz",
+   "id": "EL-2627-bournemouth-v-sk-puntigamer-sturm-graz",
    "competition": "EL",
    "season": "2627",
    "home": "Bournemouth",
-   "away": "Sturm Graz",
+   "away": "Sk Puntigamer Sturm Graz",
    "kickoff_utc": "2026-10-15T19:00:00Z",
    "status": "FINISHED",
    "score": [
@@ -14742,7 +14742,7 @@
    "sources": [
     "openligadb"
    ],
-   "first_seen": "2026-11-09T18:47:26.413227+00:00",
+   "first_seen": "2026-11-17T22:38:43.163631+00:00",
    "kickoff_history": []
   },
   {
@@ -17317,10 +17317,10 @@
    "kickoff_history": []
   },
   {
-   "id": "EL-2627-sturm-graz-v-marseille",
+   "id": "EL-2627-sk-puntigamer-sturm-graz-v-marseille",
    "competition": "EL",
    "season": "2627",
-   "home": "Sturm Graz",
+   "home": "Sk Puntigamer Sturm Graz",
    "away": "Marseille",
    "kickoff_utc": "2026-10-22T16:45:00Z",
    "status": "FINISHED",
@@ -17332,7 +17332,7 @@
    "sources": [
     "openligadb"
    ],
-   "first_seen": "2026-11-09T18:47:26.413227+00:00",
+   "first_seen": "2026-11-17T22:38:43.163631+00:00",
    "kickoff_history": []
   },
   {
@@ -22712,10 +22712,10 @@
    "kickoff_history": []
   },
   {
-   "id": "EL-2627-sturm-graz-v-celje",
+   "id": "EL-2627-sk-puntigamer-sturm-graz-v-celje",
    "competition": "EL",
    "season": "2627",
-   "home": "Sturm Graz",
+   "home": "Sk Puntigamer Sturm Graz",
    "away": "Celje",
    "kickoff_utc": "2026-11-05T20:00:00Z",
    "status": "FINISHED",
@@ -22727,7 +22727,7 @@
    "sources": [
     "openligadb"
    ],
-   "first_seen": "2026-11-09T18:47:26.413227+00:00",
+   "first_seen": "2026-11-17T22:38:43.163631+00:00",
    "kickoff_history": []
   },
   {
@@ -24793,9 +24793,12 @@
    "home": "Denmark",
    "away": "Norway",
    "kickoff_utc": "2026-11-17T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    2,
+    3
+   ],
+   "result_source": "openligadb",
    "sources": [
     "openligadb"
    ],
@@ -24809,9 +24812,12 @@
    "home": "Wales",
    "away": "Portugal",
    "kickoff_utc": "2026-11-17T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    2,
+    3
+   ],
+   "result_source": "openligadb",
    "sources": [
     "openligadb"
    ],
@@ -27166,13 +27172,29 @@
    "kickoff_history": []
   },
   {
+   "id": "EL-2627-hoffenheim-v-sk-puntigamer-sturm-graz",
+   "competition": "EL",
+   "season": "2627",
+   "home": "Hoffenheim",
+   "away": "Sk Puntigamer Sturm Graz",
+   "kickoff_utc": "2026-11-26T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-17T22:38:43.163631+00:00",
+   "kickoff_history": []
+  },
+  {
    "id": "EL-2627-hoffenheim-v-sturm-graz",
    "competition": "EL",
    "season": "2627",
    "home": "Hoffenheim",
    "away": "Sturm Graz",
    "kickoff_utc": "2026-11-26T20:00:00Z",
-   "status": "SCHEDULED",
+   "status": "REMOVED_FROM_SCHEDULE",
    "score": null,
    "result_source": null,
    "sources": [
@@ -31673,13 +31695,29 @@
    "kickoff_history": []
   },
   {
+   "id": "EL-2627-az-alkmaar-v-sk-puntigamer-sturm-graz",
+   "competition": "EL",
+   "season": "2627",
+   "home": "AZ Alkmaar",
+   "away": "Sk Puntigamer Sturm Graz",
+   "kickoff_utc": "2026-12-10T17:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-17T22:38:43.163631+00:00",
+   "kickoff_history": []
+  },
+  {
    "id": "EL-2627-az-alkmaar-v-sturm-graz",
    "competition": "EL",
    "season": "2627",
    "home": "AZ Alkmaar",
    "away": "Sturm Graz",
    "kickoff_utc": "2026-12-10T17:45:00Z",
-   "status": "SCHEDULED",
+   "status": "REMOVED_FROM_SCHEDULE",
    "score": null,
    "result_source": null,
    "sources": [
@@ -42370,13 +42408,29 @@
    "kickoff_history": []
   },
   {
+   "id": "EL-2627-sk-puntigamer-sturm-graz-v-ofi-crete",
+   "competition": "EL",
+   "season": "2627",
+   "home": "Sk Puntigamer Sturm Graz",
+   "away": "OFI Crete",
+   "kickoff_utc": "2027-01-21T17:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-17T22:38:43.163631+00:00",
+   "kickoff_history": []
+  },
+  {
    "id": "EL-2627-sturm-graz-v-ofi-crete",
    "competition": "EL",
    "season": "2627",
    "home": "Sturm Graz",
    "away": "OFI Crete",
    "kickoff_utc": "2027-01-21T17:45:00Z",
-   "status": "SCHEDULED",
+   "status": "REMOVED_FROM_SCHEDULE",
    "score": null,
    "result_source": null,
    "sources": [
@@ -45167,13 +45221,29 @@
    "kickoff_history": []
   },
   {
+   "id": "EL-2627-dinamo-zagreb-v-sk-puntigamer-sturm-graz",
+   "competition": "EL",
+   "season": "2627",
+   "home": "Dinamo Zagreb",
+   "away": "Sk Puntigamer Sturm Graz",
+   "kickoff_utc": "2027-01-28T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-17T22:38:43.163631+00:00",
+   "kickoff_history": []
+  },
+  {
    "id": "EL-2627-dinamo-zagreb-v-sturm-graz",
    "competition": "EL",
    "season": "2627",
    "home": "Dinamo Zagreb",
    "away": "Sturm Graz",
    "kickoff_utc": "2027-01-28T20:00:00Z",
-   "status": "SCHEDULED",
+   "status": "REMOVED_FROM_SCHEDULE",
    "score": null,
    "result_source": null,
    "sources": [

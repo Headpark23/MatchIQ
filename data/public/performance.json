@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-17T13:49:24.218683+00:00",
+ "generated_at": "2026-11-17T22:38:43.163631+00:00",
  "min_report_n": 20,
  "markets": {
   "result": {
@@ -568,7 +568,7 @@
   "most_likely:no_bet": 5
  },
  "evaluated_matches": 35,
- "published_records": 672,
+ "published_records": 712,
  "by_competition": {
   "BL1": {
    "min_report_n": 20,
@@ -1036,7 +1036,7 @@
     "most_likely:most_likely": 12
    },
    "evaluated_matches": 18,
-   "published_records": 510
+   "published_records": 537
   },
   "CL": {
    "min_report_n": 20,
@@ -1053,7 +1053,7 @@
    "most_likely_by_market": {},
    "decisions": {},
    "evaluated_matches": 0,
-   "published_records": 189
+   "published_records": 218
   },
   "ECL": {
    "min_report_n": 20,
@@ -1070,7 +1070,7 @@
    "most_likely_by_market": {},
    "decisions": {},
    "evaluated_matches": 0,
-   "published_records": 180
+   "published_records": 198
   },
   "EL": {
    "min_report_n": 20,
@@ -1087,7 +1087,7 @@
    "most_likely_by_market": {},
    "decisions": {},
    "evaluated_matches": 0,
-   "published_records": 180
+   "published_records": 198
   },
   "ELC": {
    "min_report_n": 20,
@@ -1680,7 +1680,7 @@
     "best_value:no_bet": 36
    },
    "evaluated_matches": 36,
-   "published_records": 995
+   "published_records": 1051
   },
   "FL1": {
    "min_report_n": 20,
@@ -2144,7 +2144,7 @@
     "most_likely:no_bet": 3
    },
    "evaluated_matches": 19,
-   "published_records": 516
+   "published_records": 543
   },
   "N1": {
    "min_report_n": 20,
@@ -2429,36 +2429,36 @@
     "best_value:no_bet": 5
    },
    "evaluated_matches": 5,
-   "published_records": 287
+   "published_records": 314
   },
   "NLA": {
    "min_report_n": 20,
    "markets": {
     "result": {
-     "n": 14,
-     "hits": 11,
-     "brier": 0.4192,
-     "logloss": 0.7578,
-     "pick_hit_rate": 0.7857,
-     "mean_pick_p": 0.5929,
+     "n": 16,
+     "hits": 12,
+     "brier": 0.421,
+     "logloss": 0.758,
+     "pick_hit_rate": 0.75,
+     "mean_pick_p": 0.5853,
      "sufficient_sample": false
     },
     "goals": {
-     "n": 14,
-     "hits": 13,
-     "brier": 0.2219,
-     "logloss": 0.6367,
-     "pick_hit_rate": 0.9286,
-     "mean_pick_p": 0.5382,
+     "n": 16,
+     "hits": 15,
+     "brier": 0.2207,
+     "logloss": 0.6343,
+     "pick_hit_rate": 0.9375,
+     "mean_pick_p": 0.5384,
      "sufficient_sample": false
     },
     "btts": {
-     "n": 14,
-     "hits": 5,
-     "brier": 0.2514,
-     "logloss": 0.6959,
-     "pick_hit_rate": 0.3571,
-     "mean_pick_p": 0.5175,
+     "n": 16,
+     "hits": 6,
+     "brier": 0.252,
+     "logloss": 0.6971,
+     "pick_hit_rate": 0.375,
+     "mean_pick_p": 0.5202,
      "sufficient_sample": false
     }
    },
@@ -2492,43 +2492,43 @@
       "sufficient_sample": false
      },
      "40-50%": {
-      "n": 4,
+      "n": 5,
       "hits": 3,
-      "brier": 0.5703,
-      "logloss": 0.9638,
-      "pick_hit_rate": 0.75,
-      "mean_pick_p": 0.4563,
+      "brier": 0.59,
+      "logloss": 0.9865,
+      "pick_hit_rate": 0.6,
+      "mean_pick_p": 0.4492,
       "sufficient_sample": false
      },
      "60-70%": {
-      "n": 1,
-      "hits": 1,
-      "brier": 0.1792,
-      "logloss": 0.4164,
+      "n": 2,
+      "hits": 2,
+      "brier": 0.1883,
+      "logloss": 0.4286,
       "pick_hit_rate": 1.0,
-      "mean_pick_p": 0.6594,
+      "mean_pick_p": 0.6514,
       "sufficient_sample": false
      }
     },
     "goals": {
      "50-60%": {
-      "n": 14,
-      "hits": 13,
-      "brier": 0.2219,
-      "logloss": 0.6367,
-      "pick_hit_rate": 0.9286,
-      "mean_pick_p": 0.5382,
+      "n": 16,
+      "hits": 15,
+      "brier": 0.2207,
+      "logloss": 0.6343,
+      "pick_hit_rate": 0.9375,
+      "mean_pick_p": 0.5384,
       "sufficient_sample": false
      }
     },
     "btts": {
      "50-60%": {
-      "n": 14,
-      "hits": 5,
-      "brier": 0.2514,
-      "logloss": 0.6959,
-      "pick_hit_rate": 0.3571,
-      "mean_pick_p": 0.5175,
+      "n": 16,
+      "hits": 6,
+      "brier": 0.252,
+      "logloss": 0.6971,
+      "pick_hit_rate": 0.375,
+      "mean_pick_p": 0.5202,
       "sufficient_sample": false
      }
     }
@@ -2536,46 +2536,46 @@
    "versions": {
     "result": {
      "dc-public-v1": {
-      "n": 14,
-      "hits": 11,
-      "brier": 0.4192,
-      "logloss": 0.7578,
-      "pick_hit_rate": 0.7857,
-      "mean_pick_p": 0.5929,
+      "n": 16,
+      "hits": 12,
+      "brier": 0.421,
+      "logloss": 0.758,
+      "pick_hit_rate": 0.75,
+      "mean_pick_p": 0.5853,
       "sufficient_sample": false
      }
     },
     "goals": {
      "dc-public-v1": {
-      "n": 14,
-      "hits": 13,
-      "brier": 0.2219,
-      "logloss": 0.6367,
-      "pick_hit_rate": 0.9286,
-      "mean_pick_p": 0.5382,
+      "n": 16,
+      "hits": 15,
+      "brier": 0.2207,
+      "logloss": 0.6343,
+      "pick_hit_rate": 0.9375,
+      "mean_pick_p": 0.5384,
       "sufficient_sample": false
      }
     },
     "btts": {
      "dc-public-v1": {
-      "n": 14,
-      "hits": 5,
-      "brier": 0.2514,
-      "logloss": 0.6959,
-      "pick_hit_rate": 0.3571,
-      "mean_pick_p": 0.5175,
+      "n": 16,
+      "hits": 6,
+      "brier": 0.252,
+      "logloss": 0.6971,
+      "pick_hit_rate": 0.375,
+      "mean_pick_p": 0.5202,
       "sufficient_sample": false
      }
     }
    },
    "tiers": {
     "L1": {
-     "n": 14,
-     "hits": 11,
-     "brier": 0.4192,
-     "logloss": 0.7578,
-     "pick_hit_rate": 0.7857,
-     "mean_pick_p": 0.5929,
+     "n": 16,
+     "hits": 12,
+     "brier": 0.421,
+     "logloss": 0.758,
+     "pick_hit_rate": 0.75,
+     "mean_pick_p": 0.5853,
      "sufficient_sample": false
     }
    },
@@ -2689,39 +2689,39 @@
      "sufficient_sample": false
     },
     "Norway": {
-     "n": 1,
+     "n": 2,
      "hits": 1,
-     "brier": 0.135,
-     "logloss": 0.3502,
-     "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.7046,
+     "brier": 0.402,
+     "logloss": 0.7138,
+     "pick_hit_rate": 0.5,
+     "mean_pick_p": 0.5626,
      "sufficient_sample": false
     },
     "Wales": {
-     "n": 1,
-     "hits": 1,
-     "brier": 0.135,
-     "logloss": 0.3502,
+     "n": 2,
+     "hits": 2,
+     "brier": 0.1662,
+     "logloss": 0.3955,
      "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.7046,
+     "mean_pick_p": 0.6741,
      "sufficient_sample": false
     },
     "Portugal": {
-     "n": 1,
-     "hits": 0,
-     "brier": 1.1147,
-     "logloss": 1.8128,
-     "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.5978,
+     "n": 2,
+     "hits": 1,
+     "brier": 0.6561,
+     "logloss": 1.1268,
+     "pick_hit_rate": 0.5,
+     "mean_pick_p": 0.6206,
      "sufficient_sample": false
     },
     "Denmark": {
-     "n": 1,
+     "n": 2,
      "hits": 0,
-     "brier": 1.1147,
-     "logloss": 1.8128,
+     "brier": 0.8918,
+     "logloss": 1.4451,
      "pick_hit_rate": 0.0,
-     "mean_pick_p": 0.5978,
+     "mean_pick_p": 0.5092,
      "sufficient_sample": false
     }
    },
@@ -2795,34 +2795,44 @@
      "kickoff_utc": "2026-11-16T19:45:00Z",
      "won": true,
      "brier": 0.357
+    },
+    {
+     "kickoff_utc": "2026-11-17T19:45:00Z",
+     "won": false,
+     "brier": 0.66892
+    },
+    {
+     "kickoff_utc": "2026-11-17T19:45:00Z",
+     "won": true,
+     "brier": 0.19742
     }
    ],
    "most_likely": {
-    "n": 14,
-    "hits": 12,
-    "brier": 0.1785,
-    "logloss": 0.5392,
-    "pick_hit_rate": 0.8571,
-    "mean_pick_p": 0.6116,
+    "n": 16,
+    "hits": 14,
+    "brier": 0.1755,
+    "logloss": 0.5342,
+    "pick_hit_rate": 0.875,
+    "mean_pick_p": 0.6112,
     "sufficient_sample": false
    },
    "most_likely_by_market": {
     "goals": {
-     "n": 5,
-     "hits": 5,
-     "brier": 0.2137,
-     "logloss": 0.6204,
+     "n": 6,
+     "hits": 6,
+     "brier": 0.2085,
+     "logloss": 0.6099,
      "pick_hit_rate": 1.0,
-     "mean_pick_p": 0.5379,
+     "mean_pick_p": 0.5437,
      "sufficient_sample": false
     },
     "result": {
-     "n": 6,
-     "hits": 5,
-     "brier": 0.1183,
-     "logloss": 0.4044,
-     "pick_hit_rate": 0.8333,
-     "mean_pick_p": 0.7168,
+     "n": 7,
+     "hits": 6,
+     "brier": 0.1195,
+     "logloss": 0.4096,
+     "pick_hit_rate": 0.8571,
+     "mean_pick_p": 0.7064,
      "sufficient_sample": false
     },
     "btts": {
@@ -2836,10 +2846,10 @@
     }
    },
    "decisions": {
-    "most_likely:most_likely": 14,
-    "best_value:no_bet": 14
+    "most_likely:most_likely": 16,
+    "best_value:no_bet": 16
    },
-   "evaluated_matches": 14,
+   "evaluated_matches": 16,
    "published_records": 114
   },
   "P1": {
@@ -3134,7 +3144,7 @@
     "best_value:no_bet": 5
    },
    "evaluated_matches": 5,
-   "published_records": 156
+   "published_records": 174
   },
   "PD": {
    "min_report_n": 20,
@@ -3625,7 +3635,7 @@
     "best_value:no_bet": 21
    },
    "evaluated_matches": 21,
-   "published_records": 573
+   "published_records": 605
   },
   "SA": {
    "min_report_n": 20,
@@ -4153,7 +4163,7 @@
     "most_likely:no_bet": 6
    },
    "evaluated_matches": 30,
-   "published_records": 569
+   "published_records": 599
   },
   "SC0": {
    "min_report_n": 20,
@@ -4173,5 +4183,5 @@
    "published_records": 244
   }
  },
- "settlement_updates": 0
+ "settlement_updates": 34
 }

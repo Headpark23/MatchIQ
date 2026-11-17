@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-11-17T13:49:24.218683+00:00",
+ "attempted_at": "2026-11-17T22:38:43.163631+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -139,7 +139,7 @@
    "ok": true,
    "label": "OpenLigaDB (ODbL 1.0, © OpenLigaDB contributors)",
    "matches": 48,
-   "results": 46,
+   "results": 48,
    "note": null
   },
   "CL:openligadb": {
@@ -161,7 +161,7 @@
    "label": "OpenLigaDB (ODbL 1.0, © OpenLigaDB contributors)",
    "matches": 144,
    "results": 72,
-   "note": null
+   "note": "unrecognised team name(s), shown as published and predicted from the average: SK Puntigamer Sturm Graz"
   },
   "ECL:openligadb": {
    "ok": true,
@@ -265,10 +265,10 @@
  ],
  "errors": [],
  "ok": true,
- "last_success": "2026-11-17T13:49:24.218683+00:00",
- "fixtures": 3566,
- "upcoming_predicted": 204,
- "published_revisions": 0,
+ "last_success": "2026-11-17T22:38:43.163631+00:00",
+ "fixtures": 3570,
+ "upcoming_predicted": 212,
+ "published_revisions": 8,
  "imported_frozen_records": 0,
  "settlement_updates": 151,
  "training_results": 1938,
@@ -283,8 +283,8 @@
  "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0, including openfootball/champions-league for European club history), martj42/international_results (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk.",
  "public": {
   "model_version": "dc-public-v1",
-  "predictions": 306,
-  "records": 5185,
+  "predictions": 322,
+  "records": 5507,
   "validated": true
  }
 }
