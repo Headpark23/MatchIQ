@@ -358323,6 +358323,965 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "c9ce2ab5907f6b1631eeb8ecf219e8c4f625fd2c21993cc851b53175879dc7d5"
+  },
+  {
+   "record_id": "ELC-2627-derby-v-bristol-city#r1",
+   "match_id": "ELC-2627-derby-v-bristol-city",
+   "revision": 1,
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Derby",
+    "away": "Bristol City",
+    "kickoff_utc": "2026-12-09T19:45:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "d92f46ca8326c4c5",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Derby win",
+      "p": 0.4129,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Derby win",
+       "p": 0.4129,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2735,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Bristol City win",
+       "p": 0.3136,
+       "fair_odds": "≈9/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.509,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7367,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.491,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2577,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5321,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5321,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4679,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5719,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.6911,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.5719,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 10.5,
+       "over": 0.4576,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5529,
+      "fair_odds": "≈4/5",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7494,
+       "over_fair_odds": "≈1/3",
+       "under_fair_odds": "≈3/1"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5529,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3587,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5625,
+      "fair_odds": "≈4/5",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.5758,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4375,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 9.5,
+       "over": 0.312,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "corners",
+     "key": "over",
+     "line": 9.5,
+     "label": "Over 9.5",
+     "p": 0.5719,
+     "credible_p": 0.5716,
+     "n": 552,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 552 Championship backtest matches",
+     "lower_bound": 0.537
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "f09a41b7aa7aa0421a5ca018bbda4932be53d5143371b1b4521d60e1b7ab668f"
+  },
+  {
+   "record_id": "ELC-2627-lincoln-v-stoke#r1",
+   "match_id": "ELC-2627-lincoln-v-stoke",
+   "revision": 1,
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Lincoln",
+    "away": "Stoke",
+    "kickoff_utc": "2026-12-09T19:45:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "d92f46ca8326c4c5",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Stoke win",
+      "p": 0.4141,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Lincoln win",
+       "p": 0.3038,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2822,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Stoke win",
+       "p": 0.4141,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5196,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7281,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4804,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.249,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5234,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5234,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4766,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.579,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.6972,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.579,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 10.5,
+       "over": 0.465,
+       "over_fair_odds": "≈6/5",
+       "under_fair_odds": "≈5/6"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.504,
+      "fair_odds": "≈Evens",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7106,
+       "over_fair_odds": "≈2/5",
+       "under_fair_odds": "≈5/2"
+      },
+      {
+       "line": 3.5,
+       "over": 0.504,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3124,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5875,
+      "fair_odds": "≈8/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.5514,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4125,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.2892,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "shots",
+     "key": "under",
+     "line": 8.5,
+     "label": "Under 8.5",
+     "p": 0.5875,
+     "credible_p": 0.5872,
+     "n": 552,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 552 Championship backtest matches",
+     "lower_bound": 0.5527
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "8a8a226878054c6ad9189ec7e084d91ebe5c7a073f8910dcc80b89b878388b27"
+  },
+  {
+   "record_id": "ELC-2627-preston-v-portsmouth#r1",
+   "match_id": "ELC-2627-preston-v-portsmouth",
+   "revision": 1,
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Preston",
+    "away": "Portsmouth",
+    "kickoff_utc": "2026-12-09T19:45:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "d92f46ca8326c4c5",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Preston win",
+      "p": 0.3698,
+      "fair_odds": "≈7/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Preston win",
+       "p": 0.3698,
+       "fair_odds": "≈7/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2768,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Portsmouth win",
+       "p": 0.3534,
+       "fair_odds": "≈15/8"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5108,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7353,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4892,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2562,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5316,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5316,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4684,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5858,
+      "fair_odds": "≈8/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.703,
+       "over_fair_odds": "≈4/9",
+       "under_fair_odds": "≈9/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.5858,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 10.5,
+       "over": 0.4723,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5201,
+      "fair_odds": "≈10/11",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7243,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5201,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3266,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.6358,
+      "fair_odds": "≈4/7",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.4985,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 8.5,
+       "over": 0.3642,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      },
+      {
+       "line": 9.5,
+       "over": 0.25,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "shots",
+     "key": "under",
+     "line": 8.5,
+     "label": "Under 8.5",
+     "p": 0.6358,
+     "credible_p": 0.6338,
+     "n": 552,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 552 Championship backtest matches",
+     "lower_bound": 0.6001
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "f221f4941a955d7ce6e90760e7be5de10bdc01d5afd6c71bbd76c4c682d8a826"
+  },
+  {
+   "record_id": "ELC-2627-southampton-v-burnley#r1",
+   "match_id": "ELC-2627-southampton-v-burnley",
+   "revision": 1,
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Southampton",
+    "away": "Burnley",
+    "kickoff_utc": "2026-12-09T20:00:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "d92f46ca8326c4c5",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Southampton win",
+      "p": 0.5415,
+      "fair_odds": "≈5/6"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Southampton win",
+       "p": 0.5415,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2296,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Burnley win",
+       "p": 0.2289,
+       "fair_odds": "≈100/30"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5286,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7637,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5286,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2925,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5534,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5534,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4466,
+       "fair_odds": "≈5/4"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5204,
+      "fair_odds": "≈10/11",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.6433,
+       "over_fair_odds": "≈4/7",
+       "under_fair_odds": "≈7/4"
+      },
+      {
+       "line": 9.5,
+       "over": 0.5204,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 10.5,
+       "over": 0.4075,
+       "over_fair_odds": "≈6/4",
+       "under_fair_odds": "≈4/6"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "none"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.5385,
+      "fair_odds": "≈5/6",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7388,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.5385,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 4.5,
+       "over": 0.3441,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 8.5",
+      "p": 0.5306,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6045,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 8.5,
+       "over": 0.4694,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3435,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5534,
+     "credible_p": 0.5529,
+     "n": 552,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 552 Championship backtest matches",
+     "lower_bound": 0.5181
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "fad5cdfddbb7fca6fc7e6ab40ecae9608405804aba59d875b5b54407625a6af6"
   }
  ]
 }

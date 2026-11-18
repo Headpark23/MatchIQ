@@ -778147,6 +778147,1795 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "760c16342e17bcdec61ca594d87a188b147ddd6c2c4f807b61a5806139d0c69f"
+  },
+  {
+   "record_id": "PUB-CL-2627-real-betis-v-como#r1",
+   "match_id": "CL-2627-real-betis-v-como",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Real Betis",
+    "away": "Como",
+    "kickoff_utc": "2026-12-09T17:45:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Como win",
+      "p": 0.4179,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Real Betis win",
+       "p": 0.3844,
+       "fair_odds": "≈13/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1977,
+       "fair_odds": "≈4/1"
+      },
+      {
+       "key": "A",
+       "label": "Como win",
+       "p": 0.4179,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.621,
+      "fair_odds": "≈8/13",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8144,
+       "over_fair_odds": "≈2/9",
+       "under_fair_odds": "≈9/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.621,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 3.5,
+       "over": 0.4119,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5796,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5796,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4204,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.621,
+     "credible_p": 0.6146,
+     "n": 189,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 189 Champions League backtest matches",
+     "lower_bound": 0.5564
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "c77de42af98a4c5bd764c9c52390d66f256024744749ecc342cd39f937294030"
+  },
+  {
+   "record_id": "PUB-CL-2627-slovan-bratislava-v-shakhtar-donetsk#r1",
+   "match_id": "CL-2627-slovan-bratislava-v-shakhtar-donetsk",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Slovan Bratislava",
+    "away": "Shakhtar Donetsk",
+    "kickoff_utc": "2026-12-09T17:45:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Shakhtar Donetsk win",
+      "p": 0.4342,
+      "fair_odds": "≈5/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Slovan Bratislava win",
+       "p": 0.3545,
+       "fair_odds": "≈15/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2113,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Shakhtar Donetsk win",
+       "p": 0.4342,
+       "fair_odds": "≈5/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5358,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7618,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5358,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3179,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "no",
+      "label": "No",
+      "p": 0.5004,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.4996,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.5004,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5358,
+     "credible_p": 0.5375,
+     "n": 189,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 189 Champions League backtest matches",
+     "lower_bound": 0.4778
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "b5dc13065b4c73f336d06b0087d31a1ff2876ff7a2c2773f5e6fd5312b0c1244"
+  },
+  {
+   "record_id": "PUB-ELC-2627-derby-v-bristol-city#r1",
+   "match_id": "ELC-2627-derby-v-bristol-city",
+   "revision": 1,
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Derby",
+    "away": "Bristol City",
+    "kickoff_utc": "2026-12-09T19:45:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Derby win",
+      "p": 0.4205,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Derby win",
+       "p": 0.4205,
+       "fair_odds": "≈11/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2733,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Bristol City win",
+       "p": 0.3062,
+       "fair_odds": "≈9/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5082,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.737,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4918,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2579,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5317,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5317,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4683,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5317,
+     "credible_p": 0.5319,
+     "n": 557,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 557 Championship backtest matches",
+     "lower_bound": 0.4971
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "93b84af80319828852e6a0f73945a7e4da12282adad39e7e0b6c741b06938e73"
+  },
+  {
+   "record_id": "PUB-ELC-2627-lincoln-v-stoke#r1",
+   "match_id": "ELC-2627-lincoln-v-stoke",
+   "revision": 1,
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Lincoln",
+    "away": "Stoke",
+    "kickoff_utc": "2026-12-09T19:45:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Stoke win",
+      "p": 0.4148,
+      "fair_odds": "≈11/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Lincoln win",
+       "p": 0.3024,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2828,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Stoke win",
+       "p": 0.4148,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5192,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7281,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4808,
+       "over_fair_odds": "≈11/10",
+       "under_fair_odds": "≈10/11"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2489,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5229,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5229,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4771,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5229,
+     "credible_p": 0.5234,
+     "n": 557,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 557 Championship backtest matches",
+     "lower_bound": 0.4886
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "70b769d361d08e6d76b34fa66064180ff5cef0638a57f72e80626a006682406a"
+  },
+  {
+   "record_id": "PUB-ELC-2627-preston-v-portsmouth#r1",
+   "match_id": "ELC-2627-preston-v-portsmouth",
+   "revision": 1,
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Preston",
+    "away": "Portsmouth",
+    "kickoff_utc": "2026-12-09T19:45:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Preston win",
+      "p": 0.3691,
+      "fair_odds": "≈7/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Preston win",
+       "p": 0.3691,
+       "fair_odds": "≈7/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2776,
+       "fair_odds": "≈5/2"
+      },
+      {
+       "key": "A",
+       "label": "Portsmouth win",
+       "p": 0.3533,
+       "fair_odds": "≈15/8"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5104,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7352,
+       "over_fair_odds": "≈4/11",
+       "under_fair_odds": "≈11/4"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4896,
+       "over_fair_odds": "≈Evens",
+       "under_fair_odds": "≈Evens"
+      },
+      {
+       "line": 3.5,
+       "over": 0.256,
+       "over_fair_odds": "≈3/1",
+       "under_fair_odds": "≈1/3"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5312,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5312,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4688,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5312,
+     "credible_p": 0.5315,
+     "n": 557,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 557 Championship backtest matches",
+     "lower_bound": 0.4967
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "5cdd98367ec45fa4e646e3590169a79169b52ffb82c09c22a665b5d2af1ca9f1"
+  },
+  {
+   "record_id": "PUB-CL-2627-arsenal-v-real-madrid#r1",
+   "match_id": "CL-2627-arsenal-v-real-madrid",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Arsenal",
+    "away": "Real Madrid",
+    "kickoff_utc": "2026-12-09T20:00:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Arsenal win",
+      "p": 0.652,
+      "fair_odds": "≈8/15"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Arsenal win",
+       "p": 0.652,
+       "fair_odds": "≈8/15"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1932,
+       "fair_odds": "≈4/1"
+      },
+      {
+       "key": "A",
+       "label": "Real Madrid win",
+       "p": 0.1548,
+       "fair_odds": "≈11/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5621,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7805,
+       "over_fair_odds": "≈2/7",
+       "under_fair_odds": "≈7/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5621,
+       "over_fair_odds": "≈4/5",
+       "under_fair_odds": "≈5/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3427,
+       "over_fair_odds": "≈15/8",
+       "under_fair_odds": "≈8/15"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.517,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.517,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.483,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "result",
+     "key": "H",
+     "label": "Arsenal win",
+     "p": 0.652,
+     "credible_p": 0.6343,
+     "n": 172,
+     "status": "provisional",
+     "strength": "moderate",
+     "basis": "Champions League model, 172 backtest matches (2024-25)",
+     "lower_bound": 0.5739
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "fd93c3bea3bb8f77ea92775ea9e082e40a82547b7f954ad4ba74549f8a8ced7a"
+  },
+  {
+   "record_id": "PUB-CL-2627-dortmund-v-inter#r1",
+   "match_id": "CL-2627-dortmund-v-inter",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Dortmund",
+    "away": "Inter",
+    "kickoff_utc": "2026-12-09T20:00:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Dortmund win",
+      "p": 0.3936,
+      "fair_odds": "≈6/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Dortmund win",
+       "p": 0.3936,
+       "fair_odds": "≈6/4"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2464,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Inter win",
+       "p": 0.36,
+       "fair_odds": "≈7/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5462,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7693,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5462,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3273,
+       "over_fair_odds": "≈2/1",
+       "under_fair_odds": "≈1/2"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5289,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5289,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4711,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5462,
+     "credible_p": 0.5469,
+     "n": 189,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 189 Champions League backtest matches",
+     "lower_bound": 0.4873
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "ff29256d03290b0e2ac61b2e4bc99a4423b754be8b6af5fff8212f8d13c23a23"
+  },
+  {
+   "record_id": "PUB-CL-2627-lask-v-fenerbahce#r1",
+   "match_id": "CL-2627-lask-v-fenerbahce",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "LASK",
+    "away": "Fenerbahce",
+    "kickoff_utc": "2026-12-09T20:00:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "LASK win",
+      "p": 0.4587,
+      "fair_odds": "≈6/5"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "LASK win",
+       "p": 0.4587,
+       "fair_odds": "≈6/5"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2041,
+       "fair_odds": "≈4/1"
+      },
+      {
+       "key": "A",
+       "label": "Fenerbahce win",
+       "p": 0.3372,
+       "fair_odds": "≈2/1"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6225,
+      "fair_odds": "≈8/13",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8151,
+       "over_fair_odds": "≈2/9",
+       "under_fair_odds": "≈9/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.6225,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 3.5,
+       "over": 0.414,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5888,
+      "fair_odds": "≈8/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5888,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4112,
+       "fair_odds": "≈11/8"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.6225,
+     "credible_p": 0.6159,
+     "n": 189,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 189 Champions League backtest matches",
+     "lower_bound": 0.5577
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "2dbf915a942686f76e6716a0dcf4afed8056f7b9cd0810f2ab0fe88bd073438b"
+  },
+  {
+   "record_id": "PUB-CL-2627-lens-v-bodo-glimt#r1",
+   "match_id": "CL-2627-lens-v-bodo-glimt",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Lens",
+    "away": "Bodo/Glimt",
+    "kickoff_utc": "2026-12-09T20:00:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Bodo/Glimt win",
+      "p": 0.4618,
+      "fair_odds": "≈6/5"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Lens win",
+       "p": 0.3481,
+       "fair_odds": "≈15/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1901,
+       "fair_odds": "≈9/2"
+      },
+      {
+       "key": "A",
+       "label": "Bodo/Glimt win",
+       "p": 0.4618,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.6032,
+      "fair_odds": "≈4/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8052,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.6032,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3887,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5478,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5478,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4522,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.6032,
+     "credible_p": 0.5985,
+     "n": 189,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 189 Champions League backtest matches",
+     "lower_bound": 0.5398
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "a63c96d8a1a4415927addffb20bef91ad8a4fb76e5163b28c10a02a17092c8cd"
+  },
+  {
+   "record_id": "PUB-CL-2627-liverpool-v-porto#r1",
+   "match_id": "CL-2627-liverpool-v-porto",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Liverpool",
+    "away": "FC Porto",
+    "kickoff_utc": "2026-12-09T20:00:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Liverpool win",
+      "p": 0.5715,
+      "fair_odds": "≈8/11"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Liverpool win",
+       "p": 0.5715,
+       "fair_odds": "≈8/11"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.1888,
+       "fair_odds": "≈9/2"
+      },
+      {
+       "key": "A",
+       "label": "FC Porto win",
+       "p": 0.2397,
+       "fair_odds": "≈100/30"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5969,
+      "fair_odds": "≈4/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.8018,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5969,
+       "over_fair_odds": "≈4/6",
+       "under_fair_odds": "≈6/4"
+      },
+      {
+       "line": 3.5,
+       "over": 0.381,
+       "over_fair_odds": "≈13/8",
+       "under_fair_odds": "≈8/13"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5381,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5381,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4619,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5969,
+     "credible_p": 0.5928,
+     "n": 189,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 189 Champions League backtest matches",
+     "lower_bound": 0.534
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "6077a20f611bf750006e22b28eebac70009019f2b438c605be90ea2d01024682"
+  },
+  {
+   "record_id": "PUB-CL-2627-psv-v-atletico-madrid#r1",
+   "match_id": "CL-2627-psv-v-atletico-madrid",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "PSV",
+    "away": "Atletico Madrid",
+    "kickoff_utc": "2026-12-09T20:00:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "A",
+      "label": "Atletico Madrid win",
+      "p": 0.4436,
+      "fair_odds": "≈5/4"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "PSV win",
+       "p": 0.3334,
+       "fair_odds": "≈2/1"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2229,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Atletico Madrid win",
+       "p": 0.4436,
+       "fair_odds": "≈5/4"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5795,
+      "fair_odds": "≈8/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7914,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5795,
+       "over_fair_odds": "≈8/11",
+       "under_fair_odds": "≈11/8"
+      },
+      {
+       "line": 3.5,
+       "over": 0.361,
+       "over_fair_odds": "≈7/4",
+       "under_fair_odds": "≈4/7"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5539,
+      "fair_odds": "≈4/5"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5539,
+       "fair_odds": "≈4/5"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4461,
+       "fair_odds": "≈5/4"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5795,
+     "credible_p": 0.577,
+     "n": 189,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 189 Champions League backtest matches",
+     "lower_bound": 0.5179
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "826f38335102b885c99911667fc05fb71608b0222da0b5535fca8760e44f08e5"
+  },
+  {
+   "record_id": "PUB-ELC-2627-southampton-v-burnley#r1",
+   "match_id": "ELC-2627-southampton-v-burnley",
+   "revision": 1,
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Southampton",
+    "away": "Burnley",
+    "kickoff_utc": "2026-12-09T20:00:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Southampton win",
+      "p": 0.5453,
+      "fair_odds": "≈5/6"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Southampton win",
+       "p": 0.5453,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.232,
+       "fair_odds": "≈100/30"
+      },
+      {
+       "key": "A",
+       "label": "Burnley win",
+       "p": 0.2227,
+       "fair_odds": "≈7/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5247,
+      "fair_odds": "≈10/11",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7607,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5247,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2881,
+       "over_fair_odds": "≈5/2",
+       "under_fair_odds": "≈2/5"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5489,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5489,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4511,
+       "fair_odds": "≈6/5"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5489,
+     "credible_p": 0.5485,
+     "n": 557,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 557 Championship backtest matches",
+     "lower_bound": 0.5138
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "dddfba08315e8e0ab819d4370e29749ec7961548850ee2a0605e0ba6bee382e2"
+  },
+  {
+   "record_id": "PUB-CL-2627-stuttgart-v-lille#r1",
+   "match_id": "CL-2627-stuttgart-v-lille",
+   "revision": 1,
+   "fixture": {
+    "competition": "CL",
+    "season": "2627",
+    "home": "Stuttgart",
+    "away": "Lille",
+    "kickoff_utc": "2026-12-09T20:00:00Z"
+   },
+   "published_at": "2026-11-18T22:19:38.241494+00:00",
+   "inputs_fingerprint": "972f6665f643bdc8",
+   "markets": {
+    "result": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Stuttgart win",
+      "p": 0.4991,
+      "fair_odds": "≈Evens"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Stuttgart win",
+       "p": 0.4991,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2197,
+       "fair_odds": "≈7/2"
+      },
+      {
+       "key": "A",
+       "label": "Lille win",
+       "p": 0.2812,
+       "fair_odds": "≈5/2"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5383,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7636,
+       "over_fair_odds": "≈3/10",
+       "under_fair_odds": "≈100/30"
+      },
+      {
+       "line": 2.5,
+       "over": 0.5383,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.3202,
+       "over_fair_odds": "≈9/4",
+       "under_fair_odds": "≈4/9"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5149,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5149,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4851,
+       "fair_odds": "≈11/10"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openligadb"
+   ],
+   "origin": "public-derived",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "over",
+     "line": 2.5,
+     "label": "Over 2.5",
+     "p": 0.5383,
+     "credible_p": 0.5398,
+     "n": 189,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 189 Champions League backtest matches",
+     "lower_bound": 0.4802
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "4716ae57290e15b592b33d6cacbbd83ba63e97f08a430e669dca9a0c77a033e2"
   }
  ]
 }
