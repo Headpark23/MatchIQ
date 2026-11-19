@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-19T13:51:45.495458+00:00",
+ "generated_at": "2026-11-19T22:26:49.340280+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -40532,6 +40532,30 @@
    ]
   },
   {
+   "id": "PL-2627-coventry-v-everton",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Coventry",
+   "away": "Everton",
+   "kickoff_utc": "2027-01-16T12:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-16T15:00:00Z",
+     "to": "2027-01-16T12:30:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
    "id": "BL1-2627-dortmund-v-freiburg",
    "competition": "BL1",
    "season": "2627",
@@ -40677,83 +40701,11 @@
    ]
   },
   {
-   "id": "PL-2627-aston-villa-v-man-united",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Aston Villa",
-   "away": "Man United",
-   "kickoff_utc": "2027-01-16T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-bournemouth-v-ipswich",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Bournemouth",
-   "away": "Ipswich",
-   "kickoff_utc": "2027-01-16T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-brentford-v-brighton",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Brentford",
-   "away": "Brighton",
-   "kickoff_utc": "2027-01-16T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "PL-2627-chelsea-v-sunderland",
    "competition": "PL",
    "season": "2627",
    "home": "Chelsea",
    "away": "Sunderland",
-   "kickoff_utc": "2027-01-16T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-coventry-v-everton",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Coventry",
-   "away": "Everton",
    "kickoff_utc": "2027-01-16T15:00:00Z",
    "status": "SCHEDULED",
    "score": null,
@@ -40839,24 +40791,6 @@
    "kickoff_history": []
   },
   {
-   "id": "PL-2627-tottenham-v-leeds",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Tottenham",
-   "away": "Leeds",
-   "kickoff_utc": "2027-01-16T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "N1-2627-telstar-v-nec-nijmegen",
    "competition": "N1",
    "season": "2627",
@@ -40893,6 +40827,30 @@
      "from": "2027-01-16T14:00:00Z",
      "to": "2027-01-16T16:15:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-aston-villa-v-man-united",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Aston Villa",
+   "away": "Man United",
+   "kickoff_utc": "2027-01-16T17:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-16T15:00:00Z",
+     "to": "2027-01-16T17:30:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
     }
    ]
   },
@@ -41815,6 +41773,30 @@
    "kickoff_history": []
   },
   {
+   "id": "PL-2627-bournemouth-v-ipswich",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Bournemouth",
+   "away": "Ipswich",
+   "kickoff_utc": "2027-01-17T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-16T15:00:00Z",
+     "to": "2027-01-17T14:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
    "id": "FL1-2627-paris-v-toulouse",
    "competition": "FL1",
    "season": "2627",
@@ -41936,6 +41918,30 @@
    ]
   },
   {
+   "id": "PL-2627-tottenham-v-leeds",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Tottenham",
+   "away": "Leeds",
+   "kickoff_utc": "2027-01-17T16:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-16T15:00:00Z",
+     "to": "2027-01-17T16:30:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
    "id": "FL1-2627-lyon-v-lorient",
    "competition": "FL1",
    "season": "2627",
@@ -41955,6 +41961,30 @@
      "from": "2027-01-16T14:00:00Z",
      "to": "2027-01-17T19:45:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-brentford-v-brighton",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Brentford",
+   "away": "Brighton",
+   "kickoff_utc": "2027-01-18T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-16T15:00:00Z",
+     "to": "2027-01-18T20:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
     }
    ]
   },
@@ -43077,60 +43107,6 @@
    ]
   },
   {
-   "id": "PL-2627-arsenal-v-newcastle",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Arsenal",
-   "away": "Newcastle",
-   "kickoff_utc": "2027-01-23T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-brighton-v-man-city",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Brighton",
-   "away": "Man City",
-   "kickoff_utc": "2027-01-23T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-crystal-palace-v-tottenham",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Crystal Palace",
-   "away": "Tottenham",
-   "kickoff_utc": "2027-01-23T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "SC0-2627-dundee-v-aberdeen-2",
    "competition": "SC0",
    "season": "2627",
@@ -43144,24 +43120,6 @@
     "openfootball"
    ],
    "first_seen": "2026-11-08T12:27:20.059394+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-everton-v-brentford",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Everton",
-   "away": "Brentford",
-   "kickoff_utc": "2027-01-23T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
    "kickoff_history": []
   },
   {
@@ -43233,42 +43191,6 @@
    "kickoff_history": []
   },
   {
-   "id": "PL-2627-leeds-v-chelsea",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Leeds",
-   "away": "Chelsea",
-   "kickoff_utc": "2027-01-23T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-man-united-v-liverpool",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Man United",
-   "away": "Liverpool",
-   "kickoff_utc": "2027-01-23T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "SC0-2627-motherwell-v-dundee-united-2",
    "competition": "SC0",
    "season": "2627",
@@ -43285,24 +43207,6 @@
    "kickoff_history": []
   },
   {
-   "id": "PL-2627-nottm-forest-v-bournemouth",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Nott'm Forest",
-   "away": "Bournemouth",
-   "kickoff_utc": "2027-01-23T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "SC0-2627-rangers-v-st-johnstone-2",
    "competition": "SC0",
    "season": "2627",
@@ -43316,24 +43220,6 @@
     "openfootball"
    ],
    "first_seen": "2026-11-08T12:27:20.059394+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-sunderland-v-coventry",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Sunderland",
-   "away": "Coventry",
-   "kickoff_utc": "2027-01-23T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
    "kickoff_history": []
   },
   {
@@ -43373,6 +43259,30 @@
      "from": "2027-01-23T14:00:00Z",
      "to": "2027-01-23T16:15:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-arsenal-v-newcastle",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Arsenal",
+   "away": "Newcastle",
+   "kickoff_utc": "2027-01-23T17:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-23T15:00:00Z",
+     "to": "2027-01-23T17:30:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
     }
    ]
   },
@@ -43528,6 +43438,30 @@
      "from": "2027-01-23T14:00:00Z",
      "to": "2027-01-23T19:45:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-brighton-v-man-city",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Brighton",
+   "away": "Man City",
+   "kickoff_utc": "2027-01-23T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-23T15:00:00Z",
+     "to": "2027-01-23T20:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
     }
    ]
   },
@@ -44295,6 +44229,54 @@
    "kickoff_history": []
   },
   {
+   "id": "PL-2627-crystal-palace-v-tottenham",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Crystal Palace",
+   "away": "Tottenham",
+   "kickoff_utc": "2027-01-24T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-23T15:00:00Z",
+     "to": "2027-01-24T14:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-everton-v-brentford",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Everton",
+   "away": "Brentford",
+   "kickoff_utc": "2027-01-24T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-23T15:00:00Z",
+     "to": "2027-01-24T14:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
    "id": "FL1-2627-le-havre-v-rennes",
    "competition": "FL1",
    "season": "2627",
@@ -44314,6 +44296,54 @@
      "from": "2027-01-23T14:00:00Z",
      "to": "2027-01-24T14:00:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-nottm-forest-v-bournemouth",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Nott'm Forest",
+   "away": "Bournemouth",
+   "kickoff_utc": "2027-01-24T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-23T15:00:00Z",
+     "to": "2027-01-24T14:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-sunderland-v-coventry",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Sunderland",
+   "away": "Coventry",
+   "kickoff_utc": "2027-01-24T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-23T15:00:00Z",
+     "to": "2027-01-24T14:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
     }
    ]
   },
@@ -44432,6 +44462,30 @@
    ]
   },
   {
+   "id": "PL-2627-man-united-v-liverpool",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Man United",
+   "away": "Liverpool",
+   "kickoff_utc": "2027-01-24T16:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-23T15:00:00Z",
+     "to": "2027-01-24T16:30:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
    "id": "BL1-2627-hoffenheim-v-koln",
    "competition": "BL1",
    "season": "2627",
@@ -44480,6 +44534,30 @@
      "from": "2027-01-23T14:00:00Z",
      "to": "2027-01-24T19:45:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-leeds-v-chelsea",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Leeds",
+   "away": "Chelsea",
+   "kickoff_utc": "2027-01-25T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-23T15:00:00Z",
+     "to": "2027-01-25T20:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
     }
    ]
   },
@@ -46009,6 +46087,30 @@
    ]
   },
   {
+   "id": "PL-2627-liverpool-v-everton",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Liverpool",
+   "away": "Everton",
+   "kickoff_utc": "2027-01-30T12:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-30T15:00:00Z",
+     "to": "2027-01-30T12:30:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
    "id": "SC0-2627-aberdeen-v-rangers-2",
    "competition": "SC0",
    "season": "2627",
@@ -46030,78 +46132,6 @@
    "season": "2627",
    "home": "Aston Villa",
    "away": "Ipswich",
-   "kickoff_utc": "2027-01-30T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-bournemouth-v-fulham",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Bournemouth",
-   "away": "Fulham",
-   "kickoff_utc": "2027-01-30T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-brentford-v-man-united",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Brentford",
-   "away": "Man United",
-   "kickoff_utc": "2027-01-30T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-chelsea-v-nottm-forest",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Chelsea",
-   "away": "Nott'm Forest",
-   "kickoff_utc": "2027-01-30T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-coventry-v-leeds",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Coventry",
-   "away": "Leeds",
    "kickoff_utc": "2027-01-30T15:00:00Z",
    "status": "SCHEDULED",
    "score": null,
@@ -46147,24 +46177,6 @@
    "kickoff_history": []
   },
   {
-   "id": "PL-2627-hull-v-crystal-palace",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Hull",
-   "away": "Crystal Palace",
-   "kickoff_utc": "2027-01-30T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "SC0-2627-kilmarnock-v-motherwell-2",
    "competition": "SC0",
    "season": "2627",
@@ -46178,42 +46190,6 @@
     "openfootball"
    ],
    "first_seen": "2026-11-08T12:27:20.059394+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-liverpool-v-everton",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Liverpool",
-   "away": "Everton",
-   "kickoff_utc": "2027-01-30T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-man-city-v-arsenal",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Man City",
-   "away": "Arsenal",
-   "kickoff_utc": "2027-01-30T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
    "kickoff_history": []
   },
   {
@@ -46248,24 +46224,6 @@
     "openfootball"
    ],
    "first_seen": "2026-11-08T12:27:20.059394+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "PL-2627-tottenham-v-sunderland",
-   "competition": "PL",
-   "season": "2627",
-   "home": "Tottenham",
-   "away": "Sunderland",
-   "kickoff_utc": "2027-01-30T15:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openligadb",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T13:11:24.741152+00:00",
    "kickoff_history": []
   },
   {
@@ -46305,6 +46263,30 @@
      "from": "2027-01-30T14:00:00Z",
      "to": "2027-01-30T16:15:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-chelsea-v-nottm-forest",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Chelsea",
+   "away": "Nott'm Forest",
+   "kickoff_utc": "2027-01-30T17:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-30T15:00:00Z",
+     "to": "2027-01-30T17:30:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
     }
    ]
   },
@@ -47198,6 +47180,78 @@
    "kickoff_history": []
   },
   {
+   "id": "PL-2627-bournemouth-v-fulham",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Bournemouth",
+   "away": "Fulham",
+   "kickoff_utc": "2027-01-31T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-30T15:00:00Z",
+     "to": "2027-01-31T14:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-coventry-v-leeds",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Coventry",
+   "away": "Leeds",
+   "kickoff_utc": "2027-01-31T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-30T15:00:00Z",
+     "to": "2027-01-31T14:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-hull-v-crystal-palace",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Hull",
+   "away": "Crystal Palace",
+   "kickoff_utc": "2027-01-31T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-30T15:00:00Z",
+     "to": "2027-01-31T14:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
    "id": "FL1-2627-rennes-v-lorient",
    "competition": "FL1",
    "season": "2627",
@@ -47217,6 +47271,30 @@
      "from": "2027-01-30T14:00:00Z",
      "to": "2027-01-31T14:00:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-tottenham-v-sunderland",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Tottenham",
+   "away": "Sunderland",
+   "kickoff_utc": "2027-01-31T14:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-30T15:00:00Z",
+     "to": "2027-01-31T14:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
     }
    ]
   },
@@ -47277,6 +47355,30 @@
    ]
   },
   {
+   "id": "PL-2627-man-city-v-arsenal",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Man City",
+   "away": "Arsenal",
+   "kickoff_utc": "2027-01-31T16:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-30T15:00:00Z",
+     "to": "2027-01-31T16:30:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
    "id": "FL1-2627-lyon-v-lille",
    "competition": "FL1",
    "season": "2627",
@@ -47296,6 +47398,30 @@
      "from": "2027-01-30T14:00:00Z",
      "to": "2027-01-31T19:45:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PL-2627-brentford-v-man-united",
+   "competition": "PL",
+   "season": "2627",
+   "home": "Brentford",
+   "away": "Man United",
+   "kickoff_utc": "2027-02-01T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openligadb",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T13:11:24.741152+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-30T15:00:00Z",
+     "to": "2027-02-01T20:00:00Z",
+     "seen_at": "2026-11-19T22:26:49.340280+00:00"
     }
    ]
   },
