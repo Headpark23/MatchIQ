@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-19T22:26:49.340280+00:00",
+ "generated_at": "2026-11-20T21:57:47.360723+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -24831,9 +24831,12 @@
    "home": "Bayern Munich",
    "away": "FC Koln",
    "kickoff_utc": "2026-11-20T19:30:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb",
@@ -24849,9 +24852,12 @@
    "home": "Troyes",
    "away": "Le Havre",
    "kickoff_utc": "2026-11-20T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    3,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -24866,7 +24872,7 @@
    "home": "Athletic Club",
    "away": "Espanyol",
    "kickoff_utc": "2026-11-20T20:00:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -61666,6 +61672,134 @@
     "openfootball"
    ],
    "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "NLA-2627-belgium-v-germany",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "Belgium",
+   "away": "Germany",
+   "kickoff_utc": "2027-03-25T19:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "NLA-2627-netherlands-v-portugal",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "Netherlands",
+   "away": "Portugal",
+   "kickoff_utc": "2027-03-25T19:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "NLA-2627-norway-v-england",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "Norway",
+   "away": "England",
+   "kickoff_utc": "2027-03-25T19:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "NLA-2627-spain-v-france",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "Spain",
+   "away": "France",
+   "kickoff_utc": "2027-03-25T19:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "NLA-2627-england-v-norway",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "England",
+   "away": "Norway",
+   "kickoff_utc": "2027-03-28T18:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "NLA-2627-france-v-spain",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "France",
+   "away": "Spain",
+   "kickoff_utc": "2027-03-28T18:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "NLA-2627-germany-v-belgium",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "Germany",
+   "away": "Belgium",
+   "kickoff_utc": "2027-03-28T18:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "NLA-2627-portugal-v-netherlands",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "Portugal",
+   "away": "Netherlands",
+   "kickoff_utc": "2027-03-28T18:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
    "kickoff_history": []
   },
   {
