@@ -1,1162 +1,8 @@
 {
- "generated_at": "2026-11-21T03:27:54.951278+00:00",
+ "generated_at": "2026-11-21T12:59:44.333010+00:00",
  "horizon_days": 21,
  "model_version": "dc-public-v1",
  "predictions": {
-  "PL-2627-man-city-v-fulham": {
-   "match_id": "PL-2627-man-city-v-fulham",
-   "record_id": "PUB-PL-2627-man-city-v-fulham#r26",
-   "published_at": "2026-11-21T03:27:54.951278+00:00",
-   "derivation": "public-derived",
-   "fixture": {
-    "competition": "PL",
-    "season": "2627",
-    "home": "Man City",
-    "away": "Fulham",
-    "kickoff_utc": "2026-11-21T12:30:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": []
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 351 Premier League matches (2025-26): Brier 0.620 against 0.658 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "H",
-      "label": "Man City win",
-      "p": 0.6579,
-      "fair_odds": "≈8/15"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "Man City win",
-       "p": 0.6579,
-       "fair_odds": "≈8/15"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2099,
-       "fair_odds": "≈4/1"
-      },
-      {
-       "key": "A",
-       "label": "Fulham win",
-       "p": 0.1322,
-       "fair_odds": "≈13/2"
-      }
-     ],
-     "method": "Premier League Dixon-Coles fitted on Premier League results only",
-     "training_matches": 1239,
-     "form": {
-      "home": [
-       {
-        "date": "2026-08-23",
-        "opponent": "Bournemouth",
-        "gf": 2,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-05",
-        "opponent": "Coventry",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-20",
-        "opponent": "Sunderland",
-        "gf": 5,
-        "ga": 3,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-17",
-        "opponent": "Ipswich",
-        "gf": 3,
-        "ga": 2,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "Brighton",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-08-30",
-        "opponent": "Sunderland",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-12",
-        "opponent": "Liverpool",
-        "gf": 0,
-        "ga": 0,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-10",
-        "opponent": "Ipswich",
-        "gf": 1,
-        "ga": 2,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-24",
-        "opponent": "Coventry",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "Aston Villa",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 62,
-      "away": 62
-     },
-     "league_p": [
-      0.431,
-      0.2462,
-      0.3228
-     ],
-     "pooled_matches": {
-      "home": 41,
-      "away": 41
-     },
-     "derivation": "public-derived"
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Premier League backtest (380 matches, 2025-26): Brier 0.249 against 0.250 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 2.5",
-      "p": 0.5714,
-      "fair_odds": "≈8/11",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.8086,
-        "fair_odds": "≈1/4"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.1914,
-        "fair_odds": "≈4/1"
-       },
-       "model_p": 0.7932,
-       "league_p": 0.8152
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.5714,
-        "fair_odds": "≈8/11"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.4286,
-        "fair_odds": "≈11/8"
-       },
-       "model_p": 0.5564,
-       "league_p": 0.5779
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.345,
-        "fair_odds": "≈15/8"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.655,
-        "fair_odds": "≈8/15"
-       },
-       "model_p": 0.3326,
-       "league_p": 0.3503
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 2.97,
-      "expected_goals": [
-       2.08,
-       0.83
-      ]
-     },
-     "explanation": [
-      "The score model expects about 2.1 goals for Man City and 0.8 for Fulham.",
-      "Premier League matches average 2.97 goals; 58% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% Premier League rate for each line",
-     "derivation": "public-derived"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Premier League backtest (380 matches, 2025-26): Brier 0.246 against 0.247 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5525,
-      "fair_odds": "≈4/5"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5525,
-       "fair_odds": "≈4/5"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4475,
-       "fair_odds": "≈5/4"
-      }
-     ],
-     "model_p": 0.499,
-     "league_p": 0.5755,
-     "explanation": [
-      "Both teams scored in 58% of Premier League matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% Premier League rate",
-     "derivation": "public-derived"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "result",
-     "key": "H",
-     "label": "Man City win",
-     "p": 0.6579,
-     "credible_p": 0.6457,
-     "n": 351,
-     "status": "provisional",
-     "strength": "moderate",
-     "basis": "Premier League model, 351 backtest matches (2025-26)",
-     "lower_bound": 0.6037
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
-  "ELC-2627-millwall-v-qpr": {
-   "match_id": "ELC-2627-millwall-v-qpr",
-   "record_id": "PUB-ELC-2627-millwall-v-qpr#r26",
-   "published_at": "2026-11-21T03:27:54.951278+00:00",
-   "derivation": "public-derived",
-   "fixture": {
-    "competition": "ELC",
-    "season": "2627",
-    "home": "Millwall",
-    "away": "QPR",
-    "kickoff_utc": "2026-11-21T12:30:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": []
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 503 Championship matches (2025-26): Brier 0.639 against 0.655 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "H",
-      "label": "Millwall win",
-      "p": 0.4673,
-      "fair_odds": "≈11/10"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "Millwall win",
-       "p": 0.4673,
-       "fair_odds": "≈11/10"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.2653,
-       "fair_odds": "≈11/4"
-      },
-      {
-       "key": "A",
-       "label": "QPR win",
-       "p": 0.2673,
-       "fair_odds": "≈11/4"
-      }
-     ],
-     "method": "Championship Dixon-Coles fitted on Championship results only",
-     "training_matches": 1851,
-     "form": {
-      "home": [
-       {
-        "date": "2026-09-05",
-        "opponent": "Bolton",
-        "gf": 4,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-19",
-        "opponent": "West Ham",
-        "gf": 2,
-        "ga": 2,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-13",
-        "opponent": "Swansea",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-17",
-        "opponent": "Lincoln",
-        "gf": 2,
-        "ga": 2,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "Derby",
-        "gf": 4,
-        "ga": 1,
-        "res": "W"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-09-09",
-        "opponent": "Charlton",
-        "gf": 0,
-        "ga": 0,
-        "res": "D"
-       },
-       {
-        "date": "2026-09-12",
-        "opponent": "West Brom",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-09",
-        "opponent": "West Ham",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-17",
-        "opponent": "Birmingham",
-        "gf": 0,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "Southampton",
-        "gf": 1,
-        "ga": 4,
-        "res": "L"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 77,
-      "away": 76
-     },
-     "league_p": [
-      0.4387,
-      0.2604,
-      0.3009
-     ],
-     "pooled_matches": {
-      "home": 54,
-      "away": 52
-     },
-     "derivation": "public-derived"
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "under",
-      "label": "Under 2.5",
-      "p": 0.5046,
-      "fair_odds": "≈Evens",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.7398,
-        "fair_odds": "≈4/11"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.2602,
-        "fair_odds": "≈11/4"
-       },
-       "model_p": 0.7325,
-       "league_p": 0.7428
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.4954,
-        "fair_odds": "≈Evens"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.5046,
-        "fair_odds": "≈Evens"
-       },
-       "model_p": 0.4766,
-       "league_p": 0.5035
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.261,
-        "fair_odds": "≈11/4"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.739,
-        "fair_odds": "≈4/11"
-       },
-       "model_p": 0.2597,
-       "league_p": 0.2615
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 2.61,
-      "expected_goals": [
-       1.5,
-       1.08
-      ]
-     },
-     "explanation": [
-      "The score model expects about 1.5 goals for Millwall and 1.1 for QPR.",
-      "Championship matches average 2.61 goals; 50% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% Championship rate for each line",
-     "derivation": "public-derived"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.247 against 0.248 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5319,
-      "fair_odds": "≈10/11"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5319,
-       "fair_odds": "≈10/11"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4681,
-       "fair_odds": "≈11/10"
-      }
-     ],
-     "model_p": 0.5164,
-     "league_p": 0.5386,
-     "explanation": [
-      "Both teams scored in 54% of Championship matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% Championship rate",
-     "derivation": "public-derived"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "btts",
-     "key": "yes",
-     "label": "Yes",
-     "p": 0.5319,
-     "credible_p": 0.5321,
-     "n": 557,
-     "status": "provisional",
-     "strength": "weak",
-     "basis": "league-anchored blend, 557 Championship backtest matches",
-     "lower_bound": 0.4973
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
-  "ELC-2627-norwich-v-cardiff": {
-   "match_id": "ELC-2627-norwich-v-cardiff",
-   "record_id": "PUB-ELC-2627-norwich-v-cardiff#r26",
-   "published_at": "2026-11-21T03:27:54.951278+00:00",
-   "derivation": "public-derived",
-   "fixture": {
-    "competition": "ELC",
-    "season": "2627",
-    "home": "Norwich",
-    "away": "Cardiff",
-    "kickoff_utc": "2026-11-21T12:30:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": [
-     {
-      "from": "2026-11-21T15:00:00Z",
-      "to": "2026-11-21T12:30:00Z",
-      "seen_at": "2026-11-07T06:34:54.341956+00:00"
-     }
-    ]
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 503 Championship matches (2025-26): Brier 0.639 against 0.655 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "H",
-      "label": "Norwich win",
-      "p": 0.602,
-      "fair_odds": "≈4/6"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "Norwich win",
-       "p": 0.602,
-       "fair_odds": "≈4/6"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.1987,
-       "fair_odds": "≈4/1"
-      },
-      {
-       "key": "A",
-       "label": "Cardiff win",
-       "p": 0.1993,
-       "fair_odds": "≈4/1"
-      }
-     ],
-     "method": "Championship Dixon-Coles fitted on Championship results only",
-     "training_matches": 1851,
-     "form": {
-      "home": [
-       {
-        "date": "2026-09-09",
-        "opponent": "Birmingham",
-        "gf": 2,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-20",
-        "opponent": "Bolton",
-        "gf": 3,
-        "ga": 4,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-14",
-        "opponent": "Southampton",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-17",
-        "opponent": "Portsmouth",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "Watford",
-        "gf": 3,
-        "ga": 2,
-        "res": "W"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-09-05",
-        "opponent": "Portsmouth",
-        "gf": 0,
-        "ga": 2,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-12",
-        "opponent": "Bolton",
-        "gf": 0,
-        "ga": 1,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-10",
-        "opponent": "Blackburn",
-        "gf": 1,
-        "ga": 2,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-17",
-        "opponent": "Middlesbrough",
-        "gf": 2,
-        "ga": 2,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "Wolves",
-        "gf": 0,
-        "ga": 3,
-        "res": "L"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 77,
-      "away": 53
-     },
-     "league_p": [
-      0.4387,
-      0.2604,
-      0.3009
-     ],
-     "pooled_matches": {
-      "home": 52,
-      "away": 15
-     },
-     "derivation": "public-derived"
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 2.5",
-      "p": 0.5607,
-      "fair_odds": "≈4/5",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.7825,
-        "fair_odds": "≈2/7"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.2175,
-        "fair_odds": "≈7/2"
-       },
-       "model_p": 0.8751,
-       "league_p": 0.7428
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.5607,
-        "fair_odds": "≈4/5"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.4393,
-        "fair_odds": "≈5/4"
-       },
-       "model_p": 0.6942,
-       "league_p": 0.5035
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.3274,
-        "fair_odds": "≈2/1"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.6726,
-        "fair_odds": "≈1/2"
-       },
-       "model_p": 0.4811,
-       "league_p": 0.2615
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 2.61,
-      "expected_goals": [
-       2.31,
-       1.28
-      ]
-     },
-     "explanation": [
-      "The score model expects about 2.3 goals for Norwich and 1.3 for Cardiff.",
-      "Championship matches average 2.61 goals; 50% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% Championship rate for each line",
-     "derivation": "public-derived"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.247 against 0.248 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5726,
-      "fair_odds": "≈8/11"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5726,
-       "fair_odds": "≈8/11"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4274,
-       "fair_odds": "≈11/8"
-      }
-     ],
-     "model_p": 0.6517,
-     "league_p": 0.5386,
-     "explanation": [
-      "Both teams scored in 54% of Championship matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% Championship rate",
-     "derivation": "public-derived"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "result",
-     "key": "H",
-     "label": "Norwich win",
-     "p": 0.602,
-     "credible_p": 0.5958,
-     "n": 503,
-     "status": "provisional",
-     "strength": "moderate",
-     "basis": "Championship model, 503 backtest matches (2025-26)",
-     "lower_bound": 0.5598
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
-  "ELC-2627-southampton-v-derby": {
-   "match_id": "ELC-2627-southampton-v-derby",
-   "record_id": "PUB-ELC-2627-southampton-v-derby#r26",
-   "published_at": "2026-11-21T03:27:54.951278+00:00",
-   "derivation": "public-derived",
-   "fixture": {
-    "competition": "ELC",
-    "season": "2627",
-    "home": "Southampton",
-    "away": "Derby",
-    "kickoff_utc": "2026-11-21T12:30:00Z",
-    "status": "SCHEDULED",
-    "kickoff_history": []
-   },
-   "promoted": [],
-   "markets": {
-    "result": {
-     "market": "result",
-     "name": "Match result",
-     "tier": "L1",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "moderate",
-      "summary": "Backtest on 503 Championship matches (2025-26): Brier 0.639 against 0.655 for the league average. A single-season test with no forward record yet, so provisional."
-     },
-     "pick": {
-      "key": "H",
-      "label": "Southampton win",
-      "p": 0.6626,
-      "fair_odds": "≈1/2"
-     },
-     "selections": [
-      {
-       "key": "H",
-       "label": "Southampton win",
-       "p": 0.6626,
-       "fair_odds": "≈1/2"
-      },
-      {
-       "key": "D",
-       "label": "Draw",
-       "p": 0.1956,
-       "fair_odds": "≈4/1"
-      },
-      {
-       "key": "A",
-       "label": "Derby win",
-       "p": 0.1418,
-       "fair_odds": "≈6/1"
-      }
-     ],
-     "method": "Championship Dixon-Coles fitted on Championship results only",
-     "training_matches": 1851,
-     "form": {
-      "home": [
-       {
-        "date": "2026-09-08",
-        "opponent": "Swansea",
-        "gf": 3,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-09-12",
-        "opponent": "Bristol City",
-        "gf": 4,
-        "ga": 1,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-11",
-        "opponent": "Portsmouth",
-        "gf": 1,
-        "ga": 0,
-        "res": "W"
-       },
-       {
-        "date": "2026-10-17",
-        "opponent": "Bolton",
-        "gf": 0,
-        "ga": 0,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "QPR",
-        "gf": 4,
-        "ga": 1,
-        "res": "W"
-       }
-      ],
-      "away": [
-       {
-        "date": "2026-09-05",
-        "opponent": "West Ham",
-        "gf": 0,
-        "ga": 3,
-        "res": "L"
-       },
-       {
-        "date": "2026-09-19",
-        "opponent": "Burnley",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-14",
-        "opponent": "QPR",
-        "gf": 1,
-        "ga": 4,
-        "res": "L"
-       },
-       {
-        "date": "2026-10-24",
-        "opponent": "Sheffield United",
-        "gf": 1,
-        "ga": 1,
-        "res": "D"
-       },
-       {
-        "date": "2026-10-31",
-        "opponent": "Millwall",
-        "gf": 1,
-        "ga": 4,
-        "res": "L"
-       }
-      ]
-     },
-     "venue_games": {
-      "home": 55,
-      "away": 53
-     },
-     "league_p": [
-      0.4387,
-      0.2604,
-      0.3009
-     ],
-     "pooled_matches": {
-      "home": 54,
-      "away": 52
-     },
-     "derivation": "public-derived"
-    },
-    "goals": {
-     "market": "goals",
-     "name": "Total goals",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "over",
-      "label": "Over 2.5",
-      "p": 0.5335,
-      "fair_odds": "≈10/11",
-      "line": 2.5
-     },
-     "lines": [
-      {
-       "line": 1.5,
-       "over": {
-        "key": "over",
-        "label": "Over 1.5",
-        "p": 0.7663,
-        "fair_odds": "≈3/10"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 1.5",
-        "p": 0.2337,
-        "fair_odds": "≈100/30"
-       },
-       "model_p": 0.8209,
-       "league_p": 0.7428
-      },
-      {
-       "line": 2.5,
-       "over": {
-        "key": "over",
-        "label": "Over 2.5",
-        "p": 0.5335,
-        "fair_odds": "≈10/11"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 2.5",
-        "p": 0.4665,
-        "fair_odds": "≈11/10"
-       },
-       "model_p": 0.6033,
-       "league_p": 0.5035
-      },
-      {
-       "line": 3.5,
-       "over": {
-        "key": "over",
-        "label": "Over 3.5",
-        "p": 0.297,
-        "fair_odds": "≈9/4"
-       },
-       "under": {
-        "key": "under",
-        "label": "Under 3.5",
-        "p": 0.703,
-        "fair_odds": "≈4/9"
-       },
-       "model_p": 0.3798,
-       "league_p": 0.2615
-      }
-     ],
-     "inputs": {
-      "league_mean_goals": 2.61,
-      "expected_goals": [
-       2.2,
-       0.92
-      ]
-     },
-     "explanation": [
-      "The score model expects about 2.2 goals for Southampton and 0.9 for Derby.",
-      "Championship matches average 2.61 goals; 50% go over 2.5."
-     ],
-     "method": "30% score-model probability + 70% Championship rate for each line",
-     "derivation": "public-derived"
-    },
-    "btts": {
-     "market": "btts",
-     "name": "Both teams to score",
-     "model_version": "dc-public-v1",
-     "evidence": {
-      "status": "provisional",
-      "strength": "weak",
-      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.247 against 0.248 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
-     },
-     "pick": {
-      "key": "yes",
-      "label": "Yes",
-      "p": 0.5383,
-      "fair_odds": "≈5/6"
-     },
-     "selections": [
-      {
-       "key": "yes",
-       "label": "Yes",
-       "p": 0.5383,
-       "fair_odds": "≈5/6"
-      },
-      {
-       "key": "no",
-       "label": "No",
-       "p": 0.4617,
-       "fair_odds": "≈6/5"
-      }
-     ],
-     "model_p": 0.5374,
-     "league_p": 0.5386,
-     "explanation": [
-      "Both teams scored in 54% of Championship matches in the training data."
-     ],
-     "method": "30% score-model probability + 70% Championship rate",
-     "derivation": "public-derived"
-    }
-   },
-   "recommendations": {
-    "most_likely": {
-     "decision": "most_likely",
-     "market": "result",
-     "key": "H",
-     "label": "Southampton win",
-     "p": 0.6626,
-     "credible_p": 0.654,
-     "n": 503,
-     "status": "provisional",
-     "strength": "moderate",
-     "basis": "Championship model, 503 backtest matches (2025-26)",
-     "lower_bound": 0.6191
-    },
-    "best_value": {
-     "decision": "no_bet",
-     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
-    },
-    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
-   }
-  },
   "PD-2627-alaves-v-deportivo-la-coruna": {
    "match_id": "PD-2627-alaves-v-deportivo-la-coruna",
    "record_id": "PUB-PD-2627-alaves-v-deportivo-la-coruna#r26",
@@ -107151,6 +105997,868 @@
      "strength": "moderate",
      "basis": "Primeira Liga model, 268 backtest matches (2025-26)",
      "lower_bound": 0.4915
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "ELC-2627-preston-v-middlesbrough": {
+   "match_id": "ELC-2627-preston-v-middlesbrough",
+   "record_id": "PUB-ELC-2627-preston-v-middlesbrough#r1",
+   "published_at": "2026-11-21T12:59:44.333010+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Preston",
+    "away": "Middlesbrough",
+    "kickoff_utc": "2026-12-12T12:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 503 Championship matches (2025-26): Brier 0.639 against 0.655 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "A",
+      "label": "Middlesbrough win",
+      "p": 0.4983,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Preston win",
+       "p": 0.2469,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2548,
+       "fair_odds": "≈3/1"
+      },
+      {
+       "key": "A",
+       "label": "Middlesbrough win",
+       "p": 0.4983,
+       "fair_odds": "≈Evens"
+      }
+     ],
+     "method": "Championship Dixon-Coles fitted on Championship results only",
+     "training_matches": 1851,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-12",
+        "opponent": "Lincoln",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-10",
+        "opponent": "Millwall",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "West Brom",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-11-03",
+        "opponent": "Sheffield United",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-07",
+        "opponent": "Southampton",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-19",
+        "opponent": "Birmingham",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-13",
+        "opponent": "Stoke",
+        "gf": 3,
+        "ga": 2,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-23",
+        "opponent": "Bolton",
+        "gf": 5,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-04",
+        "opponent": "Wrexham",
+        "gf": 0,
+        "ga": 2,
+        "res": "L"
+       },
+       {
+        "date": "2026-11-07",
+        "opponent": "Watford",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 77,
+      "away": 79
+     },
+     "league_p": [
+      0.4387,
+      0.2604,
+      0.3009
+     ],
+     "pooled_matches": {
+      "home": 52,
+      "away": 55
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 2.5",
+      "p": 0.5034,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7458,
+        "fair_odds": "≈1/3"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2542,
+        "fair_odds": "≈3/1"
+       },
+       "model_p": 0.7526,
+       "league_p": 0.7428
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.5034,
+        "fair_odds": "≈Evens"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.4966,
+        "fair_odds": "≈Evens"
+       },
+       "model_p": 0.5032,
+       "league_p": 0.5035
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2679,
+        "fair_odds": "≈11/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7321,
+        "fair_odds": "≈4/11"
+       },
+       "model_p": 0.283,
+       "league_p": 0.2615
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.61,
+      "expected_goals": [
+       1.07,
+       1.62
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.1 goals for Preston and 1.6 for Middlesbrough.",
+      "Championship matches average 2.61 goals; 50% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Championship rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.247 against 0.248 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.536,
+      "fair_odds": "≈5/6"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.536,
+       "fair_odds": "≈5/6"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.464,
+       "fair_odds": "≈6/5"
+      }
+     ],
+     "model_p": 0.5299,
+     "league_p": 0.5386,
+     "explanation": [
+      "Both teams scored in 54% of Championship matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Championship rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.536,
+     "credible_p": 0.5361,
+     "n": 557,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 557 Championship backtest matches",
+     "lower_bound": 0.5013
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "ELC-2627-qpr-v-watford": {
+   "match_id": "ELC-2627-qpr-v-watford",
+   "record_id": "PUB-ELC-2627-qpr-v-watford#r1",
+   "published_at": "2026-11-21T12:59:44.333010+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "QPR",
+    "away": "Watford",
+    "kickoff_utc": "2026-12-12T12:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 503 Championship matches (2025-26): Brier 0.639 against 0.655 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "QPR win",
+      "p": 0.4931,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "QPR win",
+       "p": 0.4931,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.2613,
+       "fair_odds": "≈11/4"
+      },
+      {
+       "key": "A",
+       "label": "Watford win",
+       "p": 0.2457,
+       "fair_odds": "≈3/1"
+      }
+     ],
+     "method": "Championship Dixon-Coles fitted on Championship results only",
+     "training_matches": 1851,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-19",
+        "opponent": "Preston",
+        "gf": 2,
+        "ga": 2,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-14",
+        "opponent": "Derby",
+        "gf": 4,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Swansea",
+        "gf": 5,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-11-03",
+        "opponent": "Burnley",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-11-07",
+        "opponent": "Lincoln",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-05",
+        "opponent": "West Brom",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-09-18",
+        "opponent": "Bristol City",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-13",
+        "opponent": "Cardiff",
+        "gf": 1,
+        "ga": 5,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Wolves",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Norwich",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 77,
+      "away": 76
+     },
+     "league_p": [
+      0.4387,
+      0.2604,
+      0.3009
+     ],
+     "pooled_matches": {
+      "home": 52,
+      "away": 52
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5044,
+      "fair_odds": "≈Evens",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7398,
+        "fair_odds": "≈4/11"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2602,
+        "fair_odds": "≈11/4"
+       },
+       "model_p": 0.7328,
+       "league_p": 0.7428
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.4956,
+        "fair_odds": "≈Evens"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.5044,
+        "fair_odds": "≈Evens"
+       },
+       "model_p": 0.477,
+       "league_p": 0.5035
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2611,
+        "fair_odds": "≈11/4"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7389,
+        "fair_odds": "≈4/11"
+       },
+       "model_p": 0.26,
+       "league_p": 0.2615
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.61,
+      "expected_goals": [
+       1.56,
+       1.02
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.6 goals for QPR and 1.0 for Watford.",
+      "Championship matches average 2.61 goals; 50% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Championship rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.247 against 0.248 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5299,
+      "fair_odds": "≈10/11"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5299,
+       "fair_odds": "≈10/11"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4701,
+       "fair_odds": "≈11/10"
+      }
+     ],
+     "model_p": 0.5097,
+     "league_p": 0.5386,
+     "explanation": [
+      "Both teams scored in 54% of Championship matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Championship rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "btts",
+     "key": "yes",
+     "label": "Yes",
+     "p": 0.5299,
+     "credible_p": 0.5302,
+     "n": 557,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 557 Championship backtest matches",
+     "lower_bound": 0.4954
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   }
+  },
+  "ELC-2627-stoke-v-west-brom": {
+   "match_id": "ELC-2627-stoke-v-west-brom",
+   "record_id": "PUB-ELC-2627-stoke-v-west-brom#r1",
+   "published_at": "2026-11-21T12:59:44.333010+00:00",
+   "derivation": "public-derived",
+   "fixture": {
+    "competition": "ELC",
+    "season": "2627",
+    "home": "Stoke",
+    "away": "West Brom",
+    "kickoff_utc": "2026-12-12T12:30:00Z",
+    "status": "SCHEDULED",
+    "kickoff_history": []
+   },
+   "promoted": [],
+   "markets": {
+    "result": {
+     "market": "result",
+     "name": "Match result",
+     "tier": "L1",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate",
+      "summary": "Backtest on 503 Championship matches (2025-26): Brier 0.639 against 0.655 for the league average. A single-season test with no forward record yet, so provisional."
+     },
+     "pick": {
+      "key": "H",
+      "label": "Stoke win",
+      "p": 0.3536,
+      "fair_odds": "≈15/8"
+     },
+     "selections": [
+      {
+       "key": "H",
+       "label": "Stoke win",
+       "p": 0.3536,
+       "fair_odds": "≈15/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3024,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "A",
+       "label": "West Brom win",
+       "p": 0.3439,
+       "fair_odds": "≈15/8"
+      }
+     ],
+     "method": "Championship Dixon-Coles fitted on Championship results only",
+     "training_matches": 1851,
+     "form": {
+      "home": [
+       {
+        "date": "2026-09-05",
+        "opponent": "Charlton",
+        "gf": 4,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-19",
+        "opponent": "Sheffield United",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-13",
+        "opponent": "Middlesbrough",
+        "gf": 2,
+        "ga": 3,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Bristol City",
+        "gf": 0,
+        "ga": 0,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "Preston",
+        "gf": 2,
+        "ga": 0,
+        "res": "W"
+       }
+      ],
+      "away": [
+       {
+        "date": "2026-09-09",
+        "opponent": "Derby",
+        "gf": 1,
+        "ga": 0,
+        "res": "W"
+       },
+       {
+        "date": "2026-09-20",
+        "opponent": "Wolves",
+        "gf": 0,
+        "ga": 1,
+        "res": "L"
+       },
+       {
+        "date": "2026-10-13",
+        "opponent": "Wrexham",
+        "gf": 2,
+        "ga": 1,
+        "res": "W"
+       },
+       {
+        "date": "2026-10-24",
+        "opponent": "Preston",
+        "gf": 1,
+        "ga": 1,
+        "res": "D"
+       },
+       {
+        "date": "2026-10-31",
+        "opponent": "West Ham",
+        "gf": 3,
+        "ga": 1,
+        "res": "W"
+       }
+      ]
+     },
+     "venue_games": {
+      "home": 76,
+      "away": 77
+     },
+     "league_p": [
+      0.4387,
+      0.2604,
+      0.3009
+     ],
+     "pooled_matches": {
+      "home": 52,
+      "away": 52
+     },
+     "derivation": "public-derived"
+    },
+    "goals": {
+     "market": "goals",
+     "name": "Total goals",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.250 against 0.251 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5373,
+      "fair_odds": "≈5/6",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": {
+        "key": "over",
+        "label": "Over 1.5",
+        "p": 0.7122,
+        "fair_odds": "≈2/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 1.5",
+        "p": 0.2878,
+        "fair_odds": "≈5/2"
+       },
+       "model_p": 0.6406,
+       "league_p": 0.7428
+      },
+      {
+       "line": 2.5,
+       "over": {
+        "key": "over",
+        "label": "Over 2.5",
+        "p": 0.4627,
+        "fair_odds": "≈6/5"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 2.5",
+        "p": 0.5373,
+        "fair_odds": "≈5/6"
+       },
+       "model_p": 0.3675,
+       "league_p": 0.5035
+      },
+      {
+       "line": 3.5,
+       "over": {
+        "key": "over",
+        "label": "Over 3.5",
+        "p": 0.2351,
+        "fair_odds": "≈100/30"
+       },
+       "under": {
+        "key": "under",
+        "label": "Under 3.5",
+        "p": 0.7649,
+        "fair_odds": "≈3/10"
+       },
+       "model_p": 0.1735,
+       "league_p": 0.2615
+      }
+     ],
+     "inputs": {
+      "league_mean_goals": 2.61,
+      "expected_goals": [
+       1.09,
+       1.07
+      ]
+     },
+     "explanation": [
+      "The score model expects about 1.1 goals for Stoke and 1.1 for West Brom.",
+      "Championship matches average 2.61 goals; 50% go over 2.5."
+     ],
+     "method": "30% score-model probability + 70% Championship rate for each line",
+     "derivation": "public-derived"
+    },
+    "btts": {
+     "market": "btts",
+     "name": "Both teams to score",
+     "model_version": "dc-public-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak",
+      "summary": "Championship backtest (557 matches, 2025-26): Brier 0.247 against 0.248 for the league average. No proven edge: read this as the league rate nudged by the Dixon-Coles score model."
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5093,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5093,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4907,
+       "fair_odds": "≈Evens"
+      }
+     ],
+     "model_p": 0.441,
+     "league_p": 0.5386,
+     "explanation": [
+      "Both teams scored in 54% of Championship matches in the training data."
+     ],
+     "method": "30% score-model probability + 70% Championship rate",
+     "derivation": "public-derived"
+    }
+   },
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "goals",
+     "key": "under",
+     "line": 2.5,
+     "label": "Under 2.5",
+     "p": 0.5373,
+     "credible_p": 0.5359,
+     "n": 557,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 557 Championship backtest matches",
+     "lower_bound": 0.5011
     },
     "best_value": {
      "decision": "no_bet",

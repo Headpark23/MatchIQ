@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-21T03:27:54.951278+00:00",
+ "generated_at": "2026-11-21T12:59:44.333010+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -24898,7 +24898,7 @@
    "home": "Man City",
    "away": "Fulham",
    "kickoff_utc": "2026-11-21T12:30:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -24916,7 +24916,7 @@
    "home": "Millwall",
    "away": "QPR",
    "kickoff_utc": "2026-11-21T12:30:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -24933,7 +24933,7 @@
    "home": "Norwich",
    "away": "Cardiff",
    "kickoff_utc": "2026-11-21T12:30:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -24956,7 +24956,7 @@
    "home": "Southampton",
    "away": "Derby",
    "kickoff_utc": "2026-11-21T12:30:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -61694,38 +61694,6 @@
    "kickoff_history": []
   },
   {
-   "id": "NLA-2627-netherlands-v-portugal",
-   "competition": "NLA",
-   "season": "2627",
-   "home": "Netherlands",
-   "away": "Portugal",
-   "kickoff_utc": "2027-03-25T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "openligadb"
-   ],
-   "first_seen": "2026-11-20T21:57:47.360723+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "NLA-2627-norway-v-england",
-   "competition": "NLA",
-   "season": "2627",
-   "home": "Norway",
-   "away": "England",
-   "kickoff_utc": "2027-03-25T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "openligadb"
-   ],
-   "first_seen": "2026-11-20T21:57:47.360723+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "NLA-2627-spain-v-france",
    "competition": "NLA",
    "season": "2627",
@@ -61742,12 +61710,12 @@
    "kickoff_history": []
   },
   {
-   "id": "NLA-2627-england-v-norway",
+   "id": "NLA-2627-norway-v-england",
    "competition": "NLA",
    "season": "2627",
-   "home": "England",
-   "away": "Norway",
-   "kickoff_utc": "2027-03-28T18:45:00Z",
+   "home": "Norway",
+   "away": "England",
+   "kickoff_utc": "2027-03-27T17:00:00Z",
    "status": "SCHEDULED",
    "score": null,
    "result_source": null,
@@ -61755,7 +61723,35 @@
     "openligadb"
    ],
    "first_seen": "2026-11-20T21:57:47.360723+00:00",
-   "kickoff_history": []
+   "kickoff_history": [
+    {
+     "from": "2027-03-25T19:45:00Z",
+     "to": "2027-03-27T17:00:00Z",
+     "seen_at": "2026-11-21T12:59:44.333010+00:00"
+    }
+   ]
+  },
+  {
+   "id": "NLA-2627-netherlands-v-portugal",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "Netherlands",
+   "away": "Portugal",
+   "kickoff_utc": "2027-03-27T19:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-03-25T19:45:00Z",
+     "to": "2027-03-27T19:45:00Z",
+     "seen_at": "2026-11-21T12:59:44.333010+00:00"
+    }
+   ]
   },
   {
    "id": "NLA-2627-france-v-spain",
@@ -61790,12 +61786,12 @@
    "kickoff_history": []
   },
   {
-   "id": "NLA-2627-portugal-v-netherlands",
+   "id": "NLA-2627-england-v-norway",
    "competition": "NLA",
    "season": "2627",
-   "home": "Portugal",
-   "away": "Netherlands",
-   "kickoff_utc": "2027-03-28T18:45:00Z",
+   "home": "England",
+   "away": "Norway",
+   "kickoff_utc": "2027-03-30T18:45:00Z",
    "status": "SCHEDULED",
    "score": null,
    "result_source": null,
@@ -61803,7 +61799,35 @@
     "openligadb"
    ],
    "first_seen": "2026-11-20T21:57:47.360723+00:00",
-   "kickoff_history": []
+   "kickoff_history": [
+    {
+     "from": "2027-03-28T18:45:00Z",
+     "to": "2027-03-30T18:45:00Z",
+     "seen_at": "2026-11-21T12:59:44.333010+00:00"
+    }
+   ]
+  },
+  {
+   "id": "NLA-2627-portugal-v-netherlands",
+   "competition": "NLA",
+   "season": "2627",
+   "home": "Portugal",
+   "away": "Netherlands",
+   "kickoff_utc": "2027-03-30T18:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-20T21:57:47.360723+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-03-28T18:45:00Z",
+     "to": "2027-03-30T18:45:00Z",
+     "seen_at": "2026-11-21T12:59:44.333010+00:00"
+    }
+   ]
   },
   {
    "id": "N1-2627-ajax-v-twente",
