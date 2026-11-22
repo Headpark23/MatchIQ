@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-11-21T20:40:38.812733+00:00",
+ "attempted_at": "2026-11-22T00:42:12.555842+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -62,7 +62,7 @@
    "ok": true,
    "label": "football-data.org (free tier)",
    "matches": 380,
-   "results": 123,
+   "results": 124,
    "note": null
   },
   "PD:openfootball": {
@@ -76,7 +76,7 @@
    "ok": true,
    "label": "football-data.org (free tier)",
    "matches": 380,
-   "results": 110,
+   "results": 114,
    "note": null
   },
   "SA:openfootball": {
@@ -90,7 +90,7 @@
    "ok": true,
    "label": "football-data.org (free tier)",
    "matches": 306,
-   "results": 92,
+   "results": 96,
    "note": null
   },
   "FL1:openfootball": {
@@ -111,7 +111,7 @@
    "ok": true,
    "label": "football-data.org (free tier)",
    "matches": 306,
-   "results": 111,
+   "results": 113,
    "note": null
   },
   "P1:openfootball": {
@@ -247,17 +247,17 @@
   "the-odds-api": {
    "ok": true,
    "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
-   "matches": 84,
+   "matches": 101,
    "notes": {
-    "PL": "skipped: polled 7.7 h ago (minimum 8 h)",
-    "ELC": "skipped: polled 7.7 h ago (minimum 8 h)",
-    "BL1": "skipped: polled 7.7 h ago (minimum 8 h)",
-    "PD": "skipped: polled 7.7 h ago (minimum 8 h)",
-    "SA": "skipped: polled 7.7 h ago (minimum 8 h)",
-    "FL1": "skipped: polled 7.7 h ago (minimum 8 h)"
+    "PL": "ok: 22 of 22 events matched, 2 credits",
+    "ELC": "ok: 25 of 25 events matched, 2 credits",
+    "BL1": "ok: 11 of 11 events matched, 2 credits",
+    "PD": "ok: 15 of 15 events matched, 2 credits",
+    "SA": "ok: 16 of 16 events matched, 2 credits",
+    "FL1": "ok: 12 of 12 events matched, 2 credits"
    },
-   "credits_used_this_month": 162,
-   "credits_remaining_reported": 320
+   "credits_used_this_month": 174,
+   "credits_remaining_reported": 308
   }
  },
  "warnings": [
@@ -265,12 +265,12 @@
  ],
  "errors": [],
  "ok": true,
- "last_success": "2026-11-21T20:40:38.812733+00:00",
+ "last_success": "2026-11-22T00:42:12.555842+00:00",
  "fixtures": 3578,
- "upcoming_predicted": 207,
- "published_revisions": 180,
+ "upcoming_predicted": 217,
+ "published_revisions": 94,
  "imported_frozen_records": 0,
- "settlement_updates": 364,
+ "settlement_updates": 257,
  "training_results": 1945,
  "results_latest": "2026-11-21",
  "model_versions": {
@@ -283,8 +283,8 @@
  "attribution": "Fixtures and results: football-data.org, OpenLigaDB contributors (ODbL 1.0), openfootball (CC0, including openfootball/champions-league for European club history), martj42/international_results (CC0). Bookmaker prices: The Odds API. Research-only statistics (private): football-data.co.uk.",
  "public": {
   "model_version": "dc-public-v1",
-  "predictions": 364,
-  "records": 6669,
+  "predictions": 374,
+  "records": 7043,
   "validated": true
  }
 }
