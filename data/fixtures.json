@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-22T23:49:16.317093+00:00",
+ "generated_at": "2026-11-23T20:31:51.743003+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -25324,9 +25324,12 @@
    "home": "Lincoln",
    "away": "Wrexham",
    "kickoff_utc": "2026-11-21T15:00:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    0,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -25900,9 +25903,12 @@
    "home": "Juventus",
    "away": "Venezia",
    "kickoff_utc": "2026-11-22T11:30:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    4,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26009,9 +26015,12 @@
    "home": "Bologna",
    "away": "Udinese",
    "kickoff_utc": "2026-11-22T14:00:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26032,9 +26041,12 @@
    "home": "Hull",
    "away": "Brighton",
    "kickoff_utc": "2026-11-22T14:00:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    2,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb",
@@ -26070,9 +26082,12 @@
    "home": "Sassuolo",
    "away": "Genoa",
    "kickoff_utc": "2026-11-22T14:00:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    0,
+    2
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26180,9 +26195,12 @@
    "home": "Liverpool",
    "away": "Man United",
    "kickoff_utc": "2026-11-22T16:30:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    4,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb",
@@ -26219,9 +26237,12 @@
    "home": "AC Milan",
    "away": "Frosinone",
    "kickoff_utc": "2026-11-22T17:00:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    5,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26268,9 +26289,12 @@
    "home": "Atalanta",
    "away": "Inter",
    "kickoff_utc": "2026-11-22T19:45:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    4,
+    4
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26331,7 +26355,7 @@
    "home": "Monza",
    "away": "Fiorentina",
    "kickoff_utc": "2026-11-23T19:45:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -26354,7 +26378,7 @@
    "home": "Brentford",
    "away": "Everton",
    "kickoff_utc": "2026-11-23T20:00:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -26372,7 +26396,7 @@
    "home": "Levante",
    "away": "Elche",
    "kickoff_utc": "2026-11-23T20:00:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -32537,6 +32561,34 @@
    "kickoff_history": []
   },
   {
+   "id": "PD-2627-elche-v-sevilla",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Elche",
+   "away": "Sevilla",
+   "kickoff_utc": "2026-12-11T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-11T20:00:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
+    }
+   ]
+  },
+  {
    "id": "P1-2627-academico-viseu-v-arouca",
    "competition": "P1",
    "season": "2627",
@@ -32609,6 +32661,34 @@
    ],
    "first_seen": "2026-10-26T16:44:38.256231+00:00",
    "kickoff_history": []
+  },
+  {
+   "id": "PD-2627-levante-v-alaves",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Levante",
+   "away": "Alaves",
+   "kickoff_utc": "2026-12-12T13:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-12T13:00:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
+    }
+   ]
   },
   {
    "id": "SA-2627-cagliari-v-venezia",
@@ -32987,6 +33067,34 @@
    "kickoff_history": []
   },
   {
+   "id": "PD-2627-villarreal-v-rayo-vallecano",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Villarreal",
+   "away": "Rayo Vallecano",
+   "kickoff_utc": "2026-12-12T15:15:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-12T15:15:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
+    }
+   ]
+  },
+  {
    "id": "P1-2627-estoril-v-santa-clara",
    "competition": "P1",
    "season": "2627",
@@ -33098,6 +33206,34 @@
      "from": "2026-12-12T00:00:00Z",
      "to": "2026-12-12T17:30:00Z",
      "seen_at": "2026-11-05T21:13:49.781151+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PD-2627-malaga-v-barcelona",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Malaga",
+   "away": "Barcelona",
+   "kickoff_utc": "2026-12-12T17:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-12T17:30:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
     }
    ]
   },
@@ -33292,6 +33428,34 @@
    "kickoff_history": []
   },
   {
+   "id": "PD-2627-real-betis-v-racing-santander",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Real Betis",
+   "away": "Racing Santander",
+   "kickoff_utc": "2026-12-12T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-12T20:00:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
+    }
+   ]
+  },
+  {
    "id": "P1-2627-gil-vicente-v-sporting-cp",
    "competition": "P1",
    "season": "2627",
@@ -33311,236 +33475,6 @@
      "from": "2026-12-13T15:00:00Z",
      "to": "2026-12-12T20:30:00Z",
      "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-atletico-madrid-v-valencia",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Atletico Madrid",
-   "away": "Valencia",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-deportivo-la-coruna-v-athletic-club",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Deportivo La Coruna",
-   "away": "Athletic Club",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-elche-v-sevilla",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Elche",
-   "away": "Sevilla",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-espanyol-v-celta-vigo",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Espanyol",
-   "away": "Celta Vigo",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-levante-v-alaves",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Levante",
-   "away": "Alaves",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-malaga-v-barcelona",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Malaga",
-   "away": "Barcelona",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-real-betis-v-racing-santander",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Real Betis",
-   "away": "Racing Santander",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-real-madrid-v-osasuna",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Real Madrid",
-   "away": "Osasuna",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-real-sociedad-v-getafe",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Real Sociedad",
-   "away": "Getafe",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "PD-2627-villarreal-v-rayo-vallecano",
-   "competition": "PD",
-   "season": "2627",
-   "home": "Villarreal",
-   "away": "Rayo Vallecano",
-   "kickoff_utc": "2026-12-13T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-13T14:00:00Z",
-     "to": "2026-12-13T00:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
     }
    ]
   },
@@ -33581,6 +33515,34 @@
      "from": "2026-12-13T14:00:00Z",
      "to": "2026-12-13T11:30:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PD-2627-atletico-madrid-v-valencia",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Atletico Madrid",
+   "away": "Valencia",
+   "kickoff_utc": "2026-12-13T13:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-13T13:00:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
     }
    ]
   },
@@ -33797,6 +33759,34 @@
    "kickoff_history": []
   },
   {
+   "id": "PD-2627-deportivo-la-coruna-v-athletic-club",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Deportivo La Coruna",
+   "away": "Athletic Club",
+   "kickoff_utc": "2026-12-13T15:15:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-13T15:15:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
+    }
+   ]
+  },
+  {
    "id": "P1-2627-casa-pia-v-nacional",
    "competition": "P1",
    "season": "2627",
@@ -33953,6 +33943,34 @@
    ]
   },
   {
+   "id": "PD-2627-real-sociedad-v-getafe",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Real Sociedad",
+   "away": "Getafe",
+   "kickoff_utc": "2026-12-13T17:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-13T17:30:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
+    }
+   ]
+  },
+  {
    "id": "P1-2627-vitoria-guimaraes-v-alverca",
    "competition": "P1",
    "season": "2627",
@@ -34080,6 +34098,34 @@
    ]
   },
   {
+   "id": "PD-2627-real-madrid-v-osasuna",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Real Madrid",
+   "away": "Osasuna",
+   "kickoff_utc": "2026-12-13T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-13T20:00:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
+    }
+   ]
+  },
+  {
    "id": "P1-2627-porto-v-estrela-amadora",
    "competition": "P1",
    "season": "2627",
@@ -34145,6 +34191,34 @@
      "from": "2026-12-13T14:00:00Z",
      "to": "2026-12-14T19:45:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "PD-2627-espanyol-v-celta-vigo",
+   "competition": "PD",
+   "season": "2627",
+   "home": "Espanyol",
+   "away": "Celta Vigo",
+   "kickoff_utc": "2026-12-14T20:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-13T14:00:00Z",
+     "to": "2026-12-13T00:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2026-12-13T00:00:00Z",
+     "to": "2026-12-14T20:00:00Z",
+     "seen_at": "2026-11-23T20:31:51.743003+00:00"
     }
    ]
   },
