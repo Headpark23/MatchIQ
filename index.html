@@ -54,6 +54,7 @@
     try {
       var h = window.location.hash || '';
       var isSharedDeepLink = h.indexOf('join-league=') !== -1 || h.indexOf('slip=') !== -1 ||
+        h.indexOf('btm=') !== -1 ||
         (window.location.search || '').indexOf('from=push') !== -1 ||  // a tapped notification
         (window.location.search || '').indexOf('shared=1') !== -1;     // a slip shared in from another app
       if (!isSharedDeepLink) {

@@ -1,8 +1,8 @@
-// App Launch: Guarantee landing on Home screen (#/) unless explicit deep-link (#join-league, #slip, push, or shared slip)
+// App Launch: Guarantee landing on Home screen (#/) unless explicit deep-link (#join-league, #slip, #btm, push, or shared slip)
 try {
   const h = window.location.hash || '';
   const s = window.location.search || '';
-  const isSharedDeepLink = h.includes('join-league=') || h.includes('slip=') ||
+  const isSharedDeepLink = h.includes('join-league=') || h.includes('slip=') || h.includes('btm=') ||
     s.includes('from=push') || s.includes('shared=1');
   if (!isSharedDeepLink) {
     window.location.hash = '#/';
@@ -59,8 +59,7 @@ function jargonTip(term) {
   const key = String(term || '').toLowerCase().trim();
   const def = JARGON_DEFS[key];
   if (!def) return '';
-  const escaped = esc(def).replace(/'/g, "\'");
-  return '<button type="button" class="jargon-tip-btn" aria-label="' + esc(def) + '" title="' + esc(def) + '" onclick="alert(\'' + escaped + '\')">?</button>';
+  return '<button type="button" class="jargon-tip-btn" aria-label="' + esc(def) + '" title="' + esc(def) + '" onclick="toast(this.getAttribute(\'title\'))">?</button>';
 }
 
 const DIARY_STORAGE_KEY = 'matchiq_bet_diary_v1';
@@ -1510,22 +1509,343 @@ function sinceLastVisitCard() {
     '<div class="hm-since-kicker">' + (since ? 'Since you were last here' : 'Your bets') + '</div>' + rows.join('') + '</section>';
 }
 
+// ------------------------------------------------------------ Beat the Model (1-tap matchday challenge)
+const BTM_STORAGE_KEY = 'betbuddy_btm_v1';
+const BTM_TOP_COMPS = { PL: 1, CL: 2, ELC: 3, BL1: 4, PD: 5, SA: 6, EL: 7, FL1: 8 };
+let btmMateChallenge = null;
+
+function loadBtmState() {
+  try {
+    const raw = localStorage.getItem(BTM_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (parsed && parsed.picks && typeof parsed.picks === 'object') return parsed;
+  } catch (e) {}
+  return { picks: {} };
+}
+
+function saveBtmState(state) {
+  try { localStorage.setItem(BTM_STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function btmModelLean(pred) {
+  const res = pred && pred.markets && pred.markets.result;
+  if (!res) return { key: 'H', prob: 0.45 };
+  if (res.pick && res.pick.key && ['H', 'D', 'A'].includes(res.pick.key)) {
+    return { key: res.pick.key, prob: Number(res.pick.p || 0) };
+  }
+  const probs = res.probs || {};
+  const best = [['H', Number(probs.H || 0)], ['D', Number(probs.D || 0)], ['A', Number(probs.A || 0)]].sort((a, b) => b[1] - a[1])[0];
+  return { key: best[0], prob: best[1] };
+}
+
+function btmChoiceLabel(choice, home, away) {
+  if (choice === 'H') return home || 'Home';
+  if (choice === 'A') return away || 'Away';
+  return 'Draw';
+}
+
+function settleBeatTheModel() {
+  const state = loadBtmState();
+  let changed = false;
+  Object.values(state.picks).forEach(p => {
+    if (!p || p.outcome) return;
+    const f = fixtureById(p.fixtureId);
+    if (!f || !(f.status === 'FINISHED' || Array.isArray(f.score)) || !Array.isArray(f.score) || f.score.length < 2) return;
+    const [hg, ag] = f.score;
+    const outcome = hg > ag ? 'H' : (ag > hg ? 'A' : 'D');
+    p.outcome = outcome;
+    p.score = hg + '–' + ag;
+    p.userWon = p.userPick === outcome;
+    p.modelWon = p.modelPick === outcome;
+    p.settledAt = new Date().toISOString();
+    changed = true;
+  });
+  if (changed) saveBtmState(state);
+  return state;
+}
+
+function getBtmStats(state) {
+  const picks = Object.values((state && state.picks) || {});
+  const settled = picks.filter(p => p && p.outcome).sort((a, b) => Date.parse(a.kickoff_utc || a.pickedAt || '') - Date.parse(b.kickoff_utc || b.pickedAt || ''));
+  const open = picks.filter(p => p && !p.outcome);
+  let userWins = 0, modelWins = 0, streak = 0;
+  settled.forEach(p => {
+    if (p.userWon) { userWins++; streak++; } else { streak = 0; }
+    if (p.modelWon) modelWins++;
+  });
+  return {
+    userWins,
+    modelWins,
+    settledCount: settled.length,
+    openCount: open.length,
+    streak,
+    recentSettled: settled.slice(-3).reverse()
+  };
+}
+
+function getBeatTheModelMatches() {
+  const now = Date.now();
+  const preds = predictionsList().filter(p => {
+    const f = fixtureById(p.match_id) || p.fixture;
+    if (!f) return false;
+    const status = f.status || 'SCHEDULED';
+    if (status !== 'SCHEDULED') return false;
+    const ms = kickoffMs(f);
+    return ms > now && p.markets && p.markets.result;
+  });
+  // If opened from a mate's challenge link, include those fixtures first if still upcoming.
+  const challengeIds = btmMateChallenge ? Object.keys(btmMateChallenge.picks || {}) : [];
+  const byId = new Map(preds.map(p => [p.match_id, p]));
+  const picked = [];
+  challengeIds.forEach(id => { if (byId.has(id) && picked.length < 3) picked.push(byId.get(id)); });
+
+  const week = preds.filter(p => {
+    const ms = kickoffMs(fixtureById(p.match_id) || p.fixture);
+    return ms - now <= 7 * 86400000;
+  });
+  const pool = (week.length >= 3 ? week : preds).slice().sort((a, b) => {
+    const fa = fixtureById(a.match_id) || a.fixture;
+    const fb = fixtureById(b.match_id) || b.fixture;
+    const dayDiff = Math.floor((kickoffMs(fa) - now) / 86400000) - Math.floor((kickoffMs(fb) - now) / 86400000);
+    if (Math.abs(dayDiff) >= 2) return dayDiff;
+    const ca = BTM_TOP_COMPS[fa.competition] || 50;
+    const cb = BTM_TOP_COMPS[fb.competition] || 50;
+    if (ca !== cb) return ca - cb;
+    return kickoffMs(fa) - kickoffMs(fb);
+  });
+  for (const p of pool) {
+    if (picked.length >= 3) break;
+    if (!picked.some(x => x.match_id === p.match_id)) picked.push(p);
+  }
+  return picked;
+}
+
+function parseMateChallengeFromHash() {
+  try {
+    const h = window.location.hash || '';
+    const m = /[?&]btm=([^&]+)/.exec(h);
+    if (!m) return;
+    const raw = decodeURIComponent(m[1]);
+    const parts = raw.split('|');
+    const from = (parts[0] || 'A mate').replace(/[<>&"']/g, '').slice(0, 24) || 'A mate';
+    const picks = {};
+    (parts[1] || '').split(',').forEach(pair => {
+      const idx = pair.lastIndexOf(':');
+      if (idx <= 0) return;
+      const id = pair.slice(0, idx).trim();
+      const ch = pair.slice(idx + 1).trim().toUpperCase();
+      if (id && (ch === 'H' || ch === 'D' || ch === 'A')) picks[id] = ch;
+    });
+    if (Object.keys(picks).length) {
+      btmMateChallenge = { from, picks };
+    }
+  } catch (e) {}
+}
+parseMateChallengeFromHash();
+
+function pickBeatTheModel(fixtureId, choice) {
+  if (!['H', 'D', 'A'].includes(choice)) return;
+  const pred = (DATA.predictions && DATA.predictions.predictions && DATA.predictions.predictions[fixtureId]) || null;
+  const f = fixtureById(fixtureId) || (pred && pred.fixture);
+  if (!f) return;
+  if (kickoffMs(f) <= Date.now()) {
+    toast('Kick-off passed — this match is locked.');
+    return;
+  }
+  const lean = btmModelLean(pred);
+  const state = loadBtmState();
+  state.picks[fixtureId] = {
+    fixtureId,
+    home: f.home,
+    away: f.away,
+    kickoff_utc: f.kickoff_utc,
+    competition: f.competition || 'PL',
+    userPick: choice,
+    modelPick: lean.key,
+    modelProb: lean.prob,
+    pickedAt: new Date().toISOString(),
+    outcome: null,
+    userWon: null,
+    modelWon: null,
+    settledAt: null
+  };
+  saveBtmState(state);
+  const label = btmChoiceLabel(choice, f.home, f.away);
+  const msg = choice === lean.key
+    ? 'Locked ' + label + ' — backing Bet Buddy!'
+    : 'Locked ' + label + ' — taking on Bet Buddy!';
+  toast(msg);
+  render();
+}
+
+function buildBtmChallengeUrl(matches, state) {
+  const user = getAuthUser();
+  const who = (user && user.signedIn && (user.handle || user.name)) ? String(user.handle || user.name).replace(/^@+/, '').split(' ')[0].slice(0, 18) : 'A mate';
+  const pairs = matches
+    .map(p => { const pk = state.picks[p.match_id]; return pk ? p.match_id + ':' + pk.userPick : null; })
+    .filter(Boolean);
+  if (!pairs.length) return '';
+  const base = window.location.origin + window.location.pathname;
+  return base + '#/?btm=' + encodeURIComponent(who + '|' + pairs.join(','));
+}
+
+function challengeMateBtm() {
+  const state = loadBtmState();
+  const matches = getBeatTheModelMatches();
+  const url = buildBtmChallengeUrl(matches, state);
+  if (!url) { toast('Tap at least one match pick first.'); return; }
+  const pickedCount = matches.filter(p => state.picks[p.match_id]).length;
+  const text = '⚔️ Beat the Model on Bet Buddy! I just locked ' + pickedCount + ' match ' + (pickedCount === 1 ? 'call' : 'calls') + ' — tap your picks and see who wins at full-time: ' + url;
+  if (navigator.share) {
+    navigator.share({ title: 'Beat the Model · Bet Buddy', text, url }).catch(() => {});
+  } else if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => toast('Challenge link copied — paste it into WhatsApp!')).catch(() => toast('Link ready to share!'));
+  } else {
+    toast('Copy your challenge link from the address bar.');
+  }
+}
+
+function shareBtmScore() {
+  const state = settleBeatTheModel();
+  const stats = getBtmStats(state);
+  const url = window.location.origin + window.location.pathname;
+  const text = stats.settledCount
+    ? '⚽ Beat the Model on Bet Buddy: I\'m ' + stats.userWins + '–' + stats.modelWins + ' vs the AI' + (stats.streak >= 2 ? ' (🔥 ' + stats.streak + ' in a row)' : '') + '. Can you beat it? ' + url
+    : '⚽ Playing Beat the Model on Bet Buddy — free 1-tap match calls vs the football model: ' + url;
+  if (navigator.share) {
+    navigator.share({ title: 'My Beat the Model Score', text, url }).catch(() => {});
+  } else if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => toast('Score copied — paste into WhatsApp!')).catch(() => {});
+  }
+}
+
+function dismissMateChallenge() {
+  btmMateChallenge = null;
+  try { history.replaceState(null, '', window.location.pathname + '#/'); } catch (e) {}
+  render();
+}
+
+function fmtCountdownChip(ms) {
+  const diff = ms - Date.now();
+  if (diff <= 0) return 'Live / kicking off';
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return 'in ' + mins + 'm';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return 'in ' + hrs + 'h ' + (mins % 60) + 'm';
+  const days = Math.floor(hrs / 24);
+  return 'in ' + days + 'd ' + (hrs % 24) + 'h';
+}
+
+function renderBeatTheModelCard() {
+  const state = settleBeatTheModel();
+  const stats = getBtmStats(state);
+  const matches = getBeatTheModelMatches();
+  if (!matches.length && !stats.settledCount) return '';
+
+  const pickedHere = matches.filter(p => state.picks[p.match_id]).length;
+  const user = getAuthUser();
+  const isSignedIn = Boolean(user && user.signedIn);
+
+  const scorePill = stats.settledCount
+    ? '<span class="btm-score-pill">You <b>' + stats.userWins + '</b>–<b>' + stats.modelWins + '</b> Model</span>'
+    : '<span class="btm-score-pill is-new">Free · 5 secs</span>';
+  const streakPill = stats.streak >= 2 ? '<span class="btm-streak">🔥 ' + stats.streak + ' streak</span>' : '';
+
+  const mateBanner = btmMateChallenge
+    ? '<div class="btm-mate-banner"><span>⚔️ <b>' + esc(btmMateChallenge.from) + '</b> challenged you! Lock your picks below — settles at full-time.</span>' +
+      '<button type="button" class="icon-btn" onclick="dismissMateChallenge()" aria-label="Dismiss challenge">&times;</button></div>'
+    : '';
+
+  const recentBar = stats.recentSettled.length
+    ? '<div class="btm-recent"><span class="btm-recent-lbl">Full-time:</span>' + stats.recentSettled.map(r =>
+        '<span class="btm-recent-chip ' + (r.userWon ? 'ok' : 'no') + '">' + (r.userWon ? '✓' : '✗') + ' ' + esc(r.home) + ' ' + esc(r.score || '') + ' ' + esc(r.away) + '</span>'
+      ).join('') + '</div>'
+    : '';
+
+  const rowsHtml = matches.map(p => {
+    const f = fixtureById(p.match_id) || p.fixture;
+    const lean = btmModelLean(p);
+    const saved = state.picks[p.match_id];
+    const userPick = saved ? saved.userPick : null;
+    const matePick = btmMateChallenge && btmMateChallenge.picks ? btmMateChallenge.picks[p.match_id] : null;
+    const ms = kickoffMs(f);
+    const modelPct = Math.round(lean.prob * 100);
+    const modelName = btmChoiceLabel(lean.key, f.home, f.away);
+    const stance = userPick
+      ? (userPick === lean.key ? '<span class="btm-stance back">🤝 Backing model</span>' : '<span class="btm-stance fade">⚔️ Taking on model</span>')
+      : '<span class="btm-stance model">🤖 Model: ' + esc(modelName) + ' ' + modelPct + '%</span>';
+    const mateTag = matePick ? '<span class="btm-mate-tag">' + esc(btmMateChallenge.from) + ': ' + esc(btmChoiceLabel(matePick, f.home, f.away)) + '</span>' : '';
+
+    const btn = (ch, lbl) => {
+      const cls = ['btm-btn'];
+      if (userPick === ch) cls.push('is-picked');
+      if (lean.key === ch) cls.push('is-model');
+      return '<button type="button" class="' + cls.join(' ') + '" data-btm-id="' + esc(p.match_id) + '" data-btm-pick="' + ch + '" aria-pressed="' + (userPick === ch) + '">' + esc(lbl) + '</button>';
+    };
+
+    return '<div class="btm-row">' +
+      '<div class="btm-row-top">' +
+        '<span class="btm-comp">' + esc(leagueName(f.competition)) + ' · ' + esc(ownBetDayLabel(ms)) + ' ' + esc(fmtTime(ms)) + '</span>' +
+        stance +
+      '</div>' +
+      (mateTag ? '<div class="btm-mate-row">' + mateTag + '</div>' : '') +
+      '<div class="btm-choices" role="group" aria-label="Pick result for ' + esc(f.home) + ' vs ' + esc(f.away) + '">' +
+        btn('H', f.home) + btn('D', 'Draw') + btn('A', f.away) +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  const actionsHtml = pickedHere > 0
+    ? '<div class="btm-actions">' +
+        '<button type="button" class="btn small primary btm-share-btn" onclick="challengeMateBtm()">⚔️ Challenge a mate</button>' +
+        '<button type="button" class="btn small btm-share-btn" onclick="shareBtmScore()">📤 Share score</button>' +
+      '</div>'
+    : '<p class="btm-hint">Tap Home, Draw or Away on any match. We settle automatically at full-time.</p>';
+
+  const guestNudge = !isSignedIn && (pickedHere > 0 || stats.settledCount > 0)
+    ? '<button type="button" class="btm-nudge" onclick="signInWithGoogle()"><span>🔒 Save your streak &amp; join the UK ladder — free with Google</span><em>Sign in ›</em></button>'
+    : '';
+
+  return '<section class="btm-card" aria-label="Beat the Model daily challenge">' +
+    '<div class="btm-head">' +
+      '<div><div class="btm-kicker">⚔️ Beat the Model</div><h2 class="btm-title">Can you out-tip our AI?</h2></div>' +
+      '<div class="btm-badges">' + streakPill + scorePill + '</div>' +
+    '</div>' +
+    mateBanner + recentBar +
+    '<div class="btm-list">' + rowsHtml + '</div>' +
+    actionsHtml + guestNudge +
+  '</section>';
+}
+
+if (typeof window !== 'undefined') {
+  window.pickBeatTheModel = pickBeatTheModel;
+  window.challengeMateBtm = challengeMateBtm;
+  window.shareBtmScore = shareBtmScore;
+  window.dismissMateChallenge = dismissMateChallenge;
+}
+
 function renderWelcomeHero() {
   const user = getAuthUser();
   const userName = user && user.signedIn ? (user.handle || user.name || '').replace(/^@+/, '').split(' ')[0] : '';
   const rec = DATA.performance ? recordAll(DATA.performance) : null;
   const now = Date.now();
-  const weekN = fixturesList().filter(f => f.status === 'SCHEDULED' && kickoffMs(f) > now && kickoffMs(f) - now < 7 * 86400000).length;
+  const upcomingWeek = fixturesList().filter(f => f.status === 'SCHEDULED' && kickoffMs(f) > now && kickoffMs(f) - now < 7 * 86400000).sort((a, b) => kickoffMs(a) - kickoffMs(b));
+  const weekN = upcomingWeek.length;
+  const nextKo = upcomingWeek[0] ? kickoffMs(upcomingWeek[0]) : 0;
   const leaguesN = shownCompetitionCount();
 
-  // Slim header: the hit rate, top pick and builder each have their own block just below, so they are not repeated here.
+  // Slim, energetic Matchday Pulse header with live countdown to next kick-off.
+  const pulseChip = nextKo ? '<span class="hm-pulse">⏱️ Next kick-off ' + esc(fmtCountdownChip(nextKo)) + '</span>' : '';
   const hero = '<header class="hm-hero">' +
     '<div class="hm-top"><p class="hm-hello">' + (userName ? 'Welcome back, ' + esc(userName) + ' 👋' : 'Welcome to Bet Buddy 👋') + '</p>' +
-      (multiSportLive() ? '<span class="hm-sports" aria-label="Football, tennis, golf, darts and rugby">⚽🎾⛳🎯🏉</span>' : '<span class="hm-sports" aria-label="Football">⚽</span>') + '</div>' +
+      (pulseChip || (multiSportLive() ? '<span class="hm-sports" aria-label="Football, tennis, golf, darts and rugby">⚽🎾⛳🎯🏉</span>' : '<span class="hm-sports" aria-label="Football">⚽</span>')) + '</div>' +
     '<div class="hm-hero-row"><h1 class="hm-title">Smarter bets. <span>Honest numbers.</span></h1>' +
       '<a href="#/build" class="btn primary hm-cta">Build a bet</a></div>' +
     '<p class="hm-meta"><a href="#/fixtures"><b>' + weekN + '</b> games this week</a> · <b>' + leaguesN + '</b> leagues · free</p>' +
   '</header>';
+
+  let btm = '';
+  try { btm = renderBeatTheModelCard(); } catch (e) { /* optional */ }
 
   // Today's top pick, as a teaser.
   let teaser = '';
@@ -1552,10 +1872,10 @@ function renderWelcomeHero() {
   const upNext = next.length ? '<section class="hm-block"><div class="hm-block-head"><h2>Up next</h2><a href="#/fixtures">All matches ›</a></div>' +
     '<div class="cp-group"><div class="cp-ghead"><span>' + esc(fmtDay(kickoffMs(next[0]))) + '</span><span class="cp-cols"><span>Home</span><span>Draw</span><span>Away</span></span></div>' + next.map(fixtureCouponRow).join('') + '</div></section>' : '';
 
-  // A 4×2 launcher grid: short labels on phones, the one-line description returns on wider screens.
+  // Compact 5-tile quick-access grid below the live action.
   const tile = (tag, attrs, cls, icon, title, desc) => '<' + tag + ' class="hm-tile ' + cls + '" ' + attrs + ' aria-label="' + title + ': ' + desc + '"><span class="hm-tile-ico">' + hubIcon(icon, 22) + '</span><b>' + title + '</b><small>' + desc + '</small></' + tag + '>';
   const diaryCount = getStoredDiary().length;
-  const tiles = '<section class="hm-block"><div class="hm-block-head"><h2>Everything in one place</h2></div><div class="hm-tiles">' +
+  const tiles = '<section class="hm-block"><div class="hm-block-head"><h2>Explore Bet Buddy</h2></div><div class="hm-tiles">' +
     tile('a', 'href="#/find"', 't-find', 'target', 'Find me a bet', 'Build your own, get a suggestion, or ask BetAI') +
     tile('a', 'href="#/leagues"', 't-leagues', 'trophy', 'Leagues', 'Beat your mates, climb ladders') +
     tile('a', 'href="#/diary"', 't-diary', 'book', 'Diary', diaryCount ? diaryCount + ' bets tracked' : 'See where your money goes') +
@@ -1569,7 +1889,7 @@ function renderWelcomeHero() {
   try { since = sinceLastVisitCard(); } catch (e) { /* the summary is optional */ }
   try { since += pushPromptCard(); } catch (e) { /* optional */ }
 
-  return '<div class="hm">' + hero + since + record + teaser + tiles + upNext +
+  return '<div class="hm">' + hero + btm + since + teaser + upNext + record + tiles +
     '<p class="hm-trust">🛡️ We say <b>No bet</b> when the evidence is thin · Bet Buddy never places bets · 18+ · <a href="https://www.begambleaware.org" target="_blank" rel="noopener">BeGambleAware</a></p>' +
     '<button type="button" class="hub-quiet-link" onclick="openButlerModal()">' + hubIcon('slip', 14) + 'My bookmakers &amp; slip note settings</button>' +
   '</div>';
@@ -7929,6 +8249,7 @@ $('bookmaker-quick').innerHTML = ['Bet365', 'Sky Bet', 'Paddy Power', 'Ladbrokes
 updateDiaryCount();
 try { updateButlerUI(); } catch (e) {}
 loadData().then(() => {
+  try { settleBeatTheModel(); } catch (e) {}
   render();
   try { autoSettleDiary(); } catch (e) { console.warn('autoSettleDiary notice:', e); }
 });
@@ -8484,6 +8805,8 @@ document.addEventListener('click', e => {
   const save = t.closest('[data-betai-save]');
   if (save) { betaiSaveToDiary(save.dataset.betaiSave, save.dataset.i != null ? Number(save.dataset.i) : null, save.dataset.dest); return; }
   if (t.closest('[data-betai-why]')) { betai.showWhy = !betai.showWhy; renderBetAI(); return; }
+  const btmBtn = t.closest('[data-btm-pick]');
+  if (btmBtn) { pickBeatTheModel(btmBtn.dataset.btmId, btmBtn.dataset.btmPick); return; }
   if (t.id === 'betai-modal') closeBetAI();
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBetAI(); });
