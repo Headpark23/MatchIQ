@@ -78,16 +78,35 @@ class Parse(unittest.TestCase):
 
 class Budget(unittest.TestCase):
     def test_matchday_focus(self):
-        far = [fixture("PL", "Arsenal", "Chelsea", 80)]
+        far = [fixture("PL", "Arsenal", "Chelsea", 120)]
         self.assertIsNone(odds.plan_call({}, NOW, "PL", far)[0])
         self.assertIsNone(odds.plan_call({}, NOW, "SA", FIX)[0])  # a league with no fixture is never polled
         self.assertEqual(odds.plan_call({}, NOW, "PL", FIX)[0], ["h2h", "totals"])
 
     def test_interval_tightens_near_kickoff(self):
-        cache = {"leagues": {"PL": {"fetched_at": (NOW - dt.timedelta(hours=4)).isoformat()}}}
-        self.assertIsNone(odds.plan_call(cache, NOW, "PL", FIX)[0])  # 4 h < 8 h with kickoff 30 h away
+        cache = {"leagues": {"PL": {"fetched_at": (NOW - dt.timedelta(hours=40)).isoformat()}}}
+        self.assertIsNone(odds.plan_call(cache, NOW, "PL", FIX)[0])  # 40 h < 72 h with kickoff 30 h away
         soon = [fixture("PL", "Arsenal", "Chelsea", 5)]
-        self.assertIsNotNone(odds.plan_call(cache, NOW, "PL", soon)[0])  # 4 h >= 3 h with kickoff inside 6 h
+        self.assertIsNotNone(odds.plan_call(cache, NOW, "PL", soon)[0])  # 40 h >= 36 h with kickoff inside 12 h
+
+    def test_all_priority_leagues_have_odds_sport(self):
+        self.assertGreaterEqual(len(odds.PRIORITY), 15)
+        for code in odds.PRIORITY:
+            self.assertIn("odds_sport", odds.ALL_LEAGUES[code])
+
+    def test_derived_markets_populated_from_h2h_and_totals(self):
+        combo = {"title": "Tight", "markets": [
+            {"key": "h2h", "last_update": "2026-10-28T08:55:00Z",
+             "outcomes": [{"name": "Arsenal", "price": 2.1}, {"name": "Draw", "price": 3.4}, {"name": "Chelsea", "price": 3.6}]},
+            {"key": "totals", "last_update": "2026-10-28T08:55:00Z",
+             "outcomes": [{"name": "Over", "point": 2.5, "price": 1.85}, {"name": "Under", "point": 2.5, "price": 1.95}]}
+        ]}
+        matches, _ = odds.parse_events([event("Arsenal", "Chelsea", 30, [combo])], NOW, "PL", FIX)
+        sel = next(iter(matches.values()))["selections"]
+        for key in ("dc:1X", "dc:X2", "dc:12", "dnb:H", "dnb:A", "btts:yes", "btts:no"):
+            self.assertIn(key, sel)
+            self.assertEqual(sel[key]["bookmaker"], "Tight")
+            self.assertGreater(sel[key]["decimal"], 1.0)
 
     def test_monthly_cap_and_pace(self):
         self.assertIsNone(odds.plan_call({"credits": {"spent_by_month": {"2026-10": 400}}}, NOW, "PL", FIX)[0])
@@ -132,7 +151,8 @@ class Refresh(unittest.TestCase):
         self.assertEqual(cache["credits"]["provider_remaining"], 490)
         self.assertFalse(cache["leagues"]["PL"]["totals"])  # none returned: next time h2h only
         self.assertNotIn("SECRET", json.dumps(cache))
-        again, _ = odds.refresh(cache, NOW + dt.timedelta(hours=9), FIX, key="k", opener=opener)
+        later_fix = [fixture("PL", "Arsenal", "Chelsea", 100)]
+        again, _ = odds.refresh(cache, NOW + dt.timedelta(hours=73), later_fix, key="k", opener=opener)
         self.assertEqual(again["credits"]["spent_by_month"]["2026-10"], 3)  # h2h only: 1 credit
 
     def test_failure_keeps_cache_and_spends_nothing(self):

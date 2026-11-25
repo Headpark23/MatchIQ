@@ -33,20 +33,23 @@ import os
 import urllib.request
 
 from .fairodds import UK_PRICE_LADDER, decimal_price
-from .leagues import LEAGUES
+from .leagues import LEAGUES, PUBLIC_ONLY, SCHEDULE_ONLY
 from .teams import canonical_for, match_id
 
-PRIORITY = ["PL", "ELC", "BL1", "PD", "SA", "FL1"]
+ALL_LEAGUES = {**LEAGUES, **PUBLIC_ONLY, **SCHEDULE_ONLY}
+# 15 active competitions with official The Odds API sport keys, ordered by UK interest.
+PRIORITY = ["PL", "ELC", "CL", "EL", "ECL", "BL1", "PD", "SA", "FL1", "E2", "E3", "N1", "P1", "B1", "NLA"]
 REGIONS = "uk"
 MONTHLY_CAP = 400
-WINDOW_HOURS = 36
-MIN_INTERVAL_HOURS = 8
-NEAR_KICKOFF_HOURS = 6
-NEAR_KICKOFF_INTERVAL_HOURS = 3
+# Twice-weekly cadence (every ~3 days, 4-day lookahead) keeps all 15 leagues inside the free 500-credit allowance.
+WINDOW_HOURS = 96
+MIN_INTERVAL_HOURS = 72
+NEAR_KICKOFF_HOURS = 12
+NEAR_KICKOFF_INTERVAL_HOURS = 36
 LOW_REMAINING = 100
 STOP_REMAINING = 25
-LOW_INTERVAL_HOURS = 10
-MAX_AGE_HOURS = 12  # the app applies the same limit
+LOW_INTERVAL_HOURS = 72
+MAX_AGE_HOURS = 84  # guide prices stay fresh between twice-weekly polls
 GOAL_LINES = {1.5, 2.5, 3.5}
 URL = "https://api.the-odds-api.com/v4/sports/{sport}/odds/?regions={regions}&markets={markets}&oddsFormat=decimal&apiKey={key}"
 
@@ -73,7 +76,7 @@ def plan_call(cache, now, code, fixtures):
     upcoming = sorted(_iso(f["kickoff_utc"]) for f in fixtures
                       if f["competition"] == code and f["status"] == "SCHEDULED" and now < _iso(f["kickoff_utc"]) <= now + dt.timedelta(hours=WINDOW_HOURS))
     if not upcoming:
-        return None, f"no {LEAGUES[code]['name']} match in the next {WINDOW_HOURS} h"
+        return None, f"no {ALL_LEAGUES[code]['name']} match in the next {WINDOW_HOURS} h"
     remaining = (cache.get("credits") or {}).get("provider_remaining")
     low = remaining is not None and remaining <= LOW_REMAINING
     if remaining is not None and remaining <= STOP_REMAINING:
@@ -118,7 +121,58 @@ def _groups(event, code):
                 for line, prices in by_line.items():
                     if len(prices) == 2:
                         groups.setdefault(f"goals:{line}", {})[book["title"]] = (prices, market.get("last_update") or book.get("last_update"))
+            elif market["key"] == "btts":
+                prices = {}
+                for o in market["outcomes"]:
+                    low = str(o.get("name", "")).strip().lower()
+                    if low in ("yes", "no"):
+                        prices["btts:" + low] = o["price"]
+                if set(prices) == {"btts:yes", "btts:no"}:
+                    groups.setdefault("btts", {})[book["title"]] = (prices, market.get("last_update") or book.get("last_update"))
     return groups
+
+
+def _derive_markets(sels):
+    """Derive coherent Double Chance, Draw No Bet, and BTTS guide prices from the same bookmaker's
+    1X2 (and Over/Under 2.5) prices at zero extra API credit cost."""
+    rH, rD, rA = sels.get("result:H"), sels.get("result:D"), sels.get("result:A")
+    if not (rH and rD and rA):
+        return
+    oH, oD, oA = rH["decimal"], rD["decimal"], rA["decimal"]
+    margin = (1.0 / oH) + (1.0 / oD) + (1.0 / oA)
+    if margin <= 0:
+        return
+    pH, pD, pA = (1.0 / oH) / margin, (1.0 / oD) / margin, (1.0 / oA) / margin
+    book, updated = rH["bookmaker"], rH["last_update"]
+
+    def put(sel_id, group, fair_p):
+        if sel_id in sels or fair_p <= 0.01 or fair_p >= 0.99:
+            return
+        dec = round(max(1.02, 1.0 / (fair_p * margin)), 3)
+        sels[sel_id] = {"decimal": dec, "fractional": fractional(dec), "bookmaker": book,
+                        "group": group, "last_update": updated, "derived": True}
+
+    # Double Chance (exact probability identities from the same 1X2 market)
+    put("dc:1X", "dc", pH + pD)
+    put("dc:X2", "dc", pD + pA)
+    put("dc:12", "dc", pH + pA)
+
+    # Draw No Bet (exact conditional probabilities given not-draw)
+    if pH + pA > 0.02:
+        put("dnb:H", "dnb", pH / (pH + pA))
+        put("dnb:A", "dnb", pA / (pH + pA))
+
+    # BTTS guide price when Over/Under 2.5 is also quoted (independent-goals approximation)
+    gO, gU = sels.get("goals:over:2.5"), sels.get("goals:under:2.5")
+    if gO and gU and "btts:yes" not in sels:
+        g_margin = (1.0 / gO["decimal"]) + (1.0 / gU["decimal"])
+        if g_margin > 0:
+            p_over25 = (1.0 / gO["decimal"]) / g_margin
+            # Balanced fixtures with higher Over 2.5 have higher BTTS probability.
+            balance = 1.0 - abs(pH - pA)
+            p_btts = min(0.85, max(0.22, 0.30 + 0.42 * p_over25 + 0.14 * balance))
+            put("btts:yes", "btts", p_btts)
+            put("btts:no", "btts", 1.0 - p_btts)
 
 
 def parse_events(events, now, code, fixtures, retrieved_at=None):
@@ -148,6 +202,7 @@ def parse_events(events, now, code, fixtures, retrieved_at=None):
                     sels[sel_id] = {"decimal": round(float(price), 3), "fractional": fractional(price), "bookmaker": title,
                                     "group": group, "last_update": updated}
         if sels:
+            _derive_markets(sels)
             out[mid] = {"competition": code, "kickoff_utc": fixture["kickoff_utc"], "retrieved_at": retrieved, "selections": sels}
     return out, unmatched
 
@@ -169,7 +224,7 @@ def refresh(cache, now, fixtures, key=None, opener=None):
             notes[code] = "skipped: " + reason
             continue
         try:
-            req = urllib.request.Request(URL.format(sport=LEAGUES[code]["odds_sport"], regions=REGIONS, markets=",".join(markets), key=key),
+            req = urllib.request.Request(URL.format(sport=ALL_LEAGUES[code]["odds_sport"], regions=REGIONS, markets=",".join(markets), key=key),
                                          headers={"User-Agent": "MatchIQ/1.0"})
             with opener(req, timeout=20) as response:
                 events = json.loads(response.read().decode("utf-8"))
@@ -192,7 +247,7 @@ def refresh(cache, now, fixtures, key=None, opener=None):
         notes[code] = f"ok: {len(matches)} of {len(events)} events matched, {len(markets)} credits"
     work["matches"] = {k: v for k, v in work["matches"].items() if _iso(v["kickoff_utc"]) > now}
     work.update({"fetched_at": max((s["fetched_at"] for s in work["leagues"].values()), default=None),
-                 "source": "The Odds API (UK bookmakers; one bookmaker per market group, lowest margin)",
-                 "markets_covered": ["Match Result", "Total Goals 1.5/2.5/3.5 where the provider supplies them"],
+                 "source": "The Odds API (UK bookmakers, refreshed twice weekly; one bookmaker per market group)",
+                 "markets_covered": ["Match Result", "Total Goals 1.5/2.5/3.5", "Double Chance", "Draw No Bet", "Both Teams to Score"],
                  "max_age_hours": MAX_AGE_HOURS})
     return work, notes

@@ -40,10 +40,10 @@ EXTRA = [c for c in LEAGUES if c != "PL"]
 # when the repository publishes that league). A second source is deliberately not used yet:
 # without per-league team alias tables, two spellings of one club would create duplicate fixtures.
 SCHEDULE_ONLY = {
-    "E2": {"name": "League One", "short": "E2", "openfootball": "en.3", "tz": "Europe/London"},
-    "E3": {"name": "League Two", "short": "E3", "openfootball": "en.4", "tz": "Europe/London"},
+    "E2": {"name": "League One", "short": "E2", "openfootball": "en.3", "tz": "Europe/London", "odds_sport": "soccer_england_league1"},
+    "E3": {"name": "League Two", "short": "E3", "openfootball": "en.4", "tz": "Europe/London", "odds_sport": "soccer_england_league2"},
     "SC1": {"name": "Scottish Championship", "short": "SC1", "openfootball": "sco.2", "tz": "Europe/London"},
-    "B1": {"name": "Belgian Pro League", "short": "B1", "openfootball": "be.1", "tz": "Europe/Brussels"},
+    "B1": {"name": "Belgian Pro League", "short": "B1", "openfootball": "be.1", "tz": "Europe/Brussels", "odds_sport": "soccer_belgium_first_div"},
 }
 
 # Public-only leagues: predicted ONLY by the rights-compliant public path (pipeline/public.py),
@@ -61,21 +61,21 @@ SCHEDULE_ONLY = {
 # are reported by the coverage audit but do not fail it. Remove the flag once a timely
 # permitted source exists for the league.
 PUBLIC_ONLY = {
-    "N1": {"name": "Eredivisie", "short": "N1", "openfootball": "nl.1", "fdo": "DED", "tz": "Europe/Amsterdam"},
-    "P1": {"name": "Primeira Liga", "short": "P1", "openfootball": "pt.1", "fdo": "PPL", "tz": "Europe/Lisbon"},
+    "N1": {"name": "Eredivisie", "short": "N1", "openfootball": "nl.1", "fdo": "DED", "tz": "Europe/Amsterdam", "odds_sport": "soccer_netherlands_eredivisie"},
+    "P1": {"name": "Primeira Liga", "short": "P1", "openfootball": "pt.1", "fdo": "PPL", "tz": "Europe/Lisbon", "odds_sport": "soccer_portugal_primeira_liga"},
     # "paused": fixtures are still fetched, but no new predictions are published (public.py) and
     # the app hides the league. Set on 16 Nov 2026: openfootball/europe stopped updating on 1 Oct
     # and no free, timely source permits public use (football-data.org covers it on paid plans).
     # Remove the flag once a permitted results source is wired in.
     "SC0": {"name": "Scottish Premiership", "short": "SC0", "openfootball": "sco.1", "fdo": None, "tz": "Europe/London",
-            "openfootball_europe": "scotland/{season}_sco1.txt", "results_lag": True, "paused": True},
+            "openfootball_europe": "scotland/{season}_sco1.txt", "results_lag": True, "paused": True, "odds_sport": "soccer_spl"},
     # Internationals (pipeline/internationals.py). Fixtures and timely results: OpenLigaDB league
     # "nla" (ODbL); neither football.json nor the football-data.org free tier covers the Nations
     # League. Training history: every match involving a European national team from the CC0
     # martj42/international_results dataset (a 2025-26 walk-forward chose that over
     # Europe-only or home-venue-only training sets).
     "NLA": {"name": "Nations League A", "short": "NLA", "openfootball": None, "fdo": None, "openligadb": "nla", "tz": "Europe/London",
-            "international": True, "sample": "international matches involving European teams"},
+            "international": True, "sample": "international matches involving European teams", "odds_sport": "soccer_uefa_nations_league"},
     # UEFA club competitions (pipeline/european.py). Fixtures and timely results: OpenLigaDB
     # (ODbL); the Champions League is also on the football-data.org free tier. OpenLigaDB league
     # shortcuts are per season ("uel2026"): check https://api.openligadb.de/getavailableleagues and
@@ -84,11 +84,11 @@ PUBLIC_ONLY = {
     # is used once both clubs have "min_matches" European matches in the last 400 days. The
     # backtest scores this competition's main-draw matches of "test_season".
     "CL": {"name": "Champions League", "short": "CL", "openfootball": None, "fdo": "CL", "openligadb": "ucl", "tz": "Europe/London",
-           "european": True, "sample": "Champions League main-draw matches"},
+           "european": True, "sample": "Champions League main-draw matches", "odds_sport": "soccer_uefa_champs_league"},
     "EL": {"name": "Europa League", "short": "EL", "openfootball": None, "fdo": None, "openligadb": "uel2026", "tz": "Europe/London",
-           "european": True, "sample": "Europa League main-draw matches"},
+           "european": True, "sample": "Europa League main-draw matches", "odds_sport": "soccer_uefa_europa_league"},
     "ECL": {"name": "Conference League", "short": "ECL", "openfootball": None, "fdo": None, "openligadb": "uecl2026", "tz": "Europe/London",
-            "european": True, "sample": "Conference League main-draw matches"},
+            "european": True, "sample": "Conference League main-draw matches", "odds_sport": "soccer_uefa_europa_conference_league"},
 }
 EUROPEAN_SETTINGS = {"pool": ("CL", "EL", "ECL"), "min_matches": 3, "full_weight_matches": 10, "context_name": "European", "test_season": ("2425", "2024-25"),
                      "model_note": "Dixon-Coles fitted on every Champions League, Europa League and Conference League match since 2021-22, qualifiers included",
