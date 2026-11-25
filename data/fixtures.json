@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-24T18:16:58.102695+00:00",
+ "generated_at": "2026-11-25T02:46:48.422257+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -6931,28 +6931,10 @@
    ],
    "result_source": "football-data.org",
    "sources": [
-    "football-data.org"
-   ],
-   "first_seen": "2026-11-09T18:47:26.413227+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "CL-2627-excelsior-rotterdam-v-feyenoord",
-   "competition": "CL",
-   "season": "2627",
-   "home": "Excelsior Rotterdam",
-   "away": "Feyenoord",
-   "kickoff_utc": "2026-09-09T16:45:00Z",
-   "status": "FINISHED",
-   "score": [
-    5,
-    1
-   ],
-   "result_source": "openligadb",
-   "sources": [
+    "football-data.org",
     "openligadb"
    ],
-   "first_seen": "2026-11-12T10:16:05.869551+00:00",
+   "first_seen": "2026-11-09T18:47:26.413227+00:00",
    "kickoff_history": []
   },
   {
@@ -13944,25 +13926,6 @@
    "kickoff_history": []
   },
   {
-   "id": "CL-2627-galatasaray-v-excelsior-rotterdam",
-   "competition": "CL",
-   "season": "2627",
-   "home": "Galatasaray",
-   "away": "Excelsior Rotterdam",
-   "kickoff_utc": "2026-10-13T19:00:00Z",
-   "status": "FINISHED",
-   "score": [
-    1,
-    4
-   ],
-   "result_source": "openligadb",
-   "sources": [
-    "openligadb"
-   ],
-   "first_seen": "2026-11-12T10:16:05.869551+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "CL-2627-galatasaray-v-barcelona",
    "competition": "CL",
    "season": "2627",
@@ -13976,7 +13939,8 @@
    ],
    "result_source": "football-data.org",
    "sources": [
-    "football-data.org"
+    "football-data.org",
+    "openligadb"
    ],
    "first_seen": "2026-11-09T18:47:26.413227+00:00",
    "kickoff_history": []
@@ -16753,25 +16717,6 @@
    "kickoff_history": []
   },
   {
-   "id": "CL-2627-paris-sg-v-excelsior-rotterdam",
-   "competition": "CL",
-   "season": "2627",
-   "home": "Paris SG",
-   "away": "Excelsior Rotterdam",
-   "kickoff_utc": "2026-10-20T19:00:00Z",
-   "status": "FINISHED",
-   "score": [
-    4,
-    2
-   ],
-   "result_source": "openligadb",
-   "sources": [
-    "openligadb"
-   ],
-   "first_seen": "2026-11-12T10:16:05.869551+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "CL-2627-paris-sg-v-barcelona",
    "competition": "CL",
    "season": "2627",
@@ -16785,7 +16730,8 @@
    ],
    "result_source": "football-data.org",
    "sources": [
-    "football-data.org"
+    "football-data.org",
+    "openligadb"
    ],
    "first_seen": "2026-11-09T18:47:26.413227+00:00",
    "kickoff_history": []
@@ -21693,7 +21639,8 @@
    ],
    "result_source": "football-data.org",
    "sources": [
-    "football-data.org"
+    "football-data.org",
+    "openligadb"
    ],
    "first_seen": "2026-11-09T18:47:26.413227+00:00",
    "kickoff_history": []
@@ -21742,25 +21689,6 @@
     "openligadb"
    ],
    "first_seen": "2026-11-09T18:47:26.413227+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "CL-2627-excelsior-rotterdam-v-aston-villa",
-   "competition": "CL",
-   "season": "2627",
-   "home": "Excelsior Rotterdam",
-   "away": "Aston Villa",
-   "kickoff_utc": "2026-11-03T20:00:00Z",
-   "status": "FINISHED",
-   "score": [
-    3,
-    0
-   ],
-   "result_source": "openligadb",
-   "sources": [
-    "openligadb"
-   ],
-   "first_seen": "2026-11-12T10:16:05.869551+00:00",
    "kickoff_history": []
   },
   {
@@ -26428,9 +26356,12 @@
    "home": "Bodo/Glimt",
    "away": "LASK",
    "kickoff_utc": "2026-11-24T17:45:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb"
@@ -26445,9 +26376,12 @@
    "home": "Galatasaray",
    "away": "Aston Villa",
    "kickoff_utc": "2026-11-24T17:45:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb"
@@ -26462,9 +26396,12 @@
    "home": "Bristol City",
    "away": "Wrexham",
    "kickoff_utc": "2026-11-24T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26479,9 +26416,12 @@
    "home": "Cardiff",
    "away": "Preston",
    "kickoff_utc": "2026-11-24T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    0,
+    4
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26496,9 +26436,12 @@
    "home": "Charlton",
    "away": "Lincoln",
    "kickoff_utc": "2026-11-24T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    4,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26513,7 +26456,7 @@
    "home": "Hibernian",
    "away": "Dundee",
    "kickoff_utc": "2026-11-24T19:45:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -26529,9 +26472,12 @@
    "home": "Middlesbrough",
    "away": "Swansea",
    "kickoff_utc": "2026-11-24T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    2,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26546,9 +26492,12 @@
    "home": "Norwich",
    "away": "QPR",
    "kickoff_utc": "2026-11-24T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26563,9 +26512,12 @@
    "home": "Portsmouth",
    "away": "West Ham",
    "kickoff_utc": "2026-11-24T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26580,9 +26532,12 @@
    "home": "Sheffield United",
    "away": "Southampton",
    "kickoff_utc": "2026-11-24T19:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -26597,9 +26552,12 @@
    "home": "Arsenal",
    "away": "Dortmund",
    "kickoff_utc": "2026-11-24T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb"
@@ -26614,9 +26572,12 @@
    "home": "Como",
    "away": "AEK Athens",
    "kickoff_utc": "2026-11-24T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb"
@@ -26631,9 +26592,12 @@
    "home": "Feyenoord",
    "away": "FC Porto",
    "kickoff_utc": "2026-11-24T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    0,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb"
@@ -26648,9 +26612,12 @@
    "home": "Man City",
    "away": "Napoli",
    "kickoff_utc": "2026-11-24T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    2,
+    2
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb"
@@ -26665,9 +26632,12 @@
    "home": "RB Leipzig",
    "away": "Lens",
    "kickoff_utc": "2026-11-24T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    3,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb"
@@ -26682,7 +26652,7 @@
    "home": "Rangers",
    "away": "Aberdeen",
    "kickoff_utc": "2026-11-24T20:00:00Z",
-   "status": "SCHEDULED",
+   "status": "AWAITING_RESULT",
    "score": null,
    "result_source": null,
    "sources": [
@@ -26698,9 +26668,12 @@
    "home": "Real Madrid",
    "away": "PSV",
    "kickoff_utc": "2026-11-24T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    5,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb"
@@ -26715,9 +26688,12 @@
    "home": "Slovan Bratislava",
    "away": "Real Betis",
    "kickoff_utc": "2026-11-24T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    0,
+    2
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openligadb"
@@ -26732,30 +26708,17 @@
    "home": "Wolves",
    "away": "Derby",
    "kickoff_utc": "2026-11-24T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    3,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
    ],
    "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": []
-  },
-  {
-   "id": "CL-2627-sabah-v-excelsior-rotterdam",
-   "competition": "CL",
-   "season": "2627",
-   "home": "Sabah",
-   "away": "Excelsior Rotterdam",
-   "kickoff_utc": "2026-11-25T17:45:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "openligadb"
-   ],
-   "first_seen": "2026-11-12T10:16:05.869551+00:00",
    "kickoff_history": []
   },
   {
@@ -26769,9 +26732,26 @@
    "score": null,
    "result_source": null,
    "sources": [
-    "football-data.org"
+    "football-data.org",
+    "openligadb"
    ],
    "first_seen": "2026-11-09T18:47:26.413227+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "CL-2627-sabah-v-excelsior-rotterdam",
+   "competition": "CL",
+   "season": "2627",
+   "home": "Sabah",
+   "away": "Excelsior Rotterdam",
+   "kickoff_utc": "2026-11-25T17:45:00Z",
+   "status": "REMOVED_FROM_SCHEDULE",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-12T10:16:05.869551+00:00",
    "kickoff_history": []
   },
   {
@@ -31506,7 +31486,8 @@
    "score": null,
    "result_source": null,
    "sources": [
-    "football-data.org"
+    "football-data.org",
+    "openligadb"
    ],
    "first_seen": "2026-11-09T18:47:26.413227+00:00",
    "kickoff_history": []
@@ -31558,7 +31539,7 @@
    "home": "Excelsior Rotterdam",
    "away": "Man City",
    "kickoff_utc": "2026-12-08T20:00:00Z",
-   "status": "SCHEDULED",
+   "status": "REMOVED_FROM_SCHEDULE",
    "score": null,
    "result_source": null,
    "sources": [
@@ -38017,29 +37998,6 @@
    ]
   },
   {
-   "id": "FL1-2627-paris-v-le-havre",
-   "competition": "FL1",
-   "season": "2627",
-   "home": "Paris FC",
-   "away": "Le Havre",
-   "kickoff_utc": "2027-01-02T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-02T14:00:00Z",
-     "to": "2027-01-02T20:00:00Z",
-     "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
    "id": "FL1-2627-toulouse-v-angers",
    "competition": "FL1",
    "season": "2627",
@@ -38465,6 +38423,34 @@
      "from": "2027-01-02T14:00:00Z",
      "to": "2027-01-03T16:15:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "FL1-2627-paris-v-le-havre",
+   "competition": "FL1",
+   "season": "2627",
+   "home": "Paris FC",
+   "away": "Le Havre",
+   "kickoff_utc": "2027-01-03T16:15:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-02T14:00:00Z",
+     "to": "2027-01-02T20:00:00Z",
+     "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    },
+    {
+     "from": "2027-01-02T20:00:00Z",
+     "to": "2027-01-03T16:15:00Z",
+     "seen_at": "2026-11-25T02:46:48.422257+00:00"
     }
    ]
   },
@@ -42518,22 +42504,6 @@
    "kickoff_history": []
   },
   {
-   "id": "CL-2627-sporting-cp-v-excelsior-rotterdam",
-   "competition": "CL",
-   "season": "2627",
-   "home": "Sporting CP",
-   "away": "Excelsior Rotterdam",
-   "kickoff_utc": "2027-01-20T20:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "openligadb"
-   ],
-   "first_seen": "2026-11-12T10:16:05.869551+00:00",
-   "kickoff_history": []
-  },
-  {
    "id": "CL-2627-sporting-cp-v-barcelona",
    "competition": "CL",
    "season": "2627",
@@ -42544,9 +42514,26 @@
    "score": null,
    "result_source": null,
    "sources": [
-    "football-data.org"
+    "football-data.org",
+    "openligadb"
    ],
    "first_seen": "2026-11-09T18:47:26.413227+00:00",
+   "kickoff_history": []
+  },
+  {
+   "id": "CL-2627-sporting-cp-v-excelsior-rotterdam",
+   "competition": "CL",
+   "season": "2627",
+   "home": "Sporting CP",
+   "away": "Excelsior Rotterdam",
+   "kickoff_utc": "2027-01-20T20:00:00Z",
+   "status": "REMOVED_FROM_SCHEDULE",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "openligadb"
+   ],
+   "first_seen": "2026-11-12T10:16:05.869551+00:00",
    "kickoff_history": []
   },
   {
@@ -45199,7 +45186,8 @@
    "score": null,
    "result_source": null,
    "sources": [
-    "football-data.org"
+    "football-data.org",
+    "openligadb"
    ],
    "first_seen": "2026-11-09T18:47:26.413227+00:00",
    "kickoff_history": []
@@ -45262,7 +45250,7 @@
    "home": "Excelsior Rotterdam",
    "away": "Como",
    "kickoff_utc": "2027-01-27T20:00:00Z",
-   "status": "SCHEDULED",
+   "status": "REMOVED_FROM_SCHEDULE",
    "score": null,
    "result_source": null,
    "sources": [
