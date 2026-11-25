@@ -8255,7 +8255,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v112';
+const APP_VERSION = 'v113';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {
