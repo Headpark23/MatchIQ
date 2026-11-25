@@ -5512,3 +5512,12 @@ a.hm-chip:hover { border-color: var(--pick); }
 .btm-nudge { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 13px; border: 1px solid color-mix(in srgb, var(--pick) 35%, var(--line-strong)); background: color-mix(in srgb, var(--pick) 10%, transparent); color: var(--ink); font: 600 12.5px/1.35 var(--display); cursor: pointer; text-align: left; }
 .btm-nudge em { font-style: normal; color: var(--pick); font-weight: 800; white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .btm-btn { transition: none; } }
+
+.btm-card.is-collapsed { gap: 8px; padding: 12px 14px; border-radius: 18px; }
+.btm-col-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.btm-col-info { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.btm-mini-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.btm-mini-chip { padding: 2px 8px; border-radius: 999px; font: 700 11.5px var(--display); background: rgba(16, 185, 129, .18); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, .32); }
+.btm-col-actions { display: flex; gap: 8px; align-items: center; }
+.btm-toggle-btn { flex: none; min-height: 40px !important; padding: 0 12px !important; }
+.btm-collapse-link { padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line-strong); background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--soft); font: 700 11.5px var(--display); cursor: pointer; }

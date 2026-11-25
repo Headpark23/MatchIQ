@@ -1513,6 +1513,7 @@ function sinceLastVisitCard() {
 const BTM_STORAGE_KEY = 'betbuddy_btm_v1';
 const BTM_TOP_COMPS = { PL: 1, CL: 2, ELC: 3, BL1: 4, PD: 5, SA: 6, EL: 7, FL1: 8 };
 let btmMateChallenge = null;
+let btmExpanded = false;
 
 function loadBtmState() {
   try {
@@ -1719,6 +1720,11 @@ function shareBtmScore() {
   }
 }
 
+function toggleBtmExpanded() {
+  btmExpanded = !btmExpanded;
+  render();
+}
+
 function dismissMateChallenge() {
   btmMateChallenge = null;
   try { history.replaceState(null, '', window.location.pathname + '#/'); } catch (e) {}
@@ -1743,6 +1749,8 @@ function renderBeatTheModelCard() {
   if (!matches.length && !stats.settledCount) return '';
 
   const pickedHere = matches.filter(p => state.picks[p.match_id]).length;
+  const allPicked = matches.length > 0 && pickedHere >= matches.length;
+  const collapsed = allPicked && !btmExpanded;
   const user = getAuthUser();
   const isSignedIn = Boolean(user && user.signedIn);
 
@@ -1750,6 +1758,31 @@ function renderBeatTheModelCard() {
     ? '<span class="btm-score-pill">You <b>' + stats.userWins + '</b>–<b>' + stats.modelWins + '</b> Model</span>'
     : '<span class="btm-score-pill is-new">Free · 5 secs</span>';
   const streakPill = stats.streak >= 2 ? '<span class="btm-streak">🔥 ' + stats.streak + ' streak</span>' : '';
+
+  if (collapsed) {
+    const summaryChips = matches.map(p => {
+      const f = fixtureById(p.match_id) || p.fixture;
+      const pk = state.picks[p.match_id];
+      return '<span class="btm-mini-chip">' + esc(btmChoiceLabel(pk.userPick, f.home, f.away)) + '</span>';
+    }).join('');
+    const guestMini = !isSignedIn
+      ? '<button type="button" class="btm-nudge" onclick="signInWithGoogle()"><span>🔒 Save your streak &amp; join the UK ladder — free with Google</span><em>Sign in ›</em></button>'
+      : '';
+    return '<section class="btm-card is-collapsed" aria-label="Beat the Model completed">' +
+      '<div class="btm-col-top">' +
+        '<div class="btm-col-info">' +
+          '<span class="btm-kicker">⚔️ Beat the Model · ✓ ' + pickedHere + '/' + matches.length + ' locked</span>' +
+          '<div class="btm-mini-chips">' + summaryChips + '</div>' +
+        '</div>' +
+        '<div class="btm-badges">' + streakPill + (stats.settledCount ? scorePill : '') + '</div>' +
+      '</div>' +
+      '<div class="btm-col-actions">' +
+        '<button type="button" class="btn small primary btm-share-btn" onclick="challengeMateBtm()">⚔️ Challenge a mate</button>' +
+        '<button type="button" class="btn small btm-toggle-btn" onclick="toggleBtmExpanded()" aria-expanded="false">Show picks ▾</button>' +
+      '</div>' +
+      guestMini +
+    '</section>';
+  }
 
   const mateBanner = btmMateChallenge
     ? '<div class="btm-mate-banner"><span>⚔️ <b>' + esc(btmMateChallenge.from) + '</b> challenged you! Lock your picks below — settles at full-time.</span>' +
@@ -1809,7 +1842,7 @@ function renderBeatTheModelCard() {
   return '<section class="btm-card" aria-label="Beat the Model daily challenge">' +
     '<div class="btm-head">' +
       '<div><div class="btm-kicker">⚔️ Beat the Model</div><h2 class="btm-title">Can you out-tip our AI?</h2></div>' +
-      '<div class="btm-badges">' + streakPill + scorePill + '</div>' +
+      '<div class="btm-badges">' + streakPill + scorePill + (allPicked ? '<button type="button" class="btm-collapse-link" onclick="toggleBtmExpanded()" aria-expanded="true">Hide ▴</button>' : '') + '</div>' +
     '</div>' +
     mateBanner + recentBar +
     '<div class="btm-list">' + rowsHtml + '</div>' +
@@ -1822,6 +1855,7 @@ if (typeof window !== 'undefined') {
   window.challengeMateBtm = challengeMateBtm;
   window.shareBtmScore = shareBtmScore;
   window.dismissMateChallenge = dismissMateChallenge;
+  window.toggleBtmExpanded = toggleBtmExpanded;
 }
 
 function renderWelcomeHero() {
@@ -8255,7 +8289,7 @@ loadData().then(() => {
 });
 initFirebaseAuth();
 
-const APP_VERSION = 'v113';
+const APP_VERSION = 'v114';
 try { const fv = document.getElementById('footer-app-version'); if (fv) fv.textContent = APP_VERSION; } catch (e) {}
 
 async function forceAppSync() {

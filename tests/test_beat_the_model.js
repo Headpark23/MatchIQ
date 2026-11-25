@@ -102,4 +102,13 @@ vm.runInContext('parseMateChallengeFromHash()', context);
 const homeMate = vm.runInContext('viewHome()', context);
 assert.ok(homeMate.includes('challenged you!'), 'Opening mate challenge URL should show H2H banner');
 
+// 5. Completing all featured matches auto-collapses the card, with Show/Hide toggle
+vm.runInContext("pickBeatTheModel('PL-f2', 'H')", context);
+const homeCollapsed = vm.runInContext('viewHome()', context);
+assert.ok(homeCollapsed.includes('btm-card is-collapsed'), 'Completing all picks should auto-collapse Beat the Model');
+assert.ok(homeCollapsed.includes('Show picks'), 'Collapsed card should offer Show picks toggle');
+vm.runInContext('toggleBtmExpanded()', context);
+const homeExpanded = vm.runInContext('viewHome()', context);
+assert.ok(homeExpanded.includes('Hide ▴'), 'Expanded completed card should offer Hide toggle');
+
 console.log('PASS: test_beat_the_model.js');
