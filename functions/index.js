@@ -179,13 +179,21 @@ async function giveBackBetAIQuestion(uid, day) {
   });
 }
 
+// Mirrors Firestore's isVerifiedUser(): Google accounts, or email/password accounts with a confirmed email.
+function isVerifiedToken(tok) {
+  const provider = tok && tok.firebase && tok.firebase.sign_in_provider;
+  return provider === 'google.com' || (provider === 'password' && tok.email_verified === true);
+}
+
 exports.betAI = onRequest({ cors: true, secrets: [GEMINI_API_KEY], timeoutSeconds: 60, memory: '256MiB' }, async (req, res) => {
   if (req.method !== 'POST') { res.status(405).json({ error: 'post only' }); return; }
   let uid;
   try {
     const m = /^Bearer (.+)$/.exec(req.get('Authorization') || '');
     if (!m) { res.status(401).json({ error: 'sign-in-required' }); return; }
-    uid = (await admin.auth().verifyIdToken(m[1])).uid;
+    const tok = await admin.auth().verifyIdToken(m[1]);
+    if (!isVerifiedToken(tok)) { res.status(403).json({ error: 'verify-email-required' }); return; }
+    uid = tok.uid;
   } catch (e) { res.status(401).json({ error: 'sign-in-required' }); return; }
 
   const now = Date.now();
@@ -314,7 +322,9 @@ exports.parseBetSlip = onRequest({ cors: true, secrets: [GEMINI_API_KEY], timeou
   try {
     const m = /^Bearer (.+)$/.exec(req.get('Authorization') || '');
     if (!m) { res.status(401).json({ error: 'sign-in-required' }); return; }
-    uid = (await admin.auth().verifyIdToken(m[1])).uid;
+    const tok = await admin.auth().verifyIdToken(m[1]);
+    if (!isVerifiedToken(tok)) { res.status(403).json({ error: 'verify-email-required' }); return; }
+    uid = tok.uid;
   } catch (e) { res.status(401).json({ error: 'sign-in-required' }); return; }
 
   const day = betai.ukDay(Date.now());

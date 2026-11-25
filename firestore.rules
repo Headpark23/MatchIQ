@@ -251,7 +251,8 @@ service cloud.firestore {
 
     // 1. User Profiles & Subcollections
     match /users/{uid} {
-      allow read: if isAuthenticated();
+      allow get: if isOwner(uid);
+      allow list: if false;
       allow create: if isOwner(uid) && isValidUser(request.resource.data);
       allow update: if isOwner(uid) && isValidUser(request.resource.data) &&
         request.resource.data.createdAt == resource.data.createdAt;

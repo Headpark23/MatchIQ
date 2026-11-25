@@ -1,7 +1,9 @@
-// App Launch: Guarantee landing on Home screen (#/) unless explicit deep-link (#join-league or #slip)
+// App Launch: Guarantee landing on Home screen (#/) unless explicit deep-link (#join-league, #slip, push, or shared slip)
 try {
   const h = window.location.hash || '';
-  const isSharedDeepLink = h.includes('join-league=') || h.includes('slip=');
+  const s = window.location.search || '';
+  const isSharedDeepLink = h.includes('join-league=') || h.includes('slip=') ||
+    s.includes('from=push') || s.includes('shared=1');
   if (!isSharedDeepLink) {
     window.location.hash = '#/';
   }
@@ -456,10 +458,35 @@ function normaliseMarket(key, m) {
 }
 
 // ------------------------------------------------------------ data access
-async function loadData() {
-  await Promise.all(Object.entries(FILES).map(async ([key, url]) => {
+let historyLoadPromise = null;
+async function ensureHistoryLoaded() {
+  if (DATA.history) return DATA.history;
+  if (historyLoadPromise) return historyLoadPromise;
+  historyLoadPromise = (async () => {
     try {
-      const res = await fetch(url, { cache: 'no-store' });
+      const res = await fetch(FILES.history, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      DATA.history = await res.json();
+      delete LOAD_ERRORS.history;
+      hidePausedCompetitions();
+      return DATA.history;
+    } catch (error) {
+      LOAD_ERRORS.history = String(error.message || error);
+      return null;
+    } finally {
+      historyLoadPromise = null;
+      try { render(); } catch (e) {}
+    }
+  })();
+  return historyLoadPromise;
+}
+
+async function loadData() {
+  // Load core files first; prediction_history.json (~10 MB) is fetched on demand when needed.
+  const coreEntries = Object.entries(FILES).filter(([key]) => key !== 'history');
+  await Promise.all(coreEntries.map(async ([key, url]) => {
+    try {
+      const res = await fetch(url, { cache: 'no-cache' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       DATA[key] = await res.json();
       delete LOAD_ERRORS[key];
@@ -514,6 +541,7 @@ const upcoming = () => predictionsList().filter(p => {
 }).sort((a, b) => kickoffMs(a.fixture) - kickoffMs(b.fixture));
 
 function finalRecord(id) {
+  if (!DATA.history && !LOAD_ERRORS.history) ensureHistoryLoaded();
   const recs = historyRecords().filter(r => r.match_id === id);
   if (!recs.length) return null;
   return recs.find(r => r.evaluated) || recs[recs.length - 1];
@@ -2170,6 +2198,8 @@ function viewResults() {
   const lv = other ? (((DATA.leagueValidation || {}).leagues || {})[compFilter === 'ALL' ? 'PL' : compFilter] || null) : null;
   const rel = other ? null : DATA.reliability;
   const res = (perf.markets || {}).result;
+  const historyLoading = !DATA.history && !LOAD_ERRORS.history;
+  if (historyLoading) ensureHistoryLoaded();
   const latest = {};
   for (const r of historyRecords()) latest[r.match_id] = r.evaluated ? r : (latest[r.match_id] && latest[r.match_id].evaluated ? latest[r.match_id] : r);
   const recs = Object.values(latest).filter(r => inComp(r.fixture.competition)).sort((a, b) => kickoffMs(b.fixture) - kickoffMs(a.fixture));
@@ -2199,7 +2229,7 @@ function viewResults() {
   html += '<div class="section card" id="rt-log" style="padding:0"><div class="section-head" style="padding:16px 16px 0"><h2 class="section-title">Prediction log' +
     (compFilter !== 'ALL' ? ' <button type="button" class="rt-filter" data-comp="ALL" title="Show every league">' + esc(recordLeagueName(compFilter)) + ' ✕</button>' : '') + '</h2><div class="seg" role="group" aria-label="Prediction log">' +
     [['settled', 'Settled'], ['pending', 'Awaiting result'], ['future', 'Upcoming']].map(([k, l]) => '<button type="button" data-rfilter="' + k + '" aria-pressed="' + (resultsFilter === k) + '">' + l + '</button>').join('') + '</div></div>' +
-    (shown.length ? shown.slice(0, resultsLimit).map(logRow).join('') + (shown.length > resultsLimit ? '<div style="padding:12px"><button type="button" class="btn" data-rmore>Show more (' + (shown.length - resultsLimit) + ' left)</button></div>' : '') : '<p class="muted" style="padding:16px">Nothing here yet.</p>') + '</div>';
+    (shown.length ? shown.slice(0, resultsLimit).map(logRow).join('') + (shown.length > resultsLimit ? '<div style="padding:12px"><button type="button" class="btn" data-rmore>Show more (' + (shown.length - resultsLimit) + ' left)</button></div>' : '') : '<p class="muted" style="padding:16px">' + (historyLoading ? 'Loading sealed prediction log…' : 'Nothing here yet.') + '</p>') + '</div>';
   html += '<details class="section card maths-section" style="margin-top:20px;">' +
     '<summary style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;min-height:44px;font-weight:600;font-size:15px;color:var(--cyan);">' +
       '<span>🔬 Show the maths: ' + esc(compFilter === 'ALL' ? 'Premier League' : recordLeagueName(compFilter)) + ' (Brier score, calibration &amp; model details)</span>' +
@@ -5146,6 +5176,7 @@ function importErrorText(code) {
   const m = {
     'daily-limit': 'You have used today’s ' + importUI.limit + ' reads. It resets at midnight UK time.',
     'sign-in-required': 'Please sign in again to import a bet.',
+    'verify-email-required': 'Please confirm your email address first (check your inbox for the verification link).',
     'ai-unavailable': 'Could not read that just now. It was not counted. Try again shortly.',
     'unsupported-image': 'Please use a JPEG, PNG or WebP screenshot.',
     'bad-image': 'That picture could not be read. Try a fresh screenshot.',
@@ -7866,11 +7897,12 @@ async function checkAutoUpdateResults(force = false) {
   isResultsSyncing = true;
   lastResultsAutoSync = now;
   try {
+    const needHistory = Boolean(DATA.history) || window.location.hash.startsWith('#/results');
     const [histRes, perfRes, fixRes, multiRes] = await Promise.all([
-      fetch('data/prediction_history.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null),
-      fetch('data/performance.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null),
-      fetch('data/fixtures.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null),
-      fetch('data/multi_sport_events.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null)
+      needHistory ? fetch(FILES.history, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null) : Promise.resolve(null),
+      fetch(FILES.performance, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null),
+      fetch(FILES.fixtures, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null),
+      fetch(FILES.multiSport, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null)
     ]);
     if (histRes) DATA.history = histRes;
     if (perfRes) DATA.performance = perfRes;
@@ -8404,6 +8436,7 @@ function betaiErrorText(e) {
   const code = e && e.message;
   if (code === 'daily-limit') return 'You have used your 4 questions for today. Back at midnight UK time.';
   if (code === 'sign-in-required') return 'Please sign in again to use BetAI.';
+  if (code === 'verify-email-required') return 'Please confirm your email address first (check your inbox for the verification link).';
   if (code === 'ai-unavailable') return 'BetAI could not answer just now. That question was not counted. Try again shortly.';
   return 'Something went wrong. Please try again.';
 }

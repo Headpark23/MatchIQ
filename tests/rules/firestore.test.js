@@ -253,6 +253,22 @@ describe('Bet Buddy (MatchIQ) Firestore Security Rules - Google-Only Access', fu
       await assertFails(dbBob.collection('users').doc('alice').set(validUserPayload));
     });
 
+    it('denies User B from reading or listing User A profile doc while allowing User A to read own profile', async function () {
+      await testEnv.withSecurityRulesDisabled(async (adminContext) => {
+        await adminContext.firestore().collection('users').doc('alice').set({
+          ...validUserPayload,
+          town: 'Paisley',
+          region: 'Renfrewshire',
+          country: 'Scotland'
+        });
+      });
+      const dbAlice = getGoogleUser('alice');
+      const dbBob = getGoogleUser('bob');
+      await assertSucceeds(dbAlice.collection('users').doc('alice').get());
+      await assertFails(dbBob.collection('users').doc('alice').get());
+      await assertFails(dbBob.collection('users').get());
+    });
+
     it('denies User B from writing User A diary or leagueMemberships', async function () {
       const dbBob = getGoogleUser('bob');
       await assertFails(dbBob.collection('users').doc('alice').collection('diary').doc('bet1').set({ stake: 10 }));
