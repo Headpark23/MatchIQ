@@ -562622,6 +562622,246 @@
     "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
    },
    "sha256": "3858a3a2592548ff85e2e5f4c2f6f3ac8694f8b85d3c2c97d3b36996b41f3e5c"
+  },
+  {
+   "record_id": "PD-2627-rayo-vallecano-v-athletic-club#r1",
+   "match_id": "PD-2627-rayo-vallecano-v-athletic-club",
+   "revision": 1,
+   "fixture": {
+    "competition": "PD",
+    "season": "2627",
+    "home": "Rayo Vallecano",
+    "away": "Athletic Club",
+    "kickoff_utc": "2026-12-09T19:00:00Z"
+   },
+   "published_at": "2026-11-25T21:30:08.338345+00:00",
+   "inputs_fingerprint": "e4e4ca459edace7f",
+   "markets": {
+    "result": {
+     "model_version": "dc-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "moderate"
+     },
+     "pick": {
+      "key": "H",
+      "label": "Rayo Vallecano win",
+      "p": 0.3502,
+      "fair_odds": "≈15/8"
+     },
+     "tier": "L1",
+     "selections": [
+      {
+       "key": "H",
+       "label": "Rayo Vallecano win",
+       "p": 0.3502,
+       "fair_odds": "≈15/8"
+      },
+      {
+       "key": "D",
+       "label": "Draw",
+       "p": 0.3084,
+       "fair_odds": "≈9/4"
+      },
+      {
+       "key": "A",
+       "label": "Athletic Club win",
+       "p": 0.3414,
+       "fair_odds": "≈15/8"
+      }
+     ]
+    },
+    "goals": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "under",
+      "label": "Under 2.5",
+      "p": 0.5512,
+      "fair_odds": "≈4/5",
+      "line": 2.5
+     },
+     "lines": [
+      {
+       "line": 1.5,
+       "over": 0.7078,
+       "over_fair_odds": "≈2/5",
+       "under_fair_odds": "≈5/2"
+      },
+      {
+       "line": 2.5,
+       "over": 0.4488,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      },
+      {
+       "line": 3.5,
+       "over": 0.2323,
+       "over_fair_odds": "≈100/30",
+       "under_fair_odds": "≈3/10"
+      }
+     ]
+    },
+    "btts": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "yes",
+      "label": "Yes",
+      "p": 0.5049,
+      "fair_odds": "≈Evens"
+     },
+     "selections": [
+      {
+       "key": "yes",
+       "label": "Yes",
+       "p": 0.5049,
+       "fair_odds": "≈Evens"
+      },
+      {
+       "key": "no",
+       "label": "No",
+       "p": 0.4951,
+       "fair_odds": "≈Evens"
+      }
+     ]
+    },
+    "corners": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 9.5",
+      "p": 0.5377,
+      "fair_odds": "≈5/6",
+      "line": 9.5
+     },
+     "lines": [
+      {
+       "line": 8.5,
+       "over": 0.6539,
+       "over_fair_odds": "≈8/15",
+       "under_fair_odds": "≈15/8"
+      },
+      {
+       "line": 9.5,
+       "over": 0.5377,
+       "over_fair_odds": "≈5/6",
+       "under_fair_odds": "≈6/5"
+      },
+      {
+       "line": 10.5,
+       "over": 0.4278,
+       "over_fair_odds": "≈11/8",
+       "under_fair_odds": "≈8/11"
+      }
+     ]
+    },
+    "cards": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 3.5",
+      "p": 0.6193,
+      "fair_odds": "≈8/13",
+      "line": 3.5
+     },
+     "lines": [
+      {
+       "line": 2.5,
+       "over": 0.7924,
+       "over_fair_odds": "≈1/4",
+       "under_fair_odds": "≈4/1"
+      },
+      {
+       "line": 3.5,
+       "over": 0.6193,
+       "over_fair_odds": "≈8/13",
+       "under_fair_odds": "≈13/8"
+      },
+      {
+       "line": 4.5,
+       "over": 0.4417,
+       "over_fair_odds": "≈5/4",
+       "under_fair_odds": "≈4/5"
+      }
+     ]
+    },
+    "shots": {
+     "model_version": "blend30-league-v1",
+     "evidence": {
+      "status": "provisional",
+      "strength": "weak"
+     },
+     "pick": {
+      "key": "over",
+      "label": "Over 8.5",
+      "p": 0.5226,
+      "fair_odds": "≈10/11",
+      "line": 8.5
+     },
+     "lines": [
+      {
+       "line": 7.5,
+       "over": 0.6555,
+       "over_fair_odds": "≈8/15",
+       "under_fair_odds": "≈15/8"
+      },
+      {
+       "line": 8.5,
+       "over": 0.5226,
+       "over_fair_odds": "≈10/11",
+       "under_fair_odds": "≈11/10"
+      },
+      {
+       "line": 9.5,
+       "over": 0.3994,
+       "over_fair_odds": "≈6/4",
+       "under_fair_odds": "≈4/6"
+      }
+     ]
+    }
+   },
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "origin": "pipeline",
+   "recommendations": {
+    "most_likely": {
+     "decision": "most_likely",
+     "market": "cards",
+     "key": "over",
+     "line": 3.5,
+     "label": "Over 3.5",
+     "p": 0.6193,
+     "credible_p": 0.6204,
+     "n": 380,
+     "status": "provisional",
+     "strength": "weak",
+     "basis": "league-anchored blend, 380 La Liga backtest matches",
+     "lower_bound": 0.5794
+    },
+    "best_value": {
+     "decision": "no_bet",
+     "reason": "No bookmaker price is available to compare. Enter a price you have seen to test it for value."
+    },
+    "rule": "rank by lower 90% bound; value needs a real price, a validated model and +5% expected value"
+   },
+   "sha256": "11755847b5ff3d5a1e38baba9665bb1f542b371471c4e0cf5719988ba18fc314"
   }
  ]
 }
