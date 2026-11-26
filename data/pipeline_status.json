@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-11-25T21:30:08.338345+00:00",
+ "attempted_at": "2026-11-26T00:40:17.169856+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -27,7 +27,7 @@
    "ok": true,
    "label": "football-data.org (free tier)",
    "matches": 552,
-   "results": 200,
+   "results": 204,
    "note": null
   },
   "ELC:openfootball": {
@@ -146,14 +146,14 @@
    "ok": true,
    "label": "OpenLigaDB (ODbL 1.0, © OpenLigaDB contributors)",
    "matches": 144,
-   "results": 83,
+   "results": 90,
    "note": null
   },
   "CL:football-data.org": {
    "ok": true,
    "label": "football-data.org (free tier)",
    "matches": 144,
-   "results": 83,
+   "results": 90,
    "note": null
   },
   "EL:openligadb": {
@@ -247,26 +247,26 @@
   "the-odds-api": {
    "ok": true,
    "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
-   "matches": 153,
+   "matches": 155,
    "notes": {
-    "PL": "skipped: polled 69.7 h ago (minimum 72 h)",
-    "ELC": "skipped: polled 6.6 h ago (minimum 72 h)",
+    "PL": "ok: 20 of 20 events matched, 2 credits",
+    "ELC": "skipped: polled 9.8 h ago (minimum 72 h)",
     "CL": "skipped: no Champions League match in the next 96 h",
-    "EL": "ok: 13 of 18 events matched, 2 credits",
-    "ECL": "ok: 16 of 18 events matched, 2 credits",
-    "BL1": "ok: 18 of 18 events matched, 2 credits",
-    "PD": "skipped: polled 69.7 h ago (minimum 72 h)",
-    "SA": "skipped: polled 69.7 h ago (minimum 72 h)",
-    "FL1": "ok: 18 of 18 events matched, 2 credits",
+    "EL": "skipped: polled 3.2 h ago (minimum 72 h)",
+    "ECL": "skipped: polled 3.2 h ago (minimum 72 h)",
+    "BL1": "skipped: polled 3.2 h ago (minimum 72 h)",
+    "PD": "ok: 22 of 22 events matched, 2 credits",
+    "SA": "ok: 20 of 20 events matched, 2 credits",
+    "FL1": "skipped: polled 3.2 h ago (minimum 72 h)",
     "E2": "skipped: no League One match in the next 96 h",
     "E3": "skipped: no League Two match in the next 96 h",
-    "N1": "ok: 10 of 14 events matched, 2 credits",
-    "P1": "ok: 6 of 9 events matched, 2 credits",
+    "N1": "skipped: polled 3.2 h ago (minimum 72 h)",
+    "P1": "skipped: polled 3.2 h ago (minimum 72 h)",
     "B1": "skipped: no Belgian Pro League match in the next 96 h",
     "NLA": "skipped: no Nations League A match in the next 96 h"
    },
-   "credits_used_this_month": 214,
-   "credits_remaining_reported": 254
+   "credits_used_this_month": 220,
+   "credits_remaining_reported": 248
   }
  },
  "warnings": [
@@ -274,12 +274,12 @@
  ],
  "errors": [],
  "ok": true,
- "last_success": "2026-11-25T21:30:08.338345+00:00",
+ "last_success": "2026-11-26T00:40:17.169856+00:00",
  "fixtures": 3574,
  "upcoming_predicted": 205,
- "published_revisions": 1,
+ "published_revisions": 48,
  "imported_frozen_records": 0,
- "settlement_updates": 219,
+ "settlement_updates": 259,
  "training_results": 1948,
  "results_latest": "2026-11-23",
  "model_versions": {
@@ -293,7 +293,7 @@
  "public": {
   "model_version": "dc-public-v1",
   "predictions": 348,
-  "records": 8887,
+  "records": 9235,
   "validated": true
  }
 }
