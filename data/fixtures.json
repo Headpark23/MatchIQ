@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-26T00:40:17.169856+00:00",
+ "generated_at": "2026-11-26T08:54:52.458917+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -4506,33 +4506,6 @@
    "kickoff_history": []
   },
   {
-   "id": "ELC-2627-birmingham-v-southampton",
-   "competition": "ELC",
-   "season": "2627",
-   "home": "Birmingham",
-   "away": "Southampton",
-   "kickoff_utc": "2026-09-01T18:45:00Z",
-   "status": "FINISHED",
-   "score": [
-    1,
-    1
-   ],
-   "result_source": "football-data.org",
-   "sources": [
-    "football-data.org",
-    "openfootball",
-    "football-data.co.uk"
-   ],
-   "first_seen": "2026-10-26T16:44:38.256231+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-09-01T19:00:00Z",
-     "to": "2026-09-01T18:45:00Z",
-     "seen_at": "2026-11-14T06:59:35.853811+00:00"
-    }
-   ]
-  },
-  {
    "id": "ELC-2627-lincoln-v-blackburn",
    "competition": "ELC",
    "season": "2627",
@@ -4657,6 +4630,38 @@
    ],
    "first_seen": "2026-10-26T16:44:38.256231+00:00",
    "kickoff_history": []
+  },
+  {
+   "id": "ELC-2627-birmingham-v-southampton",
+   "competition": "ELC",
+   "season": "2627",
+   "home": "Birmingham",
+   "away": "Southampton",
+   "kickoff_utc": "2026-09-01T19:00:00Z",
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.org",
+   "sources": [
+    "football-data.org",
+    "openfootball",
+    "football-data.co.uk"
+   ],
+   "first_seen": "2026-10-26T16:44:38.256231+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-09-01T19:00:00Z",
+     "to": "2026-09-01T18:45:00Z",
+     "seen_at": "2026-11-14T06:59:35.853811+00:00"
+    },
+    {
+     "from": "2026-09-01T18:45:00Z",
+     "to": "2026-09-01T19:00:00Z",
+     "seen_at": "2026-11-26T08:54:52.458917+00:00"
+    }
+   ]
   },
   {
    "id": "ELC-2627-stoke-v-norwich",
