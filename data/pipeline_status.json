@@ -1,5 +1,5 @@
 {
- "attempted_at": "2026-11-27T03:15:15.417788+00:00",
+ "attempted_at": "2026-11-27T14:18:14.704864+00:00",
  "season": "2627",
  "sources": {
   "football-data.org": {
@@ -160,7 +160,7 @@
    "ok": true,
    "label": "OpenLigaDB (ODbL 1.0, © OpenLigaDB contributors)",
    "matches": 144,
-   "results": 72,
+   "results": 90,
    "note": "unrecognised team name(s), shown as published and predicted from the average: SK Puntigamer Sturm Graz"
   },
   "ECL:openligadb": {
@@ -247,26 +247,26 @@
   "the-odds-api": {
    "ok": true,
    "label": "The Odds API (free plan, UK bookmakers; Match Result and Total Goals only)",
-   "matches": 126,
+   "matches": 130,
    "notes": {
-    "PL": "skipped: polled 26.6 h ago (minimum 72 h)",
-    "ELC": "skipped: polled 36.3 h ago (minimum 72 h)",
+    "PL": "ok: 20 of 20 events matched, 2 credits",
+    "ELC": "ok: 12 of 12 events matched, 2 credits",
     "CL": "skipped: no Champions League match in the next 96 h",
     "EL": "skipped: no Europa League match in the next 96 h",
     "ECL": "skipped: no Conference League match in the next 96 h",
-    "BL1": "skipped: polled 29.8 h ago (minimum 72 h)",
-    "PD": "skipped: polled 26.6 h ago (minimum 72 h)",
-    "SA": "skipped: polled 26.6 h ago (minimum 72 h)",
-    "FL1": "skipped: polled 29.8 h ago (minimum 72 h)",
+    "BL1": "ok: 18 of 18 events matched, 2 credits",
+    "PD": "ok: 22 of 22 events matched, 2 credits",
+    "SA": "ok: 20 of 20 events matched, 2 credits",
+    "FL1": "ok: 18 of 18 events matched, 2 credits",
     "E2": "skipped: no League One match in the next 96 h",
     "E3": "skipped: no League Two match in the next 96 h",
-    "N1": "skipped: polled 29.8 h ago (minimum 72 h)",
-    "P1": "skipped: polled 29.8 h ago (minimum 72 h)",
+    "N1": "ok: 14 of 18 events matched, 2 credits",
+    "P1": "ok: 6 of 9 events matched, 2 credits",
     "B1": "skipped: no Belgian Pro League match in the next 96 h",
     "NLA": "skipped: no Nations League A match in the next 96 h"
    },
-   "credits_used_this_month": 220,
-   "credits_remaining_reported": 248
+   "credits_used_this_month": 236,
+   "credits_remaining_reported": 232
   }
  },
  "warnings": [
@@ -274,7 +274,7 @@
  ],
  "errors": [],
  "ok": true,
- "last_success": "2026-11-27T03:15:15.417788+00:00",
+ "last_success": "2026-11-27T14:18:14.704864+00:00",
  "fixtures": 3574,
  "upcoming_predicted": 205,
  "published_revisions": 0,
@@ -293,7 +293,7 @@
  "public": {
   "model_version": "dc-public-v1",
   "predictions": 330,
-  "records": 9895,
+  "records": 10225,
   "validated": true
  }
 }
