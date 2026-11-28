@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-27T22:55:42.596459+00:00",
+ "generated_at": "2026-11-28T08:25:02.270549+00:00",
  "season": "2627",
  "fixtures": [
   {
@@ -27709,9 +27709,12 @@
    "home": "Groningen",
    "away": "Willem II",
    "kickoff_utc": "2026-11-27T19:00:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    1
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -27767,9 +27770,12 @@
    "home": "Venezia",
    "away": "Bologna",
    "kickoff_utc": "2026-11-27T19:45:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    0,
+    0
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -27862,9 +27868,12 @@
    "home": "Maritimo",
    "away": "Nacional",
    "kickoff_utc": "2026-11-27T20:15:00Z",
-   "status": "AWAITING_RESULT",
-   "score": null,
-   "result_source": null,
+   "status": "FINISHED",
+   "score": [
+    1,
+    2
+   ],
+   "result_source": "football-data.org",
    "sources": [
     "football-data.org",
     "openfootball"
@@ -35680,29 +35689,6 @@
    ]
   },
   {
-   "id": "P1-2627-sc-braga-v-academico-viseu",
-   "competition": "P1",
-   "season": "2627",
-   "home": "SC Braga",
-   "away": "Academico Viseu",
-   "kickoff_utc": "2026-12-20T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-20T15:00:00Z",
-     "to": "2026-12-20T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
    "id": "PD-2627-sevilla-v-racing-santander",
    "competition": "PD",
    "season": "2627",
@@ -35722,29 +35708,6 @@
      "from": "2026-12-20T14:00:00Z",
      "to": "2026-12-20T00:00:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-sporting-cp-v-estoril",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Sporting CP",
-   "away": "Estoril",
-   "kickoff_utc": "2026-12-20T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-20T15:00:00Z",
-     "to": "2026-12-20T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
     }
    ]
   },
@@ -36299,6 +36262,62 @@
    ]
   },
   {
+   "id": "P1-2627-sc-braga-v-academico-viseu",
+   "competition": "P1",
+   "season": "2627",
+   "home": "SC Braga",
+   "away": "Academico Viseu",
+   "kickoff_utc": "2026-12-22T18:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-20T15:00:00Z",
+     "to": "2026-12-20T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-20T00:00:00Z",
+     "to": "2026-12-22T18:45:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-sporting-cp-v-estoril",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Sporting CP",
+   "away": "Estoril",
+   "kickoff_utc": "2026-12-22T20:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-20T15:00:00Z",
+     "to": "2026-12-20T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-20T00:00:00Z",
+     "to": "2026-12-22T20:45:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "PL-2627-aston-villa-v-leeds",
    "competition": "PL",
    "season": "2627",
@@ -36709,213 +36728,6 @@
    "kickoff_history": []
   },
   {
-   "id": "P1-2627-benfica-v-sporting-cp",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Benfica",
-   "away": "Sporting CP",
-   "kickoff_utc": "2026-12-27T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-27T15:00:00Z",
-     "to": "2026-12-27T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-casa-pia-v-famalicao",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Casa Pia",
-   "away": "Famalicao",
-   "kickoff_utc": "2026-12-27T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-27T15:00:00Z",
-     "to": "2026-12-27T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-estoril-v-alverca",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Estoril",
-   "away": "Alverca",
-   "kickoff_utc": "2026-12-27T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-27T15:00:00Z",
-     "to": "2026-12-27T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-porto-v-nacional",
-   "competition": "P1",
-   "season": "2627",
-   "home": "FC Porto",
-   "away": "Nacional",
-   "kickoff_utc": "2026-12-27T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-27T15:00:00Z",
-     "to": "2026-12-27T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-gil-vicente-v-arouca",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Gil Vicente",
-   "away": "Arouca",
-   "kickoff_utc": "2026-12-27T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-27T15:00:00Z",
-     "to": "2026-12-27T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-maritimo-v-sc-braga",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Maritimo",
-   "away": "SC Braga",
-   "kickoff_utc": "2026-12-27T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-27T15:00:00Z",
-     "to": "2026-12-27T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-moreirense-v-academico-viseu",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Moreirense",
-   "away": "Academico Viseu",
-   "kickoff_utc": "2026-12-27T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-27T15:00:00Z",
-     "to": "2026-12-27T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-santa-clara-v-estrela-amadora",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Santa Clara",
-   "away": "Estrela Amadora",
-   "kickoff_utc": "2026-12-27T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-27T15:00:00Z",
-     "to": "2026-12-27T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-vitoria-guimaraes-v-rio-ave",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Vitoria Guimaraes",
-   "away": "Rio Ave",
-   "kickoff_utc": "2026-12-27T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2026-12-27T15:00:00Z",
-     "to": "2026-12-27T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
    "id": "SC0-2627-hearts-v-hibernian",
    "competition": "SC0",
    "season": "2627",
@@ -36948,6 +36760,34 @@
    ],
    "first_seen": "2026-10-26T13:11:24.741152+00:00",
    "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-santa-clara-v-estrela-amadora",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Santa Clara",
+   "away": "Estrela Amadora",
+   "kickoff_utc": "2026-12-27T15:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-27T15:00:00Z",
+     "to": "2026-12-27T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-27T00:00:00Z",
+     "to": "2026-12-27T15:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
   },
   {
    "id": "PL-2627-man-united-v-nottm-forest",
@@ -36986,6 +36826,90 @@
    "kickoff_history": []
   },
   {
+   "id": "P1-2627-maritimo-v-sc-braga",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Maritimo",
+   "away": "SC Braga",
+   "kickoff_utc": "2026-12-28T18:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-27T15:00:00Z",
+     "to": "2026-12-27T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-27T00:00:00Z",
+     "to": "2026-12-28T18:00:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-gil-vicente-v-arouca",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Gil Vicente",
+   "away": "Arouca",
+   "kickoff_utc": "2026-12-28T18:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-27T15:00:00Z",
+     "to": "2026-12-27T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-27T00:00:00Z",
+     "to": "2026-12-28T18:45:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-porto-v-nacional",
+   "competition": "P1",
+   "season": "2627",
+   "home": "FC Porto",
+   "away": "Nacional",
+   "kickoff_utc": "2026-12-28T20:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-27T15:00:00Z",
+     "to": "2026-12-27T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-27T00:00:00Z",
+     "to": "2026-12-28T20:45:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "ELC-2627-wrexham-v-blackburn",
    "competition": "ELC",
    "season": "2627",
@@ -37001,6 +36925,34 @@
    ],
    "first_seen": "2026-10-26T16:44:38.256231+00:00",
    "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-casa-pia-v-famalicao",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Casa Pia",
+   "away": "Famalicao",
+   "kickoff_utc": "2026-12-29T18:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-27T15:00:00Z",
+     "to": "2026-12-27T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-27T00:00:00Z",
+     "to": "2026-12-29T18:45:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
   },
   {
    "id": "PL-2627-hull-v-leeds",
@@ -37250,6 +37202,34 @@
    "kickoff_history": []
   },
   {
+   "id": "P1-2627-benfica-v-sporting-cp",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Benfica",
+   "away": "Sporting CP",
+   "kickoff_utc": "2026-12-29T20:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-27T15:00:00Z",
+     "to": "2026-12-27T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-27T00:00:00Z",
+     "to": "2026-12-29T20:45:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "PL-2627-coventry-v-brentford",
    "competition": "PL",
    "season": "2627",
@@ -37452,6 +37432,34 @@
    ],
    "first_seen": "2026-10-26T13:11:24.741152+00:00",
    "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-estoril-v-alverca",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Estoril",
+   "away": "Alverca",
+   "kickoff_utc": "2026-12-30T20:15:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-27T15:00:00Z",
+     "to": "2026-12-27T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-27T00:00:00Z",
+     "to": "2026-12-30T20:15:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
   },
   {
    "id": "PL-2627-ipswich-v-chelsea",
@@ -38246,6 +38254,34 @@
    ]
   },
   {
+   "id": "P1-2627-sporting-cp-v-santa-clara",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Sporting CP",
+   "away": "Santa Clara",
+   "kickoff_utc": "2027-01-02T20:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-10T15:00:00Z",
+     "to": "2027-01-10T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-10T00:00:00Z",
+     "to": "2027-01-02T20:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "PD-2627-celta-vigo-v-deportivo-la-coruna",
    "competition": "PD",
    "season": "2627",
@@ -38606,6 +38642,34 @@
    "kickoff_history": []
   },
   {
+   "id": "P1-2627-moreirense-v-academico-viseu",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Moreirense",
+   "away": "Academico Viseu",
+   "kickoff_utc": "2027-01-03T15:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-27T15:00:00Z",
+     "to": "2026-12-27T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-27T00:00:00Z",
+     "to": "2027-01-03T15:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "FL1-2627-lille-v-strasbourg",
    "competition": "FL1",
    "season": "2627",
@@ -38736,6 +38800,34 @@
    ],
    "first_seen": "2026-10-26T16:44:38.256231+00:00",
    "kickoff_history": []
+  },
+  {
+   "id": "P1-2627-vitoria-guimaraes-v-rio-ave",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Vitoria Guimaraes",
+   "away": "Rio Ave",
+   "kickoff_utc": "2027-01-03T20:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2026-12-27T15:00:00Z",
+     "to": "2026-12-27T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2026-12-27T00:00:00Z",
+     "to": "2027-01-03T20:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
   },
   {
    "id": "P1-2627-estoril-v-maritimo",
@@ -39673,29 +39765,6 @@
    ]
   },
   {
-   "id": "P1-2627-alverca-v-maritimo",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Alverca",
-   "away": "Maritimo",
-   "kickoff_utc": "2027-01-10T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-10T15:00:00Z",
-     "to": "2027-01-10T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
    "id": "P1-2627-arouca-v-benfica",
    "competition": "P1",
    "season": "2627",
@@ -39834,75 +39903,6 @@
    ]
   },
   {
-   "id": "P1-2627-estrela-amadora-v-estoril",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Estrela Amadora",
-   "away": "Estoril",
-   "kickoff_utc": "2027-01-10T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-10T15:00:00Z",
-     "to": "2027-01-10T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-famalicao-v-vitoria-guimaraes",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Famalicao",
-   "away": "Vitoria Guimaraes",
-   "kickoff_utc": "2027-01-10T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-10T15:00:00Z",
-     "to": "2027-01-10T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-nacional-v-gil-vicente",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Nacional",
-   "away": "Gil Vicente",
-   "kickoff_utc": "2027-01-10T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-10T15:00:00Z",
-     "to": "2027-01-10T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
    "id": "PD-2627-osasuna-v-barcelona",
    "competition": "PD",
    "season": "2627",
@@ -40014,29 +40014,6 @@
      "from": "2027-01-10T14:00:00Z",
      "to": "2027-01-10T00:00:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-sporting-cp-v-santa-clara",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Sporting CP",
-   "away": "Santa Clara",
-   "kickoff_utc": "2027-01-10T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-10T15:00:00Z",
-     "to": "2027-01-10T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
     }
    ]
   },
@@ -40201,6 +40178,62 @@
    ]
   },
   {
+   "id": "P1-2627-alverca-v-maritimo",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Alverca",
+   "away": "Maritimo",
+   "kickoff_utc": "2027-01-10T15:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-10T15:00:00Z",
+     "to": "2027-01-10T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-10T00:00:00Z",
+     "to": "2027-01-10T15:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-nacional-v-gil-vicente",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Nacional",
+   "away": "Gil Vicente",
+   "kickoff_utc": "2027-01-10T15:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-10T15:00:00Z",
+     "to": "2027-01-10T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-10T00:00:00Z",
+     "to": "2027-01-10T15:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "N1-2627-groningen-v-go-ahead-eagles",
    "competition": "N1",
    "season": "2627",
@@ -40289,6 +40322,62 @@
      "from": "2027-01-10T14:00:00Z",
      "to": "2027-01-10T19:45:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-estrela-amadora-v-estoril",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Estrela Amadora",
+   "away": "Estoril",
+   "kickoff_utc": "2027-01-11T00:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-10T15:00:00Z",
+     "to": "2027-01-10T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-10T00:00:00Z",
+     "to": "2027-01-11T00:00:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-famalicao-v-vitoria-guimaraes",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Famalicao",
+   "away": "Vitoria Guimaraes",
+   "kickoff_utc": "2027-01-11T00:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-10T15:00:00Z",
+     "to": "2027-01-10T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-10T00:00:00Z",
+     "to": "2027-01-11T00:00:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
     }
    ]
   },
@@ -40693,6 +40782,62 @@
      "from": "2027-01-16T14:00:00Z",
      "to": "2027-01-15T19:45:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-alverca-v-porto",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Alverca",
+   "away": "FC Porto",
+   "kickoff_utc": "2027-01-15T20:15:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-17T15:00:00Z",
+     "to": "2027-01-17T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-17T00:00:00Z",
+     "to": "2027-01-15T20:15:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-sc-braga-v-moreirense",
+   "competition": "P1",
+   "season": "2627",
+   "home": "SC Braga",
+   "away": "Moreirense",
+   "kickoff_utc": "2027-01-16T00:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-17T15:00:00Z",
+     "to": "2027-01-17T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-17T00:00:00Z",
+     "to": "2027-01-16T00:00:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
     }
    ]
   },
@@ -41236,6 +41381,34 @@
    "kickoff_history": []
   },
   {
+   "id": "P1-2627-nacional-v-santa-clara",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Nacional",
+   "away": "Santa Clara",
+   "kickoff_utc": "2027-01-16T15:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-17T15:00:00Z",
+     "to": "2027-01-17T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-17T00:00:00Z",
+     "to": "2027-01-16T15:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "N1-2627-telstar-v-nec-nijmegen",
    "competition": "N1",
    "season": "2627",
@@ -41472,6 +41645,34 @@
    "kickoff_history": []
   },
   {
+   "id": "P1-2627-sporting-cp-v-estrela-amadora",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Sporting CP",
+   "away": "Estrela Amadora",
+   "kickoff_utc": "2027-01-16T20:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-17T15:00:00Z",
+     "to": "2027-01-17T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-17T00:00:00Z",
+     "to": "2027-01-16T20:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "SA-2627-ac-milan-v-torino",
    "competition": "SA",
    "season": "2627",
@@ -41491,75 +41692,6 @@
      "from": "2027-01-17T14:00:00Z",
      "to": "2027-01-17T00:00:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-academico-viseu-v-benfica",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Academico Viseu",
-   "away": "Benfica",
-   "kickoff_utc": "2027-01-17T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-17T15:00:00Z",
-     "to": "2027-01-17T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-alverca-v-porto",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Alverca",
-   "away": "FC Porto",
-   "kickoff_utc": "2027-01-17T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-17T15:00:00Z",
-     "to": "2027-01-17T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-arouca-v-vitoria-guimaraes",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Arouca",
-   "away": "Vitoria Guimaraes",
-   "kickoff_utc": "2027-01-17T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-17T15:00:00Z",
-     "to": "2027-01-17T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
     }
    ]
   },
@@ -41656,29 +41788,6 @@
    ]
   },
   {
-   "id": "P1-2627-casa-pia-v-maritimo",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Casa Pia",
-   "away": "Maritimo",
-   "kickoff_utc": "2027-01-17T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-17T15:00:00Z",
-     "to": "2027-01-17T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
    "id": "PD-2627-celta-vigo-v-valencia",
    "competition": "PD",
    "season": "2627",
@@ -41698,29 +41807,6 @@
      "from": "2027-01-17T14:00:00Z",
      "to": "2027-01-17T00:00:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-famalicao-v-estoril",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Famalicao",
-   "away": "Estoril",
-   "kickoff_utc": "2027-01-17T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-17T15:00:00Z",
-     "to": "2027-01-17T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
     }
    ]
   },
@@ -41863,29 +41949,6 @@
    ]
   },
   {
-   "id": "P1-2627-nacional-v-santa-clara",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Nacional",
-   "away": "Santa Clara",
-   "kickoff_utc": "2027-01-17T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-17T15:00:00Z",
-     "to": "2027-01-17T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
    "id": "SA-2627-napoli-v-fiorentina",
    "competition": "SA",
    "season": "2627",
@@ -42001,52 +42064,6 @@
    ]
   },
   {
-   "id": "P1-2627-rio-ave-v-gil-vicente",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Rio Ave",
-   "away": "Gil Vicente",
-   "kickoff_utc": "2027-01-17T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-17T15:00:00Z",
-     "to": "2027-01-17T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-sc-braga-v-moreirense",
-   "competition": "P1",
-   "season": "2627",
-   "home": "SC Braga",
-   "away": "Moreirense",
-   "kickoff_utc": "2027-01-17T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-17T15:00:00Z",
-     "to": "2027-01-17T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
-    }
-   ]
-  },
-  {
    "id": "SA-2627-sassuolo-v-monza",
    "competition": "SA",
    "season": "2627",
@@ -42066,29 +42083,6 @@
      "from": "2027-01-17T14:00:00Z",
      "to": "2027-01-17T00:00:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
-    }
-   ]
-  },
-  {
-   "id": "P1-2627-sporting-cp-v-estrela-amadora",
-   "competition": "P1",
-   "season": "2627",
-   "home": "Sporting CP",
-   "away": "Estrela Amadora",
-   "kickoff_utc": "2027-01-17T00:00:00Z",
-   "status": "SCHEDULED",
-   "score": null,
-   "result_source": null,
-   "sources": [
-    "football-data.org",
-    "openfootball"
-   ],
-   "first_seen": "2026-11-02T20:30:56.705751+00:00",
-   "kickoff_history": [
-    {
-     "from": "2027-01-17T15:00:00Z",
-     "to": "2027-01-17T00:00:00Z",
-     "seen_at": "2026-11-08T06:40:44.055440+00:00"
     }
    ]
   },
@@ -42294,6 +42288,34 @@
    ]
   },
   {
+   "id": "P1-2627-casa-pia-v-maritimo",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Casa Pia",
+   "away": "Maritimo",
+   "kickoff_utc": "2027-01-17T15:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-17T15:00:00Z",
+     "to": "2027-01-17T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-17T00:00:00Z",
+     "to": "2027-01-17T15:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "N1-2627-cambuur-v-willem-ii",
    "competition": "N1",
    "season": "2627",
@@ -42387,6 +42409,34 @@
    ]
   },
   {
+   "id": "P1-2627-academico-viseu-v-benfica",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Academico Viseu",
+   "away": "Benfica",
+   "kickoff_utc": "2027-01-17T18:00:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-17T15:00:00Z",
+     "to": "2027-01-17T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-17T00:00:00Z",
+     "to": "2027-01-17T18:00:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
    "id": "FL1-2627-lyon-v-lorient",
    "competition": "FL1",
    "season": "2627",
@@ -42406,6 +42456,62 @@
      "from": "2027-01-16T14:00:00Z",
      "to": "2027-01-17T19:45:00Z",
      "seen_at": "2026-10-26T17:03:38.162299+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-rio-ave-v-gil-vicente",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Rio Ave",
+   "away": "Gil Vicente",
+   "kickoff_utc": "2027-01-17T20:30:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-17T15:00:00Z",
+     "to": "2027-01-17T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-17T00:00:00Z",
+     "to": "2027-01-17T20:30:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-famalicao-v-estoril",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Famalicao",
+   "away": "Estoril",
+   "kickoff_utc": "2027-01-18T18:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-17T15:00:00Z",
+     "to": "2027-01-17T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-17T00:00:00Z",
+     "to": "2027-01-18T18:45:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
     }
    ]
   },
@@ -42430,6 +42536,34 @@
      "from": "2027-01-16T15:00:00Z",
      "to": "2027-01-18T20:00:00Z",
      "seen_at": "2026-11-19T22:26:49.340280+00:00"
+    }
+   ]
+  },
+  {
+   "id": "P1-2627-arouca-v-vitoria-guimaraes",
+   "competition": "P1",
+   "season": "2627",
+   "home": "Arouca",
+   "away": "Vitoria Guimaraes",
+   "kickoff_utc": "2027-01-18T20:45:00Z",
+   "status": "SCHEDULED",
+   "score": null,
+   "result_source": null,
+   "sources": [
+    "football-data.org",
+    "openfootball"
+   ],
+   "first_seen": "2026-11-02T20:30:56.705751+00:00",
+   "kickoff_history": [
+    {
+     "from": "2027-01-17T15:00:00Z",
+     "to": "2027-01-17T00:00:00Z",
+     "seen_at": "2026-11-08T06:40:44.055440+00:00"
+    },
+    {
+     "from": "2027-01-17T00:00:00Z",
+     "to": "2027-01-18T20:45:00Z",
+     "seen_at": "2026-11-28T08:25:02.270549+00:00"
     }
    ]
   },
